@@ -159,7 +159,7 @@
         <artifactId>maven-eclipse-plugin</artifactId>
         <version>2.7</version>
       </plugin>
-      <!-- 
+
       <plugin>
         <groupId>com.mysema.rdf</groupId>
         <artifactId>rdfbean-maven-plugin</artifactId>
@@ -170,14 +170,14 @@
               <goal>schemagen</goal>
             </goals>
             <configuration>
-              <prefix>blog</prefix>
-              <namespace>http://www.mysema.com/semantics/blog/#</namespace>
-              <schemaFile>src/main/rdf/blog.owl</schemaFile>
+              <prefix>editio</prefix>
+              <namespace>http://www.finlit.fi/semantics/editio/#</namespace>
+              <schemaFile>src/main/rdf/editio.owl</schemaFile>
             </configuration>
           </execution>
         </executions>
       </plugin>
-       -->
+
       <plugin>
         <groupId>com.mysema.maven</groupId>
         <artifactId>maven-apt-plugin</artifactId>
