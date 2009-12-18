@@ -9,7 +9,7 @@
     </p>
         
     <p:eastPanel>
-        east
+        <t:dashboard/>
     </p:eastPanel>
 
     <p:westPanel>

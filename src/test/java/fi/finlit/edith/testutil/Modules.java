@@ -3,7 +3,7 @@
  * All rights reserved.
  * 
  */
-package fi.finlit.edith;
+package fi.finlit.edith.testutil;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

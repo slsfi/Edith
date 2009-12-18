@@ -1,0 +1,23 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+    <t:content>
+        <t:if test="loggedIn">
+        <div class="dashboard panel">
+            <h3>${message:dashboard}</h3>
+            <ul>
+                <li>
+                    <a t:type="pagelink" t:page="index" t:disabled="isOnPage('index')">${message:frontpage}</a>
+                </li>
+                <li>
+                    <a t:type="pageLink" t:page="documentsPage" t:disabled="isOnPage('documentsPage')">${message:documents}</a>
+                </li>                                
+                <li>
+                    <a t:type="pageLink" t:page="noteSearch" t:disabled="isOnPage('noteSearch')">${message:notesearch}</a>
+                </li>
+                <li>
+                    <a t:type="pageLink" t:page="logoutPage" t:disabled="isOnPage('logoutPage')">${message:logout}</a>
+                </li>
+            </ul>            
+        </div>
+        </t:if>        
+    </t:content>    
+</html>

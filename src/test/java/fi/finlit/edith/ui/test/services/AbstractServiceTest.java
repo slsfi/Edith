@@ -7,8 +7,8 @@ package fi.finlit.edith.ui.test.services;
 
 import org.junit.runner.RunWith;
 
-import fi.finlit.edith.Modules;
-import fi.finlit.edith.TapestryTestRunner;
+import fi.finlit.edith.testutil.Modules;
+import fi.finlit.edith.testutil.TapestryTestRunner;
 import fi.finlit.edith.ui.services.ServiceModule;
 
 /**

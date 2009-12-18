@@ -2,22 +2,25 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
       xmlns:p="tapestry:parameter">
       
-    <p:title>Edith</p:title>  
+    <p:title>${message:frontpage}</p:title>  
 
     <ul>
         <li>
-            <a t:type="pageLink" t:page="documentsPage">Documents tree</a>
+            <a t:type="pageLink" t:page="documentsPage">${message:documents}</a>
         </li>                
         <li>
-            <a t:type="pageLink" t:page="document/annotatePage" t:context="1">Annotate document</a>
+            <a t:type="pageLink" t:page="document/annotatePage" t:context="1">${message:annotate-document}</a>
          </li>
          <li>   
-            <a t:type="pageLink" t:page="document/viewPage" t:context="1">View document</a>
+            <a t:type="pageLink" t:page="document/viewPage" t:context="1">${message:view-document}</a>
+        </li>
+        <li>
+            <a t:type="pageLink" t:page="noteSearch">${message:notesearch}</a>
         </li>
     </ul>
         
     <p:eastPanel>
-        east
+        <t:dashboard/>
     </p:eastPanel>
 
     <p:westPanel>
