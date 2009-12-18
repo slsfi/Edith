@@ -7,7 +7,7 @@
     <p>${message:register}</p>
     
     <t:beaneditform object="user"
-        include="shortName,password,email,firstName,lastName" 
+        include="username,password,email,firstName,lastName" 
         submitlabel="message:submit"/>
         
     <!-- TODO : captcha -->

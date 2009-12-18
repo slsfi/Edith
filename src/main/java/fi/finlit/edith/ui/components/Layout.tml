@@ -32,7 +32,7 @@
         </table>
         
         <div id="bottom">
-              bottom
+              <img src="${context:images/sks_logo.gif}"/>
         </div>      
         
         </div>
