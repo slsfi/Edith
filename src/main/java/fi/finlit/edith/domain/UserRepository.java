@@ -7,6 +7,8 @@ package fi.finlit.edith.domain;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  * UserRepository provides
@@ -14,6 +16,7 @@ import java.util.List;
  * @author tiwe
  * @version $Id$
  */
+@Transactional
 public interface UserRepository extends Repository<User,String>{
     
     /**

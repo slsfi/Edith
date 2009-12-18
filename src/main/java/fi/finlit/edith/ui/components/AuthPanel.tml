@@ -1,0 +1,26 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+      xmlns:p="tapestry:parameter">
+    <t:content>
+    	<t:if test="loggedIn">
+            <ul class="actions">
+                <li>
+                    <t:fmt.message key="logged-in-as" args="[username]"/>
+                </li>
+                <li>
+                    <a t:type="pagelink" t:page="logoutPage" t:disabled="isOnPage('logoutPage')">${message:logout}</a>
+                </li>
+            </ul>
+             
+    		<p:else>
+            <ul class="actions">
+                <li>
+                    <a t:type="pageLink" t:page="loginPage" t:disabled="isOnPage('loginPage')">${message:login}</a>
+                </li>
+                <li>
+                    <a t:type="pageLink" t:page="registerPage" t:disabled="isOnPage('registerPage')">${message:register}</a>
+                </li>
+            </ul>    			
+    		</p:else>
+    	</t:if>   	        
+  	</t:content>    
+</html>

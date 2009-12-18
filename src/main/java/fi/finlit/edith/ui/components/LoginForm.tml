@@ -1,0 +1,21 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+    <t:content>
+
+	 <form id="loginForm" method="POST" action="security_check">
+		<div><label class="left" for="username">${message:username}</label>
+			<input name="j_username" id="username" type="text"/>
+		</div>
+		<div><label class="left" for="password">${message:password}</label>
+			<input name="j_password" id="password" type="password"/>
+		</div>
+		<div><label class="left"> </label>
+			 <input type="checkbox" name="rememberMe" id="rememberMe" tabindex="3"/>
+			 <label for="rememberMe">${message:rememberMe}</label>
+		</div>
+		<div class="buttons"><label class="left"> </label>
+			<input type="submit" value="${message:submit}"/> 
+		</div>	 
+	 </form>
+
+    </t:content>    
+</html>

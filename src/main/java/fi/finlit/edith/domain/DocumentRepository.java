@@ -7,12 +7,15 @@ package fi.finlit.edith.domain;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * DocumentRepository provides
  *
  * @author tiwe
  * @version $Id$
  */
+@Transactional
 public interface DocumentRepository extends Repository<Document,String>{
     
     /**

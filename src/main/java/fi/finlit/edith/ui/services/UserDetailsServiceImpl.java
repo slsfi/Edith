@@ -24,25 +24,17 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     
     @Inject
     private UserRepository userRepository;
-//    
-//    @Inject
-//    private PasswordEncoder passwordEncoder;
-//
-//    @Inject
-//    private SaltSource saltSource;
-//    
+
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException, DataAccessException {
         User user = userRepository.getByUsername(username);
         if (user != null){
-            UserDetailsImpl userDetails = new UserDetailsImpl(
+            return new UserDetailsImpl(
                     user.getUsername(), user.getPassword(), 
-                    user.getProfile().getAuthorities());
-//            userDetails.setPassword(passwordEncoder.encodePassword("pass",saltSource.getSalt(userDetails)));
-            return userDetails;    
+                    user.getProfile().getAuthorities());    
         }else{
-            return null;
+            throw new UsernameNotFoundException("User " + username + " not found");
         }
         
     }

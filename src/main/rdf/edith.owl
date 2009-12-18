@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+	xmlns:editio="http://www.finlit.fi/semantics/edith/#"
+	xml:base="http://www.finlit.fi/semantics/edith/">
+<owl:Ontology rdf:about=""/>
+<owl:ObjectProperty rdf:about="#validFor">
+	<rdfs:label>validFor</rdfs:label>
+</owl:ObjectProperty>
+<owl:DatatypeProperty rdf:about="#text">
+	<rdfs:label>text</rdfs:label>
+</owl:DatatypeProperty>
+<owl:Class rdf:about="#Document">
+	<rdfs:label>Document</rdfs:label>
+</owl:Class>
+<owl:Restriction rdf:nodeID="node1r2mkdsx3">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:Restriction>
+<owl:DatatypeProperty rdf:about="#description">
+	<rdfs:label>description</rdfs:label>
+</owl:DatatypeProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx3">
+	<owl:onProperty rdf:resource="#description"/>
+</rdf:Description>
+<rdf:Description rdf:about="#Document">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx3"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx4">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#description"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#Document">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx4"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx5">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:Restriction>
+<owl:DatatypeProperty rdf:about="#svnPath">
+	<rdfs:label>svnPath</rdfs:label>
+</owl:DatatypeProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx5">
+	<owl:onProperty rdf:resource="#svnPath"/>
+</rdf:Description>
+<rdf:Description rdf:about="#Document">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx5"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx6">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#svnPath"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#Document">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx6"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx7">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:Restriction>
+<owl:DatatypeProperty rdf:about="#title">
+	<rdfs:label>title</rdfs:label>
+</owl:DatatypeProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx7">
+	<owl:onProperty rdf:resource="#title"/>
+</rdf:Description>
+<rdf:Description rdf:about="#Document">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx7"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx8">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#title"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#Document">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx8"/>
+</rdf:Description>
+<owl:ObjectProperty rdf:about="#revisionOf">
+	<rdfs:label>revisionOf</rdfs:label>
+</owl:ObjectProperty>
+<owl:DatatypeProperty rdf:about="#explanation">
+	<rdfs:label>explanation</rdfs:label>
+</owl:DatatypeProperty>
+<owl:ObjectProperty rdf:about="#status">
+	<rdfs:label>status</rdfs:label>
+</owl:ObjectProperty>
+<owl:ObjectProperty rdf:about="#tagged">
+	<rdfs:label>tagged</rdfs:label>
+</owl:ObjectProperty>
+<owl:DatatypeProperty rdf:about="#basicForm">
+	<rdfs:label>basicForm</rdfs:label>
+</owl:DatatypeProperty>
+<owl:ObjectProperty rdf:about="#latestRevision">
+	<rdfs:label>latestRevision</rdfs:label>
+</owl:ObjectProperty>
+<owl:Class rdf:about="#Tag">
+	<rdfs:label>Tag</rdfs:label>
+</owl:Class>
+<owl:Class rdf:about="#NoteStatus">
+	<rdfs:label>NoteStatus</rdfs:label>
+</owl:Class>
+<rdf:List rdf:nodeID="node1r2mkdsx9"/>
+<editio:NoteStatus rdf:about="#Draft"/>
+<rdf:Description rdf:nodeID="node1r2mkdsx9">
+	<rdf:first rdf:resource="#Draft"/>
+	<rdf:rest>
+		<rdf:List rdf:nodeID="node1r2mkdsx10"/>
+	</rdf:rest>
+</rdf:Description>
+<editio:NoteStatus rdf:about="#LockedForEdit"/>
+<rdf:Description rdf:nodeID="node1r2mkdsx10">
+	<rdf:first rdf:resource="#LockedForEdit"/>
+	<rdf:rest>
+		<rdf:List rdf:nodeID="node1r2mkdsx11"/>
+	</rdf:rest>
+</rdf:Description>
+<editio:NoteStatus rdf:about="#Finished"/>
+<rdf:Description rdf:nodeID="node1r2mkdsx11">
+	<rdf:first rdf:resource="#Finished"/>
+	<rdf:rest>
+		<rdf:List rdf:nodeID="node1r2mkdsx12"/>
+	</rdf:rest>
+</rdf:Description>
+<editio:NoteStatus rdf:about="#Publishable"/>
+<rdf:Description rdf:nodeID="node1r2mkdsx12">
+	<rdf:first rdf:resource="#Publishable"/>
+	<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+</rdf:Description>
+<rdf:Description rdf:about="#NoteStatus">
+	<owl:oneOf rdf:nodeID="node1r2mkdsx9"/>
+</rdf:Description>
+<owl:DatatypeProperty rdf:about="#lemma">
+	<rdfs:label>lemma</rdfs:label>
+</owl:DatatypeProperty>
+<owl:Class rdf:about="#Profile">
+	<rdfs:label>Profile</rdfs:label>
+</owl:Class>
+<rdf:List rdf:nodeID="node1r2mkdsx13"/>
+<editio:Profile rdf:about="#User"/>
+<rdf:Description rdf:nodeID="node1r2mkdsx13">
+	<rdf:first rdf:resource="#User"/>
+	<rdf:rest>
+		<rdf:List rdf:nodeID="node1r2mkdsx14"/>
+	</rdf:rest>
+</rdf:Description>
+<editio:Profile rdf:about="#Admin"/>
+<rdf:Description rdf:nodeID="node1r2mkdsx14">
+	<rdf:first rdf:resource="#Admin"/>
+	<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+</rdf:Description>
+<rdf:Description rdf:about="#Profile">
+	<owl:oneOf rdf:nodeID="node1r2mkdsx13"/>
+</rdf:Description>
+<owl:ObjectProperty rdf:about="#profile">
+	<rdfs:label>profile</rdfs:label>
+</owl:ObjectProperty>
+<owl:DatatypeProperty rdf:about="#meaning">
+	<rdfs:label>meaning</rdfs:label>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#email">
+	<rdfs:label>email</rdfs:label>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#createdOn">
+	<rdfs:label>createdOn</rdfs:label>
+</owl:DatatypeProperty>
+<owl:ObjectProperty rdf:about="#note">
+	<rdfs:label>note</rdfs:label>
+</owl:ObjectProperty>
+<owl:Class rdf:about="#Note">
+	<rdfs:label>Note</rdfs:label>
+</owl:Class>
+<owl:Restriction rdf:nodeID="node1r2mkdsx15">
+	<owl:allValuesFrom rdf:resource="#Document"/>
+</owl:Restriction>
+<owl:ObjectProperty rdf:about="#document">
+	<rdfs:label>document</rdfs:label>
+</owl:ObjectProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx15">
+	<owl:onProperty rdf:resource="#document"/>
+</rdf:Description>
+<rdf:Description rdf:about="#Note">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx15"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx16">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#document"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#Note">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx16"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx17"/>
+<owl:Class rdf:about="#NoteRevision">
+	<rdfs:label>NoteRevision</rdfs:label>
+</owl:Class>
+<owl:Restriction rdf:nodeID="node1r2mkdsx18">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<owl:onProperty rdf:resource="#lemma"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx18"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx19">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#lemma"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx19"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx20">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<owl:onProperty rdf:resource="#meaning"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx20"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx21">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#meaning"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx21"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx22">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<owl:onProperty rdf:resource="#basicForm"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx22"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx23">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#basicForm"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx23"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx24">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+	<owl:onProperty rdf:resource="#createdOn"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx24"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx25">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#createdOn"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx25"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx26">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<owl:onProperty rdf:resource="#explanation"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx26"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx27">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#explanation"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx27"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx28">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:Restriction>
+<owl:DatatypeProperty rdf:about="#longText">
+	<rdfs:label>longText</rdfs:label>
+</owl:DatatypeProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx28">
+	<owl:onProperty rdf:resource="#longText"/>
+</rdf:Description>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx28"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx29">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#longText"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx29"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx30"/>
+<owl:Class rdf:about="#User">
+	<rdfs:label>User</rdfs:label>
+</owl:Class>
+<owl:Restriction rdf:nodeID="node1r2mkdsx31">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:Restriction>
+<owl:DatatypeProperty rdf:about="#firstName">
+	<rdfs:label>firstName</rdfs:label>
+</owl:DatatypeProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx31">
+	<owl:onProperty rdf:resource="#firstName"/>
+</rdf:Description>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx31"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx32">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#firstName"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx32"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx33">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:Restriction>
+<owl:DatatypeProperty rdf:about="#lastName">
+	<rdfs:label>lastName</rdfs:label>
+</owl:DatatypeProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx33">
+	<owl:onProperty rdf:resource="#lastName"/>
+</rdf:Description>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx33"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx34">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#lastName"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx34"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx35">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<owl:onProperty rdf:resource="#email"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx35"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx36">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#email"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx36"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx37">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:Restriction>
+<owl:DatatypeProperty rdf:about="#username">
+	<rdfs:label>username</rdfs:label>
+</owl:DatatypeProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx37">
+	<owl:onProperty rdf:resource="#username"/>
+</rdf:Description>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx37"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx38">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#username"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx38"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx39">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:Restriction>
+<owl:DatatypeProperty rdf:about="#password">
+	<rdfs:label>password</rdfs:label>
+</owl:DatatypeProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx39">
+	<owl:onProperty rdf:resource="#password"/>
+</rdf:Description>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx39"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx40">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#password"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx40"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx41">
+	<owl:allValuesFrom rdf:resource="#Profile"/>
+	<owl:onProperty rdf:resource="#profile"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx41"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx42">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#profile"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#User">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx42"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="node1r2mkdsx30">
+	<owl:allValuesFrom rdf:resource="#User"/>
+</rdf:Description>
+<owl:ObjectProperty rdf:about="#createdBy">
+	<rdfs:label>createdBy</rdfs:label>
+</owl:ObjectProperty>
+<rdf:Description rdf:nodeID="node1r2mkdsx30">
+	<owl:onProperty rdf:resource="#createdBy"/>
+</rdf:Description>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx30"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx43">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#createdBy"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx43"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx44">
+	<owl:allValuesFrom rdf:resource="#Note"/>
+	<owl:onProperty rdf:resource="#revisionOf"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx44"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx45">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#revisionOf"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx45"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx46">
+	<owl:allValuesFrom rdf:resource="#NoteStatus"/>
+	<owl:onProperty rdf:resource="#status"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx46"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx47">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#status"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx47"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx48">
+	<owl:allValuesFrom rdf:resource="#Tag"/>
+	<owl:onProperty rdf:resource="#tagged"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteRevision">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx48"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="node1r2mkdsx17">
+	<owl:allValuesFrom rdf:resource="#NoteRevision"/>
+	<owl:onProperty rdf:resource="#latestRevision"/>
+</rdf:Description>
+<rdf:Description rdf:about="#Note">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx17"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx49">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#latestRevision"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#Note">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx49"/>
+</rdf:Description>
+<owl:Class rdf:about="#NoteComment">
+	<rdfs:label>NoteComment</rdfs:label>
+</owl:Class>
+<owl:Restriction rdf:nodeID="node1r2mkdsx50">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+	<owl:onProperty rdf:resource="#createdOn"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx50"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx51">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#createdOn"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx51"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx52">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<owl:onProperty rdf:resource="#text"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx52"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx53">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#text"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx53"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx54">
+	<owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<owl:onProperty rdf:resource="#title"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx54"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx55">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#title"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx55"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx56">
+	<owl:allValuesFrom rdf:resource="#User"/>
+	<owl:onProperty rdf:resource="#createdBy"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx56"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx57">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#createdBy"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx57"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx58">
+	<owl:allValuesFrom rdf:resource="#Note"/>
+	<owl:onProperty rdf:resource="#note"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx58"/>
+</rdf:Description>
+<owl:Restriction rdf:nodeID="node1r2mkdsx59">
+	<owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</owl:maxCardinality>
+	<owl:onProperty rdf:resource="#note"/>
+</owl:Restriction>
+<rdf:Description rdf:about="#NoteComment">
+	<rdfs:subClassOf rdf:nodeID="node1r2mkdsx59"/>
+</rdf:Description>
+
+</rdf:RDF>

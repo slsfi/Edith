@@ -1,0 +1,23 @@
+<html t:type="layout"  
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+      xmlns:p="tapestry:parameter">
+
+	<p:title>${message:register}</p:title>
+    
+    <p>${message:register}</p>
+    
+    <t:beaneditform object="user"
+        include="shortName,password,email,firstName,lastName" 
+        submitlabel="message:submit"/>
+        
+    <!-- TODO : captcha -->
+	
+    <p:eastPanel>
+        east
+    </p:eastPanel>
+
+    <p:westPanel>
+        west
+    </p:westPanel>
+
+</html>

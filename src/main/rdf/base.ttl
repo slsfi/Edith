@@ -1,0 +1,28 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix edith: <http://www.finlit.fi/semantics/edith/#> .
+@prefix : <http://www.finlit.fi/semantics/edith/data#> .
+
+:timo rdf:type edith:User ; 
+	edith:profile edith:Admin ;
+    edith:username "timo" ;
+    edith:password "d8a0c6468369447dc6328adca0c17e8ad5e572f1";
+    edith:firstName "Timo" ; 
+    edith:lastName "Westkämper" ;
+    edith:email "timo.westkamper@mysema.com" .
+
+:lassi rdf:type edith:User ;
+	edith:profile edith:Admin ;
+    edith:username "lassi" ; 
+    edith:password "533e854ad7be44d124c9f4ca4a683ac39a3e824b" ;
+	edith:firstName "Lassi" ; 
+	edith:lastName "Immonen" ;
+	edith:email "lassi.immonen@mysema.com" .
+	
+:heli rdf:type edith:User ;
+    edith:profile edith:Admin ;
+    edith:username "heli" ;
+    edith:password "2fcd17f22902903d49f74a69fd7554584ea98fc0" ; 
+    edith:firstName "Heli" ;
+    edith:lastName "Kautonen" ;
+    edith:email "heli.kautonen@finlit.fi" .	

@@ -10,7 +10,7 @@
     
         <div id="header">         
           <div id="auth">
-            auth
+            <t:authPanel/>
           </div> 
           <div style="clear:both;"/>
         </div>

@@ -75,6 +75,5 @@ public class User extends Identifiable {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
-
     
 }

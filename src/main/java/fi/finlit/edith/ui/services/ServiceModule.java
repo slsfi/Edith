@@ -51,7 +51,7 @@ public class ServiceModule {
     public static Repository buildRepository(Configuration configuration) {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(  
-            new RDFSource("classpath:/editio.owl", RDFFormat.RDFXML, EDITH.NS),
+            new RDFSource("classpath:/edith.owl", RDFFormat.RDFXML, EDITH.NS),
             new RDFSource("classpath:/base.ttl", RDFFormat.TURTLE, EDITH.DATA),
             new RDFSource("classpath:/data.ttl", RDFFormat.TURTLE, EDITH.DATA)
         );                
