@@ -3,7 +3,7 @@
  * All rights reserved.
  * 
  */
-package fi.finlit.editio.ui.services;
+package fi.finlit.editio.domain;
 
 import java.io.Serializable;
 import java.util.Collection;

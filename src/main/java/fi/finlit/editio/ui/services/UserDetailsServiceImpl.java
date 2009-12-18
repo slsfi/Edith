@@ -12,6 +12,7 @@ import org.springframework.security.userdetails.UserDetailsService;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 
 import fi.finlit.editio.domain.User;
+import fi.finlit.editio.domain.UserRepository;
 
 /**
  * UserDetailsServiceImpl provides

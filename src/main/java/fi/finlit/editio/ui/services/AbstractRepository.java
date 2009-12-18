@@ -9,6 +9,8 @@ import java.util.Collection;
 
 import com.mysema.query.types.path.PEntity;
 
+import fi.finlit.editio.domain.Repository;
+
 /**
  * AbstractRepository provides
  *

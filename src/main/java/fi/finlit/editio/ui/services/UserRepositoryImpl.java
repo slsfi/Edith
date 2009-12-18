@@ -10,6 +10,7 @@ import java.util.List;
 import static fi.finlit.editio.domain.QUser.user;
 
 import fi.finlit.editio.domain.User;
+import fi.finlit.editio.domain.UserRepository;
 
 /**
  * UserServiceImpl provides

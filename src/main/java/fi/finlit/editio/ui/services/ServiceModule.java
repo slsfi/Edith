@@ -23,11 +23,12 @@ import com.mysema.tapestry.core.CallbackService;
 
 import fi.finlit.editio.EDITIO;
 import fi.finlit.editio.domain.Document;
+import fi.finlit.editio.domain.UserRepository;
 
 @SubModule(RDFBeanModule.class)
 public class ServiceModule {
     
-    @Match({"ArticleRepository","UserRepository", "CallbackService"})
+    @Match({"UserRepository", "CallbackService"})
     public static void adviseTransactions(TransactionalAdvisor advisor, MethodAdviceReceiver receiver){
         advisor.addTransactionCommitAdvice(receiver);
     }
@@ -50,7 +51,7 @@ public class ServiceModule {
     public static Repository buildRepository(Configuration configuration) {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(  
-            new RDFSource("classpath:/blog.owl", RDFFormat.RDFXML, EDITIO.NS),
+            new RDFSource("classpath:/editio.owl", RDFFormat.RDFXML, EDITIO.NS),
             new RDFSource("classpath:/base.ttl", RDFFormat.TURTLE, EDITIO.DATA),
             new RDFSource("classpath:/data.ttl", RDFFormat.TURTLE, EDITIO.DATA)
         );                
