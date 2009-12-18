@@ -16,7 +16,7 @@ import fi.finlit.edith.ui.services.AuthService;
  * @author tiwe
  * @version $Id$
  */
-public class BasePage {
+public abstract class BasePage {
     
     @Inject
     private AuthService authService;

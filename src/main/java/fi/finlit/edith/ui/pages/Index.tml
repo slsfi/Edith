@@ -3,6 +3,8 @@
       xmlns:p="tapestry:parameter">
       
     <p:title>${message:frontpage}</p:title>  
+    
+    <h3>${message:main-actions}</h3>
 
     <ul>
         <li>

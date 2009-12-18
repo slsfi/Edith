@@ -37,7 +37,7 @@ import fi.finlit.edith.domain.UserRepository;
 @SubModule(RDFBeanModule.class)
 public class ServiceModule {
     
-    @Match({"UserRepository", "CallbackService"})
+    @Match({"DocumentRepository", "NoteRepository", "UserRepository", "CallbackService"})
     public static void adviseTransactions(TransactionalAdvisor advisor, MethodAdviceReceiver receiver){
         advisor.addTransactionCommitAdvice(receiver);
     }
