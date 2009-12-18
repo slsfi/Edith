@@ -22,7 +22,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 @IncludeStylesheet({
     "context:styles/base.css",
     "context:styles/general.css",
-    "context:styles/editio.css",    
+    "context:styles/edith.css",    
     
     "context:styles/tapestry/forms.css",
     "context:styles/tapestry/grid.css",

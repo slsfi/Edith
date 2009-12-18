@@ -17,7 +17,7 @@
                 
         <div id="top">
             <a t:type="pagelink" t:page="index" id="homeLink">
-              Home
+              <img src="${context:images/logo.jpg}"/>
             </a>
           <div class="title"><t:delegate to="title"/></div>
           <div style="clear:both;"/>

@@ -3,11 +3,11 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
   version="2.4">
 
-  <display-name>editio</display-name>
+  <display-name>edith</display-name>
 
   <context-param>
     <param-name>tapestry.app-package</param-name>
-    <param-value>fi.finlit.editio.ui</param-value>
+    <param-value>fi.finlit.edith.ui</param-value>
   </context-param>
   
   <filter>
