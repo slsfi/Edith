@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.editio.domain;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -12,7 +17,7 @@ import fi.finlit.editio.EDITIO;
  * @version $Id$
  */
 @ClassMapping(ns=EDITIO.NS)
-public class Document {
+public class Document extends Identifiable{
     
     @Predicate
     private String description;

@@ -1,4 +1,11 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.editio.domain;
+
+import org.joda.time.DateTime;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
@@ -12,7 +19,10 @@ import fi.finlit.editio.EDITIO;
  * @version $Id$
  */
 @ClassMapping(ns=EDITIO.NS)
-public class NoteComment {
+public class NoteComment extends Identifiable{
+    
+    @Predicate
+    private DateTime createdOn;
     
     @Predicate
     private User createdBy;
@@ -57,6 +67,16 @@ public class NoteComment {
     public void setNote(Note note) {
         this.note = note;
     }
+
+    public DateTime getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(DateTime createdOn) {
+        this.createdOn = createdOn;
+    }
+    
+    
     
     
 

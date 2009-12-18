@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.editio.domain;
 
 import java.util.Set;
@@ -16,7 +21,19 @@ import fi.finlit.editio.EDITIO;
  * @version $Id$
  */
 @ClassMapping(ns=EDITIO.NS)
-public class NoteRevision {
+public class NoteRevision extends Identifiable {
+    
+    // Explanation
+    @Predicate
+    private String lemma;
+
+    // Explanation
+    @Predicate
+    private String meaning; // merkitys
+    
+    // Explanation : subtekstinLahde
+    
+    // Explanation : sitaatti
     
 //    TODO  : subtekstinLahde, sitaatti, lahde;
     
@@ -27,7 +44,7 @@ public class NoteRevision {
     private String basicForm; // perusmuoto
     
     @Predicate
-    private DateTime created;
+    private DateTime createdOn;
     
     @Predicate
     private User createdBy;
@@ -42,13 +59,7 @@ public class NoteRevision {
     private NoteStatus status;
     
     @Predicate
-    private String lemma;
-
-    @Predicate
     private String longText; // pitkä viite
-
-    @Predicate
-    private String meaning; // merkitys
 
     @Predicate(ln="tagged")
     private Set<Tag> tags;
@@ -57,8 +68,8 @@ public class NoteRevision {
         return basicForm;
     }
 
-    public DateTime getCreated() {
-        return created;
+    public DateTime getCreatedOn() {
+        return createdOn;
     }
 
     public User getCreatedBy() {
@@ -89,8 +100,8 @@ public class NoteRevision {
         this.basicForm = basicForm;
     }
 
-    public void setCreated(DateTime created) {
-        this.created = created;
+    public void setCreatedOn(DateTime created) {
+        this.createdOn = created;
     }
 
     public void setCreatedBy(User createdBy) {
