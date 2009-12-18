@@ -36,7 +36,7 @@ public class RegisterPage extends BasePage{
     Object onSuccess(){
         user.setProfile(Profile.User);
         userRepo.save(user);
-        // TODO : check no username is not taken
+        // TODO : check that username is not taken
         return loginPage;
     }
 }

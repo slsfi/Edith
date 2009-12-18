@@ -32,7 +32,11 @@
         </table>
         
         <div id="bottom">
-              <img src="${context:images/sks_logo.gif}"/>
+        <!-- 
+            <a href="http://www.finlit.fi">
+                <img src="${context:images/sks_logo.gif}"/>
+            </a>
+        -->
         </div>      
         
         </div>

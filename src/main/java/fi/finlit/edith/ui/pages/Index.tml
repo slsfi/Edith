@@ -4,7 +4,17 @@
       
     <p:title>Edith</p:title>  
 
-    <p>content</p>
+    <ul>
+        <li>
+            <a t:type="pageLink" t:page="documentsPage">Documents tree</a>
+        </li>                
+        <li>
+            <a t:type="pageLink" t:page="document/annotatePage" t:context="1">Annotate document</a>
+         </li>
+         <li>   
+            <a t:type="pageLink" t:page="document/viewPage" t:context="1">View document</a>
+        </li>
+    </ul>
         
     <p:eastPanel>
         east
