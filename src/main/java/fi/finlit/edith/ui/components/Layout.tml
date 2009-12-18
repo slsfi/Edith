@@ -25,6 +25,7 @@
         
         <table id="main">
           <tr>
+            <td id="left"><t:delegate to="eastPanel"/></td>
             <td id="center" width="100%"><t:body/></td>
             <td id="right"><t:delegate to="westPanel"/></td>
           </tr>
