@@ -26,15 +26,13 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
 
     @Override
     public User getByUsername(String username){
-        return getSession().from(user)
-            .where(user.username.eq(username))
+        return getSession().from(user).where(user.username.eq(username))
             .uniqueResult(user);
     }
     
     @Override
     public List<User> getOrderedByName() {
-        return getSession().from(user)
-            .orderBy(user.username.asc())
+        return getSession().from(user).orderBy(user.username.asc())
             .list(user);
     }
 
