@@ -18,6 +18,7 @@ import org.apache.tapestry5.urlrewriter.URLRewriterRule;
 import org.springframework.security.providers.AuthenticationProvider;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
+import org.springframework.security.userdetails.UserDetailsService;
 
 import com.mysema.tapestry.Module;
 import com.mysema.tapestry.PageMappingRule;
@@ -31,7 +32,6 @@ import com.mysema.tapestry.PageMappingRule;
 @SubModule( { ServiceModule.class, Module.class })
 public class AppModule {
     
-
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) {
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "fi,en,sv,de");
@@ -56,7 +56,7 @@ public class AppModule {
     // auth
     
     public static void bind(ServiceBinder binder){        
-//        binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);        
+        binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);        
     }
     
     public static void contributeAlias(Configuration<AliasContribution<PasswordEncoder>> configuration ) {

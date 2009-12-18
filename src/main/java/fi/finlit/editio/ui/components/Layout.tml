@@ -10,14 +10,14 @@
     
         <div id="header">         
           <div id="auth">
-            <t:authPanel/>
+            auth
           </div> 
           <div style="clear:both;"/>
         </div>
                 
         <div id="top">
             <a t:type="pagelink" t:page="index" id="homeLink">
-              <img src="${context:images/logo.png}"/>
+              Home
             </a>
           <div class="title"><t:delegate to="title"/></div>
           <div style="clear:both;"/>
@@ -31,11 +31,7 @@
         </table>
         
         <div id="bottom">
-              <ul class="actions">
-                <li>Copyright 2009 by <a href="http://www.mysema.com">${message:company}</a></li>
-                <li><a t:type="pagelink" t:page="aboutPage" t:disabled="isOnPage('aboutPage')">${message:about}</a></li>
-                <li><a t:type="pagelink" t:page="rss">RSS</a></li>
-            </ul>
+              bottom
         </div>      
         
         </div>

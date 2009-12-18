@@ -23,6 +23,8 @@ import fi.finlit.editio.EDITIO;
 @ClassMapping(ns=EDITIO.NS)
 public class NoteRevision extends Identifiable {
     
+//  TODO  : subtekstinLahde, sitaatti, lahde;
+    
     // Explanation
     @Predicate
     private String lemma;
@@ -34,8 +36,6 @@ public class NoteRevision extends Identifiable {
     // Explanation : subtekstinLahde
     
     // Explanation : sitaatti
-    
-//    TODO  : subtekstinLahde, sitaatti, lahde;
     
     @Predicate(ln="validFor")
     private Set<Long> svnRevisions;

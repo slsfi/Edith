@@ -11,6 +11,6 @@ package fi.finlit.editio.ui.pages;
  * @author tiwe
  * @version $Id$
  */
-public class IndexPage {
+public class Index {
 
 }

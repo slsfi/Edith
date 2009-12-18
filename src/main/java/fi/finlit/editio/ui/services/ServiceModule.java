@@ -19,8 +19,10 @@ import com.mysema.rdfbean.sesame.MemoryRepository;
 import com.mysema.rdfbean.sesame.RDFSource;
 import com.mysema.rdfbean.tapestry.RDFBeanModule;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
+import com.mysema.tapestry.core.CallbackService;
 
 import fi.finlit.editio.EDITIO;
+import fi.finlit.editio.domain.Document;
 
 @SubModule(RDFBeanModule.class)
 public class ServiceModule {
@@ -32,15 +34,15 @@ public class ServiceModule {
     
     public static void bind(ServiceBinder binder){
 //        binder.bind(ArticleRepository.class, ArticleRepositoryImpl.class);
-//        binder.bind(UserRepository.class, UserRepositoryImpl.class);
-//        binder.bind(FeedGenerator.class, FeedGeneratorImpl.class);  
-//        binder.bind(CallbackService.class, CallbackServiceImpl.class);
-//        binder.bind(AuthService.class, SpringSecurityAuthService.class);
+//      binder.bind(FeedGenerator.class, FeedGeneratorImpl.class);
+        binder.bind(UserRepository.class, UserRepositoryImpl.class);  
+        binder.bind(CallbackService.class, CallbackServiceImpl.class);
+        binder.bind(AuthService.class, SpringSecurityAuthService.class);
     }
 
     public static Configuration buildConfiguration(IdentityService identityService){
         DefaultConfiguration configuration = new DefaultConfiguration();
-//        configuration.addPackages(Article.class.getPackage());
+        configuration.addPackages(Document.class.getPackage());
         configuration.setIdentityService(identityService);
         return configuration;
     }
