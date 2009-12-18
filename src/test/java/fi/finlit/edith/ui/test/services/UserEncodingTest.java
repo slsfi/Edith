@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.edith.ui.test.services;
 
 import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;

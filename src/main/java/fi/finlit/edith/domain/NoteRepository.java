@@ -3,14 +3,14 @@
  * All rights reserved.
  * 
  */
-package fi.finlit.edith.ui.pages;
+package fi.finlit.edith.domain;
 
 /**
- * DocumentsPage provides
+ * NoteRepository provides
  *
  * @author tiwe
  * @version $Id$
  */
-public class DocumentsPage {
+public interface NoteRepository extends Repository<Note,String>{
 
 }

@@ -23,8 +23,17 @@ import com.mysema.tapestry.core.CallbackService;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.UserRepository;
 
+/**
+ * ServiceModule provides service bindings and RDFBean configuration elements
+ *
+ * @author tiwe
+ * @version $Id$
+ *
+ */
 @SubModule(RDFBeanModule.class)
 public class ServiceModule {
     
@@ -34,9 +43,10 @@ public class ServiceModule {
     }
     
     public static void bind(ServiceBinder binder){
-//        binder.bind(ArticleRepository.class, ArticleRepositoryImpl.class);
-//      binder.bind(FeedGenerator.class, FeedGeneratorImpl.class);
-        binder.bind(UserRepository.class, UserRepositoryImpl.class);  
+        binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
+        binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
+        binder.bind(UserRepository.class, UserRepositoryImpl.class);
+        
         binder.bind(CallbackService.class, CallbackServiceImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
     }

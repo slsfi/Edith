@@ -24,7 +24,7 @@ import com.mysema.tapestry.Module;
 import com.mysema.tapestry.PageMappingRule;
 
 /**
- * AppModule provides
+ * AppModule is the main Tapestry module for the Edith application
  *
  * @author tiwe
  * @version $Id$
