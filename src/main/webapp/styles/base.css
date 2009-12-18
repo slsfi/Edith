@@ -1,0 +1,52 @@
+body {
+	font-family : arial,helvetica,clean,sans-serif;background-color: #fff;
+}
+
+html, body, form { 
+	margin: 0; 
+	padding: 0; 
+}
+
+ul, ol, li, h1, h2, h3, h4, h5, p { 
+	margin: 0; 
+	padding: 0
+}
+
+td, th { 
+	vertical-align: top; 
+}
+
+li { 
+	margin-left: 2em; 
+}
+
+/*a {padding: 0 0.2em 0 0.2em;}*/
+a img { 
+	border: 0; 
+} 
+
+a:link { 
+	text-decoration: none; 
+	color: #00f; 
+}
+
+a:visited { 
+	text-decoration: none; 
+	color: #639; 
+}
+
+a:hover { 
+	text-decoration: underline; 
+} 
+
+a:active { 
+	text-decoration: underline; 
+}
+
+h1, h2, h3, h4, h5, p{
+	margin-bottom: 0.5em;
+}
+
+p{
+	margin: 0.5em 0 0.5 0;
+}

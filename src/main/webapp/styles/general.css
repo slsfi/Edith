@@ -1,0 +1,13 @@
+.panel li {
+	margin-left: 0;
+	padding-left: 0;		
+	list-style: none;	
+}	
+
+.panel li {
+	font-weight: bold;
+}
+
+.panel li a {
+	font-weight: normal;
+}

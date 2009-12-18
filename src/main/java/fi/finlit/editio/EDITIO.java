@@ -5,12 +5,7 @@
  */
 package fi.finlit.editio;
 
-/**
- * EDITIO provides
- *
- * @author tiwe
- * @version $Id$
- */
+
 public final class EDITIO {
     
     private EDITIO(){}
