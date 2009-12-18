@@ -9,7 +9,7 @@
   </parent>
 
   <groupId>fi.finlit</groupId>
-  <artifactId>fi.finlit.editio</artifactId>
+  <artifactId>fi.finlit.edith</artifactId>
   <packaging>war</packaging>
   <version>0.1.0-SNAPSHOT</version>
   <name>SKS Editio</name>
@@ -176,8 +176,8 @@
             </goals>
             <configuration>
               <prefix>editio</prefix>
-              <namespace>http://www.finlit.fi/semantics/editio/#</namespace>
-              <schemaFile>src/main/rdf/editio.owl</schemaFile>
+              <namespace>http://www.finlit.fi/semantics/edith/#</namespace>
+              <schemaFile>src/main/rdf/edith.owl</schemaFile>
             </configuration>
           </execution>
         </executions>
