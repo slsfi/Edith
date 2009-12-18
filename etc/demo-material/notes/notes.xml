@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="drama_test.xsl"?>
+
+<notes>
+  <note xml:id="note.1" target="ref.1" resp="ed">
+    <mentioned>kraatari</mentioned>
+    ’räätäli’ (murt. ja kk, ru skräddare)
+  </note>
+
+  <note xml:id="note.2" target="ref.2" resp="ed">
+    <mentioned>klanetti</mentioned>
+    ’klarinetti’ (murt.)
+  </note>
+
+  <note xml:id="note.3" target="ref.3" resp="ed">
+    <mentioned>huone</mentioned>
+    ’talo, rakennus’ (kk, vrt. ru hus) (
+    <ref target="#eas1934">EAS 1934</ref>
+    : 287)
+  </note>
+
+  <note xml:id="note.4" target="ref.4" resp="ed">
+    <mentioned>rahi</mentioned>
+    ’jakkara, pieni penkki’ (murt., kk)
+  </note>
+
+  <note xml:id="note.5" target="ref.5." resp="ed">
+    Pukeutuminen on komedian konventio, joka korostaa roolin ottamista.
+    Vrt. Ludvig Holbergin Jeppe Niilonpojan (1722) Jeppe pukeutuu näytelmän
+    alussa kaupunkimatkaansa varten (Tarkiainen 1912: 486).</note>
+</notes>

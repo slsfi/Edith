@@ -20,17 +20,17 @@ public enum NoteStatus {
     /**
      * 
      */
-    DRAFT,
+    Draft,
     /**
      * 
      */
-    LOCKED_FOR_EDIT,
+    LockedForEdit,
     /**
      * 
      */
-    FINISHED,
+    Finished,
     /**
      * 
      */
-    PUBLISHABLE;
+    Publishable;
 }

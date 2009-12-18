@@ -1,0 +1,314 @@
+
+<?xml-stylesheet type="text/xsl" href="Notes_test.xsl"?>
+
+<notecoll source="Nummisuutarit">
+
+<notes type="Lingvistisiä ">
+
+<note xml:id="note.lukkari" target="ref.lukkari" resp="ed"><mentioned>lukkari</mentioned> Lukkarin (ru klockare) eli kanttorin (ru kantor, vrt. lat cantor 'laulaja') tehtävänä oli urkujen soiton ja esilaulannan ohessa hoitaa monenlaisia seurakunnan juoksevia asioita, kuten naimalupien ja perukirjojen kirjoittaminen. Lukkari vastasi myös lasten alkeiskouluopetuksesta. Kellonsoitto, johon lukkari-nimike viittaa, oli siirtynyt jo 1700-luvulla kirkonvartijoille. Virallisesti 'lukkari'-nimike korvattiin 'kanttorilla' vuoden 1938 kirkkolaissa. (<ref target="Marte2001">Marte 2001</ref>)</note> 
+
+<note xml:id="note.1" target="ref.1" resp="ed"><mentioned>kraatari</mentioned> 'räätäli' (murt. ja kk, ru skräddare)</note> 
+
+<note xml:id="note.2" target="ref.2" resp="ed"><mentioned>klanetti</mentioned> 'klarinetti' (murt.)</note>
+
+<note xml:id="note.3" target="ref.3" resp="ed"><mentioned>huone</mentioned> 'talo, rakennus' (vrt. ru hus)</note>
+
+<note xml:id="note.4" target="ref.4" resp="ed"><mentioned>rahi</mentioned> 'jakkara, pieni penkki' (murt.)</note>
+
+<note xml:id="note.koska" target="ref.koska" resp="ed"><mentioned>koska</mentioned> 'kun' </note>
+
+<note xml:id="note.vastin" target="ref.vastin" resp="ed"><mentioned>västin</mentioned> 'liivin' (murt. vrt. ru väst)</note>
+
+<note xml:id="note.jalkeensaatos" target="ref.jalkeensaatos" resp="ed"><mentioned>jälkeensäätös</mentioned> 'testamentti, jälkisäädös'</note>
+
+<note xml:id="note.verranvastaiset" target="ref.verranvastaiset" resp="ed"><mentioned>Kristoni verranvastaiset</mentioned> 'Kristoni kanssa samanarvoiset, Kristoni vertaiset'</note>
+
+<note xml:id="note.paikalla" target="ref.paikalla" resp="ed"><mentioned>paikalla</mentioned> 'heti, kohta' (Vrt. Europaeus s.v. genast)</note>
+
+<note xml:id="note.sentaan" target="ref.sentaan" resp="ed">"><mentioned>sentään</mentioned>  tässä: 'sen tähden, siksi' [Tark! Eur]</note>
+
+<note xml:id="note.mynti" target="ref.mynti" resp="ed">"><mentioned>mynti</mentioned> 'täysi-ikäinen' (Vrt. ru lakitermi myndig) "Avioliittoon rupeavilta laki yleisesti vaatii, että mies on täyttänyt 21:n ja vaimo 15:n vuoden iän , jota paitsi molempain pitää olla täysijärkisiä ja herran-ehtoolliselle lasketuita." (Lönnrot 1863.)</note>
+
+<note xml:id="note.tuimasti" target="ref.tuimasti" resp="ed">"><mentioned>tuimasti</mentioned> 'ankarasti'</note>
+
+<note xml:id="note.mainittu" target="ref.mainittu" resp="ed"><mentioned>mainittu</mentioned> 'kuuluisa, tunnettu' (vrt. Europaeus s.v. beryktad)</note>
+
+<note xml:id="note.vettaleipaa" target="ref.vettaleipaa" resp="ed"><mentioned>Muutaman -- määrää</mentioned> [Merenkulku ja oikeuskontekstia...]</note>
+
+<note xml:id="note.kereitten" target="ref.kereitten" resp="ed"><mentioned>kereitten</mentioned> 'keritte' (murt.) (Itkonen 1989: 363)</note>
+
+<note xml:id="note.haarun" target="ref.haarun" resp="ed">"><mentioned>haarun</mentioned> 'kaksihaaraisen puisen hiilihangon' (<mentioned>haaru</mentioned> voi tarkoittaa myös muita haarakkaisia työvälineitä)</note>
+
+<note xml:id="note.koppeliin" target="ref.koppeliin" resp="ed"><mentioned>-koppeliin</mentioned> 'pieneen aitaukseen' (murt. vrt. ru vanh. koppel) [Tark! Eur]</note>
+
+<note xml:id="note.teejoutua" target="ref.teejoutua" resp="ed"><mentioned>Tee -- joutua</mentioned> 'kiirehdi' (vrt. ru gör hast) [Tark! Eur]</note>
+
+<note xml:id="note.varmaan" target="ref.varmaan" resp="ed"><mentioned>varmaan</mentioned> 'varmasti'</note>
+
+<note xml:id="note.noustapitaa" target="ref.noustapitaa" resp="ed"><mentioned>nousta pitää</mentioned> 'syntyy, tulee syntymään' (vrt. Europaeus s.v. uppkomma)</note>
+
+<note xml:id="note.tiekoon" target="ref.tiekoon" resp="ed"><mentioned>tieköön</mentioned> 'tietäköön'</note>
+
+<note xml:id="note.ukulina" target="ref.ukulina" resp="ed"><mentioned>ukulina</mentioned> 'pöllönä'(vrt. ru uggla) [Tark! Eur]</note>
+
+<note xml:id="note.pataassa" target="ref.pataassa" resp="ed"><mentioned>istua kuin pata-ässä</mentioned> 'istua paikallaan mitään tekemättä' sananparsi (Sananparsikorpus)</note>
+
+<note xml:id="note.haarapussi" target="ref.haarapussi" resp="ed"><mentioned>haarapussi</mentioned> 'pitkä, keskeltä täytettävä eväspussi, jota kannettiin olkapäillää toinen pää edessä, toinen takana'</note>
+
+<note xml:id="note.pistouvaisimme" target="ref.pistouvaisimme" resp="ed"><mentioned>pistouvaisimme</mentioned> 'varustaisimme, tarjoaisimme'(murt. vrt. ru best&#229;) [Tark! Eur]</note>
+
+<note xml:id="note.jalkataneissa" target="ref.jalkataneissa" resp="ed"><mentioned>jalkataneissa</mentioned> 'jalan, jalkapatikassa'(murt.)</note>
+
+<note xml:id="note.historjia" target="ref.historjia" resp="ed"><mentioned>-historjia</mentioned> 'juttuja, kaskuja' (vrt. ru historia, ve istorija)</note>
+
+<note xml:id="note.konsikka" target="ref.konsikka" resp="ed"><mentioned>könsikkä</mentioned> 'jukuri, jurrikka' (murt.)</note>
+
+<note xml:id="note.kosee" target="ref.kosee" resp="ed"><mentioned>kosee</mentioned> 'koskee' (murt. <mentioned>kosea</mentioned> 'koskea')</note>
+
+<note xml:id="note.taakke" target="ref.taakke" resp="ed"><mentioned>taakke</mentioned> 'taakse' (murt. ks. Itkonen 1989: 361)</note>
+
+<note xml:id="note.rakuunhevoinen" target="ref.rakuunahevoinen" resp="ed"><mentioned>rakuunahevoinen</mentioned> 'sotaratsu' (vrt. ru dragonhäst)</note>
+
+<note xml:id="note.ehdit" target="ref.ehdit" resp="ed"><mentioned>ehdit</mentioned> tässä: 'saavutat' (vrt. Europaeus s.v. hinna: hinna upp 'saavuttaa')</note>
+
+<note xml:id="note.kohtaataitaa" target="ref.kohtaataitaa" resp="ed"><mentioned>kohtaa taitaa</mentioned> 'voi kohdata, saattaa kohdata'</note>
+
+<note xml:id="note.tullasuittaa" target="ref.tullasuittaa" resp="ed"><mentioned>tulla suittaa</mentioned> 'voit tulla, ehkä tulee' (ks. Saukkonen 1965: 85-88)</note>
+
+<note xml:id="note.konkariaskelta" target="ref.konkariaskelta" resp="ed"><mentioned>konkari-askelta</mentioned> '(korostetun selvää) askelta' (Vrt. ru g&#229;ngare-skridt 'ratsun askellaji, jossa kaikki neljä kaviota astuvat nopeasti ja selvästi, töltti', vrt. Europaeus s.v. g&#229;ngare '(häst) konkari')</note>
+
+<note xml:id="note.ehka" target="ref.ehka" resp="ed"><mentioned>ehkä</mentioned> tässä: 'vaikka' (murt.)</note>
+
+<note xml:id="note.esikuvaintunnusmerkkein" target="ref.esikuvaintunnusmerkkein" resp="ed"><mentioned>esikuvain ja tunnusmerkkein kautta</mentioned> 'esimerkkien ja vertauskuvien avulla' </note>
+
+<note xml:id="note.rakkikoira" target="ref.rakkikoira" resp="ed"><mentioned>vihainen ja äreä kuin rakki-koira</mentioned> sananparsi</note>
+
+<note xml:id="note.malta" target="ref.malta" resp="ed"><mentioned>Malta</mentioned> 'huomaa' (murt. vrt. ru besinna 'ottaa huomioon', besinna sig 'malttaa')</note>
+
+<note xml:id="note.puusuutari" target="ref.puusuutari" resp="ed"><mentioned>puusuutaria</mentioned> 'puukenkien tekijää'</note>
+
+<note xml:id="note.ensimaisissa" target="ref.ensimaisissa" resp="ed"><mentioned>ensimäisissä</mentioned> 'seuraavissa' (murt.)</note>
+
+<note xml:id="note.hangoittelijani" target="ref.hangoittelijani" resp="ed"><mentioned>hangoittelijani</mentioned> 'kilpakosijani, kilpailijani' (Vrt. Europaeus s.v. rival)</note>
+
+<note xml:id="note.tempussa" target="ref.tempussa" resp="ed"><mentioned>tempussa</mentioned> 'asiassa' (Vrt. Europaeus s.v. omständighet)</note>
+
+<note xml:id="note.kuraasi" target="ref.kuraasi" resp="ed"><mentioned>kuraasi</mentioned> 'rohkeus' (murt. vrt. ru kurage)</note>
+
+<note xml:id="note.tarjoi" target="ref.tarjoi" resp="ed"><mentioned>tarjoi itsensä</mentioned> 'tarjoutui' (murt. tarjoo 'tarjota'; Itkonen 1989: 362-363.)</note>
+
+<note xml:id="note.ehdeit" target="ref.ehdeit" resp="ed"><mentioned>ehdeit</mentioned> 'saavuttivat' (murt. [täytyy] ehtii : [minä] ehdein)</note>
+
+<note xml:id="note.tunteeterinomaisetr" target="ref.tunteeterinomaiset" resp="ed"><mentioned>Tunteet erinomaiset</mentioned> 'omituiset tuntemukset'</note>
+
+<note xml:id="note.miehistaa" target="ref.miehistaa" resp="ed"><mentioned>itseni miehistää</mentioned> 'ryhdistäytyä, terästäytyä' (vrt. Europaeus s.v. st&#229;lsätta sig 'miehistää itsensä')</note>
+
+<note xml:id="note.perakaneetilla" target="ref.perakaneetilla" resp="ed"><mentioned>peräkaneetilla</mentioned> 'kertosäkeellä'</note>
+
+<note xml:id="note.sillakurilla" target="ref.sillakurilla" resp="ed"><mentioned>sillä kurilla</mentioned> 'siten, sillä tavoin' (murt.)</note>
+
+<note xml:id="note.vaikkyvi" target="ref.vaikkyvi" resp="ed"><mentioned>väikkyvi</mentioned> 'leijailee' (Vrt. Europaeus s.v. sväfva)</note>
+
+<note xml:id="note.katsoitses" target="ref.katsoitses" resp="ed"><mentioned>Katso vaan itses</mentioned> 'varo vaan, pidä varasi' (vrt. ru akta sig)</note>
+
+<note xml:id="note.keekoilemaan" target="ref.keekoilemaan" resp="ed"><mentioned>keekoilemaan</mentioned> 'keikailemaan' (murt.)</note>
+
+<note xml:id="note.pikipallo" target="ref.pikipallo" resp="ed"><mentioned>sydämeni -- pikipallo</mentioned> sananparsi 'rinnassa roihuaa'</note>
+
+<note xml:id="note.riivioon" target="ref.riivioon" resp="ed"><mentioned>riiviöön -- saattais</mentioned> 'riivaisisi, villitsisi'</note>
+
+<note xml:id="note.puumerkki" target="ref.puumerkki" resp="ed"><mentioned>puumerkkinsä</mentioned> 'kirjoitustaidottoman allekirjoituksen asemesta käyttäämä merkintä' (vrt. ru bomärke)</note>
+
+<note xml:id="note.jalkataneissa_2" target="ref.jalkataneissa_2" resp="ed"><mentioned>jalka-taneissa</mentioned> 'jalan, jalkapatikassa' (murt.)</note>
+
+<note xml:id="note.ylpealta" target="ref.ylpealta" resp="ed"><mentioned>ylpeältä</mentioned> 'ylväältä, uljaalta' (Vrt. Europaeus s.v. stolt mm. 'ylpeä, uljas')</note>
+
+<note xml:id="note.etta" target="ref.etta" resp="ed"><mentioned>että</mentioned> tässä: 'koska' (vrt. ru för att)</note>
+
+<note xml:id="note.valittaman" target="ref.valittaman" resp="ed"><mentioned>vanhempia -- valittaman</mentioned> 'pitäisi raskaasti surkutella vanhempia' (vrt. Europaeus s.v. beklaga 'surkutella, valittaa, pahoitella'; klaga över 'voivotella')</note>
+
+<note xml:id="note.erittain" target="ref.erittain" resp="ed"><mentioned>erittäin</mentioned> 'erikseen, erityisesti' (murt.)</note>
+
+<note xml:id="note.mieltamurtaa" target="ref.mieltamurtaa" resp="ed"><mentioned>mieltäni murtaa</mentioned> 'muuttaa mieleni; voittaa vihani' </note>
+
+<note xml:id="note.tulileimaus1" target="ref.tulileimaus1" resp="ed"><mentioned>Kirkas -- leimaus</mentioned>
+Vrt. VK 176: 3: "O kirkas tuli ja leimaus, Sytytä meihin palava rakkaus, Pitämään sinun sanas ja opetukses, Siinä myös kiini rippumaan,
+kaikes' siunaukses'. Kyrie eleeson." 
+[Ks. myös XX; Nyk. virsi 113:3 "Oi Henki, kirkas leimahdus...", alunp. Luther: "Du werthes Licht, gib uns deinen Schein"]
+</note>
+
+<note xml:id="note.matteus1" target="ref.matteus1" resp="ed"><mentioned>saatpa -- olet</mentioned>
+Vrt. Matt. 25: 31-46. Matteus kuvaa viimeistä tuomiota, jolloin vanhurskaat saavat iänkaikkisen elämän, sillä
+ovat auttaneet lähimmäistään. Matt. 25: 35: "Sillä minä isoisin, ja te ruokitte minun: minä janoisin, ja te
+juotitte minun: minä olin outo, ja te minun huoneeseen otitte." Ks. myös viite [XX].</note>
+
+<note xml:id="note.siksi" target="ref.siksi" resp="ed"><mentioned>Siksi</mentioned> 'siihen mennessä, siiheksi'</note>
+
+<note xml:id="note.loiskimme" target="ref.loiskimme" resp="ed"><mentioned>loiskimmeki</mentioned> 'hypimmekkin' (murt.)</note>
+
+<note xml:id="note.edessanne" target="ref.edessanne" resp="ed"><mentioned>edessänne</mentioned> 'teille' (murt. vrt. ru för er)</note>
+
+<note xml:id="note.mitaalikanuunia" target="ref.mitaalikanuunia" resp="ed"><mentioned>mitaali-kanuunia</mentioned> 'rautakanuunoita'; <mentioned>mitali</mentioned> 'metalli'</note>
+
+<note xml:id="note.ryssat" target="ref.ryssat" resp="ed"><mentioned>Ryssät</mentioned> 'venäläiset' (vrt. ru ryss)</note>
+
+<note xml:id="note.peraansoittais" target="ref.peraansoittais" resp="ed"><mentioned>saakeli peräänsoittais</mentioned> 'paholainen ajaisi takaa' (murt.[?])</note>
+
+<note xml:id="note.perunamurulla" target="ref.perunamurulla" resp="ed"><mentioned>perunamurulla</mentioned> 'pienellä perunapellolla' (murt.)</note>
+
+<note xml:id="note.pelaa" target="ref.pelaa" resp="ed"><mentioned>pelaa</mentioned> 'soittaa' (murt. vrt. ru spela)</note>
+
+<note xml:id="note.porstuvassa" target="ref.porstuvassa" resp="ed"><mentioned>porstuvassa</mentioned> 'eteisessä' (murt. vrt. ru förstuga)</note>
+
+<note xml:id="note.herettya" target="ref.herettya" resp="ed"><mentioned>herettyä</mentioned> 'loputtua' (murt.)</note>
+
+<note xml:id="note.leiskahtelee" target="ref.leiskahtelee" resp="ed"><mentioned>leiskahtelee</mentioned> 'hyppii, heilahtelee' (murt.)</note>
+
+<note xml:id="note.olvi" target="ref.olvi" resp="ed"><mentioned>olvi</mentioned> 'olut'</note>
+
+<note xml:id="note.huhmarissa" target="ref.huhmarissa" resp="ed"><mentioned>huhmarissa</mentioned> 'survimessa, murskaimessa'</note>
+
+<note xml:id="note.peraanaatus" target="ref.peraanaatus" resp="ed"><mentioned>perään-aatus</mentioned> 'pohdiskelu, ajattelu' (Vrt. Europaeus s.v. eftertänka 'perään-ajatus'</note>
+
+<note xml:id="note.kaikki" target="ref.kaikki" resp="ed"><mentioned>kaikki</mentioned> 'lopussa' (vrt. ru alla)</note>
+
+<note xml:id="note.ilautti" target="ref.ilautti" resp="ed"><mentioned>ilautti</mentioned> 'iahdutti'</note>
+
+<note xml:id="note.ankarasti1" target="ref.ankarasti1" resp="ed"><mentioned>ankarasti</mentioned> tässä: 'kovasti, suuresti'</note>
+
+<note xml:id="note.panipaesiin" target="ref.panipaesiin" resp="ed"><mentioned>panipa -- esiin</mentioned> 'esittipä, toipa esiin' (vrt. ru lägga fram)</note>
+
+<note xml:id="note.likistipakarsimysta" target="ref.likistipakarsimysta" resp="ed"><mentioned>likistipä -- kärsimystä</mentioned> 'koetteli kärsivällisyyttä'</note>
+
+<note xml:id="note.vapriikinnuuska" target="ref.vapriikinnuuska" resp="ed"><mentioned>vapriikin nuuska</mentioned> 'tehdastekoinen nuuska' (murt. vrt. ru fabrik)</note>
+
+<note xml:id="note.marepala" target="ref.marepala" resp="ed"><mentioned>märepala</mentioned> 'märehtimispala, mälli'</note>
+
+<note xml:id="note.vesikoijussa" target="ref.vesikoijussa" resp="ed"><mentioned>vesikoijussa</mentioned> 'kuritushuoneessa, eristyssellissä'</note>
+
+<note xml:id="note.vaanetta" target="ref.vaanetta" resp="ed"><mentioned>vaan että</mentioned> 'ainoastaan'</note>
+
+<note xml:id="note.tiukka" target="ref.tiukka" resp="ed"><mentioned>tiukka</mentioned> 'huono, vähäinen, niukka'</note>
+
+<note xml:id="note.esimieheksensa" target="ref.esimieheksensa" resp="ed"><mentioned>esimieheksensä</mentioned> 'holhoojaksensa'</note>
+
+<note xml:id="note.tuttavien" target="ref.tuttavien" resp="ed"><mentioned>tuttavien</mentioned> 'tuttujen' (murt. vrt. Europaeus s.v. bekant 'tuttu, tuttava'</note>
+
+<note xml:id="note.putelli" target="ref.putelli" resp="ed"><mentioned>putelli</mentioned> 'pullo' (vrt. ru vanh. butell ~ butäll)</note>
+
+<note xml:id="note.reteliin" target="ref.reteliin" resp="ed"><mentioned>reteliin</mentioned> 'heinärattaille', <mentioned>retelit</mentioned> 'heinärattaat'</note>
+
+<note xml:id="note.puhdashyva" target="ref.puhdashyva" resp="ed"><mentioned>sitten -- hyvä</mentioned> sananparsi <mentioned>puhdas on hyvä</mentioned> 'kaikki on lopussa'</note>
+
+<note xml:id="note.aatelkaasperaan" target="ref.aatelkaasperaan" resp="ed"><mentioned>Aatelkaas perään</mentioned> 'miettikääpä, punnitkaapa' (vrt. ru tänka efter, Europaeus s.v. eftertänka 'ajatella perään'</note>
+
+<note xml:id="note.jalkihaihin" target="ref.jalkihaihin" resp="ed"><mentioned>jälkihäihin</mentioned> 'hääjuhlien jatkoille sulhasen kotiin'</note>
+
+</notes>
+
+
+<notes type="Mittaa koskevia ">
+
+<note xml:id="note.riksia" target="ref.riksia" resp="ed"><mentioned>riksiä</mentioned> 'riikintaalaria' (Vrt. ru riksdaler) Vanha ruotsalainen rahayksikkö, joka oli käytössä Suomessa vuoteen 1840 asti Venäjän ruplan rinnalla.</note>
+
+<note xml:id="note.leiviska" target="ref.leiviska" resp="ed"><mentioned>leiviskä</mentioned> Vanha painomitta, n. 8,5 kg.</note>
+
+</notes>
+
+
+<notes type="Kirjallisuus">
+
+<note xml:id="note.riettaus" target="ref.riettaus" resp="ed"><mentioned>riettauden hengen</mentioned> Vrt. Gossner 1822: 6-7: "Niin monta syntiä kuin minä teen, niin monta perkeleen rietasta henkeä raatelee ja täyttää sydämeni". Ks. [X] </note>
+
+<note xml:id="note.elavakuva" target="ref.elavakuva" resp="ed"><mentioned>kuvani elävä</mentioned> Vrt. Moos. 1: 27: "Ja Jumala loi Ihmisen omaksi kuwaksensa, Jumalan kuwaksi hän sen loi; mieheksi ja vaimoksi loi hän heitä."</note>
+
+<note xml:id="note.syvyydenkaivo" target="ref.syvyydenkaivo" resp="ed"><mentioned>syvyyden kaivoon</mentioned>
+'helvettiin' Vrt. Ilm. 9: 1-2: 
+"Ja wiides Engeli soitti Basunalla, ja minä näjin Tähden Taiwaasta maan päälle putoowan,
+ja hänelle annettiin sywyyden kaiwon awain.
+Ja hän awais sywyyden kaiwon, ja kaiwon sawu kävi ylös niinkuin suuren pätsin sawu; ja Aurinko ja ilma pimis kaiwon sawusta."</note>
+
+<note xml:id="note.tobias1" target="ref.tobias1" resp="ed"><mentioned>Oli -- lähteä</mentioned> Vrt. Tob. 4-9: Tobia lähettää samannimisen poikansa perimään vanhaa velkaa, ja tällä matkalla nuori Tobia päätyy naimisiin. "Tobiaan kirja" kuuluu Vanhan Testamentin ns. apokryfikirjoihin, joita julkaistiin useissa vanhoissa Raamatun laitoksissa.</note>
+
+<note xml:id="note.tobias2" target="ref.tobias2" resp="ed"><mentioned>ja koska -- saastainen</mentioned> Vrt. Tob. 3: 8, 6: 18: Paha henki on tappanut Saaralta seitsemän vastavihittyä aviomiestä, kun nämä ovat tulleet hänen vuoteeseensa. Oppaana toimiva enkeli Rafael kehottaa nuorta Tobiaa pidättäytymään kolme päivää avioliiton solmimisen jälkeen, jotta tämä välttäisi edeltäjiensä kohtalon.</note>
+
+<note xml:id="note.johannes1" target="ref.johannes1" resp="ed"><mentioned>vaan -- pyyntö</mentioned> Vrt. 1 Joh. 2: 16: "Sillä kaikki kuin maailmassa on, lihan himo, silmäin pyyntö, ja elämän koreus, ei se ole Isästä, waan se on maailmasta."; <mentioned>silmäin pyyntö</mentioned> 'aistien välityksellä syntyvät halut'</note>
+
+<note xml:id="note.saarnaaja1" target="ref.saarnaaja1" resp="ed"><mentioned>mutta -- paulansa</mentioned> Vrt. Saarn. 7: 27: "Ja löysin, että se waimo on haikiampi kuin kuolema, jonka sydän on werkko ja paula, ja hänen kätensä owat kahleet. Se joka Jumalalle on otollinen, hän wälttää häntä, mutta syntinen käsitetään hänen kauttansa".</note>
+
+<note xml:id="note.tobias3" target="ref.tobias3" resp="ed"><mentioned>riettauden -- surmattiin</mentioned> Vrt. Tob. 3: 8, 6: 18: Paha henki on tappanut Saaralta seitsemän vastavihittyä aviomiestä, kun nämä ovat tulleet hänen vuoteeseensa. Oppaana toimiva enkeli Rafael kehottaa nuorta Tobiaa pidättäytymään kolme päivää avioliiton solmimisen jälkeen, jotta tämä välttäisi edeltäjiensä kohtalon.</note>
+
+<note xml:id="note.tobias4" target="ref.tobias4" resp="ed"><mentioned>tulipa -- enkeli</mentioned> Vrt. Tob. 5: 14-15: Nuoren Tobiaan matkaoppaaksi tarjoutuu arkkienkeli Rafael.</note>
+
+<note xml:id="note.tobias5" target="ref.tobias5" resp="ed"><mentioned>huusi -- kala</mentioned> Vrt. Tob. 6: 2-3: "Ja hän meni pesemään jalkojansa; ja katso, suuri kala hyppäis sieltä, ja tahtoi niellä hänen. Jota Tobia hämmästyi, ja huusi täydellä äänellä ja sanoi: Herra, hän tahtoo minun syödä." Joesta hyppäävä kala, joka tavoittelee Tobiaa, on tunnettu kuvamotiivi, ja se löytyy esimerkiksi Kiven tuntemista vuoden 1853 Raamatusta ja Hybnerin kuvakirjasta 'Pipliän Historiat Wanhasta ja Uudesta Testamentista' (1850). (Ks. Sihvo 2000.)</note>
+
+<note xml:id="note.mailmailoita" target="ref.mailmailoita" resp="ed"><mentioned>"Koko -- mahtaa"</mentioned> Vrt. VK 75: 1 "Koko mailm' iloit' mahtaa, / kaikest' sielust', mielestäns',/ HERran tykö tulkaat kaukaa, / Te kuin olett' liitosans', / Iloll' edes astukaat, / HERrall' kiitost' veisatkaat."</note>
+
+<note xml:id="note.saatanaympari" target="ref.saatanaympari" resp="ed"><mentioned>saatana -- ympärillämme</mentioned> Vrt. 1 Piet. 5: 8: "Olkaat raittiit, walwokaat; sillä teidän wihollisenne Perkele käy ympäri, niinkuin kiljuwa jalopeura, ja etsii kenen hän nielis." [Vrt. Job 1: 7: "Mutta Herra sanoi Satanalle: kusta sinä tulet? Satan wastais Herraa, ja sanoi: minä olen käynyt ja waeltanut ympäri maan." (Job 2: 2: sama)]</note>
+
+<note xml:id="note.johannes2" target="ref.johannes2" resp="ed"><mentioned>Mitä -- kirjoitin.</mentioned>
+Vrt. Joh. 19: 19-22: Pilatus kirjoitutti Jeesuksen ristiin "JESUS NATSARENUS JUDALAISTEN KUNINGAS".
+Kun juutalaiset papit kritisoivat tätä, Pilatus vastasi heille: "mitä minä kirjoitin, sen minä kirjoitin."</note>
+</notes>
+
+
+<notes type="Muita ">
+
+<note xml:id="note.neuloen" target="ref.neuloen" resp="ed"><mentioned>neuloen</mentioned> Suutarit neuloivat eli ompelivat kenkien saumoja erityisellä nahkaneulalla.</note>
+
+<note xml:id="note.5" target="ref.5" resp="ed"><mentioned>Ullakossa -- sulhaiseksi</mentioned> Esko pukeutuu (sulhasen) rooliin. Pukeutuminen on komedian konventio, joka korostaa roolin ottamista. Ks. [X]</note>
+
+<note xml:id="note.naimalupa" target="ref.naimalupa" resp="ed">"><mentioned>saadaksesi naimalupaa</mentioned> Naisen holhoojalta tarvittiin suostumus kihlaukseen ja avioliittoon. (Ks. Lönnrot 1863.)</note>
+
+<note xml:id="note.Turku" target="ref.Turku" resp="ed"><mentioned>Turussa</mentioned> Turku oli 1840-luvulle asti Suomen suurin kaupunki ja tärkein satamakaupunki (pääkaupunkina 1809-12).</note>
+
+<note xml:id="note.pamppuni" target="ref.pamppuni" resp="ed"><mentioned>pamppuni</mentioned> Pamppu tai keppi kuuluu komedian ns. slpastick-perinteeseen, joka juontaa juurensa Antiikin Kreikan näytelmiin.</note>
+
+<note xml:id="note.rikosrangaistus" target="ref.rikosrangaistus" resp="ed"><mentioned>rikos -- vaatii</mentioned> sananparsi (MKT)</note>
+
+<note xml:id="note.sionissa" target="ref.sionissa" resp="ed"><mentioned>Sionissa</mentioned>
+Tarkoittaa <mentioned>Siionin virsiä</mentioned>, joka on herännäisuskovaisten laulukokoelma.
+Herännäiskokoontumisiin osallistuvat tuntevat virret niin hyvin, että joku saattaa spontaanisti
+aloittaa virren edellisen puheen innoittamana ja muut yhtyvät siihen.
+Kivi tunsi Siionin virsi kokoelmista ainakin <mentioned>Siionin virret</mentioned> (1790) ja
+<mentioned>Halullisten Sieluin Hengelliset Laulut</mentioned> (1790). 
+Vuonna 1883 <mentioned>Siionin virsiin</mentioned> liitetyn kokoelman <mentioned>Hengelliset Laulut</mentioned>
+Kivi lienee tuntenut erillisinä arkkivirsijulkaisuina.
+(Ks. Haavio-Maununmaa 1993: 12-13, 15-16, 88, 103 sekä Kares 1950: 67.)
+[Sitaattia "Olenko - - huuttaan" ei kuitenkaan näyttäisi Siionin virsi -kokoelmista löytyvän.]</note>
+
+<note xml:id="note.reppuryssa" target="ref.reppuryssa" resp="ed"><mentioned>reppuryssä</mentioned> Reppu- eli laukkuryssät olivat itäkarjalaisia ja venäläisiä kulkukauppiaita, jotka vaelsivat Venäjän vallan aikana yleensä jalan kauppamatkoillaan. Usein reppuryssät toimivat uutisten ja huhujen levittäjinä.</note>
+
+<note xml:id="note.toukallakerno" target="ref.toukallakerno" resp="ed"><mentioned>toukalla -- kohtaan</mentioned> 'toukka on mielistynyt tyttöön'(vrt. ru ha et kärt öga till ngn); 'toukka' on viittaus puusuutarin työhön eli puunkaivertamiseen kuin toukka.</note>
+
+<note xml:id="note.haatoimis" target="ref.haatoimis" resp="ed"><mentioned>Häätoimis' -- lyhteet</mentioned> Morsiamen hyvästijättö lapsuuskodilleen on kansanlauluperinteessä käytetty motiivi. Arkkiveisu "Morsiamen hyvästijättölaulu" oli 1800-luvulla hyvin tunnettu. Vanha tapa oli ajeluttaa hääparia pitkin kujaa, jonka molemmin puolin leimusivat palavat lyhteet.</note>
+
+<note xml:id="note.tilulii" target="ref.tilulii" resp="ed"><mentioned>Tilulii -- lilulii</mentioned> Kansanlauluissa käytettiin yleisesti "tiluliin" kaltaisia kertosäkeitä.</note>
+
+<note xml:id="note.onnela" target="ref.onnela" resp="ed"><mentioned>Mis' löytyvi -- vuoret</mentioned> Kivellä yleinen runokuva, vrt. <mentioned>Onnelliset</mentioned> ja <mentioned>Sunnuntai</mentioned>.</note>
+
+<note xml:id="note.minasinuksi" target="ref.minasinuksi" resp="ed"><mentioned>minä -- minuksi</mentioned> [sitaatti?]</note>
+
+<note xml:id="note.uusipaita" target="ref.uusipaita" resp="ed"><mentioned>matkaansaattaa -- paidan</mentioned> Puhemiehelle oli tapana antaa palkkioksi uusi paita. matkaansaattaa 'saada aikaiseksi' (Vrt. Europaeus s.v. tillvägabringa 'matkaan saattaa')</note>
+
+<!-- sivulta 25 eteenpäin -->
+
+<note xml:id="note.tuulispilvis" target="ref.tuulispilvis" resp="ed"><mentioned>tuulis' ja pilvis'</mentioned> [sitaatti?]</note>
+
+<note xml:id="note.haaporsaita" target="ref.haaporsaita" resp="ed"><mentioned>etten -- hääporsaita</mentioned> 'etten anna sinulle selkään' (murt. antaa pääsiäis- tai jouluporsaita 'rangaista huonosta käytöksestä kyseisinä juhlapäivinä'; vrt. ru ris 'vitsa', gris 'porsas') (Länsimäki HS 2006.)</note>
+
+<note xml:id="note.tikanpojan" target="ref.tikanpojan" resp="ed"><mentioned>Se -- puuhun</mentioned> vrt. sananparsi "luonto se on, joka tikanpojan puuhun vetää"</note>
+
+<!-- sivulta 30: -->
+
+<!-- sivulta 63: -->
+
+<note xml:id="note.jumaltiesi" target="ref.jumaltiesi" resp="ed"><mentioned>Jumal' -- naulitaan</mentioned> Sadussa kettu laukkaa hampaat hevosen häntään takertuneena, jolloin jänis kysyy "Mihin Mikkoa viedään?" Kettu vastaa: "Jumala tiesi, Jussi kulta, missä nahka naulitaan". [Tark!]</note>
+
+<note xml:id="note.albion" target="ref.albion" resp="ed"><mentioned>Albionin</mentioned> 'Englannin' Brittein saarten vanha nimitys, joka on säilynyt kaunokirjallisissa teksteissä, esimerkiksi Shakespearen "Kuningas Lear" III näytös: 91-92.</note>
+
+<note xml:id="note.kynasein" target="ref.kynasein" resp="ed"><mentioned>kynäsein</mentioned> Lapsen hellittelynimitys; <mentioned>kynä</mentioned> 'sulan ruoto'</note>
+
+</notes>
+
+</notecoll>
