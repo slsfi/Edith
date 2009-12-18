@@ -1,6 +1,6 @@
 package fi.finlit.edith.ui.services;
 
-import static fi.finlit.editio.domain.QDocument.document;
+import static fi.finlit.edith.domain.QDocument.document;
 
 import java.util.List;
 

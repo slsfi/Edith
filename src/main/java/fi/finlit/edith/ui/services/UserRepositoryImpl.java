@@ -7,7 +7,7 @@ package fi.finlit.edith.ui.services;
 
 import java.util.List;
 
-import static fi.finlit.editio.domain.QUser.user;
+import static fi.finlit.edith.domain.QUser.user;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserRepository;
