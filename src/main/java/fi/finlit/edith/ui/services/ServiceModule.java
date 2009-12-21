@@ -10,6 +10,7 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.openrdf.rio.RDFFormat;
+import org.tmatesoft.svn.core.wc.SVNClientManager;
 
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.object.Configuration;
@@ -50,14 +51,14 @@ public class ServiceModule {
         binder.bind(CallbackService.class, CallbackServiceImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
     }
-
+    
     public static Configuration buildConfiguration(IdentityService identityService){
         DefaultConfiguration configuration = new DefaultConfiguration();
         configuration.addPackages(Document.class.getPackage());
         configuration.setIdentityService(identityService);
         return configuration;
     }
-    
+
     public static Repository buildRepository(Configuration configuration) {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(  
@@ -66,6 +67,10 @@ public class ServiceModule {
             new RDFSource("classpath:/data.ttl", RDFFormat.TURTLE, EDITH.DATA)
         );                
         return repository;        
+    }
+    
+    public static SVNClientManager buildSVNClientManager(){
+        return SVNClientManager.newInstance();
     }   
     
 }

@@ -12,6 +12,7 @@ public class EdithNormalStart {
     public static void main(String[] args) throws Exception{
         System.setProperty("org.mortbay.jetty.webapp.parentLoaderPriority", "true");
         System.setProperty("production.mode", "true");
+        // TODO : svn.repo system properties
         JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
     }
 
