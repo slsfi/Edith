@@ -13,7 +13,7 @@ import com.mysema.rdfbean.annotations.Predicate;
 import fi.finlit.edith.EDITH;
 
 /**
- * Comment provides
+ * NoteComment provides
  *
  * @author tiwe
  * @version $Id$

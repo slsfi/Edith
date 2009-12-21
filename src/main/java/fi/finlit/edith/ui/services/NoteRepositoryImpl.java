@@ -17,7 +17,7 @@ import fi.finlit.edith.domain.NoteRepository;
  */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository{
 
-    protected NoteRepositoryImpl() {
+    public NoteRepositoryImpl() {
         super(note);
     }
 

@@ -15,7 +15,7 @@ import fi.finlit.edith.ui.services.AuthService;
  * @author tiwe
  * @version $Id$
  */
-public class AuthAwarePanel {
+public abstract class AuthAwarePanel {
     
     @Inject
     private AuthService authService;

@@ -37,8 +37,9 @@ public class NoteRevision extends Identifiable {
     
     // Explanation : sitaatti
     
-    @Predicate(ln="validFor")
-    private Set<Long> svnRevisions;
+//    @Predicate(ln="validFor")
+//    private Set<Long> svnRevisions;
+    private long svnRevision;
     
     @Predicate
     private String basicForm; // perusmuoto
@@ -128,14 +129,6 @@ public class NoteRevision extends Identifiable {
         this.tags = tags;
     }
 
-    public Set<Long> getSvnRevisions() {
-        return svnRevisions;
-    }
-
-    public void setSvnRevisions(Set<Long> svnRevisions) {
-        this.svnRevisions = svnRevisions;
-    }
-
     public Note getRevisionOf() {
         return revisionOf;
     }
@@ -150,6 +143,14 @@ public class NoteRevision extends Identifiable {
 
     public void setStatus(NoteStatus status) {
         this.status = status;
+    }
+
+    public long getSvnRevision() {
+        return svnRevision;
+    }
+
+    public void setSvnRevision(long svnRevision) {
+        this.svnRevision = svnRevision;
     }
  
     
