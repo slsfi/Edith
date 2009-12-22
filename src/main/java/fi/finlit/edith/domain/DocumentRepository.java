@@ -19,12 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 public interface DocumentRepository extends Repository<Document,String>{
     
     /**
+     * Get a Document handle for the given path
+     * 
      * @param svnPath
      * @return
      */
     Document getDocumentForPath(String svnPath);
     
     /**
+     * Get the Documents of the given directory path and its subpaths
+     * 
      * @param svnFolder
      * @return
      */

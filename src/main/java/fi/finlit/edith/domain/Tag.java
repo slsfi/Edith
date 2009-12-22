@@ -19,7 +19,7 @@ import fi.finlit.edith.EDITH;
  * @version $Id$
  */
 @ClassMapping(ns=EDITH.NS)
-public class Tag {
+public class Tag implements Comparable<Tag>{
     
     @Id(IDType.URI)
     UID id;
@@ -32,6 +32,11 @@ public class Tag {
     
     public String getName(){
         return id.getLocalName();
+    }
+
+    @Override
+    public int compareTo(Tag tag) {
+        return id.getLocalName().compareTo(tag.getName());
     }
 
 }

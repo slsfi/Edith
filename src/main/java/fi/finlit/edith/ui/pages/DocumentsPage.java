@@ -20,6 +20,7 @@ import fi.finlit.edith.domain.DocumentRepository;
  * @author tiwe
  * @version $Id$
  */
+@SuppressWarnings("unused")
 public class DocumentsPage {
     
     @Inject
@@ -27,6 +28,9 @@ public class DocumentsPage {
     
     @Property
     private Collection<Document> documents;
+    
+    @Property
+    private Document document;
     
     @Secured("ROLE_USER")
     void onActivate(){

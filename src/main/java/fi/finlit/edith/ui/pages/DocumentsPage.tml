@@ -2,11 +2,16 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
       xmlns:p="tapestry:parameter">
       
-    <p:title>Edith</p:title>  
+    <p:title>${message:documents}</p:title>  
 
-    <p>
-        TODO : list documents here
-    </p>
+    <!-- TODO : make this a tree -->
+
+    <ul>
+        <li t:type="loop" t:source="documents" t:value="document">
+            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${document.title}</a>  
+            (<a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>)
+        </li>
+    </ul>
         
     <p:eastPanel>
         <t:dashboard/>

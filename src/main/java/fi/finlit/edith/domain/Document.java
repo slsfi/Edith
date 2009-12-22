@@ -17,7 +17,7 @@ import fi.finlit.edith.EDITH;
  * @version $Id$
  */
 @ClassMapping(ns=EDITH.NS)
-public class Document extends Identifiable{
+public class Document extends Identifiable implements Comparable<Document>{
     
     @Predicate
     private String description;
@@ -50,6 +50,11 @@ public class Document extends Identifiable{
     
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public int compareTo(Document doc) {
+        return svnPath.compareTo(doc.svnPath);
     }
 
 }

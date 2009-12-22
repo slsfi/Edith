@@ -2,13 +2,9 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
       xmlns:p="tapestry:parameter">
       
-    <p:title>${document.title}</p:title>  
-
-    <p>
-        ${document.title}
-        
-        <!-- TODO : show contents -->
-    </p>
+    <p:title>${message:about}</p:title>  
+    
+    <h3>${message:about}</h3>
         
     <p:eastPanel>
         <t:dashboard/>

@@ -10,6 +10,10 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.openrdf.rio.RDFFormat;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 
 import com.mysema.rdfbean.model.Repository;
@@ -72,5 +76,11 @@ public class ServiceModule {
     public static SVNClientManager buildSVNClientManager(){
         return SVNClientManager.newInstance();
     }   
+    
+    public static SVNRepository buildSVNRepository() throws SVNException{
+        SVNURL repoURL = SVNURL.parseURIEncoded(System.getProperty(EDITH.REPO_URL_PROPERTY));
+        return SVNRepositoryFactory.create(repoURL);
+
+    }
     
 }

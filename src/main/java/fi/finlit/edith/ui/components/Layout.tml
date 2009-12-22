@@ -32,11 +32,17 @@
         </table>
         
         <div id="bottom">
-        <!-- 
-            <a href="http://www.finlit.fi">
-                <img src="${context:images/sks_logo.gif}"/>
-            </a>
-        -->
+            <ul class="actions">
+                <li>
+                    <t:pagelink page="index">${message:frontpage}</t:pagelink>
+                </li>            
+                <li>
+                    <t:pagelink page="aboutPage">${message:about}</t:pagelink>
+                </li>
+                <li>
+                    <a href="http://www.finlit.fi">SKS</a>                
+                </li>
+            </ul>
         </div>      
         
         </div>

@@ -13,9 +13,11 @@
                 <li>
                     <a t:type="pageLink" t:page="noteSearch" t:disabled="isOnPage('noteSearch')">${message:notesearch}</a>
                 </li>
+                <!-- 
                 <li>
                     <a t:type="pageLink" t:page="logoutPage" t:disabled="isOnPage('logoutPage')">${message:logout}</a>
                 </li>
+                 -->
             </ul>            
         </div>
         </t:if>        
