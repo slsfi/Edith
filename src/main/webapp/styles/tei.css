@@ -1,0 +1,58 @@
+/*html, body {
+    height: 100%;
+}
+
+.content .tei{
+    margin: 10px 0 0 10px;
+    min-height: 100%;
+    overflow: scroll;			
+    margin: 0 auto;
+}
+*/
+
+.tei .head{
+	font-weight: bold;
+	font-size: 1.2em;
+	padding: 1em 0em;
+}
+
+.speaker{
+	display: block;
+	font-weight: bold;
+}
+
+.stage {
+	font-style: italic;
+}
+
+.orig{
+	font-style: italic;
+	color: #D0D0D0;
+}
+
+.sp{
+	padding-bottom: 0.5em;
+}
+
+.listBibl{
+	border: dotted 1px gray;
+}
+
+.titleStmt .title{
+	font-weight: bold;
+	font-size: 1.4em;
+	text-align: center;
+	padding: 1em;	
+}
+
+.titleStmt .author{
+	font-weight: bold;
+	font-size: 1.2em;
+	text-align: center;
+	padding: 1em 0em;
+}	
+
+.teiHeader{
+	/*border: solid 1px #E0E0E0;*/	
+	padding: 1em 0em;
+}

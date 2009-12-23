@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.pages.document;
 
+import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -18,6 +19,7 @@ import fi.finlit.edith.domain.DocumentRepository;
  * @version $Id$
  */
 @SuppressWarnings("unused")
+@IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage {
     
     @Inject

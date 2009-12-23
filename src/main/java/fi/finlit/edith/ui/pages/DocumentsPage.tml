@@ -4,13 +4,13 @@
       
     <p:title>${message:documents}</p:title>  
 
-    <!-- TODO : make this a tree -->
-
     <ul>
-        <li t:type="loop" t:source="documents" t:value="document">
-            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${document.title}</a>  
+    <t:loop source="documents" value="document">
+        <li>
+            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${document.title}</a>         
             (<a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>)
-        </li>
+        </li>    
+    </t:loop>
     </ul>
         
     <p:eastPanel>

@@ -5,8 +5,8 @@
  */
 package fi.finlit.edith.ui.services;
 
-import com.mysema.tapestry.core.Callback;
-import com.mysema.tapestry.core.CallbackService;
+import com.mysema.query.paging.Callback;
+import com.mysema.query.paging.CallbackService;
 
 /**
  * CallbackServiceImpl provides

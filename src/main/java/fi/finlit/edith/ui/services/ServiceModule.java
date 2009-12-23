@@ -16,6 +16,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 
+import com.mysema.query.paging.CallbackService;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
@@ -24,7 +25,6 @@ import com.mysema.rdfbean.sesame.MemoryRepository;
 import com.mysema.rdfbean.sesame.RDFSource;
 import com.mysema.rdfbean.tapestry.RDFBeanModule;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
-import com.mysema.tapestry.core.CallbackService;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
@@ -52,6 +52,7 @@ public class ServiceModule {
         binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
         
+        binder.bind(DocumentRenderer.class, DocumentRendererImpl.class);
         binder.bind(CallbackService.class, CallbackServiceImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
     }

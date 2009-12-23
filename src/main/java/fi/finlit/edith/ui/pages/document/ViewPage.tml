@@ -4,11 +4,9 @@
       
     <p:title>${document.title}</p:title>  
 
-    <p>
-        ${document.title}
-        
-        <!-- TODO : show contents -->
-    </p>
+    <div class="content">
+        <t:document.view svnPath="${document.svnPath}" revision="literal:-1"/>        
+    </div>
         
     <p:eastPanel>
         <t:dashboard/>

@@ -5,6 +5,8 @@
  */
 package fi.finlit.edith.domain;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -33,5 +35,13 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @return
      */
     List<Document> getDocumentsOfFolder(String svnFolder);
+
+    /**
+     * @param svnPath
+     * @param revision
+     * @return
+     * @throws IOException 
+     */
+    File getDocumentFile(String svnPath, long revision) throws IOException;
 
 }

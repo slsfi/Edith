@@ -7,6 +7,9 @@ package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QDocument.document;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -52,8 +55,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public Collection<Document> getAll() {        
         return getDocumentsOfFolder(documentRoot);
-    }
-    
+    }    
+
     private Document getDocumentMetadata(String svnPath){
         return getSession().from(document)
             .where(document.svnPath.eq(svnPath))
@@ -69,6 +72,20 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return document;
     }
 
+    @Override
+    public File getDocumentFile(String svnPath, long revision) throws IOException {
+        try {
+            // better scheme for file fetches
+            File file = File.createTempFile("tei", null);
+            svnRepository.getFile(svnPath, revision, null, new FileOutputStream(file));
+            return file;
+        } catch (SVNException e) {
+            String error = "Caught " + e.getClass().getName();
+            logger.error(error, e);
+            throw new IOException(error, e);
+        }
+    }
+    
     @Override
     public List<Document> getDocumentsOfFolder(String svnFolder) {
         try {

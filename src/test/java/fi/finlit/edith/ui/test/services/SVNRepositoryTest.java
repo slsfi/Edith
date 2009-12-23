@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.edith.ui.test.services;
 
 import java.util.ArrayList;
@@ -19,6 +24,7 @@ public class SVNRepositoryTest extends AbstractServiceTest{
     @Inject
     private SVNRepository svnRepository;
     
+    @SuppressWarnings("unchecked")
     @Test
     public void test() throws SVNException{
         Collection entries = new ArrayList();
