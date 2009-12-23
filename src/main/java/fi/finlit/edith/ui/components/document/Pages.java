@@ -13,12 +13,12 @@ import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.ui.services.DocumentRenderer;
 
 /**
- * ViewPanel provides
+ * Pages provides
  *
  * @author tiwe
  * @version $Id$
  */
-public class View {
+public class Pages {
     
     @Inject
     private DocumentRepository documentRepo;
@@ -41,6 +41,7 @@ public class View {
 
     @BeginRender
     void beginRender(MarkupWriter writer) throws Exception {
-        renderer.renderDocument(docFile, writer);
+        renderer.renderPageLinks(docFile, writer);
     }
+
 }

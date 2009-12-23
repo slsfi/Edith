@@ -27,7 +27,7 @@ public class DocumentRendererTest extends AbstractServiceTest{
         File file = new File("etc/demo-material/tei/Nummisuutarit rakenteistettuna.xml");
         assertTrue(file + " doesn't exist", file.exists());
         MarkupWriter writer = new MarkupWriterImpl();
-        renderer.render(file, writer);
+        renderer.renderDocument(file, writer);
         System.out.println(writer);
     }
     

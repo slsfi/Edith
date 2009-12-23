@@ -12,6 +12,18 @@ import org.apache.tapestry5.MarkupWriter;
  */
 public interface DocumentRenderer {
 
-    void render(File file, MarkupWriter writer) throws Exception;
+    /**
+     * @param file
+     * @param writer
+     * @throws Exception
+     */
+    void renderPageLinks(File file, MarkupWriter writer) throws Exception;
+    
+    /**
+     * @param file
+     * @param writer
+     * @throws Exception
+     */
+    void renderDocument(File file, MarkupWriter writer) throws Exception;
 
 }

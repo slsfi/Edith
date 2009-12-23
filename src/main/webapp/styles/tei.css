@@ -39,8 +39,8 @@
 }
 
 .titleStmt .title{
-	font-weight: bold;
-	font-size: 1.4em;
+	/*font-weight: bold;*/
+	font-size: 1.5em;
 	text-align: center;
 	padding: 1em;	
 }
@@ -80,3 +80,18 @@
 	font-size: 1.2em;
 	padding-bottom: 0.5em;		
 }
+
+.page {
+    text-align: center;
+    font-weight: bold;	
+}
+
+.l{
+	padding-left: 2.5em;	
+}	
+
+/*
+.fileDesc{
+	border: solid 1px gray;
+}
+*/

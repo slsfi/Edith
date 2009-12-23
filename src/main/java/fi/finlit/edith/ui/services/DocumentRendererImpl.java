@@ -20,8 +20,6 @@ import org.apache.tapestry5.MarkupWriter;
  */
 public class DocumentRendererImpl implements DocumentRenderer {
     
-    private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
-
     // sp -> speech, pb -> page break, lg -> line group, l -> line
     
     static final Set<String> emptyElements = new HashSet<String>(Arrays.asList("lb","pb"));
@@ -41,7 +39,36 @@ public class DocumentRendererImpl implements DocumentRenderer {
     static final Set<String> toSelf = new HashSet<String>(Arrays.asList("div","p"));
     
     @Override
-    public void render(File file, MarkupWriter writer) throws Exception{
+    public void renderPageLinks(File file, MarkupWriter writer) throws Exception{
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
+        
+        writer.element("ul", "class", "pages");
+        while (true) {
+            int event = reader.next();            
+            if (event == XMLStreamConstants.START_ELEMENT){
+                String localName = reader.getLocalName();
+                if (localName.equals("pb")){
+                    String page = reader.getAttributeValue(null, "n");
+                    if (page != null){
+                        writer.element("li");
+                        writer.element("a", "href", "#page" + page);
+                        writer.writeRaw(page);
+                        writer.end();    
+                        writer.end();
+                    }                    
+                }
+                
+            }else if (event == XMLStreamConstants.END_DOCUMENT) {
+                reader.close();
+                break;
+            }
+        }
+        writer.end();
+    }
+    
+    @Override
+    public void renderDocument(File file, MarkupWriter writer) throws Exception{
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
         
@@ -67,10 +94,10 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     writer.element("br");
                     writer.end();
                 }else if (localName.equals("pb")){
-                    String page = reader.getAttributeValue(TEI_NS, "n");
+                    String page = reader.getAttributeValue(null, "n");
                     if (page != null){
-                        writer.element("div", "class", "page");
-                        writer.writeRaw(page);
+                        writer.element("div", "id", "page" + page, "class", "page");
+                        writer.writeRaw(page + ".");
                         writer.end();    
                     }                    
                 }else{
@@ -94,6 +121,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                 break;
             }
         }
+        
     }
 
 }

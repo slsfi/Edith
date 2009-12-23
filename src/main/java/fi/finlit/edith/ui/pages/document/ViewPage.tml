@@ -15,10 +15,17 @@
         
     <p:eastPanel>
         <t:dashboard/>
+        <div class="panel">
+            <h3>${message:revisions}</h3>
+            TODO
+        </div>
     </p:eastPanel>
 
     <p:westPanel>
-        west
+        <div class="panel" style="border: none; text-align: center;">
+            <h3>${message:pages}</h3>
+            <t:document.pages svnPath="${document.svnPath}" revision="literal:-1"/>
+        </div>
     </p:westPanel>
 
 </html>
