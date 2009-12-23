@@ -31,7 +31,7 @@
 }
 
 .sp{
-	padding-bottom: 0.5em;
+	padding: 0.25em 0;
 }
 
 .listBibl{
@@ -55,4 +55,28 @@
 .teiHeader{
 	/*border: solid 1px #E0E0E0;*/	
 	padding: 1em 0em;
+}
+
+.respStmt .resp{
+	width: 10em;
+	float: left;
+	font-weight: bold;
+}
+
+.respStmt .name {
+	float: left;	
+}
+
+.respStmt{
+	clear: both;
+}
+
+.publicationStmt{
+	clear: both;
+}
+
+.editionStmt .edition {
+	font-weight: bold;
+	font-size: 1.2em;
+	padding-bottom: 0.5em;		
 }

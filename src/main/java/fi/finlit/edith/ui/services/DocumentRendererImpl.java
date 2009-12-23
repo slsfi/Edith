@@ -32,7 +32,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
     static final Set<String> toP = new HashSet<String>();
     
     static final Set<String> toSpan = new HashSet<String>(Arrays.asList(
-            "actor","camera","caption","date","docAuthor","gap","orig","ref","role","roleDesc","set","sound","speaker","stage","tech","view"));
+            "actor","camera","caption","date","desc","docAuthor","gap","orig","ref","role","roleDesc","set","sound","speaker","stage","tech","view"));
    
     static final Set<String> toUl = new HashSet<String>(Arrays.asList("castGroup","castList","listPerson"));
     

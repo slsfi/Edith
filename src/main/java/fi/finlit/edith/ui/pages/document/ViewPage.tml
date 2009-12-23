@@ -3,6 +3,11 @@
       xmlns:p="tapestry:parameter">
       
     <p:title>${document.title}</p:title>  
+            
+    <div style="text-align: right">
+        <t:pagelink page="document/printPage" t:context="${document.id}">${message:print}</t:pagelink>
+    </div>
+    <div style="clear:both;"/>
 
     <div class="content">
         <t:document.view svnPath="${document.svnPath}" revision="literal:-1"/>        

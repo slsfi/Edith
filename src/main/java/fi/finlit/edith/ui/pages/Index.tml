@@ -13,14 +13,6 @@
         <li>
             <a t:type="pageLink" t:page="noteSearch">${message:notesearch}</a>
         </li>
-        
-        <!-- dummy pages -->
-        <li>
-            <a t:type="pageLink" t:page="document/annotatePage" t:context="1">${message:annotate-document}</a>
-         </li>
-         <li>   
-            <a t:type="pageLink" t:page="document/viewPage" t:context="1">${message:view-document}</a>
-        </li>        
     </ul>
         
     <p:eastPanel>
