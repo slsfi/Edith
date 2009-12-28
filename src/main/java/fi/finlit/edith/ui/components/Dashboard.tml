@@ -11,7 +11,7 @@
                     <a t:type="pageLink" t:page="documentsPage" t:disabled="isOnPage('documentsPage')">${message:documents}</a>
                 </li>                                
                 <li>
-                    <a t:type="pageLink" t:page="noteSearch" t:disabled="isOnPage('noteSearch')">${message:notesearch}</a>
+                    <a t:type="pageLink" t:page="noteSearchPage" t:disabled="isOnPage('noteSearchPage')">${message:notesearch}</a>
                 </li>
                 <!-- 
                 <li>

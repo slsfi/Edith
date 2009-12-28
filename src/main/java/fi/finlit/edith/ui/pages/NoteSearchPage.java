@@ -11,6 +11,6 @@ package fi.finlit.edith.ui.pages;
  * @author tiwe
  * @version $Id$
  */
-public class NoteSearch {
+public class NoteSearchPage {
 
 }

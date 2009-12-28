@@ -11,7 +11,7 @@
             <a t:type="pageLink" t:page="documentsPage">${message:documents}</a>
         </li>                       
         <li>
-            <a t:type="pageLink" t:page="noteSearch">${message:notesearch}</a>
+            <a t:type="pageLink" t:page="noteSearchPage">${message:notesearch}</a>
         </li>
     </ul>
     
