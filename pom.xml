@@ -45,11 +45,6 @@
     </dependency>
 
     <!-- security -->
-    <!--
-      <dependency> <groupId>org.apache.shiro</groupId>
-      <artifactId>shiro-web</artifactId>
-      <version>1.0-incubating-SNAPSHOT</version> </dependency>
-    -->
     <dependency>
       <groupId>nu.localhost.tapestry</groupId>
       <artifactId>tapestry-spring-security</artifactId>
@@ -74,13 +69,6 @@
     </dependency>
 
     <!-- services -->
-<!--     
-    <dependency>
-      <groupId>rome</groupId>
-      <artifactId>rome</artifactId>
-      <version>0.9</version>
-    </dependency>
- -->    
     <dependency>
       <groupId>org.tmatesoft.svnkit</groupId>
       <artifactId>svnkit</artifactId>
@@ -137,6 +125,10 @@
       </resource>
       <resource>
         <filtering>false</filtering>
+        <directory>target/generated-resources/rdf</directory>
+      </resource>
+      <resource>
+        <filtering>false</filtering>
         <directory>src/main/rdf</directory>
       </resource>    
       <resource>
@@ -172,6 +164,24 @@
         <version>2.7</version>
       </plugin>
 
+      <!-- Directory creation for schema gen -->
+      <plugin>
+        <groupId>org.codehaus.mojo.groovy</groupId>
+        <artifactId>groovy-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+              <source>new File("$pom.basedir/target/generated-resources/rdf").mkdirs();</source>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>  
+
+      <!-- OWL schema generation -->
       <plugin>
         <groupId>com.mysema.rdf</groupId>
         <artifactId>rdfbean-maven-plugin</artifactId>
@@ -184,12 +194,13 @@
             <configuration>
               <prefix>editio</prefix>
               <namespace>http://www.finlit.fi/semantics/edith/#</namespace>
-              <schemaFile>src/main/rdf/edith.owl</schemaFile>
+              <schemaFile>target/generated-resources/rdf/edith.owl</schemaFile>
             </configuration>
           </execution>
         </executions>
       </plugin>
       
+      <!-- Querydsl code generation -->
       <plugin>
         <groupId>com.mysema.maven</groupId>
         <artifactId>maven-apt-plugin</artifactId>
