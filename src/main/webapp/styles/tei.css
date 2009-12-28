@@ -42,7 +42,7 @@
 	/*font-weight: bold;*/
 	font-size: 1.5em;
 	text-align: center;
-	padding: 1em;	
+	padding: 0.5em;	
 }
 
 .titleStmt .author{
@@ -54,7 +54,7 @@
 
 .teiHeader{
 	/*border: solid 1px #E0E0E0;*/	
-	padding: 1em 0em;
+	/*padding: 1em 0em;*/
 }
 
 .respStmt .resp{

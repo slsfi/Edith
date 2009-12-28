@@ -23,6 +23,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
 
 /**
  * DocumentRepositoryImpl provides
@@ -73,11 +74,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public File getDocumentFile(String svnPath, long revision) throws IOException {
+    public File getDocumentFile(DocumentRevision document) throws IOException {
         try {
             // better scheme for file fetches
             File file = File.createTempFile("tei", null);
-            svnRepository.getFile(svnPath, revision, null, new FileOutputStream(file));
+            svnRepository.getFile(document.getSvnPath(), document.getRevision(), null, new FileOutputStream(file));
             return file;
         } catch (SVNException e) {
             String error = "Caught " + e.getClass().getName();

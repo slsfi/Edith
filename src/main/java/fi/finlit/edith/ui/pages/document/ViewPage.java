@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
 
 /**
  * ViewPage provides
@@ -28,8 +29,12 @@ public class ViewPage {
     @Property
     private Document document;
     
+    @Property
+    private DocumentRevision documentRevision;
+    
     void onActivate(String id){
         document = documentRepo.getById(id);
+        documentRevision = new DocumentRevision(document, -1);
     }
     
 }

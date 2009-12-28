@@ -9,7 +9,7 @@
   
   <body>
     
-    <t:document.view svnPath="${document.svnPath}" revision="literal:-1"/>
+    <t:document.view document="documentRevision"/>
 
   </body>
   

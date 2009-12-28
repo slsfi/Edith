@@ -14,6 +14,10 @@
             <a t:type="pageLink" t:page="noteSearch">${message:notesearch}</a>
         </li>
     </ul>
+    
+    <p:breadcrumbs>
+        ${message:frontpage}
+    </p:breadcrumbs>
         
     <p:eastPanel>
         <t:dashboard/>

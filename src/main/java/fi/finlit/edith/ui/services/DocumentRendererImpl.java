@@ -11,6 +11,10 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.ioc.annotations.Inject;
+
+import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
 
 /**
  * DocumentWriterImpl provides
@@ -38,8 +42,12 @@ public class DocumentRendererImpl implements DocumentRenderer {
     
     static final Set<String> toSelf = new HashSet<String>(Arrays.asList("div","p"));
     
+    @Inject
+    private DocumentRepository documentRepo;
+    
     @Override
-    public void renderPageLinks(File file, MarkupWriter writer) throws Exception{
+    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception{
+        File file = documentRepo.getDocumentFile(document);
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
         
@@ -68,7 +76,8 @@ public class DocumentRendererImpl implements DocumentRenderer {
     }
     
     @Override
-    public void renderDocument(File file, MarkupWriter writer) throws Exception{
+    public void renderDocument(DocumentRevision document, MarkupWriter writer) throws Exception{
+        File file = documentRepo.getDocumentFile(document);
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
         

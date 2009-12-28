@@ -21,7 +21,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
  */
 @IncludeStylesheet({
     "context:styles/base.css",
-    "context:styles/general.css",
     "context:styles/edith.css",    
     
     "context:styles/tapestry/forms.css",
@@ -37,6 +36,10 @@ public class Layout {
     @Property
     private Block title;
 
+    @Parameter(defaultPrefix = BindingConstants.LITERAL)
+    @Property
+    private Block breadcrumbs;
+    
     @Property
     private String pageName;
 

@@ -6,6 +6,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
 
 /**
  * PrintPage provides
@@ -15,7 +16,6 @@ import fi.finlit.edith.domain.DocumentRepository;
  */
 @IncludeStylesheet({
     "context:styles/base.css",
-    "context:styles/general.css",
     "context:styles/edith.css",       
     "context:styles/tei.css",
 
@@ -30,7 +30,11 @@ public class PrintPage {
     @Property
     private Document document;
     
+    @Property
+    private DocumentRevision documentRevision;
+    
     void onActivate(String id){
         document = documentRepo.getById(id);
+        documentRevision = new DocumentRevision(document, -1);
     }
 }

@@ -16,9 +16,11 @@
                 <li>
                     <a t:type="pageLink" t:page="loginPage" t:disabled="isOnPage('loginPage')">${message:login}</a>
                 </li>
+                <!-- 
                 <li>
                     <a t:type="pageLink" t:page="registerPage" t:disabled="isOnPage('registerPage')">${message:register}</a>
                 </li>
+                 -->
             </ul>    			
     		</p:else>
     	</t:if>   	        

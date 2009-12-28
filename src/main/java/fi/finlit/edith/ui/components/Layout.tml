@@ -8,11 +8,14 @@
     <body>
         <div id="container">
     
-        <div id="header">         
+        <div id="header">
+          <div id="breadcrumbs">
+                <t:delegate to="breadcrumbs"/>
+          </div>         
           <div id="auth">
             <t:authPanel/>
           </div> 
-          <div style="clear:both;"/>
+          <div style="clear:both;"></div>
         </div>
                 
         <div id="top">

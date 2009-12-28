@@ -39,7 +39,7 @@ public class NoteRevision extends Identifiable {
     
 //    @Predicate(ln="validFor")
 //    private Set<Long> svnRevisions;
-    private long svnRevision;
+    private long revision;
     
     @Predicate
     private String basicForm; // perusmuoto
@@ -145,12 +145,12 @@ public class NoteRevision extends Identifiable {
         this.status = status;
     }
 
-    public long getSvnRevision() {
-        return svnRevision;
+    public long getRevision() {
+        return revision;
     }
 
-    public void setSvnRevision(long svnRevision) {
-        this.svnRevision = svnRevision;
+    public void setRevision(long svnRevision) {
+        this.revision = svnRevision;
     }
  
     

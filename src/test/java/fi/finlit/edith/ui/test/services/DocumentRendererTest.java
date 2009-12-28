@@ -1,14 +1,11 @@
 package fi.finlit.edith.ui.test.services;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Test;
 
+import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.ui.services.DocumentRenderer;
 
 /**
@@ -24,10 +21,9 @@ public class DocumentRendererTest extends AbstractServiceTest{
     
     @Test
     public void test() throws Exception{
-        File file = new File("etc/demo-material/tei/Nummisuutarit rakenteistettuna.xml");
-        assertTrue(file + " doesn't exist", file.exists());
         MarkupWriter writer = new MarkupWriterImpl();
-        renderer.renderDocument(file, writer);
+        String svnPath = "documents/trunk/Nummisuutarit rakenteistettuna.xml";
+        renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
         System.out.println(writer);
     }
     

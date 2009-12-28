@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
 
 /**
  * AnnotatePage provides
@@ -28,8 +29,12 @@ public class AnnotatePage {
     @Property
     private Document document;
     
+    @Property
+    private DocumentRevision documentRevison;
+    
     void onActivate(String id){
         document = documentRepo.getById(id);
+        documentRevison = new DocumentRevision(document, -1);
     }
     
 

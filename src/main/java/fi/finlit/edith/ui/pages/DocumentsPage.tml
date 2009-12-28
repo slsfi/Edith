@@ -18,6 +18,10 @@
         </li>    
     </t:loop>
     </ul>
+    
+    <p:breadcrumbs>
+        <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:documents}
+    </p:breadcrumbs>        
         
     <p:eastPanel>
         <t:dashboard/>

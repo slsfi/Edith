@@ -6,16 +6,19 @@
 	font-size: 1.5em;
 	font-weight: bold;
 }
+
 #bottom {
-	font-size: 90%;		
-	border-top: solid 1px #D0D0D0; 
-	padding: 0.3em; 
+	font-size: 90%;
+	border-top: solid 1px gray;		
+	/*background-color: #E0E0E0;*/
+	padding: 0.4em;
+	margin: 0.4em; 
 	clear:both;
 }
 
 #auth {
     padding: 0.2em;	
-}	
+}
 
 #main form {
 	margin: 0 auto;
@@ -42,14 +45,14 @@
 #top .title{
 	padding-top: 0.2em;	
 	padding-left: 2em;
-}	
+}
 
 #auth {
 	float: right;	
 }
 
 h3{
-	font-weight: normal;	
+	/*font-weight: normal;*/	
 }
 
 .searchbox{
@@ -75,17 +78,13 @@ label.left {
 	float:left;
 }
 
-#header {
-	float: right;	
-}	
-
 #header a {
 	text-decoration: underline;	
 }
 
-.actions {
+/*.actions {
 	margin-top: 1em;
-}	
+}*/	
 
 .actions li{
 	display: inline; 
@@ -105,4 +104,18 @@ label.left {
 
 .articleform div.t-beaneditor-row label {
 	display: none;
+}
+
+#bottom li {
+	font-weight: bold;
+}
+
+#bottom li a {
+	font-weight: normal;
+}
+
+.page{
+	padding: 0.5em;
+	border-top: dotted 1px gray;
+	/*border-bottom: dotted 1px gray;*/
 }

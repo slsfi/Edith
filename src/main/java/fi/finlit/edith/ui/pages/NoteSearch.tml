@@ -2,11 +2,15 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
       xmlns:p="tapestry:parameter">
       
-    <p:title>Edith</p:title>  
+    <p:title>${message:notesearch}</p:title>  
 
     <p>
-        Search for notes (inline display of results ?!?)
+        TODO
     </p>
+    
+    <p:breadcrumbs>
+        <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:notesearch}
+    </p:breadcrumbs>  
         
     <p:eastPanel>
         <t:dashboard/>

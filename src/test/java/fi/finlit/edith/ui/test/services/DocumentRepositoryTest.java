@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
 
 /**
  * DocumentRepositoryTest provides
@@ -48,7 +49,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest{
     @Test
     public void getDocumentFile() throws IOException{
         for (Document document : documentRepo.getAll()){
-            File file = documentRepo.getDocumentFile(document.getSvnPath(), -1);
+            File file = documentRepo.getDocumentFile(new DocumentRevision(document, -1));
             assertTrue(file.exists());
             assertTrue(file.isFile());
             assertTrue(file.length() > 0);

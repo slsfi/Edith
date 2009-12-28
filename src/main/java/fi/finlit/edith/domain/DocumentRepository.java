@@ -42,6 +42,6 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @return
      * @throws IOException 
      */
-    File getDocumentFile(String svnPath, long revision) throws IOException;
+    File getDocumentFile(DocumentRevision document) throws IOException;
 
 }
