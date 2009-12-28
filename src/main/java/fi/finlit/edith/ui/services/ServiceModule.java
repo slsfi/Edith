@@ -9,7 +9,6 @@ import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
-import org.openrdf.rio.RDFFormat;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -18,11 +17,12 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 
 import com.mysema.query.paging.CallbackService;
 import com.mysema.rdfbean.model.Repository;
+import com.mysema.rdfbean.model.io.Format;
+import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
 import com.mysema.rdfbean.object.identity.IdentityService;
 import com.mysema.rdfbean.sesame.MemoryRepository;
-import com.mysema.rdfbean.sesame.RDFSource;
 import com.mysema.rdfbean.tapestry.RDFBeanModule;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
 
@@ -68,9 +68,9 @@ public class ServiceModule {
     public static Repository buildRepository(Configuration configuration) {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(  
-            new RDFSource("classpath:/edith.owl", RDFFormat.RDFXML, EDITH.NS),
-            new RDFSource("classpath:/base.ttl", RDFFormat.TURTLE, EDITH.DATA),
-            new RDFSource("classpath:/data.ttl", RDFFormat.TURTLE, EDITH.DATA)
+            new RDFSource("classpath:/edith.owl", Format.RDFXML, EDITH.NS),
+            new RDFSource("classpath:/base.ttl", Format.TURTLE, EDITH.DATA),
+            new RDFSource("classpath:/data.ttl", Format.TURTLE, EDITH.DATA)
         );                
         return repository;        
     }

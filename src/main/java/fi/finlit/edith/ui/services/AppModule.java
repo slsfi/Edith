@@ -53,7 +53,7 @@ public class AppModule {
         configuration.add("pageMapping", new PageMappingRule(componentResolver));
     }
 
-    // auth
+    // Spring Security service injections
     
     public static void bind(ServiceBinder binder){        
         binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);        

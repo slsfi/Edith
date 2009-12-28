@@ -1,4 +1,11 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.edith.domain;
+
+import net.jcip.annotations.Immutable;
 
 /**
  * DocumentRevision provides
@@ -6,6 +13,7 @@ package fi.finlit.edith.domain;
  * @author tiwe
  * @version $Id$
  */
+@Immutable
 public class DocumentRevision {
     
     private final String svnPath;

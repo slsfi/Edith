@@ -18,7 +18,7 @@
   <properties>
     <tapestry.version>5.1.0.5</tapestry.version>
     <jetty.version>6.1.0-SNAPSHOT</jetty.version>
-    <rdfbean.version>0.8.0</rdfbean.version>
+    <rdfbean.version>0.8.1</rdfbean.version>
   </properties>
 
   <dependencies>
@@ -30,12 +30,14 @@
       <artifactId>tapestry-core</artifactId>
       <version>${tapestry.version}</version>
     </dependency>
+    <!-- 
     <dependency>
       <groupId>org.apache.tapestry</groupId>
       <artifactId>tapestry-test</artifactId>
       <version>${tapestry.version}</version>
       <scope>test</scope>
     </dependency>
+     -->
     <dependency>
       <groupId>com.mysema.commons</groupId>
       <artifactId>mysema-commons-tapestry</artifactId>
@@ -136,7 +138,7 @@
       <resource>
         <filtering>false</filtering>
         <directory>src/main/rdf</directory>
-      </resource>
+      </resource>    
       <resource>
         <filtering>false</filtering>
         <directory>src/main/java</directory>
@@ -187,7 +189,7 @@
           </execution>
         </executions>
       </plugin>
-
+      
       <plugin>
         <groupId>com.mysema.maven</groupId>
         <artifactId>maven-apt-plugin</artifactId>

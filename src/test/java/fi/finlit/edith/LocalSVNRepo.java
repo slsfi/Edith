@@ -21,6 +21,7 @@ import org.tmatesoft.svn.core.wc.SVNCommitClient;
  */
 public class LocalSVNRepo {
     
+    @SuppressWarnings("deprecation")
     public static void init(File svnRepo) throws SVNException {
         if (!svnRepo.exists()){
             SVNURL repoURL = SVNRepositoryFactory.createLocalRepository(svnRepo, true , false );   

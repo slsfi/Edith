@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.edith.ui.components.document;
 
 import org.apache.tapestry5.MarkupWriter;
