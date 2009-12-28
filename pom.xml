@@ -192,7 +192,7 @@
               <goal>schemagen</goal>
             </goals>
             <configuration>
-              <prefix>editio</prefix>
+              <prefix>edith</prefix>
               <namespace>http://www.finlit.fi/semantics/edith/#</namespace>
               <schemaFile>target/generated-resources/rdf/edith.owl</schemaFile>
             </configuration>
