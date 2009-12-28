@@ -18,7 +18,7 @@
   <properties>
     <tapestry.version>5.1.0.5</tapestry.version>
     <jetty.version>6.1.0-SNAPSHOT</jetty.version>
-    <rdfbean.version>0.8.1</rdfbean.version>
+    <rdfbean.version>0.8.2</rdfbean.version>
   </properties>
 
   <dependencies>
@@ -30,14 +30,6 @@
       <artifactId>tapestry-core</artifactId>
       <version>${tapestry.version}</version>
     </dependency>
-    <!-- 
-    <dependency>
-      <groupId>org.apache.tapestry</groupId>
-      <artifactId>tapestry-test</artifactId>
-      <version>${tapestry.version}</version>
-      <scope>test</scope>
-    </dependency>
-     -->
     <dependency>
       <groupId>com.mysema.commons</groupId>
       <artifactId>mysema-commons-tapestry</artifactId>
@@ -175,7 +167,7 @@
               <goal>execute</goal>
             </goals>
             <configuration>
-              <source>new File("$pom.basedir/target/generated-resources/rdf").mkdirs();</source>
+              <source>new File("target/generated-resources/rdf").mkdirs();</source>
             </configuration>
           </execution>
         </executions>
@@ -194,7 +186,8 @@
             <configuration>
               <prefix>edith</prefix>
               <namespace>http://www.finlit.fi/semantics/edith/#</namespace>
-              <schemaFile>target/generated-resources/rdf/edith.owl</schemaFile>
+              <schemaFile>target/generated-resources/rdf/edith.ttl</schemaFile>
+              <useTurtle>true</useTurtle>
             </configuration>
           </execution>
         </executions>

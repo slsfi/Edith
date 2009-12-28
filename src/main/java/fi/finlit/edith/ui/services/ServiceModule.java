@@ -65,12 +65,14 @@ public class ServiceModule {
         return configuration;
     }
 
+    // TODO : override identityService
+    
     public static Repository buildRepository(Configuration configuration) {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(  
-            new RDFSource("classpath:/edith.owl", Format.RDFXML, EDITH.NS),
-            new RDFSource("classpath:/base.ttl", Format.TURTLE, EDITH.DATA),
-            new RDFSource("classpath:/data.ttl", Format.TURTLE, EDITH.DATA)
+            new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS),
+            new RDFSource("classpath:/base.ttl",  Format.TURTLE, EDITH.DATA),
+            new RDFSource("classpath:/data.ttl",  Format.TURTLE, EDITH.DATA)
         );                
         return repository;        
     }
