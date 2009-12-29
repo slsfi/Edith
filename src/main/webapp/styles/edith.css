@@ -9,8 +9,7 @@
 
 #bottom {
 	font-size: 90%;
-	border-top: solid 1px gray;		
-	/*background-color: #E0E0E0;*/
+	border-top: solid 1px #D0D0D0;		
 	padding: 0.4em;
 	margin: 0.4em; 
 	clear:both;

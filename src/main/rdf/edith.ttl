@@ -1,0 +1,480 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix edith: <http://www.finlit.fi/semantics/edith/#> .
+
+
+<http://www.finlit.fi/semantics/edith/> a owl:Ontology .
+
+edith:text a owl:DatatypeProperty ;
+	rdfs:label "text" .
+
+edith:Document a owl:Class ;
+	rdfs:label "Document" .
+
+_:node-29mugix3 a owl:Restriction ;
+	owl:allValuesFrom xsd:string .
+
+edith:description a owl:DatatypeProperty ;
+	rdfs:label "description" .
+
+_:node-29mugix3 owl:onProperty edith:description .
+
+edith:Document rdfs:subClassOf _:node-29mugix3 .
+
+_:node-29mugix4 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:description .
+
+edith:Document rdfs:subClassOf _:node-29mugix4 .
+
+_:node-29mugix5 a owl:Restriction ;
+	owl:allValuesFrom xsd:string .
+
+edith:svnPath a owl:DatatypeProperty ;
+	rdfs:label "svnPath" .
+
+_:node-29mugix5 owl:onProperty edith:svnPath .
+
+edith:Document rdfs:subClassOf _:node-29mugix5 .
+
+_:node-29mugix6 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:svnPath .
+
+edith:Document rdfs:subClassOf _:node-29mugix6 .
+
+_:node-29mugix7 a owl:Restriction ;
+	owl:allValuesFrom xsd:string .
+
+edith:title a owl:DatatypeProperty ;
+	rdfs:label "title" .
+
+_:node-29mugix7 owl:onProperty edith:title .
+
+edith:Document rdfs:subClassOf _:node-29mugix7 .
+
+_:node-29mugix8 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:title .
+
+edith:Document rdfs:subClassOf _:node-29mugix8 .
+
+edith:revisionOf a owl:ObjectProperty ;
+	rdfs:label "revisionOf" .
+
+edith:explanation a owl:DatatypeProperty ;
+	rdfs:label "explanation" .
+
+edith:status a owl:ObjectProperty ;
+	rdfs:label "status" .
+
+edith:tagged a owl:ObjectProperty ;
+	rdfs:label "tagged" .
+
+edith:basicForm a owl:DatatypeProperty ;
+	rdfs:label "basicForm" .
+
+edith:latestRevision a owl:ObjectProperty ;
+	rdfs:label "latestRevision" .
+
+edith:Tag a owl:Class ;
+	rdfs:label "Tag" .
+
+edith:NoteStatus a owl:Class ;
+	rdfs:label "NoteStatus" .
+
+_:node-29mugix9 a rdf:List .
+
+edith:Draft a edith:NoteStatus .
+
+_:node-29mugix9 rdf:first edith:Draft ;
+	rdf:rest _:node-29mugix10 .
+
+_:node-29mugix10 a rdf:List .
+
+edith:LockedForEdit a edith:NoteStatus .
+
+_:node-29mugix10 rdf:first edith:LockedForEdit ;
+	rdf:rest _:node-29mugix11 .
+
+_:node-29mugix11 a rdf:List .
+
+edith:Finished a edith:NoteStatus .
+
+_:node-29mugix11 rdf:first edith:Finished ;
+	rdf:rest _:node-29mugix12 .
+
+_:node-29mugix12 a rdf:List .
+
+edith:Publishable a edith:NoteStatus .
+
+_:node-29mugix12 rdf:first edith:Publishable ;
+	rdf:rest rdf:nil .
+
+edith:NoteStatus owl:oneOf _:node-29mugix9 .
+
+edith:lemma a owl:DatatypeProperty ;
+	rdfs:label "lemma" .
+
+edith:Profile a owl:Class ;
+	rdfs:label "Profile" .
+
+_:node-29mugix13 a rdf:List .
+
+edith:User a edith:Profile .
+
+_:node-29mugix13 rdf:first edith:User ;
+	rdf:rest _:node-29mugix14 .
+
+_:node-29mugix14 a rdf:List .
+
+edith:Admin a edith:Profile .
+
+_:node-29mugix14 rdf:first edith:Admin ;
+	rdf:rest rdf:nil .
+
+edith:Profile owl:oneOf _:node-29mugix13 .
+
+edith:profile a owl:ObjectProperty ;
+	rdfs:label "profile" .
+
+edith:meaning a owl:DatatypeProperty ;
+	rdfs:label "meaning" .
+
+edith:email a owl:DatatypeProperty ;
+	rdfs:label "email" .
+
+edith:createdOn a owl:DatatypeProperty ;
+	rdfs:label "createdOn" .
+
+edith:note a owl:ObjectProperty ;
+	rdfs:label "note" .
+
+edith:Note a owl:Class ;
+	rdfs:label "Note" .
+
+_:node-29mugix15 a owl:Restriction ;
+	owl:allValuesFrom edith:Document .
+
+edith:document a owl:ObjectProperty ;
+	rdfs:label "document" .
+
+_:node-29mugix15 owl:onProperty edith:document .
+
+edith:Note rdfs:subClassOf _:node-29mugix15 .
+
+_:node-29mugix16 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:document .
+
+edith:Note rdfs:subClassOf _:node-29mugix16 .
+
+_:node-29mugix17 a owl:Restriction .
+
+edith:NoteRevision a owl:Class ;
+	rdfs:label "NoteRevision" .
+
+_:node-29mugix18 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:lemma .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix18 .
+
+_:node-29mugix19 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:lemma .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix19 .
+
+_:node-29mugix20 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:meaning .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix20 .
+
+_:node-29mugix21 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:meaning .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix21 .
+
+_:node-29mugix22 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:basicForm .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix22 .
+
+_:node-29mugix23 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:basicForm .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix23 .
+
+_:node-29mugix24 a owl:Restriction ;
+	owl:allValuesFrom xsd:dateTime ;
+	owl:onProperty edith:createdOn .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix24 .
+
+_:node-29mugix25 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:createdOn .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix25 .
+
+_:node-29mugix26 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:explanation .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix26 .
+
+_:node-29mugix27 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:explanation .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix27 .
+
+_:node-29mugix28 a owl:Restriction ;
+	owl:allValuesFrom xsd:string .
+
+edith:longText a owl:DatatypeProperty ;
+	rdfs:label "longText" .
+
+_:node-29mugix28 owl:onProperty edith:longText .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix28 .
+
+_:node-29mugix29 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:longText .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix29 .
+
+_:node-29mugix30 a owl:Restriction .
+
+edith:User a owl:Class ;
+	rdfs:label "User" .
+
+_:node-29mugix31 a owl:Restriction ;
+	owl:allValuesFrom xsd:string .
+
+edith:firstName a owl:DatatypeProperty ;
+	rdfs:label "firstName" .
+
+_:node-29mugix31 owl:onProperty edith:firstName .
+
+edith:User rdfs:subClassOf _:node-29mugix31 .
+
+_:node-29mugix32 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:firstName .
+
+edith:User rdfs:subClassOf _:node-29mugix32 .
+
+_:node-29mugix33 a owl:Restriction ;
+	owl:allValuesFrom xsd:string .
+
+edith:lastName a owl:DatatypeProperty ;
+	rdfs:label "lastName" .
+
+_:node-29mugix33 owl:onProperty edith:lastName .
+
+edith:User rdfs:subClassOf _:node-29mugix33 .
+
+_:node-29mugix34 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:lastName .
+
+edith:User rdfs:subClassOf _:node-29mugix34 .
+
+_:node-29mugix35 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:email .
+
+edith:User rdfs:subClassOf _:node-29mugix35 .
+
+_:node-29mugix36 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:email .
+
+edith:User rdfs:subClassOf _:node-29mugix36 .
+
+_:node-29mugix37 a owl:Restriction ;
+	owl:allValuesFrom xsd:string .
+
+edith:username a owl:DatatypeProperty ;
+	rdfs:label "username" .
+
+_:node-29mugix37 owl:onProperty edith:username .
+
+edith:User rdfs:subClassOf _:node-29mugix37 .
+
+_:node-29mugix38 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:username .
+
+edith:User rdfs:subClassOf _:node-29mugix38 .
+
+_:node-29mugix39 a owl:Restriction ;
+	owl:allValuesFrom xsd:string .
+
+edith:password a owl:DatatypeProperty ;
+	rdfs:label "password" .
+
+_:node-29mugix39 owl:onProperty edith:password .
+
+edith:User rdfs:subClassOf _:node-29mugix39 .
+
+_:node-29mugix40 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:password .
+
+edith:User rdfs:subClassOf _:node-29mugix40 .
+
+_:node-29mugix41 a owl:Restriction ;
+	owl:allValuesFrom edith:Profile ;
+	owl:onProperty edith:profile .
+
+edith:User rdfs:subClassOf _:node-29mugix41 .
+
+_:node-29mugix42 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:profile .
+
+edith:User rdfs:subClassOf _:node-29mugix42 .
+
+_:node-29mugix30 owl:allValuesFrom edith:User .
+
+edith:createdBy a owl:ObjectProperty ;
+	rdfs:label "createdBy" .
+
+_:node-29mugix30 owl:onProperty edith:createdBy .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix30 .
+
+_:node-29mugix43 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:createdBy .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix43 .
+
+_:node-29mugix44 a owl:Restriction ;
+	owl:allValuesFrom edith:Note ;
+	owl:onProperty edith:revisionOf .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix44 .
+
+_:node-29mugix45 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:revisionOf .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix45 .
+
+_:node-29mugix46 a owl:Restriction ;
+	owl:allValuesFrom edith:NoteStatus ;
+	owl:onProperty edith:status .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix46 .
+
+_:node-29mugix47 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:status .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix47 .
+
+_:node-29mugix48 a owl:Restriction ;
+	owl:allValuesFrom edith:Tag ;
+	owl:onProperty edith:tagged .
+
+edith:NoteRevision rdfs:subClassOf _:node-29mugix48 .
+
+_:node-29mugix17 owl:allValuesFrom edith:NoteRevision ;
+	owl:onProperty edith:latestRevision .
+
+edith:Note rdfs:subClassOf _:node-29mugix17 .
+
+_:node-29mugix49 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:latestRevision .
+
+edith:Note rdfs:subClassOf _:node-29mugix49 .
+
+edith:Folder a owl:Class ;
+	rdfs:label "Folder" .
+
+_:node-29mugix50 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:svnPath .
+
+edith:Folder rdfs:subClassOf _:node-29mugix50 .
+
+_:node-29mugix51 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:svnPath .
+
+edith:Folder rdfs:subClassOf _:node-29mugix51 .
+
+edith:NoteComment a owl:Class ;
+	rdfs:label "NoteComment" .
+
+_:node-29mugix52 a owl:Restriction ;
+	owl:allValuesFrom xsd:dateTime ;
+	owl:onProperty edith:createdOn .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix52 .
+
+_:node-29mugix53 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:createdOn .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix53 .
+
+_:node-29mugix54 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:text .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix54 .
+
+_:node-29mugix55 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:text .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix55 .
+
+_:node-29mugix56 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:title .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix56 .
+
+_:node-29mugix57 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:title .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix57 .
+
+_:node-29mugix58 a owl:Restriction ;
+	owl:allValuesFrom edith:User ;
+	owl:onProperty edith:createdBy .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix58 .
+
+_:node-29mugix59 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:createdBy .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix59 .
+
+_:node-29mugix60 a owl:Restriction ;
+	owl:allValuesFrom edith:Note ;
+	owl:onProperty edith:note .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix60 .
+
+_:node-29mugix61 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:note .
+
+edith:NoteComment rdfs:subClassOf _:node-29mugix61 .

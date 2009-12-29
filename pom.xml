@@ -117,10 +117,6 @@
       </resource>
       <resource>
         <filtering>false</filtering>
-        <directory>target/generated-resources/rdf</directory>
-      </resource>
-      <resource>
-        <filtering>false</filtering>
         <directory>src/main/rdf</directory>
       </resource>    
       <resource>
@@ -156,41 +152,17 @@
         <version>2.7</version>
       </plugin>
 
-      <!-- Directory creation for schema gen -->
-      <plugin>
-        <groupId>org.codehaus.mojo.groovy</groupId>
-        <artifactId>groovy-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <source>new File("target/generated-resources/rdf").mkdirs();</source>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>  
-
       <!-- OWL schema generation -->
       <plugin>
         <groupId>com.mysema.rdf</groupId>
         <artifactId>rdfbean-maven-plugin</artifactId>
         <version>${rdfbean.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>schemagen</goal>
-            </goals>
-            <configuration>
-              <prefix>edith</prefix>
-              <namespace>http://www.finlit.fi/semantics/edith/#</namespace>
-              <schemaFile>target/generated-resources/rdf/edith.ttl</schemaFile>
-              <useTurtle>true</useTurtle>
-            </configuration>
-          </execution>
-        </executions>
+        <configuration>
+          <prefix>edith</prefix>
+          <namespace>http://www.finlit.fi/semantics/edith/#</namespace>
+          <schemaFile>src/main/rdf/edith.ttl</schemaFile>
+          <useTurtle>true</useTurtle>
+        </configuration>
       </plugin>
       
       <!-- Querydsl code generation -->
