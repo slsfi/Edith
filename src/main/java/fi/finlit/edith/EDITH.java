@@ -16,6 +16,8 @@ public final class EDITH {
     
     public static final String DATA = BASE + "data#";
     
+    // symbol keys
+    
     public static final String REPO_URL_PROPERTY = "svn.repo.url";
     
     public static final String REPO_FILE_PROPERTY = "svn.repo.file";

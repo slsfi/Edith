@@ -8,6 +8,7 @@ package fi.finlit.edith.ui.test.services;
 import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
@@ -28,6 +29,7 @@ public class UserEncodingTest extends AbstractServiceTest{
     private UserRepository userRepository;
     
     @Test
+    @Ignore
     public void encoding() throws Exception{
         PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
         

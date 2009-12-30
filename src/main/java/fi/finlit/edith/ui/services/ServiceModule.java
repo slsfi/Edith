@@ -6,16 +6,23 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 
+import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.springframework.security.providers.encoding.PasswordEncoder;
+import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -30,13 +37,15 @@ import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
 import com.mysema.rdfbean.object.identity.IdentityService;
 import com.mysema.rdfbean.sesame.MemoryRepository;
-import com.mysema.rdfbean.tapestry.RDFBeanModule;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
+import com.mysema.rdfbean.tapestry.services.RDFBeanModule;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.Profile;
+import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserRepository;
 
 /**
@@ -58,7 +67,42 @@ public class ServiceModule {
         for (Map.Entry<Object, Object> entry : properties.entrySet()){
             configuration.add(entry.getKey().toString(), entry.getValue().toString());
         }
-    }
+    }    
+
+    public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) throws Exception {
+        PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
+        
+        SaltSourceImpl saltSource = new SaltSourceImpl();
+        saltSource.setSystemWideSalt("DEADBEEF");
+        saltSource.afterPropertiesSet();
+     
+        // users
+        for (String email : Arrays.asList(
+                "timo.westkamper@mysema.com",
+                "lassi.immonen@mysema.com",
+                "heli.kautonen@finlit.fi",
+                "matti.anttila@finlit.fi",
+                "sakari.katajamaki@finlit.fi",
+                "ossi.kokko@finlit.fi")){            
+            String firstName = StringUtils.capitalize(email.substring(0, email.indexOf('.')));
+            String lastName = StringUtils.capitalize(email.substring(firstName.length() + 1, email.indexOf('@')));
+            
+            User user = new User();
+            user.setUsername(firstName.toLowerCase());
+            user.setEmail(email);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setProfile(Profile.User);
+            
+            UserDetailsImpl userDetails = new UserDetailsImpl(
+                    user.getUsername(), user.getPassword(), 
+                    user.getProfile().getAuthorities());
+            String password = passwordEncoder.encodePassword(user.getUsername(),saltSource.getSalt(userDetails));
+            user.setPassword(password);
+            configuration.add("user-" + user.getUsername(), user);
+        }      
+        
+    }  
     
     // TODO : get rid of match
     @Match({"DocumentRepository", "NoteRepository", "UserRepository", "CallbackService"})
@@ -101,7 +145,7 @@ public class ServiceModule {
     
     public static SVNRepository buildSVNRepository(@Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL) throws SVNException{
         return SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repoURL));
-
     }
+    
     
 }

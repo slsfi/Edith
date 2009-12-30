@@ -27,7 +27,7 @@ public class DocumentRendererTest extends AbstractServiceTest{
     @Test
     public void test() throws Exception{
         MarkupWriter writer = new MarkupWriterImpl();
-        String svnPath = "documents/trunk/Nummisuutarit rakenteistettuna.xml";
+        String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
         renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
         System.out.println(writer);
     }

@@ -5,7 +5,6 @@
  */
 package fi.finlit.edith.ui.pages;
 
-import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.ui.services.AuthService;
@@ -21,7 +20,6 @@ public abstract class BasePage {
     @Inject
     private AuthService authService;
     
-    @Cached
     public boolean isLoggedIn(){
         return authService.isAuthenticated();
     }

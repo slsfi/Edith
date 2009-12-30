@@ -22,7 +22,7 @@ import fi.finlit.edith.EDITH;
 public class Tag implements Comparable<Tag>{
     
     @Id(IDType.URI)
-    UID id;
+    private UID id;
     
     protected Tag(){}
     
