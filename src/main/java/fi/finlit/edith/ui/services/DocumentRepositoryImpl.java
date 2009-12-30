@@ -10,6 +10,7 @@ import static fi.finlit.edith.domain.QDocument.document;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import fi.finlit.edith.domain.Document;
@@ -37,6 +39,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     
     // TODO : make this configurable
     private String documentRoot = "/documents/trunk";
+    
+    // TODO : make this configurable
+    private final File svnCache = new File(System.getProperty("java.io.tmpdir"), "svncache");
     
     @Inject
     private SVNRepository svnRepository;
@@ -58,10 +63,29 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return getDocumentsOfFolder(documentRoot);
     }    
 
-    private Document getDocumentMetadata(String svnPath){
-        return getSession().from(document)
-            .where(document.svnPath.eq(svnPath))
-            .uniqueResult(document);
+    @Override
+    public File getDocumentFile(DocumentRevision document) throws IOException {
+        try {
+            long revision = document.getRevision();
+            if (revision == -1){
+                revision = getLatestRevision(document.getSvnPath());
+            }
+            return getDocumentFile(document.getSvnPath(), revision);            
+        } catch (SVNException e) {
+            String error = "Caught " + e.getClass().getName();
+            logger.error(error, e);
+            throw new IOException(error, e);
+        }
+    }
+    
+    private File getDocumentFile(String svnPath, long revision) throws IOException, SVNException{
+        File documentFolder = new File(svnCache, URLEncoder.encode(svnPath,"UTF-8")); 
+        File documentFile = new File(documentFolder, String.valueOf(revision));
+        if (!documentFile.exists()){
+            documentFolder.mkdirs();
+            svnRepository.getFile(svnPath, revision, null, new FileOutputStream(documentFile));
+        }                
+        return documentFile;
     }
     
     @Override
@@ -72,19 +96,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
         return document;
     }
-
-    @Override
-    public File getDocumentFile(DocumentRevision document) throws IOException {
-        try {
-            // better scheme for file fetches
-            File file = File.createTempFile("tei", null);
-            svnRepository.getFile(document.getSvnPath(), document.getRevision(), null, new FileOutputStream(file));
-            return file;
-        } catch (SVNException e) {
-            String error = "Caught " + e.getClass().getName();
-            logger.error(error, e);
-            throw new IOException(error, e);
-        }
+    
+    private Document getDocumentMetadata(String svnPath){
+        return getSession().from(document)
+            .where(document.svnPath.eq(svnPath))
+            .uniqueResult(document);
     }
     
     @Override
@@ -108,6 +124,19 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             logger.error(error, e);
             throw new RuntimeException(error, e);
         }
+    }
+    
+    private long getLatestRevision(String svnPath) throws SVNException{
+        long revision = 0;
+        long latest = svnRepository.getLatestRevision();
+        Collection<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>(); 
+        svnRepository.getFileRevisions(svnPath, revisions, 0, latest);
+        for (SVNFileRevision rev : revisions){
+            if (revision < rev.getRevision()){
+                revision = rev.getRevision();
+            }
+        }
+        return revision;
     }
 
 }

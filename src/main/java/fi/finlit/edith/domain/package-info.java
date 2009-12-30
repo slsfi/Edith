@@ -3,7 +3,17 @@
  * All rights reserved.
  * 
  */
-@MappedClasses( { Document.class, Note.class, NoteComment.class, NoteRevision.class, NoteStatus.class, Profile.class, Tag.class, User.class })
+@MappedClasses( { 
+    Document.class, 
+    Folder.class,
+    Identifiable.class,
+    Note.class, 
+    NoteComment.class,
+    NoteRevision.class, 
+    NoteStatus.class, 
+    Profile.class,
+    Tag.class, 
+    User.class })
 package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.MappedClasses;

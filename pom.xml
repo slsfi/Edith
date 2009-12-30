@@ -19,6 +19,7 @@
     <tapestry.version>5.1.0.5</tapestry.version>
     <jetty.version>6.1.0-SNAPSHOT</jetty.version>
     <rdfbean.version>0.8.3</rdfbean.version>
+    <commons.tapestry.version>0.1.5</commons.tapestry.version>
   </properties>
 
   <dependencies>
@@ -33,7 +34,13 @@
     <dependency>
       <groupId>com.mysema.commons</groupId>
       <artifactId>mysema-commons-tapestry</artifactId>
-      <version>0.1.4-SNAPSHOT</version>
+      <version>${commons.tapestry.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.mysema.querydsl</groupId>
+          <artifactId>querydsl-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- security -->
