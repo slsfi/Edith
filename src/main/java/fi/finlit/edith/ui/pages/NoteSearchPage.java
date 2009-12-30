@@ -39,8 +39,11 @@ public class NoteSearchPage {
     
     void onActivate(EventContext context){
         if (context.getCount() > 0){
-            searchTerm = context.get(String.class, 0);
+            searchTerm = context.get(String.class, 0);            
             notes = noteRepository.queryNotes(searchTerm);
+            if (searchTerm.equals("*")){
+                searchTerm = null;
+            }
         }  
     }
     
