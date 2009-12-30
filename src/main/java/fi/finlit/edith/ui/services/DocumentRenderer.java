@@ -17,8 +17,18 @@ import fi.finlit.edith.domain.DocumentRevision;
  */
 public interface DocumentRenderer {
 
+    /**
+     * @param document
+     * @param writer
+     * @throws Exception
+     */
     void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception;
     
+    /**
+     * @param document
+     * @param writer
+     * @throws Exception
+     */
     void renderDocument(DocumentRevision document, MarkupWriter writer) throws Exception;
 
 }

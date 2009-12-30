@@ -51,7 +51,9 @@ public class DataModule {
             String password = passwordEncoder.encodePassword(user.getUsername(),saltSource.getSalt(userDetails));
             user.setPassword(password);
             configuration.add("user-" + user.getUsername(), user);
-        }      
+        }     
+        
+        // 
         
     }  
 

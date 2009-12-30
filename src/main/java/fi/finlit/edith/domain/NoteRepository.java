@@ -5,7 +5,11 @@
  */
 package fi.finlit.edith.domain;
 
+import java.io.File;
+
 import org.springframework.transaction.annotation.Transactional;
+
+import com.mysema.query.paging.ListSource;
 
 /**
  * NoteRepository provides
@@ -15,5 +19,17 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public interface NoteRepository extends Repository<Note,String>{
+    
+    /**
+     * @param searchTerm
+     * @return
+     */
+    ListSource<NoteRevision> queryNotes(String searchTerm);
+
+    /**
+     * @param file
+     * @throws Exception 
+     */
+    void importNotes(File file) throws Exception;
 
 }
