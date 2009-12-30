@@ -6,7 +6,7 @@
 package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
-import com.mysema.rdfbean.annotations.InverseFunctionalProperty;
+import com.mysema.rdfbean.annotations.UniqueProperty;
 import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
@@ -24,7 +24,7 @@ public class Document extends Identifiable implements Comparable<Document>{
     private String description;
 
     @Predicate
-    @InverseFunctionalProperty
+    @UniqueProperty
     private String svnPath;
 
     @Predicate

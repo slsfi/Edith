@@ -22,7 +22,6 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetailsService;
 
-import com.mysema.tapestry.Module;
 import com.mysema.tapestry.PageMappingRule;
 
 /**
@@ -31,7 +30,7 @@ import com.mysema.tapestry.PageMappingRule;
  * @author tiwe
  * @version $Id$
  */
-@SubModule( { DataModule.class, ServiceModule.class, Module.class })
+@SubModule( { DataModule.class, ServiceModule.class })
 public class AppModule {
     
     public static void contributeApplicationDefaults(

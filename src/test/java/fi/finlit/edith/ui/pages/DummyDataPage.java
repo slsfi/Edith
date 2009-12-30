@@ -13,7 +13,7 @@ import fi.finlit.edith.domain.NoteRepository;
  * @author tiwe
  * @version $Id$
  */
-public class TestDataPage {
+public class DummyDataPage {
 
     @Inject
     private NoteRepository noteRepository;

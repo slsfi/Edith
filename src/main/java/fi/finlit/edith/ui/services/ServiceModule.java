@@ -6,23 +6,15 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 
-import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
-import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
-import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.springframework.security.providers.encoding.PasswordEncoder;
-import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -38,14 +30,11 @@ import com.mysema.rdfbean.object.DefaultConfiguration;
 import com.mysema.rdfbean.object.identity.IdentityService;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
-import com.mysema.rdfbean.tapestry.services.RDFBeanModule;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.Profile;
-import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserRepository;
 
 /**
@@ -55,7 +44,6 @@ import fi.finlit.edith.domain.UserRepository;
  * @version $Id$
  *
  */
-@SubModule(RDFBeanModule.class)
 public class ServiceModule {
     
     public static void contributeApplicationDefaults(

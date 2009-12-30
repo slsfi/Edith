@@ -6,7 +6,7 @@
 package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
-import com.mysema.rdfbean.annotations.InverseFunctionalProperty;
+import com.mysema.rdfbean.annotations.UniqueProperty;
 import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
@@ -24,7 +24,7 @@ public class User extends Identifiable {
     private String firstName, lastName, email;
     
     @Predicate
-    @InverseFunctionalProperty
+    @UniqueProperty
     private String username;
     
     @Predicate

@@ -6,8 +6,8 @@
 package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
-import com.mysema.rdfbean.annotations.InverseFunctionalProperty;
 import com.mysema.rdfbean.annotations.Predicate;
+import com.mysema.rdfbean.annotations.UniqueProperty;
 
 import fi.finlit.edith.EDITH;
 
@@ -21,7 +21,7 @@ import fi.finlit.edith.EDITH;
 public class Folder extends Identifiable implements Comparable<Folder>{
 
     @Predicate
-    @InverseFunctionalProperty
+    @UniqueProperty
     private String svnPath;
     
     @Override

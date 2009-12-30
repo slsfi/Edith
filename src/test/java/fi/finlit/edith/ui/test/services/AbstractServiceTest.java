@@ -13,6 +13,8 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
+import com.mysema.rdfbean.tapestry.services.RDFBeanModule;
+
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.LocalSVNRepo;
 import fi.finlit.edith.testutil.Modules;
@@ -26,7 +28,7 @@ import fi.finlit.edith.ui.services.ServiceModule;
  * @version $Id$
  */
 @RunWith(TapestryTestRunner.class)
-@Modules(ServiceModule.class)
+@Modules({ServiceModule.class, RDFBeanModule.class})
 public abstract class AbstractServiceTest {
 
     @BeforeClass
