@@ -5,10 +5,17 @@
  */
 package fi.finlit.edith.ui.services;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -41,6 +48,17 @@ import fi.finlit.edith.domain.UserRepository;
  */
 @SubModule(RDFBeanModule.class)
 public class ServiceModule {
+    
+    public static void contributeApplicationDefaults(
+            MappedConfiguration<String, String> configuration) throws IOException {        
+        // app config
+        configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
+        Properties properties = new Properties();
+        properties.load(AppModule.class.getResourceAsStream("/app.properties"));
+        for (Map.Entry<Object, Object> entry : properties.entrySet()){
+            configuration.add(entry.getKey().toString(), entry.getValue().toString());
+        }
+    }
     
     // TODO : get rid of match
     @Match({"DocumentRepository", "NoteRepository", "UserRepository", "CallbackService"})
@@ -81,9 +99,8 @@ public class ServiceModule {
         return SVNClientManager.newInstance();
     }   
     
-    public static SVNRepository buildSVNRepository() throws SVNException{
-        SVNURL repoURL = SVNURL.parseURIEncoded(System.getProperty(EDITH.REPO_URL_PROPERTY));
-        return SVNRepositoryFactory.create(repoURL);
+    public static SVNRepository buildSVNRepository(@Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL) throws SVNException{
+        return SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repoURL));
 
     }
     

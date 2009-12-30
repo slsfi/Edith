@@ -19,5 +19,9 @@ public final class EDITH {
     public static final String REPO_URL_PROPERTY = "svn.repo.url";
     
     public static final String REPO_FILE_PROPERTY = "svn.repo.file";
+    
+    public static final String SVN_DOCUMENT_ROOT = "svn.document.root";
+    
+    public static final String SVN_CACHE_DIR = "svn.cache.dir";
 
 }

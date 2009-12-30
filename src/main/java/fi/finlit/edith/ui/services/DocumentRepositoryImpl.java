@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
@@ -23,6 +24,7 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
@@ -37,11 +39,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
     
-    // TODO : make this configurable
-    private String documentRoot = "/documents/trunk";
+    @Inject 
+    @Symbol(EDITH.SVN_DOCUMENT_ROOT)
+    private String documentRoot;
     
-    // TODO : make this configurable
-    private final File svnCache = new File(System.getProperty("java.io.tmpdir"), "svncache");
+    @Inject 
+    @Symbol(EDITH.SVN_CACHE_DIR)
+    private File svnCache;
     
     @Inject
     private SVNRepository svnRepository;

@@ -5,6 +5,8 @@
  */
 package fi.finlit.edith.ui.services;
 
+import java.io.IOException;
+
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -33,7 +35,8 @@ import com.mysema.tapestry.PageMappingRule;
 public class AppModule {
     
     public static void contributeApplicationDefaults(
-            MappedConfiguration<String, String> configuration) {
+            MappedConfiguration<String, String> configuration) throws IOException {
+        // general config
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "fi,en,sv,de");
         configuration.add(SymbolConstants.PRODUCTION_MODE, System.getProperty("production.mode", "false"));
         configuration.add(SymbolConstants.APPLICATION_VERSION, "0.1.0");
@@ -44,6 +47,7 @@ public class AppModule {
         configuration.add("spring-security.check.url", "/security_check");
         configuration.add("spring-security.failure.url", "/loginfailed");
         configuration.add("spring-security.accessDenied.url", "/forbidden");
+        
     }
 
     public static void contributeURLRewriter(
@@ -66,8 +70,7 @@ public class AppModule {
     public static void contributeProviderManager(
             OrderedConfiguration<AuthenticationProvider> configuration,
             @InjectService("DaoAuthenticationProvider") AuthenticationProvider daoAuthenticationProvider) {
-        configuration.add("daoAuthenticationProvider",
-                daoAuthenticationProvider);
+        configuration.add("daoAuthenticationProvider", daoAuthenticationProvider);
     }
 
 }
