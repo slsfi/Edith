@@ -30,6 +30,6 @@ public interface NoteRepository extends Repository<Note,String>{
      * @param file
      * @throws Exception 
      */
-    void importNotes(File file) throws Exception;
+    int importNotes(File file) throws Exception;
 
 }

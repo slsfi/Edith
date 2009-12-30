@@ -24,7 +24,7 @@ public class TestDataPage {
     }
     
     public void onActionFromAddTestData() throws Exception{
-        noteRepository.importNotes(new File("etc/demo-material/notes"));
+        noteRepository.importNotes(new File("etc/demo-material/notes/nootit.xml"));
     }
 
 }

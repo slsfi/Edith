@@ -56,40 +56,47 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public void importNotes(File file) throws Exception {
+    public int importNotes(File file) throws Exception {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
         
-        NoteRevision note = null;
+        NoteRevision revision = null;
         String text = null;        
+        int counter = 0;
         
         while (true) {
             int event = reader.next();
-            String localName = reader.getLocalName();
+            
             if (event == XMLStreamConstants.START_ELEMENT){
-                
+                String localName = reader.getLocalName();    
                 if (localName.equals("note")){
-                    note = new NoteRevision();
+                    revision = new NoteRevision();
                 }
                 
             }else if (event == XMLStreamConstants.END_ELEMENT){
+                String localName = reader.getLocalName();
                 
                 if (localName.equals("note")){
+                    Note note = new Note();                    
+                    note.setLatestRevision(revision);
+                    revision.setRevisionOf(note);
                     getSession().save(note);
+                    getSession().save(revision);
+                    counter++;
                 }else if (localName.equals("lemma")){
-                    note.setLemma(text);
+                    revision.setLemma(text);
                 }else if (localName.equals("text")){
-                    note.setLongText(text);
+                    revision.setLongText(text);
                 }else if (localName.equals("baseform")){
-                    note.setBasicForm(text);
+                    revision.setBasicForm(text);
                 }else if (localName.equals("meaning")){
-                    note.setMeaning(text);
+                    revision.setMeaning(text);
                 }else if (localName.equals("subsource")){
                     
                 }else if (localName.equals("citation")){
                     
                 }else if (localName.equals("description")){
-                    note.setExplanation(text);
+                    revision.setExplanation(text);
                 }else if (localName.equals("source")){
                     
                 }else if (localName.equals("classification")){
@@ -110,5 +117,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 break;
             }
         }
+        return counter;
     }
+    
 }
