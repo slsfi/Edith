@@ -10,16 +10,20 @@ import static fi.finlit.edith.domain.QNoteRevision.noteRevision;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
+import com.mysema.query.BooleanBuilder;
 import com.mysema.query.paging.CallbackService;
 import com.mysema.query.paging.ListSource;
+import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.tapestry.PagedQuery;
 
 import fi.finlit.edith.domain.Note;
@@ -47,11 +51,23 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     
     @Override
     public ListSource<NoteRevision> queryNotes(String searchTerm) {
-        Assert.notNull(searchTerm);
+        Assert.notNull(searchTerm);        
+        BooleanBuilder orBuilder = new BooleanBuilder();
+        if (!searchTerm.equals("*")){
+            for (PString path : Arrays.asList(
+                    noteRevision.lemma, 
+                    noteRevision.longText,
+                    noteRevision.basicForm,
+                    noteRevision.meaning,
+                    noteRevision.explanation
+                    )){
+                orBuilder.or(path.contains(searchTerm, false));
+            }    
+        }
         return getPagedQuery()
             .from(noteRevision)
-            .where(noteRevision.lemma.contains(searchTerm, false))
-            .orderBy(noteRevision.createdOn.desc())
+            .where(orBuilder)
+            .orderBy(noteRevision.lemma.asc())
             .list(noteRevision); 
     }
 
@@ -71,14 +87,16 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 String localName = reader.getLocalName();    
                 if (localName.equals("note")){
                     revision = new NoteRevision();
+                    revision.setCreatedOn(new DateTime());
                 }
                 
             }else if (event == XMLStreamConstants.END_ELEMENT){
                 String localName = reader.getLocalName();
                 
                 if (localName.equals("note")){
-                    Note note = new Note();                    
+                    Note note = new Note();
                     note.setLatestRevision(revision);
+                    
                     revision.setRevisionOf(note);
                     getSession().save(note);
                     getSession().save(revision);
