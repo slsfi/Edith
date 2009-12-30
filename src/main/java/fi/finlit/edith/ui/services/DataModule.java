@@ -6,6 +6,7 @@ import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 
@@ -20,12 +21,12 @@ import fi.finlit.edith.domain.User;
  */
 public class DataModule {
     
-    public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) throws Exception {
-        PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-        
-        SaltSourceImpl saltSource = new SaltSourceImpl();
-        saltSource.setSystemWideSalt("DEADBEEF");
-        saltSource.afterPropertiesSet();
+    public static void contributeSeedEntity(OrderedConfiguration<Object> configuration, SaltSource saltSource, PasswordEncoder passwordEncoder) throws Exception {
+//        PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
+//        
+//        SaltSourceImpl saltSource = new SaltSourceImpl();
+//        saltSource.setSystemWideSalt("DEADBEEF");
+//        saltSource.afterPropertiesSet();
      
         // users
         for (String email : Arrays.asList(
