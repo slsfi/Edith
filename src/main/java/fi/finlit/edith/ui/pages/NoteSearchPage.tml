@@ -1,23 +1,34 @@
-<html t:type="layout"  
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-      xmlns:p="tapestry:parameter">
-      
-    <p:title>${message:notesearch}</p:title>  
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+    xmlns:p="tapestry:parameter">
 
-    <p>
-        TODO
-    </p>
-    
+    <p:title>${message:notesearch}</p:title>
+
+    <t:form t:id="searchForm" t:zone="searchResults">
+        <t:errors />
+        <t:textfield value="searchTerm" />
+        <br />
+        <input type="submit" value="${message:search}" />
+    </t:form>
+    <t:zone t:id="searchResults">
+        <t:block t:id="searchResultsBlock">
+            <ul>
+                <t:pagedList t:source="notes" t:value="note"
+                    t:pageSize="20">
+                    <li>${note.lemma}</li>
+                </t:pagedList>
+            </ul>
+        </t:block>
+    </t:zone>
+
     <p:breadcrumbs>
-        <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:notesearch}
-    </p:breadcrumbs>  
-        
+        <a t:type="pageLink" t:page="index">${message:frontpage}</a>
+        &gt; ${message:notesearch}
+    </p:breadcrumbs>
+
     <p:eastPanel>
-        <t:dashboard/>
+        <t:dashboard />
     </p:eastPanel>
 
-    <p:westPanel>
-        west
-    </p:westPanel>
+    <p:westPanel>west</p:westPanel>
 
 </html>
