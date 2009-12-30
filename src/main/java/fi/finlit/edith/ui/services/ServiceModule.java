@@ -68,41 +68,6 @@ public class ServiceModule {
             configuration.add(entry.getKey().toString(), entry.getValue().toString());
         }
     }    
-
-    public static void contributeSeedEntity(OrderedConfiguration<Object> configuration) throws Exception {
-        PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-        
-        SaltSourceImpl saltSource = new SaltSourceImpl();
-        saltSource.setSystemWideSalt("DEADBEEF");
-        saltSource.afterPropertiesSet();
-     
-        // users
-        for (String email : Arrays.asList(
-                "timo.westkamper@mysema.com",
-                "lassi.immonen@mysema.com",
-                "heli.kautonen@finlit.fi",
-                "matti.anttila@finlit.fi",
-                "sakari.katajamaki@finlit.fi",
-                "ossi.kokko@finlit.fi")){            
-            String firstName = StringUtils.capitalize(email.substring(0, email.indexOf('.')));
-            String lastName = StringUtils.capitalize(email.substring(firstName.length() + 1, email.indexOf('@')));
-            
-            User user = new User();
-            user.setUsername(firstName.toLowerCase());
-            user.setEmail(email);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setProfile(Profile.User);
-            
-            UserDetailsImpl userDetails = new UserDetailsImpl(
-                    user.getUsername(), user.getPassword(), 
-                    user.getProfile().getAuthorities());
-            String password = passwordEncoder.encodePassword(user.getUsername(),saltSource.getSalt(userDetails));
-            user.setPassword(password);
-            configuration.add("user-" + user.getUsername(), user);
-        }      
-        
-    }  
     
     // TODO : get rid of match
     @Match({"DocumentRepository", "NoteRepository", "UserRepository", "CallbackService"})

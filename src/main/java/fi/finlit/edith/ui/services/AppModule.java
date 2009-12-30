@@ -31,7 +31,7 @@ import com.mysema.tapestry.PageMappingRule;
  * @author tiwe
  * @version $Id$
  */
-@SubModule( { ServiceModule.class, Module.class })
+@SubModule( { DataModule.class, ServiceModule.class, Module.class })
 public class AppModule {
     
     public static void contributeApplicationDefaults(
