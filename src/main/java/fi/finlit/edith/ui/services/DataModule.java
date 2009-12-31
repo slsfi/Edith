@@ -2,13 +2,10 @@ package fi.finlit.edith.ui.services;
 
 import java.util.Arrays;
 
-import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
-import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 
 import fi.finlit.edith.domain.Profile;
 import fi.finlit.edith.domain.User;
@@ -44,13 +41,20 @@ public class DataModule {
             user.setEmail(email);
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            user.setProfile(Profile.User);
+            if (email.endsWith("mysema.com")){
+                user.setProfile(Profile.Admin);
+            }else{
+                user.setProfile(Profile.User);
+            }
             
+            
+            // encode password
             UserDetailsImpl userDetails = new UserDetailsImpl(
                     user.getUsername(), user.getPassword(), 
                     user.getProfile().getAuthorities());
             String password = passwordEncoder.encodePassword(user.getUsername(),saltSource.getSalt(userDetails));
             user.setPassword(password);
+            
             configuration.add("user-" + user.getUsername(), user);
         }     
         
