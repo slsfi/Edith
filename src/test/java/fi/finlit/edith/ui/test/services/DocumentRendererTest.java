@@ -32,4 +32,12 @@ public class DocumentRendererTest extends AbstractServiceTest{
         System.out.println(writer);
     }
     
+    @Test
+    public void testWithNotes() throws Exception{
+        MarkupWriter writer = new MarkupWriterImpl();
+        String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
+        renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
+        System.out.println(writer);
+    }
+    
 }

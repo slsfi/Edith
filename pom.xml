@@ -18,7 +18,7 @@
   <properties>
     <tapestry.version>5.1.0.5</tapestry.version>
     <jetty.version>6.1.0-SNAPSHOT</jetty.version>
-    <rdfbean.version>0.8.8</rdfbean.version>
+    <rdfbean.version>0.8.7</rdfbean.version>
     <commons.tapestry.version>0.1.5</commons.tapestry.version>
   </properties>
 

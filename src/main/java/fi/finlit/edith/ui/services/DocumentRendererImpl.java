@@ -29,9 +29,11 @@ import fi.finlit.edith.domain.DocumentRevision;
  */
 public class DocumentRendererImpl implements DocumentRenderer {
     
+    private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
+    
     // sp -> speech, pb -> page break, lg -> line group, l -> line
     
-    static final Set<String> emptyElements = new HashSet<String>(Arrays.asList("lb","pb"));
+    static final Set<String> emptyElements = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
     
     static final Set<String> toDiv = new HashSet<String>(Arrays.asList(
             "title", "l","lg","publisher","pubPlace","sp","teiHeader","text"));
@@ -86,6 +88,8 @@ public class DocumentRendererImpl implements DocumentRenderer {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
         
+        boolean noteContent = false;
+        
         while (true) {
             int event = reader.next();            
             if (event == XMLStreamConstants.START_ELEMENT){
@@ -101,7 +105,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                 }else if (toLi.contains(localName)){
                     writer.element("li", "class", localName);
                 }else if (toSelf.contains(localName)){
-                    writer.element(localName);
+                    writer.element(localName);                                         
                 }else if (localName.equals("TEI")){    
                     writer.element("div", "class", "tei");
                 }else if (localName.equals("lb")){    
@@ -114,6 +118,16 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         writer.writeRaw(page + ".");
                         writer.end();    
                     }                    
+                }else if (localName.equals("anchor")){
+                    String id = reader.getAttributeValue(XML_NS, "id");
+                    if (id == null){
+                        continue;
+                    }else if (id.startsWith("start")){
+                        noteContent = true;
+                    }else if (id.startsWith("end")){
+                        noteContent = false;
+                    }
+                    
                 }else{
                     writer.element("div", "class", localName);
                 }
@@ -128,7 +142,14 @@ public class DocumentRendererImpl implements DocumentRenderer {
                 // ?!?      
                 
             }else if (event == XMLStreamConstants.CHARACTERS){
-                writer.writeRaw(reader.getText());
+                String text = reader.getText();
+                if (noteContent && !text.trim().isEmpty()){
+                    writer.element("span", "class", "notecontent");
+                    writer.writeRaw(text);
+                    writer.end();
+                }else{
+                    writer.writeRaw(text);
+                }
                 
             }else if (event == XMLStreamConstants.END_DOCUMENT) {
                 reader.close();

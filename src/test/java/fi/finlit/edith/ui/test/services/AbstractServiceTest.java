@@ -19,6 +19,7 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.LocalSVNRepo;
 import fi.finlit.edith.testutil.Modules;
 import fi.finlit.edith.testutil.TapestryTestRunner;
+import fi.finlit.edith.ui.services.DataModule;
 import fi.finlit.edith.ui.services.ServiceModule;
 
 /**
@@ -28,7 +29,7 @@ import fi.finlit.edith.ui.services.ServiceModule;
  * @version $Id$
  */
 @RunWith(TapestryTestRunner.class)
-@Modules({ServiceModule.class, RDFBeanModule.class})
+@Modules({ServiceModule.class, DataModule.class, RDFBeanModule.class})
 public abstract class AbstractServiceTest {
 
     @BeforeClass

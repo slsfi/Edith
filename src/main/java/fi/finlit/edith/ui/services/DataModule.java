@@ -45,8 +45,7 @@ public class DataModule {
                 user.setProfile(Profile.Admin);
             }else{
                 user.setProfile(Profile.User);
-            }
-            
+            }            
             
             // encode password
             UserDetailsImpl userDetails = new UserDetailsImpl(
