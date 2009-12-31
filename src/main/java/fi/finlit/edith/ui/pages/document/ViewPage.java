@@ -27,38 +27,8 @@ import fi.finlit.edith.domain.DocumentRevision;
  */
 @SuppressWarnings("unused")
 @IncludeStylesheet("context:styles/tei.css")
-public class ViewPage {
+public class ViewPage extends AbstractDocumentPage{
 
-    @Inject
-    private DocumentRepository documentRepo;
-       
-    @Property
-    private Document document;
     
-    @Property
-    private DocumentRevision documentRevision;
-    
-    @Property
-    private List<Long> revisions;
-    
-    @Property
-    private Long revision;
-    
-    private Context context;
-    
-    void onActivate(EventContext context) throws SVNException{
-        this.context = new Context(context);
-        document = documentRepo.getById(context.get(String.class, 0));
-        long revision = -1;
-        if (context.getCount() > 1){
-            revision = context.get(Long.class, 1);
-        }
-        documentRevision = new DocumentRevision(document, revision);
-        revisions = documentRepo.getRevisions(document);            
-    }
-    
-    Object[] onPassivate(){
-        return context.toArray();
-    }
     
 }

@@ -3,17 +3,10 @@
       xmlns:p="tapestry:parameter">
       
     <p:title>${document.title}</p:title>  
-            
-    <div style="float: right">
-        <t:pagelink page="document/printPage" t:context="${document.id}">${message:print}</t:pagelink>
-    </div>
-
 
     <div class="content">
         <t:document.view document="documentRevision"/>        
     </div>
-
-    <div style="clear:both;"></div>
     
     <p:breadcrumbs>
         <a t:type="pageLink" t:page="index">${message:frontpage}</a> 
@@ -35,11 +28,15 @@
         </div>
     </p:eastPanel>
 
-    <p:westPanel>
-        <div class="panel" style="border: none; text-align: center;">
+    <p:westPanel>                
+        <div style="text-align: center;">
+            <t:pagelink page="document/printPage" t:context="[document.id,revision]">${message:print}</t:pagelink>
+        </div>
+    
+        <div class="panel narrow" style="border: none; text-align: center;">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>
-        </div>
+        </div>        
     </p:westPanel>
 
 </html>

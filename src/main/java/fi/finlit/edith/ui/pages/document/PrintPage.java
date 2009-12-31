@@ -27,19 +27,6 @@ import fi.finlit.edith.domain.DocumentRevision;
     "context:styles/skins/printer-friendly.css"    
 })
 @SuppressWarnings("unused")    
-public class PrintPage {
+public class PrintPage extends AbstractDocumentPage{
 
-    @Inject
-    private DocumentRepository documentRepo;
-    
-    @Property
-    private Document document;
-    
-    @Property
-    private DocumentRevision documentRevision;
-    
-    void onActivate(String id){
-        document = documentRepo.getById(id);
-        documentRevision = new DocumentRevision(document, -1);
-    }
 }

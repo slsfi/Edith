@@ -21,21 +21,6 @@ import fi.finlit.edith.domain.DocumentRevision;
  */
 @SuppressWarnings("unused")
 @IncludeStylesheet("context:styles/tei.css")
-public class AnnotatePage {
+public class AnnotatePage extends AbstractDocumentPage{
     
-    @Inject
-    private DocumentRepository documentRepo;
-       
-    @Property
-    private Document document;
-    
-    @Property
-    private DocumentRevision documentRevison;
-    
-    void onActivate(String id){
-        document = documentRepo.getById(id);
-        documentRevison = new DocumentRevision(document, -1);
-    }
-    
-
 }
