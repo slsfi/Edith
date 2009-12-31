@@ -1,53 +1,70 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-      xmlns:p="tapestry:parameter">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+    xmlns:p="tapestry:parameter">
     <head>
-        <title><t:delegate to="title"/></title>
+        <title><t:delegate to="title" /></title>
     </head>
     <body>
-        <div id="container">
-    
         <div id="header">
-          <div id="breadcrumbs">
-                <t:delegate to="breadcrumbs"/>
-          </div>         
-          <div id="auth">
-            <t:authPanel/>
-          </div> 
-          <div style="clear:both;"></div>
+            <div class="content">
+                <div id="breadcrumbs">
+                    <t:delegate to="breadcrumbs" />
+                </div>
+                <div id="auth">
+                    <t:authPanel />
+                </div>
+                <div style="clear:both;"></div>
+            </div>
         </div>
-                
+
         <div id="top">
-            <a t:type="pagelink" t:page="index" id="homeLink">
-              <img src="${context:images/logo.jpg}"/>
-            </a>
-          <div class="title"><t:delegate to="title"/></div>
-          <div style="clear:both;"/>
+            <div class="content">
+                <a t:type="pagelink" t:page="index" id="homeLink">
+                    <img src="${context:images/logo.jpg}" />
+                </a>
+                <div class="title">
+                    <t:delegate to="title" />
+                </div>
+                <div style="clear:both;" />
+            </div>
         </div>
-        
-        <table id="main">
-          <tr>
-            <td id="left"><t:delegate to="eastPanel"/></td>
-            <td id="center" width="100%"><t:body/></td>
-            <td id="right"><t:delegate to="westPanel"/></td>
-          </tr>
-        </table>
-        
+
+        <div id="main1">
+            <div id="main2">
+                <div id="left">
+                    <div class="content">
+                        <t:delegate to="eastPanel" />
+                    </div>
+                </div>
+                <div id="right">
+                    <div class="content">
+                        <t:delegate to="westPanel" />
+                    </div>
+                </div>
+                <div id="center">
+                    <div class="content">
+                        <t:body />
+                    </div>
+                </div>
+                <div class="cleaner">
+                </div>
+            </div>
+        </div>
+
         <div id="bottom">
-            <ul class="actions">
-                <li>
-                    <t:pagelink page="index" t:disabled="isOnPage('index')">${message:frontpage}</t:pagelink>
-                </li>            
-                <li>
-                    <t:pagelink page="aboutPage" t:disabled="isOnPage('aboutPage')">${message:about}</t:pagelink>
-                </li>
-                <li>
-                    <a href="http://www.finlit.fi">SKS</a>                
-                </li>
-            </ul>
-        </div>      
-        
+            <div class="content">
+                <ul class="actions">
+                    <li>
+                        <t:pagelink page="index" t:disabled="isOnPage('index')">${message:frontpage}</t:pagelink>
+                    </li>
+                    <li>
+                        <t:pagelink page="aboutPage" t:disabled="isOnPage('aboutPage')">${message:about}</t:pagelink>
+                    </li>
+                    <li>
+                        <a href="http://www.finlit.fi">SKS</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </body>
 </html>

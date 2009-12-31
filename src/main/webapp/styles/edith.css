@@ -1,13 +1,19 @@
-#main, #top, #bottom{
-	padding: 0.2em;	
-}	
+.content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
 
-#top {
+#top .content,
+#header .content {
+    padding: 0.2em; 
+}
+
+#top .content {
 	font-size: 1.5em;
 	font-weight: bold;
 }
 
-#bottom {
+#bottom .content {
 	font-size: 90%;
 	border-top: solid 1px #D0D0D0;		
 	padding: 0.4em;
@@ -24,13 +30,6 @@
 	padding-bottom: 5px;
 }
 
-#left{
-	
-}	
-
-#left, #center, #right {
-	padding: 1em;
-}
 
 #breadcrumbs, #auth {
 	padding: 5px 7px;
@@ -112,3 +111,29 @@ label.left {
 #bottom li a {
 	font-weight: normal;
 }
+
+
+/* Note search */
+
+table.searchresults {
+	font-size: 80%;
+    border-collapse: collapse;
+}
+
+table.searchresults  th {
+	text-align: left;
+    border-bottom: 2px solid black;	
+}
+
+
+table.searchresults td+td {
+    border-left: 1px solid #cccccc;
+}
+
+
+table.searchresults td {
+    border-bottom: 1px solid #999999;
+    padding: 0.2em;
+}
+
+
