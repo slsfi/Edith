@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="Notes_test.xsl"?>
+
+<notecoll source="Nummisuutarit">
+
+  <notes type="Esimerkki">
+
+    <note xml:id="note.1" target="ref.1" resp="ed">
+      <lemma>Lemma</lemma>
+      <text>Pitka viite (text)</text>
+      <baseform>Perusmuoto (baseform)</baseform>
+      <meaning>Merkitys (meaning)</meaning>
+      <subsource>Subtekstin lahde (subsource)</subsource>
+      <citation>Sitaatti (citation)</citation>
+      <description> 'räätäli' (murt. ja kk, ru skräddare)</description>
+      <source>Lahde (source)</source>
+      <classification>Oma luokitus (classification)</classification>
+      <edited>XX/YYYYMMDD</edited>
+      <stage>Tyostovaihe (stage)</stage>
+      <comment>Kommentti (comment)</comment>
+    </note>
+    
+  </notes>
+  
+</notecoll>

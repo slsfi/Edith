@@ -51,7 +51,7 @@ public class ServiceModule {
         // app config
         configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
         Properties properties = new Properties();
-        properties.load(AppModule.class.getResourceAsStream("/app.properties"));
+        properties.load(AppModule.class.getResourceAsStream("/edith.properties"));
         for (Map.Entry<Object, Object> entry : properties.entrySet()){
             configuration.add(entry.getKey().toString(), entry.getValue().toString());
         }

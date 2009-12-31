@@ -26,7 +26,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
     
     // tapestry component styles
     "context:styles/tapestry/forms.css",
-    "context:styles/tapestry/grid.css",    
+    "context:styles/tapestry/grid.css"    
     })
 @SuppressWarnings("unused")
 public class Layout {

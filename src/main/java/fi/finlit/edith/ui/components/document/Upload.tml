@@ -1,0 +1,15 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+    <t:content>
+    
+    <t:form t:id="uploadForm">
+      <t:errors/>
+      <input t:type="upload" t:id="file" t:validate="required"/>
+      <input type="submit" value="${message:submit}"/>
+    </t:form>
+    
+    <t:if test="message">
+        <p class="msg">${message}</p>
+    </t:if>
+    
+    </t:content>
+</html>    

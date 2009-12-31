@@ -30,11 +30,11 @@ public class TapestryTestRunner extends BlockJUnit4ClassRunner {
     }
 
     private static Registry getRegistry(Class<?> testClass){
-        Class<?>[] m = testClass.getAnnotation(Modules.class).value();
-        Set<Class<?>> modules = new HashSet<Class<?>>(Arrays.asList(m));
+        Class<?>[] classes = testClass.getAnnotation(Modules.class).value();
+        Set<Class<?>> modules = new HashSet<Class<?>>(Arrays.asList(classes));
         Registry registry;
         if (!registries.containsKey(modules)){
-            registry = new RegistryBuilder().add(m).build();    
+            registry = new RegistryBuilder().add(classes).build();    
             registries.put(modules, registry);
         }else{
             registry = registries.get(modules);

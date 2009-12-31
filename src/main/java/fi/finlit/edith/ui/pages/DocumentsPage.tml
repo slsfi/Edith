@@ -18,15 +18,11 @@
         </li>    
     </t:loop>
     </ul>
-    
-    <h3>${message:add-document}</h3>
-    
-    <t:form t:id="uploadForm">
-      <t:errors/>
-      <input t:type="upload" t:id="file" validate="required"/>
-      <input type="submit" value="${message:submit}"/>
-    </t:form>
-    
+   
+   <h3>${message:add-document}</h3>
+   
+   <t:document.upload/>
+       
     <p:breadcrumbs>
         <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:documents}
     </p:breadcrumbs>        

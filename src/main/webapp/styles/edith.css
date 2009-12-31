@@ -3,6 +3,10 @@
     padding-right: 0.5em;
 }
 
+#center h3{
+	margin-top: 1em;	
+}	
+
 #top .content,
 #header .content {
     padding: 0.2em; 
@@ -131,5 +135,9 @@ table.searchresults td {
     border-bottom: 1px solid #999999;
     padding: 0.2em;
 }
+
+.msg{
+	font-weight: bold;	
+}	
 
 

@@ -1,0 +1,59 @@
+package fi.finlit.edith.ui.components.document;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.tapestry5.PersistenceConstants;
+import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.Messages;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.upload.services.UploadedFile;
+import org.tmatesoft.svn.core.SVNException;
+
+import fi.finlit.edith.EDITH;
+import fi.finlit.edith.domain.DocumentRepository;
+
+/**
+ * Upload provides
+ *
+ * @author tiwe
+ * @version $Id$
+ */
+@SuppressWarnings("unused")
+public class Upload {    
+
+    @Inject
+    private DocumentRepository documentRepo;
+    
+    @Inject 
+    @Symbol(EDITH.SVN_DOCUMENT_ROOT)
+    private String documentRoot;
+    
+    @Property
+    private UploadedFile file;
+    
+    @Persist(PersistenceConstants.FLASH)
+    @Property
+    private String message;
+    
+    @Inject
+    private Messages messages;
+
+    // TODO : validate that the name has not been taken
+    
+    void onSuccess() throws IOException, SVNException{
+        File tempFile = File.createTempFile("upload", null);        
+        try{
+            file.write(tempFile);
+            String path = documentRoot + "/" + file.getFileName();
+            documentRepo.addDocument(path, tempFile);    
+            message = messages.format("document-stored-msg", file.getFileName());
+        }finally{
+            tempFile.delete();
+        }
+    }
+    
+}

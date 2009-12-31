@@ -6,13 +6,17 @@
 
     <t:form t:id="uploadForm">
       <t:errors/>
-      <input t:type="upload" t:id="file" validate="required"/>
+      <input t:type="upload" t:id="file" t:validate="required"/>
       <input type="submit" value="${message:submit}"/>
     </t:form>
     
+    <t:if test="message">
+        <p class="msg">${message}</p>
+    </t:if>
+    
     <p:breadcrumbs>
         <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:noteimport}
-    </p:breadcrumbs>        
+    </p:breadcrumbs>       
         
     <p:eastPanel>
         <t:dashboard/>
