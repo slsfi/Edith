@@ -24,6 +24,6 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     public void importNotes() throws Exception{
         assertEquals(133, noteRepo.importNotes(new File("etc/demo-material/notes/nootit.xml")));        
         assertEquals(1l, noteRepo.queryNotes("lemma").size());
-        assertEquals(1l, noteRepo.queryNotes("etten anna sinulle").size());
+        assertEquals(2l, noteRepo.queryNotes("etten anna sinulle").size());
     }
 }

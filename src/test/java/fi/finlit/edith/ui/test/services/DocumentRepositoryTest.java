@@ -33,12 +33,12 @@ public class DocumentRepositoryTest extends AbstractServiceTest{
         
     @Test
     public void getAll(){
-        assertEquals(6, documentRepo.getAll().size());
+        assertEquals(7, documentRepo.getAll().size());
     }
     
     @Test
     public void getDocumentsOfFolder(){
-        assertEquals(6, documentRepo.getDocumentsOfFolder("documents/trunk").size()); 
+        assertEquals(7, documentRepo.getDocumentsOfFolder("documents/trunk").size()); 
     }
     
     @Test

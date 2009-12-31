@@ -143,7 +143,7 @@
                     </sp>
                     <sp>
                         <speaker>Jaana.</speaker>
-                        <p>Hän paikalla lähtee häihinsä Mikko Vilkastuksen kanssa.</p>
+                        <p>Hän paikalla <anchor xml:id="start1"/>lähtee häihinsä Mikko Vilkastuksen<anchor xml:id="end1"/> kanssa.</p>
                     </sp>
                     <pb n="6"/>
                     <sp>
@@ -152,7 +152,7 @@
                     </sp>
                     <sp>
                         <speaker>Jaana.</speaker>
-                        <p>Tulee kaiketi. Nyt kiirehtivät, koska suutarille käskyn käräjiin annoit,
+                        <p>Tulee kaiketi. Nyt kiirehtivät, <anchor xml:id="start2"/>koska suutarille käskyn käräjiin annoit,
                             saadaksesi naimalupaa.</p>
                     </sp>
                     <sp>
@@ -162,7 +162,7 @@
                     </sp>
                     <sp>
                         <speaker>Jaana.</speaker>
-                        <p>Nytpä äitinsä on kutsumassa tänne lukkaria lupauskirjaa isän puolesta
+                        <p>Nytpä äitinsä on kutsumassa tänne lukkaria <anchor xml:id="end2"/>lupauskirjaa isän puolesta
                             tekemään.</p>
                     </sp>
                     <sp>
@@ -170,13 +170,13 @@
                         <p>Niin menee meiltä viisisataa riksiä. Nummi-suutarin poika ne riistää
                             meiltä, ja sinä olet kuitenkin vanhempi häntä. Tuhat tulimmaista! Se
                             kaistapäinen korpraali, miksi teki hän näin kummallisen jälkisäätöksen?
-                            ”Kumpi heistä ennen naiduksi tulee”, niin seisoo säätös-kirjassa. Onko
+                            ”Kumpi heistä ennen naiduksi <anchor xml:id="start3"/>tulee”, niin seisoo säätös-kirjassa. Onko
                             tämä järjellinen ehto, jolle hän perintö-oikeuden perustaa! Kaikki
-                            yhdelle tai puolet kummallenkin määrätty, niin emmepä tietäisi tässä
+                            yhdelle tai puolet <anchor xml:id="start4"/>kummallenkin määrätty, niin emmepä tietäisi tässä
                             sydäntä karvastelevasta kiusasta nyt. Vahingosta en huoli, mutta se
-                            kiusa! – Olispa toisin toki, luulen minä, käynyt, jos ei kova onni sulle
+                            kiusa! – Olispa toisin toki, luulen minä, <anchor xml:id="end3"/>käynyt, jos ei kova onni sulle
                             suutaria edusmieheksi pannut olis, mutta tätä ehkä äitisi kuollessa jo
-                            tarkoittivat ja ovat siis tarkoituksensa päässä nyt. Rutto sen suutarin
+                            tarkoittivat ja ovat siis <anchor xml:id="end4"/>tarkoituksensa päässä nyt. Rutto sen suutarin
                             niskaan!</p>
                     </sp>
                     <sp>
