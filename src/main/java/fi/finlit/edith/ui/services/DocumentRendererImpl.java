@@ -34,7 +34,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
     static final Set<String> emptyElements = new HashSet<String>(Arrays.asList("lb","pb"));
     
     static final Set<String> toDiv = new HashSet<String>(Arrays.asList(
-            "title", "l","lg","publisher","pubPlace","sp","stage","teiHeader","text"));
+            "title", "l","lg","publisher","pubPlace","sp","teiHeader","text"));
     
     static final Set<String> toP = new HashSet<String>();
     

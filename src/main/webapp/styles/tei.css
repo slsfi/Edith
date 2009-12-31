@@ -17,8 +17,9 @@
 }
 
 .speaker{
-	display: block;
-	font-weight: bold;
+	/*font-weight: bold;*/
+	color: #4040D0;
+	font-style: italic;
 }
 
 .stage {
@@ -33,6 +34,14 @@
 .sp{
 	padding: 0.25em 0;
 }
+
+.sp .speaker {
+	padding-right: 0.25em;	
+}	
+
+.sp p {
+	display: inline;	
+}	
 
 .listBibl{
 	border: dotted 1px gray;
@@ -83,7 +92,10 @@
 
 .page {
     text-align: center;
-    font-weight: bold;	
+    font-weight: bold;
+    /*display: inline;*/	
+    padding: 0.5em;
+	border-top: dotted 1px gray;
 }
 
 .l{

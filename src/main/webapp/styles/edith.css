@@ -112,9 +112,3 @@ label.left {
 #bottom li a {
 	font-weight: normal;
 }
-
-.page{
-	padding: 0.5em;
-	border-top: dotted 1px gray;
-	/*border-bottom: dotted 1px gray;*/
-}
