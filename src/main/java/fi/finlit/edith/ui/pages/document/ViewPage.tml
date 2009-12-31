@@ -25,7 +25,13 @@
         <t:dashboard/>
         <div class="panel">
             <h3>${message:revisions}</h3>
-            TODO
+            <ul>
+                <t:loop source="revisions" value="revision">
+                <li>
+                    <t:pagelink page="document/viewPage" t:context="[document.id,revision]">${revision}</t:pagelink>
+                </li>
+                </t:loop>
+            </ul>            
         </div>
     </p:eastPanel>
 

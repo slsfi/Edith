@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.tmatesoft.svn.core.SVNException;
 
 /**
  * DocumentRepository provides
@@ -43,5 +44,12 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @throws IOException 
      */
     File getDocumentFile(DocumentRevision document) throws IOException;
+
+    /**
+     * @param document
+     * @return
+     * @throws SVNException 
+     */
+    List<Long> getRevisions(Document document) throws SVNException;
 
 }

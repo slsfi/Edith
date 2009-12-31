@@ -89,6 +89,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
         
         boolean noteContent = false;
+        Set<String> noteIds = new HashSet<String>();
         
         while (true) {
             int event = reader.next();            
@@ -123,9 +124,13 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     if (id == null){
                         continue;
                     }else if (id.startsWith("start")){
-                        noteContent = true;
+                        noteContent = true;                        
+                        noteIds.add(id.substring("start".length()));
                     }else if (id.startsWith("end")){
-                        noteContent = false;
+                        noteIds.remove(id.substring("end".length()));
+                        if (noteIds.isEmpty()){
+                            noteContent = false;    
+                        }                        
                     }
                     
                 }else{

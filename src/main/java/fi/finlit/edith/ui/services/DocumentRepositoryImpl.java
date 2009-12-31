@@ -142,5 +142,17 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
         return revision;
     }
+    
+    @Override
+    public List<Long> getRevisions(Document document) throws SVNException {
+        long latest = svnRepository.getLatestRevision();
+        Collection<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>(); 
+        svnRepository.getFileRevisions(document.getSvnPath(), revisions, 0, latest);
+        List<Long> revisionIds = new ArrayList<Long>(revisions.size());
+        for (SVNFileRevision rev : revisions){
+            revisionIds.add(rev.getRevision());
+        }
+        return revisionIds;
+    }
 
 }
