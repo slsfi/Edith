@@ -32,6 +32,11 @@
       <version>${tapestry.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.tapestry</groupId>
+      <artifactId>tapestry-upload</artifactId>
+      <version>${tapestry.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.mysema.commons</groupId>
       <artifactId>mysema-commons-tapestry</artifactId>
       <version>${commons.tapestry.version}</version>

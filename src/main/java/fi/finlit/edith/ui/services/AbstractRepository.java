@@ -7,6 +7,8 @@ package fi.finlit.edith.ui.services;
 
 import java.util.Collection;
 
+import org.tmatesoft.svn.core.SVNException;
+
 import com.mysema.query.types.path.PEntity;
 
 import fi.finlit.edith.domain.Repository;

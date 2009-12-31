@@ -22,9 +22,7 @@ import fi.finlit.edith.domain.DocumentRevision;
 @IncludeStylesheet({
     "context:styles/base.css",
     "context:styles/edith.css",       
-    "context:styles/tei.css",
-
-    "context:styles/skins/printer-friendly.css"    
+    "context:styles/tei.css",    
 })
 @SuppressWarnings("unused")    
 public class PrintPage extends AbstractDocumentPage{

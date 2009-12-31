@@ -21,12 +21,12 @@ import org.apache.tapestry5.ioc.annotations.Inject;
  */
 @IncludeStylesheet({
     "context:styles/base.css",
+    "context:styles/layout-3col.css", // TODO : create alternatives and make page specific
     "context:styles/edith.css",    
     
+    // tapestry component styles
     "context:styles/tapestry/forms.css",
-    "context:styles/tapestry/grid.css",
-    
-    "context:styles/skins/simple.css"
+    "context:styles/tapestry/grid.css",    
     })
 @SuppressWarnings("unused")
 public class Layout {

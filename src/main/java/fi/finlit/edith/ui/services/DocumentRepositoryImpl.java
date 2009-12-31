@@ -21,8 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNCommitClient;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
@@ -39,6 +42,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
     
+    @Inject
+    private SVNClientManager clientManager;
+    
     @Inject 
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
@@ -54,19 +60,27 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         super(document);
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void addDocument(String svnPath, File file) throws SVNException {
+        SVNURL repoURL = svnRepository.getRepositoryRoot(false);
+        SVNCommitClient commitClient = clientManager.getCommitClient();
+        commitClient.doImport(file, repoURL.appendPath(svnPath, false), svnPath + " added", false);        
+    }
+    
     private Document createDocument(String path, String title, String description){
         Document document = new Document();
         document.setSvnPath(path);
         document.setTitle(title);
         document.setDescription(description);
         return save(document);
-    }
-    
+    }    
+
     @Override
     public Collection<Document> getAll() {        
         return getDocumentsOfFolder(documentRoot);
-    }    
-
+    }
+    
     @Override
     public File getDocumentFile(DocumentRevision document) throws IOException {
         try {
@@ -130,11 +144,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
     
-    private long getLatestRevision(String svnPath) throws SVNException{
+    private long getLatestRevision(String svnPath) throws SVNException{        
+        List<SVNFileRevision> revisions = getRevisions(svnPath); 
         long revision = 0;
-        long latest = svnRepository.getLatestRevision();
-        Collection<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>(); 
-        svnRepository.getFileRevisions(svnPath, revisions, 0, latest);
         for (SVNFileRevision rev : revisions){
             if (revision < rev.getRevision()){
                 revision = rev.getRevision();
@@ -145,14 +157,31 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     
     @Override
     public List<Long> getRevisions(Document document) throws SVNException {
-        long latest = svnRepository.getLatestRevision();
-        Collection<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>(); 
-        svnRepository.getFileRevisions(document.getSvnPath(), revisions, 0, latest);
+        List<SVNFileRevision> revisions = getRevisions(document.getSvnPath());
         List<Long> revisionIds = new ArrayList<Long>(revisions.size());
         for (SVNFileRevision rev : revisions){
             revisionIds.add(rev.getRevision());
         }
         return revisionIds;
+    }
+
+    private List<SVNFileRevision> getRevisions(String svnPath) throws SVNException{
+        long latest = svnRepository.getLatestRevision();
+        List<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>(); 
+        svnRepository.getFileRevisions(svnPath, revisions, 0, latest);
+        return revisions;
+    }
+    
+    @Override
+    public void remove(Document document){
+        // only delete document in SVN, do not remove metadata instance
+        try {
+            SVNURL repoURL = svnRepository.getRepositoryRoot(false);
+            SVNURL targetURL = repoURL.appendPath(document.getSvnPath(), false);
+            clientManager.getCommitClient().doDelete(new SVNURL[]{targetURL}, "removed " + document.getSvnPath());
+        } catch (SVNException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }        
     }
 
 }

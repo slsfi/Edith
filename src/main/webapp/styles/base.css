@@ -2,127 +2,6 @@ body {
 	font-family : arial,helvetica,clean,sans-serif;background-color: #fff;
 }
 
-html, body, form { 
-	margin: 0; 
-	padding: 0; 
-}
-
-/* Hiding the regular scroll bars */
-body {
-    overflow: hidden;
-    max-height: 100%;
-}
-
-/**
-* 3-column basic layout using div's
-*/
-
-#main1 {
- margin:0; padding:0;
-}
-#main2 {
- margin:0; padding:0;
-}
-
-/**
-* The fluid layout
-*/
-
-/*
-#left {
- float:left;
- width:12em;
- margin:0; padding:0;
-}
-
-
-#right {
- float:right;
- width:10em;
-}
-
-
-#center {
- margin:0 150px;
-}
-
-*/
-
-/**
-* The fixed positioning to get the center column scroll
-*/
-
-
-#header {
-    height: 2em;
-}
-
-#top {
-    height: 3em;
-}
-
-#main1 {
-    position: absolute;
-    top: 5em;
-    left: 0em;
-    right: 0em;
-    bottom: 2em;
-}
-
-
-#left {
-    position: absolute;
-    top: 0em;
-    left: 0em;
-    bottom: 0em;
-    width: 12em;
-    overflow: auto;
-}
-
-#right {
-    position: absolute;
-    top: 0em;
-    right: 0em; 
-    bottom: 0em;
-    width: 10em;  
-    overflow: auto;
-}
-
-
-#center {
-    position: absolute;
-    top: 0em;
-    left: 12em;
-    right: 10em;
-    bottom: 0em;
-    overflow: auto;
-}
-
-/*
-#center .content {	
-	height: 100%;
-}
-
-*/
-#bottom {
-    position: fixed;
-    height: 2em;
-    width: 100%;
-    bottom: 0px;
-}
-
-
-.cleaner {
- clear:both;
- height:1px;
- font-size:1px;
- border:none;
- margin:0; padding:0;
- background:transparent;
-} 
-
-
-
 ul, ol, li, h1, h2, h3, h4, h5, p { 
 	margin: 0; 
 	padding: 0
@@ -167,7 +46,16 @@ p{
 	margin: 0.5em 0 0.5 0;
 }
 
+.panel {	
+	border: solid 1px #D0D0D0;
+	-moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+	padding: 0.3em;
+	margin-bottom: 1em;
+}
+
 .panel h3{
+	border-bottom: dotted 1px;	
 	font-size: 100%;	
 }	
 

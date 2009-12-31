@@ -13,6 +13,9 @@
                 <li>
                     <a t:type="pageLink" t:page="noteSearchPage" t:disabled="isOnPage('noteSearchPage')">${message:notesearch}</a>
                 </li>
+                <li>
+                    <a t:type="pageLink" t:page="noteImportPage" t:disabled="isOnPage('noteImportPage')">${message:noteimport}</a>
+                </li>
                 <!-- 
                 <li>
                     <a t:type="pageLink" t:page="logoutPage" t:disabled="isOnPage('logoutPage')">${message:logout}</a>

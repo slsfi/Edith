@@ -13,6 +13,9 @@
         <li>
             <a t:type="pageLink" t:page="noteSearchPage">${message:notesearch}</a>
         </li>
+        <li>
+            <a t:type="pageLink" t:page="noteImportPage">${message:noteimport}</a>
+        </li>
     </ul>
     
     <p:breadcrumbs>

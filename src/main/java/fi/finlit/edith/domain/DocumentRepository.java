@@ -52,4 +52,11 @@ public interface DocumentRepository extends Repository<Document,String>{
      */
     List<Long> getRevisions(Document document) throws SVNException;
 
+    /**
+     * @param string
+     * @param file
+     * @throws SVNException 
+     */
+    void addDocument(String svnPath, File file) throws SVNException;
+
 }
