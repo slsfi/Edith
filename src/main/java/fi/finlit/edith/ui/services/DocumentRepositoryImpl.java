@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
@@ -41,6 +42,10 @@ import fi.finlit.edith.domain.DocumentRevision;
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements DocumentRepository{
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
+    
+    static{
+        FSRepositoryFactory.setup();
+    }
     
     @Inject
     private SVNClientManager clientManager;

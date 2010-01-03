@@ -14,11 +14,9 @@ import com.mysema.commons.jetty.JettyHelper;
 
 public class EdithDebugStart {
     
-    private static final File svnRepo = new File("target/repo");
-    
     public static void main(String[] args) throws Exception{
-        FSRepositoryFactory.setup();
-        LocalSVNRepo.init(svnRepo);
+        FSRepositoryFactory.setup();        
+        File svnRepo = new File("target/repo");
         
         System.setProperty("org.mortbay.jetty.webapp.parentLoaderPriority", "true");
         System.setProperty("production.mode", "false");

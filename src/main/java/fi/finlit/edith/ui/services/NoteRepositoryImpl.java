@@ -16,15 +16,12 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
-import com.mysema.query.paging.CallbackService;
 import com.mysema.query.paging.ListSource;
 import com.mysema.query.types.path.PString;
-import com.mysema.rdfbean.tapestry.PagedQuery;
 
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
@@ -38,15 +35,8 @@ import fi.finlit.edith.domain.NoteRevision;
  */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository{
 
-    @Inject
-    private CallbackService txCallback;
-    
     public NoteRepositoryImpl() {
         super(note);
-    }
-
-    private PagedQuery getPagedQuery(){
-        return new PagedQuery(txCallback, getSession());
     }
     
     @Override

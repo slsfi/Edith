@@ -21,7 +21,6 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 
-import com.mysema.query.paging.CallbackService;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
@@ -58,7 +57,7 @@ public class ServiceModule {
     }    
     
     // TODO : get rid of match
-    @Match({"DocumentRepository", "NoteRepository", "UserRepository", "CallbackService"})
+    @Match({"DocumentRepository", "NoteRepository", "UserRepository"})
     public static void adviseTransactions(TransactionalAdvisor advisor, MethodAdviceReceiver receiver){
         advisor.addTransactionCommitAdvice(receiver);
     }
@@ -69,7 +68,6 @@ public class ServiceModule {
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
         
         binder.bind(DocumentRenderer.class, DocumentRendererImpl.class);
-        binder.bind(CallbackService.class, CallbackServiceImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
     }
     
@@ -85,9 +83,7 @@ public class ServiceModule {
     public static Repository buildRepository(Configuration configuration) {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(  
-            new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS),
-            new RDFSource("classpath:/base.ttl",  Format.TURTLE, EDITH.DATA),
-            new RDFSource("classpath:/data.ttl",  Format.TURTLE, EDITH.DATA)
+            new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS)
         );                
         return repository;        
     }
@@ -96,7 +92,8 @@ public class ServiceModule {
         return SVNClientManager.newInstance();
     }   
     
-    public static SVNRepository buildSVNRepository(@Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL) throws SVNException{
+    public static SVNRepository buildSVNRepository(
+            @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL) throws SVNException{
         return SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repoURL));
     }
     

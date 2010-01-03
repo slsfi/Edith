@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertNotNull;
@@ -5,7 +10,6 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Arrays;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.UserRepository;
@@ -22,7 +26,6 @@ public class UserRepositoryTest extends AbstractServiceTest{
     private UserRepository userRepo;
     
     @Test
-    @Ignore
     public void getByUsername(){
         for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")){
             assertNotNull(userRepo.getByUsername(username));

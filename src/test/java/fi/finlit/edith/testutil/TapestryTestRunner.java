@@ -35,6 +35,7 @@ public class TapestryTestRunner extends BlockJUnit4ClassRunner {
         Registry registry;
         if (!registries.containsKey(modules)){
             registry = new RegistryBuilder().add(classes).build();    
+            registry.performRegistryStartup();
             registries.put(modules, registry);
         }else{
             registry = registries.get(modules);

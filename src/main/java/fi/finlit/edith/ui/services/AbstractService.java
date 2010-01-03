@@ -9,6 +9,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
+import com.mysema.rdfbean.query.PagedBeanQuery;
 
 /**
  * AbstractService provides
@@ -23,6 +24,9 @@ public abstract class AbstractService {
     
     protected Session getSession(){
         return sessionFactory.getCurrentSession();
-    }
+    }    
 
+    protected PagedBeanQuery getPagedQuery(){
+        return new PagedBeanQuery(sessionFactory, getSession());
+    }
 }
