@@ -27,6 +27,6 @@ public abstract class AbstractService {
     }    
 
     protected PagedBeanQuery getPagedQuery(){
-        return new PagedBeanQuery(sessionFactory, getSession());
+        return new PagedBeanQuery(sessionFactory);
     }
 }
