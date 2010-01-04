@@ -7,9 +7,8 @@ package fi.finlit.edith.domain;
 
 import java.io.File;
 
+import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.mysema.query.paging.ListSource;
 
 /**
  * NoteRepository provides
@@ -20,11 +19,7 @@ import com.mysema.query.paging.ListSource;
 @Transactional
 public interface NoteRepository extends Repository<Note,String>{
     
-    /**
-     * @param searchTerm
-     * @return
-     */
-    ListSource<NoteRevision> queryNotes(String searchTerm);
+    GridDataSource queryNotes(String searchTem);
 
     /**
      * @param file

@@ -10,28 +10,13 @@
     </t:form>
 
     <t:if test="notes">
-        <t:if test="!notes.empty">
-            <table class="searchresults">
-                <tr>
-                    <th>${message:lemma}</th>
-                    <th>${message:basicForm}</th>
-                    <th>${message:longText}</th>
-                    <th>${message:meaning}</th>
-                    <th>${message:explanation}</th>
-                </tr>
-
-                <t:pagedList t:source="notes" t:value="note" t:pageSize="20">
-                    <tr>
-                        <td>${note.lemma}</td>
-                        <td>${note.basicForm}</td>
-                        <td>${note.longText}</td>
-                        <td>${note.meaning}</td>
-                        <td>${note.explanation}</td>
-                    </tr>
-                </t:pagedList>
-            </table>
-            <p:else>${message:no-results}</p:else>
-        </t:if>
+        <t:grid source="notes" row="note" rowsPerPage="20" inPlace="true"
+            include="lemma,basicForm,longText,meaning,explanation">
+            <p:empty>
+                <p>${message:no-results}</p>
+            </p:empty>  
+        </t:grid>
+        <p:else>${message:no-results}</p:else>            
     </t:if>
     
     <p:breadcrumbs>

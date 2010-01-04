@@ -5,13 +5,10 @@
  */
 package fi.finlit.edith.ui.pages;
 
-import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
-
-import com.mysema.query.paging.ListSource;
-import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
@@ -29,7 +26,7 @@ public class NoteSearchPage {
     private String searchTerm;
 
     @Property
-    private ListSource<NoteRevision> notes;
+    private GridDataSource notes;
 
     @Property
     private NoteRevision note;

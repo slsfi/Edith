@@ -16,11 +16,11 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.tapestry5.grid.GridDataSource;
 import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
-import com.mysema.query.paging.ListSource;
 import com.mysema.query.types.path.PString;
 
 import fi.finlit.edith.domain.Note;
@@ -38,9 +38,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     public NoteRepositoryImpl() {
         super(note);
     }
-    
+        
     @Override
-    public ListSource<NoteRevision> queryNotes(String searchTerm) {
+    public GridDataSource queryNotes(String searchTerm) {
         Assert.notNull(searchTerm);        
         BooleanBuilder orBuilder = new BooleanBuilder();
         if (!searchTerm.equals("*")){
@@ -54,11 +54,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 orBuilder.or(path.contains(searchTerm, false));
             }    
         }
-        return getPagedQuery()
-            .from(noteRevision)
-            .where(orBuilder)
-            .orderBy(noteRevision.lemma.asc())
-            .list(noteRevision); 
+        return createGridDataSource(noteRevision, orBuilder.getValue());
     }
 
     @Override
