@@ -16,7 +16,9 @@
                 <p>${message:no-results}</p>
             </p:empty>  
         </t:grid>
-        <p:else>${message:no-results}</p:else>            
+        <p:else>
+            <p>${message:no-results}</p>
+        </p:else>            
     </t:if>
     
     <p:breadcrumbs>
