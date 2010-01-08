@@ -6,22 +6,15 @@
 package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QNote.note;
-import static fi.finlit.edith.domain.QNoteRevision.noteRevision;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.tapestry5.grid.GridDataSource;
 import org.joda.time.DateTime;
-import org.springframework.util.Assert;
-
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.path.PString;
 
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
@@ -39,24 +32,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         super(note);
     }
         
-    @Override
-    public GridDataSource queryNotes(String searchTerm) {
-        Assert.notNull(searchTerm);        
-        BooleanBuilder orBuilder = new BooleanBuilder();
-        if (!searchTerm.equals("*")){
-            for (PString path : Arrays.asList(
-                    noteRevision.lemma, 
-                    noteRevision.longText,
-                    noteRevision.basicForm,
-                    noteRevision.meaning,
-                    noteRevision.explanation
-                    )){
-                orBuilder.or(path.contains(searchTerm, false));
-            }    
-        }
-        return createGridDataSource(noteRevision, orBuilder.getValue());
-    }
-
     @Override
     public int importNotes(File file) throws Exception {
         XMLInputFactory factory = XMLInputFactory.newInstance();

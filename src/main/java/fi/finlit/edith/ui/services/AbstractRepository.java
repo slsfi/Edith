@@ -51,5 +51,17 @@ public abstract class AbstractRepository<T> extends AbstractService
         getSession().save(entity);
         return entity;
     }
+
+    @Override
+    public void saveAll(Iterable<? extends T> entities) {
+        for (T t : entities) {
+            getSession().save(t);
+        }
+    }
+
+    @Override
+    public void remove(String id) {
+        getSession().delete(getById(id));
+    }
     
 }

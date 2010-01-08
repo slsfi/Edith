@@ -32,11 +32,15 @@ public interface Repository<Entity, Id extends Serializable> {
      * @param entity
      */
     void remove( Entity entity );
+    
+    void remove(Id id);
 
     /**
      * @param entity
      * @return
      */
     Entity save( Entity entity );
+    
+    void saveAll( Iterable<? extends Entity> entities);
 
 }

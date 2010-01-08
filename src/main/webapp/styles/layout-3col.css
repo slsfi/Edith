@@ -95,19 +95,12 @@ body {
     overflow: auto;
 }
 
-/*
-#center .content {	
-	height: 100%;
-}
-
-*/
 #bottom {
     position: fixed;
     height: 2em;
     width: 100%;
     bottom: 0px;
 }
-
 
 .cleaner {
     clear:both;

@@ -7,7 +7,6 @@ package fi.finlit.edith.domain;
 
 import java.io.File;
 
-import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -19,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface NoteRepository extends Repository<Note,String>{
     
-    GridDataSource queryNotes(String searchTem);
-
     /**
      * @param file
      * @throws Exception 

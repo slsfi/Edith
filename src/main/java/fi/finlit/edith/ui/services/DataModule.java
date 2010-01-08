@@ -56,7 +56,8 @@ public class DataModule {
     }
     
     @SuppressWarnings("deprecation")
-    private static void initializeSVN(File svnRepo) throws SVNException {        
+    private static void initializeSVN(File svnRepo) throws SVNException {
+        System.out.println("Initializing SVN repository on: " + svnRepo.getAbsolutePath());
         SVNURL repoURL = SVNRepositoryFactory.createLocalRepository(svnRepo, true , false );          
         SVNClientManager clientManager = SVNClientManager.newInstance();
         SVNCommitClient commitClient = clientManager.getCommitClient();

@@ -1,0 +1,21 @@
+
+/* Hiding right panel and center fills the whole page */
+#right {
+    visibility: hidden;
+}
+
+#center {
+    right: 0em;
+}
+
+#editcontrols {
+    float: right;
+}
+
+#formcontrols {
+    float:right;
+}
+
+#formcontrols a {
+    margin-right: 1em;
+}

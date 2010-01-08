@@ -2,25 +2,87 @@
 
     <p:title>${message:notesearch}</p:title>
 
-    <t:form t:id="searchForm">
+    <t:form t:id="search">
         <t:errors />
         <t:textfield value="searchTerm" />
-        <br />
         <input type="submit" value="${message:search}" />
+        <t:if test="notes">
+            <div id="editcontrols">
+                <t:if test="!editMode">
+                    <t:actionlink t:id="toggleEdit">${message:edit}</t:actionlink>
+                    <p:else>
+                        <t:actionlink t:id="cancel">${message:cancel}</t:actionlink>
+                    </p:else>
+                </t:if>
+            </div>
+            <div class="cleaner"> </div>
+         </t:if>
     </t:form>
 
     <t:if test="notes">
-        <t:grid source="notes" row="note" rowsPerPage="20" inPlace="true"
-            include="lemma,basicForm,longText,meaning,explanation">
-            <p:empty>
-                <p>${message:no-results}</p>
-            </p:empty>  
-        </t:grid>
+        <t:form t:id="edit">
+            <div id="formcontrols">
+                <t:if test="editMode">
+                    <input type="submit" value="${message:save}" />
+                </t:if>
+            </div>
+            <div class="cleaner"> </div>
+            <t:grid source="notes" row="note" rowsPerPage="20" t:encoder="encoder"
+                include="lemma,basicForm,longText,meaning,explanation" add="actions">
+                <p:lemmaCell>
+                    <t:if test="editMode">
+                        <t:textfield t:id="lemma" value="note.lemma" />
+                        <p:else>
+                            ${note.lemma}
+                        </p:else>
+                    </t:if>
+                </p:lemmaCell>
+                <p:basicFormCell>
+                    <t:if test="editMode">
+                        <t:textfield t:id="basicForm" value="note.basicForm" />
+                        <p:else>
+                            ${note.basicForm}
+                        </p:else>
+                    </t:if>
+                </p:basicFormCell>
+                <p:longTextCell>
+                    <t:if test="editMode">
+                        <t:textarea rows="5" cols="30" t:id="longText" value="note.longText" />
+                        <p:else>
+                            ${note.longText}
+                        </p:else>
+                    </t:if>
+                </p:longTextCell>
+                <p:meaningCell>
+                    <t:if test="editMode">
+                        <t:textarea rows="5" cols="30" t:id="meaning" value="note.meaning" />
+                        <p:else>
+                            ${note.meaning}
+                        </p:else>
+                    </t:if>
+                </p:meaningCell>
+                <p:explanationCell>
+                    <t:if test="editMode">
+                        <t:textarea rows="5" cols="30" t:id="explanation" value="note.explanation" />
+                        <p:else>
+                            ${note.explanation}
+                        </p:else>
+                    </t:if>
+                </p:explanationCell>
+                <p:actionsCell>
+                    <t:actionlink t:id="delete" context="note.id">${message:delete}
+                    </t:actionlink>
+                </p:actionsCell>
+                <p:empty>
+                    <p>${message:no-results}</p>
+                </p:empty>
+            </t:grid>
+        </t:form>
         <p:else>
             <p>${message:no-results}</p>
-        </p:else>            
+        </p:else>
     </t:if>
-    
+
     <p:breadcrumbs>
         <a t:type="pageLink" t:page="index">${message:frontpage}</a>
         &gt; ${message:notesearch}
