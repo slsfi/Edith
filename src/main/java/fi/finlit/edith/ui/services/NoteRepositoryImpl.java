@@ -16,6 +16,8 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.joda.time.DateTime;
 
+import com.mysema.rdfbean.dao.AbstractRepository;
+
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;

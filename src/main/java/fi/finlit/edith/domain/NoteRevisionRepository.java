@@ -8,14 +8,14 @@ package fi.finlit.edith.domain;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysema.rdfbean.dao.Repository;
+
 /**
  * The Interface NoteRevisionRepository.
  */
 @Transactional
 public interface NoteRevisionRepository extends Repository<NoteRevision, String> {
 
-    
-    
     GridDataSource queryNotes(String searchTem);
 
 }

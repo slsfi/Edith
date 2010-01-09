@@ -1,0 +1,40 @@
+* DEPLOYMENT
+
+ Java 1.6.?
+ * Jetty (/opt/jetty)
+* Apache + SSL
+ * Subversion (/opt/repos/edith)
+ * basic auth
+ 
+
+SUBVERSION
+
+* sudo zypper in subversion
+* mkdir /opt/repos
+* mkdir /opt/repos/edith
+
+JAVA
+
+* zypper in java-1_6_0-sun
+* zypper in java-1_6_0-sun-devel
+* update-alternatives --config java
+* update-alternatives --config javac
+
+JETTY
+
+* wget http://dist.codehaus.org/jetty/jetty-6.1.22/jetty-6.1.22.zip
+* install into /opt/jetty
+
+* /opt/jetty/bin/jetty.sh :
+change "START_STOP_DAEMON=0"
+
+* /etc/default/jetty :
+export JETTY_HOME=/opt/jetty
+export JAVA_OPTIONS="-Xms256M -Xmx768M -XX:MaxPermSize=256M"
+
+* useradd jetty
+
+
+TODO : make sure subversion work in httpd
+
+TODO : deploy webapp

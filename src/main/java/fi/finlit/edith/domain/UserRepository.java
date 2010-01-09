@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysema.rdfbean.dao.Repository;
+
 
 /**
  * UserRepository provides

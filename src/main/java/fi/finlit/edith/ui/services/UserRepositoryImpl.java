@@ -5,9 +5,11 @@
  */
 package fi.finlit.edith.ui.services;
 
+import static fi.finlit.edith.domain.QUser.user;
+
 import java.util.List;
 
-import static fi.finlit.edith.domain.QUser.user;
+import com.mysema.rdfbean.dao.AbstractRepository;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserRepository;

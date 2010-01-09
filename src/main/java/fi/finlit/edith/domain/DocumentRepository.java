@@ -12,6 +12,8 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import org.tmatesoft.svn.core.SVNException;
 
+import com.mysema.rdfbean.dao.Repository;
+
 /**
  * DocumentRepository provides
  *

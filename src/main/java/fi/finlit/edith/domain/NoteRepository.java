@@ -9,6 +9,8 @@ import java.io.File;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysema.rdfbean.dao.Repository;
+
 /**
  * NoteRepository provides
  *

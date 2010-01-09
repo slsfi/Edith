@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.types.path.PString;
+import com.mysema.rdfbean.dao.AbstractRepository;
 
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
