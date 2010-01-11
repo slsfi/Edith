@@ -1,0 +1,20 @@
+<html t:type="layout"  
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+      xmlns:p="tapestry:parameter">
+      
+    <p:title>${message:help}</p:title>  
+    
+    <p:breadcrumbs>
+        <a t:type="pageLink" t:page="index">${message:frontpage}</a> 
+        &gt; ${message:help}
+    </p:breadcrumbs>
+        
+    <p:eastPanel>
+        <t:dashboard/>
+    </p:eastPanel>
+
+    <p:westPanel>
+        west
+    </p:westPanel>
+
+</html>
