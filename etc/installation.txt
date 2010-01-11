@@ -1,12 +1,3 @@
-* DEPLOYMENT
-
- Java 1.6.?
- * Jetty (/opt/jetty)
-* Apache + SSL
- * Subversion (/opt/repos/edith)
- * basic auth
- 
-
 SUBVERSION
 
 * sudo zypper in subversion
@@ -14,12 +5,14 @@ SUBVERSION
 * mkdir /opt/repos
 * mkdir /opt/repos/edith
 
+
 JAVA
 
 * zypper in java-1_6_0-sun
 * zypper in java-1_6_0-sun-devel
 * update-alternatives --config java
 * update-alternatives --config javac
+
 
 JETTY
 
@@ -35,10 +28,16 @@ export JAVA_OPTIONS="-Xms256M -Xmx768M -XX:MaxPermSize=256M"
 
 * useradd jetty
 
+
 SUBVERSION IN HTTPD
 
 http://en.opensuse.org/Subversion
 
+TODO
+
+
 DEPLOY
 
-TODO : deploy webapp
+* create the folders mentioned in profiles/sks/res/edith.properties 
+
+* deploy webapp

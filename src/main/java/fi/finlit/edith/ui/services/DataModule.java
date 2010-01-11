@@ -45,7 +45,7 @@ public class DataModule {
         // svn
         FSRepositoryFactory.setup();
         File svnRepo = new File(svnRepoPath);
-        if (!svnRepo.exists()){
+        if (!svnRepo.exists() || svnRepo.list().length == 0){
             svnRepo.mkdirs();
             initializeSVN(svnRepo);    
         }
@@ -57,7 +57,7 @@ public class DataModule {
     
     @SuppressWarnings("deprecation")
     private static void initializeSVN(File svnRepo) throws SVNException {
-        System.out.println("Initializing SVN repository on: " + svnRepo.getAbsolutePath());
+        System.err.println("Initializing SVN repository on: " + svnRepo.getAbsolutePath());
         SVNURL repoURL = SVNRepositoryFactory.createLocalRepository(svnRepo, true , false );          
         SVNClientManager clientManager = SVNClientManager.newInstance();
         SVNCommitClient commitClient = clientManager.getCommitClient();
@@ -68,11 +68,15 @@ public class DataModule {
         }, "created initial folders");
         
         SVNURL folder = repoURL.appendPath("documents/trunk", false);
-        for (File file : new File("etc/demo-material/tei").listFiles()){
-            if (file.isFile()){
-                commitClient.doImport(file, folder.appendPath(file.getName(), false), file.getName() + " added", false);    
-            }            
-        } 
+        
+        // TODO : make this location configurable
+        if (new File("etc/demo-material/tei").exists()){
+            for (File file : new File("etc/demo-material/tei").listFiles()){
+                if (file.isFile()){
+                    commitClient.doImport(file, folder.appendPath(file.getName(), false), file.getName() + " added", false);    
+                }            
+            }    
+        }         
     }
 
     @SuppressWarnings("unchecked")
