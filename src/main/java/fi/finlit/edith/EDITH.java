@@ -25,5 +25,5 @@ public final class EDITH {
     public static final String SVN_DOCUMENT_ROOT = "svn.document.root";
     
     public static final String SVN_CACHE_DIR = "svn.cache.dir";
-
+    
 }

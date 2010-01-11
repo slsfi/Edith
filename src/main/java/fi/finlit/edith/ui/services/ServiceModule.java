@@ -29,6 +29,7 @@ import com.mysema.rdfbean.object.DefaultConfiguration;
 import com.mysema.rdfbean.object.identity.IdentityService;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
+import com.mysema.rdfbean.tapestry.services.RDFBeanModule;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
@@ -80,7 +81,10 @@ public class ServiceModule {
         return configuration;
     }
 
-    // TODO : override identityService
+    public static void contributeIdentityService(final MappedConfiguration<String, String> configuration,
+            @Inject @Symbol(RDFBeanModule.DERBY_URL) String derbyUrl) {
+        configuration.add(RDFBeanModule.DERBY_URL, derbyUrl) ;
+    }
     
     public static Repository buildRepository(Configuration configuration) {
         MemoryRepository repository = new MemoryRepository();

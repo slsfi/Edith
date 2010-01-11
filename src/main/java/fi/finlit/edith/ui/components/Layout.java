@@ -21,7 +21,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
  */
 @IncludeStylesheet({
     "context:styles/base.css",
-    "context:styles/layout-3col.css", // TODO : create alternatives and make page specific
+    "context:styles/layout-3col.css", 
     "context:styles/edith.css",    
     
     // tapestry component styles
