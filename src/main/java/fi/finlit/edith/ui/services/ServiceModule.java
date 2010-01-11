@@ -6,6 +6,7 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
@@ -21,6 +22,8 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 
+import com.mysema.rdfbean.model.FetchStrategy;
+import com.mysema.rdfbean.model.PredicateWildcardFetch;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
@@ -29,7 +32,6 @@ import com.mysema.rdfbean.object.DefaultConfiguration;
 import com.mysema.rdfbean.object.identity.IdentityService;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
-import com.mysema.rdfbean.tapestry.services.RDFBeanModule;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
@@ -76,16 +78,12 @@ public class ServiceModule {
     
     public static Configuration buildConfiguration(IdentityService identityService){
         DefaultConfiguration configuration = new DefaultConfiguration();
+        configuration.setFetchStrategies(Collections.<FetchStrategy>singletonList(new PredicateWildcardFetch()));
         configuration.addPackages(Document.class.getPackage());
         configuration.setIdentityService(identityService);
         return configuration;
     }
 
-    public static void contributeIdentityService(final MappedConfiguration<String, String> configuration,
-            @Inject @Symbol(RDFBeanModule.DERBY_URL) String derbyUrl) {
-        configuration.add(RDFBeanModule.DERBY_URL, derbyUrl) ;
-    }
-    
     public static Repository buildRepository(Configuration configuration) {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(  

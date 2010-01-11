@@ -56,6 +56,9 @@ public class NoteRevision extends Identifiable {
     @Predicate
     private Note revisionOf;
     
+    @Predicate(ln="latestRevision", inv=true)
+    private Note latestRevisionOf;
+    
     @Predicate
     private NoteStatus status;
     
@@ -151,6 +154,10 @@ public class NoteRevision extends Identifiable {
 
     public void setRevision(long svnRevision) {
         this.revision = svnRevision;
+    }
+
+    public Note getLatestRevisionOf() {
+        return latestRevisionOf;
     }
  
     
