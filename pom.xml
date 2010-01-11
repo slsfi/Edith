@@ -136,9 +136,12 @@
     <resources>
       <resource>
         <filtering>false</filtering>
-        <!-- <directory>src/main/resources</directory> -->
         <directory>${extraResources}</directory>
       </resource>
+      <resource>
+        <filtering>false</filtering>
+        <directory>src/main/resources</directory>
+      </resource>      
       <resource>
         <filtering>false</filtering>
         <directory>src/main/rdf</directory>
