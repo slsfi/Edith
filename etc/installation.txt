@@ -10,6 +10,7 @@
 SUBVERSION
 
 * sudo zypper in subversion
+* sudo zypper in subversion-server
 * mkdir /opt/repos
 * mkdir /opt/repos/edith
 
@@ -34,7 +35,10 @@ export JAVA_OPTIONS="-Xms256M -Xmx768M -XX:MaxPermSize=256M"
 
 * useradd jetty
 
+SUBVERSION IN HTTPD
 
-TODO : make sure subversion work in httpd
+http://en.opensuse.org/Subversion
+
+DEPLOY
 
 TODO : deploy webapp

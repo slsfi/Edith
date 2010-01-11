@@ -26,4 +26,6 @@ public final class EDITH {
     
     public static final String SVN_CACHE_DIR = "svn.cache.dir";
     
+    public static final String RDFBEAN_DATA_DIR = "rdfbean.data.dir";
+    
 }

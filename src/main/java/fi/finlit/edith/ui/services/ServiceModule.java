@@ -84,8 +84,10 @@ public class ServiceModule {
         return configuration;
     }
 
-    public static Repository buildRepository(Configuration configuration) {
+    public static Repository buildRepository(Configuration configuration,
+            @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir) {
         MemoryRepository repository = new MemoryRepository();
+        repository.setDataDirName(rdfbeanDataDir);
         repository.setSources(  
             new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS)
         );                

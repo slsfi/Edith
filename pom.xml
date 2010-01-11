@@ -20,6 +20,7 @@
     <jetty.version>6.1.0-SNAPSHOT</jetty.version>
     <rdfbean.version>1.0.4</rdfbean.version>
     <commons.tapestry.version>0.1.7</commons.tapestry.version>
+    <extraResources>src/main/resources</extraResources>
   </properties>
 
   <dependencies>
@@ -120,12 +121,23 @@
       <url>http://www.localhost.nu/java/mvn</url>
     </repository>
   </repositories>
+  
+  <profiles>
+    <profile>
+      <id>sks</id>
+      <properties>
+        <extraResources>profiles/sks/res</extraResources>
+      </properties>
+    </profile>  
+  </profiles>
 
   <build>
+    <finalName>edith</finalName>
     <resources>
       <resource>
         <filtering>false</filtering>
-        <directory>src/main/resources</directory>
+        <!-- <directory>src/main/resources</directory> -->
+        <directory>${extraResources}</directory>
       </resource>
       <resource>
         <filtering>false</filtering>
