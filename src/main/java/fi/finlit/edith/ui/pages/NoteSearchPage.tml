@@ -31,7 +31,7 @@
                 include="lemma,basicForm,longText,meaning,explanation" add="actions">
                 <p:lemmaCell>
                     <t:if test="editMode">
-                        <t:textfield t:id="lemma" value="note.lemma" />
+                        <t:inlineField t:id="lemma" value="note.lemma" value1="note.lemma"/>
                         <p:else>
                             ${note.lemma}
                         </p:else>
@@ -39,7 +39,7 @@
                 </p:lemmaCell>
                 <p:basicFormCell>
                     <t:if test="editMode">
-                        <t:textfield t:id="basicForm" value="note.basicForm" />
+                        <t:inlineField t:id="basicForm" value="note.basicForm" value1="note.basicForm" />
                         <p:else>
                             ${note.basicForm}
                         </p:else>
@@ -47,7 +47,7 @@
                 </p:basicFormCell>
                 <p:longTextCell>
                     <t:if test="editMode">
-                        <t:textarea rows="5" cols="30" t:id="longText" value="note.longText" />
+                        <t:inlineField t:id="longText" value="note.longText" value1="note.longText" />
                         <p:else>
                             ${note.longText}
                         </p:else>
@@ -55,7 +55,7 @@
                 </p:longTextCell>
                 <p:meaningCell>
                     <t:if test="editMode">
-                        <t:textarea rows="5" cols="30" t:id="meaning" value="note.meaning" />
+                        <t:inlineField t:id="meaning" value="note.meaning" value1="note.meaning" />
                         <p:else>
                             ${note.meaning}
                         </p:else>
@@ -63,7 +63,7 @@
                 </p:meaningCell>
                 <p:explanationCell>
                     <t:if test="editMode">
-                        <t:textarea rows="5" cols="30" t:id="explanation" value="note.explanation" />
+                        <t:inlineField t:id="explanation" value="note.explanation" value1="note.explanation" />
                         <p:else>
                             ${note.explanation}
                         </p:else>

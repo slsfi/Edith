@@ -115,9 +115,9 @@ label.left {
 
 /* Note search */
 
-table.searchresults {
+table.t-data-grid {
 	font-size: 80%;
-    border-collapse: collapse;
+    
 }
 
 table.searchresults  th {

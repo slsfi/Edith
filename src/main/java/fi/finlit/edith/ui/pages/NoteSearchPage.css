@@ -19,3 +19,9 @@
 #formcontrols a {
     margin-right: 1em;
 }
+
+.editable {
+   /*border: dotted 1px red;*/
+   min-width: 10em;
+   min-height: 1em;
+}
