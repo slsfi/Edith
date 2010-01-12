@@ -14,7 +14,8 @@ import org.apache.tapestry5.services.ComponentDefaultProvider;
 
 @IncludeJavaScriptLibrary({
         "classpath:jquery-1.3.2.js","InlineEditEvent.js",})
-public class InlineMixin {
+@SuppressWarnings("unused")
+        public class InlineMixin {
     
     @InjectContainer
     private Hidden field;
