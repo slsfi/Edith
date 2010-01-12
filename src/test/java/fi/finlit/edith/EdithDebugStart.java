@@ -25,6 +25,4 @@ public class EdithDebugStart {
         JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
     }
 
-
-
 }

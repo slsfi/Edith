@@ -38,107 +38,108 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
 @SuppressWarnings("unused")
 public class NoteSearchPage {
 
-	@Property
-	private String searchTerm;
-	
-	@Property
-	private String editMode;
-	
-	private Context context;
+    @Property
+    private String searchTerm;
 
-	@Property
+    @Property
+    private String editMode;
+
+    private Context context;
+
+    @Property
     private GridDataSource notes;
 
-	@Property
-	private NoteRevision note;
+    @Property
+    private NoteRevision note;
 
-	@Inject
-	private NoteRevisionRepository noteRevisionRepository;
-	
-	@Property
+    @Inject
+    private NoteRevisionRepository noteRevisionRepository;
+
+    @Property
     private NotePrimaryKeyEncoder encoder;
 
-	@Inject
-	@Path("NoteSearchPage.css")
-	private Asset stylesheet;
+    @Inject
+    @Path("NoteSearchPage.css")
+    private Asset stylesheet;
 
-	@Environmental
-	private RenderSupport support;
+    @Environmental
+    private RenderSupport support;
 
-	void onPrepare() {
+    void onPrepare() {
         encoder = new NotePrimaryKeyEncoder();
     }
-	
-	void onActionFromToggleEdit() {
-		context = new Context(searchTerm, "edit");
-	}
-	
-	void onActionFromCancel() {
+
+    void onActionFromToggleEdit() {
+        context = new Context(searchTerm, "edit");
+    }
+
+    void onActionFromCancel() {
         context = new Context(searchTerm);
     }
-	
-	void onActionFromDelete(String noteRevisionId) {
-	    noteRevisionRepository.remove(noteRevisionId);
-	}
-	
-	void onActivate(EventContext context) {
-		if (context.getCount() >= 1) {
-		    this.searchTerm = context.get(String.class, 0);
-		}
-		if (context.getCount() >= 2) {
+
+    void onActionFromDelete(String noteRevisionId) {
+        noteRevisionRepository.remove(noteRevisionId);
+    }
+
+    void onActivate(EventContext context) {
+        if (context.getCount() >= 1) {
+            this.searchTerm = context.get(String.class, 0);
+        }
+        if (context.getCount() >= 2) {
             this.editMode = context.get(String.class, 1);
         }
         this.context = new Context(context);
-	}
-	
-	void onSuccessFromSearch() {
-	    context = new Context(searchTerm);
-	}
-	
-	void onSuccessFromEdit() {
-	    //TODO Validations
-	    noteRevisionRepository.saveAll(encoder.getAllValues());
-	    context = new Context(searchTerm);
-	}
-	
-	void setupRender() {
-	    notes = noteRevisionRepository.queryNotes(searchTerm == null ? "*" : searchTerm);
-	}
+    }
 
-	Object onPassivate() {
-		return context == null ? null : context.toArray();
-	}
+    void onSuccessFromSearch() {
+        context = new Context(searchTerm);
+    }
 
-	private class NotePrimaryKeyEncoder implements ValueEncoder<NoteRevision> {
-		private final Map<String, NoteRevision> keyToValue = new HashMap<String, NoteRevision>();
+    void onSuccessFromEdit() {
+        // TODO Validations
+        noteRevisionRepository.saveAll(encoder.getAllValues());
+        context = new Context(searchTerm);
+    }
 
-		public String toClient(NoteRevision value) {
-		    //System.out.println("toClient called " + value);
-			return value.getId();
-		}
+    void setupRender() {
+        notes = noteRevisionRepository.queryNotes(searchTerm == null ? "*"
+                : searchTerm);
+    }
 
-		public NoteRevision toValue(String id) {
-		    //System.out.println("toValue called "+ id);
-			NoteRevision note = noteRevisionRepository.getById(id);
-			keyToValue.put(id, note);
-			return note;
-		}
+    Object onPassivate() {
+        return context == null ? null : context.toArray();
+    }
 
-		public final List<NoteRevision> getAllValues() {
-			List<NoteRevision> result = CollectionFactory.newList();
+    private class NotePrimaryKeyEncoder implements ValueEncoder<NoteRevision> {
+        private final Map<String, NoteRevision> keyToValue = new HashMap<String, NoteRevision>();
 
-			for (Map.Entry<String, NoteRevision> entry : keyToValue.entrySet()) {
-				result.add(entry.getValue());
-			}
+        public String toClient(NoteRevision value) {
+            // System.out.println("toClient called " + value);
+            return value.getId();
+        }
 
-			return result;
-		}
-	};
-	
-	@AfterRender
-	void addStylesheet() {
-		//This is needed to have the page specific style sheet after
-		//other css includes
-		support.addStylesheetLink(stylesheet, null);
-	}
+        public NoteRevision toValue(String id) {
+            // System.out.println("toValue called "+ id);
+            NoteRevision note = noteRevisionRepository.getById(id);
+            keyToValue.put(id, note);
+            return note;
+        }
+
+        public final List<NoteRevision> getAllValues() {
+            List<NoteRevision> result = CollectionFactory.newList();
+
+            for (Map.Entry<String, NoteRevision> entry : keyToValue.entrySet()) {
+                result.add(entry.getValue());
+            }
+
+            return result;
+        }
+    };
+
+    @AfterRender
+    void addStylesheet() {
+        // This is needed to have the page specific style sheet after
+        // other css includes
+        support.addStylesheetLink(stylesheet, null);
+    }
 }
