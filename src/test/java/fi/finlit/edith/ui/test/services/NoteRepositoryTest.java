@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.NoteRepository;
