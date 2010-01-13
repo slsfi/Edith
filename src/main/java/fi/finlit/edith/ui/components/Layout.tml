@@ -33,12 +33,12 @@
             <div id="main2">
                 <div id="left">
                     <div class="content">
-                        <t:delegate to="eastPanel" />
+                        <t:delegate to="leftPanel" />
                     </div>
                 </div>
                 <div id="right">
                     <div class="content">
-                        <t:delegate to="westPanel" />
+                        <t:delegate to="rightPanel" />
                     </div>
                 </div>
                 <div id="center">

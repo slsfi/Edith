@@ -4,9 +4,12 @@
       
     <p:title>Test data utils</p:title>  
     
-    <ul class="actions">
+    <ul>
         <li>
             <a t:id="addTestData" t:type="actionlink">Add test data</a>    
+        </li>
+        <li>
+            <a t:id="removeNotes" t:type="actionLink">Remove notes and terms</a>
         </li>
     </ul>
         
@@ -14,12 +17,12 @@
         <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; Test data
     </p:breadcrumbs>        
         
-    <p:eastPanel>
+    <p:leftPanel>
         <t:dashboard/>
-    </p:eastPanel>
+    </p:leftPanel>
 
-    <p:westPanel>
+    <p:rightPanel>
         west
-    </p:westPanel>
+    </p:rightPanel>
 
 </html>

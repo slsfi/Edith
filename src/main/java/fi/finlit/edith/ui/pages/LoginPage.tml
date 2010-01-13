@@ -8,12 +8,12 @@
 	 
     <t:loginForm/>
 
-    <p:eastPanel>
+    <p:leftPanel>
         <t:dashboard/>
-    </p:eastPanel>
+    </p:leftPanel>
 
-    <p:westPanel>
+    <p:rightPanel>
         west
-    </p:westPanel>
+    </p:rightPanel>
 
 </html>

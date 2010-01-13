@@ -10,11 +10,12 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.junit.Before;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.ui.services.AdminService;
 
 /**
  * NoteRepositoryTest provides
@@ -23,6 +24,9 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
  * @version $Id$
  */
 public class NoteRepositoryTest extends AbstractServiceTest{
+    
+    @Inject
+    private AdminService adminService;
 
     @Inject
     private NoteRepository noteRepo;
@@ -30,9 +34,14 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
     
+    @Inject @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
+    private File noteTestData;
+    
     @Test
     public void importNotes() throws Exception{
-        assertEquals(133, noteRepo.importNotes(new File("etc/demo-material/notes/nootit.xml")));        
+        adminService.removeNotesAndTerms();
+        
+        assertEquals(133, noteRepo.importNotes(noteTestData));        
         assertEquals(1l, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
         assertEquals(2l, noteRevisionRepo.queryNotes("etten anna sinulle").getAvailableRows());
     }

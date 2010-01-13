@@ -10,12 +10,12 @@
         <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:about}
     </p:breadcrumbs>        
         
-    <p:eastPanel>
+    <p:leftPanel>
         <t:dashboard/>
-    </p:eastPanel>
+    </p:leftPanel>
 
-    <p:westPanel>
+    <p:rightPanel>
         west
-    </p:westPanel>
+    </p:rightPanel>
 
 </html>

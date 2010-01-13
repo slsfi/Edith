@@ -10,11 +10,6 @@ import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
 
-//    types : 
-//    * Sananparret
-//    * Historialliset viitteet
-//    * Henkilöviitteet
-//    * Kirjallisuusviitteet
 
 /**
  * Note provides

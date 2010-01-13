@@ -45,11 +45,11 @@ public class Layout {
 
     @Parameter(defaultPrefix = BindingConstants.LITERAL)
     @Property
-    private Block eastPanel;
+    private Block leftPanel;
     
     @Parameter(defaultPrefix = BindingConstants.LITERAL)
     @Property
-    private Block westPanel;
+    private Block rightPanel;
         
     @Inject
     private ComponentResources resources;

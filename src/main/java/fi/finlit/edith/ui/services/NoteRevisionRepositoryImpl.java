@@ -40,8 +40,8 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
                     noteRevision.lemma, 
                     noteRevision.longText,
                     noteRevision.basicForm,
-                    noteRevision.meaning,
-                    noteRevision.explanation
+//                    noteRevision.term.meaning,
+                    noteRevision.description
                     )){
                 builder.or(path.contains(searchTerm, false));
             }    

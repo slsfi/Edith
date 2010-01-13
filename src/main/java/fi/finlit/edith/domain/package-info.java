@@ -7,11 +7,14 @@
     Document.class, 
     Folder.class,
     Identifiable.class,
+    Location.class,
     Note.class, 
     NoteComment.class,
     NoteRevision.class, 
-    NoteStatus.class, 
-    Profile.class,
+    NoteStatus.class,
+    Person.class,
+    Term.class,
+    Profile.class,    
     Tag.class, 
     User.class })
 package fi.finlit.edith.domain;

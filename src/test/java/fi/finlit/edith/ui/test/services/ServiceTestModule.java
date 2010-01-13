@@ -5,6 +5,8 @@
  */
 package fi.finlit.edith.ui.test.services;
 
+import java.io.IOException;
+
 import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -26,6 +28,13 @@ import fi.finlit.edith.EDITH;
  * @version $Id$
  */
 public class ServiceTestModule {
+    
+    public static final String NOTE_TEST_DATA_KEY = "note.test.data";
+    
+    public static void contributeApplicationDefaults(
+            MappedConfiguration<String, String> configuration) throws IOException {
+        configuration.add(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
+    }
 
     public static SaltSource buildSaltSource() throws Exception {
         SaltSourceImpl saltSource = new SaltSourceImpl();

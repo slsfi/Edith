@@ -61,12 +61,13 @@ public class ServiceModule {
     }    
     
     // TODO : get rid of match
-    @Match({"DocumentRepository", "NoteRepository", "UserRepository", "NoteRevisionRepository"})
+    @Match({"AdminService", "DocumentRepository", "NoteRepository", "UserRepository", "NoteRevisionRepository"})
     public static void adviseTransactions(TransactionalAdvisor advisor, MethodAdviceReceiver receiver){
         advisor.addTransactionCommitAdvice(receiver);
     }
     
     public static void bind(ServiceBinder binder){
+        binder.bind(AdminService.class, AdminServiceImpl.class);
         binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
         binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
         binder.bind(NoteRevisionRepository.class, NoteRevisionRepositoryImpl.class);

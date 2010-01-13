@@ -72,7 +72,7 @@ body {
     top: 0em;
     left: 0em;
     bottom: 0em;
-    width: 12em;
+    width: 10em;
     overflow: auto;
 }
 
@@ -89,7 +89,7 @@ body {
 #center {
     position: absolute;
     top: 0em;
-    left: 12em;
+    left: 10em;
     right: 10em;
     bottom: 0em;
     overflow: auto;

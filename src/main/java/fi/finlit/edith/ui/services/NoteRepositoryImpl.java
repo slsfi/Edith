@@ -21,6 +21,7 @@ import com.mysema.rdfbean.dao.AbstractRepository;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.Term;
 
 /**
  * NoteRepositoryImpl provides
@@ -71,13 +72,17 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 }else if (localName.equals("baseform")){
                     revision.setBasicForm(text);
                 }else if (localName.equals("meaning")){
-                    revision.setMeaning(text);
+                    Term term = new Term();
+                    term.setBasicForm(revision.getBasicForm());
+                    term.setMeaning(text);
+                    getSession().save(term);
+                    revision.setTerm(term);
                 }else if (localName.equals("subsource")){
                     
                 }else if (localName.equals("citation")){
                     
                 }else if (localName.equals("description")){
-                    revision.setExplanation(text);
+                    revision.setDescription(text);
                 }else if (localName.equals("source")){
                     
                 }else if (localName.equals("classification")){

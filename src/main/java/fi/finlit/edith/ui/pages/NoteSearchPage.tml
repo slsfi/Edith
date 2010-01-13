@@ -28,7 +28,7 @@
             </div>
             <div class="cleaner"> </div>
             <t:grid source="notes" row="note" rowsPerPage="20" t:encoder="encoder"
-                include="lemma,basicForm,longText,meaning,explanation" add="actions">
+                include="lemma,basicForm,longText,description" add="actions">
                 <p:lemmaCell>
                     <t:if test="editMode">
                         <t:inlineField t:id="lemma" value="note.lemma" value1="note.lemma"/>
@@ -53,6 +53,7 @@
                         </p:else>
                     </t:if>
                 </p:longTextCell>
+                <!-- 
                 <p:meaningCell>
                     <t:if test="editMode">
                         <t:inlineField t:id="meaning" value="note.meaning" value1="note.meaning" />
@@ -61,14 +62,15 @@
                         </p:else>
                     </t:if>
                 </p:meaningCell>
-                <p:explanationCell>
+                 -->
+                <p:descriptionCell>
                     <t:if test="editMode">
-                        <t:inlineField t:id="explanation" value="note.explanation" value1="note.explanation" />
+                        <t:inlineField t:id="description" value="note.description" value1="note.description" />
                         <p:else>
-                            ${note.explanation}
+                            ${note.description}
                         </p:else>
                     </t:if>
-                </p:explanationCell>
+                </p:descriptionCell>
                 <p:actionsCell>
                     <t:actionlink t:id="delete" context="note.id">${message:delete}
                     </t:actionlink>
@@ -88,10 +90,10 @@
         &gt; ${message:notesearch}
     </p:breadcrumbs>
 
-    <p:eastPanel>
+    <p:leftPanel>
         <t:dashboard />
-    </p:eastPanel>
+    </p:leftPanel>
 
-    <p:westPanel>west</p:westPanel>
+    <p:rightPanel>west</p:rightPanel>
 
 </html>
