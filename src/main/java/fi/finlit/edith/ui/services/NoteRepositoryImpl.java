@@ -51,18 +51,19 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 String localName = reader.getLocalName();    
                 if (localName.equals("note")){
                     revision = new NoteRevision();
+                    revision.setRevisionOf(new Note());
+                    revision.getRevisionOf().setLatestRevision(revision);
                     revision.setCreatedOn(new DateTime());
                 }
                 
             }else if (event == XMLStreamConstants.END_ELEMENT){
                 String localName = reader.getLocalName();
                 
-                if (localName.equals("note")){
-                    Note note = new Note();
-                    note.setLatestRevision(revision);
-                    
-                    revision.setRevisionOf(note);
-                    getSession().save(note);
+                if (localName.equals("note")){                    
+                    if (revision.getRevisionOf().getTerm() != null){
+                        getSession().save(revision.getRevisionOf().getTerm());    
+                    }                    
+                    getSession().save(revision.getRevisionOf());
                     getSession().save(revision);
                     counter++;
                 }else if (localName.equals("lemma")){
@@ -75,8 +76,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     Term term = new Term();
                     term.setBasicForm(revision.getBasicForm());
                     term.setMeaning(text);
-                    getSession().save(term);
-                    revision.setTerm(term);
+                    revision.getRevisionOf().setTerm(term);
                 }else if (localName.equals("subsource")){
                     
                 }else if (localName.equals("citation")){

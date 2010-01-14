@@ -34,19 +34,19 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     @Override
     public GridDataSource queryNotes(String searchTerm) {
         Assert.notNull(searchTerm);        
-        BooleanBuilder builder = new BooleanBuilder();
+        BooleanBuilder builder = new BooleanBuilder();        
         if (!searchTerm.equals("*")){
             for (PString path : Arrays.asList(
                     noteRevision.lemma, 
                     noteRevision.longText,
                     noteRevision.basicForm,
-//                    noteRevision.term.meaning,
+                    noteRevision.revisionOf.term.meaning,
                     noteRevision.description
                     )){
                 builder.or(path.contains(searchTerm, false));
             }    
-        }
-        builder.and(noteRevision.latestRevisionOf.isNotNull());
+        }        
+        builder.and(noteRevision.eq(noteRevision.revisionOf.latestRevision));
         return createGridDataSource(noteRevision, builder.getValue());
     }
     

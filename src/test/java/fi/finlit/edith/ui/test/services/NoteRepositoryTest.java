@@ -41,8 +41,9 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     public void importNotes() throws Exception{
         adminService.removeNotesAndTerms();
         
-        assertEquals(133, noteRepo.importNotes(noteTestData));        
-        assertEquals(1l, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
-        assertEquals(2l, noteRevisionRepo.queryNotes("etten anna sinulle").getAvailableRows());
+        assertEquals(133, noteRepo.importNotes(noteTestData));
+        assertEquals(133, noteRevisionRepo.queryNotes("*").getAvailableRows());                
+        assertEquals(1, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
+        assertEquals(2, noteRevisionRepo.queryNotes("etten anna sinulle").getAvailableRows());
     }
 }

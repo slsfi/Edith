@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 
+import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
@@ -43,14 +44,12 @@ public class NoteRevision extends Identifiable {
 
     @Predicate
     private String longText; 
-    
-    @Predicate
-    private Term term;
-        
+            
     @Predicate
     private long revision;
     
     @Predicate
+    @QueryInit({"term.meaning", "latestRevision"})
     private Note revisionOf;
 
     @Predicate
@@ -85,10 +84,6 @@ public class NoteRevision extends Identifiable {
     
     public String getLongText() {
         return longText;
-    }
-
-    public Term getTerm() {
-        return term;
     }
 
     public long getRevision() {
@@ -129,10 +124,6 @@ public class NoteRevision extends Identifiable {
 
     public void setLongText(String longText) {
         this.longText = longText;
-    }
-
-    public void setTerm(Term term) {
-        this.term = term;
     }
 
     public void setRevision(long svnRevision) {

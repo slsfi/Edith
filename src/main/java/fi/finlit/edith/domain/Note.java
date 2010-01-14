@@ -23,9 +23,11 @@ public class Note extends Identifiable{
     @Predicate
     private Document document;
 
-    // necessary ?!?
     @Predicate
     private NoteRevision latestRevision;
+
+    @Predicate
+    private Term term;
     
     public Document getDocument() {
         return document;
@@ -42,5 +44,15 @@ public class Note extends Identifiable{
     public void setLatestRevision(NoteRevision latestRevision) {
         this.latestRevision = latestRevision;
     }
+
+    public Term getTerm() {
+        return term;
+    }
+
+    public void setTerm(Term term) {
+        this.term = term;
+    }
+    
+    
         
 }
