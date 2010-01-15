@@ -149,7 +149,11 @@ public class DocumentRendererImpl implements DocumentRenderer {
             }else if (event == XMLStreamConstants.CHARACTERS){
                 String text = reader.getText();
                 if (noteContent && !text.trim().isEmpty()){
-                    writer.element("span", "class", "notecontent");
+                    StringBuilder classes = new StringBuilder("notecontent");
+                    for (String noteId : noteIds){
+                        classes.append(" n").append(noteId);
+                    }                    
+                    writer.element("span", "class", classes);
                     writer.writeRaw(text);
                     writer.end();
                 }else{
