@@ -106,3 +106,7 @@
 	color: #40D040;
 	cursor: pointer;
 }
+
+.notecontent:hover{
+	border-bottom: solid 2px;
+}
