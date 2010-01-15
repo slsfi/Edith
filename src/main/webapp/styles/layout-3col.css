@@ -81,7 +81,7 @@ body {
     top: 0em;
     right: 0em; 
     bottom: 0em;
-    width: 10em;  
+    width: 15em;  
     overflow: auto;
 }
 
@@ -90,7 +90,7 @@ body {
     position: absolute;
     top: 0em;
     left: 10em;
-    right: 10em;
+    right: 15em;
     bottom: 0em;
     overflow: auto;
 }

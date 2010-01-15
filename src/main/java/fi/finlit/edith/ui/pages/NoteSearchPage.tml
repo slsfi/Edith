@@ -28,7 +28,7 @@
             </div>
             <div class="cleaner"> </div>
             <t:grid source="notes" row="note" rowsPerPage="20" t:encoder="encoder"
-                include="lemma,basicForm,longText,description" add="actions">
+                include="lemma,basicForm,longText,description" add="meaning,actions">
                 <p:lemmaCell>
                     <t:if test="editMode">
                         <t:inlineField t:id="lemma" value="note.lemma" value1="note.lemma"/>
@@ -53,16 +53,6 @@
                         </p:else>
                     </t:if>
                 </p:longTextCell>
-                <!-- 
-                <p:meaningCell>
-                    <t:if test="editMode">
-                        <t:inlineField t:id="meaning" value="note.meaning" value1="note.meaning" />
-                        <p:else>
-                            ${note.meaning}
-                        </p:else>
-                    </t:if>
-                </p:meaningCell>
-                 -->
                 <p:descriptionCell>
                     <t:if test="editMode">
                         <t:inlineField t:id="description" value="note.description" value1="note.description" />
@@ -70,7 +60,13 @@
                             ${note.description}
                         </p:else>
                     </t:if>
-                </p:descriptionCell>
+                </p:descriptionCell>                
+                <p:meaningCell>
+                    <t:if test="note.revisionOf.term">
+                        ${note.revisionOf.term.meaning}
+                    </t:if>                    
+                </p:meaningCell>
+
                 <p:actionsCell>
                     <t:actionlink t:id="delete" context="note.id">${message:delete}
                     </t:actionlink>
