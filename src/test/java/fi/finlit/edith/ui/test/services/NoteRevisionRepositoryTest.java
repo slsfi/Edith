@@ -50,4 +50,8 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "4"));
     }
 
+    @Test
+    public void queryNotes(){
+        // TODO
+    }
 }

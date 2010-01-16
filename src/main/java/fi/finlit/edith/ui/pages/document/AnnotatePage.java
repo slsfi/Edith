@@ -63,7 +63,10 @@ public class AnnotatePage extends AbstractDocumentPage{
         notes = new ArrayList<NoteRevision>(context.getCount());        
         for (int i = 0; i < context.getCount(); i++){
             String localId = context.get(String.class, i).substring(1);
-            notes.add(noteRepo.getByLocalId(document, documentRevision.getRevision(), localId));
+            NoteRevision rev = noteRepo.getByLocalId(document, documentRevision.getRevision(), localId);
+            if (rev != null){
+                notes.add(rev);    
+            }            
         }
         return noteEditForm;
     }

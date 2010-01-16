@@ -7,6 +7,7 @@ package fi.finlit.edith.domain;
 
 import java.io.File;
 
+import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mysema.rdfbean.dao.Repository;
@@ -35,5 +36,11 @@ public interface NoteRepository extends Repository<Note,String>{
      * @return
      */
     Note createNote(Document document, long revision, String localId, String lemma, String longText);
+
+    /**
+     * @param searchTerm
+     * @return
+     */
+    GridDataSource queryDictionary(String searchTerm);
     
 }

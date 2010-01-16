@@ -41,6 +41,7 @@ import fi.finlit.edith.domain.DocumentRevision;
  * @author tiwe
  * @version $Id$
  */
+// TODO : move SVN abstraction to other service
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements DocumentRepository{
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);

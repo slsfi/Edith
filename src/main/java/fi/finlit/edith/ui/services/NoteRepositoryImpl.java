@@ -6,16 +6,23 @@
 package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QNote.note;
+import static fi.finlit.edith.domain.QNoteRevision.noteRevision;
+import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.tapestry5.grid.GridDataSource;
 import org.joda.time.DateTime;
+import org.springframework.util.Assert;
 
+import com.mysema.query.BooleanBuilder;
+import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
 
 import fi.finlit.edith.domain.Document;
@@ -23,6 +30,7 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteStatus;
+import fi.finlit.edith.domain.QTermWithNotes;
 import fi.finlit.edith.domain.Term;
 
 /**
@@ -127,6 +135,20 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             }
         }
         return counter;
+    }
+
+    @Override
+    public GridDataSource queryDictionary(String searchTerm) {
+        Assert.notNull(searchTerm);        
+        if (!searchTerm.equals("*")){
+            BooleanBuilder builder = new BooleanBuilder();        
+            builder.or(termWithNotes.basicForm.contains(searchTerm, false));
+            builder.or(termWithNotes.meaning.contains(searchTerm, false));
+            return createGridDataSource(termWithNotes, builder.getValue());    
+        }else{
+            return createGridDataSource(termWithNotes);
+        }
+        
     }
     
 }

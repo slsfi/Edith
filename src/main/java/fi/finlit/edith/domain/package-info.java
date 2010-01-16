@@ -14,6 +14,7 @@
     NoteStatus.class,
     Person.class,
     Term.class,
+    TermWithNotes.class,
     Profile.class,    
     Tag.class, 
     User.class })

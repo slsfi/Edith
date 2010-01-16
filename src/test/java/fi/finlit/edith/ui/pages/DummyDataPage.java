@@ -23,6 +23,7 @@ import fi.finlit.edith.ui.services.AdminService;
  * @author tiwe
  * @version $Id$
  */
+// TODO : move test data creation to test data service
 public class DummyDataPage {
     
     static final String TEST_DOCUMENT_SVNPATH = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";

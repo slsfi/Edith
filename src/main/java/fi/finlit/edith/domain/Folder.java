@@ -17,6 +17,7 @@ import fi.finlit.edith.EDITH;
  * @author tiwe
  * @version $Id$
  */
+// NOTE : do we need a Folder type at all ?!?
 @ClassMapping(ns=EDITH.NS)
 public class Folder extends Identifiable implements Comparable<Folder>{
 

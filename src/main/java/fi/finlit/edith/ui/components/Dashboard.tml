@@ -14,6 +14,9 @@
                     <a t:type="pageLink" t:page="noteSearchPage" t:disabled="isOnPage('noteSearchPage')">${message:notesearch}</a>
                 </li>
                 <li>
+                    <a t:type="pageLink" t:page="dictionarySearchPage" t:disabled="isOnPage('dictionarySearchPage')">${message:dictionarysearch}</a>
+                </li>                
+                <li>
                     <a t:type="pageLink" t:page="noteImportPage" t:disabled="isOnPage('noteImportPage')">${message:noteimport}</a>
                 </li>
                 <!-- 

@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.test.services;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -39,11 +40,19 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     
     @Test
     public void importNotes() throws Exception{
-        adminService.removeNotesAndTerms();
-        
+        adminService.removeNotesAndTerms();        
         assertEquals(133, noteRepo.importNotes(noteTestData));
+        
         assertEquals(133, noteRevisionRepo.queryNotes("*").getAvailableRows());                
         assertEquals(1, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
         assertEquals(2, noteRevisionRepo.queryNotes("etten anna sinulle").getAvailableRows());
+    }
+    
+    @Test
+    public void queryDictionary() throws Exception{
+        adminService.removeNotesAndTerms();        
+        assertEquals(133, noteRepo.importNotes(noteTestData));
+        
+        assertTrue(noteRepo.queryDictionary("*").getAvailableRows() > 0);
     }
 }

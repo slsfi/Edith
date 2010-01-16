@@ -5,29 +5,23 @@
  */
 package fi.finlit.edith.ui.pages;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.tapestry5.Asset;
-import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Environmental;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 
 import com.mysema.tapestry.core.Context;
 
-import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 /**
  * NoteSearch provides
@@ -52,11 +46,11 @@ public class NoteSearchPage {
     @Property
     private NoteRevision note;
 
-    @Inject
-    private NoteRevisionRepository noteRevisionRepository;
+    @Inject 
+    private NoteRevisionRepository noteRevisionRepo;
 
     @Property
-    private NotePrimaryKeyEncoder encoder;
+    private PrimaryKeyEncoder<NoteRevision> encoder;
 
     @Inject
     @Path("NoteSearchPage.css")
@@ -66,7 +60,7 @@ public class NoteSearchPage {
     private RenderSupport support;
 
     void onPrepare() {
-        encoder = new NotePrimaryKeyEncoder();
+        encoder = new PrimaryKeyEncoder<NoteRevision>(noteRevisionRepo);
     }
 
     void onActionFromToggleEdit() {
@@ -78,7 +72,7 @@ public class NoteSearchPage {
     }
 
     void onActionFromDelete(String noteRevisionId) {
-        noteRevisionRepository.remove(noteRevisionId);
+        noteRevisionRepo.remove(noteRevisionId);
     }
 
     void onActivate(EventContext context) {
@@ -97,12 +91,12 @@ public class NoteSearchPage {
 
     void onSuccessFromEdit() {
         // TODO Validations
-        noteRevisionRepository.saveAll(encoder.getAllValues());
+        noteRevisionRepo.saveAll(encoder.getAllValues());
         context = new Context(searchTerm);
     }
 
     void setupRender() {
-        notes = noteRevisionRepository.queryNotes(searchTerm == null ? "*"
+        notes = noteRevisionRepo.queryNotes(searchTerm == null ? "*"
                 : searchTerm);
     }
 
@@ -110,36 +104,11 @@ public class NoteSearchPage {
         return context == null ? null : context.toArray();
     }
 
-    private class NotePrimaryKeyEncoder implements ValueEncoder<NoteRevision> {
-        private final Map<String, NoteRevision> keyToValue = new HashMap<String, NoteRevision>();
-
-        public String toClient(NoteRevision value) {
-            // System.out.println("toClient called " + value);
-            return value.getId();
-        }
-
-        public NoteRevision toValue(String id) {
-            // System.out.println("toValue called "+ id);
-            NoteRevision note = noteRevisionRepository.getById(id);
-            keyToValue.put(id, note);
-            return note;
-        }
-
-        public final List<NoteRevision> getAllValues() {
-            List<NoteRevision> result = CollectionFactory.newList();
-
-            for (Map.Entry<String, NoteRevision> entry : keyToValue.entrySet()) {
-                result.add(entry.getValue());
-            }
-
-            return result;
-        }
-    };
-
     @AfterRender
     void addStylesheet() {
         // This is needed to have the page specific style sheet after
         // other css includes
         support.addStylesheetLink(stylesheet, null);
     }
+    
 }
