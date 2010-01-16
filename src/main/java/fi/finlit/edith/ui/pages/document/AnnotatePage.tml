@@ -16,20 +16,7 @@
         
     <p:leftPanel>
         <t:dashboard/>
-                
-        <div class="panel narrow">
-            <!-- TODO : make this area updatable -->
-            <h3>${message:notes}</h3>
-            <ul class="notes">
-                <t:loop source="docNotes" value="note">
-                <li>    
-                    <a href="#start${note.revisionOf.localId}">${note.revisionOf.localId}</a>
-                </li>
-                </t:loop>
-            </ul>
-            <div style="clear:both;"></div>
-        </div>
-
+              
         <div class="panel narrow">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>
@@ -52,6 +39,19 @@
 
     <p:rightPanel>
     
+        <div class="panel narrow">
+            <!-- TODO : make this area updatable -->
+            <h3>${message:notes}</h3>
+            <ul class="notes">
+                <t:loop source="docNotes" value="note">
+                <li>    
+                    <a href="#start${note.revisionOf.localId}" class="notelink">${note.revisionOf.localId}</a>
+                </li>
+                </t:loop>
+            </ul>
+            <div style="clear:both;"></div>
+        </div>    
+    
         <!-- ACTIONS :
             - update note (form submit, revision creation)
             - add new note (form submit, SVN commit)
@@ -59,15 +59,14 @@
             - change note boundaries  (SVN commit)      
          -->                
         
-        <t:zone t:id="editZone"/>
+        <t:zone t:id="editZone" update="show"/>
         
         <t:block t:id="noteEditForm">
             <t:loop source="notes" value="note">
                 <div>
                     <b># ${note.revisionOf.localId}</b>
                     <t:beaneditform t:id="note" include="lemma,longText,basicForm"/>
-                </div>
-                            
+                </div>                            
             </t:loop>      
         </t:block>
         

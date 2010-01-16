@@ -6,4 +6,13 @@ jQuery(document).ready(function(){
             TapestryExt.activateZone('editZone', link);
         }    
     );
+    
+    jQuery('.notelink').bind('click',
+    	function(event) {
+    		var id = jQuery(this).attr('href').replace('#start','');
+    		var link = editLink.replace('CONTEXT', "n"+id);
+    		TapestryExt.activateZone('editZone', link);
+    	}
+    );		
 });
+        
