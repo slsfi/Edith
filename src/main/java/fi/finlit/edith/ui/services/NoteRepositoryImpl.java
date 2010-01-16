@@ -18,9 +18,11 @@ import org.joda.time.DateTime;
 
 import com.mysema.rdfbean.dao.AbstractRepository;
 
+import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.Term;
 
 /**
@@ -33,6 +35,27 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     public NoteRepositoryImpl() {
         super(note);
+    }
+    
+    @Override
+    public Note createNote(Document document, long revision, String localId, String lemma, String longText) {
+        NoteRevision rev = new NoteRevision();
+        rev.setCreatedOn(new DateTime());
+//        rev.setCreatedBy(createdBy)
+        rev.setSVNRevision(revision);
+        rev.setLemma(lemma);
+        rev.setLongText(longText);
+        getSession().save(rev);
+        
+        Note note = new Note();
+        note.setStatus(NoteStatus.Draft);
+        note.setDocument(document);
+        note.setLocalId(localId);
+        note.setLatestRevision(rev);
+        rev.setRevisionOf(note);
+        getSession().save(note);
+        
+        return note;
     }
         
     @Override

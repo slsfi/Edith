@@ -16,6 +16,7 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
 
+import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 
@@ -26,7 +27,7 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
  * @version $Id$
  */
 public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision> implements NoteRevisionRepository {
-
+    
     public NoteRevisionRepositoryImpl() {
         super(noteRevision);
     }
@@ -48,6 +49,17 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         }        
         builder.and(noteRevision.eq(noteRevision.revisionOf.latestRevision));
         return createGridDataSource(noteRevision, builder.getValue());
+    }
+
+    @Override
+    public NoteRevision getByLocalId(Document document, long revision, String localId) {
+        Assert.notNull(document);
+        Assert.notNull(localId);
+        return getSession().from(noteRevision)
+            .where(noteRevision.revisionOf.document.eq(document),
+                   noteRevision.revisionOf.localId.eq(localId),
+                   noteRevision.svnRevision.eq(revision))
+            .uniqueResult(noteRevision);
     }
     
 }

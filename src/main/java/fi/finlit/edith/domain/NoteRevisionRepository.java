@@ -18,4 +18,6 @@ public interface NoteRevisionRepository extends Repository<NoteRevision, String>
 
     GridDataSource queryNotes(String searchTem);
 
+    NoteRevision getByLocalId(Document document, long documentRevision, String localId);
+
 }

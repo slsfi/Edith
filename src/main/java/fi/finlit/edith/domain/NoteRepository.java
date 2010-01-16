@@ -26,4 +26,14 @@ public interface NoteRepository extends Repository<Note,String>{
      */
     int importNotes(File file) throws Exception;
     
+    /**
+     * @param document
+     * @param revision
+     * @param localId
+     * @param lemma
+     * @param longText
+     * @return
+     */
+    Note createNote(Document document, long revision, String localId, String lemma, String longText);
+    
 }

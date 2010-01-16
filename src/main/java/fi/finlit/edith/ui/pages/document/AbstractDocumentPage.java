@@ -31,10 +31,8 @@ public class AbstractDocumentPage {
     @Inject
     private DocumentRepository documentRepo;
        
-    @Property
     private Document document;
     
-    @Property
     private DocumentRevision documentRevision;
     
     @Property
@@ -48,16 +46,30 @@ public class AbstractDocumentPage {
     @Secured("ROLE_USER")
     void onActivate(EventContext context) throws SVNException{
         this.context = new Context(context);
-        document = documentRepo.getById(context.get(String.class, 0));
-        long revision = -1;
+        document = documentRepo.getById(context.get(String.class, 0));        
+        revisions = documentRepo.getRevisions(document);
+        long revision;
         if (context.getCount() > 1){
             revision = context.get(Long.class, 1);
+        }else{
+            // get latest 
+            revision = revisions.get(revisions.size() - 1);
         }
         documentRevision = new DocumentRevision(document, revision);
-        revisions = documentRepo.getRevisions(document);            
+        
     }
     
     Object[] onPassivate(){
         return context.toArray();
     }
+
+    public Document getDocument(){
+        return document;
+    }
+    
+    public DocumentRevision getDocumentRevision() {
+        return documentRevision;
+    }
+    
+    
 }

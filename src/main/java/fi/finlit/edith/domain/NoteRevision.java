@@ -47,7 +47,7 @@ public class NoteRevision extends Identifiable {
     private long svnRevision;
     
     @Predicate
-    @QueryInit({"term.meaning", "latestRevision"})
+    @QueryInit({"*", "term.meaning"})
     private Note revisionOf;
     
     public String getBasicForm() {

@@ -6,10 +6,13 @@
     
     <ul>
         <li>
-            <a t:id="addTestData" t:type="actionlink">Add test data</a>    
+            <a t:type="eventLink" t:event="addNoteSearchTestData">Add note search test data</a>    
         </li>
         <li>
-            <a t:id="removeNotes" t:type="actionLink">Remove notes and terms</a>
+            <a t:type="eventLink" t:event="addAnnotateTestData">Add annotate test data</a>    
+        </li>
+        <li>
+            <a t:type="eventLink" t:event="removeNotes">Remove notes and terms</a>
         </li>
     </ul>
         

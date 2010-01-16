@@ -41,7 +41,9 @@
         <t:zone t:id="editZone"/>
         
         <t:block t:id="noteEditForm">
-            edit notes ${context}      
+            <t:loop source="notes" value="note">
+                <t:beaneditform t:id="note"/>            
+            </t:loop>      
         </t:block>
         
     </p:rightPanel>

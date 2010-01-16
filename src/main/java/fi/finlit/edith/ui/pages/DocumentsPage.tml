@@ -8,11 +8,9 @@
     <t:loop source="documents" value="document">
         <li>
             <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${document.title}</a>
-            <ul class="actions">
-                <li>
-                    <a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>
-                </li>
-            </ul>
+            ( 
+              <a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>
+            )
         </li>    
     </t:loop>
     </ul>
