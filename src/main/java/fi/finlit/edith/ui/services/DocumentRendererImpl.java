@@ -124,6 +124,10 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     if (id == null){
                         continue;
                     }else if (id.startsWith("start")){
+                        // start anchor
+                        writer.element("span", "class", "notestart", "id", id);
+                        writer.end();
+                        
                         noteContent = true;                        
                         noteIds.add(id.substring("start".length()));
                     }else if (id.startsWith("end")){

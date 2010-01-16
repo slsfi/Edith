@@ -8,6 +8,7 @@ package fi.finlit.edith.ui.services;
 import static fi.finlit.edith.domain.QNoteRevision.noteRevision;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.util.Assert;
@@ -60,6 +61,15 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
                    noteRevision.revisionOf.localId.eq(localId),
                    noteRevision.svnRevision.eq(revision))
             .uniqueResult(noteRevision);
+    }
+
+    @Override
+    public List<NoteRevision> getOfDocument(Document document, long revision) {
+        Assert.notNull(document);
+        return getSession().from(noteRevision)
+            .where(noteRevision.revisionOf.document.eq(document),
+               noteRevision.svnRevision.eq(revision))
+            .list(noteRevision);
     }
     
 }

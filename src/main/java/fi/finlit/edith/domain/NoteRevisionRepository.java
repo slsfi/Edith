@@ -5,6 +5,8 @@
  */
 package fi.finlit.edith.domain;
 
+import java.util.List;
+
 import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,5 +31,12 @@ public interface NoteRevisionRepository extends Repository<NoteRevision, String>
      * @return
      */
     NoteRevision getByLocalId(Document document, long documentRevision, String localId);
+
+    /**
+     * @param document
+     * @param revision
+     * @return
+     */
+    List<NoteRevision> getOfDocument(Document document, long revision);
 
 }

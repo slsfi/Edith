@@ -29,6 +29,7 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
  * @author tiwe
  * @version $Id$
  */
+@SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "classpath:TapestryExt.js", "AnnotatePage.js"})
 @IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage extends AbstractDocumentPage{
@@ -49,12 +50,21 @@ public class AnnotatePage extends AbstractDocumentPage{
     private ComponentResources resources;
 
     @Inject
-    private NoteRevisionRepository noteRepo;
+    private NoteRevisionRepository noteRevisionRepo;
+    
+    @Property
+    private List<NoteRevision> docNotes;
     
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
         renderSupport.addScript("editLink = '" + link + "';");
+    }
+
+    void setupRender() {
+        Document document = getDocument();
+        DocumentRevision documentRevision = getDocumentRevision();
+        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
     }
 
     Object onEdit(EventContext context){
@@ -63,7 +73,7 @@ public class AnnotatePage extends AbstractDocumentPage{
         notes = new ArrayList<NoteRevision>(context.getCount());        
         for (int i = 0; i < context.getCount(); i++){
             String localId = context.get(String.class, i).substring(1);
-            NoteRevision rev = noteRepo.getByLocalId(document, documentRevision.getRevision(), localId);
+            NoteRevision rev = noteRevisionRepo.getByLocalId(document, documentRevision.getRevision(), localId);
             if (rev != null){
                 notes.add(rev);    
             }            

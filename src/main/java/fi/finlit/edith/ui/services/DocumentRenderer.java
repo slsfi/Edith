@@ -22,6 +22,7 @@ public interface DocumentRenderer {
      * @param writer
      * @throws Exception
      */
+    // TODO : cache rendering results
     void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception;
     
     /**
@@ -29,6 +30,7 @@ public interface DocumentRenderer {
      * @param writer
      * @throws Exception
      */
+    // TODO : cache rendering results
     void renderDocument(DocumentRevision document, MarkupWriter writer) throws Exception;
 
 }

@@ -1,10 +1,11 @@
 package fi.finlit.edith.ui.test.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.junit.Before;
 import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -33,17 +34,24 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     @Inject
     private DocumentRepository documentRepo;
     
-    @Test
-    public void getByLocalId() throws SVNException{
+    private Document document;
+    
+    private long latestRevision;
+    
+    @Before
+    public void setUp() throws SVNException{
         Document document = documentRepo.getDocumentForPath(TEST_DOCUMENT_SVNPATH);
         List<Long> revisions = documentRepo.getRevisions(document);
-        long latestRevision = revisions.get(revisions.size() - 1).longValue();
-        
+        long latestRevision = revisions.get(revisions.size() - 1).longValue();        
         noteRepo.createNote(document, latestRevision, "1", "lähtee häihinsä", "lähtee häihinsä Mikko Vilkastuksen");
         noteRepo.createNote(document, latestRevision, "2", "käskyn annoit", "koska suutarille käskyn käräjiin annoit, saadaksesi naimalupaa.");
         noteRepo.createNote(document, latestRevision, "3", "tulee", "tulee, niin seisoo säätös-kirjassa.");
         noteRepo.createNote(document, latestRevision, "4", "määrätty", "kummallenkin määrätty, niin emmepä tietäisi tässä");
         
+    }
+    
+    @Test
+    public void getByLocalId() throws SVNException{        
         assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "1"));
         assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "2"));
         assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "3"));
@@ -52,6 +60,11 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
 
     @Test
     public void queryNotes(){
+        // TODO
+    }
+    
+    @Test
+    public void getOfDocument(){
         // TODO
     }
 }

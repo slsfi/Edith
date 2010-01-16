@@ -16,16 +16,18 @@
         
     <p:leftPanel>
         <t:dashboard/>
-
+                
         <div class="panel narrow">
-            <h3>${message:revisions}</h3>
-            <ul>
-                <t:loop source="revisions" value="revision">
-                <li>
-                    <t:pagelink page="document/annotatePage" t:context="[document.id,revision]">${revision}</t:pagelink>
+            <!-- TODO : make this area updatable -->
+            <h3>${message:notes}</h3>
+            <ul class="notes">
+                <t:loop source="docNotes" value="note">
+                <li>    
+                    <a href="#start${note.revisionOf.localId}">${note.revisionOf.localId}</a>
                 </li>
                 </t:loop>
-            </ul>            
+            </ul>
+            <div style="clear:both;"></div>
         </div>
 
         <div class="panel narrow">
@@ -33,16 +35,39 @@
             <t:document.pages document="documentRevision"/>
             <div style="clear:both;"></div>
         </div>
+
+        <div class="panel narrow">
+            <h3>${message:revisions}</h3>
+            <ul>
+                <t:loop source="revisions" value="revision">
+                <li>
+                    <!-- TODO : with date here -->
+                    <t:pagelink page="document/annotatePage" t:context="[document.id,revision]">${revision}</t:pagelink>
+                </li>
+                </t:loop>
+            </ul>            
+        </div>
         
     </p:leftPanel>
 
-    <p:rightPanel>                
+    <p:rightPanel>
+    
+        <!-- ACTIONS :
+            - update note (form submit, revision creation)
+            - add new note (form submit, SVN commit)
+            - delete note (note removal, SVN commit)
+            - change note boundaries  (SVN commit)      
+         -->                
         
         <t:zone t:id="editZone"/>
         
         <t:block t:id="noteEditForm">
             <t:loop source="notes" value="note">
-                <t:beaneditform t:id="note"/>            
+                <div>
+                    <b># ${note.revisionOf.localId}</b>
+                    <t:beaneditform t:id="note" include="lemma,longText,basicForm"/>
+                </div>
+                            
             </t:loop>      
         </t:block>
         

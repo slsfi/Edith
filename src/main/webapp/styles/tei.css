@@ -86,7 +86,7 @@
 	border-top: dotted 1px gray;
 }
 
-.pages li{
+.pages li, .notes li{
 	display: block;
 	float: left;
 	padding: 0.3em;	
