@@ -16,27 +16,23 @@
         
     <p:leftPanel>
         <t:dashboard/>
-        <div class="panel narrow">
-            <h3>${message:revisions}</h3>
-            <ul>
-                <t:loop source="revisions" value="revision">
-                <li>
-                    <t:pagelink page="document/viewPage" t:context="[document.id,revision]">${revision}</t:pagelink>
-                </li>
-                </t:loop>
-            </ul>            
-        </div>
+
+        <p>
+            <t:pagelink page="document/printPage" t:context="[document.id,revision]">${message:print}</t:pagelink>
+        </p>
+
         <div class="panel narrow">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>
             <div style="clear:both;"></div>
         </div>
+        
     </p:leftPanel>
 
-    <p:rightPanel>                
-        <div style="text-align: center;">
-            <t:pagelink page="document/printPage" t:context="[document.id,revision]">${message:print}</t:pagelink>
-        </div>
+    <p:rightPanel>      
+    
+        <!--  ?!? -->
+        
     </p:rightPanel>
 
 </html>

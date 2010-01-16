@@ -5,8 +5,6 @@
  */
 package fi.finlit.edith.domain;
 
-import java.util.Set;
-
 import org.joda.time.DateTime;
 
 import com.mysema.query.annotations.QueryInit;
@@ -44,20 +42,14 @@ public class NoteRevision extends Identifiable {
 
     @Predicate
     private String longText; 
-            
+       
     @Predicate
-    private long revision;
+    private long svnRevision;
     
     @Predicate
     @QueryInit({"term.meaning", "latestRevision"})
     private Note revisionOf;
-
-    @Predicate
-    private NoteStatus status;
     
-    @Predicate(ln="tagged")
-    private Set<Tag> tags;
-
     public String getBasicForm() {
         return basicForm;
     }
@@ -86,20 +78,12 @@ public class NoteRevision extends Identifiable {
         return longText;
     }
 
-    public long getRevision() {
-        return revision;
+    public long getSvnRevision() {
+        return svnRevision;
     }
 
     public Note getRevisionOf() {
         return revisionOf;
-    }
-
-    public NoteStatus getStatus() {
-        return status;
-    }
-
-    public Set<Tag> getTags() {
-        return tags;
     }
 
     public void setBasicForm(String basicForm) {
@@ -126,20 +110,13 @@ public class NoteRevision extends Identifiable {
         this.longText = longText;
     }
 
-    public void setRevision(long svnRevision) {
-        this.revision = svnRevision;
+    public void setSVNRevision(long svnRevision) {
+        this.svnRevision = svnRevision;
     }
 
     public void setRevisionOf(Note revisionOf) {
         this.revisionOf = revisionOf;
     }
 
-    public void setStatus(NoteStatus status) {
-        this.status = status;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
  
 }

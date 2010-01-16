@@ -90,6 +90,8 @@
         <t:dashboard />
     </p:leftPanel>
 
-    <p:rightPanel>west</p:rightPanel>
+    <p:rightPanel>
+    
+    </p:rightPanel>
 
 </html>

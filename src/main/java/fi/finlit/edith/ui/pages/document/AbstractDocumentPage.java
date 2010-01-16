@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.springframework.security.annotation.Secured;
 import org.tmatesoft.svn.core.SVNException;
 
 import com.mysema.tapestry.core.Context;
@@ -44,6 +45,7 @@ public class AbstractDocumentPage {
     
     private Context context;
     
+    @Secured("ROLE_USER")
     void onActivate(EventContext context) throws SVNException{
         this.context = new Context(context);
         document = documentRepo.getById(context.get(String.class, 0));

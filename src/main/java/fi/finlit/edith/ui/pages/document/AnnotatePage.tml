@@ -4,24 +4,46 @@
       
     <p:title>${document.title}</p:title>  
 
-    <p>
-        ${document.title}
-        
-        <!-- TODO : show contents -->
-    </p>
+    <div class="content">
+        <t:document.view document="documentRevision"/>        
+    </div>
     
     <p:breadcrumbs>
         <a t:type="pageLink" t:page="index">${message:frontpage}</a> 
         &gt; <a t:type="pageLink" t:page="documentsPage">${message:documents}</a>
         &gt; ${document.title}
-    </p:breadcrumbs>         
+    </p:breadcrumbs>     
         
     <p:leftPanel>
         <t:dashboard/>
+
+        <div class="panel narrow">
+            <h3>${message:revisions}</h3>
+            <ul>
+                <t:loop source="revisions" value="revision">
+                <li>
+                    <t:pagelink page="document/annotatePage" t:context="[document.id,revision]">${revision}</t:pagelink>
+                </li>
+                </t:loop>
+            </ul>            
+        </div>
+
+        <div class="panel narrow">
+            <h3>${message:pages}</h3>
+            <t:document.pages document="documentRevision"/>
+            <div style="clear:both;"></div>
+        </div>
+        
     </p:leftPanel>
 
-    <p:rightPanel>
-        west
+    <p:rightPanel>                
+        
+        <t:zone t:id="editZone"/>
+        
+        <t:block t:id="noteEditForm">
+            edit notes ${context}      
+        </t:block>
+        
     </p:rightPanel>
 
 </html>

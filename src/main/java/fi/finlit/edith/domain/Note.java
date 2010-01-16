@@ -5,21 +5,28 @@
  */
 package fi.finlit.edith.domain;
 
+import java.util.Set;
+
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
 
-
 /**
  * Note provides
- *
+ * 
  * @author tiwe
  * @version $Id$
  */
-@ClassMapping(ns=EDITH.NS)
-public class Note extends Identifiable{
-    
+@ClassMapping(ns = EDITH.NS)
+public class Note extends Identifiable {
+
+    /**
+     * the id of the note in the context of the TEI document
+     */
+    @Predicate
+    private String localId;
+
     @Predicate
     private Document document;
 
@@ -28,7 +35,13 @@ public class Note extends Identifiable{
 
     @Predicate
     private Term term;
-    
+
+    @Predicate
+    private NoteStatus status;
+
+    @Predicate(ln = "tagged")
+    private Set<Tag> tags;
+
     public Document getDocument() {
         return document;
     }
@@ -52,7 +65,28 @@ public class Note extends Identifiable{
     public void setTerm(Term term) {
         this.term = term;
     }
-    
-    
-        
+
+    public String getLocalId() {
+        return localId;
+    }
+
+    public void setLocalId(String localId) {
+        this.localId = localId;
+    }
+
+    public NoteStatus getStatus() {
+        return status;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setStatus(NoteStatus status) {
+        this.status = status;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 }
