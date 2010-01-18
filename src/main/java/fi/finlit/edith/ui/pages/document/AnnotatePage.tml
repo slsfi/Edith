@@ -16,13 +16,7 @@
         
     <p:leftPanel>
         <t:dashboard/>
-              
-        <div class="panel narrow">
-            <h3>${message:pages}</h3>
-            <t:document.pages document="documentRevision"/>
-            <div style="clear:both;"></div>
-        </div>
-
+        
         <div class="panel narrow">
             <h3>${message:revisions}</h3>
             <ul>
@@ -34,6 +28,13 @@
                 </t:loop>
             </ul>            
         </div>
+                      
+        <div class="panel narrow">
+            <h3>${message:pages}</h3>
+            <t:document.pages document="documentRevision"/>
+            <div style="clear:both;"></div>
+        </div>
+
         
     </p:leftPanel>
 
@@ -65,6 +66,7 @@
             <t:loop source="notes" value="note">
                 <div>
                     <b># ${note.revisionOf.localId}</b>
+                    <!-- TODO : improve edit form -->
                     <t:beaneditform t:id="note" include="lemma,longText,basicForm"/>
                 </div>                            
             </t:loop>      

@@ -12,6 +12,10 @@
     padding: 0.2em; 
 }
 
+#header .content{
+	border-bottom: solid 1px #D0D0D0;		
+}	
+
 #top .content {
 	font-size: 1.5em;
 	font-weight: bold;
@@ -46,7 +50,7 @@
 
 #top .title{
 	padding-top: 0.2em;	
-	padding-left: 2em;
+	padding-left: 3em;
 }
 
 #auth {

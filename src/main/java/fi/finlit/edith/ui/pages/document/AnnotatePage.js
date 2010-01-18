@@ -2,17 +2,22 @@ jQuery(document).ready(function(){
     jQuery('.notecontent').bind('click',
         function(event) {
             var classes = jQuery(this).attr('class').replace('notecontent ','').replace(' ', '/');
-            var link = editLink.replace('CONTEXT', classes);
-            TapestryExt.activateZone('editZone', link);
+            Editor.updateEditZone(classes);
         }    
     );
     
     jQuery('.notelink').bind('click',
     	function(event) {
     		var id = jQuery(this).attr('href').replace('#start','');
-    		var link = editLink.replace('CONTEXT', "n"+id);
-    		TapestryExt.activateZone('editZone', link);
+    		Editor.updateEditZone("n"+id);
     	}
     );		
 });
+
+var Editor = {		
+	updateEditZone: function(context){
+		var link = editLink.replace('CONTEXT',context);
+		TapestryExt.updateZone('editZone', link);
+	}		
+}
         

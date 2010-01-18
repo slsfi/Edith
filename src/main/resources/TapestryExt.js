@@ -15,7 +15,7 @@ var TapestryExt = {
     element.fire(Tapestry.FORM_PROCESS_SUBMIT_EVENT);
   },
   
-  activateZone : function( zoneId, url ) {
+  updateZone : function( zoneId, url ) {
 	  var zoneManager = Tapestry.findZoneManagerForZone( zoneId );
 	  if (zoneManager){
 		  zoneManager.updateFromURL( url );  
