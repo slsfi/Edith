@@ -40,9 +40,9 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     
     @Before
     public void setUp() throws SVNException{
-        Document document = documentRepo.getDocumentForPath(TEST_DOCUMENT_SVNPATH);
+        document = documentRepo.getDocumentForPath(TEST_DOCUMENT_SVNPATH);
         List<Long> revisions = documentRepo.getRevisions(document);
-        long latestRevision = revisions.get(revisions.size() - 1).longValue();        
+        latestRevision = revisions.get(revisions.size() - 1).longValue();        
         noteRepo.createNote(document, latestRevision, "1", "lähtee häihinsä", "lähtee häihinsä Mikko Vilkastuksen");
         noteRepo.createNote(document, latestRevision, "2", "käskyn annoit", "koska suutarille käskyn käräjiin annoit, saadaksesi naimalupaa.");
         noteRepo.createNote(document, latestRevision, "3", "tulee", "tulee, niin seisoo säätös-kirjassa.");
