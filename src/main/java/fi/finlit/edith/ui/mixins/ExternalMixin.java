@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ * 
+ */
 package fi.finlit.edith.ui.mixins;
 
 import org.apache.tapestry5.ComponentResources;
