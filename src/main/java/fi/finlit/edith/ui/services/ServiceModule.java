@@ -72,6 +72,7 @@ public class ServiceModule {
         binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
         binder.bind(NoteRevisionRepository.class, NoteRevisionRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
+        binder.bind(SubversionService.class, SubversionServiceImpl.class);
         
         binder.bind(DocumentRenderer.class, DocumentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);

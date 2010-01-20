@@ -36,18 +36,16 @@ public class DocumentRendererImpl implements DocumentRenderer {
     static final Set<String> emptyElements = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
     
     static final Set<String> toDiv = new HashSet<String>(Arrays.asList(
-            "title", "l","lg","publisher","pubPlace","sp","teiHeader","text"));
+            "title", "l","lg","publisher","pubPlace","teiHeader","text"));
     
     static final Set<String> toP = new HashSet<String>();
     
     static final Set<String> toSpan = new HashSet<String>(Arrays.asList(
-            "actor","camera","caption","date","desc","docAuthor","gap","orig","ref","role","roleDesc","set","sound","speaker","stage","tech","view"));
+            "actor","camera","caption","date","desc","docAuthor","gap","orig","ref","role","roleDesc","set","sound","speaker","tech","view"));
    
     static final Set<String> toUl = new HashSet<String>(Arrays.asList("castGroup","castList","listPerson"));
     
     static final Set<String> toLi = new HashSet<String>(Arrays.asList("castItem","person"));
-    
-    static final Set<String> toSelf = new HashSet<String>(Arrays.asList("div","p"));
     
     @Inject
     private DocumentRepository documentRepo;
@@ -91,6 +89,10 @@ public class DocumentRendererImpl implements DocumentRenderer {
         boolean noteContent = false;
         Set<String> noteIds = new HashSet<String>();
         
+        int act = 0;
+        int sp = 0;
+        int stage = 0;
+        
         while (true) {
             int event = reader.next();            
             if (event == XMLStreamConstants.START_ELEMENT){
@@ -105,8 +107,24 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     writer.element("ul", "class", localName);
                 }else if (toLi.contains(localName)){
                     writer.element("li", "class", localName);
-                }else if (toSelf.contains(localName)){
-                    writer.element(localName);                                         
+                }else if (localName.equals("sp")){
+                    sp++;
+                    writer.element("div", "class", localName, "id", "act"+act+"-sp"+sp);
+                }else if (localName.equals("stage")){
+                    stage++;
+                    writer.element("div", "class", localName, "id", "act"+act+"-stage"+stage);
+                }else if (localName.equals("p")){
+                    writer.element(localName);
+                }else if (localName.equals("div")){
+                    String type = reader.getAttributeValue(null, "type");
+                    if ("act".equals(type)){
+                        act = Integer.valueOf(reader.getAttributeValue(null, "n"));
+                        sp = 0;
+                        stage = 0;
+                        writer.element(localName, "class", "act", "id", "act" + act);
+                    }else{
+                        writer.element(localName);    
+                    }                                                             
                 }else if (localName.equals("TEI")){    
                     writer.element("div", "class", "tei");
                 }else if (localName.equals("lb")){    
