@@ -144,4 +144,11 @@ table.searchresults td {
 	font-weight: bold;	
 }	
 
-
+/**
+* Disabled link
+*/ 
+a.disabled:link, a.disabled:visited,
+a.disabled:hover, a.disabled:active
+{
+	color:#aaaaaa;
+} 

@@ -39,8 +39,17 @@
     </p:leftPanel>
 
     <p:rightPanel>
-    
+        <t:form t:id="createTerm">
+            <t:hidden t:id="selectedText" value="selectedText.selection"/>
+            <t:hidden t:id="selectedStartId" value="selectedText.startId"/>
+            <t:hidden t:id="selectedEndId" value="selectedText.endId"/>
+            <a id="createTermLink" class="disabled" href="#" onClick="return false;">${message:createTerm}</a>
+        </t:form>
+           
         <div class="panel narrow">
+            
+           
+           
             <!-- TODO : make this area updatable -->
             <h3>${message:notes}</h3>
             <ul class="notes">

@@ -25,40 +25,48 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
 
 /**
  * AnnotatePage provides
- *
+ * 
  * @author tiwe
  * @version $Id$
  */
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "classpath:TapestryExt.js", "AnnotatePage.js"})
+@IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "classpath:TapestryExt.js",
+        "AnnotatePage.js" })
 @IncludeStylesheet("context:styles/tei.css")
-public class AnnotatePage extends AbstractDocumentPage{
-    
+public class AnnotatePage extends AbstractDocumentPage {
+
     @Inject
     private Block noteEditForm;
-    
+
     @Property
     private List<NoteRevision> notes;
-    
+
     @Property
     private NoteRevision note;
-    
+
     @Inject
     private RenderSupport renderSupport;
-    
+
     @Inject
     private ComponentResources resources;
 
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
-    
+
     @Property
     private List<NoteRevision> docNotes;
-    
+
+    @Property
+    private SelectedText selectedText;
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
         renderSupport.addScript("editLink = '" + link + "';");
+    }
+
+    void onActivate() {
+        selectedText = new SelectedText();
     }
 
     void setupRender() {
@@ -67,18 +75,55 @@ public class AnnotatePage extends AbstractDocumentPage{
         docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
     }
 
-    Object onEdit(EventContext context){
+    Object onEdit(EventContext context) {
         Document document = getDocument();
         DocumentRevision documentRevision = getDocumentRevision();
-        notes = new ArrayList<NoteRevision>(context.getCount());        
-        for (int i = 0; i < context.getCount(); i++){
+        notes = new ArrayList<NoteRevision>(context.getCount());
+        for (int i = 0; i < context.getCount(); i++) {
             String localId = context.get(String.class, i).substring(1);
-            NoteRevision rev = noteRevisionRepo.getByLocalId(document, documentRevision.getRevision(), localId);
-            if (rev != null){
-                notes.add(rev);    
-            }            
+            NoteRevision rev = noteRevisionRepo.getByLocalId(document, documentRevision
+                    .getRevision(), localId);
+            if (rev != null) {
+                notes.add(rev);
+            }
         }
         return noteEditForm;
     }
-    
+
+    void onSubmitFromCreateTerm() {
+        System.out.println(selectedText.startId + "," + selectedText.endId + ":["
+                + selectedText.selection+"]");
+    }
+
+    // Unfortunately the @Property annotation does not work here
+    public static class SelectedText {
+        private String selection;
+        private String startId;
+        private String endId;
+
+        public String getSelection() {
+            return selection;
+        }
+
+        public void setSelection(String selection) {
+            this.selection = selection;
+        }
+
+        public String getStartId() {
+            return startId;
+        }
+
+        public void setStartId(String startId) {
+            this.startId = startId;
+        }
+
+        public String getEndId() {
+            return endId;
+        }
+
+        public void setEndId(String endId) {
+            this.endId = endId;
+        }
+    }
+
 }
