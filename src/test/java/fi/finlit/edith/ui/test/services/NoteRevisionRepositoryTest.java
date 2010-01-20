@@ -5,11 +5,14 @@
  */
 package fi.finlit.edith.ui.test.services;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
@@ -18,6 +21,7 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.ui.services.AdminService;
 
 /**
  * NoteRevisionRepositoryTest provides
@@ -27,11 +31,14 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
  */
 public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     
-    // TODO : as symbol
-    static final String TEST_DOCUMENT_SVNPATH = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
+    @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
+    private String testDocument;
     
     @Inject
     private NoteRepository noteRepo;
+    
+    @Inject
+    private AdminService adminService;
     
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
@@ -45,9 +52,12 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     
     @Before
     public void setUp() throws SVNException{
-        document = documentRepo.getDocumentForPath(TEST_DOCUMENT_SVNPATH);
+        adminService.removeNotesAndTerms();
+        
+        document = documentRepo.getDocumentForPath(testDocument);
         List<Long> revisions = documentRepo.getRevisions(document);
-        latestRevision = revisions.get(revisions.size() - 1).longValue();        
+        latestRevision = revisions.get(revisions.size() - 1).longValue();       
+        
         noteRepo.createNote(document, latestRevision, "1", "lähtee häihinsä", "lähtee häihinsä Mikko Vilkastuksen");
         noteRepo.createNote(document, latestRevision, "2", "käskyn annoit", "koska suutarille käskyn käräjiin annoit, saadaksesi naimalupaa.");
         noteRepo.createNote(document, latestRevision, "3", "tulee", "tulee, niin seisoo säätös-kirjassa.");
@@ -65,11 +75,16 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
 
     @Test
     public void queryNotes(){
-        // TODO
+        assertTrue(noteRevisionRepo.queryNotes("annoit").getAvailableRows() > 0);
     }
     
     @Test
     public void getOfDocument(){
-        // TODO
+        assertEquals(4, noteRevisionRepo.getOfDocument(document, latestRevision).size());
+    }
+
+    @Override
+    protected Class<?> getServiceClass() {
+        return NoteRevisionRepository.class;
     }
 }

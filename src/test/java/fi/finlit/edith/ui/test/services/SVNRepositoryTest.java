@@ -36,4 +36,9 @@ public class SVNRepositoryTest extends AbstractServiceTest{
         }
     }
 
+    @Override
+    protected Class<?> getServiceClass() {
+        return null;
+    }
+
 }

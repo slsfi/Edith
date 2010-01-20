@@ -76,4 +76,16 @@ public class DocumentRepositoryTest extends AbstractServiceTest{
         assertFalse(documentRepo.getRevisions(document).isEmpty());
         documentRepo.remove(document);
     }
+
+    @Test
+    public void getRevisions() throws SVNException{
+        for (Document document : documentRepo.getAll()){
+            assertFalse(documentRepo.getRevisions(document).isEmpty());
+        }
+    }
+    
+    @Override
+    protected Class<?> getServiceClass() {
+        return DocumentRepository.class;
+    }
 }

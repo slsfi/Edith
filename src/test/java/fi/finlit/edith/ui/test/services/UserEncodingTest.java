@@ -46,4 +46,9 @@ public class UserEncodingTest extends AbstractServiceTest{
         }
     }
 
+    @Override
+    protected Class<?> getServiceClass() {
+        return null;
+    }
+
 }

@@ -25,19 +25,29 @@ public class DocumentRendererTest extends AbstractServiceTest{
     private DocumentRenderer renderer;
     
     @Test
-    public void test() throws Exception{
+    public void renderDocument() throws Exception{
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
         renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
-        System.out.println(writer);
     }
     
     @Test
-    public void testWithNotes() throws Exception{
+    public void renderPageLinks() throws Exception{
+        MarkupWriter writer = new MarkupWriterImpl();
+        String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
+        renderer.renderPageLinks(new DocumentRevision(svnPath, -1), writer);
+    }
+    
+    @Test
+    public void renderDocumentWithNotes() throws Exception{
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
         renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
-        System.out.println(writer);
+    }
+
+    @Override
+    protected Class<?> getServiceClass() {
+        return DocumentRenderer.class;
     }
     
 }

@@ -5,9 +5,15 @@
  */
 package fi.finlit.edith.ui.test.services;
 
-import java.io.File;
+import static org.junit.Assert.*;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.List;
+
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -41,6 +47,32 @@ public abstract class AbstractServiceTest {
         FSRepositoryFactory.setup();
         System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
+    }
+    
+    protected abstract Class<?> getServiceClass();
+    
+    @Test
+    public void allCovered(){
+        Class<?> serviceClass = getServiceClass();
+        List<String> missing = CollectionFactory.newList();
+        if (serviceClass != null){
+            for (Method m : serviceClass.getMethods()){
+                if (!m.getDeclaringClass().equals(serviceClass)){
+                    continue;
+                }
+                try {
+                    getClass().getMethod(m.getName());
+                } catch (SecurityException e) {
+                    String error = "Caught " + e.getClass().getName();
+                    throw new RuntimeException(error, e);
+                } catch (NoSuchMethodException e) {
+                    missing.add(m.getName());
+                }
+            } 
+        }
+        if (!missing.isEmpty()){
+            fail("Missing tests : " + missing);
+        }
     }
 
 }

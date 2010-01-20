@@ -38,7 +38,7 @@ public class AdminServiceTest extends AbstractServiceTest{
     private File noteTestData;
     
     @Test
-    public void testRemoveNotes() throws Exception {
+    public void removeNotes() throws Exception {
         noteRepo.importNotes(noteTestData);
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() > 0);
         
@@ -47,12 +47,17 @@ public class AdminServiceTest extends AbstractServiceTest{
     }
 
     @Test
-    public void testRemoveNotesAndTerms() throws Exception {
+    public void removeNotesAndTerms() throws Exception {
         noteRepo.importNotes(noteTestData);
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() > 0);
         
         adminService.removeNotes();
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() == 0);
+    }
+
+    @Override
+    protected Class<?> getServiceClass() {
+        return AdminService.class;
     }
 
 }

@@ -31,9 +31,12 @@ public class ServiceTestModule {
     
     public static final String NOTE_TEST_DATA_KEY = "note.test.data";
     
+    public static final String TEST_DOCUMENT_KEY = "test.document";
+    
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
         configuration.add(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
+        configuration.add(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml");
     }
 
     public static SaltSource buildSaltSource() throws Exception {
