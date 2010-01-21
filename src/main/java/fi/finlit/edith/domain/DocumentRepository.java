@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.tmatesoft.svn.core.SVNException;
 
 import com.mysema.rdfbean.dao.Repository;
 
@@ -22,6 +21,16 @@ import com.mysema.rdfbean.dao.Repository;
  */
 @Transactional
 public interface DocumentRepository extends Repository<Document,String>{
+    
+    /**
+     * @param document
+     * @param startId
+     * @param endId
+     * @param text
+     * @return
+     * @throws IOException 
+     */
+    String addNote(Document document, String startId, String endId, String text) throws IOException;
     
     /**
      * Get a Document handle for the given path
@@ -49,16 +58,14 @@ public interface DocumentRepository extends Repository<Document,String>{
 
     /**
      * @param document
-     * @return
-     * @throws SVNException 
+     * @return 
      */
-    List<Long> getRevisions(Document document) throws SVNException;
+    List<Long> getRevisions(Document document);
 
     /**
      * @param string
      * @param file
-     * @throws SVNException 
      */
-    void addDocument(String svnPath, File file) throws SVNException;
+    void addDocument(String svnPath, File file);
 
 }

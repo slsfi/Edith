@@ -12,8 +12,6 @@ import com.mysema.rdfbean.model.IDType;
 @ClassMapping
 public abstract class Identifiable {
     
-    private static final long serialVersionUID = 4580448045434144592L;
-    
     @Id(IDType.LOCAL)
     private String id;
     

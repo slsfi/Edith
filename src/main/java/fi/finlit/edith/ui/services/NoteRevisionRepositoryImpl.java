@@ -6,20 +6,28 @@
 package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QNoteRevision.noteRevision;
+import static fi.finlit.edith.domain.QUserInfo.userInfo;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.types.expr.EBoolean;
+import com.mysema.query.types.path.PEntity;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
+import com.mysema.rdfbean.object.BeanSubQuery;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.QNoteRevision;
+import fi.finlit.edith.domain.UserInfo;
 
 /**
  * NoteRepositoryImpl provides
@@ -28,6 +36,11 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
  * @version $Id$
  */
 public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision> implements NoteRevisionRepository {
+    
+    private static final QNoteRevision otherNote = new QNoteRevision("other");
+    
+    @Inject
+    private AuthService authService;
     
     public NoteRevisionRepositoryImpl() {
         super(noteRevision);
@@ -59,17 +72,42 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         return getSession().from(noteRevision)
             .where(noteRevision.revisionOf.document.eq(document),
                    noteRevision.revisionOf.localId.eq(localId),
-                   noteRevision.svnRevision.eq(revision))
+                   noteRevision.svnRevision.eq(revision),
+                   latestFor(revision))
             .uniqueResult(noteRevision);
     }
-
+    
     @Override
     public List<NoteRevision> getOfDocument(Document document, long revision) {
         Assert.notNull(document);
         return getSession().from(noteRevision)
             .where(noteRevision.revisionOf.document.eq(document),
-               noteRevision.svnRevision.eq(revision))
+                   noteRevision.svnRevision.loe(revision),
+                   latestFor(revision))
             .list(noteRevision);
+    }
+
+    @Override
+    public NoteRevision save(NoteRevision note) {
+        UserInfo createdBy = getSession().from(userInfo)
+            .where(userInfo.username.eq(authService.getUsername()))
+            .uniqueResult(userInfo);  
+        note.setCreatedOn(new DateTime());
+        note.setCreatedBy(createdBy);
+        note.getRevisionOf().setLatestRevision(note);
+        return super.save(note);
+    }
+    
+    private BeanSubQuery sub(PEntity<?> entity){
+        return new BeanSubQuery().from(entity);
+    }
+    
+
+    private EBoolean latestFor(long svnRevision){
+        return sub(otherNote).where(
+            otherNote.revisionOf.eq(noteRevision.revisionOf),
+            otherNote.svnRevision.loe(svnRevision),
+            otherNote.createdOn.gt(noteRevision.createdOn)).notExists();
     }
     
 }

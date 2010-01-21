@@ -50,24 +50,34 @@ public class SubversionServiceImpl implements SubversionService{
     
     @SuppressWarnings("deprecation")
     @Override
-    public void commit(String svnPath, File file) throws SVNException {
-        SVNURL repoURL = svnRepository.getRepositoryRoot(false);
-        SVNCommitClient commitClient = clientManager.getCommitClient();
-        commitClient.doImport(file, repoURL.appendPath(svnPath, false), svnPath + " added", false);        
+    public void add(String svnPath, File file){
+        try{
+            SVNURL repoURL = svnRepository.getRepositoryRoot(false);
+            SVNCommitClient commitClient = clientManager.getCommitClient();
+            commitClient.doImport(file, repoURL.appendPath(svnPath, false), svnPath + " added", false);    
+        }catch(SVNException s){
+            throw new RuntimeException(s.getMessage(), s);
+        }
+                
     }
     
     @Override
-    public File getFile(String svnPath, long revision) throws IOException, SVNException{
-        if (revision == -1){
-            revision = getLatestRevision(svnPath);
+    public File getFile(String svnPath, long revision) throws IOException{
+        try{
+            if (revision == -1){
+                revision = getLatestRevision(svnPath);
+            }
+            File documentFolder = new File(svnCache, URLEncoder.encode(svnPath,"UTF-8")); 
+            File documentFile = new File(documentFolder, String.valueOf(revision));
+            if (!documentFile.exists()){
+                documentFolder.mkdirs();
+                svnRepository.getFile(svnPath, revision, null, new FileOutputStream(documentFile));
+            }                
+            return documentFile;    
+        }catch(SVNException s){
+            throw new RuntimeException(s.getMessage(), s);
         }
-        File documentFolder = new File(svnCache, URLEncoder.encode(svnPath,"UTF-8")); 
-        File documentFile = new File(documentFolder, String.valueOf(revision));
-        if (!documentFile.exists()){
-            documentFolder.mkdirs();
-            svnRepository.getFile(svnPath, revision, null, new FileOutputStream(documentFile));
-        }                
-        return documentFile;
+        
     }
     
     private long getLatestRevision(String svnPath) throws SVNException{        
@@ -90,7 +100,6 @@ public class SubversionServiceImpl implements SubversionService{
     
     @Override
     public void remove(String svnPath){
-        // only delete document in SVN, do not remove metadata instance
         try {
             SVNURL repoURL = svnRepository.getRepositoryRoot(false);
             SVNURL targetURL = repoURL.appendPath(svnPath, false);
@@ -101,24 +110,32 @@ public class SubversionServiceImpl implements SubversionService{
     }
     
     @Override
-    public List<Long> getRevisions(String svnPath) throws SVNException {
-        List<SVNFileRevision> revisions = getFileRevisions(svnPath);
-        List<Long> revisionIds = new ArrayList<Long>(revisions.size());
-        for (SVNFileRevision rev : revisions){
-            revisionIds.add(rev.getRevision());
-        }
-        return revisionIds;
+    public List<Long> getRevisions(String svnPath){
+        try{
+            List<SVNFileRevision> revisions = getFileRevisions(svnPath);
+            List<Long> revisionIds = new ArrayList<Long>(revisions.size());
+            for (SVNFileRevision rev : revisions){
+                revisionIds.add(rev.getRevision());
+            }
+            return revisionIds;    
+        }catch(SVNException s){
+            throw new RuntimeException(s.getMessage(), s);
+        }        
     }
 
     @Override
-    public Collection<String> getEntries(String svnFolder, int revision) throws SVNException {
-        List<SVNDirEntry> entries = new ArrayList<SVNDirEntry>();
-        svnRepository.getDir(svnFolder, /* HEAD */ -1, false, entries);
-        List<String> rv = new ArrayList<String>(entries.size());
-        for (SVNDirEntry entry : entries){
-            rv.add(entry.getName());
-        }
-        return rv;        
+    public Collection<String> getEntries(String svnFolder, long revision){
+        try{
+            List<SVNDirEntry> entries = new ArrayList<SVNDirEntry>();
+            svnRepository.getDir(svnFolder, revision, false, entries);
+            List<String> rv = new ArrayList<String>(entries.size());
+            for (SVNDirEntry entry : entries){
+                rv.add(entry.getName());
+            }
+            return rv;   
+        }catch(SVNException s){
+            throw new RuntimeException(s.getMessage(), s);
+        }                
     }
     
 }

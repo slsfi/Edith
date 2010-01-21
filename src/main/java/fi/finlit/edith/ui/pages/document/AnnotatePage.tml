@@ -47,36 +47,33 @@
         </t:form>
            
         <div class="panel narrow">
-            
-           
-           
-            <!-- TODO : make this area updatable -->
             <h3>${message:notes}</h3>
-            <ul class="notes">
-                <t:loop source="docNotes" value="note">
-                <li>    
-                    <a href="#start${note.revisionOf.localId}" class="notelink">${note.revisionOf.localId}</a>
-                </li>
-                </t:loop>
-            </ul>
+            <t:if test="docNotes">
+                <ul class="notes">
+                    <t:loop source="docNotes" value="note">
+                    <li>    
+                        <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
+                    </li>
+                    </t:loop>
+                </ul>
+                <p:else>${message:no-notes}</p:else>
+            </t:if>
             <div style="clear:both;"></div>
         </div>    
     
-        <!-- ACTIONS :
-            - update note (form submit, revision creation)
-            - add new note (form submit, SVN commit)
-            - delete note (note removal, SVN commit)
-            - change note boundaries  (SVN commit)      
-         -->                
-        
         <t:zone t:id="editZone" update="show"/>
         
-        <t:block t:id="noteEditForm">
+        <t:block t:id="noteEdit">
             <t:loop source="notes" value="note">
                 <div>
-                    <b># ${note.revisionOf.localId}</b>
-                    <!-- TODO : improve edit form -->
-                    <t:beaneditform t:id="note" include="lemma,longText,basicForm"/>
+                    <b>${note.lemma}</b>
+                    <t:form t:id="noteEditForm" t:zone="editZone" t:context="note.id">
+                        <t:errors/>
+                        ${message:lemma-label}<br/><t:textField value="note.lemma"/><br/>
+                        ${message:longText-label}<br/><t:textField value="note.longText"/><br/>
+                        ${message:basicForm-label}<br/><t:textField value="note.basicForm"/>
+                        <input type="submit"/> 
+                    </t:form>
                 </div>                            
             </t:loop>      
         </t:block>

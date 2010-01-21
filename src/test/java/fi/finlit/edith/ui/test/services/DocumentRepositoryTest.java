@@ -84,6 +84,11 @@ public class DocumentRepositoryTest extends AbstractServiceTest{
         }
     }
     
+    @Test
+    public void addNote(){
+        // TODO
+    }
+    
     @Override
     protected Class<?> getServiceClass() {
         return DocumentRepository.class;

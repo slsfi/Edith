@@ -86,10 +86,14 @@
 	border-top: dotted 1px gray;
 }
 
-.pages li, .notes li{
+.pages li{
 	display: block;
 	float: left;
 	padding: 0.3em;	
+}
+
+.notes li{
+	display: block;
 }	
 
 .l{

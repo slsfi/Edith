@@ -14,7 +14,7 @@ import com.mysema.rdfbean.annotations.Predicate;
 import fi.finlit.edith.EDITH;
 
 /**
- * Note provides
+ * NoteRevision provides
  *
  * @author tiwe
  * @version $Id$
@@ -26,7 +26,7 @@ public class NoteRevision extends Identifiable {
     private String basicForm; 
     
     @Predicate
-    private User createdBy;
+    private UserInfo createdBy;
     
     @Predicate
     private DateTime createdOn;
@@ -54,7 +54,7 @@ public class NoteRevision extends Identifiable {
         return basicForm;
     }
 
-    public User getCreatedBy() {
+    public UserInfo getCreatedBy() {
         return createdBy;
     }
 
@@ -90,7 +90,7 @@ public class NoteRevision extends Identifiable {
         this.basicForm = basicForm;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(UserInfo createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -116,6 +116,18 @@ public class NoteRevision extends Identifiable {
 
     public void setRevisionOf(Note revisionOf) {
         this.revisionOf = revisionOf;
+    }
+
+    public NoteRevision createCopy() {        
+        NoteRevision copy = new NoteRevision();
+        copy.setBasicForm(basicForm);
+        copy.setDescription(description);
+        copy.setLemma(lemma);
+        copy.setLongText(longText);
+        copy.setRevisionOf(revisionOf);
+        copy.setSVNRevision(svnRevision);
+        return copy;
+        
     }
 
  

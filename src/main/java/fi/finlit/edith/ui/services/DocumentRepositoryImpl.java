@@ -15,8 +15,6 @@ import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNException;
 
 import com.mysema.rdfbean.dao.AbstractRepository;
@@ -34,22 +32,20 @@ import fi.finlit.edith.domain.DocumentRevision;
  */
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements DocumentRepository{
 
-    private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
-    
-    @Inject
-    private SubversionService svnService;
-
     @Inject 
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
+
+    @Inject
+    private SubversionService svnService;
     
     public DocumentRepositoryImpl() throws SVNException {
         super(document);
     }
 
     @Override
-    public void addDocument(String svnPath, File file) throws SVNException {
-        svnService.commit(svnPath, file);        
+    public void addDocument(String svnPath, File file){
+        svnService.add(svnPath, file);        
     }
     
     private Document createDocument(String path, String title, String description){
@@ -67,13 +63,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     
     @Override
     public File getDocumentFile(DocumentRevision document) throws IOException {
-        try {
-            return svnService.getFile(document.getSvnPath(), document.getRevision());            
-        } catch (SVNException e) {
-            String error = "Caught " + e.getClass().getName();
-            logger.error(error, e);
-            throw new IOException(error, e);
-        }
+        return svnService.getFile(document.getSvnPath(), document.getRevision());
     }
     
     @Override
@@ -93,34 +83,35 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     
     @Override
     public List<Document> getDocumentsOfFolder(String svnFolder) {
-        try {
-            Collection<String> entries = svnService.getEntries(svnFolder, /* HEAD */ -1);
-            List<Document> documents = new ArrayList<Document>(entries.size());
-            for (String entry : entries){
-                String path = svnFolder + "/" + entry;
-                Document document = getDocumentMetadata(path);
-                if (document == null){
-                    document = createDocument(path, entry, null);
-                }
-                documents.add(document);
+        Collection<String> entries = svnService.getEntries(svnFolder, /* HEAD */ -1);
+        List<Document> documents = new ArrayList<Document>(entries.size());
+        for (String entry : entries){
+            String path = svnFolder + "/" + entry;
+            Document document = getDocumentMetadata(path);
+            if (document == null){
+                document = createDocument(path, entry, null);
             }
-            return documents;
-            
-        } catch (SVNException e) {
-            String error = "Caught " + e.getClass().getName();
-            logger.error(error, e);
-            throw new RuntimeException(error, e);
+            documents.add(document);
         }
+        return documents;
     }
 
     @Override
-    public List<Long> getRevisions(Document document) throws SVNException {
+    public List<Long> getRevisions(Document document){
         return svnService.getRevisions(document.getSvnPath());
     }
     
     @Override
     public void remove(Document document){
         svnService.remove(document.getSvnPath());  
+    }
+
+    @Override
+    public String addNote(Document doc, String startId, String endId, String text) throws IOException {        
+        File docFile = svnService.getFile(doc.getSvnPath(), -1);
+        // TODO : add anchors for the given id span
+        
+        return null;
     }
 
 }

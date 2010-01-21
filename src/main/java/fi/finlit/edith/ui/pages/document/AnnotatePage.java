@@ -36,7 +36,7 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
 public class AnnotatePage extends AbstractDocumentPage {
 
     @Inject
-    private Block noteEditForm;
+    private Block noteEdit;
 
     @Property
     private List<NoteRevision> notes;
@@ -87,7 +87,7 @@ public class AnnotatePage extends AbstractDocumentPage {
                 notes.add(rev);
             }
         }
-        return noteEditForm;
+        return noteEdit;
     }
 
     void onSubmitFromCreateTerm() {
@@ -126,4 +126,15 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
     }
 
+
+    void onPrepareForSubmit(String noteRev) {
+        note = noteRevisionRepo.getById(noteRev).createCopy();
+    }
+    
+    void onSuccessFromNoteEditForm() {        
+        note.setSVNRevision(getDocumentRevision().getRevision());
+        noteRevisionRepo.save(note);
+    }
+    
+    
 }

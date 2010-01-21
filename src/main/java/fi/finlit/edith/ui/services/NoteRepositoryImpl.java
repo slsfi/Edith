@@ -6,23 +6,22 @@
 package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QNote.note;
-import static fi.finlit.edith.domain.QNoteRevision.noteRevision;
 import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
+import static fi.finlit.edith.domain.QUserInfo.userInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
 
 import fi.finlit.edith.domain.Document;
@@ -30,8 +29,8 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteStatus;
-import fi.finlit.edith.domain.QTermWithNotes;
 import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.UserInfo;
 
 /**
  * NoteRepositoryImpl provides
@@ -41,15 +40,22 @@ import fi.finlit.edith.domain.Term;
  */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository{
 
+    @Inject
+    private AuthService authService;
+    
     public NoteRepositoryImpl() {
         super(note);
     }
     
     @Override
     public Note createNote(Document document, long revision, String localId, String lemma, String longText) {
+        UserInfo createdBy = getSession().from(userInfo)
+            .where(userInfo.username.eq(authService.getUsername()))
+            .uniqueResult(userInfo);  
+        
         NoteRevision rev = new NoteRevision();
         rev.setCreatedOn(new DateTime());
-//        rev.setCreatedBy(createdBy)
+        rev.setCreatedBy(createdBy);
         rev.setSVNRevision(revision);
         rev.setLemma(lemma);
         rev.setLongText(longText);

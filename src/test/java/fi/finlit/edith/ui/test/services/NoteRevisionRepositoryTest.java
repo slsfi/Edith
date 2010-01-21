@@ -20,6 +20,7 @@ import org.tmatesoft.svn.core.SVNException;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.AdminService;
 
@@ -80,6 +81,25 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     
     @Test
     public void getOfDocument(){
+        assertEquals(4, noteRevisionRepo.getOfDocument(document, latestRevision).size());
+    }
+    
+    @Test
+    public void getOfDocument_with_note_updates() throws InterruptedException{
+        assertEquals(4, noteRevisionRepo.getOfDocument(document, latestRevision).size());
+        
+        Thread.sleep(2000);
+        
+        for (NoteRevision rev : noteRevisionRepo.getOfDocument(document, latestRevision)){
+            rev = rev.createCopy();
+            rev.setLemma(rev.getLemma() +"XXX");
+            noteRevisionRepo.save(rev);
+        }
+        
+//        for (NoteRevision rev : noteRevisionRepo.getOfDocument(document, latestRevision)){
+//            System.out.println(rev.getCreatedOn());
+//        }    
+        
         assertEquals(4, noteRevisionRepo.getOfDocument(document, latestRevision).size());
     }
 

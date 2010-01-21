@@ -25,7 +25,7 @@ public class NoteComment extends Identifiable{
     private DateTime createdOn;
     
     @Predicate
-    private User createdBy;
+    private UserInfo createdBy;
 
     @Predicate
     private String text;
@@ -36,7 +36,7 @@ public class NoteComment extends Identifiable{
     @Predicate
     private Note note;
     
-    public User getCreatedBy() {
+    public UserInfo getCreatedBy() {
         return createdBy;
     }
 
@@ -48,7 +48,7 @@ public class NoteComment extends Identifiable{
         return title;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(UserInfo createdBy) {
         this.createdBy = createdBy;
     }
     

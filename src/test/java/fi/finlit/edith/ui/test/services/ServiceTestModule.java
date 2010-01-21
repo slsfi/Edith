@@ -20,6 +20,7 @@ import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 
 import fi.finlit.edith.EDITH;
+import fi.finlit.edith.ui.services.AuthService;
 
 /**
  * ServiceTestModule provides
@@ -53,9 +54,21 @@ public class ServiceTestModule {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
         configuration.add(Repository.class, repository);
+        
+        AuthService authService = new AuthService(){
+            public String getUsername() {
+                return "tiwe";
+            }
+            public boolean isAuthenticated() {
+                return true;
+            }
+            public void logout() {}            
+        };
+        configuration.add(AuthService.class, authService);
     }
 
     public static PasswordEncoder buildPaswordEncoder() {
         return new ShaPasswordEncoder();
     }
+    
 }

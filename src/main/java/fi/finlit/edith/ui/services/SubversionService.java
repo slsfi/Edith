@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import org.tmatesoft.svn.core.SVNException;
-
 /**
  * SubversionService provides
  *
@@ -20,14 +18,14 @@ import org.tmatesoft.svn.core.SVNException;
  */
 public interface SubversionService {
     
-    void commit(String svnPath, File file) throws SVNException;
+    void add(String svnPath, File file);
     
-    File getFile(String svnPath, long revision) throws IOException, SVNException;
+    Collection<String> getEntries(String svnFolder, long revision);
     
+    File getFile(String svnPath, long revision) throws IOException;
+
+    List<Long> getRevisions(String svnPath);
+
     void remove(String svnPath);
-
-    List<Long> getRevisions(String svnPath) throws SVNException;
-
-    Collection<String> getEntries(String svnFolder, int revision) throws SVNException;
 
 }
