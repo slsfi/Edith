@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface SubversionService {
     
-    void add(String svnPath, File file);
+    void importFile(String svnPath, File file);
     
     Collection<String> getEntries(String svnFolder, long revision);
     
@@ -26,7 +26,7 @@ public interface SubversionService {
 
     List<Long> getRevisions(String svnPath);
 
-    void remove(String svnPath);
+    void delete(String svnPath);
 
     void update(String svnPath, File file);
 

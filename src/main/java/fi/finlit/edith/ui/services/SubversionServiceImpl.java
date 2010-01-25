@@ -50,7 +50,7 @@ public class SubversionServiceImpl implements SubversionService{
     
     @SuppressWarnings("deprecation")
     @Override
-    public void add(String svnPath, File file){
+    public void importFile(String svnPath, File file){
         try{
             SVNURL repoURL = svnRepository.getRepositoryRoot(false);
             SVNCommitClient commitClient = clientManager.getCommitClient();
@@ -133,7 +133,7 @@ public class SubversionServiceImpl implements SubversionService{
     }
 
     @Override
-    public void remove(String svnPath){
+    public void delete(String svnPath){
         try {
             SVNURL repoURL = svnRepository.getRepositoryRoot(false);
             SVNURL targetURL = repoURL.appendPath(svnPath, false);

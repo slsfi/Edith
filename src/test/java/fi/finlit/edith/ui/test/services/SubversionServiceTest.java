@@ -7,15 +7,15 @@ import fi.finlit.edith.ui.services.SubversionService;
 
 /**
  * SubversionServiceTest provides
- *
+ * 
  * @author tiwe
  * @version $Id$
  */
-public class SubversionServiceTest extends AbstractServiceTest{
+public class SubversionServiceTest extends AbstractServiceTest {
 
     @Test
     @Ignore
-    public void add() {
+    public void importFile() {
     }
 
     @Test
@@ -25,7 +25,7 @@ public class SubversionServiceTest extends AbstractServiceTest{
 
     @Test
     @Ignore
-    public void remove() {
+    public void delete() {
     }
 
     @Test
@@ -37,15 +37,15 @@ public class SubversionServiceTest extends AbstractServiceTest{
     @Ignore
     public void getEntries() {
     }
-   
+
     @Test
     @Ignore
-    public void update(){        
+    public void update() {
     }
 
     @Test
     @Ignore
-    public void commit(){        
+    public void commit() {
     }
 
     @Override

@@ -58,7 +58,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Override
     public void addDocument(String svnPath, File file){
-        svnService.add(svnPath, file);        
+        svnService.importFile(svnPath, file);        
     }
     
     private Document createDocument(String path, String title, String description){
@@ -116,7 +116,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     
     @Override
     public void remove(Document document){
-        svnService.remove(document.getSvnPath());  
+        svnService.delete(document.getSvnPath());  
     }
 
     @Override
