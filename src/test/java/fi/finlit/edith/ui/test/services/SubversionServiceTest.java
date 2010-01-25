@@ -1,8 +1,13 @@
 package fi.finlit.edith.ui.test.services;
 
+import java.io.File;
+
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.SubversionService;
 
 /**
@@ -12,10 +17,20 @@ import fi.finlit.edith.ui.services.SubversionService;
  * @version $Id$
  */
 public class SubversionServiceTest extends AbstractServiceTest {
+    @Inject
+    private SubversionService subversionService;
+
+    @Inject
+    @Symbol(EDITH.SVN_DOCUMENT_ROOT)
+    private String documentRoot;
+
+    @Inject
+    @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
+    private File noteTestData;
 
     @Test
-    @Ignore
     public void importFile() {
+        subversionService.importFile(documentRoot, noteTestData);
     }
 
     @Test
