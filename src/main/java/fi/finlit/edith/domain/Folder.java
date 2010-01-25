@@ -29,6 +29,16 @@ public class Folder extends Identifiable implements Comparable<Folder>{
     public int compareTo(Folder folder) {
         return svnPath.compareTo(folder.svnPath);
     }
+    
+    @Override
+    public int hashCode(){
+        return svnPath.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object o){
+        return o instanceof Folder && ((Folder)o).svnPath.equals(svnPath);
+    }
 
     public String getSvnPath() {
         return svnPath;

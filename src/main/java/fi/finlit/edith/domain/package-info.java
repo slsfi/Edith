@@ -21,7 +21,6 @@
     UserInfo.class})
 package fi.finlit.edith.domain;
 
-import com.mysema.query.annotations.QuerydslConfig;
 import com.mysema.rdfbean.annotations.MappedClasses;
 
 

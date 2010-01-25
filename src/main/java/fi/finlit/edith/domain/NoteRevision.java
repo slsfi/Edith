@@ -5,8 +5,6 @@
  */
 package fi.finlit.edith.domain;
 
-import org.joda.time.DateTime;
-
 import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
@@ -29,7 +27,7 @@ public class NoteRevision extends Identifiable {
     private UserInfo createdBy;
     
     @Predicate
-    private DateTime createdOn;
+    private long createdOn;
     
     @Predicate
     private String description;
@@ -58,7 +56,7 @@ public class NoteRevision extends Identifiable {
         return createdBy;
     }
 
-    public DateTime getCreatedOn() {
+    public long getCreatedOn() {
         return createdOn;
     }
 
@@ -94,7 +92,7 @@ public class NoteRevision extends Identifiable {
         this.createdBy = createdBy;
     }
 
-    public void setCreatedOn(DateTime created) {
+    public void setCreatedOn(long created) {
         this.createdOn = created;
     }
 

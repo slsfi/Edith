@@ -9,6 +9,13 @@ import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Id;
 import com.mysema.rdfbean.model.IDType;
 
+/**
+ * Identifiable provides
+ *
+ * @author tiwe
+ * @version $Id$
+ *
+ */
 @ClassMapping
 public abstract class Identifiable {
     

@@ -38,5 +38,15 @@ public class Tag implements Comparable<Tag>{
     public int compareTo(Tag tag) {
         return id.getLocalName().compareTo(tag.getName());
     }
+    
+    @Override
+    public boolean equals(Object o){
+        return o instanceof Tag && ((Tag)o).id.equals(id);
+    }
+    
+    @Override
+    public int hashCode(){
+        return id.hashCode();
+    }
 
 }

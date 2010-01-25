@@ -53,6 +53,16 @@ public class Document extends Identifiable implements Comparable<Document>{
     public void setTitle(String title) {
         this.title = title;
     }
+        
+    @Override
+    public int hashCode(){
+        return svnPath.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object o){
+        return o instanceof Document && ((Document)o).svnPath.equals(svnPath);
+    }
 
     @Override
     public int compareTo(Document doc) {

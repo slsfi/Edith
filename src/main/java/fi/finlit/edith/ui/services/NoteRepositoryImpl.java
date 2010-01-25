@@ -54,7 +54,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             .uniqueResult(userInfo);  
         
         NoteRevision rev = new NoteRevision();
-        rev.setCreatedOn(new DateTime());
+        rev.setCreatedOn(System.currentTimeMillis());
         rev.setCreatedBy(createdBy);
         rev.setSVNRevision(revision);
         rev.setLemma(lemma);
@@ -90,7 +90,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     revision = new NoteRevision();
                     revision.setRevisionOf(new Note());
                     revision.getRevisionOf().setLatestRevision(revision);
-                    revision.setCreatedOn(new DateTime());
+                    revision.setCreatedOn(System.currentTimeMillis());
                 }
                 
             }else if (event == XMLStreamConstants.END_ELEMENT){
@@ -150,9 +150,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             BooleanBuilder builder = new BooleanBuilder();        
             builder.or(termWithNotes.basicForm.contains(searchTerm, false));
             builder.or(termWithNotes.meaning.contains(searchTerm, false));
-            return createGridDataSource(termWithNotes, builder.getValue());    
+            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc(), builder.getValue());    
         }else{
-            return createGridDataSource(termWithNotes);
+            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc());
         }
         
     }

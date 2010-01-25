@@ -25,6 +25,7 @@ public class AdminServiceImpl extends AbstractService implements AdminService{
         Session session = getSession();
         removeAll(session, NoteRevision.class);
         removeAll(session, Note.class);
+        session.flush();
     }
 
     @Override
@@ -32,7 +33,8 @@ public class AdminServiceImpl extends AbstractService implements AdminService{
         Session session = getSession();
         removeAll(session, NoteRevision.class);
         removeAll(session, Note.class);
-        removeAll(session, Term.class);        
+        removeAll(session, Term.class);       
+        session.flush();
     }
     
     private <T> void removeAll(Session session, Class<T> type){

@@ -6,6 +6,7 @@
 package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
@@ -50,11 +52,14 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
     private String testDocument;
     
+    @Before
+    public void setUp(){
+        adminService.removeNotesAndTerms();    
+    }
+    
     @Test
-    public void importNotes() throws Exception{
-        adminService.removeNotesAndTerms();        
-        assertEquals(133, noteRepo.importNotes(noteTestData));
-        
+    public void importNotes() throws Exception{            
+        assertEquals(133, noteRepo.importNotes(noteTestData));        
         assertEquals(133, noteRevisionRepo.queryNotes("*").getAvailableRows());                
         assertEquals(1, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
         assertEquals(2, noteRevisionRepo.queryNotes("etten anna sinulle").getAvailableRows());
@@ -62,7 +67,6 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     
     @Test
     public void queryDictionary() throws Exception{
-        adminService.removeNotesAndTerms();        
         assertEquals(133, noteRepo.importNotes(noteTestData));        
         assertTrue(noteRepo.queryDictionary("*").getAvailableRows() > 0);
     }
@@ -77,6 +81,8 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         String lemma = UUID.randomUUID().toString();
         noteRepo.createNote(document, latestRevision, "10", lemma, "longText");
         assertTrue(noteRepo.queryDictionary(lemma).getAvailableRows() > 0);
+        
+//        assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "10"));
     }
 
     @Override

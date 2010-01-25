@@ -13,7 +13,6 @@ import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
@@ -62,7 +61,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
             }    
         }        
         builder.and(noteRevision.eq(noteRevision.revisionOf.latestRevision));
-        return createGridDataSource(noteRevision, builder.getValue());
+        return createGridDataSource(noteRevision, noteRevision.basicForm.asc(), builder.getValue());
     }
 
     @Override
@@ -72,7 +71,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         return getSession().from(noteRevision)
             .where(noteRevision.revisionOf.document.eq(document),
                    noteRevision.revisionOf.localId.eq(localId),
-                   noteRevision.svnRevision.eq(revision),
+                   noteRevision.svnRevision.loe(revision),            
                    latestFor(revision))
             .uniqueResult(noteRevision);
     }
@@ -92,7 +91,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         UserInfo createdBy = getSession().from(userInfo)
             .where(userInfo.username.eq(authService.getUsername()))
             .uniqueResult(userInfo);  
-        note.setCreatedOn(new DateTime());
+        note.setCreatedOn(System.currentTimeMillis());
         note.setCreatedBy(createdBy);
         note.getRevisionOf().setLatestRevision(note);
         return super.save(note);
@@ -105,6 +104,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
 
     private EBoolean latestFor(long svnRevision){
         return sub(otherNote).where(
+            otherNote.ne(noteRevision),
             otherNote.revisionOf.eq(noteRevision.revisionOf),
             otherNote.svnRevision.loe(svnRevision),
             otherNote.createdOn.gt(noteRevision.createdOn)).notExists();

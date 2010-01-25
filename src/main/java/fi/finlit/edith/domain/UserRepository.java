@@ -7,6 +7,8 @@ package fi.finlit.edith.domain;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mysema.rdfbean.dao.Repository;
@@ -25,6 +27,7 @@ public interface UserRepository extends Repository<User,String>{
      * @param shortName
      * @return
      */
+    @Nullable
     User getByUsername(String shortName);
     
     /**

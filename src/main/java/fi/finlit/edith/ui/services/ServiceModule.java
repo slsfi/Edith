@@ -22,6 +22,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 
+import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.FetchStrategy;
 import com.mysema.rdfbean.model.PredicateWildcardFetch;
 import com.mysema.rdfbean.model.Repository;
@@ -88,6 +89,7 @@ public class ServiceModule {
 
     public static Repository buildRepository(Configuration configuration,
             @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir) {
+        Namespaces.register("edith", EDITH.NS);
         MemoryRepository repository = new MemoryRepository();
         repository.setDataDirName(rdfbeanDataDir);
         repository.setSources(  
