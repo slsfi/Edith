@@ -30,7 +30,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     @Test
     public void importFile() {
-        subversionService.importFile(documentRoot, noteTestData);
+        subversionService.importFile(documentRoot + "/XXX", noteTestData);
     }
 
     @Test

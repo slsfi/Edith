@@ -18,7 +18,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;

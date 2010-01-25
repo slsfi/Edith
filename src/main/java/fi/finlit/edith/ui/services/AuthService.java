@@ -13,10 +13,19 @@ package fi.finlit.edith.ui.services;
  */
 public interface AuthService {
     
+    /**
+     * @return
+     */
     boolean isAuthenticated();
     
+    /**
+     * 
+     */
     void logout();
 
+    /**
+     * @return
+     */
     String getUsername();
 
 }

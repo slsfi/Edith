@@ -52,7 +52,7 @@ public class SubversionServiceImpl implements SubversionService{
     @Override
     public void importFile(String svnPath, File file){
         try{
-            SVNURL repoURL = svnRepository.getRepositoryRoot(false);
+            SVNURL repoURL = svnRepository.getRepositoryRoot(true);
             SVNCommitClient commitClient = clientManager.getCommitClient();
             commitClient.doImport(file, repoURL.appendPath(svnPath, false), svnPath + " added", false);    
         }catch(SVNException s){
