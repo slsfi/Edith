@@ -37,6 +37,16 @@ public class SubversionServiceTest extends AbstractServiceTest{
     @Ignore
     public void getEntries() {
     }
+   
+    @Test
+    @Ignore
+    public void update(){        
+    }
+
+    @Test
+    @Ignore
+    public void commit(){        
+    }
 
     @Override
     protected Class<?> getServiceClass() {

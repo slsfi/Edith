@@ -62,6 +62,26 @@ public class SubversionServiceImpl implements SubversionService{
     }
     
     @Override
+    public long commit(String svnPath, File file) {
+        throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    public Collection<String> getEntries(String svnFolder, long revision){
+        try{
+            List<SVNDirEntry> entries = new ArrayList<SVNDirEntry>();
+            svnRepository.getDir(svnFolder, revision, false, entries);
+            List<String> rv = new ArrayList<String>(entries.size());
+            for (SVNDirEntry entry : entries){
+                rv.add(entry.getName());
+            }
+            return rv;   
+        }catch(SVNException s){
+            throw new RuntimeException(s.getMessage(), s);
+        }                
+    }
+    
+    @Override
     public File getFile(String svnPath, long revision) throws IOException{
         try{
             if (revision == -1){
@@ -80,6 +100,13 @@ public class SubversionServiceImpl implements SubversionService{
         
     }
     
+    private List<SVNFileRevision> getFileRevisions(String svnPath) throws SVNException{
+        long latest = svnRepository.getLatestRevision();
+        List<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>(); 
+        svnRepository.getFileRevisions(svnPath, revisions, 0, latest);
+        return revisions;
+    }
+    
     private long getLatestRevision(String svnPath) throws SVNException{        
         List<SVNFileRevision> revisions = getFileRevisions(svnPath); 
         long revision = 0;
@@ -90,25 +117,7 @@ public class SubversionServiceImpl implements SubversionService{
         }
         return revision;
     }
-    
-    private List<SVNFileRevision> getFileRevisions(String svnPath) throws SVNException{
-        long latest = svnRepository.getLatestRevision();
-        List<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>(); 
-        svnRepository.getFileRevisions(svnPath, revisions, 0, latest);
-        return revisions;
-    }
-    
-    @Override
-    public void remove(String svnPath){
-        try {
-            SVNURL repoURL = svnRepository.getRepositoryRoot(false);
-            SVNURL targetURL = repoURL.appendPath(svnPath, false);
-            clientManager.getCommitClient().doDelete(new SVNURL[]{targetURL}, "removed " + svnPath);
-        } catch (SVNException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }        
-    }
-    
+
     @Override
     public List<Long> getRevisions(String svnPath){
         try{
@@ -124,18 +133,20 @@ public class SubversionServiceImpl implements SubversionService{
     }
 
     @Override
-    public Collection<String> getEntries(String svnFolder, long revision){
-        try{
-            List<SVNDirEntry> entries = new ArrayList<SVNDirEntry>();
-            svnRepository.getDir(svnFolder, revision, false, entries);
-            List<String> rv = new ArrayList<String>(entries.size());
-            for (SVNDirEntry entry : entries){
-                rv.add(entry.getName());
-            }
-            return rv;   
-        }catch(SVNException s){
-            throw new RuntimeException(s.getMessage(), s);
-        }                
+    public void remove(String svnPath){
+        try {
+            SVNURL repoURL = svnRepository.getRepositoryRoot(false);
+            SVNURL targetURL = repoURL.appendPath(svnPath, false);
+            clientManager.getCommitClient().doDelete(new SVNURL[]{targetURL}, "removed " + svnPath);
+        } catch (SVNException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }        
+    }
+
+    @Override
+    public void update(String svnPath, File file) {
+        throw new UnsupportedOperationException();
+        
     }
     
 }

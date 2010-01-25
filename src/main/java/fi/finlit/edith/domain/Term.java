@@ -11,7 +11,7 @@ import com.mysema.rdfbean.annotations.Predicate;
 import fi.finlit.edith.EDITH;
 
 /**
- * Phrase provides
+ * Term provides
  *
  * @author tiwe
  * @version $Id$

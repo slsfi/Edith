@@ -28,4 +28,8 @@ public interface SubversionService {
 
     void remove(String svnPath);
 
+    void update(String svnPath, File file);
+
+    long commit(String svnPath, File file);
+
 }

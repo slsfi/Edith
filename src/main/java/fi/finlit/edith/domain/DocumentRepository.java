@@ -24,13 +24,14 @@ public interface DocumentRepository extends Repository<Document,String>{
     
     /**
      * @param document
+     * @param svnRevision
      * @param startId
      * @param endId
      * @param text
      * @return
      * @throws IOException 
      */
-    String addNote(Document document, String startId, String endId, String text) throws IOException;
+    Note addNote(Document document, long svnRevision, String startId, String endId, String text) throws IOException;
     
     /**
      * Get a Document handle for the given path

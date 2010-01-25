@@ -12,6 +12,7 @@ import fi.finlit.edith.EDITH;
  * @author tiwe
  * @version $Id$
  */
+//TODO : use "user:"<username> as URL schema ?!?
 @ClassMapping(ns=EDITH.NS, ln="User")
 public class UserInfo extends Identifiable {
 
