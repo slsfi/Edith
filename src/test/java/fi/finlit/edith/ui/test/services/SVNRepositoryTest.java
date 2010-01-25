@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 
@@ -19,11 +19,12 @@ import org.tmatesoft.svn.core.io.SVNRepository;
  * @author tiwe
  * @version $Id$
  */
+//TODO Remove once SubversionServiceTest is ready.
 public class SVNRepositoryTest extends AbstractServiceTest{
 
     @Inject
     private SVNRepository svnRepository;
-    
+
     @SuppressWarnings("unchecked")
     @Test
     public void test() throws SVNException{
