@@ -11,8 +11,6 @@ import java.io.IOException;
 import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
@@ -41,12 +39,13 @@ public class ServiceTestModule {
     public static final String TEST_DOCUMENT_KEY = "test.document";
 
     public static void contributeApplicationDefaults(
-            MappedConfiguration<String, String> configuration,
-            @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) File repoFile)
+            MappedConfiguration<String, String> configuration)
             throws IOException, SVNException {
+        File svnRepo = new File("target/repo");
         configuration.add(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
         configuration.add(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml");
-        configuration.add(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(repoFile).toString());
+        configuration.add(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
+        configuration.add(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
     }
 
     public static SaltSource buildSaltSource() throws Exception {
