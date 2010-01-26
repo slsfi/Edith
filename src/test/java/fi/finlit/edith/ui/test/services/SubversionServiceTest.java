@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -43,8 +44,8 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void importFile() throws Exception {
         final long currentRevision = subversionService.getLatestRevision();
         final long expected = currentRevision + 1;
-        assertEquals(expected, subversionService.importFile(documentRoot
-                + "/notesTestData.txt", noteTestData));
+        String newPath = documentRoot + "/" + UUID.randomUUID().toString();
+        assertEquals(expected, subversionService.importFile(newPath, noteTestData));
     }
 
     @Test
@@ -59,8 +60,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     @Test(expected = RuntimeException.class)
     public void delete() throws Exception {
         final String svnPath = documentRoot + "/notesTestData.txt";
-        final long revision = subversionService.importFile(svnPath,
-                noteTestData);
+        final long revision = subversionService.importFile(svnPath, noteTestData);
         assertTrue(FileUtils.contentEquals(noteTestData, subversionService
                 .getFile(svnPath, revision)));
         subversionService.delete(svnPath);

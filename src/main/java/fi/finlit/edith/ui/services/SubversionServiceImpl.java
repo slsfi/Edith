@@ -8,6 +8,7 @@ package fi.finlit.edith.ui.services;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +17,8 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -36,6 +39,8 @@ import fi.finlit.edith.EDITH;
  */
 public class SubversionServiceImpl implements SubversionService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SubversionServiceImpl.class);
+    
     static {
         FSRepositoryFactory.setup();
     }
@@ -70,8 +75,7 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     public void initialize() {
-        System.err.println("Initializing SVN repository on: "
-                + svnRepo.getAbsolutePath());
+        logger.info("Initializing SVN repository on: " + svnRepo.getAbsolutePath());
         try {
             svnRepository = SVNRepositoryFactory.create(repoSvnURL);
             if (svnRepo.exists()) {
@@ -84,9 +88,11 @@ public class SubversionServiceImpl implements SubversionService {
                     repoSvnURL.appendPath("documents/trunk", false) },
                     "created initial folders");
 
+            // TODO : externalize this into Symbol ?
             if (new File("etc/demo-material/tei").exists()) {
                 for (File file : new File("etc/demo-material/tei").listFiles()) {
                     if (file.isFile()) {
+                        // TODO : use symbol here!
                         importFile("documents/trunk/" + file.getName(), file);
                     }
                 }
@@ -98,6 +104,8 @@ public class SubversionServiceImpl implements SubversionService {
 
     public void destroy() {
         try {
+            svnRepository.closeSession();
+            svnRepository = null;
             FileUtils.deleteDirectory(svnCache);
             FileUtils.deleteDirectory(svnRepo);
         } catch (IOException e) {
@@ -147,14 +155,19 @@ public class SubversionServiceImpl implements SubversionService {
             if (revision == -1) {
                 revision = getLatestRevision(svnPath);
             }
-            File documentFolder = new File(svnCache, URLEncoder.encode(svnPath,
-                    "UTF-8"));
-            File documentFile = new File(documentFolder, String
-                    .valueOf(revision));
+            File documentFolder = new File(svnCache, URLEncoder.encode(svnPath,"UTF-8"));
+            File documentFile = new File(documentFolder, String.valueOf(revision));
             if (!documentFile.exists()) {
                 documentFolder.mkdirs();
-                svnRepository.getFile(svnPath, revision, null,
-                        new FileOutputStream(documentFile));
+                OutputStream out = new FileOutputStream(documentFile);
+                try{
+                    svnRepository.getFile(svnPath, revision, null, out);    
+                }finally{
+                    // SVNRepository.getFile doesn't close OutputStream,
+                    // so we need to close it manually
+                    out.close();
+                }
+                
             }
             return documentFile;
         } catch (SVNException s) {
@@ -163,8 +176,7 @@ public class SubversionServiceImpl implements SubversionService {
 
     }
 
-    private List<SVNFileRevision> getFileRevisions(String svnPath)
-            throws SVNException {
+    private List<SVNFileRevision> getFileRevisions(String svnPath) throws SVNException {
         long latest = svnRepository.getLatestRevision();
         List<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>();
         svnRepository.getFileRevisions(svnPath, revisions, 0, latest);
@@ -200,8 +212,7 @@ public class SubversionServiceImpl implements SubversionService {
     public void delete(String svnPath) {
         try {
             SVNURL targetURL = repoSvnURL.appendPath(svnPath, false);
-            System.out.println(commitClient.doDelete(new SVNURL[] { targetURL }, "removed "
-                    + svnPath));
+            System.out.println(commitClient.doDelete(new SVNURL[] { targetURL }, "removed " + svnPath));
         } catch (SVNException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -210,7 +221,6 @@ public class SubversionServiceImpl implements SubversionService {
     @Override
     public void update(String svnPath, File file) {
         throw new UnsupportedOperationException();
-
     }
 
     @Override
