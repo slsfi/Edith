@@ -12,6 +12,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 
@@ -26,15 +28,19 @@ import fi.finlit.edith.domain.User;
  * @version $Id$
  */
 public class DataModule {
+    
+    private static final Logger logger = LoggerFactory.getLogger(DataModule.class);
+    
     public static void contributeSeedEntity(
             OrderedConfiguration<Object> configuration,
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) String svnRepoPath,
             SaltSource saltSource,
             PasswordEncoder passwordEncoder, SubversionService subversionService) throws Exception {
 
-        System.err.println("Initializing DataModule");
+        logger.info("Initializing DataModule");
 
         subversionService.initialize();
+        
         // users
         addUsers(configuration, saltSource, passwordEncoder);
     }

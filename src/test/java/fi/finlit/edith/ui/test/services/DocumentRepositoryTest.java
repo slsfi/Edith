@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -27,6 +28,7 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.ui.services.SubversionService;
 
 /**
  * DocumentRepositoryTest provides
@@ -38,6 +40,11 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepo;
+    
+    @Inject
+    private SubversionService subversionService;
+    
+    private static boolean initialized = false;
 
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
@@ -45,6 +52,15 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     private List<Document> savedDocs = new ArrayList<Document>();
 
+    @Before
+    public void setUp(){
+        if (!initialized){
+            subversionService.destroy();
+            subversionService.initialize();
+            initialized = true;
+        }        
+    }
+    
     @After
     public void tearDown(){
         for (Document doc : savedDocs){

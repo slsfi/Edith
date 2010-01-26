@@ -32,7 +32,7 @@ import org.tmatesoft.svn.core.wc.SVNCommitClient;
 import fi.finlit.edith.EDITH;
 
 /**
- * SubversionServiceImpl provides
+ * SubversionServiceImpl is the default implementation of the SubversionService interface
  *
  * @author tiwe
  * @version $Id$
@@ -83,6 +83,7 @@ public class SubversionServiceImpl implements SubversionService {
             }
             SVNRepositoryFactory.createLocalRepository(svnRepo, true, false);
 
+            // TODO : use Edith.SVN_DOCUMENT_ROOT symbol here
             commitClient.doMkDir(new SVNURL[] {
                     repoSvnURL.appendPath("documents", false),
                     repoSvnURL.appendPath("documents/trunk", false) },
@@ -92,7 +93,7 @@ public class SubversionServiceImpl implements SubversionService {
             if (new File("etc/demo-material/tei").exists()) {
                 for (File file : new File("etc/demo-material/tei").listFiles()) {
                     if (file.isFile()) {
-                        // TODO : use symbol here!
+                        // TODO : use Edith.SVN_DOCUMENT_ROOT symbol here
                         importFile("documents/trunk/" + file.getName(), file);
                     }
                 }
