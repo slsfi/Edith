@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 
@@ -19,27 +19,27 @@ import fi.finlit.edith.ui.services.DocumentRenderer;
  * @author tiwe
  * @version $Id$
  */
-public class DocumentRendererTest extends AbstractServiceTest{
+public class DocumentRendererTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRenderer renderer;
-    
+
     @Test
-    public void renderDocument() throws Exception{
+    public void renderDocument() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
         renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
     }
-    
+
     @Test
-    public void renderPageLinks() throws Exception{
+    public void renderPageLinks() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
         renderer.renderPageLinks(new DocumentRevision(svnPath, -1), writer);
     }
-    
+
     @Test
-    public void renderDocumentWithNotes() throws Exception{
+    public void renderDocumentWithNotes() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
         renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
@@ -49,5 +49,5 @@ public class DocumentRendererTest extends AbstractServiceTest{
     protected Class<?> getServiceClass() {
         return DocumentRenderer.class;
     }
-    
+
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -17,29 +17,40 @@ import java.util.List;
  * @version $Id$
  */
 public interface SubversionService {
-    
+
+    /**
+     * Creates the repository and adds the directory structure.
+     */
+    void initialize();
+
+    /**
+     * Deletes the repository directory.
+     */
+    void destroy();
+
     /**
      * Import the given file into SVN (SVN add + import)
-     * 
+     *
      * @param svnPath target path
      * @param file file to be imported
+     * @return revision number of commit
      */
-    void importFile(String svnPath, File file);
-    
+    long importFile(String svnPath, File file);
+
     /**
      * Get directory entries
-     * 
+     *
      * @param svnFolder
      * @param revision
      * @return collection of child names
      */
     Collection<String> getEntries(String svnFolder, long revision);
-    
+
     /**
      * Get file access to given svn path with given revision
-     * 
+     *
      * @param svnPath svn path of file
-     * @param revision 
+     * @param revision
      * @return
      * @throws IOException
      */
@@ -47,7 +58,7 @@ public interface SubversionService {
 
     /**
      * Get revisions of given path
-     * 
+     *
      * @param svnPath
      * @return
      */
@@ -55,14 +66,14 @@ public interface SubversionService {
 
     /**
      * Delete the given svn path
-     * 
+     *
      * @param svnPath
      */
     void delete(String svnPath);
 
     /**
      * Update the contents from the given svn path to file
-     * 
+     *
      * @param svnPath
      * @param file
      */
@@ -70,11 +81,17 @@ public interface SubversionService {
 
     /**
      * Commit the given file to the given svnPath
-     * 
+     *
      * @param svnPath
      * @param file
      * @return
      */
     long commit(String svnPath, File file);
 
+    /**
+     * Retrieves the latest revision number.
+     *
+     * @return
+     */
+    long getLatestRevision();
 }

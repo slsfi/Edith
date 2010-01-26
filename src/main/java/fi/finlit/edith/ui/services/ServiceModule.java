@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -16,11 +16,6 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
-import org.tmatesoft.svn.core.wc.SVNClientManager;
 
 import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.FetchStrategy;
@@ -49,9 +44,9 @@ import fi.finlit.edith.domain.UserRepository;
  *
  */
 public class ServiceModule {
-    
+
     public static void contributeApplicationDefaults(
-            MappedConfiguration<String, String> configuration) throws IOException {        
+            MappedConfiguration<String, String> configuration) throws IOException {
         // app config
         configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
         Properties properties = new Properties();
@@ -59,14 +54,14 @@ public class ServiceModule {
         for (Map.Entry<Object, Object> entry : properties.entrySet()){
             configuration.add(entry.getKey().toString(), entry.getValue().toString());
         }
-    }    
-    
+    }
+
     // TODO : get rid of match
     @Match({"AdminService", "DocumentRepository", "NoteRepository", "UserRepository", "NoteRevisionRepository"})
     public static void adviseTransactions(TransactionalAdvisor advisor, MethodAdviceReceiver receiver){
         advisor.addTransactionCommitAdvice(receiver);
     }
-    
+
     public static void bind(ServiceBinder binder){
         binder.bind(AdminService.class, AdminServiceImpl.class);
         binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
@@ -74,11 +69,11 @@ public class ServiceModule {
         binder.bind(NoteRevisionRepository.class, NoteRevisionRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
         binder.bind(SubversionService.class, SubversionServiceImpl.class);
-        
+
         binder.bind(DocumentRenderer.class, DocumentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
     }
-    
+
     public static Configuration buildConfiguration(IdentityService identityService){
         DefaultConfiguration configuration = new DefaultConfiguration();
         configuration.setFetchStrategies(Collections.<FetchStrategy>singletonList(new PredicateWildcardFetch()));
@@ -92,20 +87,9 @@ public class ServiceModule {
         Namespaces.register("edith", EDITH.NS);
         MemoryRepository repository = new MemoryRepository();
         repository.setDataDirName(rdfbeanDataDir);
-        repository.setSources(  
+        repository.setSources(
             new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS)
-        );                
-        return repository;        
+        );
+        return repository;
     }
-    
-    public static SVNClientManager buildSVNClientManager(){
-        return SVNClientManager.newInstance();
-    }   
-    
-    public static SVNRepository buildSVNRepository(
-            @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL) throws SVNException{
-        return SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repoURL));
-    }
-    
-    
 }
