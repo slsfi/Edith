@@ -74,6 +74,8 @@ public interface SubversionService {
     /**
      * Update the contents from the given svn path to file
      *
+     * TODO remove svnPath variable
+     *
      * @param svnPath
      * @param file
      */
@@ -81,6 +83,8 @@ public interface SubversionService {
 
     /**
      * Commit the given file to the given svnPath
+     *
+     * TODO remove svnPath variable
      *
      * @param svnPath
      * @param file
@@ -94,4 +98,13 @@ public interface SubversionService {
      * @return
      */
     long getLatestRevision();
+
+    /**
+     * Checks out a directory into the destination folder.
+     *
+     * TODO Retrieve only the desired file + svnPath + revision
+     *
+     * @param destination
+     */
+    void checkout(File destination);
 }
