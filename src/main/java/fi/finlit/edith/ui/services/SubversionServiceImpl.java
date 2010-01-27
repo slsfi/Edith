@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.jcip.annotations.Immutable;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -45,29 +47,25 @@ public class SubversionServiceImpl implements SubversionService {
         FSRepositoryFactory.setup();
     }
 
-    private SVNClientManager clientManager;
+    private final SVNClientManager clientManager;
 
-    private File svnCache;
+    private final File svnCache;
 
     private SVNRepository svnRepository;
 
-    private File svnRepo;
+    private final File svnRepo;
 
-    private SVNCommitClient commitClient;
-
-    private SVNURL repoSvnURL;
+    private final SVNURL repoSvnURL;
 
     public SubversionServiceImpl(
             @Inject @Symbol(EDITH.SVN_CACHE_DIR) File svnCache,
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) File svnRepo,
             @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL) {
         this.clientManager = SVNClientManager.newInstance();
-        this.commitClient = clientManager.getCommitClient();
         this.svnCache = svnCache;
         this.svnRepo = svnRepo;
-        this.repoSvnURL = null;
         try {
-            repoSvnURL = SVNURL.parseURIEncoded(repoURL);
+            this.repoSvnURL = SVNURL.parseURIEncoded(repoURL);
         } catch (SVNException e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +82,7 @@ public class SubversionServiceImpl implements SubversionService {
             SVNRepositoryFactory.createLocalRepository(svnRepo, true, false);
 
             // TODO : use Edith.SVN_DOCUMENT_ROOT symbol here
-            commitClient.doMkDir(new SVNURL[] {
+            clientManager.getCommitClient().doMkDir(new SVNURL[] {
                     repoSvnURL.appendPath("documents", false),
                     repoSvnURL.appendPath("documents/trunk", false) },
                     "created initial folders");
@@ -120,8 +118,7 @@ public class SubversionServiceImpl implements SubversionService {
     public long importFile(String svnPath, File file) {
         try {
             // TODO inject via symbol
-            commitClient = clientManager.getCommitClient();
-            return commitClient.doImport(file,
+            return clientManager.getCommitClient().doImport(file,
                     repoSvnURL.appendPath(svnPath, false), svnPath + " added",
                     false).getNewRevision();
         } catch (SVNException s) {
@@ -213,7 +210,7 @@ public class SubversionServiceImpl implements SubversionService {
     public void delete(String svnPath) {
         try {
             SVNURL targetURL = repoSvnURL.appendPath(svnPath, false);
-            System.out.println(commitClient.doDelete(new SVNURL[] { targetURL }, "removed " + svnPath));
+            System.out.println(clientManager.getCommitClient().doDelete(new SVNURL[] { targetURL }, "removed " + svnPath));
         } catch (SVNException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

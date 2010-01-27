@@ -8,16 +8,10 @@ package fi.finlit.edith.ui.services;
 import static fi.finlit.edith.domain.QDocument.document;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import nu.xom.Builder;
-import nu.xom.ParsingException;
-import nu.xom.Serializer;
-import nu.xom.ValidityException;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -42,18 +36,20 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private static final String ENCODING = "UTF-8";
     
-    @Inject 
-    @Symbol(EDITH.SVN_DOCUMENT_ROOT)
-    private String documentRoot;
-
-    @Inject
-    private SubversionService svnService;
+    private final String documentRoot;
     
-    @Inject
-    private NoteRepository noteRepository;
+    private final SubversionService svnService;
     
-    public DocumentRepositoryImpl() throws SVNException {
+    private final NoteRepository noteRepository;
+    
+    public DocumentRepositoryImpl(
+            @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
+            @Inject SubversionService svnService,
+            @Inject NoteRepository noteRepository) throws SVNException {
         super(document);
+        this.documentRoot = documentRoot;
+        this.svnService = svnService;
+        this.noteRepository = noteRepository;
     }
 
     @Override
@@ -121,36 +117,28 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Override
     public Note addNote(Document doc, long revision, String startId, String endId, String text) throws IOException {               
-        try {
-            File docFile = svnService.getFile(doc.getSvnPath(), revision);
-            // create a DOM of the file
-            Builder builder = new Builder();
-            nu.xom.Document xmlDoc = builder.build(docFile);
-            
-            // add the note anchors into the DOM
-            // TODO
-            String localId = "XXX";
-            
-            // serialize the DOM into an XML file
-            File tempFile = File.createTempFile("tei", null);
-            Serializer serializer = new Serializer(new FileOutputStream(tempFile),ENCODING);
-            serializer.write(xmlDoc);
-            
-            // SVN update on top of the just serialized file
-            svnService.update(doc.getSvnPath(), tempFile);
-            
-            // SVN commit the file
-            long newRevision = svnService.commit(doc.getSvnPath(), tempFile);
-            
-            // persisted noteRevision has svnRevision of newly created commit
-            Note note = noteRepository.createNote(doc, newRevision, localId, text, text); 
-            return note;
-            
-        } catch (ValidityException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        } catch (ParsingException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+        File docFile = svnService.getFile(doc.getSvnPath(), revision);            
+        // TODO
+        String localId = "XXX";
+        
+        File tempFile = File.createTempFile("tei", null);
+        addNote(docFile, tempFile, startId, endId, text);
+        
+        
+        // SVN update on top of the just serialized file
+        svnService.update(doc.getSvnPath(), tempFile);
+        
+        // SVN commit the file
+        long newRevision = svnService.commit(doc.getSvnPath(), tempFile);
+        
+        // persisted noteRevision has svnRevision of newly created commit
+        Note note = noteRepository.createNote(doc, newRevision, localId, text, text); 
+        return note;
+    }
+
+    public void addNote(File source, File target, String startId, String endId, String text) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

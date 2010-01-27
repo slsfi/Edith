@@ -39,11 +39,11 @@ import fi.finlit.edith.domain.UserInfo;
  */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository{
 
-    @Inject
-    private AuthService authService;
+    private final AuthService authService;
     
-    public NoteRepositoryImpl() {
+    public NoteRepositoryImpl(@Inject AuthService authService) {
         super(note);
+        this.authService = authService;
     }
     
     @Override

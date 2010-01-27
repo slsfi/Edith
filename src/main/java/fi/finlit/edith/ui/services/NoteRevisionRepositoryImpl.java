@@ -38,11 +38,11 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     
     private static final QNoteRevision otherNote = new QNoteRevision("other");
     
-    @Inject
-    private AuthService authService;
+    private final AuthService authService;
     
-    public NoteRevisionRepositoryImpl() {
+    public NoteRevisionRepositoryImpl(@Inject AuthService authService) {
         super(noteRevision);
+        this.authService = authService;
     }
         
     @Override
