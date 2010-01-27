@@ -57,13 +57,21 @@ public class SubversionServiceImpl implements SubversionService {
 
     private final SVNURL repoSvnURL;
 
+    private final String documentRoot;
+
+    private final String materialTeiRoot;
+
     public SubversionServiceImpl(
             @Inject @Symbol(EDITH.SVN_CACHE_DIR) File svnCache,
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) File svnRepo,
-            @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL) {
+            @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL,
+            @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
+            @Inject @Symbol(EDITH.MATERIAL_TEI_ROOT) String materialTeiRoot) {
         this.clientManager = SVNClientManager.newInstance();
         this.svnCache = svnCache;
         this.svnRepo = svnRepo;
+        this.documentRoot = documentRoot;
+        this.materialTeiRoot = materialTeiRoot;
         try {
             this.repoSvnURL = SVNURL.parseURIEncoded(repoURL);
         } catch (SVNException e) {
@@ -82,18 +90,15 @@ public class SubversionServiceImpl implements SubversionService {
             }
             SVNRepositoryFactory.createLocalRepository(svnRepo, true, false);
 
-            // TODO : use Edith.SVN_DOCUMENT_ROOT symbol here
             clientManager.getCommitClient().doMkDir(
-                    new SVNURL[] { repoSvnURL.appendPath("documents", false),
-                            repoSvnURL.appendPath("documents/trunk", false) },
+                    new SVNURL[] { repoSvnURL.appendPath(documentRoot.split("/")[1], false),
+                            repoSvnURL.appendPath(documentRoot, false) },
                     "created initial folders");
 
-            // TODO : externalize this into Symbol ?
-            if (new File("etc/demo-material/tei").exists()) {
-                for (File file : new File("etc/demo-material/tei").listFiles()) {
+            if (new File(materialTeiRoot).exists()) {
+                for (File file : new File(materialTeiRoot).listFiles()) {
                     if (file.isFile()) {
-                        // TODO : use Edith.SVN_DOCUMENT_ROOT symbol here
-                        importFile("documents/trunk/" + file.getName(), file);
+                        importFile(documentRoot + "/" + file.getName(), file);
                     }
                 }
             }
@@ -118,7 +123,6 @@ public class SubversionServiceImpl implements SubversionService {
     @Override
     public long importFile(String svnPath, File file) {
         try {
-            // TODO inject via symbol
             return clientManager.getCommitClient().doImport(file,
                     repoSvnURL.appendPath(svnPath, false), svnPath + " added",
                     false).getNewRevision();
