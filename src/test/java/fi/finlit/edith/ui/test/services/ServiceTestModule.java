@@ -37,12 +37,15 @@ public class ServiceTestModule {
     public static final String NOTE_TEST_DATA_KEY = "note.test.data";
 
     public static final String TEST_DOCUMENT_KEY = "test.document";
+    
+    public static final String TEST_DOCUMENT_FILE_KEY = "test.document.file";
 
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration)
             throws IOException, SVNException {
         File svnRepo = new File("target/repo");
         configuration.add(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
+        configuration.add(TEST_DOCUMENT_FILE_KEY, "etc/demo-material/tei/Nummisuutarit rakenteistettuna-annotoituna.xml");
         configuration.add(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml");
         configuration.add(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         configuration.add(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());

@@ -8,10 +8,24 @@ package fi.finlit.edith.ui.services;
 import static fi.finlit.edith.domain.QDocument.document;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
+
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -33,8 +47,10 @@ import fi.finlit.edith.domain.NoteRepository;
  * @version $Id$
  */
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements DocumentRepository{
-
-    private static final String ENCODING = "UTF-8";
+    
+    private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
+    
+    private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
     
     private final String documentRoot;
     
@@ -117,13 +133,16 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Override
     public Note addNote(Document doc, long revision, String startId, String endId, String text) throws IOException {               
+        // TODO : get check out file instead
         File docFile = svnService.getFile(doc.getSvnPath(), revision);            
-        // TODO
-        String localId = "XXX";
-        
+        String localId = UUID.randomUUID().toString();        
         File tempFile = File.createTempFile("tei", null);
-        addNote(docFile, tempFile, startId, endId, text);
         
+        try {            
+            addNote(docFile, tempFile, startId, endId, text, localId);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }        
         
         // SVN update on top of the just serialized file
         svnService.update(doc.getSvnPath(), tempFile);
@@ -136,9 +155,99 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return note;
     }
 
-    public void addNote(File source, File target, String startId, String endId, String text) {
-        // TODO Auto-generated method stub
+    public void addNote(File source, File target, String startId, String endId, String text, String localId) throws Exception {
+        AnchorPosition startPosition = new AnchorPosition(startId);
+        AnchorPosition endPosition = new AnchorPosition(endId);
+        System.err.println(startPosition + " - " + endPosition + " : " + text);
         
+        XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+        XMLInputFactory inFactory = XMLInputFactory.newInstance();
+        XMLOutputFactory outFactory = XMLOutputFactory.newInstance(); 
+        XMLEventReader reader = inFactory.createXMLEventReader(new FileInputStream(source));        
+        XMLEventWriter writer = outFactory.createXMLEventWriter(new FileOutputStream(target));
+     
+        try{
+            int act = 0;
+            int sp = 0;
+            int stage = 0;
+            boolean inSp = false;            
+            while (reader.hasNext()){
+                boolean handled = false;
+                XMLEvent event = reader.nextEvent();
+                if (event.isStartElement()){
+                    StartElement element = event.asStartElement();
+                    String localName = element.getName().getLocalPart();
+                    if (localName.equals("div")){
+                        Iterator<Attribute> attributes = element.getAttributes();
+                        boolean isAct = false;
+                        int n = 0;
+                        while (attributes.hasNext()){
+                            Attribute attr = attributes.next();
+                            if (attr.getName().getLocalPart().equals("type") &&  attr.getValue().equals("act")){
+                                isAct = true;
+                            }else if (attr.getName().getLocalPart().equals("n")){
+                                n = Integer.valueOf(attr.getValue());
+                            }
+                        }                        
+                        if (isAct){
+                            act = n;
+                            stage = 0;
+                            sp = 0;
+                        }
+                    }else if (localName.equals("stage")){
+                        stage++;             
+                        inSp = false;
+                        
+                    }else if (localName.equals("sp")){
+                        sp++;
+                        inSp = true;
+                    }
+                }else if (event.isCharacters()){
+                    Characters characters = event.asCharacters();
+                    String data = characters.getData();                    
+                    int index = 0;
+                    
+                    if (startPosition.matches(act, inSp ? sp : stage, inSp)){
+                        index = TextUtils.getStartIndex(data, text);
+                        if (index > -1){
+                            // insert start anchor : start${localId}
+                            if (index > 0){
+                                writer.add(eventFactory.createCharacters(data.substring(0, index)));
+                            }
+                            writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
+                            writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "start" + localId));
+                            writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
+                            handled = true;                            
+                        }
+                    }
+                    
+                    if (endPosition.matches(act, inSp ? sp : stage, inSp)){
+                        int end = TextUtils.getEndIndex(data, text);
+                        if (end > -1){
+                            if (end > index){
+                                writer.add(eventFactory.createCharacters(data.substring(index, end)));    
+                            }                                           
+                            writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
+                            writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "end" + localId));
+                            writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
+                            index = end;
+                            handled = true;    
+                        }                        
+                    }
+                    
+                    if (handled && index < data.length() - 1){
+                        writer.add(eventFactory.createCharacters(data.substring(index)));
+                    }                        
+                }                
+                if (!handled){
+                    writer.add(event);    
+                }                
+            }
+        }finally{
+            writer.close();
+            reader.close();
+        }                       
     }
+
 
 }
