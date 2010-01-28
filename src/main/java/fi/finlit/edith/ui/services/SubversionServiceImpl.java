@@ -134,10 +134,10 @@ public class SubversionServiceImpl implements SubversionService {
 
     @SuppressWarnings("deprecation")
     @Override
-    public long commit(String svnPath, File file) {
+    public long commit(File file) {
         try {
             return clientManager.getCommitClient().doCommit(
-                    new File[] { file }, true, svnPath + " committed", false,
+                    new File[] { file }, true, file.getName() + " committed", false,
                     true).getNewRevision();
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
@@ -234,7 +234,7 @@ public class SubversionServiceImpl implements SubversionService {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void update(String svnPath, File file) {
+    public void update(File file) {
         try {
             clientManager.getUpdateClient().doUpdate(file,
                     SVNRevision.create(getLatestRevision()), true);
@@ -254,13 +254,14 @@ public class SubversionServiceImpl implements SubversionService {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void checkout(File destination) {
+    public void checkout(File destination, String svnPath, long revision) {
         try {
-            clientManager.getUpdateClient().doCheckout(repoSvnURL, destination,
-                    SVNRevision.create(getLatestRevision()),
-                    SVNRevision.create(getLatestRevision()), true);
+            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(svnPath, false), destination,
+                    SVNRevision.create(revision), // TODO verify these params
+                    SVNRevision.create(revision), false);
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
         }
     }
+
 }

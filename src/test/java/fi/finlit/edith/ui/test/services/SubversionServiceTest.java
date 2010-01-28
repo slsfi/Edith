@@ -1,5 +1,4 @@
 package fi.finlit.edith.ui.test.services;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -10,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -35,8 +35,23 @@ public class SubversionServiceTest extends AbstractServiceTest {
     @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
+    private File checkoutDirectory;
+    private File anotherCheckoutDirectory;
+    private File testFile;
+
+    @Before
+    public void setUp() throws Exception {
+        checkoutDirectory = new File("target/checkout");
+        anotherCheckoutDirectory = new File("target/anotherCheckout");
+        testFile = new File("target/testFile.txt");
+        FileUtils.writeStringToFile(testFile, "foo\n");
+    }
+
     @After
     public void tearDown() throws Exception {
+        FileUtils.deleteDirectory(checkoutDirectory);
+        FileUtils.deleteDirectory(anotherCheckoutDirectory);
+        testFile.delete();
         subversionService.destroy();
         subversionService.initialize();
     }
@@ -69,9 +84,8 @@ public class SubversionServiceTest extends AbstractServiceTest {
         subversionService.delete(svnPath);
         assertEquals(revision + 1, subversionService.getLatestRevision());
         // This will throw a RuntimeException because
-        // the file isn't in the next revision.
-        assertTrue(FileUtils.contentEquals(noteTestData, subversionService
-                .getFile(svnPath, revision + 1)));
+        // the file isn't in the newest revision.
+        subversionService.getFile(svnPath, -1);
     }
 
     @Test
@@ -85,120 +99,89 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    @Ignore
-    public void checkout() {
-
+    public void checkout() throws Exception {
+        String svnPath = documentRoot + "/testFile.txt";
+        subversionService.importFile(svnPath, testFile);
+        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        assertTrue(new File(checkoutDirectory + "/testFile.txt").exists());
     }
 
+    // TODO This test is really slow, find out why.
     @Test
-    @Ignore
     public void update() throws Exception {
-        File file = new File("target/file.txt");
-        FileUtils.writeStringToFile(file, "foo\n");
-        final String svnPath = documentRoot + "/file.txt";
-        File checkoutDirectory = new File("target/checkout");
-        subversionService.importFile(svnPath, file);
-        subversionService.checkout(checkoutDirectory);
-        File modifiedFile = new File("target/checkout/" + documentRoot + "/file.txt");
+        final String svnPath = documentRoot + "/testFile.txt";
+        subversionService.importFile(svnPath, testFile);
+        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        subversionService.commit(svnPath, modifiedFile);
+        subversionService.commit(modifiedFile);
 
-        File anotherCheckoutDirectory = new File("target/anotherCheckout");
-        subversionService.checkout(anotherCheckoutDirectory);
+        subversionService.checkout(anotherCheckoutDirectory, documentRoot, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
-        subversionService.commit(svnPath, modifiedFile);
+        subversionService.commit(modifiedFile);
 
-        File updatedFile = new File("target/anotherCheckout/" + documentRoot + "/file.txt");
-        subversionService.update(svnPath, updatedFile);
+        File updatedFile = new File(anotherCheckoutDirectory + "/testFile.txt");
+        subversionService.update(updatedFile);
 
         FileUtils.contentEquals(modifiedFile, updatedFile);
-
-        // TODO Not the best place to remove the checkout folder or the file
-        FileUtils.deleteDirectory(checkoutDirectory);
-        FileUtils.deleteDirectory(anotherCheckoutDirectory);
-        file.delete();
     }
 
     @Test(expected = RuntimeException.class)
     @Ignore
     public void update_conflict() throws Exception {
-        File file = new File("target/file.txt");
-        FileUtils.writeStringToFile(file, "foo\n");
-        final String svnPath = documentRoot + "/file.txt";
-        File checkoutDirectory = new File("target/checkout");
-        subversionService.importFile(svnPath, file);
-        subversionService.checkout(checkoutDirectory);
-        File modifiedFile = new File("target/checkout/" + documentRoot + "/file.txt");
+        final String svnPath = documentRoot + "/testFile.txt";
+        subversionService.importFile(svnPath, testFile);
+        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        subversionService.commit(svnPath, modifiedFile);
+        subversionService.commit(modifiedFile);
 
-        File anotherCheckoutDirectory = new File("target/anotherCheckout");
-        subversionService.checkout(anotherCheckoutDirectory);
+        subversionService.checkout(anotherCheckoutDirectory, documentRoot, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
-        subversionService.commit(svnPath, modifiedFile);
+        subversionService.commit(modifiedFile);
 
-        File updatedFile = new File("target/anotherCheckout/" + documentRoot + "/file.txt");
+        File updatedFile = new File(anotherCheckoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(updatedFile, "jeejee");
-        subversionService.update(svnPath, updatedFile);
+        subversionService.update(updatedFile);
 
         FileUtils.contentEquals(modifiedFile, updatedFile);
-
-        // TODO Not the best place to remove the checkout folder or the file
-        FileUtils.deleteDirectory(checkoutDirectory);
-        FileUtils.deleteDirectory(anotherCheckoutDirectory);
-        file.delete();
     }
 
+    // TODO This test is really slow, find out why.
     @Test
-    @Ignore
     public void commit() throws Exception {
-        File file = new File("target/file.txt");
-        FileUtils.writeStringToFile(file, "foo\n");
-        final String svnPath = documentRoot + "/file.txt";
-        File checkoutDirectory = new File("target/checkout");
-        subversionService.importFile(svnPath, file);
-        subversionService.checkout(checkoutDirectory);
-        File modifiedFile = new File("target/checkout/" + documentRoot + "/file.txt");
+        final String svnPath = documentRoot + "/testFile.txt";
+        subversionService.importFile(svnPath, testFile);
+        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        long revision = subversionService.commit(svnPath, modifiedFile);
+        long revision = subversionService.commit(modifiedFile);
         assertTrue(FileUtils.contentEquals(modifiedFile, subversionService.getFile(svnPath, revision)));
-        // TODO Not the best place to remove the checkout folder or the file
-        FileUtils.deleteDirectory(checkoutDirectory);
-        file.delete();
     }
 
+    // TODO This test is really slow, find out why.
     @Test(expected = RuntimeException.class)
-    @Ignore
     public void commit_conflict() throws Exception {
-        File file = new File("target/file.txt");
-        FileUtils.writeStringToFile(file, "foo\n");
-        final String svnPath = documentRoot + "/file.txt";
-        File checkoutDirectory = new File("target/checkout");
-        subversionService.importFile(svnPath, file);
-        subversionService.checkout(checkoutDirectory);
-        File modifiedFile = new File("target/checkout/" + documentRoot + "/file.txt");
+        final String svnPath = documentRoot + "/testFile.txt";
+        subversionService.importFile(svnPath, testFile);
+        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        subversionService.commit(svnPath, modifiedFile);
+        subversionService.commit(modifiedFile);
 
-        File anotherCheckoutDirectory = new File("target/anotherCheckout");
-        subversionService.checkout(anotherCheckoutDirectory);
+        subversionService.checkout(anotherCheckoutDirectory, documentRoot, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
-        subversionService.commit(svnPath, modifiedFile);
+        subversionService.commit(modifiedFile);
 
-        File updatedFile = new File("target/anotherCheckout/" + documentRoot + "/file.txt");
+        File updatedFile = new File(anotherCheckoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(updatedFile, "jeejee");
         try {
-            subversionService.commit(svnPath, updatedFile);
+            subversionService.commit(updatedFile);
         } catch (RuntimeException e) {
             throw e;
-        } finally {
-            // TODO Still not the best place to remove the checkout folder or the file
-            FileUtils.deleteDirectory(checkoutDirectory);
-            FileUtils.deleteDirectory(anotherCheckoutDirectory);
-            file.delete();
         }
     }
 

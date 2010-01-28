@@ -72,25 +72,24 @@ public interface SubversionService {
     void delete(String svnPath);
 
     /**
-     * Update the contents from the given svn path to file
+     * Update the contents of the file. Works only on files that are checked out
+     * first.
      *
-     * TODO remove svnPath variable
+     * TODO Throw checked exception signaling update failure.
      *
-     * @param svnPath
      * @param file
      */
-    void update(String svnPath, File file);
+    void update(File file);
 
     /**
-     * Commit the given file to the given svnPath
+     * Commit the given file. Works only on files that are checked out first.
      *
-     * TODO remove svnPath variable
+     * TODO Throw checked exception signaling commit failure instead of RuntimeException.
      *
-     * @param svnPath
      * @param file
      * @return
      */
-    long commit(String svnPath, File file);
+    long commit(File file);
 
     /**
      * Retrieves the latest revision number.
@@ -100,11 +99,13 @@ public interface SubversionService {
     long getLatestRevision();
 
     /**
-     * Checks out a directory into the destination folder.
-     *
-     * TODO Retrieve only the desired file + svnPath + revision
+     * Checks out a directory into the destination folder, svnPath refers to the
+     * SVN file's parent directory.
      *
      * @param destination
+     * @param svnPath
+     * @param revision
      */
-    void checkout(File destination);
+    void checkout(File destination, String svnPath, long revision);
+
 }
