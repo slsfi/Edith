@@ -50,7 +50,14 @@ public class SubversionServiceImpl implements SubversionService {
     private final SVNClientManager clientManager;
 
     private final File svnCache;
-
+    
+//    svnCache
+//       workingCopies
+//          timo
+//          vesa
+//          ...
+//       readCache
+           
     private SVNRepository svnRepository;
 
     private final File svnRepo;
