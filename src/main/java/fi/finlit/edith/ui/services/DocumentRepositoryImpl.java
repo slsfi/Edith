@@ -249,5 +249,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
+    @Override
+    public void removeNoteAnchors(Document document, long svnRevision, String... anchors) throws IOException {
+        throw new UnsupportedOperationException();
+        
+    }
+
 
 }

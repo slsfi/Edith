@@ -23,7 +23,7 @@ import com.mysema.rdfbean.dao.Repository;
 public interface DocumentRepository extends Repository<Document,String>{
     
     /**
-     * Add the given note for the given document
+     * Add the given note for the given Document
      * 
      * @param document
      * @param svnRevision
@@ -34,6 +34,16 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @throws IOException 
      */
     Note addNote(Document document, long svnRevision, String startId, String endId, String text) throws IOException;
+    
+    /**
+     * Remove the given anchors from the given Document
+     * 
+     * @param document
+     * @param svnRevision
+     * @param anchors
+     * @throws IOException
+     */
+    void removeNoteAnchors(Document document, long svnRevision, String... anchors) throws IOException;
     
     /**
      * Get a Document handle for the given path
