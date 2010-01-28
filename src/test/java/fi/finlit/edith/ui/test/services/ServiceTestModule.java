@@ -65,13 +65,12 @@ public class ServiceTestModule {
             MappedConfiguration<Class<?>, Object> configuration) {
         Namespaces.register("edith", EDITH.NS);
         MemoryRepository repository = new MemoryRepository();
-        repository.setSources(new RDFSource("classpath:/edith.ttl",
-                Format.TURTLE, EDITH.NS));
+        repository.setSources(new RDFSource("classpath:/edith.ttl",Format.TURTLE, EDITH.NS));
         configuration.add(Repository.class, repository);
 
         AuthService authService = new AuthService() {
             public String getUsername() {
-                return "tiwe";
+                return "timo";
             }
 
             public boolean isAuthenticated() {

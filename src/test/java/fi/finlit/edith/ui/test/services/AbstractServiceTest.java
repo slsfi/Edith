@@ -43,10 +43,7 @@ public abstract class AbstractServiceTest {
 
     @BeforeClass
     public static void beforeClass() throws SVNException{
-        File svnRepo = new File("target/repo");
         FSRepositoryFactory.setup();
-        System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
-        System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
     }
     
     protected abstract Class<?> getServiceClass();

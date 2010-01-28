@@ -11,6 +11,7 @@ import java.io.File;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.junit.After;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.NoteRepository;
@@ -37,21 +38,38 @@ public class AdminServiceTest extends AbstractServiceTest{
     @Inject @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
     private File noteTestData;
     
+    @After
+    public void tearDown(){
+        System.out.println();
+    }
+    
     @Test
     public void removeNotes() throws Exception {
+        long s = System.currentTimeMillis();
         noteRepo.importNotes(noteTestData);
+        long e = System.currentTimeMillis();
+        System.err.println("Import took " + (e-s) + "ms");
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() > 0);
         
+        s = System.currentTimeMillis();
         adminService.removeNotes();
+        e = System.currentTimeMillis();
+        System.err.println("Removal took " + (e-s) + "ms");
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() == 0);
     }
 
     @Test
     public void removeNotesAndTerms() throws Exception {
+        long s = System.currentTimeMillis();
         noteRepo.importNotes(noteTestData);
+        long e = System.currentTimeMillis();
+        System.err.println("Import took " + (e-s) + "ms");
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() > 0);
         
-        adminService.removeNotes();
+        s = System.currentTimeMillis();
+        adminService.removeNotesAndTerms();
+        e = System.currentTimeMillis();
+        System.err.println("Removal took " + (e-s) + "ms");
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() == 0);
     }
 

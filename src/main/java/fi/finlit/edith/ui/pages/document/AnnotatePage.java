@@ -6,12 +6,14 @@
 package fi.finlit.edith.ui.pages.document;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
+import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
@@ -35,6 +37,10 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
 @IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage extends AbstractDocumentPage {
 
+    @Inject
+    @Property
+    private Block notesList;
+    
     @Inject
     private Block noteEdit;
 
@@ -131,9 +137,19 @@ public class AnnotatePage extends AbstractDocumentPage {
         note = noteRevisionRepo.getById(noteRev).createCopy();
     }
     
-    void onSuccessFromNoteEditForm() {        
+    Object onSuccessFromNoteEditForm() {        
         note.setSVNRevision(getDocumentRevision().getRevision());
-        noteRevisionRepo.save(note);
+        noteRevisionRepo.save(note);        
+        
+        // notesList content
+        Document document = getDocument();
+        DocumentRevision documentRevision = getDocumentRevision();
+        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
+        
+        // noteEdit content
+        notes = Collections.singletonList(note);
+        
+        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList);
     }
     
     

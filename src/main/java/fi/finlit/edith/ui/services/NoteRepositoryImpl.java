@@ -11,6 +11,8 @@ import static fi.finlit.edith.domain.QUserInfo.userInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -22,6 +24,7 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.rdfbean.dao.AbstractRepository;
+import com.mysema.rdfbean.object.Session;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.Note;
@@ -80,6 +83,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String text = null;        
         int counter = 0;
         
+        Session session = getSession();
+        
         while (true) {
             int event = reader.next();
             
@@ -97,10 +102,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 
                 if (localName.equals("note")){                    
                     if (revision.getRevisionOf().getTerm() != null){
-                        getSession().save(revision.getRevisionOf().getTerm());    
+                        session.save(revision.getRevisionOf().getTerm());    
                     }                    
-                    getSession().save(revision.getRevisionOf());
-                    getSession().save(revision);
+                    session.save(revision.getRevisionOf());
+                    session.save(revision);
                     counter++;
                 }else if (localName.equals("lemma")){
                     revision.setLemma(text);
@@ -113,22 +118,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     term.setBasicForm(revision.getBasicForm());
                     term.setMeaning(text);
                     revision.getRevisionOf().setTerm(term);
-                }else if (localName.equals("subsource")){
-                    
-                }else if (localName.equals("citation")){
-                    
                 }else if (localName.equals("description")){
                     revision.setDescription(text);
-                }else if (localName.equals("source")){
-                    
-                }else if (localName.equals("classification")){
-                    
-                }else if (localName.equals("edited")){
-                    
-                }else if (localName.equals("stage")){
-                    
-                }else if (localName.equals("comment")){
-                    
                 }
                     
             }else if (event == XMLStreamConstants.CHARACTERS){
@@ -138,7 +129,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 reader.close();
                 break;
             }
-        }
+        }        
         return counter;
     }
 

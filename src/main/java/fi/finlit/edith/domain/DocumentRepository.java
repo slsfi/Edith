@@ -23,6 +23,8 @@ import com.mysema.rdfbean.dao.Repository;
 public interface DocumentRepository extends Repository<Document,String>{
     
     /**
+     * Add the given note for the given document
+     * 
      * @param document
      * @param svnRevision
      * @param startId
@@ -50,6 +52,8 @@ public interface DocumentRepository extends Repository<Document,String>{
     List<Document> getDocumentsOfFolder(String svnFolder);
 
     /**
+     * Get the file for the given document for reading
+     * 
      * @param svnPath
      * @param revision
      * @return
@@ -58,12 +62,16 @@ public interface DocumentRepository extends Repository<Document,String>{
     File getDocumentFile(DocumentRevision document) throws IOException;
 
     /**
+     * Get the SVN revisions for the given document in ascending order
+     * 
      * @param document
      * @return 
      */
     List<Long> getRevisions(Document document);
 
     /**
+     * Import the given File to the given svnPath
+     * 
      * @param string
      * @param file
      */

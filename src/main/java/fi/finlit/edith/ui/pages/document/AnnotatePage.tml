@@ -49,19 +49,25 @@
         <div class="panel narrow">
             <h3>${message:notes}</h3>
             <t:if test="docNotes">
-                <ul class="notes">
-                    <t:loop source="docNotes" value="note">
-                    <li>    
-                        <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
-                    </li>
-                    </t:loop>
-                </ul>
+                <t:zone t:id="listZone" update="show">
+                    <t:delegate to="notesList"/>
+                </t:zone>
                 <p:else>${message:no-notes}</p:else>
             </t:if>
             <div style="clear:both;"></div>
         </div>    
     
         <t:zone t:id="editZone" update="show"/>
+        
+        <t:block t:id="notesList">
+            <ul class="notes">
+                <t:loop source="docNotes" value="note">
+                <li>    
+                    <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
+                </li>
+                </t:loop>
+            </ul>        
+        </t:block>
         
         <t:block t:id="noteEdit">
             <t:loop source="notes" value="note">
@@ -70,9 +76,9 @@
                     <t:form t:id="noteEditForm" t:zone="editZone" t:context="note.id">
                         <t:errors/>
                         ${message:lemma-label}<br/><t:textField value="note.lemma"/><br/>
-                        ${message:longText-label}<br/><t:textField value="note.longText"/><br/>
-                        ${message:basicForm-label}<br/><t:textField value="note.basicForm"/>
-                        <input type="submit"/> 
+                        ${message:basicForm-label}<br/><t:textField value="note.basicForm"/><br/>
+                        ${message:longText-label}<br/>${note.longText}<br/>                        
+                        <input type="submit" value="${message:save}"/> 
                     </t:form>
                 </div>                            
             </t:loop>      
