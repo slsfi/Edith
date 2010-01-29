@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 
@@ -36,8 +36,8 @@ import fi.finlit.edith.ui.services.ServiceModule;
 @RunWith(TapestryTestRunner.class)
 @Modules({
     ServiceTestModule.class,
-    ServiceModule.class,    
-    DataModule.class, 
+    ServiceModule.class,
+    DataModule.class,
     RDFBeanModule.class})
 public abstract class AbstractServiceTest {
 
@@ -45,9 +45,9 @@ public abstract class AbstractServiceTest {
     public static void beforeClass() throws SVNException{
         FSRepositoryFactory.setup();
     }
-    
+
     protected abstract Class<?> getServiceClass();
-    
+
     @Test
     public void allCovered(){
         Class<?> serviceClass = getServiceClass();
@@ -65,11 +65,19 @@ public abstract class AbstractServiceTest {
                 } catch (NoSuchMethodException e) {
                     missing.add(m.getName());
                 }
-            } 
+            }
         }
         if (!missing.isEmpty()){
             fail("Missing tests : " + missing);
         }
+    }
+
+    protected static final String start(String localId){
+        return "<anchor xml:id=\"start" + localId+"\"/>";
+    }
+
+    protected static final String end(String localId){
+        return "<anchor xml:id=\"end" + localId+"\"/>";
     }
 
 }

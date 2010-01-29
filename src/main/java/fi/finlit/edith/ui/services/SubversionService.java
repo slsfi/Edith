@@ -18,27 +18,6 @@ import java.util.List;
  * @version $Id$
  */
 public interface SubversionService {
-
-//    /**
-//     * Checks out a directory into the destination folder, svnPath refers to the
-//     * SVN file's parent directory.
-//     *
-//     * @param destination
-//     * @param svnPath
-//     * @param revision
-//     */
-//    void checkout(File destination, String svnPath, long revision);
-
-//    /**
-//     * Commit the given file. Works only on files that are checked out first.
-//     *
-//     * TODO Throw checked exception signaling commit failure instead of RuntimeException.
-//     *
-//     * @param file
-//     * @return
-//     */
-//    long commit(File file);
-
     /**
      * Delete the given svn path
      *
@@ -99,21 +78,14 @@ public interface SubversionService {
      */
     void initialize();
 
-//    /**
-//     * Update the contents of the file. Works only on files that are checked out
-//     * first.
-//     *
-//     * TODO Throw checked exception signaling update failure.
-//     *
-//     * @param file
-//     */
-//    void update(File file);
-    
     /**
+     *
+     * TODO Apparently returns -1 at least when there are no changes.
+     *
      * @param svnPath
      * @param revision
      * @param callback
      */
-    void commit(String svnPath, long revision, UpdateCallback callback);
+    long commit(String svnPath, long revision, UpdateCallback callback);
 
 }

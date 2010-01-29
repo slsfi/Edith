@@ -8,13 +8,15 @@ package fi.finlit.edith.ui.services;
 import static fi.finlit.edith.domain.QDocument.document;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.xml.stream.XMLEventFactory;
@@ -31,6 +33,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.tmatesoft.svn.core.SVNException;
 
+import com.mysema.commons.lang.Assert;
 import com.mysema.rdfbean.dao.AbstractRepository;
 
 import fi.finlit.edith.EDITH;
@@ -87,8 +90,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public File getDocumentFile(DocumentRevision document) throws IOException {
-        return svnService.getFile(document.getSvnPath(), document.getRevision());
+    public InputStream getDocumentStream(DocumentRevision document) throws IOException {
+        return svnService.getStream(document.getSvnPath(), document.getRevision());
     }
 
     @Override
@@ -132,39 +135,35 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public Note addNote(Document doc, long revision, String startId, String endId, String text) throws IOException {
-        // TODO : get check out file instead
-        File docFile = svnService.getFile(doc.getSvnPath(), revision);
-        String localId = UUID.randomUUID().toString();
-        File tempFile = File.createTempFile("tei", null);
-
-        try {
-            addNote(docFile, tempFile, startId, endId, text, localId);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-
-        // SVN update on top of the just serialized file
-        svnService.update(tempFile);
-
-        // SVN commit the file
-        long newRevision = svnService.commit(tempFile);
+    public Note addNote(Document doc, long revision, final String startId, final String endId, final String text) throws IOException {
+        final String localId = UUID.randomUUID().toString();
+        Long newRevision = svnService.commit(doc.getSvnPath(), revision,
+                new UpdateCallback() {
+                    @Override
+                    public void update(InputStream source, OutputStream target) {
+                        try {
+                            addNote(source, target, startId, endId, text,
+                                    localId);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
 
         // persisted noteRevision has svnRevision of newly created commit
-        Note note = noteRepository.createNote(doc, newRevision, localId, text, text);
-        return note;
+        return noteRepository.createNote(doc, newRevision, localId, text, text);
     }
 
-    public void addNote(File source, File target, String startId, String endId, String text, String localId) throws Exception {
-        AnchorPosition startPosition = new AnchorPosition(startId);
+    public void addNote(InputStream source, OutputStream target, String startId, String endId, String text, String localId) throws Exception {
+        AnchorPosition startPosition = new AnchorPosition(Assert.notNull(startId));
         AnchorPosition endPosition = new AnchorPosition(endId);
         System.err.println(startPosition + " - " + endPosition + " : " + text);
 
         XMLEventFactory eventFactory = XMLEventFactory.newInstance();
         XMLInputFactory inFactory = XMLInputFactory.newInstance();
         XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
-        XMLEventReader reader = inFactory.createXMLEventReader(new FileInputStream(source));
-        XMLEventWriter writer = outFactory.createXMLEventWriter(new FileOutputStream(target));
+        XMLEventReader reader = inFactory.createXMLEventReader(source);
+        XMLEventWriter writer = outFactory.createXMLEventWriter(target);
 
         try{
             int act = 0;
@@ -250,10 +249,42 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public void removeNoteAnchors(Document document, long svnRevision, String... anchors) throws IOException {
-        throw new UnsupportedOperationException();
-        
+    public void removeNoteAnchors(Document document, long svnRevision,
+            final Note... notes) throws IOException {
+        Long newRevision = svnService.commit(document.getSvnPath(),
+                svnRevision, new UpdateCallback() {
+                    @Override
+                    public void update(InputStream source, OutputStream target) {
+                        try {
+                            removeNoteAnchors(source, target, notes);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+
+        // persisted noteRevision has svnRevision of newly created commit
+        for (Note note : notes) {
+            noteRepository.remove(note);
+        }
     }
 
+    public void removeNoteAnchors(InputStream source, OutputStream target, Note... notes) throws Exception {
+        Set<String> anchors = new HashSet<String>();
+        for (Note note : notes) {
+            anchors.add("start" + note.getLocalId());
+            anchors.add("end" + note.getLocalId());
+        }
+
+        XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+        XMLInputFactory inFactory = XMLInputFactory.newInstance();
+        XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
+        XMLEventReader reader = inFactory.createXMLEventReader(source);
+        XMLEventWriter writer = outFactory.createXMLEventWriter(target);
+
+        while (reader.hasNext()) {
+
+        }
+    }
 
 }

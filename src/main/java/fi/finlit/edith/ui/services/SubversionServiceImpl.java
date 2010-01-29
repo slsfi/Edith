@@ -6,13 +6,16 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -49,15 +52,6 @@ public class SubversionServiceImpl implements SubversionService {
 
     private final SVNClientManager clientManager;
 
-    private final File svnCache;
-    
-//    svnCache
-//       workingCopies
-//          timo
-//          vesa
-//          ...
-//       readCache
-           
     private SVNRepository svnRepository;
 
     private final File svnRepo;
@@ -68,17 +62,29 @@ public class SubversionServiceImpl implements SubversionService {
 
     private final String materialTeiRoot;
 
+    private final File svnCache;
+
+    private final File readCache;
+
+    private final File workingCopies;
+
+    private final AuthService authService;
+
     public SubversionServiceImpl(
             @Inject @Symbol(EDITH.SVN_CACHE_DIR) File svnCache,
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) File svnRepo,
             @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
-            @Inject @Symbol(EDITH.MATERIAL_TEI_ROOT) String materialTeiRoot) {
+            @Inject @Symbol(EDITH.MATERIAL_TEI_ROOT) String materialTeiRoot,
+            AuthService authService) {
         this.clientManager = SVNClientManager.newInstance();
         this.svnCache = svnCache;
+        this.readCache = new File(svnCache + "/readCache");
+        this.workingCopies = new File(svnCache + "/workingCopies");
         this.svnRepo = svnRepo;
         this.documentRoot = documentRoot;
         this.materialTeiRoot = materialTeiRoot;
+        this.authService = authService;
         try {
             this.repoSvnURL = SVNURL.parseURIEncoded(repoURL);
         } catch (SVNException e) {
@@ -140,7 +146,6 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @SuppressWarnings("deprecation")
-    @Override
     public long commit(File file) {
         try {
             return clientManager.getCommitClient().doCommit(
@@ -167,12 +172,12 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public File getFile(String svnPath, long revision) throws IOException {
+    public InputStream getStream(String svnPath, long revision) throws IOException {
         try {
             if (revision == -1) {
                 revision = getLatestRevision(svnPath);
             }
-            File documentFolder = new File(svnCache, URLEncoder.encode(svnPath,
+            File documentFolder = new File(readCache, URLEncoder.encode(svnPath,
                     "UTF-8"));
             File documentFile = new File(documentFolder, String
                     .valueOf(revision));
@@ -186,9 +191,8 @@ public class SubversionServiceImpl implements SubversionService {
                     // so we need to close it manually
                     out.close();
                 }
-
             }
-            return documentFile;
+            return new FileInputStream(documentFile);
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
         }
@@ -240,7 +244,6 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @SuppressWarnings("deprecation")
-    @Override
     public void update(File file) {
         try {
             clientManager.getUpdateClient().doUpdate(file,
@@ -260,15 +263,34 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @SuppressWarnings("deprecation")
-    @Override
     public void checkout(File destination, String svnPath, long revision) {
         try {
             clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(svnPath, false), destination,
-                    SVNRevision.create(revision), // TODO verify these params
+                    SVNRevision.create(revision),
                     SVNRevision.create(revision), false);
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
         }
+    }
+
+    @Override
+    public long commit(String svnPath, long revision, UpdateCallback callback) {
+        File userCheckout = new File(workingCopies + "/" + authService.getUsername()); // TODO will get overwritten(?) & caching?
+        checkout(userCheckout, svnPath.substring(0, svnPath.lastIndexOf('/')), revision); // FIXME ugly as hell
+        File file = new File(userCheckout + svnPath.substring(svnPath.lastIndexOf('/')));
+        File tmp = null;
+        try {
+            tmp = File.createTempFile(UUID.randomUUID().toString(), null);
+            callback.update(new FileInputStream(file), new FileOutputStream(tmp));
+            FileUtils.copyFile(tmp, file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (tmp != null) {
+                tmp.delete();
+            }
+        }
+        return commit(file);
     }
 
 }

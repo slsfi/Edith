@@ -11,16 +11,21 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -28,6 +33,7 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.ui.services.SubversionService;
 
 /**
@@ -40,10 +46,10 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepo;
-    
+
     @Inject
     private SubversionService subversionService;
-    
+
     private static boolean initialized = false;
 
     @Inject
@@ -58,9 +64,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
             subversionService.destroy();
             subversionService.initialize();
             initialized = true;
-        }        
+        }
     }
-    
+
     @After
     public void tearDown(){
         for (Document doc : savedDocs){
@@ -85,13 +91,11 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getDocumentFile() throws IOException {
+    public void getDocumentStream() throws IOException {
         for (Document document : documentRepo.getAll()) {
-            File file = documentRepo.getDocumentFile(new DocumentRevision(
+            InputStream in = documentRepo.getDocumentStream(new DocumentRevision(
                     document, -1));
-            assertTrue(file.exists());
-            assertTrue(file.isFile());
-            assertTrue(file.length() > 0);
+            in.close();
         }
     }
 
@@ -115,8 +119,54 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote() {
-        // TODO
+    public void addNote() throws Exception {
+        // FIXME hardcoded
+        Document document = documentRepo.getDocumentForPath(documentRoot
+                + "/Nummisuutarit rakenteistettuna.xml");
+
+        String element = "act1-sp2";
+        String text = "sun ullakosta ottaa";
+
+        Note note = documentRepo.addNote(document, -1, element, element, text);
+
+        // TODO put these into setup and teardown
+        File tmpFile = File.createTempFile("nummarit", ".xml");
+        OutputStream out = new FileOutputStream(tmpFile);
+        InputStream in = subversionService.getStream(document.getSvnPath(), -1);
+        IOUtils.copy(in, out);
+        in.close();
+        out.close();
+
+        String content = FileUtils.readFileToString(tmpFile, "UTF-8");
+        // TODO see above
+        tmpFile.delete();
+        assertTrue(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
+    }
+
+    @Test
+    @Ignore
+    public void removeNoteAnchors() throws Exception {
+        // FIXME hardcoded
+        Document document = documentRepo.getDocumentForPath(documentRoot
+                + "/Nummisuutarit rakenteistettuna.xml");
+        String element = "act1-sp2";
+        String text = "sun ullakosta ottaa";
+
+        Note note = documentRepo.addNote(document, -1, element, element, text);
+//        documentRepo.removeNoteAnchors(document, -1, new String[] { element });
+
+        // TODO put these into setup and teardown
+        File tmpFile = File.createTempFile("nummarit", ".xml");
+        OutputStream out = new FileOutputStream(tmpFile);
+        InputStream in = subversionService.getStream(document.getSvnPath(), -1);
+        IOUtils.copy(in, out);
+        in.close();
+        out.close();
+
+        String content = FileUtils.readFileToString(tmpFile, "UTF-8");
+        // TODO see above
+        tmpFile.delete();
+        assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
     }
 
     @Override

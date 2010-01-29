@@ -1,12 +1,10 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,37 +26,36 @@ import fi.finlit.edith.domain.DocumentRevision;
  * @version $Id$
  */
 public class DocumentRendererImpl implements DocumentRenderer {
-    
+
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
-    
+
     // sp -> speech, pb -> page break, lg -> line group, l -> line
-    
+
     static final Set<String> emptyElements = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
-    
+
     static final Set<String> toDiv = new HashSet<String>(Arrays.asList(
             "title", "l","lg","publisher","pubPlace","teiHeader","text"));
-    
+
     static final Set<String> toP = new HashSet<String>();
-    
+
     static final Set<String> toSpan = new HashSet<String>(Arrays.asList(
             "actor","camera","caption","date","desc","docAuthor","gap","orig","ref","role","roleDesc","set","sound","speaker","tech","view"));
-   
+
     static final Set<String> toUl = new HashSet<String>(Arrays.asList("castGroup","castList","listPerson"));
-    
+
     static final Set<String> toLi = new HashSet<String>(Arrays.asList("castItem","person"));
-    
+
     @Inject
     private DocumentRepository documentRepo;
-    
+
     @Override
     public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception{
-        File file = documentRepo.getDocumentFile(document);
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
-        
+        XMLStreamReader reader = factory.createXMLStreamReader(documentRepo.getDocumentStream(document));
+
         writer.element("ul", "class", "pages");
         while (true) {
-            int event = reader.next();            
+            int event = reader.next();
             if (event == XMLStreamConstants.START_ELEMENT){
                 String localName = reader.getLocalName();
                 if (localName.equals("pb")){
@@ -67,11 +64,11 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         writer.element("li");
                         writer.element("a", "href", "#page" + page);
                         writer.writeRaw(page);
-                        writer.end();    
                         writer.end();
-                    }                    
+                        writer.end();
+                    }
                 }
-                
+
             }else if (event == XMLStreamConstants.END_DOCUMENT) {
                 reader.close();
                 break;
@@ -79,22 +76,21 @@ public class DocumentRendererImpl implements DocumentRenderer {
         }
         writer.end();
     }
-    
+
     @Override
     public void renderDocument(DocumentRevision document, MarkupWriter writer) throws Exception{
-        File file = documentRepo.getDocumentFile(document);
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
-        
+        XMLStreamReader reader = factory.createXMLStreamReader(documentRepo.getDocumentStream(document));
+
         boolean noteContent = false;
         Set<String> noteIds = new HashSet<String>();
-        
+
         int act = 0;
         int sp = 0;
         int stage = 0;
-        
+
         while (true) {
-            int event = reader.next();            
+            int event = reader.next();
             if (event == XMLStreamConstants.START_ELEMENT){
                 String localName = reader.getLocalName();
                 if (toDiv.contains(localName)){
@@ -123,11 +119,11 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         stage = 0;
                         writer.element(localName, "class", "act", "id", "act" + act);
                     }else{
-                        writer.element(localName);    
-                    }                                                             
-                }else if (localName.equals("TEI")){    
+                        writer.element(localName);
+                    }
+                }else if (localName.equals("TEI")){
                     writer.element("div", "class", "tei");
-                }else if (localName.equals("lb")){    
+                }else if (localName.equals("lb")){
                     writer.element("br");
                     writer.end();
                 }else if (localName.equals("pb")){
@@ -135,8 +131,8 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     if (page != null){
                         writer.element("div", "id", "page" + page, "class", "page");
                         writer.writeRaw(page + ".");
-                        writer.end();    
-                    }                    
+                        writer.end();
+                    }
                 }else if (localName.equals("anchor")){
                     String id = reader.getAttributeValue(XML_NS, "id");
                     if (id == null){
@@ -145,49 +141,49 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         // start anchor
                         writer.element("span", "class", "notestart", "id", id);
                         writer.end();
-                        
-                        noteContent = true;                        
+
+                        noteContent = true;
                         noteIds.add(id.substring("start".length()));
                     }else if (id.startsWith("end")){
                         noteIds.remove(id.substring("end".length()));
                         if (noteIds.isEmpty()){
-                            noteContent = false;    
-                        }                        
+                            noteContent = false;
+                        }
                     }
-                    
+
                 }else{
                     writer.element("div", "class", localName);
                 }
-                
+
             }else if (event == XMLStreamConstants.END_ELEMENT){
                 String localName = reader.getLocalName();
                 if (!emptyElements.contains(localName)){
-                    writer.end();    
+                    writer.end();
                 }
-                
-            }else if (event == XMLStreamConstants.ATTRIBUTE){    
-                // ?!?      
-                
+
+            }else if (event == XMLStreamConstants.ATTRIBUTE){
+                // ?!?
+
             }else if (event == XMLStreamConstants.CHARACTERS){
                 String text = reader.getText();
                 if (noteContent && !text.trim().isEmpty()){
                     StringBuilder classes = new StringBuilder("notecontent");
                     for (String noteId : noteIds){
                         classes.append(" n").append(noteId);
-                    }                    
+                    }
                     writer.element("span", "class", classes);
                     writer.writeRaw(text);
                     writer.end();
                 }else{
                     writer.writeRaw(text);
                 }
-                
+
             }else if (event == XMLStreamConstants.END_DOCUMENT) {
                 reader.close();
                 break;
             }
         }
-        
+
     }
 
 }
