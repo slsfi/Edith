@@ -65,6 +65,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
             subversionService.initialize();
             initialized = true;
         }
+
     }
 
     @After
@@ -72,6 +73,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         for (Document doc : savedDocs){
             documentRepo.remove(doc);
         }
+
     }
 
     @Test
@@ -100,7 +102,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void addDocument() throws IOException, SVNException {
+    public void addDocument() throws IOException{
         File file = File.createTempFile("test", null);
         FileUtils.writeStringToFile(file, "test file", "UTF-8");
         String targetPath = "/documents/" + UUID.randomUUID().toString();
@@ -112,7 +114,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getRevisions() throws SVNException {
+    public void getRevisions() {
         for (Document document : documentRepo.getAll()) {
             assertFalse(documentRepo.getRevisions(document).isEmpty());
         }
@@ -120,7 +122,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void addNote() throws Exception {
-        // FIXME hardcoded
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
 
@@ -129,7 +130,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         Note note = documentRepo.addNote(document, -1, element, element, text);
 
-        // TODO put these into setup and teardown
+        // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
         OutputStream out = new FileOutputStream(tmpFile);
         InputStream in = subversionService.getStream(document.getSvnPath(), -1);
@@ -138,24 +139,22 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         out.close();
 
         String content = FileUtils.readFileToString(tmpFile, "UTF-8");
-        // TODO see above
         tmpFile.delete();
         assertTrue(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
     }
 
     @Test
-    @Ignore
     public void removeNoteAnchors() throws Exception {
-        // FIXME hardcoded
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
+
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
 
         Note note = documentRepo.addNote(document, -1, element, element, text);
-//        documentRepo.removeNoteAnchors(document, -1, new String[] { element });
+        documentRepo.removeNoteAnchors(document, -1, new Note[] { note });
 
-        // TODO put these into setup and teardown
+        // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
         OutputStream out = new FileOutputStream(tmpFile);
         InputStream in = subversionService.getStream(document.getSvnPath(), -1);
@@ -164,9 +163,39 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         out.close();
 
         String content = FileUtils.readFileToString(tmpFile, "UTF-8");
-        // TODO see above
         tmpFile.delete();
         assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
+    }
+
+    @Test
+    public void removeNoteAnchors_several() throws Exception {
+        Document document = documentRepo.getDocumentForPath(documentRoot
+                + "/Nummisuutarit rakenteistettuna.xml");
+
+        String element = "act1-sp2";
+        String text = "sun ullakosta ottaa";
+        String text2 = "ottaa";
+        String text3 = "ullakosta";
+
+        Note note = documentRepo.addNote(document, -1, element, element, text);
+        // note2 won't be removed
+        Note note2 = documentRepo.addNote(document, -1, element, element, text2);
+        Note note3 = documentRepo.addNote(document, -1, element, element, text3);
+        documentRepo.removeNoteAnchors(document, -1, new Note[] { note, note3 });
+
+        // TODO Resource handling into setup + teardown?
+        File tmpFile = File.createTempFile("nummarit", ".xml");
+        OutputStream out = new FileOutputStream(tmpFile);
+        InputStream in = subversionService.getStream(document.getSvnPath(), -1);
+        IOUtils.copy(in, out);
+        in.close();
+        out.close();
+
+        String content = FileUtils.readFileToString(tmpFile, "UTF-8");
+        tmpFile.delete();
+        assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
+        assertTrue(content.contains(start(note2.getLocalId()) + text2 + end(note2.getLocalId())));
+        assertFalse(content.contains(start(note3.getLocalId()) + text3 + end(note3.getLocalId())));
     }
 
     @Override

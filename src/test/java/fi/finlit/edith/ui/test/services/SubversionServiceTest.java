@@ -135,21 +135,21 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void checkout() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        subversionService.checkout(checkoutDirectory, -1);
         assertTrue(new File(checkoutDirectory + "/testFile.txt").exists());
     }
 
     // TODO This test is really slow, find out why.
     @Test
     public void update() throws Exception {
-        final String svnPath = documentRoot + "/testFile.txt";
+        String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        subversionService.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         subversionService.commit(modifiedFile);
 
-        subversionService.checkout(anotherCheckoutDirectory, documentRoot, -1);
+        subversionService.checkout(anotherCheckoutDirectory, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
         subversionService.commit(modifiedFile);
@@ -157,7 +157,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
         File updatedFile = new File(anotherCheckoutDirectory + "/testFile.txt");
         subversionService.update(updatedFile);
 
-        FileUtils.contentEquals(modifiedFile, updatedFile);
+        assertTrue(FileUtils.contentEquals(modifiedFile, updatedFile));
     }
 
     @Test(expected = RuntimeException.class)
@@ -165,12 +165,12 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void update_conflict() throws Exception {
         final String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        subversionService.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         subversionService.commit(modifiedFile);
 
-        subversionService.checkout(anotherCheckoutDirectory, documentRoot, -1);
+        subversionService.checkout(anotherCheckoutDirectory, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
         subversionService.commit(modifiedFile);
@@ -186,7 +186,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void commit() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         long oldRevision = subversionService.importFile(svnPath, testFile);
-        long newRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), new UpdateCallback() {
+        long newRevision = subversionService.commit("testFile.txt", subversionService.getLatestRevision(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
@@ -215,7 +215,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void commit_file() throws Exception {
         final String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        subversionService.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         long revision = subversionService.commit(modifiedFile);
@@ -224,15 +224,15 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     // TODO This test is really slow, find out why.
     @Test(expected = RuntimeException.class)
-    public void commit__file_results_in_conflict() throws Exception {
+    public void commit_file_results_in_conflict() throws Exception {
         final String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, documentRoot, -1);
+        subversionService.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         subversionService.commit(modifiedFile);
 
-        subversionService.checkout(anotherCheckoutDirectory, documentRoot, -1);
+        subversionService.checkout(anotherCheckoutDirectory, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
         subversionService.commit(modifiedFile);

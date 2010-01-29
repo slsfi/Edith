@@ -263,9 +263,9 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @SuppressWarnings("deprecation")
-    public void checkout(File destination, String svnPath, long revision) {
+    public void checkout(File destination, long revision) {
         try {
-            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(svnPath, false), destination,
+            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, false), destination,
                     SVNRevision.create(revision),
                     SVNRevision.create(revision), false);
         } catch (SVNException s) {
@@ -276,8 +276,9 @@ public class SubversionServiceImpl implements SubversionService {
     @Override
     public long commit(String svnPath, long revision, UpdateCallback callback) {
         File userCheckout = new File(workingCopies + "/" + authService.getUsername()); // TODO will get overwritten(?) & caching?
-        checkout(userCheckout, svnPath.substring(0, svnPath.lastIndexOf('/')), revision); // FIXME ugly as hell
-        File file = new File(userCheckout + svnPath.substring(svnPath.lastIndexOf('/')));
+        svnPath = svnPath.replaceAll(documentRoot, "");
+        checkout(userCheckout, revision);
+        File file = new File(userCheckout + "/" + svnPath);
         File tmp = null;
         try {
             tmp = File.createTempFile(UUID.randomUUID().toString(), null);
