@@ -275,8 +275,11 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    @Ignore
     public void getLatestRevision() {
+        long revision = subversionService.getLatestRevision();
+        long expected = revision + 1;
+        subversionService.importFile(documentRoot + "/foobar", noteTestData);
+        assertEquals(expected, subversionService.getLatestRevision());
     }
 
     @Test
