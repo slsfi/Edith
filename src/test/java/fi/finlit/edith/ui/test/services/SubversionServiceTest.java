@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -69,7 +70,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     private File testFile;
 
     private File svnRepoCopy = new File("target/repoCopy");
-    
+
     @Before
     public void setUp() throws Exception {
         subversionService = new SubversionServiceImpl(svnCache, svnRepo, repoURL, documentRoot, materialTeiRoot, authService);
@@ -82,11 +83,11 @@ public class SubversionServiceTest extends AbstractServiceTest {
         // make a copy of svn repository
         FileUtils.copyDirectory(svnRepo, svnRepoCopy);
     }
-    
+
 
     @After
     public void tearDown() throws Exception {
-        closeStreams();        
+        closeStreams();
         FileUtils.deleteDirectory(checkoutDirectory);
         FileUtils.deleteDirectory(anotherCheckoutDirectory);
         testFile.delete();
@@ -135,8 +136,15 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    @Ignore
     public void getEntries() {
+        String svnPath = documentRoot;
+        String filename = "testFile.txt";
+        subversionService.importFile(svnPath + "/" + filename, testFile);
+        Collection<String> entries = subversionService.getEntries(svnPath, subversionService
+                .getLatestRevision());
+        assertTrue(entries.contains(filename));
+        // There should be other files as well
+        assertTrue(entries.size() > 1);
     }
 
     @Test
