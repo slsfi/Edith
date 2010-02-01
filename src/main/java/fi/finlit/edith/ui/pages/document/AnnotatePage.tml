@@ -17,17 +17,18 @@
     <p:leftPanel>
         <t:dashboard/>
         
+        <!-- 
         <div class="panel narrow">
             <h3>${message:revisions}</h3>
             <ul>
                 <t:loop source="revisions" value="revision">
                 <li>
-                    <!-- TODO : with date here -->
                     <t:pagelink page="document/annotatePage" t:context="[document.id,revision]">${revision}</t:pagelink>
                 </li>
                 </t:loop>
             </ul>            
         </div>
+         -->
                       
         <div class="panel narrow">
             <h3>${message:pages}</h3>

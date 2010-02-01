@@ -50,6 +50,7 @@ public class AbstractDocumentPage {
         revisions = documentRepo.getRevisions(document);
         long revision;
         if (context.getCount() > 1){
+            // TODO : block this for AnnotatePage
             revision = context.get(Long.class, 1);
         }else{
             // get latest 
@@ -69,6 +70,10 @@ public class AbstractDocumentPage {
     
     public DocumentRevision getDocumentRevision() {
         return documentRevision;
+    }
+    
+    protected DocumentRepository getDocumentRepo(){
+        return documentRepo;
     }
     
     

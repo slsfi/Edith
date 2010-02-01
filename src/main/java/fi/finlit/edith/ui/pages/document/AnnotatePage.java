@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.pages.document;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -96,9 +97,12 @@ public class AnnotatePage extends AbstractDocumentPage {
         return noteEdit;
     }
 
-    void onSubmitFromCreateTerm() {
-        System.out.println(selectedText.startId + "," + selectedText.endId + ":["
-                + selectedText.selection+"]");
+    void onSubmitFromCreateTerm() throws IOException {
+        System.out.println(selectedText.startId + "," + selectedText.endId + ":["+ selectedText.selection+"]");
+        Document document = getDocument();
+        DocumentRevision documentRevision = getDocumentRevision();
+        getDocumentRepo().addNote(document, documentRevision.getRevision(), 
+                selectedText.startId, selectedText.endId, selectedText.selection);
     }
 
     // Unfortunately the @Property annotation does not work here
