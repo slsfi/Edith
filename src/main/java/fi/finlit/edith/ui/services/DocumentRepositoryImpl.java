@@ -285,8 +285,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
         try {
             while (reader.hasNext()) {
-                XMLEvent event = reader.nextEvent();
-                writer.add(event);
+                writer.add(reader.nextEvent());
             }
         } finally {
             writer.close();
@@ -304,7 +303,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
 
         return new EventFilter() {
-            private boolean remove = false;
+            private boolean removeNextEndElement = false;
 
             @Override
             public boolean accept(XMLEvent event) {
@@ -312,11 +311,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     Attribute attr = event.asStartElement().getAttributeByName(
                             searchedAttributeName);
                     if (attr != null && anchors.contains(attr.getValue())) {
-                        remove = true;
+                        removeNextEndElement = true;
                         return false;
                     }
-                } else if (event.isEndElement() && remove) {
-                    remove = false;
+                } else if (event.isEndElement() && removeNextEndElement) {
+                    removeNextEndElement = false;
                     return false;
                 }
 
