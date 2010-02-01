@@ -157,7 +157,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public Note addNote(Document doc, long revision, final String startId, final String endId,
             final String text) throws IOException {
         final String localId = UUID.randomUUID().toString();
-        svnService.commit(doc.getSvnPath(), revision, new UpdateCallback() {
+        Long newRevision = svnService.commit(doc.getSvnPath(), revision, new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
@@ -170,7 +170,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         });
 
         // persisted noteRevision has svnRevision of newly created commit
-        return noteRepository.createNote(doc, revision, localId, text, text);
+        return noteRepository.createNote(doc, newRevision, localId, text, text);
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, String startId, String endId,
@@ -303,7 +303,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public void updateNote(Document document, final NoteRevision note, final String startId, final String endId,
             final String text) throws IOException {
-        svnService.commit(document.getSvnPath(), note.getSvnRevision(),
+        Long newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(),
                 new UpdateCallback() {
                     @Override
                     public void update(InputStream source, OutputStream target) {
@@ -321,6 +321,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
         NoteRevision copy = note.createCopy();
         copy.setLongText(text);
+        copy.setSVNRevision(newRevision);
         noteRevisionRepository.save(copy);
     }
 

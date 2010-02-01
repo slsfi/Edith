@@ -110,9 +110,9 @@ public class AnnotatePage extends AbstractDocumentPage {
                 selectedText.startId, selectedText.endId, selectedText.selection);
         long newRevision = note.getLatestRevision().getSvnRevision();
         
-        // update notesList content        
-        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
+        // update notesList content
         documentRevision.setRevision(newRevision);
+        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());        
         return new MultiZoneUpdate("listZone", notesList).add("documentZone",documentView);
     }
 
