@@ -32,7 +32,7 @@ import fi.finlit.edith.ui.services.UpdateCallback;
  * @version $Id$
  */
 public class SubversionServiceTest extends AbstractServiceTest {
-    
+
     private SubversionServiceImpl subversionService;
 
     @Inject
@@ -46,15 +46,15 @@ public class SubversionServiceTest extends AbstractServiceTest {
     @Inject
     @Symbol(EDITH.SVN_CACHE_DIR)
     private File svnCache;
-    
+
     @Inject
     @Symbol(EDITH.REPO_FILE_PROPERTY)
     private File svnRepo;
-    
+
     @Inject
     @Symbol(EDITH.REPO_URL_PROPERTY)
     private String repoURL;
-    
+
     @Inject
     @Symbol(EDITH.MATERIAL_TEI_ROOT)
     private String materialTeiRoot;
@@ -63,22 +63,22 @@ public class SubversionServiceTest extends AbstractServiceTest {
     private AuthService authService;
 
     private File checkoutDirectory;
-    
+
     private File anotherCheckoutDirectory;
-    
+
     private File testFile;
-    
+
     private File svnRepoCopy = new File("target/repoCopy");
 
     @Before
     public void setUp() throws Exception {
         subversionService = new SubversionServiceImpl(svnCache, svnRepo, repoURL, documentRoot, materialTeiRoot, authService);
-        subversionService.initialize();        
+        subversionService.initialize();
         checkoutDirectory = new File("target/checkout");
         anotherCheckoutDirectory = new File("target/anotherCheckout");
         testFile = new File("target/testFile.txt");
         FileUtils.writeStringToFile(testFile, "foo\n");
-        
+
         // make a copy of svn repository
         FileUtils.copyDirectory(svnRepo, svnRepoCopy);
     }
@@ -88,20 +88,20 @@ public class SubversionServiceTest extends AbstractServiceTest {
         FileUtils.deleteDirectory(checkoutDirectory);
         FileUtils.deleteDirectory(anotherCheckoutDirectory);
         testFile.delete();
-        
-        // recover the svn repository from the copy 
+
+        // recover the svn repository from the copy
         subversionService.destroy();
         svnRepoCopy.renameTo(svnRepo);
     }
 
     @Test
     public void importFile() throws Exception {
-        
+
         final long currentRevision = subversionService.getLatestRevision();
         final long expected = currentRevision + 1;
         String newPath = documentRoot + "/" + UUID.randomUUID().toString();
         assertEquals(expected, subversionService.importFile(newPath,
-                noteTestData));               
+                noteTestData));
     }
 
     @Test
@@ -199,7 +199,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void commit() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         long oldRevision = subversionService.importFile(svnPath, testFile);
-        long newRevision = subversionService.commit("testFile.txt", subversionService.getLatestRevision(), new UpdateCallback() {
+        long newRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
@@ -232,7 +232,12 @@ public class SubversionServiceTest extends AbstractServiceTest {
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         long revision = subversionService.commit(modifiedFile);
-//        assertTrue(FileUtils.contentEquals(modifiedFile, subversionService.getFile(svnPath, revision)));
+        InputStream modifiedStream = new FileInputStream(modifiedFile);
+        try {
+            assertTrue(IOUtils.contentEquals(modifiedStream, subversionService.getStream(svnPath, revision)));
+        } finally {
+            modifiedStream.close();
+        }
     }
 
     // TODO This test is really slow, find out why.

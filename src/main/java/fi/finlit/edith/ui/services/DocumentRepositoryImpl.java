@@ -67,7 +67,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
-            @Inject SubversionService svnService, 
+            @Inject SubversionService svnService,
             @Inject NoteRepository noteRepository)throws SVNException {
         super(sessionFactory, document);
         this.documentRoot = documentRoot;
@@ -276,7 +276,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     public void removeNoteAnchors(InputStream source, OutputStream target, Note... notes) throws Exception {
+        final QName searchedAttributeName = new QName(XML_NS, "id");
+
         Set<String> anchors = new HashSet<String>(notes.length * 2);
+
         for (Note note : notes) {
             anchors.add("start" + note.getLocalId());
             anchors.add("end" + note.getLocalId());
@@ -291,7 +294,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             if (event.isStartElement()) {
-                Attribute attr = event.asStartElement().getAttributeByName(new QName(XML_NS, "id"));
+                Attribute attr = event.asStartElement().getAttributeByName(searchedAttributeName);
                 if (attr != null && anchors.contains(attr.getValue())) {
                     remove = true;
                     continue;
