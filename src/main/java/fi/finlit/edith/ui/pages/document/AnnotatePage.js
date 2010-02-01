@@ -28,7 +28,6 @@ jQuery(document).ready(function(){
     		jQuery(":input[name='selectedText']").val(TextSelector.getSelection());
     	
     		//Submit form
-    		//jQuery("#createTerm").submit();
     		TapestryExt.submitZoneForm(jQuery("#createTerm").get(0));
     		return false;
     	}
@@ -81,7 +80,7 @@ var TextSelector = {
 		
 		isBeingSelected: function() {
 			if (!this.started ) return false;
-			if(this.getSelection()) return true;
+			if (this.getSelection()) return true;
 			return false;
 		},
 		
@@ -93,10 +92,6 @@ var TextSelector = {
 				return;
 			}
 			this.endId = target.attr("id");
-			
-			//Tapestry.Logging.info("startId " + this.startId);
-			//Tapestry.Logging.info("endId " + this.endId);
-			//Tapestry.Logging.info("selected text " + this.getSelection());
 		},
 
 		/**
