@@ -10,8 +10,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
@@ -47,16 +50,19 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     private String localId;
 
-    private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
-
-    private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
+    private XMLEventReader sourceReader;
+    
+    private XMLEventWriter targetWriter;
 
     @Before
-    public void setUp() throws SVNException, IOException{
+    public void setUp() throws SVNException, IOException, XMLStreamException{
         source = new FileInputStream(new File(testDocument));
         targetFile = File.createTempFile("test", null);
         target = new FileOutputStream(targetFile);
         localId = UUID.randomUUID().toString();
+        
+        sourceReader = XMLInputFactory.newInstance().createXMLEventReader(source);
+        targetWriter = XMLOutputFactory.newInstance().createXMLEventWriter(target);
     }
 
     @After
@@ -72,8 +78,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_for_p() throws Exception{
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
-        documentRepo.addNote(inFactory.createXMLEventReader(source), outFactory
-                .createXMLEventWriter(target), element, element, text, localId);
+        documentRepo.addNote(sourceReader, targetWriter, element, element, text, localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + text + end(localId)));
@@ -83,8 +88,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_for_speaker() throws Exception{
         String element = "act1-sp1";
         String text = "Esko.";
-        documentRepo.addNote(inFactory.createXMLEventReader(source), outFactory
-                .createXMLEventWriter(target), element, element, text, localId);
+        documentRepo.addNote(sourceReader, targetWriter, element, element, text, localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains("<speaker>" + start(localId) + text + end(localId) + "</speaker>"));
@@ -95,8 +99,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String start = "act1-sp2";
         String end = "act1-sp3";
         String text = "ja polvip\u00F6ksyt. Esko.";
-        documentRepo.addNote(inFactory.createXMLEventReader(source), outFactory
-                .createXMLEventWriter(target), start, end, text, localId);
+        documentRepo.addNote(sourceReader, targetWriter, start, end, text, localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
@@ -108,14 +111,27 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String start = "act1-sp2";
         String end = "act1-sp3";
         String text = "ja polvip\u00F6ksyt. Esko. (panee ty\u00F6ns\u00E4 pois).";
-        documentRepo.addNote(inFactory.createXMLEventReader(source), outFactory
-                .createXMLEventWriter(target), start, end, text, localId);
+        documentRepo.addNote(sourceReader, targetWriter, start, end, text, localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
         assertTrue(content.contains("(panee ty\u00F6ns\u00E4 pois)." + end(localId)));
     }
 
+    @Test
+    public void addNote_long() throws Exception{
+        String element = "act1-sp1";
+        StringBuilder text = new StringBuilder();
+        text.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
+        text.append("ja sulhais-vaatteisin puettuna olen, koska h\u00E4n takaisin pal");
+        documentRepo.addNote(sourceReader, targetWriter, element, element, text.toString(), localId);
+        
+        String content = FileUtils.readFileToString(targetFile, "UTF-8");
+        System.out.println(content);
+        assertTrue(content.contains(start(localId) + "matkalle, nimitt\u00E4in."));
+        assertTrue(content.contains(" takaisin palajaa" + end(localId)));
+    }
+    
     @Override
     protected Class<?> getServiceClass() {
         return null;

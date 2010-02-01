@@ -33,6 +33,8 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNException;
 
 import com.mysema.commons.lang.Assert;
@@ -57,6 +59,8 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements
         DocumentRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
+    
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
 
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
@@ -230,6 +234,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
                             writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "start" + localId));
                             writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
+                            logger.info("start"+localId +" added");
                             handled = true;
                         } else {
                             index = 0;
@@ -240,13 +245,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         int end = TextUtils.getEndIndex(data, text);
                         if (end > -1) {
                             if (end > index) {
-                                writer.add(eventFactory
-                                        .createCharacters(data.substring(index, end)));
+                                writer.add(eventFactory.createCharacters(data.substring(index, end)));
                             }
                             writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
-                            writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "end"
-                                    + localId));
+                            writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "end" + localId));
                             writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
+                            logger.info("end"+localId +" added");
                             index = end;
                             handled = true;
                         }

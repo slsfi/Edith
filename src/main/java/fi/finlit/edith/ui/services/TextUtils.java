@@ -8,10 +8,10 @@ package fi.finlit.edith.ui.services;
  */
 public class TextUtils {
     
-    public static int getStartIndex(String data, String text) {
-        if (data.contains(text)){
-            int firstIndex = data.indexOf(text);
-            int lastIndex = data.lastIndexOf(text);
+    public static int getStartIndex(String string, String text) {
+        if (string.contains(text)){
+            int firstIndex = string.indexOf(text);
+            int lastIndex = string.lastIndexOf(text);
             if (lastIndex == firstIndex){
                 return firstIndex;
             }else{
@@ -21,8 +21,8 @@ public class TextUtils {
             
         }else {
             // TODO : optimize
-            for (int i = 0; i < data.length(); i++){
-                if (text.charAt(0) == data.charAt(i) && text.startsWith(data.substring(i))){
+            for (int i = 0; i < string.length(); i++){
+                if (text.charAt(0) == string.charAt(i) && text.startsWith(string.substring(i))){
                     return i;
                 }
             }
@@ -30,10 +30,10 @@ public class TextUtils {
         return -1;         
     }
     
-    public static int getEndIndex(String data, String text){
-        if (data.contains(text)){
-            int firstIndex = data.indexOf(text);
-            int lastIndex = data.lastIndexOf(text);
+    public static int getEndIndex(String string, String text){
+        if (string.contains(text)){
+            int firstIndex = string.indexOf(text);
+            int lastIndex = string.lastIndexOf(text);
             if (lastIndex == firstIndex){
                 return firstIndex + text.length();
             }else{
@@ -43,7 +43,7 @@ public class TextUtils {
             
         }else{
             for (int i = 0; i < text.length(); i++){
-                if (text.charAt(i) == data.charAt(0) && data.startsWith(text.substring(i))){
+                if (text.charAt(i) == string.charAt(0) && string.startsWith(text.substring(i))){
                     return text.length() - i;
                 }
             }
