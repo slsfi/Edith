@@ -7,12 +7,9 @@ package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QNote.note;
 import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
-import static fi.finlit.edith.domain.QUserInfo.userInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -24,7 +21,9 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.rdfbean.dao.AbstractRepository;
+import com.mysema.rdfbean.model.BID;
 import com.mysema.rdfbean.object.Session;
+import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.Note;
@@ -33,6 +32,7 @@ import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.domain.UserRepository;
 
 /**
  * NoteRepositoryImpl provides
@@ -42,18 +42,19 @@ import fi.finlit.edith.domain.UserInfo;
  */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository{
 
-    private final AuthService authService;
+    private final UserRepository userRepository;
     
-    public NoteRepositoryImpl(@Inject AuthService authService) {
-        super(note);
-        this.authService = authService;
+    public NoteRepositoryImpl(
+            @Inject SessionFactory sessionFactory,
+            @Inject AuthService authService, 
+            @Inject UserRepository userRepository) {
+        super(sessionFactory, note);
+        this.userRepository = userRepository;
     }
-    
+        
     @Override
     public Note createNote(Document document, long revision, String localId, String lemma, String longText) {
-        UserInfo createdBy = getSession().from(userInfo)
-            .where(userInfo.username.eq(authService.getUsername()))
-            .uniqueResult(userInfo);  
+        UserInfo createdBy = userRepository.getCurrentUser();
         
         NoteRevision rev = new NoteRevision();
         rev.setCreatedOn(System.currentTimeMillis());

@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.test.services;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -16,6 +17,7 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.ui.services.AuthService;
 
 /**
  * UserRepositoryTest provides
@@ -28,11 +30,19 @@ public class UserRepositoryTest extends AbstractServiceTest{
     @Inject
     private UserRepository userRepo;
     
+    @Inject
+    private AuthService authService;
+    
     @Test
     public void getByUsername(){
         for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")){
             assertNotNull(userRepo.getByUsername(username));
         }
+    }
+    
+    @Test
+    public void getCurrentUser(){
+        assertEquals(authService.getUsername(), userRepo.getCurrentUser().getUsername());
     }
     
     @Test

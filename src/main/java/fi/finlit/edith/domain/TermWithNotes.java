@@ -34,20 +34,20 @@ public class TermWithNotes {
         return basicForm;
     }
 
-    public void setBasicForm(String basicForm) {
-        this.basicForm = basicForm;
-    }
-
     public String getMeaning() {
         return meaning;
     }
 
-    public void setMeaning(String meaning) {
-        this.meaning = meaning;
-    }
-
     public Set<Note> getNotes() {
         return notes;
+    }
+
+    public void setBasicForm(String basicForm) {
+        this.basicForm = basicForm;
+    }
+
+    public void setMeaning(String meaning) {
+        this.meaning = meaning;
     }
 
     public void setNotes(Set<Note> notes) {

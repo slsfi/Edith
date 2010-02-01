@@ -19,6 +19,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.FetchStrategy;
+import com.mysema.rdfbean.model.Ontology;
 import com.mysema.rdfbean.model.PredicateWildcardFetch;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.Format;
@@ -82,11 +83,12 @@ public class ServiceModule {
         return configuration;
     }
 
-    public static Repository buildRepository(Configuration configuration,
+    public static Repository buildRepository(Ontology ontology,
             @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir) {
         Namespaces.register("edith", EDITH.NS);
         MemoryRepository repository = new MemoryRepository();
         repository.setDataDirName(rdfbeanDataDir);
+        repository.setOntology(ontology);
         repository.setSources(
             new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS)
         );

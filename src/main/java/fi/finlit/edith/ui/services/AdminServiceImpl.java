@@ -5,8 +5,11 @@
  */
 package fi.finlit.edith.ui.services;
 
+import org.apache.tapestry5.ioc.annotations.Inject;
+
 import com.mysema.rdfbean.dao.AbstractService;
 import com.mysema.rdfbean.object.Session;
+import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRevision;
@@ -19,6 +22,10 @@ import fi.finlit.edith.domain.Term;
  * @version $Id$
  */
 public class AdminServiceImpl extends AbstractService implements AdminService{
+
+    public AdminServiceImpl(@Inject SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 
     @Override
     public void removeNotes() {

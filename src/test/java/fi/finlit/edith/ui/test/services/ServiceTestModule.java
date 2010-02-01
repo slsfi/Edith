@@ -21,6 +21,8 @@ import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
+import com.mysema.rdfbean.object.identity.IdentityService;
+import com.mysema.rdfbean.object.identity.MemoryIdentityService;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 
 import fi.finlit.edith.EDITH;
@@ -67,7 +69,7 @@ public class ServiceTestModule {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(new RDFSource("classpath:/edith.ttl",Format.TURTLE, EDITH.NS));
         configuration.add(Repository.class, repository);
-
+        
         AuthService authService = new AuthService() {
             public String getUsername() {
                 return "timo";
@@ -81,6 +83,8 @@ public class ServiceTestModule {
             }
         };
         configuration.add(AuthService.class, authService);
+        
+        configuration.add(IdentityService.class, MemoryIdentityService.instance());
     }
 
     public static PasswordEncoder buildPaswordEncoder() {

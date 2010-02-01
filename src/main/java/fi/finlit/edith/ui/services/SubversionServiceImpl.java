@@ -50,31 +50,32 @@ public class SubversionServiceImpl implements SubversionService {
         FSRepositoryFactory.setup();
     }
 
+    private final AuthService authService;
+
     private final SVNClientManager clientManager;
-
-    private SVNRepository svnRepository;
-
-    private final File svnRepo;
-
-    private final SVNURL repoSvnURL;
 
     private final String documentRoot;
 
     private final String materialTeiRoot;
 
-    private final File svnCache;
-
     private final File readCache;
 
-    private final File workingCopies;
+    private final SVNURL repoSvnURL;
 
-    private final AuthService authService;
+    private final File svnCache;
+
+    private final File svnRepo;
+
+    private SVNRepository svnRepository;
+
+    private final File workingCopies;
 
     public SubversionServiceImpl(
             @Inject @Symbol(EDITH.SVN_CACHE_DIR) File svnCache,
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) File svnRepo,
             @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
+            //                    TEI_MATERIAL_ROOT ?!?
             @Inject @Symbol(EDITH.MATERIAL_TEI_ROOT) String materialTeiRoot,
             AuthService authService) {
         this.clientManager = SVNClientManager.newInstance();
@@ -93,30 +94,65 @@ public class SubversionServiceImpl implements SubversionService {
         this.svnRepository = null;
     }
 
-    public void initialize() {
-        logger.info("Initializing SVN repository on: "
-                + svnRepo.getAbsolutePath());
+    @SuppressWarnings("deprecation")
+    public void checkout(File destination, long revision) {
         try {
-            svnRepository = SVNRepositoryFactory.create(repoSvnURL);
-            if (svnRepo.exists()) {
-                return;
-            }
-            SVNRepositoryFactory.createLocalRepository(svnRepo, true, false);
-
-            clientManager.getCommitClient().doMkDir(
-                    new SVNURL[] { repoSvnURL.appendPath(documentRoot.split("/")[1], false),
-                            repoSvnURL.appendPath(documentRoot, false) },
-                    "created initial folders");
-
-            if (new File(materialTeiRoot).exists()) {
-                for (File file : new File(materialTeiRoot).listFiles()) {
-                    if (file.isFile()) {
-                        importFile(documentRoot + "/" + file.getName(), file);
-                    }
-                }
-            }
+            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, false), destination,
+                    SVNRevision.create(revision),
+                    SVNRevision.create(revision), false);
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public long commit(File file) {
+        try {
+            return clientManager.getCommitClient().doCommit(
+                    new File[] { file }, true, file.getName() + " committed", false,
+                    true).getNewRevision();
+        } catch (SVNException s) {
+            throw new RuntimeException(s.getMessage(), s);
+        }
+    }
+
+    @Override
+    public long commit(String svnPath, long revision, UpdateCallback callback) {
+        File userCheckout = new File(workingCopies + "/" + authService.getUsername()); // TODO will get overwritten(?) & caching?
+        // TODO : better use substring 
+        svnPath = svnPath.replaceAll(documentRoot, "");
+        checkout(userCheckout, revision);
+        File file = new File(userCheckout + "/" + svnPath);
+        File tmp = null;
+        try {
+            tmp = File.createTempFile(UUID.randomUUID().toString(), null);
+            InputStream is = new FileInputStream(file);
+            OutputStream os = new FileOutputStream(tmp);
+            try{
+                callback.update(is, os);    
+            }finally{
+                os.close();
+                is.close();                
+            }               
+            FileUtils.copyFile(tmp, file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (tmp != null) {
+                tmp.delete();
+            }
+        }
+        return commit(file);
+    }
+
+    @Override
+    public void delete(String svnPath) {
+        try {
+            SVNURL targetURL = repoSvnURL.appendPath(svnPath, false);
+            System.out.println(clientManager.getCommitClient().doDelete(
+                    new SVNURL[] { targetURL }, "removed " + svnPath));
+        } catch (SVNException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -130,30 +166,6 @@ public class SubversionServiceImpl implements SubversionService {
             throw new RuntimeException(e.getMessage(), e);
         }
 
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public long importFile(String svnPath, File file) {
-        try {
-            return clientManager.getCommitClient().doImport(file,
-                    repoSvnURL.appendPath(svnPath, false), svnPath + " added",
-                    false).getNewRevision();
-        } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
-        }
-
-    }
-
-    @SuppressWarnings("deprecation")
-    public long commit(File file) {
-        try {
-            return clientManager.getCommitClient().doCommit(
-                    new File[] { file }, true, file.getName() + " committed", false,
-                    true).getNewRevision();
-        } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
-        }
     }
 
     @Override
@@ -171,40 +183,20 @@ public class SubversionServiceImpl implements SubversionService {
         }
     }
 
-    @Override
-    public InputStream getStream(String svnPath, long revision) throws IOException {
-        try {
-            if (revision == -1) {
-                revision = getLatestRevision(svnPath);
-            }
-            File documentFolder = new File(readCache, URLEncoder.encode(svnPath,
-                    "UTF-8"));
-            File documentFile = new File(documentFolder, String
-                    .valueOf(revision));
-            if (!documentFile.exists()) {
-                documentFolder.mkdirs();
-                OutputStream out = new FileOutputStream(documentFile);
-                try {
-                    svnRepository.getFile(svnPath, revision, null, out);
-                } finally {
-                    // SVNRepository.getFile doesn't close OutputStream,
-                    // so we need to close it manually
-                    out.close();
-                }
-            }
-            return new FileInputStream(documentFile);
-        } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
-        }
-
-    }
-
-    private List<SVNFileRevision> getFileRevisions(String svnPath)
-            throws SVNException {
+    private List<SVNFileRevision> getFileRevisions(String svnPath) throws SVNException {
         long latest = svnRepository.getLatestRevision();
         List<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>();
         svnRepository.getFileRevisions(svnPath, revisions, 0, latest);
         return revisions;
+    }
+
+    @Override
+    public long getLatestRevision() {
+        try {
+            return svnRepository.getLatestRevision();
+        } catch (SVNException s) {
+            throw new RuntimeException(s.getMessage(), s);
+        }
     }
 
     private long getLatestRevision(String svnPath) throws SVNException {
@@ -233,13 +225,67 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public void delete(String svnPath) {
+    public InputStream getStream(String svnPath, long revision) throws IOException {
         try {
-            SVNURL targetURL = repoSvnURL.appendPath(svnPath, false);
-            System.out.println(clientManager.getCommitClient().doDelete(
-                    new SVNURL[] { targetURL }, "removed " + svnPath));
-        } catch (SVNException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            if (revision == -1) {
+                revision = getLatestRevision(svnPath);
+            }
+            File documentFolder = new File(readCache, URLEncoder.encode(svnPath, "UTF-8"));
+            File documentFile = new File(documentFolder, String.valueOf(revision));
+            if (!documentFile.exists()) {
+                documentFolder.mkdirs();
+                OutputStream out = new FileOutputStream(documentFile);
+                try {
+                    svnRepository.getFile(svnPath, revision, null, out);
+                } finally {
+                    // SVNRepository.getFile doesn't close OutputStream,
+                    // so we need to close it manually
+                    out.close();
+                }
+            }
+            return new FileInputStream(documentFile);
+        } catch (SVNException s) {
+            throw new RuntimeException(s.getMessage(), s);
+        }
+
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public long importFile(String svnPath, File file) {
+        try {
+            return clientManager.getCommitClient().doImport(file,
+                    repoSvnURL.appendPath(svnPath, false), svnPath + " added",
+                    false).getNewRevision();
+        } catch (SVNException s) {
+            throw new RuntimeException(s.getMessage(), s);
+        }
+
+    }
+
+    public void initialize() {
+        logger.info("Initializing SVN repository on: " + svnRepo.getAbsolutePath());
+        try {
+            svnRepository = SVNRepositoryFactory.create(repoSvnURL);
+            if (svnRepo.exists()) {
+                return;
+            }
+            SVNRepositoryFactory.createLocalRepository(svnRepo, true, false);
+
+            clientManager.getCommitClient().doMkDir(
+                    new SVNURL[] { repoSvnURL.appendPath(documentRoot.split("/")[1], false),
+                            repoSvnURL.appendPath(documentRoot, false) },
+                    "created initial folders");
+
+            if (new File(materialTeiRoot).exists()) {
+                for (File file : new File(materialTeiRoot).listFiles()) {
+                    if (file.isFile()) {
+                        importFile(documentRoot + "/" + file.getName(), file);
+                    }
+                }
+            }
+        } catch (SVNException s) {
+            throw new RuntimeException(s.getMessage(), s);
         }
     }
 
@@ -251,47 +297,6 @@ public class SubversionServiceImpl implements SubversionService {
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
         }
-    }
-
-    @Override
-    public long getLatestRevision() {
-        try {
-            return svnRepository.getLatestRevision();
-        } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    public void checkout(File destination, long revision) {
-        try {
-            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, false), destination,
-                    SVNRevision.create(revision),
-                    SVNRevision.create(revision), false);
-        } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
-        }
-    }
-
-    @Override
-    public long commit(String svnPath, long revision, UpdateCallback callback) {
-        File userCheckout = new File(workingCopies + "/" + authService.getUsername()); // TODO will get overwritten(?) & caching?
-        svnPath = svnPath.replaceAll(documentRoot, "");
-        checkout(userCheckout, revision);
-        File file = new File(userCheckout + "/" + svnPath);
-        File tmp = null;
-        try {
-            tmp = File.createTempFile(UUID.randomUUID().toString(), null);
-            callback.update(new FileInputStream(file), new FileOutputStream(tmp));
-            FileUtils.copyFile(tmp, file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (tmp != null) {
-                tmp.delete();
-            }
-        }
-        return commit(file);
     }
 
 }

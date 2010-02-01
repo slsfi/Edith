@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2009 Mysema Ltd.
- * All rights reserved.
- * 
- */
 package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -14,19 +9,14 @@ import com.mysema.rdfbean.model.IDType;
  *
  * @author tiwe
  * @version $Id$
- *
  */
 @ClassMapping
-public abstract class Identifiable {
-    
+public class Identifiable {
+        
     @Id(IDType.LOCAL)
     private String id;
-    
+   
     public String getId() {
-        return id;
-    }
-
-    public String toString() {
         return id;
     }
 

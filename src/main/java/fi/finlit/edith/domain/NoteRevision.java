@@ -8,6 +8,7 @@ package fi.finlit.edith.domain;
 import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
+import com.mysema.rdfbean.model.ID;
 
 import fi.finlit.edith.EDITH;
 
@@ -18,13 +19,13 @@ import fi.finlit.edith.EDITH;
  * @version $Id$
  */
 @ClassMapping(ns=EDITH.NS)
-public class NoteRevision extends Identifiable {
+public class NoteRevision extends Identifiable{
     
     @Predicate
-    private String basicForm; 
+    private String basicForm;
     
     @Predicate
-    private UserInfo createdBy;
+    private UserInfo createdBy; 
     
     @Predicate
     private long createdOn;
@@ -42,12 +43,24 @@ public class NoteRevision extends Identifiable {
     private String longText; 
        
     @Predicate
-    private long svnRevision;
-    
-    @Predicate
     @QueryInit({"*", "term.meaning"})
     private Note revisionOf;
     
+    @Predicate
+    private long svnRevision;
+    
+    public NoteRevision createCopy() {        
+        NoteRevision copy = new NoteRevision();
+        copy.setBasicForm(basicForm);
+        copy.setDescription(description);
+        copy.setLemma(lemma);
+        copy.setLongText(longText);
+        copy.setRevisionOf(revisionOf);
+        copy.setSVNRevision(svnRevision);
+        return copy;
+        
+    }
+
     public String getBasicForm() {
         return basicForm;
     }
@@ -63,25 +76,25 @@ public class NoteRevision extends Identifiable {
     public String getDescription() {
         return description;
     }
-
+        
     public Note getLatestRevisionOf() {
         return latestRevisionOf;
     }
-    
+
     public String getLemma() {
         return lemma;
     }
-    
+
     public String getLongText() {
         return longText;
     }
 
-    public long getSvnRevision() {
-        return svnRevision;
-    }
-
     public Note getRevisionOf() {
         return revisionOf;
+    }
+
+    public long getSvnRevision() {
+        return svnRevision;
     }
 
     public void setBasicForm(String basicForm) {
@@ -108,25 +121,12 @@ public class NoteRevision extends Identifiable {
         this.longText = longText;
     }
 
-    public void setSVNRevision(long svnRevision) {
-        this.svnRevision = svnRevision;
-    }
-
     public void setRevisionOf(Note revisionOf) {
         this.revisionOf = revisionOf;
     }
 
-    public NoteRevision createCopy() {        
-        NoteRevision copy = new NoteRevision();
-        copy.setBasicForm(basicForm);
-        copy.setDescription(description);
-        copy.setLemma(lemma);
-        copy.setLongText(longText);
-        copy.setRevisionOf(revisionOf);
-        copy.setSVNRevision(svnRevision);
-        return copy;
-        
+    public void setSVNRevision(long svnRevision) {
+        this.svnRevision = svnRevision;
     }
-
  
 }

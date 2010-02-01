@@ -6,7 +6,6 @@
 package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QNoteRevision.noteRevision;
-import static fi.finlit.edith.domain.QUserInfo.userInfo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,13 +19,16 @@ import com.mysema.query.types.expr.EBoolean;
 import com.mysema.query.types.path.PEntity;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
+import com.mysema.rdfbean.model.BID;
 import com.mysema.rdfbean.object.BeanSubQuery;
+import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.QNoteRevision;
 import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.domain.UserRepository;
 
 /**
  * NoteRepositoryImpl provides
@@ -38,13 +40,15 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     
     private static final QNoteRevision otherNote = new QNoteRevision("other");
     
-    private final AuthService authService;
+    private final UserRepository userRepository;
     
-    public NoteRevisionRepositoryImpl(@Inject AuthService authService) {
-        super(noteRevision);
-        this.authService = authService;
+    public NoteRevisionRepositoryImpl(
+            @Inject SessionFactory sessionFactory,
+            @Inject UserRepository userRepository) {
+        super(sessionFactory, noteRevision);
+        this.userRepository = userRepository;
     }
-        
+            
     @Override
     public GridDataSource queryNotes(String searchTerm) {
         Assert.notNull(searchTerm);        
@@ -88,9 +92,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
 
     @Override
     public NoteRevision save(NoteRevision note) {
-        UserInfo createdBy = getSession().from(userInfo)
-            .where(userInfo.username.eq(authService.getUsername()))
-            .uniqueResult(userInfo);  
+        UserInfo createdBy = userRepository.getCurrentUser();  
         note.setCreatedOn(System.currentTimeMillis());
         note.setCreatedBy(createdBy);
         note.getRevisionOf().setLatestRevision(note);
@@ -99,8 +101,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     
     private BeanSubQuery sub(PEntity<?> entity){
         return new BeanSubQuery().from(entity);
-    }
-    
+    }    
 
     private EBoolean latestFor(long svnRevision){
         return sub(otherNote).where(

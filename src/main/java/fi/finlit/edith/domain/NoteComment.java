@@ -22,62 +22,58 @@ import fi.finlit.edith.EDITH;
 public class NoteComment extends Identifiable{
     
     @Predicate
+    private UserInfo createdBy;
+    
+    @Predicate
     private DateTime createdOn;
     
     @Predicate
-    private UserInfo createdBy;
+    private Note note;
 
     @Predicate
     private String text;
 
     @Predicate
     private String title;
-
-    @Predicate
-    private Note note;
     
     public UserInfo getCreatedBy() {
         return createdBy;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setCreatedBy(UserInfo createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public void setText(String text) {
-        this.text = text;
-    }
-    
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Note getNote() {
-        return note;
-    }
-
-    public void setNote(Note note) {
-        this.note = note;
     }
 
     public DateTime getCreatedOn() {
         return createdOn;
     }
 
+    public Note getNote() {
+        return note;
+    }
+
+    public String getText() {
+        return text;
+    }
+    
+    public String getTitle() {
+        return title;
+    }
+    
+    public void setCreatedBy(UserInfo createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public void setCreatedOn(DateTime createdOn) {
         this.createdOn = createdOn;
     }
-    
-    
-    
-    
 
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
 }

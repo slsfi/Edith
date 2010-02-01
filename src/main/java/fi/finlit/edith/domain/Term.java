@@ -18,7 +18,7 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns=EDITH.NS)
 public class Term extends Identifiable{
-
+    
     @Predicate
     private String basicForm;
     
@@ -29,18 +29,16 @@ public class Term extends Identifiable{
         return basicForm;
     }
 
-    public void setBasicForm(String basicForm) {
-        this.basicForm = basicForm;
-    }
-
     public String getMeaning() {
         return meaning;
+    }
+
+    public void setBasicForm(String basicForm) {
+        this.basicForm = basicForm;
     }
 
     public void setMeaning(String meaning) {
         this.meaning = meaning;
     }
     
-    
-
 }

@@ -35,8 +35,8 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.tmatesoft.svn.core.SVNException;
 
 import com.mysema.commons.lang.Assert;
-import com.mysema.query.types.Template.Element;
 import com.mysema.rdfbean.dao.AbstractRepository;
+import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
@@ -64,10 +64,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private final NoteRepository noteRepository;
 
-    public DocumentRepositoryImpl(@Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
-            @Inject SubversionService svnService, @Inject NoteRepository noteRepository)
-            throws SVNException {
-        super(document);
+    public DocumentRepositoryImpl(
+            @Inject SessionFactory sessionFactory,
+            @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
+            @Inject SubversionService svnService, 
+            @Inject NoteRepository noteRepository)throws SVNException {
+        super(sessionFactory, document);
         this.documentRoot = documentRoot;
         this.svnService = svnService;
         this.noteRepository = noteRepository;
@@ -107,8 +109,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     private Document getDocumentMetadata(String svnPath) {
-        return getSession().from(document).where(document.svnPath.eq(svnPath)).uniqueResult(
-                document);
+        return getSession().from(document)
+            .where(document.svnPath.eq(svnPath))
+            .uniqueResult(document);
     }
 
     @Override
@@ -184,8 +187,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         int n = 0;
                         while (attributes.hasNext()) {
                             Attribute attr = attributes.next();
-                            if (attr.getName().getLocalPart().equals("type")
-                                    && attr.getValue().equals("act")) {
+                            if (attr.getName().getLocalPart().equals("type") && attr.getValue().equals("act")) {
                                 isAct = true;
                             } else if (attr.getName().getLocalPart().equals("n")) {
                                 n = Integer.valueOf(attr.getValue());
@@ -217,8 +219,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                 writer.add(eventFactory.createCharacters(data.substring(0, index)));
                             }
                             writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
-                            writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "start"
-                                    + localId));
+                            writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "start" + localId));
                             writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
                             handled = true;
                         }
@@ -275,7 +276,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     public void removeNoteAnchors(InputStream source, OutputStream target, Note... notes) throws Exception {
-        Set<String> anchors = new HashSet<String>();
+        Set<String> anchors = new HashSet<String>(notes.length * 2);
         for (Note note : notes) {
             anchors.add("start" + note.getLocalId());
             anchors.add("end" + note.getLocalId());
@@ -290,8 +291,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             if (event.isStartElement()) {
-                Attribute attr = event.asStartElement().getAttributeByName(
-                        new QName(XML_NS, "id"));
+                Attribute attr = event.asStartElement().getAttributeByName(new QName(XML_NS, "id"));
                 if (attr != null && anchors.contains(attr.getValue())) {
                     remove = true;
                     continue;

@@ -19,21 +19,25 @@ import fi.finlit.edith.EDITH;
  */
 // TODO : use "user:"<username> as URL schema ?!?
 @ClassMapping(ns=EDITH.NS)
-public class User extends Identifiable {
+public class User extends Identifiable{
     
     @Predicate
     private String firstName, lastName, email;
     
     @Predicate
+    private String password;
+    
+    @Predicate
+    private Profile profile;
+
+    @Predicate
     @Unique
     private String username;
     
-    @Predicate
-    private String password;
+    public String getEmail() {
+        return email;
+    }
 
-    @Predicate
-    private Profile profile;
-    
     public String getFirstName() {
         return firstName;
     }
@@ -46,40 +50,36 @@ public class User extends Identifiable {
         return password;
     }
 
+    public Profile getProfile() {
+        return profile;
+    }
+    
     public String getUsername() {
         return username;
     }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
     
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public Profile getProfile() {
-        return profile;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setProfile(Profile profile) {
         this.profile = profile;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
     
 }

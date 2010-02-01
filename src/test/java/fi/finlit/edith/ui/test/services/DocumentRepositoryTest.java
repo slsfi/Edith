@@ -25,9 +25,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
@@ -50,8 +48,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @Inject
     private SubversionService subversionService;
 
-    private static boolean initialized = false;
-
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
@@ -60,12 +56,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Before
     public void setUp(){
-        if (!initialized){
-            subversionService.destroy();
-            subversionService.initialize();
-            initialized = true;
-        }
-
+        subversionService.initialize();
     }
 
     @After

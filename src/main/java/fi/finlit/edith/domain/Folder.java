@@ -20,7 +20,7 @@ import fi.finlit.edith.EDITH;
 // NOTE : do we need a Folder type at all ?!?
 @ClassMapping(ns=EDITH.NS)
 public class Folder extends Identifiable implements Comparable<Folder>{
-
+    
     @Predicate
     @Unique
     private String svnPath;
@@ -31,17 +31,17 @@ public class Folder extends Identifiable implements Comparable<Folder>{
     }
     
     @Override
-    public int hashCode(){
-        return svnPath.hashCode();
-    }
-    
-    @Override
     public boolean equals(Object o){
         return o instanceof Folder && ((Folder)o).svnPath.equals(svnPath);
     }
-
+    
     public String getSvnPath() {
         return svnPath;
+    }
+
+    @Override
+    public int hashCode(){
+        return svnPath.hashCode();
     }
 
     public void setSvnPath(String svnPath) {

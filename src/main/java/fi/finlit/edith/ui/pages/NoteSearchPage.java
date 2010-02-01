@@ -50,7 +50,7 @@ public class NoteSearchPage {
     private NoteRevisionRepository noteRevisionRepo;
 
     @Property
-    private PrimaryKeyEncoder<NoteRevision> encoder;
+    private PrimaryKeyEncoder encoder;
 
     @Inject
     @Path("NoteSearchPage.css")
@@ -60,7 +60,7 @@ public class NoteSearchPage {
     private RenderSupport support;
 
     void onPrepare() {
-        encoder = new PrimaryKeyEncoder<NoteRevision>(noteRevisionRepo);
+        encoder = new PrimaryKeyEncoder(noteRevisionRepo);
     }
 
     void onActionFromToggleEdit() {
@@ -96,8 +96,7 @@ public class NoteSearchPage {
     }
 
     void setupRender() {
-        notes = noteRevisionRepo.queryNotes(searchTerm == null ? "*"
-                : searchTerm);
+        notes = noteRevisionRepo.queryNotes(searchTerm == null ? "*" : searchTerm);
     }
 
     Object onPassivate() {

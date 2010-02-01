@@ -16,9 +16,9 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public class DocumentRevision {
     
-    private final String svnPath;
-    
     private final long revision;
+    
+    private final String svnPath;
     
     public DocumentRevision(Document document, long revision){
         this(document.getSvnPath(), revision);

@@ -18,7 +18,7 @@
   <properties>
     <tapestry.version>5.1.0.5</tapestry.version>
     <jetty.version>6.1.0-SNAPSHOT</jetty.version>
-    <rdfbean.version>1.1.3</rdfbean.version>
+    <rdfbean.version>1.1.6</rdfbean.version>
     <commons.tapestry.version>0.1.7</commons.tapestry.version>
     <extraResources>src/main/resources</extraResources>
   </properties>
@@ -79,13 +79,7 @@
       <artifactId>stax</artifactId>
       <version>1.2.0</version>
     </dependency>
-<!--     
-    <dependency>
-      <groupId>xom</groupId>
-      <artifactId>xom</artifactId>
-      <version>1.1</version>
-    </dependency>    
- -->
+
     <!-- persistence -->
     <dependency>
       <groupId>org.tmatesoft.svnkit</groupId>

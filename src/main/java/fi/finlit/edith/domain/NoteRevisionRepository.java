@@ -21,12 +21,6 @@ import com.mysema.rdfbean.dao.Repository;
 public interface NoteRevisionRepository extends Repository<NoteRevision, String> {
 
     /**
-     * @param searchTem
-     * @return
-     */
-    GridDataSource queryNotes(String searchTem);
-
-    /**
      * @param document
      * @param documentRevision
      * @param localId
@@ -41,5 +35,11 @@ public interface NoteRevisionRepository extends Repository<NoteRevision, String>
      * @return
      */
     List<NoteRevision> getOfDocument(Document document, long revision);
+
+    /**
+     * @param searchTem
+     * @return
+     */
+    GridDataSource queryNotes(String searchTem);
 
 }

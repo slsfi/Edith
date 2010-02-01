@@ -31,6 +31,13 @@ public interface UserRepository extends Repository<User,String>{
     User getByUsername(String shortName);
     
     /**
+     * @param username
+     * @return
+     */
+    @Nullable
+    UserInfo getCurrentUser();
+
+    /**
      * @return
      */
     List<User> getOrderedByName();

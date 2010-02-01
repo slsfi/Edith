@@ -5,9 +5,8 @@
  */
 package fi.finlit.edith.ui.test.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -16,12 +15,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
 import com.mysema.rdfbean.tapestry.services.RDFBeanModule;
 
-import fi.finlit.edith.EDITH;
 import fi.finlit.edith.testutil.Modules;
 import fi.finlit.edith.testutil.TapestryTestRunner;
 import fi.finlit.edith.ui.services.DataModule;

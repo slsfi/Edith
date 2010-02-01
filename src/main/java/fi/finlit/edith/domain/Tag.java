@@ -30,18 +30,18 @@ public class Tag implements Comparable<Tag>{
         this.id = new UID("tag:", name);
     }
     
-    public String getName(){
-        return id.getLocalName();
-    }
-
     @Override
     public int compareTo(Tag tag) {
         return id.getLocalName().compareTo(tag.getName());
     }
-    
+
     @Override
     public boolean equals(Object o){
         return o instanceof Tag && ((Tag)o).id.equals(id);
+    }
+    
+    public String getName(){
+        return id.getLocalName();
     }
     
     @Override

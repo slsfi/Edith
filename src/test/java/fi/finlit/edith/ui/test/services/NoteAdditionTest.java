@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
 
+import com.mysema.rdfbean.object.SessionFactory;
+
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
@@ -43,18 +45,22 @@ public class NoteAdditionTest extends AbstractServiceTest{
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_FILE_KEY)
     private String testDocument;
 
+    @Inject 
+    private SessionFactory sessionFactory;
+    
     private DocumentRepositoryImpl documentRepo;
 
     private InputStream source;
 
     private File targetFile;
+    
     private OutputStream target;
 
     private String localId;
-
+       
     @Before
     public void setUp() throws SVNException, IOException{
-        documentRepo = new DocumentRepositoryImpl(documentRoot, svnService, noteRepo);
+        documentRepo = new DocumentRepositoryImpl(sessionFactory, documentRoot, svnService, noteRepo);
         source = new FileInputStream(new File(testDocument));
         targetFile = File.createTempFile("test", null);
         target = new FileOutputStream(targetFile);

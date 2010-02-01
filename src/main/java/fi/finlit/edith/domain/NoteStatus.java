@@ -24,11 +24,11 @@ public enum NoteStatus {
     /**
      * 
      */
-    LockedForEdit,
+    Finished,
     /**
      * 
      */
-    Finished,
+    LockedForEdit,
     /**
      * 
      */

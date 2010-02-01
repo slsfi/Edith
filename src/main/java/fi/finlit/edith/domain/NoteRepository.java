@@ -22,12 +22,6 @@ import com.mysema.rdfbean.dao.Repository;
 public interface NoteRepository extends Repository<Note,String>{
     
     /**
-     * @param file
-     * @throws Exception 
-     */
-    int importNotes(File file) throws Exception;
-    
-    /**
      * @param document
      * @param revision
      * @param localId
@@ -36,6 +30,12 @@ public interface NoteRepository extends Repository<Note,String>{
      * @return
      */
     Note createNote(Document document, long revision, String localId, String lemma, String longText);
+    
+    /**
+     * @param file
+     * @throws Exception 
+     */
+    int importNotes(File file) throws Exception;
 
     /**
      * @param searchTerm

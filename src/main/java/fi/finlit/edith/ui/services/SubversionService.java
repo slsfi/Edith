@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * SubversionService provides
+ * SubversionService provides Subversion client functionality
  *
  * @author tiwe
  * @version $Id$

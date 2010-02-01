@@ -18,7 +18,7 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns=EDITH.NS)
 public class Location extends Identifiable{
-
+    
     @Predicate
     private String primaryName;
 

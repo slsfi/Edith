@@ -24,12 +24,12 @@ public enum Profile {
     /**
      * 
      */
-    User("ROLE_USER"),
+    Admin("ROLE_USER","ROLE_ADMIN"),
     
     /**
      * 
      */
-    Admin("ROLE_USER","ROLE_ADMIN");
+    User("ROLE_USER");
     
     private final GrantedAuthority[] authorities;
     

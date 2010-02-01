@@ -22,13 +22,23 @@ public class Document extends Identifiable implements Comparable<Document>{
     
     @Predicate
     private String description;
-
+    
     @Predicate
     @Unique
     private String svnPath;
 
     @Predicate
     private String title;
+
+    @Override
+    public int compareTo(Document doc) {
+        return svnPath.compareTo(doc.svnPath);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        return o instanceof Document && ((Document)o).svnPath.equals(svnPath);
+    }
 
     public String getDescription() {
         return description;
@@ -37,11 +47,16 @@ public class Document extends Identifiable implements Comparable<Document>{
     public String getSvnPath() {
         return svnPath;
     }
-
+    
     public String getTitle() {
         return title;
     }
-
+    
+    @Override
+    public int hashCode(){
+        return svnPath.hashCode();
+    }
+        
     public void setDescription(String description) {
         this.description = description;
     }
@@ -49,24 +64,9 @@ public class Document extends Identifiable implements Comparable<Document>{
     public void setSvnPath(String svnPath) {
         this.svnPath = svnPath;
     }
-    
+
     public void setTitle(String title) {
         this.title = title;
-    }
-        
-    @Override
-    public int hashCode(){
-        return svnPath.hashCode();
-    }
-    
-    @Override
-    public boolean equals(Object o){
-        return o instanceof Document && ((Document)o).svnPath.equals(svnPath);
-    }
-
-    @Override
-    public int compareTo(Document doc) {
-        return svnPath.compareTo(doc.svnPath);
     }
 
 }

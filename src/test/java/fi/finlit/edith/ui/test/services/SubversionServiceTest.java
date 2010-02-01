@@ -32,6 +32,7 @@ import fi.finlit.edith.ui.services.UpdateCallback;
  * @version $Id$
  */
 public class SubversionServiceTest extends AbstractServiceTest {
+    
     private SubversionServiceImpl subversionService;
 
     @Inject
@@ -45,12 +46,15 @@ public class SubversionServiceTest extends AbstractServiceTest {
     @Inject
     @Symbol(EDITH.SVN_CACHE_DIR)
     private File svnCache;
+    
     @Inject
     @Symbol(EDITH.REPO_FILE_PROPERTY)
     private File svnRepo;
+    
     @Inject
     @Symbol(EDITH.REPO_URL_PROPERTY)
     private String repoURL;
+    
     @Inject
     @Symbol(EDITH.MATERIAL_TEI_ROOT)
     private String materialTeiRoot;
@@ -59,17 +63,24 @@ public class SubversionServiceTest extends AbstractServiceTest {
     private AuthService authService;
 
     private File checkoutDirectory;
+    
     private File anotherCheckoutDirectory;
+    
     private File testFile;
+    
+    private File svnRepoCopy = new File("target/repoCopy");
 
     @Before
     public void setUp() throws Exception {
         subversionService = new SubversionServiceImpl(svnCache, svnRepo, repoURL, documentRoot, materialTeiRoot, authService);
-        subversionService.initialize();
+        subversionService.initialize();        
         checkoutDirectory = new File("target/checkout");
         anotherCheckoutDirectory = new File("target/anotherCheckout");
         testFile = new File("target/testFile.txt");
         FileUtils.writeStringToFile(testFile, "foo\n");
+        
+        // make a copy of svn repository
+        FileUtils.copyDirectory(svnRepo, svnRepoCopy);
     }
 
     @After
@@ -77,24 +88,26 @@ public class SubversionServiceTest extends AbstractServiceTest {
         FileUtils.deleteDirectory(checkoutDirectory);
         FileUtils.deleteDirectory(anotherCheckoutDirectory);
         testFile.delete();
+        
+        // recover the svn repository from the copy 
         subversionService.destroy();
-        subversionService.initialize();
+        svnRepoCopy.renameTo(svnRepo);
     }
 
     @Test
     public void importFile() throws Exception {
+        
         final long currentRevision = subversionService.getLatestRevision();
         final long expected = currentRevision + 1;
         String newPath = documentRoot + "/" + UUID.randomUUID().toString();
         assertEquals(expected, subversionService.importFile(newPath,
-                noteTestData));
+                noteTestData));               
     }
 
     @Test
     public void getStream() throws Exception {
         final String svnPath = documentRoot + "/notesTestData.txt";
-        final long revision = subversionService.importFile(svnPath,
-                noteTestData);
+        final long revision = subversionService.importFile(svnPath, noteTestData);
         InputStream expected = new FileInputStream(noteTestData);
         InputStream actual = subversionService.getStream(svnPath, revision);
         boolean result = IOUtils.contentEquals(expected, actual);
