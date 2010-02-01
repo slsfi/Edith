@@ -68,7 +68,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private final SubversionService svnService;
 
     private final NoteRepository noteRepository;
-    
+
     private final NoteRevisionRepository noteRevisionRepository;
 
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
@@ -218,9 +218,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 } else if (event.isCharacters()) {
                     Characters characters = event.asCharacters();
                     String data = characters.getData();
-                    if (data.equals("ottaa")) {
-                        System.out.println(true);
-                    }
                     int index = 0;
 
                     if (startPosition.matches(act, inSp ? sp : stage, inSp)) {
