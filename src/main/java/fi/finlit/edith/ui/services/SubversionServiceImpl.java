@@ -98,7 +98,7 @@ public class SubversionServiceImpl implements SubversionService {
         try {
             clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, false), destination,
                     SVNRevision.create(revision),
-                    SVNRevision.create(revision), false);
+                    SVNRevision.create(revision), true);
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
         }
@@ -117,9 +117,13 @@ public class SubversionServiceImpl implements SubversionService {
 
     @Override
     public long commit(String svnPath, long revision, UpdateCallback callback) {
-        File userCheckout = new File(workingCopies + "/" + authService.getUsername()); // TODO will get overwritten(?) & caching?
+        File userCheckout = new File(workingCopies + "/" + authService.getUsername());
         svnPath = svnPath.substring(documentRoot.length());
-        checkout(userCheckout, revision);
+        if (userCheckout.exists()) {
+            update(userCheckout);
+        } else {
+            checkout(userCheckout, revision);
+        }
         File file = new File(userCheckout + "/" + svnPath);
         File tmp = null;
         try {

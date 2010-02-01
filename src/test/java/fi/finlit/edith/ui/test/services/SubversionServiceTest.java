@@ -199,7 +199,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void commit() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         long oldRevision = subversionService.importFile(svnPath, testFile);
-        long newRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), new UpdateCallback() {
+        subversionService.commit(svnPath, subversionService.getLatestRevision(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
@@ -210,7 +210,18 @@ public class SubversionServiceTest extends AbstractServiceTest {
                 }
             }
         });
-        assertEquals(oldRevision + 1, newRevision);
+        long currentRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), new UpdateCallback() {
+            @Override
+            public void update(InputStream source, OutputStream target) {
+                try {
+                    IOUtils.copy(source, target);
+                    IOUtils.write("jeeeeeeeejeeeejeeeeee", target);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        assertEquals(oldRevision + 2, currentRevision);
     }
 
     @Test
