@@ -10,6 +10,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -45,19 +48,23 @@ public class NoteAdditionTest extends AbstractServiceTest{
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_FILE_KEY)
     private String testDocument;
 
-    @Inject 
+    @Inject
     private SessionFactory sessionFactory;
-    
+
     private DocumentRepositoryImpl documentRepo;
 
     private InputStream source;
 
     private File targetFile;
-    
+
     private OutputStream target;
 
     private String localId;
-       
+
+    private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
+
+    private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
+
     @Before
     public void setUp() throws SVNException, IOException{
         documentRepo = new DocumentRepositoryImpl(sessionFactory, documentRoot, svnService, noteRepo);
@@ -80,7 +87,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_for_p() throws Exception{
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
-        documentRepo.addNote(source, target, element, element, text, localId);
+        documentRepo.addNote(inFactory.createXMLEventReader(source), outFactory
+                .createXMLEventWriter(target), element, element, text, localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + text + end(localId)));
@@ -90,7 +98,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_for_speaker() throws Exception{
         String element = "act1-sp1";
         String text = "Esko.";
-        documentRepo.addNote(source, target, element, element, text, localId);
+        documentRepo.addNote(inFactory.createXMLEventReader(source), outFactory
+                .createXMLEventWriter(target), element, element, text, localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains("<speaker>" + start(localId) + text + end(localId) + "</speaker>"));
@@ -101,7 +110,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String start = "act1-sp2";
         String end = "act1-sp3";
         String text = "ja polvip\u00F6ksyt. Esko.";
-        documentRepo.addNote(source, target, start, end, text, localId);
+        documentRepo.addNote(inFactory.createXMLEventReader(source), outFactory
+                .createXMLEventWriter(target), start, end, text, localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
@@ -113,7 +123,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String start = "act1-sp2";
         String end = "act1-sp3";
         String text = "ja polvip\u00F6ksyt. Esko. (panee ty\u00F6ns\u00E4 pois).";
-        documentRepo.addNote(source, target, start, end, text, localId);
+        documentRepo.addNote(inFactory.createXMLEventReader(source), outFactory
+                .createXMLEventWriter(target), start, end, text, localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));

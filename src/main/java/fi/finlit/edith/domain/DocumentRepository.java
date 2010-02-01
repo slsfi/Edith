@@ -54,7 +54,7 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @param text
      * @throws IOException
      */
-    void updateNode(Document document, NoteRevision note, String startId, String endId, String text) throws IOException;
+    void updateNote(Document document, NoteRevision note, String startId, String endId, String text) throws IOException;
     
     /**
      * Get a Document handle for the given path

@@ -25,6 +25,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
@@ -53,7 +54,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     private String documentRoot;
 
     private List<Document> savedDocs = new ArrayList<Document>();
-    
+
     private static boolean initialized = false;
 
     @Before
@@ -62,7 +63,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
             subversionService.destroy();
             subversionService.initialize();
             initialized = true;
-        }        
+        }
     }
 
     @After
@@ -70,9 +71,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         closeStreams();
         for (Document doc : savedDocs){
             documentRepo.remove(doc);
-        }        
+        }
     }
-    
+
     @Test
     public void getAll() {
         assertEquals(7, documentRepo.getAll().size());
@@ -189,9 +190,15 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertFalse(content.contains(start(note3.getLocalId()) + text3 + end(note3.getLocalId())));
     }
 
+    @Test
+    @Ignore
+    public void updateNote() {
+
+    }
+
     @Override
     protected Class<?> getServiceClass() {
         return DocumentRepository.class;
     }
-    
+
 }

@@ -60,6 +60,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
 
+    private static final QName SEARCHED_ATTRIBUTE_NAME = new QName(XML_NS, "id");
+
     private final String documentRoot;
 
     private final SubversionService svnService;
@@ -154,7 +156,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
-                    addNote(source, target, startId, endId, text, localId);
+                    addNote(inFactory.createXMLEventReader(source), outFactory
+                            .createXMLEventWriter(target), startId, endId, text, localId);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -165,14 +168,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return noteRepository.createNote(doc, newRevision, localId, text, text);
     }
 
-    public void addNote(InputStream source, OutputStream target, String startId, String endId,
+    public void addNote(XMLEventReader reader, XMLEventWriter writer, String startId, String endId,
             String text, String localId) throws Exception {
         AnchorPosition startPosition = new AnchorPosition(Assert.notNull(startId));
         AnchorPosition endPosition = new AnchorPosition(endId);
         System.err.println(startPosition + " - " + endPosition + " : " + text);
-
-        XMLEventReader reader = inFactory.createXMLEventReader(source);
-        XMLEventWriter writer = outFactory.createXMLEventWriter(target);
 
         try {
             int act = 0;
@@ -266,7 +266,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
-                    removeNoteAnchors(source, target, notes);
+                    removeNoteAnchors(inFactory.createFilteredReader(inFactory
+                            .createXMLEventReader(source), createEventFilter(notes)), outFactory
+                            .createXMLEventWriter(target));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -279,10 +281,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
-    public void removeNoteAnchors(InputStream source, OutputStream target, Note... notes) throws Exception {
-        XMLEventReader reader = inFactory.createFilteredReader(inFactory.createXMLEventReader(source), createEventFilter(notes));
-        XMLEventWriter writer = outFactory.createXMLEventWriter(target);
-
+    public void removeNoteAnchors(XMLEventReader reader, XMLEventWriter writer) throws Exception {
         try {
             while (reader.hasNext()) {
                 writer.add(reader.nextEvent());
@@ -294,7 +293,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     private static EventFilter createEventFilter(Note... notes) {
-        final QName searchedAttributeName = new QName(XML_NS, "id");
         final Set<String> anchors = new HashSet<String>(notes.length * 2);
 
         for (Note note : notes) {
@@ -309,7 +307,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             public boolean accept(XMLEvent event) {
                 if (event.isStartElement()) {
                     Attribute attr = event.asStartElement().getAttributeByName(
-                            searchedAttributeName);
+                            SEARCHED_ATTRIBUTE_NAME);
                     if (attr != null && anchors.contains(attr.getValue())) {
                         removeNextEndElement = true;
                         return false;
@@ -325,9 +323,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public void updateNode(Document document, NoteRevision note, String startId, String endId,
+    public void updateNote(Document document, NoteRevision note, String startId, String endId,
             String text) throws IOException {
-        throw new UnsupportedOperationException();
 
     }
 }
