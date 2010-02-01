@@ -204,9 +204,29 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    @Ignore
-    public void updateNote() {
+    public void updateNote() throws Exception {
+        Document document = documentRepo.getDocumentForPath(documentRoot
+                + "/Nummisuutarit rakenteistettuna.xml");
 
+        String element = "act1-sp2";
+        String text = "sun ullakosta ottaa";
+
+        Note note = documentRepo.addNote(document, -1, element, element, text);
+
+        String newText = "sun ullakosta";
+        documentRepo.updateNote(document, note, element, element, newText);
+
+        // TODO Resource handling into setup + teardown?
+        File tmpFile = File.createTempFile("nummarit", ".xml");
+        OutputStream out = new FileOutputStream(tmpFile);
+        InputStream in = register(subversionService.getStream(document.getSvnPath(), -1));
+        IOUtils.copy(in, out);
+        out.close();
+
+        String content = FileUtils.readFileToString(tmpFile, "UTF-8");
+        tmpFile.delete();
+        assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
+        assertTrue(content.contains(start(note.getLocalId()) + newText + end(note.getLocalId())));
     }
 
     @Override

@@ -213,6 +213,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 } else if (event.isCharacters()) {
                     Characters characters = event.asCharacters();
                     String data = characters.getData();
+                    if (data.equals("ottaa")) {
+                        System.out.println(true);
+                    }
                     int index = 0;
 
                     if (startPosition.matches(act, inSp ? sp : stage, inSp)) {
@@ -226,6 +229,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "start" + localId));
                             writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
                             handled = true;
+                        } else {
+                            index = 0;
                         }
                     }
 
@@ -292,6 +297,28 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
+
+    @Override
+    public void updateNote(Document document, final Note note, final String startId, final String endId,
+            final String text) throws IOException {
+            Long newRevision = svnService.commit(document.getSvnPath(),note.getLatestRevision().getSvnRevision(), new UpdateCallback() {
+                @Override
+                    public void update(InputStream source, OutputStream target) {
+                        try {
+                            addNote(inFactory.createFilteredReader(inFactory
+                                    .createXMLEventReader(source),
+                                    createEventFilter(new Note[] { note })),
+                                    outFactory.createXMLEventWriter(target), startId, endId, text,
+                                    note.getLocalId());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+            });
+
+            // TODO Update note?
+    }
+
     private static EventFilter createEventFilter(Note... notes) {
         final Set<String> anchors = new HashSet<String>(notes.length * 2);
 
@@ -322,9 +349,4 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         };
     }
 
-    @Override
-    public void updateNote(Document document, NoteRevision note, String startId, String endId,
-            String text) throws IOException {
-
-    }
 }

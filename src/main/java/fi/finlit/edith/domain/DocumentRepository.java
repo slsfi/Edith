@@ -46,7 +46,7 @@ public interface DocumentRepository extends Repository<Document,String>{
 
     /**
      * Update the boundaries of the given note in the context of the given document
-     * 
+     *
      * @param document
      * @param note
      * @param startId
@@ -54,8 +54,8 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @param text
      * @throws IOException
      */
-    void updateNote(Document document, NoteRevision note, String startId, String endId, String text) throws IOException;
-    
+    void updateNote(Document document, Note note, String startId, String endId, String text) throws IOException;
+
     /**
      * Get a Document handle for the given path
      *

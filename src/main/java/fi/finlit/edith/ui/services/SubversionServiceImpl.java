@@ -130,9 +130,9 @@ public class SubversionServiceImpl implements SubversionService {
             tmp = File.createTempFile(UUID.randomUUID().toString(), null);
             InputStream is = new FileInputStream(file);
             OutputStream os = new FileOutputStream(tmp);
-            try{
+            try {
                 callback.update(is, os);
-            }finally{
+            } finally {
                 os.close();
                 is.close();
             }
