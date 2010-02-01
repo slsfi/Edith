@@ -11,7 +11,6 @@ import java.io.IOException;
 import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.ServiceBinder;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
@@ -26,8 +25,6 @@ import com.mysema.rdfbean.sesame.MemoryRepository;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.AuthService;
-import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
-import fi.finlit.edith.ui.services.SubversionServiceImpl;
 
 /**
  * ServiceTestModule provides
@@ -61,11 +58,6 @@ public class ServiceTestModule {
         return saltSource;
     }
     
-    public static void bind(ServiceBinder binder){
-        binder.bind(DocumentRepositoryImpl.class).withId("DocumentRepositoryImpl");
-        binder.bind(SubversionServiceImpl.class).withId("SubversionServiceImpl");
-    }
-
     /**
      * Makes a memory based test configuration override
      */

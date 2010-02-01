@@ -45,7 +45,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
 
-    @InjectService("DocumentRepository")
+    @Inject
     private DocumentRepository documentRepo;
 
     private Document document;

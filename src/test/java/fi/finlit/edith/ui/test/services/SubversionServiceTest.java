@@ -12,8 +12,8 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +34,8 @@ import fi.finlit.edith.ui.services.UpdateCallback;
  */
 public class SubversionServiceTest extends AbstractServiceTest {
 
-    @InjectService("SubversionServiceImpl")
+    @Autobuild
+    @Inject
     private SubversionServiceImpl subversionService;
 
     @Inject

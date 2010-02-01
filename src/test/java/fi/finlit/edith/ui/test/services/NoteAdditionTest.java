@@ -14,8 +14,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +35,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_FILE_KEY)
     private String testDocument;
 
-    @InjectService("DocumentRepositoryImpl")
+    @Autobuild
+    @Inject
     private DocumentRepositoryImpl documentRepo;
 
     private InputStream source;

@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class DataModule {
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) String svnRepoPath,
             SaltSource saltSource,
             PasswordEncoder passwordEncoder, 
-            @InjectService("SubversionService") SubversionService subversionService) throws Exception {
+            @Inject SubversionService subversionService) throws Exception {
 
         logger.info("Initializing DataModule");
 

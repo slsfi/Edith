@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.ioc.annotations.InjectService;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.security.annotation.Secured;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -28,7 +28,7 @@ import fi.finlit.edith.domain.DocumentRevision;
 @SuppressWarnings("unused")
 public class AbstractDocumentPage {
 
-    @InjectService("DocumentRepository")
+    @Inject
     private DocumentRepository documentRepo;
        
     private Document document;

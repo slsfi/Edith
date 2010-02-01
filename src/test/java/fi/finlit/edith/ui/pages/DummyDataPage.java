@@ -9,7 +9,6 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.springframework.security.annotation.Secured;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -34,7 +33,7 @@ public class DummyDataPage {
     @Inject
     private NoteRepository noteRepository;
     
-    @InjectService("DocumentRepository")
+    @Inject
     private DocumentRepository documentRepository;
     
     @Inject

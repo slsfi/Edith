@@ -8,7 +8,7 @@ package fi.finlit.edith.ui.pages;
 import java.util.Collection;
 
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.ioc.annotations.InjectService;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.security.annotation.Secured;
 
 import fi.finlit.edith.domain.Document;
@@ -23,7 +23,7 @@ import fi.finlit.edith.domain.DocumentRepository;
 @SuppressWarnings("unused")
 public class DocumentsPage {
     
-    @InjectService("DocumentRepository")
+    @Inject
     private DocumentRepository documentRepo;
     
     @Property

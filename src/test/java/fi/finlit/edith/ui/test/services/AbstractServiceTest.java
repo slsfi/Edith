@@ -14,10 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
 import com.mysema.rdfbean.tapestry.services.RDFBeanModule;

@@ -32,7 +32,6 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -81,7 +80,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
-            @InjectService("SubversionService") SubversionService svnService,
+            @Inject SubversionService svnService,
             @Inject NoteRepository noteRepository,
             @Inject NoteRevisionRepository noteRevisionRepository)throws SVNException {
         super(sessionFactory, document);
