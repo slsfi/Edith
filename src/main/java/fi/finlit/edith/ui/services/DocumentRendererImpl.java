@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.services;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,42 +46,53 @@ public class DocumentRendererImpl implements DocumentRenderer {
 
     static final Set<String> toLi = new HashSet<String>(Arrays.asList("castItem","person"));
 
-    @Inject
-    private DocumentRepository documentRepo;
+    private final DocumentRepository documentRepo;
+    
+    private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
+    
+    public DocumentRendererImpl(@Inject DocumentRepository documentRepo){
+        this.documentRepo = documentRepo;
+    }
 
     @Override
     public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception{
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(documentRepo.getDocumentStream(document));
+        
+        InputStream is = documentRepo.getDocumentStream(document);
+        XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
-        writer.element("ul", "class", "pages");
-        while (true) {
-            int event = reader.next();
-            if (event == XMLStreamConstants.START_ELEMENT){
-                String localName = reader.getLocalName();
-                if (localName.equals("pb")){
-                    String page = reader.getAttributeValue(null, "n");
-                    if (page != null){
-                        writer.element("li");
-                        writer.element("a", "href", "#page" + page);
-                        writer.writeRaw(page);
-                        writer.end();
-                        writer.end();
+        try{
+            writer.element("ul", "class", "pages");
+            while (true) {
+                int event = reader.next();
+                if (event == XMLStreamConstants.START_ELEMENT){
+                    String localName = reader.getLocalName();
+                    if (localName.equals("pb")){
+                        String page = reader.getAttributeValue(null, "n");
+                        if (page != null){
+                            writer.element("li");
+                            writer.element("a", "href", "#page" + page);
+                            writer.writeRaw(page);
+                            writer.end();
+                            writer.end();
+                        }
                     }
-                }
 
-            }else if (event == XMLStreamConstants.END_DOCUMENT) {
-                reader.close();
-                break;
+                }else if (event == XMLStreamConstants.END_DOCUMENT) {                    
+                    break;
+                }
             }
+            writer.end();
+        }finally{
+            reader.close();
+            is.close();
         }
-        writer.end();
+
     }
 
     @Override
     public void renderDocument(DocumentRevision document, MarkupWriter writer) throws Exception{
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(documentRepo.getDocumentStream(document));
+        InputStream is = documentRepo.getDocumentStream(document);
+        XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
         boolean noteContent = false;
         Set<String> noteIds = new HashSet<String>();
@@ -89,100 +101,105 @@ public class DocumentRendererImpl implements DocumentRenderer {
         int sp = 0;
         int stage = 0;
 
-        while (true) {
-            int event = reader.next();
-            if (event == XMLStreamConstants.START_ELEMENT){
-                String localName = reader.getLocalName();
-                if (toDiv.contains(localName)){
-                    writer.element("div", "class", localName);
-                }else if (toP.contains(localName)){
-                    writer.element("p", "class", localName);
-                }else if (toSpan.contains(localName)){
-                    writer.element("span", "class", localName);
-                }else if (toUl.contains(localName)){
-                    writer.element("ul", "class", localName);
-                }else if (toLi.contains(localName)){
-                    writer.element("li", "class", localName);
-                }else if (localName.equals("sp")){
-                    sp++;
-                    writer.element("div", "class", localName, "id", "act"+act+"-sp"+sp);
-                }else if (localName.equals("stage")){
-                    stage++;
-                    writer.element("div", "class", localName, "id", "act"+act+"-stage"+stage);
-                }else if (localName.equals("p")){
-                    writer.element(localName);
-                }else if (localName.equals("div")){
-                    String type = reader.getAttributeValue(null, "type");
-                    if ("act".equals(type)){
-                        act = Integer.valueOf(reader.getAttributeValue(null, "n"));
-                        sp = 0;
-                        stage = 0;
-                        writer.element(localName, "class", "act", "id", "act" + act);
-                    }else{
+        try{
+            while (true) {
+                int event = reader.next();
+                if (event == XMLStreamConstants.START_ELEMENT){
+                    String localName = reader.getLocalName();
+                    if (toDiv.contains(localName)){
+                        writer.element("div", "class", localName);
+                    }else if (toP.contains(localName)){
+                        writer.element("p", "class", localName);
+                    }else if (toSpan.contains(localName)){
+                        writer.element("span", "class", localName);
+                    }else if (toUl.contains(localName)){
+                        writer.element("ul", "class", localName);
+                    }else if (toLi.contains(localName)){
+                        writer.element("li", "class", localName);
+                    }else if (localName.equals("sp")){
+                        sp++;
+                        writer.element("div", "class", localName, "id", "act"+act+"-sp"+sp);
+                    }else if (localName.equals("stage")){
+                        stage++;
+                        writer.element("div", "class", localName, "id", "act"+act+"-stage"+stage);
+                    }else if (localName.equals("p")){
                         writer.element(localName);
-                    }
-                }else if (localName.equals("TEI")){
-                    writer.element("div", "class", "tei");
-                }else if (localName.equals("lb")){
-                    writer.element("br");
-                    writer.end();
-                }else if (localName.equals("pb")){
-                    String page = reader.getAttributeValue(null, "n");
-                    if (page != null){
-                        writer.element("div", "id", "page" + page, "class", "page");
-                        writer.writeRaw(page + ".");
-                        writer.end();
-                    }
-                }else if (localName.equals("anchor")){
-                    String id = reader.getAttributeValue(XML_NS, "id");
-                    if (id == null){
-                        continue;
-                    }else if (id.startsWith("start")){
-                        // start anchor
-                        writer.element("span", "class", "notestart", "id", id);
-                        writer.end();
-
-                        noteContent = true;
-                        noteIds.add(id.substring("start".length()));
-                    }else if (id.startsWith("end")){
-                        noteIds.remove(id.substring("end".length()));
-                        if (noteIds.isEmpty()){
-                            noteContent = false;
+                    }else if (localName.equals("div")){
+                        String type = reader.getAttributeValue(null, "type");
+                        if ("act".equals(type)){
+                            act = Integer.valueOf(reader.getAttributeValue(null, "n"));
+                            sp = 0;
+                            stage = 0;
+                            writer.element(localName, "class", "act", "id", "act" + act);
+                        }else{
+                            writer.element(localName);
                         }
+                    }else if (localName.equals("TEI")){
+                        writer.element("div", "class", "tei");
+                    }else if (localName.equals("lb")){
+                        writer.element("br");
+                        writer.end();
+                    }else if (localName.equals("pb")){
+                        String page = reader.getAttributeValue(null, "n");
+                        if (page != null){
+                            writer.element("div", "id", "page" + page, "class", "page");
+                            writer.writeRaw(page + ".");
+                            writer.end();
+                        }
+                    }else if (localName.equals("anchor")){
+                        String id = reader.getAttributeValue(XML_NS, "id");
+                        if (id == null){
+                            continue;
+                        }else if (id.startsWith("start")){
+                            // start anchor
+                            writer.element("span", "class", "notestart", "id", id);
+                            writer.end();
+
+                            noteContent = true;
+                            noteIds.add(id.substring("start".length()));
+                        }else if (id.startsWith("end")){
+                            noteIds.remove(id.substring("end".length()));
+                            if (noteIds.isEmpty()){
+                                noteContent = false;
+                            }
+                        }
+
+                    }else{
+                        writer.element("div", "class", localName);
                     }
 
-                }else{
-                    writer.element("div", "class", localName);
-                }
-
-            }else if (event == XMLStreamConstants.END_ELEMENT){
-                String localName = reader.getLocalName();
-                if (!emptyElements.contains(localName)){
-                    writer.end();
-                }
-
-            }else if (event == XMLStreamConstants.ATTRIBUTE){
-                // ?!?
-
-            }else if (event == XMLStreamConstants.CHARACTERS){
-                String text = reader.getText();
-                if (noteContent && !text.trim().isEmpty()){
-                    StringBuilder classes = new StringBuilder("notecontent");
-                    for (String noteId : noteIds){
-                        classes.append(" n").append(noteId);
+                }else if (event == XMLStreamConstants.END_ELEMENT){
+                    String localName = reader.getLocalName();
+                    if (!emptyElements.contains(localName)){
+                        writer.end();
                     }
-                    writer.element("span", "class", classes);
-                    writer.writeRaw(text);
-                    writer.end();
-                }else{
-                    writer.writeRaw(text);
-                }
 
-            }else if (event == XMLStreamConstants.END_DOCUMENT) {
-                reader.close();
-                break;
+                }else if (event == XMLStreamConstants.ATTRIBUTE){
+                    // ?!?
+
+                }else if (event == XMLStreamConstants.CHARACTERS){
+                    String text = reader.getText();
+                    if (noteContent && !text.trim().isEmpty()){
+                        StringBuilder classes = new StringBuilder("notecontent");
+                        for (String noteId : noteIds){
+                            classes.append(" n").append(noteId);
+                        }
+                        writer.element("span", "class", classes);
+                        writer.writeRaw(text);
+                        writer.end();
+                    }else{
+                        writer.writeRaw(text);
+                    }
+
+                }else if (event == XMLStreamConstants.END_DOCUMENT) {                
+                    break;
+                }
             }
+        }finally{
+            reader.close();
+            is.close();
         }
+        
 
     }
 

@@ -21,8 +21,6 @@ import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
-import com.mysema.rdfbean.object.identity.IdentityService;
-import com.mysema.rdfbean.object.identity.MemoryIdentityService;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 
 import fi.finlit.edith.EDITH;

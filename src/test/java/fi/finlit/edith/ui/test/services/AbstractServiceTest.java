@@ -41,8 +41,7 @@ import fi.finlit.edith.ui.services.ServiceModule;
     RDFBeanModule.class})
 public abstract class AbstractServiceTest {
 
-    @BeforeClass
-    public static void beforeClass() throws SVNException{
+    static{
         FSRepositoryFactory.setup();
     }
 

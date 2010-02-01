@@ -63,6 +63,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private final SubversionService svnService;
 
     private final NoteRepository noteRepository;
+    
+    private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+    
+    private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
+    
+    private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
@@ -163,9 +169,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         AnchorPosition endPosition = new AnchorPosition(endId);
         System.err.println(startPosition + " - " + endPosition + " : " + text);
 
-        XMLEventFactory eventFactory = XMLEventFactory.newInstance();
-        XMLInputFactory inFactory = XMLInputFactory.newInstance();
-        XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
         XMLEventReader reader = inFactory.createXMLEventReader(source);
         XMLEventWriter writer = outFactory.createXMLEventWriter(target);
 
@@ -284,8 +287,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             anchors.add("end" + note.getLocalId());
         }
 
-        XMLInputFactory inFactory = XMLInputFactory.newInstance();
-        XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
         XMLEventReader reader = inFactory.createXMLEventReader(source);
         XMLEventWriter writer = outFactory.createXMLEventWriter(target);
 

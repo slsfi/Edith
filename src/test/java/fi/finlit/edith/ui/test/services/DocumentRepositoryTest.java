@@ -70,10 +70,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         closeStreams();
         for (Document doc : savedDocs){
             documentRepo.remove(doc);
-        }
-
+        }        
     }
-
+    
     @Test
     public void getAll() {
         assertEquals(7, documentRepo.getAll().size());
