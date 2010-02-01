@@ -102,8 +102,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public Document getDocumentForPath(String svnPath) {
         Document document = getDocumentMetadata(svnPath);
         if (document == null) {
-            document = createDocument(svnPath, svnPath.substring(svnPath.lastIndexOf('/') + 1),
-                    null);
+            document = createDocument(svnPath, svnPath.substring(svnPath.lastIndexOf('/') + 1), null);
         }
         return document;
     }
@@ -290,20 +289,26 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         XMLEventReader reader = inFactory.createXMLEventReader(source);
         XMLEventWriter writer = outFactory.createXMLEventWriter(target);
 
-        boolean remove = false;
-        while (reader.hasNext()) {
-            XMLEvent event = reader.nextEvent();
-            if (event.isStartElement()) {
-                Attribute attr = event.asStartElement().getAttributeByName(searchedAttributeName);
-                if (attr != null && anchors.contains(attr.getValue())) {
-                    remove = true;
+        try{
+            boolean remove = false;
+            while (reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
+                if (event.isStartElement()) {
+                    Attribute attr = event.asStartElement().getAttributeByName(searchedAttributeName);
+                    if (attr != null && anchors.contains(attr.getValue())) {
+                        remove = true;
+                        continue;
+                    }
+                } else if (event.isEndElement() && remove) {
+                    remove = false;
                     continue;
                 }
-            } else if (event.isEndElement() && remove) {
-                remove = false;
-                continue;
+                writer.add(event);
             }
-            writer.add(event);
+        }finally{
+            writer.close();
+            reader.close();
         }
+        
     }
 }

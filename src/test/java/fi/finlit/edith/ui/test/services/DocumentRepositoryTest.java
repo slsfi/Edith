@@ -66,7 +66,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() throws IOException{
+        closeStreams();
         for (Document doc : savedDocs){
             documentRepo.remove(doc);
         }
@@ -85,16 +86,13 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void getDocumentForPath() {
-        assertNotNull(documentRepo.getDocumentForPath("/documents/"
-                + UUID.randomUUID().toString()));
+        assertNotNull(documentRepo.getDocumentForPath("/documents/" + UUID.randomUUID().toString()));
     }
 
     @Test
     public void getDocumentStream() throws IOException {
         for (Document document : documentRepo.getAll()) {
-            InputStream in = documentRepo.getDocumentStream(new DocumentRevision(
-                    document, -1));
-            in.close();
+            register(documentRepo.getDocumentStream(new DocumentRevision(document, -1)));
         }
     }
 
@@ -130,9 +128,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
         OutputStream out = new FileOutputStream(tmpFile);
-        InputStream in = subversionService.getStream(document.getSvnPath(), -1);
+        InputStream in = register(subversionService.getStream(document.getSvnPath(), -1));
         IOUtils.copy(in, out);
-        in.close();
         out.close();
 
         String content = FileUtils.readFileToString(tmpFile, "UTF-8");
@@ -154,9 +151,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
         OutputStream out = new FileOutputStream(tmpFile);
-        InputStream in = subversionService.getStream(document.getSvnPath(), -1);
+        InputStream in = register(subversionService.getStream(document.getSvnPath(), -1));
         IOUtils.copy(in, out);
-        in.close();
         out.close();
 
         String content = FileUtils.readFileToString(tmpFile, "UTF-8");
@@ -183,9 +179,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
         OutputStream out = new FileOutputStream(tmpFile);
-        InputStream in = subversionService.getStream(document.getSvnPath(), -1);
+        InputStream in = register(subversionService.getStream(document.getSvnPath(), -1));
         IOUtils.copy(in, out);
-        in.close();
         out.close();
 
         String content = FileUtils.readFileToString(tmpFile, "UTF-8");
@@ -199,4 +194,5 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     protected Class<?> getServiceClass() {
         return DocumentRepository.class;
     }
+    
 }

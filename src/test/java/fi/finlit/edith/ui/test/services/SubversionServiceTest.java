@@ -69,7 +69,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     private File testFile;
 
     private File svnRepoCopy = new File("target/repoCopy");
-
+    
     @Before
     public void setUp() throws Exception {
         subversionService = new SubversionServiceImpl(svnCache, svnRepo, repoURL, documentRoot, materialTeiRoot, authService);
@@ -82,9 +82,11 @@ public class SubversionServiceTest extends AbstractServiceTest {
         // make a copy of svn repository
         FileUtils.copyDirectory(svnRepo, svnRepoCopy);
     }
+    
 
     @After
     public void tearDown() throws Exception {
+        closeStreams();        
         FileUtils.deleteDirectory(checkoutDirectory);
         FileUtils.deleteDirectory(anotherCheckoutDirectory);
         testFile.delete();
@@ -96,42 +98,35 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     @Test
     public void importFile() throws Exception {
-
-        final long currentRevision = subversionService.getLatestRevision();
-        final long expected = currentRevision + 1;
+        long currentRevision = subversionService.getLatestRevision();
+        long expected = currentRevision + 1;
         String newPath = documentRoot + "/" + UUID.randomUUID().toString();
-        assertEquals(expected, subversionService.importFile(newPath,
-                noteTestData));
+        assertEquals(expected, subversionService.importFile(newPath, noteTestData));
     }
 
     @Test
     public void getStream() throws Exception {
-        final String svnPath = documentRoot + "/notesTestData.txt";
-        final long revision = subversionService.importFile(svnPath, noteTestData);
-        InputStream expected = new FileInputStream(noteTestData);
-        InputStream actual = subversionService.getStream(svnPath, revision);
+        String svnPath = documentRoot + "/notesTestData.txt";
+        long revision = subversionService.importFile(svnPath, noteTestData);
+        InputStream expected = register(new FileInputStream(noteTestData));
+        InputStream actual = register(subversionService.getStream(svnPath, revision));
         boolean result = IOUtils.contentEquals(expected, actual);
-        expected.close();
-        actual.close();
         assertTrue(result);
     }
 
     @Test(expected = RuntimeException.class)
     public void delete() throws Exception {
-        final String svnPath = documentRoot + "/notesTestData.txt";
-        final long revision = subversionService.importFile(svnPath,
-                noteTestData);
-        InputStream expected = new FileInputStream(noteTestData);
-        InputStream actual = subversionService.getStream(svnPath, revision);
+        String svnPath = documentRoot + "/notesTestData.txt";
+        long revision = subversionService.importFile(svnPath, noteTestData);
+        InputStream expected = register(new FileInputStream(noteTestData));
+        InputStream actual = register(subversionService.getStream(svnPath, revision));
         boolean result = IOUtils.contentEquals(expected, actual);
-        expected.close();
-        actual.close();
         assertTrue(result);
         subversionService.delete(svnPath);
         assertEquals(revision + 1, subversionService.getLatestRevision());
         // This will throw a RuntimeException because
         // the file isn't in the newest revision.
-        subversionService.getStream(svnPath, -1);
+        register(subversionService.getStream(svnPath, -1));
     }
 
     @Test
@@ -176,7 +171,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     @Test(expected = RuntimeException.class)
     @Ignore
     public void update_conflict() throws Exception {
-        final String svnPath = documentRoot + "/testFile.txt";
+        String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
@@ -237,24 +232,20 @@ public class SubversionServiceTest extends AbstractServiceTest {
     // TODO This test is really slow, find out why.
     @Test
     public void commit_file() throws Exception {
-        final String svnPath = documentRoot + "/testFile.txt";
+        String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         long revision = subversionService.commit(modifiedFile);
-        InputStream modifiedStream = new FileInputStream(modifiedFile);
-        try {
-            assertTrue(IOUtils.contentEquals(modifiedStream, subversionService.getStream(svnPath, revision)));
-        } finally {
-            modifiedStream.close();
-        }
+        InputStream modifiedStream = register(new FileInputStream(modifiedFile));
+        assertTrue(IOUtils.contentEquals(modifiedStream, register(subversionService.getStream(svnPath, revision))));
     }
 
     // TODO This test is really slow, find out why.
     @Test(expected = RuntimeException.class)
     public void commit_file_results_in_conflict() throws Exception {
-        final String svnPath = documentRoot + "/testFile.txt";
+        String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
