@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.EventFilter;
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
@@ -64,11 +65,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private final SubversionService svnService;
 
     private final NoteRepository noteRepository;
-    
+
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
-    
+
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
-    
+
     private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
     public DocumentRepositoryImpl(
@@ -279,45 +280,55 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     public void removeNoteAnchors(InputStream source, OutputStream target, Note... notes) throws Exception {
-        final QName searchedAttributeName = new QName(XML_NS, "id");
+        XMLEventReader reader = inFactory.createFilteredReader(inFactory.createXMLEventReader(source), createEventFilter(notes));
+        XMLEventWriter writer = outFactory.createXMLEventWriter(target);
 
-        Set<String> anchors = new HashSet<String>(notes.length * 2);
+        try {
+            while (reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
+                writer.add(event);
+            }
+        } finally {
+            writer.close();
+            reader.close();
+        }
+    }
+
+    private static EventFilter createEventFilter(Note... notes) {
+        final QName searchedAttributeName = new QName(XML_NS, "id");
+        final Set<String> anchors = new HashSet<String>(notes.length * 2);
 
         for (Note note : notes) {
             anchors.add("start" + note.getLocalId());
             anchors.add("end" + note.getLocalId());
         }
 
-        XMLEventReader reader = inFactory.createXMLEventReader(source);
-        XMLEventWriter writer = outFactory.createXMLEventWriter(target);
+        return new EventFilter() {
+            private boolean remove = false;
 
-        try{
-            boolean remove = false;
-            while (reader.hasNext()) {
-                XMLEvent event = reader.nextEvent();
+            @Override
+            public boolean accept(XMLEvent event) {
                 if (event.isStartElement()) {
-                    Attribute attr = event.asStartElement().getAttributeByName(searchedAttributeName);
+                    Attribute attr = event.asStartElement().getAttributeByName(
+                            searchedAttributeName);
                     if (attr != null && anchors.contains(attr.getValue())) {
                         remove = true;
-                        continue;
+                        return false;
                     }
                 } else if (event.isEndElement() && remove) {
                     remove = false;
-                    continue;
+                    return false;
                 }
-                writer.add(event);
+
+                return true;
             }
-        }finally{
-            writer.close();
-            reader.close();
-        }
-        
+        };
     }
 
     @Override
     public void updateNode(Document document, NoteRevision note, String startId, String endId,
             String text) throws IOException {
         throw new UnsupportedOperationException();
-        
+
     }
 }
