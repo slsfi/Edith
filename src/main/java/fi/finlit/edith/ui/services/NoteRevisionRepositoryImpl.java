@@ -19,7 +19,6 @@ import com.mysema.query.types.expr.EBoolean;
 import com.mysema.query.types.path.PEntity;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
-import com.mysema.rdfbean.model.BID;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
@@ -87,6 +86,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
             .where(noteRevision.revisionOf.document.eq(document),
                    noteRevision.svnRevision.loe(revision),
                    latestFor(revision))
+            .orderBy(noteRevision.longText.asc())
             .list(noteRevision);
     }
 

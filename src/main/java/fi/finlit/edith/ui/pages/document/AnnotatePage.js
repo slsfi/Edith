@@ -28,7 +28,8 @@ jQuery(document).ready(function(){
     		jQuery(":input[name='selectedText']").val(TextSelector.getSelection());
     	
     		//Submit form
-    		jQuery("#createTerm").submit();
+    		//jQuery("#createTerm").submit();
+    		TapestryExt.submitZoneForm(jQuery("#createTerm").get(0));
     		return false;
     	}
     );

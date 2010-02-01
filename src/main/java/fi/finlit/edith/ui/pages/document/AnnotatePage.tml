@@ -44,30 +44,33 @@
             <t:hidden t:id="selectedText" value="selectedText.selection"/>
             <t:hidden t:id="selectedStartId" value="selectedText.startId"/>
             <t:hidden t:id="selectedEndId" value="selectedText.endId"/>
-            <a id="createTermLink" class="disabled" href="#" onClick="return false;">${message:createTerm}</a>
+            <!-- 
+            <input id="createTermLink" type="submit" value="${message:createTerm}"/>
+             --> 
+            <a id="createTermLink" class="disabled" href="#">${message:createTerm}</a>
         </t:form>
            
         <div class="panel narrow">
             <h3>${message:notes}</h3>
-            <t:if test="docNotes">
-                <t:zone t:id="listZone" update="show">
-                    <t:delegate to="notesList"/>
-                </t:zone>
-                <p:else>${message:no-notes}</p:else>
-            </t:if>
+            <t:zone t:id="listZone" update="show">
+                <t:delegate to="notesList"/>
+            </t:zone>                
             <div style="clear:both;"></div>
         </div>    
     
         <t:zone t:id="editZone" update="show"/>
         
         <t:block t:id="notesList">
-            <ul class="notes">
-                <t:loop source="docNotes" value="note">
-                <li>    
-                    <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
-                </li>
-                </t:loop>
-            </ul>        
+            <t:if test="docNotes">
+                <ul class="notes">
+                    <t:loop source="docNotes" value="note">
+                    <li>    
+                        <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
+                    </li>
+                    </t:loop>
+                </ul>        
+                <p:else>${message:no-notes}</p:else>
+            </t:if>
         </t:block>
         
         <t:block t:id="noteEdit">

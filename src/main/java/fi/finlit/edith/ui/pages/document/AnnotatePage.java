@@ -96,15 +96,15 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
         return noteEdit;
     }
-
-    Object onSubmitFromCreateTerm() throws IOException {
+    
+    Object onSuccessFromCreateTerm() throws IOException{
         System.out.println(selectedText.startId + "," + selectedText.endId + ":["+ selectedText.selection+"]");
         Document document = getDocument();
         DocumentRevision documentRevision = getDocumentRevision();
         getDocumentRepo().addNote(document, documentRevision.getRevision(), 
                 selectedText.startId, selectedText.endId, selectedText.selection);
         
-        // notesList content
+        // update notesList content
         docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
         return notesList;
     }
@@ -155,8 +155,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
         
         // noteEdit content
-        notes = Collections.singletonList(note);
-        
+        notes = Collections.singletonList(note);        
         return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList);
     }
     
