@@ -53,10 +53,16 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     private String documentRoot;
 
     private List<Document> savedDocs = new ArrayList<Document>();
+    
+    private static boolean initialized = false;
 
     @Before
     public void setUp(){
-        subversionService.initialize();
+        if (!initialized){
+            subversionService.destroy();
+            subversionService.initialize();
+            initialized = true;
+        }        
     }
 
     @After
