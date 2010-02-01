@@ -136,16 +136,16 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         tmpFile.delete();
         assertTrue(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
     }
-    
+
     @Test
     public void addNote2() throws IOException{
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
-        
+
 //        act1-sp4 - act1-sp4 : minä; ja nytpä, luulen,
         String element = "act1-sp4";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
-        
+
         Note note = documentRepo.addNote(document, -1, element, element, text);
         assertNotNull(note);
     }
@@ -214,7 +214,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Note note = documentRepo.addNote(document, -1, element, element, text);
 
         String newText = "sun ullakosta";
-        documentRepo.updateNote(document, note, element, element, newText);
+        documentRepo.updateNote(document, note.getLatestRevision(), element, element, newText);
 
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");

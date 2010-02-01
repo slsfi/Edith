@@ -299,17 +299,18 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
 
     @Override
-    public void updateNote(Document document, final Note note, final String startId, final String endId,
+    public void updateNote(Document document, final NoteRevision note, final String startId, final String endId,
             final String text) throws IOException {
-            Long newRevision = svnService.commit(document.getSvnPath(),note.getLatestRevision().getSvnRevision(), new UpdateCallback() {
-                @Override
+        Long newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(),
+                new UpdateCallback() {
+                    @Override
                     public void update(InputStream source, OutputStream target) {
                         try {
                             addNote(inFactory.createFilteredReader(inFactory
                                     .createXMLEventReader(source),
-                                    createEventFilter(new Note[] { note })),
+                                    createEventFilter(new Note[] { note.getRevisionOf() })),
                                     outFactory.createXMLEventWriter(target), startId, endId, text,
-                                    note.getLocalId());
+                                    note.getRevisionOf().getLocalId());
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
