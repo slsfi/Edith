@@ -83,12 +83,11 @@ public class ServiceModule {
         return configuration;
     }
 
-    public static Repository buildRepository(Ontology ontology,
+    public static Repository buildRepository(
             @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir) {
         Namespaces.register("edith", EDITH.NS);
         MemoryRepository repository = new MemoryRepository();
         repository.setDataDirName(rdfbeanDataDir);
-        repository.setOntology(ontology);
         repository.setSources(
             new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS)
         );
