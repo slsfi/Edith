@@ -45,6 +45,18 @@ public interface DocumentRepository extends Repository<Document,String>{
     Note addNote(Document document, long svnRevision, String startId, String endId, String text) throws IOException;
 
     /**
+     * Update the boundaries of the given note in the context of the given document
+     * 
+     * @param document
+     * @param note
+     * @param startId
+     * @param endId
+     * @param text
+     * @throws IOException
+     */
+    void updateNode(Document document, NoteRevision note, String startId, String endId, String text) throws IOException;
+    
+    /**
      * Get a Document handle for the given path
      *
      * @param svnPath

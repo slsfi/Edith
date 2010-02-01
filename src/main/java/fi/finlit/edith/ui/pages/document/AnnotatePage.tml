@@ -40,7 +40,7 @@
     </p:leftPanel>
 
     <p:rightPanel>
-        <t:form t:id="createTerm">
+        <t:form t:id="createTerm" t:zone="listZone">
             <t:hidden t:id="selectedText" value="selectedText.selection"/>
             <t:hidden t:id="selectedStartId" value="selectedText.startId"/>
             <t:hidden t:id="selectedEndId" value="selectedText.endId"/>

@@ -44,6 +44,7 @@ import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteRevision;
 
 /**
  * DocumentRepositoryImpl provides
@@ -310,6 +311,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             writer.close();
             reader.close();
         }
+        
+    }
+
+    @Override
+    public void updateNode(Document document, NoteRevision note, String startId, String endId,
+            String text) throws IOException {
+        throw new UnsupportedOperationException();
         
     }
 }

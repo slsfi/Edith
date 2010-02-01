@@ -97,12 +97,16 @@ public class AnnotatePage extends AbstractDocumentPage {
         return noteEdit;
     }
 
-    void onSubmitFromCreateTerm() throws IOException {
+    Object onSubmitFromCreateTerm() throws IOException {
         System.out.println(selectedText.startId + "," + selectedText.endId + ":["+ selectedText.selection+"]");
         Document document = getDocument();
         DocumentRevision documentRevision = getDocumentRevision();
         getDocumentRepo().addNote(document, documentRevision.getRevision(), 
                 selectedText.startId, selectedText.endId, selectedText.selection);
+        
+        // notesList content
+        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
+        return notesList;
     }
 
     // Unfortunately the @Property annotation does not work here
