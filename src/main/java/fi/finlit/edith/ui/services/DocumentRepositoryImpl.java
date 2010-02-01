@@ -61,7 +61,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
 
-    private static final QName SEARCHED_ATTRIBUTE_NAME = new QName(XML_NS, "id");
+    private static final QName XML_ID_QNAME = new QName(XML_NS, "id");
 
     private final String documentRoot;
 
@@ -339,8 +339,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Override
             public boolean accept(XMLEvent event) {
                 if (event.isStartElement()) {
-                    Attribute attr = event.asStartElement().getAttributeByName(
-                            SEARCHED_ATTRIBUTE_NAME);
+                    Attribute attr = event.asStartElement().getAttributeByName(XML_ID_QNAME);
                     if (attr != null && anchors.contains(attr.getValue())) {
                         removeNextEndElement = true;
                         return false;

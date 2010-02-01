@@ -39,20 +39,20 @@ jQuery(document).ready(function(){
 		return jQuery(element).parents(".sp,.stage").eq(0);
 	}
     
-    jQuery('.act').bind('mouseup',
+    jQuery('.act').live('mouseup',
     	function(event) {
     		TextSelector.stopSelection(findContainer(event.target));
     		if(!TextSelector.getSelection())
     			jQuery("#createTermLink").addClass('disabled');
     	}
     );
-    jQuery('.act').bind('mousedown',
+    jQuery('.act').live('mousedown',
         	function(event) {
         		TextSelector.startSelection(findContainer(event.target));
         		jQuery("#createTermLink").addClass('disabled');
         	}
         );
-    jQuery('.act').bind('mousemove',
+    jQuery('.act').live('mousemove',
         	function(event) {
         		if(!TextSelector.isBeingSelected()) return;
         		jQuery("#createTermLink").removeClass('disabled');
