@@ -56,7 +56,7 @@ public class SubversionServiceImpl implements SubversionService {
 
     private final String documentRoot;
 
-    private final String materialTeiRoot;
+    private final String teiMaterialRoot;
 
     private final File readCache;
 
@@ -75,8 +75,7 @@ public class SubversionServiceImpl implements SubversionService {
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) File svnRepo,
             @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
-            //                    TEI_MATERIAL_ROOT ?!?
-            @Inject @Symbol(EDITH.MATERIAL_TEI_ROOT) String materialTeiRoot,
+            @Inject @Symbol(EDITH.TEI_MATERIAL_ROOT) String materialTeiRoot,
             AuthService authService) {
         this.clientManager = SVNClientManager.newInstance();
         this.svnCache = svnCache;
@@ -84,7 +83,7 @@ public class SubversionServiceImpl implements SubversionService {
         this.workingCopies = new File(svnCache + "/workingCopies");
         this.svnRepo = svnRepo;
         this.documentRoot = documentRoot;
-        this.materialTeiRoot = materialTeiRoot;
+        this.teiMaterialRoot = materialTeiRoot;
         this.authService = authService;
         try {
             this.repoSvnURL = SVNURL.parseURIEncoded(repoURL);
@@ -276,8 +275,8 @@ public class SubversionServiceImpl implements SubversionService {
                             repoSvnURL.appendPath(documentRoot, false) },
                     "created initial folders");
 
-            if (new File(materialTeiRoot).exists()) {
-                for (File file : new File(materialTeiRoot).listFiles()) {
+            if (new File(teiMaterialRoot).exists()) {
+                for (File file : new File(teiMaterialRoot).listFiles()) {
                     if (file.isFile()) {
                         importFile(documentRoot + "/" + file.getName(), file);
                     }

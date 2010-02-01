@@ -56,7 +56,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     private String repoURL;
 
     @Inject
-    @Symbol(EDITH.MATERIAL_TEI_ROOT)
+    @Symbol(EDITH.TEI_MATERIAL_ROOT)
     private String materialTeiRoot;
 
     @Inject
