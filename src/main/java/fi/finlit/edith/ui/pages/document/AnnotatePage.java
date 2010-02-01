@@ -23,6 +23,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 
@@ -44,6 +45,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     
     @Inject
     private Block noteEdit;
+    
+    @Inject
+    @Property
+    private Block documentView;
 
     @Property
     private List<NoteRevision> notes;
@@ -101,12 +106,14 @@ public class AnnotatePage extends AbstractDocumentPage {
         System.out.println(selectedText.startId + "," + selectedText.endId + ":["+ selectedText.selection+"]");
         Document document = getDocument();
         DocumentRevision documentRevision = getDocumentRevision();
-        getDocumentRepo().addNote(document, documentRevision.getRevision(), 
+        Note note = getDocumentRepo().addNote(document, documentRevision.getRevision(), 
                 selectedText.startId, selectedText.endId, selectedText.selection);
+        long newRevision = note.getLatestRevision().getSvnRevision();
         
-        // update notesList content
+        // update notesList content        
         docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
-        return notesList;
+        documentRevision.setRevision(newRevision);
+        return new MultiZoneUpdate("listZone", notesList).add("documentZone",documentView);
     }
 
     // Unfortunately the @Property annotation does not work here

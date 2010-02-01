@@ -5,7 +5,12 @@
     <p:title>${document.title}</p:title>  
 
     <div class="content">
-        <t:document.view document="documentRevision"/>        
+        <t:zone t:id="documentZone" update="show">
+            <t:delegate to="documentView"/>
+        </t:zone>
+        <t:block t:id="documentView">
+            <t:document.view document="documentRevision"/>
+        </t:block>                
     </div>
     
     <p:breadcrumbs>
@@ -16,20 +21,7 @@
         
     <p:leftPanel>
         <t:dashboard/>
-        
-        <!-- 
-        <div class="panel narrow">
-            <h3>${message:revisions}</h3>
-            <ul>
-                <t:loop source="revisions" value="revision">
-                <li>
-                    <t:pagelink page="document/annotatePage" t:context="[document.id,revision]">${revision}</t:pagelink>
-                </li>
-                </t:loop>
-            </ul>            
-        </div>
-         -->
-                      
+                              
         <div class="panel narrow">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>

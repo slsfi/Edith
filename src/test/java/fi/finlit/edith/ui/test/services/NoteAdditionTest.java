@@ -25,6 +25,7 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 import fi.finlit.edith.ui.services.SubversionService;
 
@@ -44,6 +45,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Inject
     private NoteRepository noteRepo;
+    
+    private NoteRevisionRepository noteRevisionRepo;
 
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_FILE_KEY)
     private String testDocument;
@@ -67,7 +70,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Before
     public void setUp() throws SVNException, IOException{
-        documentRepo = new DocumentRepositoryImpl(sessionFactory, documentRoot, svnService, noteRepo);
+        documentRepo = new DocumentRepositoryImpl(sessionFactory, documentRoot, svnService, noteRepo, noteRevisionRepo);
         source = new FileInputStream(new File(testDocument));
         targetFile = File.createTempFile("test", null);
         target = new FileOutputStream(targetFile);

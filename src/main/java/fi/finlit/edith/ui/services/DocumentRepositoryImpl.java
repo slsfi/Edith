@@ -46,6 +46,7 @@ import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.NoteRevisionRepository;
 
 /**
  * DocumentRepositoryImpl provides
@@ -67,6 +68,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private final SubversionService svnService;
 
     private final NoteRepository noteRepository;
+    
+    private final NoteRevisionRepository noteRevisionRepository;
 
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
 
@@ -78,11 +81,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject SubversionService svnService,
-            @Inject NoteRepository noteRepository)throws SVNException {
+            @Inject NoteRepository noteRepository,
+            @Inject NoteRevisionRepository noteRevisionRepository)throws SVNException {
         super(sessionFactory, document);
         this.documentRoot = documentRoot;
         this.svnService = svnService;
         this.noteRepository = noteRepository;
+        this.noteRevisionRepository = noteRevisionRepository;
     }
 
     @Override
@@ -272,7 +277,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             public void update(InputStream source, OutputStream target) {
                 try {
                     removeNoteAnchors(inFactory.createFilteredReader(inFactory
-                            .createXMLEventReader(source), createEventFilter(notes)), outFactory
+                            .createXMLEventReader(source), createRemoveFilter(notes)), outFactory
                             .createXMLEventWriter(target));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -301,26 +306,28 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public void updateNote(Document document, final NoteRevision note, final String startId, final String endId,
             final String text) throws IOException {
-        Long newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(),
+        svnService.commit(document.getSvnPath(), note.getSvnRevision(),
                 new UpdateCallback() {
                     @Override
                     public void update(InputStream source, OutputStream target) {
                         try {
                             addNote(inFactory.createFilteredReader(inFactory
                                     .createXMLEventReader(source),
-                                    createEventFilter(new Note[] { note.getRevisionOf() })),
+                                    createRemoveFilter(new Note[] { note.getRevisionOf() })),
                                     outFactory.createXMLEventWriter(target), startId, endId, text,
                                     note.getRevisionOf().getLocalId());
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
                     }
-            });
+        });
 
-            // TODO Update note?
+        NoteRevision copy = note.createCopy();
+        copy.setLongText(text);
+        noteRevisionRepository.save(copy);
     }
 
-    private static EventFilter createEventFilter(Note... notes) {
+    private static EventFilter createRemoveFilter(Note... notes) {
         final Set<String> anchors = new HashSet<String>(notes.length * 2);
 
         for (Note note : notes) {

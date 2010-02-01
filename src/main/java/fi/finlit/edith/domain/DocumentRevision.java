@@ -5,7 +5,6 @@
  */
 package fi.finlit.edith.domain;
 
-import net.jcip.annotations.Immutable;
 
 /**
  * DocumentRevision provides
@@ -13,10 +12,9 @@ import net.jcip.annotations.Immutable;
  * @author tiwe
  * @version $Id$
  */
-@Immutable
 public class DocumentRevision {
     
-    private final long revision;
+    private long revision;
     
     private final String svnPath;
     
@@ -35,6 +33,11 @@ public class DocumentRevision {
 
     public String getSvnPath() {
         return svnPath;
+    }
+
+    public void setRevision(long newRevision) {
+        this.revision = newRevision;
+        
     }
 
 }
