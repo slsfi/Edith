@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +21,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.SubversionService;
 import fi.finlit.edith.ui.services.SubversionServiceImpl;
 import fi.finlit.edith.ui.services.UpdateCallback;
@@ -34,6 +34,7 @@ import fi.finlit.edith.ui.services.UpdateCallback;
  */
 public class SubversionServiceTest extends AbstractServiceTest {
 
+    @InjectService("SubversionServiceImpl")
     private SubversionServiceImpl subversionService;
 
     @Inject
@@ -45,23 +46,8 @@ public class SubversionServiceTest extends AbstractServiceTest {
     private File noteTestData;
 
     @Inject
-    @Symbol(EDITH.SVN_CACHE_DIR)
-    private File svnCache;
-
-    @Inject
     @Symbol(EDITH.REPO_FILE_PROPERTY)
     private File svnRepo;
-
-    @Inject
-    @Symbol(EDITH.REPO_URL_PROPERTY)
-    private String repoURL;
-
-    @Inject
-    @Symbol(EDITH.TEI_MATERIAL_ROOT)
-    private String materialTeiRoot;
-
-    @Inject
-    private AuthService authService;
 
     private File checkoutDirectory;
 
@@ -73,7 +59,6 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        subversionService = new SubversionServiceImpl(svnCache, svnRepo, repoURL, documentRoot, materialTeiRoot, authService);
         subversionService.initialize();
         checkoutDirectory = new File("target/checkout");
         anotherCheckoutDirectory = new File("target/anotherCheckout");

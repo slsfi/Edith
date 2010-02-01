@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
 
-    @Inject
+    @InjectService("DocumentRepository")
     private DocumentRepository documentRepo;
 
     private Document document;

@@ -19,7 +19,6 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.FetchStrategy;
-import com.mysema.rdfbean.model.Ontology;
 import com.mysema.rdfbean.model.PredicateWildcardFetch;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.Format;
@@ -65,11 +64,11 @@ public class ServiceModule {
 
     public static void bind(ServiceBinder binder){
         binder.bind(AdminService.class, AdminServiceImpl.class);
-        binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
+        binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class).withId("DocumentRepository");
         binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
         binder.bind(NoteRevisionRepository.class, NoteRevisionRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
-        binder.bind(SubversionService.class, SubversionServiceImpl.class);
+        binder.bind(SubversionService.class, SubversionServiceImpl.class).withId("SubversionService");
 
         binder.bind(DocumentRenderer.class, DocumentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);

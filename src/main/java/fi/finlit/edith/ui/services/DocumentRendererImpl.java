@@ -15,7 +15,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
@@ -50,7 +50,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
     
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
     
-    public DocumentRendererImpl(@Inject DocumentRepository documentRepo){
+    public DocumentRendererImpl(@InjectService("DocumentRepository") DocumentRepository documentRepo){
         this.documentRepo = documentRepo;
     }
 

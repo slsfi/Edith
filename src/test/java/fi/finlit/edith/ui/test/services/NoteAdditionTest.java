@@ -15,19 +15,14 @@ import javax.xml.stream.XMLOutputFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
 
-import com.mysema.rdfbean.object.SessionFactory;
-
-import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
-import fi.finlit.edith.ui.services.SubversionService;
 
 /**
  * TEIManipulationTest provides
@@ -37,23 +32,10 @@ import fi.finlit.edith.ui.services.SubversionService;
  */
 public class NoteAdditionTest extends AbstractServiceTest{
 
-    @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT)
-    private String documentRoot;
-
-    @Inject
-    private SubversionService svnService;
-
-    @Inject
-    private NoteRepository noteRepo;
-    
-    private NoteRevisionRepository noteRevisionRepo;
-
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_FILE_KEY)
     private String testDocument;
 
-    @Inject
-    private SessionFactory sessionFactory;
-
+    @InjectService("DocumentRepositoryImpl")
     private DocumentRepositoryImpl documentRepo;
 
     private InputStream source;
@@ -70,7 +52,6 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Before
     public void setUp() throws SVNException, IOException{
-        documentRepo = new DocumentRepositoryImpl(sessionFactory, documentRoot, svnService, noteRepo, noteRevisionRepo);
         source = new FileInputStream(new File(testDocument));
         targetFile = File.createTempFile("test", null);
         target = new FileOutputStream(targetFile);

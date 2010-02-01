@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,7 +40,7 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     @Inject
     private NoteRepository noteRepo;
     
-    @Inject
+    @InjectService("DocumentRepository")
     private DocumentRepository documentRepo;
     
     @Inject

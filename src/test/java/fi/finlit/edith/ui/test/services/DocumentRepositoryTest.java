@@ -22,10 +22,10 @@ import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
@@ -43,10 +43,10 @@ import fi.finlit.edith.ui.services.SubversionService;
  */
 public class DocumentRepositoryTest extends AbstractServiceTest {
 
-    @Inject
+    @InjectService("DocumentRepository")
     private DocumentRepository documentRepo;
 
-    @Inject
+    @InjectService("SubversionService")
     private SubversionService subversionService;
 
     @Inject

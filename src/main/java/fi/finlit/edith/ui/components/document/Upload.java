@@ -8,12 +8,12 @@ package fi.finlit.edith.ui.components.document;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.upload.services.UploadedFile;
 import org.tmatesoft.svn.core.SVNException;
@@ -30,7 +30,7 @@ import fi.finlit.edith.domain.DocumentRepository;
 @SuppressWarnings("unused")
 public class Upload {    
 
-    @Inject
+    @InjectService("DocumentRepository")
     private DocumentRepository documentRepo;
     
     @Inject 
