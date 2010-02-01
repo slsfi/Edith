@@ -109,7 +109,7 @@ public class SubversionServiceImpl implements SubversionService {
         try {
             return clientManager.getCommitClient().doCommit(
                     new File[] { file }, true, file.getName() + " committed", false,
-                    true).getNewRevision();
+                    false).getNewRevision();
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
         }
@@ -295,7 +295,7 @@ public class SubversionServiceImpl implements SubversionService {
     public void update(File file) {
         try {
             clientManager.getUpdateClient().doUpdate(file,
-                    SVNRevision.create(getLatestRevision()), true);
+                    SVNRevision.create(getLatestRevision()), false);
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
         }
