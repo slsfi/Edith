@@ -119,8 +119,7 @@ public class SubversionServiceImpl implements SubversionService {
     @Override
     public long commit(String svnPath, long revision, UpdateCallback callback) {
         File userCheckout = new File(workingCopies + "/" + authService.getUsername()); // TODO will get overwritten(?) & caching?
-        // TODO : better use substring 
-        svnPath = svnPath.replaceAll(documentRoot, "");
+        svnPath = svnPath.substring(documentRoot.length());
         checkout(userCheckout, revision);
         File file = new File(userCheckout + "/" + svnPath);
         File tmp = null;
@@ -129,11 +128,11 @@ public class SubversionServiceImpl implements SubversionService {
             InputStream is = new FileInputStream(file);
             OutputStream os = new FileOutputStream(tmp);
             try{
-                callback.update(is, os);    
+                callback.update(is, os);
             }finally{
                 os.close();
-                is.close();                
-            }               
+                is.close();
+            }
             FileUtils.copyFile(tmp, file);
         } catch (IOException e) {
             throw new RuntimeException(e);
