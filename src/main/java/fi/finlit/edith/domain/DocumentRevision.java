@@ -12,6 +12,7 @@ package fi.finlit.edith.domain;
  * @author tiwe
  * @version $Id$
  */
+// TODO : use Document instead of svnPath
 public class DocumentRevision {
     
     private long revision;
