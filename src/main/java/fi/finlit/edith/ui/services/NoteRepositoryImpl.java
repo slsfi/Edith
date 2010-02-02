@@ -81,6 +81,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
         
         NoteRevision revision = null;
+        Term term = null;
         String text = null;        
         int counter = 0;
         
@@ -96,14 +97,16 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     revision.setRevisionOf(new Note());
                     revision.getRevisionOf().setLatestRevision(revision);
                     revision.setCreatedOn(System.currentTimeMillis());
+                    term = null;
                 }
                 
             }else if (event == XMLStreamConstants.END_ELEMENT){
                 String localName = reader.getLocalName();
                 
-                if (localName.equals("note")){                    
-                    if (revision.getRevisionOf().getTerm() != null){
-                        session.save(revision.getRevisionOf().getTerm());    
+                if (localName.equals("note")){
+                    if (term != null) {
+                        revision.getRevisionOf().setTerm(term);
+                        session.save(term);    
                     }                    
                     session.save(revision.getRevisionOf());
                     session.save(revision);
@@ -113,12 +116,11 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 }else if (localName.equals("text")){
                     revision.setLongText(text);
                 }else if (localName.equals("baseform")){
-                    revision.setBasicForm(text);
+                    if (term == null) term = new Term();
+                    term.setBasicForm(text);
                 }else if (localName.equals("meaning")){
-                    Term term = new Term();
-                    term.setBasicForm(revision.getBasicForm());
+                    if (term == null) term = new Term();
                     term.setMeaning(text);
-                    revision.getRevisionOf().setTerm(term);
                 }else if (localName.equals("description")){
                     revision.setDescription(text);
                 }
@@ -133,7 +135,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         }        
         return counter;
     }
-    
+
     @Override
     public void remove(Note note, long revision) {
         Assert.notNull(note, "note was null");

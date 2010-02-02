@@ -26,9 +26,12 @@ import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.TermRepository;
 
 /**
  * AnnotatePage provides
@@ -63,6 +66,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     
     @Property 
     private NoteRevision noteOnEdit;
+    
+    @Property
+    private Term termOnEdit;
 
     @Property
     private NoteRevision note;
@@ -75,7 +81,13 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
+    
+    @Inject
+    private NoteRepository noteRepo;
 
+    @Inject
+    private TermRepository termRepo;
+    
     @Property
     private List<NoteRevision> docNotes;
 
@@ -118,9 +130,11 @@ public class AnnotatePage extends AbstractDocumentPage {
             }else{
                 logger.error("Note with localId " + localId + " coundn't be found in " + getDocumentRevision());
             }
-        }        
+        }
+        
         if (selectedNotes.size() > 0 ) {
             noteOnEdit = selectedNotes.get(0);
+            termOnEdit = getEditTerm(noteOnEdit);
         }
         
         //Order on lemma after we have selected the first one as a selection
@@ -130,8 +144,15 @@ public class AnnotatePage extends AbstractDocumentPage {
             }
         });
         
-        moreThanOneSelectable = selectedNotes.size() > 1;                   
+        moreThanOneSelectable = selectedNotes.size() > 1;
+            
+        
         return noteEdit;
+    }
+
+    private Term getEditTerm(NoteRevision noteRevision) {
+        return noteRevision.getRevisionOf().getTerm() != null ? noteRevision.getRevisionOf()
+                .getTerm().createCopy() : new Term();
     }
 
     Object onSuccessFromCreateTerm() throws IOException {
@@ -150,14 +171,28 @@ public class AnnotatePage extends AbstractDocumentPage {
     void onPrepareForSubmit(String noteRev) {
         note = noteRevisionRepo.getById(noteRev).createCopy();
         noteOnEdit = note;
+        termOnEdit = getEditTerm(noteOnEdit);
     }
     
     Object onSuccessFromNoteEditForm() throws IOException {
-        NoteRevision noteRevision;        
+	NoteRevision noteRevision;
+      
         if (updateLongTextSelection.hasSelection()) {
             noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
         } else {
             noteRevision = noteRevisionRepo.save(note);
+        }
+        
+        //XXX This doesn't look good
+        if (termOnEdit.getBasicForm() != null && !termOnEdit.getBasicForm().trim().isEmpty()) {
+            Term term = termRepo.findByBasicForm(termOnEdit.getBasicForm());
+            if (term == null) {
+                term = termOnEdit;
+                termRepo.save(term);
+            }
+
+            noteRevision.getRevisionOf().setTerm(term);
+            noteRepo.save(noteRevision.getRevisionOf());
         }
         
         // prepare view (with possibly new revision)
@@ -165,7 +200,10 @@ public class AnnotatePage extends AbstractDocumentPage {
         docNotes = noteRevisionRepo.getOfDocument(noteRevision.getDocumentRevision());
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
-        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);           
+        termOnEdit = getEditTerm(noteOnEdit);
+
+        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add(
+                "documentZone", documentView);
     }
 
     Object onDelete(EventContext context) throws IOException {
@@ -180,6 +218,18 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new MultiZoneUpdate("editZone", emptyBlock).add("listZone", notesList).add("documentZone", documentView);
     }
     
+    List<String> onProvideCompletionsFromBasicForm(String partial) {
+        
+        List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
+        
+        List<String> matches = new ArrayList<String>(terms.size());
+        for (Term term : terms) {
+            matches.add(term.getBasicForm());
+        }
+        return matches;
+    }
+
+    
     public Object[] getEditContext() {
         List<String> ctx = new ArrayList<String>(selectedNotes.size());
         //Adding the current note to head
@@ -191,5 +241,5 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
         return ctx.toArray();
     }
-    
+        
 }

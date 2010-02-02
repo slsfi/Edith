@@ -40,5 +40,12 @@ public class Term extends Identifiable{
     public void setMeaning(String meaning) {
         this.meaning = meaning;
     }
+
+    public Term createCopy() {
+        Term term = new Term();
+        term.setBasicForm(basicForm);
+        term.setMeaning(meaning);
+        return term;
+    }
     
 }

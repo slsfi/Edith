@@ -56,7 +56,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
             for (PString path : Arrays.asList(
                     noteRevision.lemma, 
                     noteRevision.longText,
-                    noteRevision.basicForm,
+                    noteRevision.revisionOf.term.basicForm,
                     noteRevision.revisionOf.term.meaning,
                     noteRevision.description
                     )){
@@ -64,7 +64,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
             }    
         }        
         builder.and(noteRevision.eq(noteRevision.revisionOf.latestRevision));
-        return createGridDataSource(noteRevision, noteRevision.basicForm.asc(), builder.getValue());
+        return createGridDataSource(noteRevision, noteRevision.revisionOf.term.basicForm.asc(), builder.getValue());
     }
 
     @Override

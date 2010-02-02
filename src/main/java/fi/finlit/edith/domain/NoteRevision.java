@@ -21,9 +21,6 @@ import fi.finlit.edith.EDITH;
 public class NoteRevision extends Identifiable{
     
     @Predicate
-    private String basicForm;
-    
-    @Predicate
     private UserInfo createdBy; 
     
     @Predicate
@@ -56,7 +53,6 @@ public class NoteRevision extends Identifiable{
     
     public NoteRevision createCopy() {        
         NoteRevision copy = new NoteRevision();
-        copy.setBasicForm(basicForm);
         copy.setDescription(description);
         copy.setLemma(lemma);
         copy.setLongText(longText);
@@ -65,16 +61,12 @@ public class NoteRevision extends Identifiable{
         return copy;
         
     }
-    
+
     public DocumentRevision getDocumentRevision(){
         if (docRevision == null || docRevision.getRevision() != svnRevision){
             docRevision = getRevisionOf().getDocument().getRevision(svnRevision);
         }
         return docRevision;
-    }
-
-    public String getBasicForm() {
-        return basicForm;
     }
 
     public UserInfo getCreatedBy() {
@@ -109,10 +101,6 @@ public class NoteRevision extends Identifiable{
         return svnRevision;
     }
 
-    public void setBasicForm(String basicForm) {
-        this.basicForm = basicForm;
-    }
-
     public void setCreatedBy(UserInfo createdBy) {
         this.createdBy = createdBy;
     }
@@ -140,7 +128,7 @@ public class NoteRevision extends Identifiable{
     public void setSVNRevision(long svnRevision) {
         this.svnRevision = svnRevision;
     }
-
+ 
     public boolean isDeleted() {
         return deleted;
     }

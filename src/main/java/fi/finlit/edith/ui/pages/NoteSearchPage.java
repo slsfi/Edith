@@ -19,6 +19,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
@@ -29,6 +30,7 @@ import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
  * @author tiwe
  * @version $Id$
  */
+//FIXME Use dto instead of NoteRevision to get the editing ability right
 @SuppressWarnings("unused")
 public class NoteSearchPage {
 
@@ -48,9 +50,9 @@ public class NoteSearchPage {
 
     @Inject 
     private NoteRevisionRepository noteRevisionRepo;
-
+    
     @Property
-    private PrimaryKeyEncoder encoder;
+    private PrimaryKeyEncoder<NoteRevision> encoder;
 
     @Inject
     @Path("NoteSearchPage.css")
@@ -60,7 +62,7 @@ public class NoteSearchPage {
     private RenderSupport support;
 
     void onPrepare() {
-        encoder = new PrimaryKeyEncoder(noteRevisionRepo);
+        encoder = new PrimaryKeyEncoder<NoteRevision>(noteRevisionRepo);
     }
 
     void onActionFromToggleEdit() {

@@ -34,6 +34,7 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.TermRepository;
 import fi.finlit.edith.domain.UserRepository;
 
 /**
@@ -57,8 +58,10 @@ public class ServiceModule {
     }
 
     // TODO : get rid of match
-    @Match({"AdminService", "DocumentRepository", "NoteRepository", "UserRepository", "NoteRevisionRepository"})
-    public static void adviseTransactions(TransactionalAdvisor advisor, MethodAdviceReceiver receiver){
+    @Match( { "AdminService", "DocumentRepository", "NoteRepository", "UserRepository",
+            "NoteRevisionRepository", "TermRepository" })
+    public static void adviseTransactions(TransactionalAdvisor advisor,
+            MethodAdviceReceiver receiver) {
         advisor.addTransactionCommitAdvice(receiver);
     }
 
@@ -67,6 +70,7 @@ public class ServiceModule {
         binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class).withId("DocumentRepository");
         binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
         binder.bind(NoteRevisionRepository.class, NoteRevisionRepositoryImpl.class);
+        binder.bind(TermRepository.class, TermRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
         binder.bind(SubversionService.class, SubversionServiceImpl.class).withId("SubversionService");
 

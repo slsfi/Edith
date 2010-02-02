@@ -20,12 +20,15 @@
     </p:breadcrumbs>     
         
     <p:leftPanel>
-        <t:dashboard/>        
+        <t:dashboard/>
+        
         <div class="panel narrow">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>
             <div style="clear:both;"></div>
-        </div>        
+        </div>
+
+        
     </p:leftPanel>
 
     <p:rightPanel>
@@ -82,11 +85,13 @@
                     <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:delete}</t:eventlink>
                     <t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
                         <t:errors/>
-                        ${message:lemma-label}<br/><t:textField value="noteOnEdit.lemma"/><br/>
-                        ${message:basicForm-label}<br/><t:textField value="noteOnEdit.basicForm"/><br/>
-                        ${message:longText-label} <a id="longTextEditLink" href="#" style="display:none">${message:update}</a>
-                        <br/><div id="longTextEdit">${noteOnEdit.longText}</div>
-                        <br/>
+                        ${message:lemma-label}<br/>
+                        <t:textField value="noteOnEdit.lemma"/><br/>
+                        ${message:basicForm-label}<br/>
+                        <t:textField t:id="basicForm" value="termOnEdit.basicForm" t:mixins="autocomplete"/><br/>
+                        <!--t:textField t:id="meaning" value="termOnEdit.meaning"/><br/-->
+                        ${message:longText-label} <a id="longTextEditLink" href="#" style="display:none">${message:update}</a><br/>
+                        <div id="longTextEdit">${noteOnEdit.longText}</div><br/>
                         
                         <t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection"/>
                         <t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId"/>
