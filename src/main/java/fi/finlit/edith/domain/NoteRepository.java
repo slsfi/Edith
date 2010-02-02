@@ -29,6 +29,7 @@ public interface NoteRepository extends Repository<Note,String>{
      * @param longText
      * @return
      */
+  //Note            DocumentRevision                  String          String        String
     Note createNote(Document document, long revision, String localId, String lemma, String longText);
     
     /**
