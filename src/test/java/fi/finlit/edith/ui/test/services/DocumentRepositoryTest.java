@@ -32,6 +32,8 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.SubversionService;
 
 /**
@@ -122,7 +124,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
 
-        Note note = documentRepo.addNote(document, -1, element, element, text);
+        
+        NoteRevision note = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
 
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
@@ -133,7 +136,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         String content = FileUtils.readFileToString(tmpFile, "UTF-8");
         tmpFile.delete();
-        assertTrue(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
+        String localId = note.getRevisionOf().getLocalId();
+        assertTrue(content.contains(start(localId) + text + end(localId)));
     }
 
     @Test
@@ -145,20 +149,21 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "act1-sp4";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
 
-        Note note = documentRepo.addNote(document, -1, element, element, text);
+        NoteRevision note = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
         assertNotNull(note);
     }
 
     @Test
-    public void removeNoteAnchors() throws Exception {
+    public void removeNotes() throws Exception {
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
 
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
 
-        Note note = documentRepo.addNote(document, -1, element, element, text);
-        documentRepo.removeNoteAnchors(document, -1, new Note[] { note });
+        NoteRevision noteRev = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
+        Note note = noteRev.getRevisionOf();
+        documentRepo.removeNotes(document.revision(-1), new Note[] { note });
 
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
@@ -173,7 +178,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void removeNoteAnchors_several() throws Exception {
+    public void removeNotes_several() throws Exception {
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
 
@@ -182,11 +187,14 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String text2 = "ottaa";
         String text3 = "ullakosta";
 
-        Note note = documentRepo.addNote(document, -1, element, element, text);
+        NoteRevision noteRev = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
         // note2 won't be removed
-        Note note2 = documentRepo.addNote(document, -1, element, element, text2);
-        Note note3 = documentRepo.addNote(document, -1, element, element, text3);
-        documentRepo.removeNoteAnchors(document, -1, new Note[] { note, note3 });
+        NoteRevision noteRev2 = documentRepo.addNote(document.revision(-1), new SelectedText( element, element, text2));
+        NoteRevision noteRev3 = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text3));
+        Note note = noteRev.getRevisionOf();
+        Note note2 = noteRev2.getRevisionOf();
+        Note note3 = noteRev3.getRevisionOf();
+        documentRepo.removeNotes(document.revision(-1), new Note[] { note, note3 });
 
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
@@ -210,10 +218,10 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
 
-        Note note = documentRepo.addNote(document, -1, element, element, text);
+        NoteRevision noteRevision = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
 
         String newText = "sun ullakosta";
-        documentRepo.updateNote(document, note.getLatestRevision(), element, element, newText);
+        documentRepo.updateNote(noteRevision, new SelectedText(element, element, newText));
 
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
@@ -224,8 +232,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         String content = FileUtils.readFileToString(tmpFile, "UTF-8");
         tmpFile.delete();
-        assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
-        assertTrue(content.contains(start(note.getLocalId()) + newText + end(note.getLocalId())));
+        String localId = noteRevision.getRevisionOf().getLocalId();
+        assertFalse(content.contains(start(localId) + text + end(localId)));
+        assertTrue(content.contains(start(localId) + newText + end(localId)));
     }
 
     @Override

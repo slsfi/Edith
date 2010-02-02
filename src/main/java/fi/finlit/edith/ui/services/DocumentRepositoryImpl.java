@@ -49,6 +49,7 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.SelectedText;
 
 /**
  * DocumentRepositoryImpl provides
@@ -61,25 +62,25 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
     
-    private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
-
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
 
+    private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
+    
     private static final QName XML_ID_QNAME = new QName(XML_NS, "id");
 
     private final String documentRoot;
-
-    private final SubversionService svnService;
-
-    private final NoteRepository noteRepository;
-
-    private final NoteRevisionRepository noteRevisionRepository;
 
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
+    private final NoteRepository noteRepository;
+
+    private final NoteRevisionRepository noteRevisionRepository;
+
     private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
+
+    private final SubversionService svnService;
 
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
@@ -94,94 +95,64 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         this.noteRevisionRepository = noteRevisionRepository;
     }
 
+    private static EventFilter createRemoveFilter(Note... notes) {
+        final Set<String> anchors = new HashSet<String>(notes.length * 2);
+
+        for (Note note : notes) {
+            anchors.add("start" + note.getLocalId());
+            anchors.add("end" + note.getLocalId());
+        }
+
+        return new EventFilter() {
+            private boolean removeNextEndElement = false;
+
+            @Override
+            public boolean accept(XMLEvent event) {
+                if (event.isStartElement()) {
+                    Attribute attr = event.asStartElement().getAttributeByName(XML_ID_QNAME);
+                    if (attr != null && anchors.contains(attr.getValue())) {
+                        removeNextEndElement = true;
+                        return false;
+                    }
+                } else if (event.isEndElement() && removeNextEndElement) {
+                    removeNextEndElement = false;
+                    return false;
+                }
+
+                return true;
+            }
+        };
+    }
+
     @Override
     public void addDocument(String svnPath, File file) {
         svnService.importFile(svnPath, file);
     }
 
-    private Document createDocument(String path, String title, String description) {
-        Document document = new Document();
-        document.setSvnPath(path);
-        document.setTitle(title);
-        document.setDescription(description);
-        return save(document);
-    }
-
     @Override
-    public Collection<Document> getAll() {
-        return getDocumentsOfFolder(documentRoot);
-    }
-
-    @Override
-    public InputStream getDocumentStream(DocumentRevision document) throws IOException {
-        return svnService.getStream(document.getSvnPath(), document.getRevision());
-    }
-
-    @Override
-    public Document getDocumentForPath(String svnPath) {
-        Document document = getDocumentMetadata(svnPath);
-        if (document == null) {
-            document = createDocument(svnPath, svnPath.substring(svnPath.lastIndexOf('/') + 1), null);
-        }
-        return document;
-    }
-
-    private Document getDocumentMetadata(String svnPath) {
-        return getSession().from(document)
-            .where(document.svnPath.eq(svnPath))
-            .uniqueResult(document);
-    }
-
-    @Override
-    public List<Document> getDocumentsOfFolder(String svnFolder) {
-        Collection<String> entries = svnService.getEntries(svnFolder, /* HEAD */-1);
-        List<Document> documents = new ArrayList<Document>(entries.size());
-        for (String entry : entries) {
-            String path = svnFolder + "/" + entry;
-            Document document = getDocumentMetadata(path);
-            if (document == null) {
-                document = createDocument(path, entry, null);
-            }
-            documents.add(document);
-        }
-        return documents;
-    }
-
-    @Override
-    public List<Long> getRevisions(Document document) {
-        return svnService.getRevisions(document.getSvnPath());
-    }
-
-    @Override
-    public void remove(Document document) {
-        svnService.delete(document.getSvnPath());
-    }
-
-    @Override
-    public Note addNote(Document doc, long revision, final String startId, final String endId,
-            final String text) throws IOException {
+    public NoteRevision addNote(DocumentRevision docRevision, final SelectedText selection) throws IOException{
         final String localId = UUID.randomUUID().toString();
-        Long newRevision = svnService.commit(doc.getSvnPath(), revision, new UpdateCallback() {
+        Long newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
                     addNote(inFactory.createXMLEventReader(source), outFactory
-                            .createXMLEventWriter(target), startId, endId, text, localId);
+                            .createXMLEventWriter(target), selection, localId);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
         });
 
+        docRevision = new DocumentRevision(docRevision, newRevision);
         // persisted noteRevision has svnRevision of newly created commit
-        return noteRepository.createNote(doc, newRevision, localId, text, text);
+        return noteRepository.createNote(docRevision, localId, selection.getSelection(), selection.getSelection()).getLatestRevision();
     }
 
-    public void addNote(XMLEventReader reader, XMLEventWriter writer, String startId, String endId,
-            String text, String localId) throws Exception {
-        AnchorPosition startPosition = new AnchorPosition(Assert.notNull(startId));
-        AnchorPosition endPosition = new AnchorPosition(endId);
-        System.err.println(startPosition + " - " + endPosition + " : " + text);
+    public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText selection, String localId) throws Exception {
+        AnchorPosition startPosition = new AnchorPosition(Assert.notNull(selection.getStartId()));
+        AnchorPosition endPosition = new AnchorPosition(selection.getEndId());
+        System.err.println(startPosition + " - " + endPosition + " : " + selection.getSelection());
 
         try {
             int act = 0;
@@ -225,7 +196,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     int index = 0;
 
                     if (startPosition.matches(act, inSp ? sp : stage, inSp)) {
-                        index = TextUtils.getStartIndex(data, text);
+                        index = TextUtils.getStartIndex(data, selection.getSelection());
                         if (index > -1) {
                             // insert start anchor : start${localId}
                             if (index > 0) {
@@ -242,7 +213,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
 
                     if (endPosition.matches(act, inSp ? sp : stage, inSp)) {
-                        int end = TextUtils.getEndIndex(data, text);
+                        int end = TextUtils.getEndIndex(data, selection.getSelection());
                         if (end > -1) {
                             if (end > index) {
                                 writer.add(eventFactory.createCharacters(data.substring(index, end)));
@@ -270,10 +241,84 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
+    private Document createDocument(String path, String title, String description) {
+        Document document = new Document();
+        document.setSvnPath(path);
+        document.setTitle(title);
+        document.setDescription(description);
+        return save(document);
+    }
+
     @Override
-    public void removeNoteAnchors(Document document, long svnRevision, final Note... notes)
-            throws IOException {
-        svnService.commit(document.getSvnPath(), svnRevision, new UpdateCallback() {
+    public Collection<Document> getAll() {
+        return getDocumentsOfFolder(documentRoot);
+    }
+
+    @Override
+    public Document getDocumentForPath(String svnPath) {
+        Assert.notNull(svnPath, "svnPath was null");
+        Document document = getDocumentMetadata(svnPath);
+        if (document == null) {
+            document = createDocument(svnPath, svnPath.substring(svnPath.lastIndexOf('/') + 1), null);
+        }
+        return document;
+    }
+
+    private Document getDocumentMetadata(String svnPath) {
+        return getSession().from(document)
+            .where(document.svnPath.eq(svnPath))
+            .uniqueResult(document);
+    }
+
+    @Override
+    public List<Document> getDocumentsOfFolder(String svnFolder) {
+        Assert.notNull(svnFolder, "svnFolder was null");
+        Collection<String> entries = svnService.getEntries(svnFolder, /* HEAD */-1);
+        List<Document> documents = new ArrayList<Document>(entries.size());
+        for (String entry : entries) {
+            String path = svnFolder + "/" + entry;
+            Document document = getDocumentMetadata(path);
+            if (document == null) {
+                document = createDocument(path, entry, null);
+            }
+            documents.add(document);
+        }
+        return documents;
+    }
+
+    @Override
+    public InputStream getDocumentStream(DocumentRevision document) throws IOException {
+        Assert.notNull(document, "document was null");
+        return svnService.getStream(document.getSvnPath(), document.getRevision());
+    }
+
+    @Override
+    public List<Long> getRevisions(Document document) {
+        Assert.notNull(document, "document was null");
+        return svnService.getRevisions(document.getSvnPath());
+    }
+
+    @Override
+    public void remove(Document document) {
+        Assert.notNull(document, "document was null");
+        svnService.delete(document.getSvnPath());
+    }
+
+
+    public void removeNoteAnchors(XMLEventReader reader, XMLEventWriter writer) throws Exception {
+        try {
+            while (reader.hasNext()) {
+                writer.add(reader.nextEvent());
+            }
+        } finally {
+            writer.close();
+            reader.close();
+        }
+    }
+
+    @Override
+    public DocumentRevision removeNotes(DocumentRevision docRevision, final Note... notes)throws IOException {
+        long newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
@@ -290,24 +335,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         for (Note note : notes) {
             noteRepository.remove(note);
         }
+        
+        return new DocumentRevision(docRevision, newRevision);
     }
-
-    public void removeNoteAnchors(XMLEventReader reader, XMLEventWriter writer) throws Exception {
-        try {
-            while (reader.hasNext()) {
-                writer.add(reader.nextEvent());
-            }
-        } finally {
-            writer.close();
-            reader.close();
-        }
-    }
-
 
     @Override
-    public NoteRevision updateNote(Document document, final NoteRevision note, final String startId, final String endId,
-            final String text) throws IOException {
-        Long newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(),
+    public NoteRevision updateNote(final NoteRevision note, final SelectedText selection) throws IOException {
+        Document document = note.getRevisionOf().getDocument();
+        long newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(),
                 new UpdateCallback() {
                     @Override
                     public void update(InputStream source, OutputStream target) {
@@ -315,7 +350,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             addNote(inFactory.createFilteredReader(inFactory
                                     .createXMLEventReader(source),
                                     createRemoveFilter(new Note[] { note.getRevisionOf() })),
-                                    outFactory.createXMLEventWriter(target), startId, endId, text,
+                                    outFactory.createXMLEventWriter(target), selection,
                                     note.getRevisionOf().getLocalId());
                         } catch (Exception e) {
                             throw new RuntimeException(e);
@@ -324,39 +359,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         });
 
         NoteRevision copy = note.createCopy();
-        copy.setLongText(text);
+        copy.setLongText(selection.getSelection());
         copy.setSVNRevision(newRevision);
         noteRevisionRepository.save(copy);
         return copy;
-    }
-
-    private static EventFilter createRemoveFilter(Note... notes) {
-        final Set<String> anchors = new HashSet<String>(notes.length * 2);
-
-        for (Note note : notes) {
-            anchors.add("start" + note.getLocalId());
-            anchors.add("end" + note.getLocalId());
-        }
-
-        return new EventFilter() {
-            private boolean removeNextEndElement = false;
-
-            @Override
-            public boolean accept(XMLEvent event) {
-                if (event.isStartElement()) {
-                    Attribute attr = event.asStartElement().getAttributeByName(XML_ID_QNAME);
-                    if (attr != null && anchors.contains(attr.getValue())) {
-                        removeNextEndElement = true;
-                        return false;
-                    }
-                } else if (event.isEndElement() && removeNextEndElement) {
-                    removeNextEndElement = false;
-                    return false;
-                }
-
-                return true;
-            }
-        };
     }
 
 }

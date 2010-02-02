@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
 
+import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 
 /**
@@ -78,7 +79,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_for_p() throws Exception{
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
-        documentRepo.addNote(sourceReader, targetWriter, element, element, text, localId);
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + text + end(localId)));
@@ -88,7 +89,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_for_speaker() throws Exception{
         String element = "act1-sp1";
         String text = "Esko.";
-        documentRepo.addNote(sourceReader, targetWriter, element, element, text, localId);
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains("<speaker>" + start(localId) + text + end(localId) + "</speaker>"));
@@ -99,7 +100,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String start = "act1-sp2";
         String end = "act1-sp3";
         String text = "ja polvip\u00F6ksyt. Esko.";
-        documentRepo.addNote(sourceReader, targetWriter, start, end, text, localId);
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(start, end, text), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
@@ -111,7 +112,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String start = "act1-sp2";
         String end = "act1-sp3";
         String text = "ja polvip\u00F6ksyt. Esko. (panee ty\u00F6ns\u00E4 pois).";
-        documentRepo.addNote(sourceReader, targetWriter, start, end, text, localId);
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(start, end, text), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
@@ -124,7 +125,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         StringBuilder text = new StringBuilder();
         text.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
         text.append("ja sulhais-vaatteisin puettuna olen, koska h\u00E4n takaisin pal");
-        documentRepo.addNote(sourceReader, targetWriter, element, element, text.toString(), localId);
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text.toString()), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         System.out.println(content);

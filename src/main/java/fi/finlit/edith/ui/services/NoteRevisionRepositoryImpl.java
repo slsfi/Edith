@@ -22,7 +22,7 @@ import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.QNoteRevision;
@@ -68,24 +68,24 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     }
 
     @Override
-    public NoteRevision getByLocalId(Document document, long revision, String localId) {
-        Assert.notNull(document);
+    public NoteRevision getByLocalId(DocumentRevision docRevision, String localId) {
+        Assert.notNull(docRevision);
         Assert.notNull(localId);
         return getSession().from(noteRevision)
-            .where(noteRevision.revisionOf.document.eq(document),
+            .where(noteRevision.revisionOf.document.eq(docRevision.getDocument()),
                    noteRevision.revisionOf.localId.eq(localId),
-                   noteRevision.svnRevision.loe(revision),            
-                   latestFor(revision))
+                   noteRevision.svnRevision.loe(docRevision.getRevision()),            
+                   latestFor(docRevision.getRevision()))
             .uniqueResult(noteRevision);
     }
     
     @Override
-    public List<NoteRevision> getOfDocument(Document document, long revision) {
-        Assert.notNull(document);
+    public List<NoteRevision> getOfDocument(DocumentRevision docRevision) {
+        Assert.notNull(docRevision);
         return getSession().from(noteRevision)
-            .where(noteRevision.revisionOf.document.eq(document),
-                   noteRevision.svnRevision.loe(revision),
-                   latestFor(revision))
+            .where(noteRevision.revisionOf.document.eq(docRevision.getDocument()),
+                   noteRevision.svnRevision.loe(docRevision.getRevision()),
+                   latestFor(docRevision.getRevision()))
             .orderBy(noteRevision.longText.asc())
             .list(noteRevision);
     }

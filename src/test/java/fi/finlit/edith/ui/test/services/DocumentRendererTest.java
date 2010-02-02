@@ -10,7 +10,7 @@ import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.ui.services.DocumentRenderer;
 
 /**
@@ -23,26 +23,29 @@ public class DocumentRendererTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRenderer renderer;
+    
+    @Inject
+    private DocumentRepository docRepo;
 
     @Test
     public void renderDocument() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
-        renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
+        renderer.renderDocument(docRepo.getDocumentForPath(svnPath).revision(-1), writer);
     }
 
     @Test
     public void renderPageLinks() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
-        renderer.renderPageLinks(new DocumentRevision(svnPath, -1), writer);
+        renderer.renderPageLinks(docRepo.getDocumentForPath(svnPath).revision(-1), writer);
     }
 
     @Test
     public void renderDocumentWithNotes() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
-        renderer.renderDocument(new DocumentRevision(svnPath, -1), writer);
+        renderer.renderDocument(docRepo.getDocumentForPath(svnPath).revision(-1), writer);
     }
 
     @Override

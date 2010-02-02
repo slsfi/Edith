@@ -48,6 +48,12 @@ public class NoteRevision extends Identifiable{
     @Predicate
     private long svnRevision;
     
+    @Predicate
+    private boolean deleted;
+    
+    // not directly persisted
+    private DocumentRevision docRevision;
+    
     public NoteRevision createCopy() {        
         NoteRevision copy = new NoteRevision();
         copy.setBasicForm(basicForm);
@@ -58,6 +64,13 @@ public class NoteRevision extends Identifiable{
         copy.setSVNRevision(svnRevision);
         return copy;
         
+    }
+    
+    public DocumentRevision getDocumentRevision(){
+        if (docRevision == null || docRevision.getRevision() != svnRevision){
+            docRevision = getRevisionOf().getDocument().revision(svnRevision);
+        }
+        return docRevision;
     }
 
     public String getBasicForm() {
@@ -127,5 +140,15 @@ public class NoteRevision extends Identifiable{
     public void setSVNRevision(long svnRevision) {
         this.svnRevision = svnRevision;
     }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+    
+    
  
 }

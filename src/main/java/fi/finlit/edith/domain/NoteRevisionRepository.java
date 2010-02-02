@@ -27,16 +27,14 @@ public interface NoteRevisionRepository extends Repository<NoteRevision, String>
      * @return
      */
     @Nullable
-  //NoteRevision              DocumentRevision                          String
-    NoteRevision getByLocalId(Document document, long documentRevision, String localId);
+    NoteRevision getByLocalId(DocumentRevision docRevision, String localId);
 
     /**
      * @param document
      * @param revision
      * @return
      */
-  //List<NoteRevision>               DocumentRevision  
-    List<NoteRevision> getOfDocument(Document document, long revision);
+    List<NoteRevision> getOfDocument(DocumentRevision docRevision);
 
     /**
      * @param searchTem

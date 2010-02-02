@@ -28,6 +28,7 @@ import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.SelectedText;
 
 /**
  * AnnotatePage provides
@@ -97,14 +98,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     void setupRender() {
-        Document document = getDocument();
-        DocumentRevision documentRevision = getDocumentRevision();
-        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
+        docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
     }
 
     Object onEdit(EventContext context) {
-        Document document = getDocument();
-        DocumentRevision documentRevision = getDocumentRevision();
         selectedNotes = new ArrayList<NoteRevision>(context.getCount());
         for (int i = 0; i < context.getCount(); i++) {
             String localId = context.get(String.class, i);
@@ -112,8 +109,7 @@ public class AnnotatePage extends AbstractDocumentPage {
             if (localId.startsWith("n"))
                 localId = localId.substring(1);
             
-            NoteRevision rev = noteRevisionRepo.getByLocalId(document, documentRevision
-                    .getRevision(), localId);
+            NoteRevision rev = noteRevisionRepo.getByLocalId(getDocumentRevision(), localId);
             if (rev != null) {
                 selectedNotes.add(rev);
             }
@@ -138,18 +134,14 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onSuccessFromCreateTerm() throws IOException {
-        System.out.println(createTermSelection.startId + "," + createTermSelection.endId + ":["
-                + createTermSelection.selection + "]");
-        Document document = getDocument();
+        System.out.println(createTermSelection.getStartId() + "," + createTermSelection.getEndId() + ":["
+                + createTermSelection.getSelection() + "]");
         DocumentRevision documentRevision = getDocumentRevision();
-        Note note = getDocumentRepo().addNote(document, documentRevision.getRevision(),
-                createTermSelection.startId, createTermSelection.endId,
-                createTermSelection.selection);
-        long newRevision = note.getLatestRevision().getSvnRevision();
+        NoteRevision noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
 
         // update notesList content
-        documentRevision.setRevision(newRevision);
-        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
+        documentRevision.setRevision(noteRevision.getSvnRevision());
+        docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         return new MultiZoneUpdate("listZone", notesList).add("documentZone", documentView);
     }
     
@@ -159,26 +151,22 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
     
     Object onSuccessFromNoteEditForm() throws IOException {
-
         Document document = getDocument();
-
+        NoteRevision noteRevision;
+        
         if (updateLongTextSelection.hasSelection()) {
-            note = getDocumentRepo().updateNote(document, note, updateLongTextSelection.startId,
-                    updateLongTextSelection.endId, updateLongTextSelection.selection);
+            noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
         } else {
-            noteRevisionRepo.save(note);
+            noteRevision = noteRevisionRepo.save(note);
         }
         
         // notesList content
-        DocumentRevision documentRevision = getDocumentRevision();
-        documentRevision.setRevision(note.getSvnRevision());
-        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
+        docNotes = noteRevisionRepo.getOfDocument(noteRevision.getDocumentRevision());
 
-        selectedNotes = Collections.singletonList(note);
-        noteOnEdit = note;
+        selectedNotes = Collections.singletonList(noteRevision);
+        noteOnEdit = noteRevision;
 
-        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add(
-                "documentZone", documentView);
+        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);
     }
 
     Object onActionFromDelete() throws IOException {
@@ -189,7 +177,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         // notesList content
         DocumentRevision documentRevision = getDocumentRevision();
-        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
+        docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         
         selectedNotes = Collections.emptyList();
 
@@ -212,42 +200,6 @@ public class AnnotatePage extends AbstractDocumentPage {
             }
         }
         return ctx.toArray();
-    }
-        
-    public static class SelectedText {
-        private String selection;
-        private String startId;
-        private String endId;
-
-        public String getSelection() {
-            return selection;
-        }
-
-        public void setSelection(String selection) {
-            this.selection = selection;
-        }
-
-        public String getStartId() {
-            return startId;
-        }
-
-        public void setStartId(String startId) {
-            this.startId = startId;
-        }
-
-        public String getEndId() {
-            return endId;
-        }
-
-        public void setEndId(String endId) {
-            this.endId = endId;
-        }
-
-        public boolean hasSelection() {
-            return selection != null && startId != null && endId != null
-                    && selection.trim().length() > 0 && startId.trim().length() > 0
-                    && endId.trim().length() > 0;
-        }
     }
     
 }

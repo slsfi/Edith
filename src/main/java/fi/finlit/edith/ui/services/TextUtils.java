@@ -9,8 +9,7 @@ package fi.finlit.edith.ui.services;
 public class TextUtils {
 
     // TODO : change into service (interface + impl) -> TextMatchingService/Impl
-    //        make sure all TextUtilsTests succeed
-    //
+    // TODO : make all regex code use precompiled Patterns
 
     public static int getStartIndex(String xmlCharacters, String noteLongText) {
         if (xmlCharacters.contains(noteLongText)) {

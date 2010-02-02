@@ -68,5 +68,9 @@ public class Document extends Identifiable implements Comparable<Document>{
     public void setTitle(String title) {
         this.title = title;
     }
+    
+    public DocumentRevision revision(long revision){
+        return new DocumentRevision(this, revision);
+    }
 
 }

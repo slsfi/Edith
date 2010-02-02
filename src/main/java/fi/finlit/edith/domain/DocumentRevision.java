@@ -12,28 +12,31 @@ package fi.finlit.edith.domain;
  * @author tiwe
  * @version $Id$
  */
-// TODO : use Document instead of svnPath
 public class DocumentRevision {
     
     private long revision;
     
-    private final String svnPath;
+    private final Document document;
     
     public DocumentRevision(Document document, long revision){
-        this(document.getSvnPath(), revision);
-    }
-
-    public DocumentRevision(String svnPath, long revision){
-        this.svnPath = svnPath;
+        this.document = document;
         this.revision = revision;
     }
     
+    public DocumentRevision(DocumentRevision docRevision, long revision) {
+        this(docRevision.getDocument(), revision);
+    }
+
+    public Document getDocument() {
+        return document;
+    }
+
     public long getRevision() {
         return revision;
     }
 
     public String getSvnPath() {
-        return svnPath;
+        return document.getSvnPath();
     }
 
     public void setRevision(long newRevision) {

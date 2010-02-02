@@ -42,8 +42,7 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @return
      * @throws IOException
      */
-    // DocumentRevision addNote(DocumentRevision docRevision, SelectedText selection)
-    Note addNote(Document document, long svnRevision, String startId, String endId, String text) throws IOException;
+    NoteRevision addNote(DocumentRevision docRevision, SelectedText selection) throws IOException;
 
     /**
      * Update the boundaries of the given note in the context of the given document
@@ -55,8 +54,7 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @param text
      * @throws IOException
      */
-    // DocumentRevision updateNote(NoteRevision document, SelectedText selection)           
-    NoteRevision updateNote(Document document, NoteRevision note, String startId, String endId, String text) throws IOException;
+    NoteRevision updateNote(NoteRevision note, SelectedText selection) throws IOException;           
 
     /**
      * Get a Document handle for the given path
@@ -100,7 +98,7 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @param anchors
      * @throws IOException
      */
-    // DocumentRevision removeNotes(DocumentRevision docRevision, Note... notes)
-    void removeNoteAnchors(Document document, long svnRevision, Note... anchors) throws IOException;
+     DocumentRevision removeNotes(DocumentRevision docRevision, Note... notes) throws IOException;
+
 
 }

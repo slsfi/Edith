@@ -21,11 +21,10 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.rdfbean.dao.AbstractRepository;
-import com.mysema.rdfbean.model.BID;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
@@ -53,20 +52,20 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
         
     @Override
-    public Note createNote(Document document, long revision, String localId, String lemma, String longText) {
+    public Note createNote(DocumentRevision docRevision, String localId, String lemma, String longText) {
         UserInfo createdBy = userRepository.getCurrentUser();
         
         NoteRevision rev = new NoteRevision();
         rev.setCreatedOn(System.currentTimeMillis());
         rev.setCreatedBy(createdBy);
-        rev.setSVNRevision(revision);
+        rev.setSVNRevision(docRevision.getRevision());
         rev.setLemma(lemma);
         rev.setLongText(longText);
         getSession().save(rev);
         
         Note note = new Note();
         note.setStatus(NoteStatus.Draft);
-        note.setDocument(document);
+        note.setDocument(docRevision.getDocument());
         note.setLocalId(localId);
         note.setLatestRevision(rev);
         rev.setRevisionOf(note);

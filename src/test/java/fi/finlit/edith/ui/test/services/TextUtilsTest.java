@@ -48,7 +48,6 @@ public class TextUtilsTest {
 
     @Test
     public void longText2(){
-        // FIXME
         StringBuilder noteLongText = new StringBuilder();
         noteLongText.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
         noteLongText.append("ja sulhais-vaatteisin puettuna olen, koska h\u00E4n takaisin pal");
