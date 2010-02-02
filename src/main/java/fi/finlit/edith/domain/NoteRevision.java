@@ -149,6 +149,8 @@ public class NoteRevision extends Identifiable{
         this.deleted = deleted;
     }
     
-    
+    public String getLocalId(){
+        return revisionOf.getLocalId();
+    }
  
 }

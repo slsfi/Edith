@@ -180,18 +180,13 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new MultiZoneUpdate("editZone", emptyBlock).add("listZone", notesList).add("documentZone", documentView);
     }
     
-    private String localId(NoteRevision noteRev) {
-        return noteRev.getRevisionOf().getLocalId(); 
-    }
-    
-    
     public Object[] getEditContext() {
         List<String> ctx = new ArrayList<String>(selectedNotes.size());
         //Adding the current note to head
-        ctx.add(localId(note));
+        ctx.add(note.getLocalId());
         for(NoteRevision r : selectedNotes) {
             if (!r.equals(note)) {
-                ctx.add(localId(r));
+                ctx.add(r.getLocalId());
             }
         }
         return ctx.toArray();

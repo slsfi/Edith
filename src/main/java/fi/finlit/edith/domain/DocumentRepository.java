@@ -16,16 +16,16 @@ import com.mysema.rdfbean.dao.Repository;
 
 /**
  * DocumentRepository provides
- *
+ * 
  * @author tiwe
  * @version $Id$
  */
 @Transactional
-public interface DocumentRepository extends Repository<Document,String>{
+public interface DocumentRepository extends Repository<Document, String> {
 
     /**
      * Import the given File to the given svnPath
-     *
+     * 
      * @param svnPath
      * @param file
      */
@@ -33,7 +33,7 @@ public interface DocumentRepository extends Repository<Document,String>{
 
     /**
      * Add the given note for the given Document
-     *
+     * 
      * @param docRevision
      * @param selection
      * @return
@@ -43,16 +43,16 @@ public interface DocumentRepository extends Repository<Document,String>{
 
     /**
      * Update the boundaries of the given note
-     *
+     * 
      * @param note
      * @param selection
      * @throws IOException
      */
-    NoteRevision updateNote(NoteRevision note, SelectedText selection) throws IOException;           
+    NoteRevision updateNote(NoteRevision note, SelectedText selection) throws IOException;
 
     /**
      * Get a Document handle for the given path
-     *
+     * 
      * @param svnPath
      * @return
      */
@@ -60,7 +60,7 @@ public interface DocumentRepository extends Repository<Document,String>{
 
     /**
      * Get the Documents of the given directory path and its subpaths
-     *
+     * 
      * @param svnFolder
      * @return
      */
@@ -68,7 +68,7 @@ public interface DocumentRepository extends Repository<Document,String>{
 
     /**
      * Get the file for the given document for reading
-     *
+     * 
      * @param docRevision
      * @return
      * @throws IOException
@@ -77,7 +77,7 @@ public interface DocumentRepository extends Repository<Document,String>{
 
     /**
      * Get the SVN revisions for the given document in ascending order
-     *
+     * 
      * @param document
      * @return
      */
@@ -85,12 +85,11 @@ public interface DocumentRepository extends Repository<Document,String>{
 
     /**
      * Remove the given anchors from the given Document
-     *
+     * 
      * @param docRevision
      * @param notes
      * @throws IOException
      */
-     DocumentRevision removeNotes(DocumentRevision docRevision, Note... notes) throws IOException;
-
+    DocumentRevision removeNotes(DocumentRevision docRevision, Note... notes) throws IOException;
 
 }
