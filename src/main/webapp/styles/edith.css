@@ -168,7 +168,8 @@ div.note_edit {
 }
 
 .note_edit a {
-    font-size: 80%;	
+    font-size: 80%;
+    float:right;	
 }
 
 
