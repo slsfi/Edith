@@ -8,10 +8,14 @@ package fi.finlit.edith.ui.services;
  */
 public class TextUtils {
     
-    public static int getStartIndex(String string, String text) {
-        if (string.contains(text)){
-            int firstIndex = string.indexOf(text);
-            int lastIndex = string.lastIndexOf(text);
+    // TODO : change into service (interface + impl) -> TextMatchingService/Impl
+    //        make sure all TextUtilsTests succeed
+    //         
+    
+    public static int getStartIndex(String xmlCharacters, String noteLongText) {
+        if (xmlCharacters.contains(noteLongText)){
+            int firstIndex = xmlCharacters.indexOf(noteLongText);
+            int lastIndex = xmlCharacters.lastIndexOf(noteLongText);
             if (lastIndex == firstIndex){
                 return firstIndex;
             }else{
@@ -20,9 +24,9 @@ public class TextUtils {
             }
             
         }else {
-            // TODO : optimize
-            for (int i = 0; i < string.length(); i++){
-                if (text.charAt(0) == string.charAt(i) && text.startsWith(string.substring(i))){
+            // TODO : improve
+            for (int i = 0; i < xmlCharacters.length(); i++){
+                if (noteLongText.charAt(0) == xmlCharacters.charAt(i) && noteLongText.startsWith(xmlCharacters.substring(i))){
                     return i;
                 }
             }
@@ -30,21 +34,22 @@ public class TextUtils {
         return -1;         
     }
     
-    public static int getEndIndex(String string, String text){
-        if (string.contains(text)){
-            int firstIndex = string.indexOf(text);
-            int lastIndex = string.lastIndexOf(text);
+    public static int getEndIndex(String xmlCharacters, String noteLongText){
+        if (xmlCharacters.contains(noteLongText)){
+            int firstIndex = xmlCharacters.indexOf(noteLongText);
+            int lastIndex = xmlCharacters.lastIndexOf(noteLongText);
             if (lastIndex == firstIndex){
-                return firstIndex + text.length();
+                return firstIndex + noteLongText.length();
             }else{
                 // TODO : log error
-                return lastIndex + text.length();
+                return lastIndex + noteLongText.length();
             }
             
         }else{
-            for (int i = 0; i < text.length(); i++){
-                if (text.charAt(i) == string.charAt(0) && string.startsWith(text.substring(i))){
-                    return text.length() - i;
+            // TODO : improve
+            for (int i = 0; i < noteLongText.length(); i++){
+                if (noteLongText.charAt(i) == xmlCharacters.charAt(0) && xmlCharacters.startsWith(noteLongText.substring(i))){
+                    return noteLongText.length() - i;
                 }
             }
         }
