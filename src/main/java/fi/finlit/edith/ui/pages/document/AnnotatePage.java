@@ -139,7 +139,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         DocumentRevision documentRevision = getDocumentRevision();
         NoteRevision noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
 
-        // prepare view
+        // prepare view (with new revision)
         documentRevision.setRevision(noteRevision.getSvnRevision());
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         return new MultiZoneUpdate("listZone", notesList).add("documentZone", documentView);
@@ -151,16 +151,15 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
     
     Object onSuccessFromNoteEditForm() throws IOException {
-        Document document = getDocument();
-        NoteRevision noteRevision;
-        
+        NoteRevision noteRevision;        
         if (updateLongTextSelection.hasSelection()) {
             noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
         } else {
             noteRevision = noteRevisionRepo.save(note);
         }
         
-        // prepare view        
+        // prepare view (with possibly new revision)
+        getDocumentRevision().setRevision(noteRevision.getSvnRevision());
         docNotes = noteRevisionRepo.getOfDocument(noteRevision.getDocumentRevision());
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
@@ -171,7 +170,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         DocumentRevision documentRevision = getDocumentRevision();
         documentRevision = getDocumentRepo().removeNotes(documentRevision, note.getRevisionOf());
 
-        // prepare view
+        // prepare view with new revision
         getDocumentRevision().setRevision(documentRevision.getRevision());
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);        
         selectedNotes = Collections.emptyList();
