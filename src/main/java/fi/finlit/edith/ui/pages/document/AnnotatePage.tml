@@ -20,15 +20,12 @@
     </p:breadcrumbs>     
         
     <p:leftPanel>
-        <t:dashboard/>
-        
+        <t:dashboard/>        
         <div class="panel narrow">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>
             <div style="clear:both;"></div>
-        </div>
-
-        
+        </div>        
     </p:leftPanel>
 
     <p:rightPanel>
@@ -81,7 +78,8 @@
                 
                 <h3>${message:noteEdit}</h3>
                 <div class="note_edit">
-                    <b>${noteOnEdit.lemma}</b> <t:actionlink t:id="delete" t:zone="editZone" context="noteOnEdit.id">${message:delete}</t:actionlink>
+                    <b>${noteOnEdit.lemma}</b> 
+                    <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:delete}</t:eventlink>
                     <t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
                         <t:errors/>
                         ${message:lemma-label}<br/><t:textField value="noteOnEdit.lemma"/><br/>

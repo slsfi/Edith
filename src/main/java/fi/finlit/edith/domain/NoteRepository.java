@@ -22,8 +22,9 @@ import com.mysema.rdfbean.dao.Repository;
 public interface NoteRepository extends Repository<Note,String>{
     
     /**
-     * @param document
-     * @param revision
+     * Create a new Note for the given DocumentRevision with the given local id, lemma and long text
+     * 
+     * @param docRevision
      * @param localId
      * @param lemma
      * @param longText
@@ -33,15 +34,28 @@ public interface NoteRepository extends Repository<Note,String>{
 
     
     /**
+     * Import notes from the given file
+     * 
      * @param file
      * @throws Exception 
      */
+     @Deprecated
     int importNotes(File file) throws Exception;
 
     /**
+     * Query for notes with the given search term
+     * 
      * @param searchTerm
      * @return
      */
     GridDataSource queryDictionary(String searchTerm);
+
+    /**
+     * Remove the give Note in the given revision
+     * 
+     * @param note
+     * @param newRevision
+     */
+    void remove(Note note, long revision);
     
 }

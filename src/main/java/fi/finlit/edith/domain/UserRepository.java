@@ -24,6 +24,8 @@ import com.mysema.rdfbean.dao.Repository;
 public interface UserRepository extends Repository<User,String>{
     
     /**
+     * Get the user with the given username
+     * 
      * @param shortName
      * @return
      */
@@ -31,6 +33,8 @@ public interface UserRepository extends Repository<User,String>{
     User getByUsername(String shortName);
     
     /**
+     * Get the current user
+     * 
      * @param username
      * @return
      */
@@ -38,6 +42,8 @@ public interface UserRepository extends Repository<User,String>{
     UserInfo getCurrentUser();
 
     /**
+     * Get the users with asceding username order
+     * 
      * @return
      */
     List<User> getOrderedByName();

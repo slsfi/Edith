@@ -135,14 +135,17 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
     
     @Override
-    public void remove(Note note) {
+    public void remove(Note note, long revision) {
         Assert.notNull(note, "note was null");
         
         UserInfo createdBy = userRepository.getCurrentUser();
-        NoteRevision revision = note.getLatestRevision().createCopy();
-        revision.setCreatedOn(System.currentTimeMillis());
-        revision.setCreatedBy(createdBy);
-        note.setLatestRevision(revision);
+        NoteRevision noteRevision = note.getLatestRevision().createCopy();
+        noteRevision.setCreatedOn(System.currentTimeMillis());
+        noteRevision.setCreatedBy(createdBy);
+        noteRevision.setSVNRevision(revision);
+        noteRevision.setDeleted(true);
+        note.setLatestRevision(noteRevision);
+        
         getSession().save(revision);
         getSession().save(note);
     }

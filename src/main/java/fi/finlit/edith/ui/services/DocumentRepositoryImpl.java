@@ -146,7 +146,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
         docRevision = new DocumentRevision(docRevision, newRevision);
         // persisted noteRevision has svnRevision of newly created commit
-        return noteRepository.createNote(docRevision, localId, selection.getSelection(), selection.getSelection()).getLatestRevision();
+        String lemma = selection.getSelection();
+        if (lemma.length() > 10 && lemma.indexOf(" ") > -1){
+            lemma = lemma.substring(0, lemma.indexOf(" "));
+        }
+        return noteRepository.createNote(docRevision, localId, lemma, selection.getSelection()).getLatestRevision();
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText selection, String localId) throws Exception {
@@ -304,7 +308,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         svnService.delete(document.getSvnPath());
     }
 
-
     public void removeNoteAnchors(XMLEventReader reader, XMLEventWriter writer) throws Exception {
         try {
             while (reader.hasNext()) {
@@ -333,7 +336,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
         // persisted noteRevision has svnRevision of newly created commit
         for (Note note : notes) {
-            noteRepository.remove(note);
+            noteRepository.remove(note, newRevision);
         }
         
         return new DocumentRevision(docRevision, newRevision);

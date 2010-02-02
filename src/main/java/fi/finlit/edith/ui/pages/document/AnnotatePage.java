@@ -168,7 +168,8 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);           
     }
 
-    Object onActionFromDelete() throws IOException {
+    Object onDelete(EventContext context) throws IOException {
+        note = noteRevisionRepo.getById(context.get(String.class, 0));
         DocumentRevision documentRevision = getDocumentRevision();
         documentRevision = getDocumentRepo().removeNotes(documentRevision, note.getRevisionOf());
 

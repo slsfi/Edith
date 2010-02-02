@@ -83,6 +83,17 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         
 //        assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "10"));
     }
+    
+    @Test
+    public void remove(){
+        Document document = documentRepo.getDocumentForPath(testDocument);
+        List<Long> revisions = documentRepo.getRevisions(document);
+        long latestRevision = revisions.get(revisions.size() - 1).longValue();
+        
+        String lemma = UUID.randomUUID().toString();
+        noteRepo.createNote(document.getRevision(latestRevision), "10", lemma, "longText");
+    }
+    
 
     @Override
     protected Class<?> getServiceClass() {

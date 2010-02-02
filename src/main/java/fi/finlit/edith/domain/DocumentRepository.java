@@ -26,7 +26,7 @@ public interface DocumentRepository extends Repository<Document,String>{
     /**
      * Import the given File to the given svnPath
      *
-     * @param string
+     * @param svnPath
      * @param file
      */
     void addDocument(String svnPath, File file);
@@ -34,24 +34,18 @@ public interface DocumentRepository extends Repository<Document,String>{
     /**
      * Add the given note for the given Document
      *
-     * @param document
-     * @param svnRevision
-     * @param startId
-     * @param endId
-     * @param text
+     * @param docRevision
+     * @param selection
      * @return
      * @throws IOException
      */
     NoteRevision addNote(DocumentRevision docRevision, SelectedText selection) throws IOException;
 
     /**
-     * Update the boundaries of the given note in the context of the given document
+     * Update the boundaries of the given note
      *
-     * @param document
      * @param note
-     * @param startId
-     * @param endId
-     * @param text
+     * @param selection
      * @throws IOException
      */
     NoteRevision updateNote(NoteRevision note, SelectedText selection) throws IOException;           
@@ -75,12 +69,11 @@ public interface DocumentRepository extends Repository<Document,String>{
     /**
      * Get the file for the given document for reading
      *
-     * @param svnPath
-     * @param revision
+     * @param docRevision
      * @return
      * @throws IOException
      */
-    InputStream getDocumentStream(DocumentRevision document) throws IOException;
+    InputStream getDocumentStream(DocumentRevision docRevision) throws IOException;
 
     /**
      * Get the SVN revisions for the given document in ascending order
@@ -93,9 +86,8 @@ public interface DocumentRepository extends Repository<Document,String>{
     /**
      * Remove the given anchors from the given Document
      *
-     * @param document
-     * @param svnRevision
-     * @param anchors
+     * @param docRevision
+     * @param notes
      * @throws IOException
      */
      DocumentRevision removeNotes(DocumentRevision docRevision, Note... notes) throws IOException;
