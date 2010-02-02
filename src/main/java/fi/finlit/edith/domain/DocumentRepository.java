@@ -42,6 +42,7 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @return
      * @throws IOException
      */
+    // DocumentRevision  DocumentRevision             SelectedText
     Note addNote(Document document, long svnRevision, String startId, String endId, String text) throws IOException;
 
     /**
@@ -54,6 +55,7 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @param text
      * @throws IOException
      */
+    // DocumentRevision     NoteRevision                          SelectedText           
     NoteRevision updateNote(Document document, NoteRevision note, String startId, String endId, String text) throws IOException;
 
     /**
@@ -98,6 +100,8 @@ public interface DocumentRepository extends Repository<Document,String>{
      * @param anchors
      * @throws IOException
      */
+    // DocumentRevision    DocumentRevision                     Note...
+    // removeNotes
     void removeNoteAnchors(Document document, long svnRevision, Note... anchors) throws IOException;
 
 }
