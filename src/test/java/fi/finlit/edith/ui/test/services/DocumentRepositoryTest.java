@@ -125,7 +125,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String text = "sun ullakosta ottaa";
 
         
-        NoteRevision note = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
+        NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
 
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
@@ -149,7 +149,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "act1-sp4";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
 
-        NoteRevision note = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
+        NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
         assertNotNull(note);
     }
 
@@ -161,9 +161,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
 
-        NoteRevision noteRev = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
+        NoteRevision noteRev = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
         Note note = noteRev.getRevisionOf();
-        documentRepo.removeNotes(document.revision(-1), new Note[] { note });
+        documentRepo.removeNotes(document.getRevision(-1), new Note[] { note });
 
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
@@ -187,14 +187,14 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String text2 = "ottaa";
         String text3 = "ullakosta";
 
-        NoteRevision noteRev = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
+        NoteRevision noteRev = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
         // note2 won't be removed
-        NoteRevision noteRev2 = documentRepo.addNote(document.revision(-1), new SelectedText( element, element, text2));
-        NoteRevision noteRev3 = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text3));
+        NoteRevision noteRev2 = documentRepo.addNote(document.getRevision(-1), new SelectedText( element, element, text2));
+        NoteRevision noteRev3 = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text3));
         Note note = noteRev.getRevisionOf();
         Note note2 = noteRev2.getRevisionOf();
         Note note3 = noteRev3.getRevisionOf();
-        documentRepo.removeNotes(document.revision(-1), new Note[] { note, note3 });
+        documentRepo.removeNotes(document.getRevision(-1), new Note[] { note, note3 });
 
         // TODO Resource handling into setup + teardown?
         File tmpFile = File.createTempFile("nummarit", ".xml");
@@ -218,7 +218,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "act1-sp2";
         String text = "sun ullakosta ottaa";
 
-        NoteRevision noteRevision = documentRepo.addNote(document.revision(-1), new SelectedText(element, element, text));
+        NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
 
         String newText = "sun ullakosta";
         documentRepo.updateNote(noteRevision, new SelectedText(element, element, newText));

@@ -74,7 +74,8 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         return getSession().from(noteRevision)
             .where(noteRevision.revisionOf.document.eq(docRevision.getDocument()),
                    noteRevision.revisionOf.localId.eq(localId),
-                   noteRevision.svnRevision.loe(docRevision.getRevision()),            
+                   noteRevision.svnRevision.loe(docRevision.getRevision()),
+                   noteRevision.deleted.eq(false),
                    latestFor(docRevision.getRevision()))
             .uniqueResult(noteRevision);
     }
@@ -85,6 +86,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         return getSession().from(noteRevision)
             .where(noteRevision.revisionOf.document.eq(docRevision.getDocument()),
                    noteRevision.svnRevision.loe(docRevision.getRevision()),
+                   noteRevision.deleted.eq(false),
                    latestFor(docRevision.getRevision()))
             .orderBy(noteRevision.longText.asc())
             .list(noteRevision);

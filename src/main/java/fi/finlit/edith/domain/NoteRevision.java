@@ -68,7 +68,7 @@ public class NoteRevision extends Identifiable{
     
     public DocumentRevision getDocumentRevision(){
         if (docRevision == null || docRevision.getRevision() != svnRevision){
-            docRevision = getRevisionOf().getDocument().revision(svnRevision);
+            docRevision = getRevisionOf().getDocument().getRevision(svnRevision);
         }
         return docRevision;
     }

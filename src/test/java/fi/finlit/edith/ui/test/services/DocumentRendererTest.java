@@ -31,21 +31,21 @@ public class DocumentRendererTest extends AbstractServiceTest {
     public void renderDocument() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
-        renderer.renderDocument(docRepo.getDocumentForPath(svnPath).revision(-1), writer);
+        renderer.renderDocument(docRepo.getDocumentForPath(svnPath).getRevision(-1), writer);
     }
 
     @Test
     public void renderPageLinks() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
-        renderer.renderPageLinks(docRepo.getDocumentForPath(svnPath).revision(-1), writer);
+        renderer.renderPageLinks(docRepo.getDocumentForPath(svnPath).getRevision(-1), writer);
     }
 
     @Test
     public void renderDocumentWithNotes() throws Exception {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
-        renderer.renderDocument(docRepo.getDocumentForPath(svnPath).revision(-1), writer);
+        renderer.renderDocument(docRepo.getDocumentForPath(svnPath).getRevision(-1), writer);
     }
 
     @Override

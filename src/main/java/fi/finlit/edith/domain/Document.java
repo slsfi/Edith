@@ -69,7 +69,7 @@ public class Document extends Identifiable implements Comparable<Document>{
         this.title = title;
     }
     
-    public DocumentRevision revision(long revision){
+    public DocumentRevision getRevision(long revision){
         return new DocumentRevision(this, revision);
     }
 

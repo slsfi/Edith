@@ -24,6 +24,7 @@ import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
+import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
@@ -131,6 +132,19 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             }
         }        
         return counter;
+    }
+    
+    @Override
+    public void remove(Note note) {
+        Assert.notNull(note, "note was null");
+        
+        UserInfo createdBy = userRepository.getCurrentUser();
+        NoteRevision revision = note.getLatestRevision().createCopy();
+        revision.setCreatedOn(System.currentTimeMillis());
+        revision.setCreatedBy(createdBy);
+        note.setLatestRevision(revision);
+        getSession().save(revision);
+        getSession().save(note);
     }
 
     @Override

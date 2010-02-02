@@ -40,8 +40,12 @@ public class DocumentRevision {
     }
 
     public void setRevision(long newRevision) {
-        this.revision = newRevision;
-        
+        this.revision = newRevision;        
+    }
+    
+    @Override
+    public String toString(){
+        return document.getSvnPath() + " (rev" + revision + ")";
     }
 
 }

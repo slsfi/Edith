@@ -54,7 +54,7 @@ public class DummyDataPage {
         List<Long> revisions = documentRepository.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).longValue();
         
-        DocumentRevision docRev = document.revision(latestRevision);
+        DocumentRevision docRev = document.getRevision(latestRevision);
         noteRepository.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
         noteRepository.createNote(docRev, "2", "k\u00E4skyn annoit", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
         noteRepository.createNote(docRev, "3", "tulee", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");

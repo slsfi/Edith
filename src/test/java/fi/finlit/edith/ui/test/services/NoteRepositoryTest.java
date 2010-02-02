@@ -78,7 +78,7 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         long latestRevision = revisions.get(revisions.size() - 1).longValue();
         
         String lemma = UUID.randomUUID().toString();
-        noteRepo.createNote(document.revision(latestRevision), "10", lemma, "longText");
+        noteRepo.createNote(document.getRevision(latestRevision), "10", lemma, "longText");
         assertTrue(noteRepo.queryDictionary(lemma).getAvailableRows() > 0);
         
 //        assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "10"));

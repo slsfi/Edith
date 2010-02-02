@@ -7,7 +7,6 @@ package fi.finlit.edith.ui.pages.document;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -22,10 +21,11 @@ import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.SelectedText;
@@ -42,6 +42,8 @@ import fi.finlit.edith.domain.SelectedText;
 @IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage extends AbstractDocumentPage {
 
+    private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
+    
     @Inject
     @Property
     private Block notesList;
@@ -106,40 +108,38 @@ public class AnnotatePage extends AbstractDocumentPage {
         for (int i = 0; i < context.getCount(); i++) {
             String localId = context.get(String.class, i);
             //XXX Where is this n coming?
-            if (localId.startsWith("n"))
+            if (localId.startsWith("n")){
                 localId = localId.substring(1);
+            }               
             
             NoteRevision rev = noteRevisionRepo.getByLocalId(getDocumentRevision(), localId);
             if (rev != null) {
                 selectedNotes.add(rev);
+            }else{
+                logger.error("Note with localId " + localId + " coundn't be found in " + getDocumentRevision());
             }
-        }
-        
+        }        
         if (selectedNotes.size() > 0 ) {
             noteOnEdit = selectedNotes.get(0);
         }
         
-        //Order on lemma after we have selected the first one as
-        //a selection
+        //Order on lemma after we have selected the first one as a selection
         Collections.sort(selectedNotes, new Comparator<NoteRevision>() {
             public int compare(NoteRevision o1, NoteRevision o2) {
                 return o1.getLemma().compareTo(o2.getLemma());
             }
         });
         
-        moreThanOneSelectable = selectedNotes.size() > 1;
-            
-        
+        moreThanOneSelectable = selectedNotes.size() > 1;                   
         return noteEdit;
     }
 
     Object onSuccessFromCreateTerm() throws IOException {
-        System.out.println(createTermSelection.getStartId() + "," + createTermSelection.getEndId() + ":["
-                + createTermSelection.getSelection() + "]");
+        System.out.println(createTermSelection);
         DocumentRevision documentRevision = getDocumentRevision();
         NoteRevision noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
 
-        // update notesList content
+        // prepare view
         documentRevision.setRevision(noteRevision.getSvnRevision());
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         return new MultiZoneUpdate("listZone", notesList).add("documentZone", documentView);
@@ -160,29 +160,22 @@ public class AnnotatePage extends AbstractDocumentPage {
             noteRevision = noteRevisionRepo.save(note);
         }
         
-        // notesList content
+        // prepare view        
         docNotes = noteRevisionRepo.getOfDocument(noteRevision.getDocumentRevision());
-
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
-
         return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);
     }
 
     Object onActionFromDelete() throws IOException {
-
-        // FIXME Do actual deletion
-
-        Document document = getDocument();
-
-        // notesList content
         DocumentRevision documentRevision = getDocumentRevision();
-        docNotes = noteRevisionRepo.getOfDocument(documentRevision);
-        
-        selectedNotes = Collections.emptyList();
+        documentRevision = getDocumentRepo().removeNotes(documentRevision, note.getRevisionOf());
 
-        return new MultiZoneUpdate("editZone", emptyBlock).add("listZone", notesList).add(
-                "documentZone", documentView);
+        // prepare view
+        getDocumentRevision().setRevision(documentRevision.getRevision());
+        docNotes = noteRevisionRepo.getOfDocument(documentRevision);        
+        selectedNotes = Collections.emptyList();
+        return new MultiZoneUpdate("editZone", emptyBlock).add("listZone", notesList).add("documentZone", documentView);
     }
     
     private String localId(NoteRevision noteRev) {

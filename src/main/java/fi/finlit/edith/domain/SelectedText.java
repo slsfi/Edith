@@ -54,4 +54,9 @@ public class SelectedText {
                 && selection.trim().length() > 0 && startId.trim().length() > 0
                 && endId.trim().length() > 0;
     }
+    
+    @Override
+    public String toString(){
+        return startId + "," + endId + ":[" + selection + "]";
+    }
 }

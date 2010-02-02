@@ -62,7 +62,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         List<Long> revisions = documentRepo.getRevisions(document);
         latestRevision = revisions.get(revisions.size() - 1).longValue();
 
-        docRev = document.revision(latestRevision);
+        docRev = document.getRevision(latestRevision);
         noteRepo.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
         noteRepo.createNote(docRev, "2", "k\u00E4skyn annoit", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
         noteRepo.createNote(docRev, "3", "tulee", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
