@@ -47,6 +47,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     
     @Inject
     private Block noteEdit;
+    
+    @Inject
+    private Block emptyBlock;
 
     @Inject
     @Property
@@ -81,7 +84,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     
     @Property
     private boolean moreThanOneSelectable;
-
+    
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
@@ -175,6 +178,22 @@ public class AnnotatePage extends AbstractDocumentPage {
         noteOnEdit = note;
 
         return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add(
+                "documentZone", documentView);
+    }
+
+    Object onActionFromDelete() throws IOException {
+
+        // FIXME Do actual deletion
+
+        Document document = getDocument();
+
+        // notesList content
+        DocumentRevision documentRevision = getDocumentRevision();
+        docNotes = noteRevisionRepo.getOfDocument(document, documentRevision.getRevision());
+        
+        selectedNotes = Collections.emptyList();
+
+        return new MultiZoneUpdate("editZone", emptyBlock).add("listZone", notesList).add(
                 "documentZone", documentView);
     }
     

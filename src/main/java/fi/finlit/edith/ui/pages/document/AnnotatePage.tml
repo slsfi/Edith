@@ -81,7 +81,7 @@
                 
                 <h3>${message:noteEdit}</h3>
                 <div class="note_edit">
-                    <b>${noteOnEdit.lemma}</b>
+                    <b>${noteOnEdit.lemma}</b> <t:actionlink t:id="delete" t:zone="editZone" context="noteOnEdit.id">${message:delete}</t:actionlink>
                     <t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
                         <t:errors/>
                         ${message:lemma-label}<br/><t:textField value="noteOnEdit.lemma"/><br/>
@@ -93,12 +93,18 @@
                         <t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection"/>
                         <t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId"/>
                         <t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId"/>                                                
-                        <input type="submit" value="${message:save}"/> 
+                        
+                        <input type="submit" value="${message:save}"/>
+                        
                     </t:form>
                    
                 </div>
             </div>      
           </t:if>                            
+        </t:block>
+        
+        <t:block id="emptyBlock">
+            <span/>
         </t:block>
         
     </p:rightPanel>
