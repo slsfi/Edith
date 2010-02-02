@@ -8,7 +8,6 @@ package fi.finlit.edith.domain;
 import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
-import com.mysema.rdfbean.model.ID;
 
 import fi.finlit.edith.EDITH;
 
