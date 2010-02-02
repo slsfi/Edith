@@ -1,11 +1,17 @@
-* add note
 
-* edit note metadata
+									2.2.-18:00
 
-* update note boundaries
+* add note 						    OK
 
-* select note in text
+* edit note metadata			    OK	
 
-* select multiple notes in text
+* update note boundaries		  	OK
 
-* delete note (OPTIONAL)
+* select note in text				OK
+
+* select multiple notes in text		OK
+
+* delete note (OPTIONAL)			FAIL
+
+
+Remember to run Add annotate test data on /dummydata, if notes list is empty

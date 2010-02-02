@@ -142,7 +142,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         // prepare view (with new revision)
         documentRevision.setRevision(noteRevision.getSvnRevision());
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
-        return new MultiZoneUpdate("listZone", notesList).add("documentZone", documentView);
+        selectedNotes = Collections.singletonList(noteRevision);
+        noteOnEdit = noteRevision;
+        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);
     }
     
     void onPrepareForSubmit(String noteRev) {
@@ -163,7 +165,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         docNotes = noteRevisionRepo.getOfDocument(noteRevision.getDocumentRevision());
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
-        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);
+        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);           
     }
 
     Object onActionFromDelete() throws IOException {
