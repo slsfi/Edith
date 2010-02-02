@@ -152,3 +152,17 @@ a.disabled:hover, a.disabled:active
 {
 	color:#aaaaaa;
 } 
+
+/*
+* Note edit box
+*/
+div.note_edit {
+    margin-top: 1em;	
+}
+
+/*
+* Content edited
+*/
+.note_edit .edited {
+    color: #aa00cc;
+}

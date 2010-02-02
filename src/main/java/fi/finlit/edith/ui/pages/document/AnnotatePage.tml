@@ -9,7 +9,7 @@
             <t:delegate to="documentView"/>
         </t:zone>
         <t:block t:id="documentView">
-            <t:document.view document="documentRevision"/>
+        <t:document.view document="documentRevision"/>        
         </t:block>                
     </div>
     
@@ -21,7 +21,7 @@
         
     <p:leftPanel>
         <t:dashboard/>
-                              
+        
         <div class="panel narrow">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>
@@ -33,20 +33,17 @@
 
     <p:rightPanel>
         <t:form t:id="createTerm" t:zone="listZone">
-            <t:hidden t:id="selectedText" value="selectedText.selection"/>
-            <t:hidden t:id="selectedStartId" value="selectedText.startId"/>
-            <t:hidden t:id="selectedEndId" value="selectedText.endId"/>
-            <!-- 
-            <input id="createTermLink" type="submit" value="${message:createTerm}"/>
-             --> 
-            <a id="createTermLink" class="disabled" href="#">${message:createTerm}</a>
+            <t:hidden t:id="selectedText_1" value="createTermSelection.selection"/>
+            <t:hidden t:id="selectedStartId_1" value="createTermSelection.startId"/>
+            <t:hidden t:id="selectedEndId_1" value="createTermSelection.endId"/>
+            <a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a>
         </t:form>
            
         <div class="panel narrow">
             <h3>${message:notes}</h3>
-            <t:zone t:id="listZone" update="show">
-                <t:delegate to="notesList"/>
-            </t:zone>                
+                <t:zone t:id="listZone" update="show">
+                    <t:delegate to="notesList"/>
+                </t:zone>
             <div style="clear:both;"></div>
         </div>    
     
@@ -54,30 +51,54 @@
         
         <t:block t:id="notesList">
             <t:if test="docNotes">
-                <ul class="notes">
-                    <t:loop source="docNotes" value="note">
-                    <li>    
-                        <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
-                    </li>
-                    </t:loop>
-                </ul>        
+            <ul class="notes">
+                <t:loop source="docNotes" value="note">
+                <li>    
+                    <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
+                </li>
+                </t:loop>
+            </ul>        
                 <p:else>${message:no-notes}</p:else>
             </t:if>
         </t:block>
-        
+         
         <t:block t:id="noteEdit">
-            <t:loop source="notes" value="note">
-                <div>
-                    <b>${note.lemma}</b>
-                    <t:form t:id="noteEditForm" t:zone="editZone" t:context="note.id">
+            <t:if test="selectedNotes">
+            <div class="panel narrow">
+                
+                <t:if test="!noteOnEdit">
+                <h3>${message:selectNote}</h3>
+                <ul class="notes">
+                    
+                    <t:loop source="selectedNotes" value="note">
+                        <li>    
+                            <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
+                        </li>
+                    </t:loop>
+                </ul>
+                
+                
+                <p:else>
+                <h3>${message:noteEdit}</h3>
+                <div class="note_edit">
+                    <b>${noteOnEdit.lemma}</b>
+                    <t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
                         <t:errors/>
-                        ${message:lemma-label}<br/><t:textField value="note.lemma"/><br/>
-                        ${message:basicForm-label}<br/><t:textField value="note.basicForm"/><br/>
-                        ${message:longText-label}<br/>${note.longText}<br/>                        
+                        ${message:lemma-label}<br/><t:textField value="noteOnEdit.lemma"/><br/>
+                        ${message:basicForm-label}<br/><t:textField value="noteOnEdit.basicForm"/><br/>
+                        ${message:longText-label}<br/><div id="longTextEdit">${noteOnEdit.longText}</div>
+                        <br/>
+                        <t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection"/>
+                        <t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId"/>
+                        <t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId"/>                                                
                         <input type="submit" value="${message:save}"/> 
                     </t:form>
-                </div>                            
-            </t:loop>      
+                   
+                </div>
+                </p:else>
+                </t:if>
+            </div>      
+          </t:if>                            
         </t:block>
         
     </p:rightPanel>
