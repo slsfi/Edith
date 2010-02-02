@@ -51,7 +51,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     private String localId;
 
     private XMLEventReader sourceReader;
-    
+
     private XMLEventWriter targetWriter;
 
     @Before
@@ -60,7 +60,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         targetFile = File.createTempFile("test", null);
         target = new FileOutputStream(targetFile);
         localId = UUID.randomUUID().toString();
-        
+
         sourceReader = XMLInputFactory.newInstance().createXMLEventReader(source);
         targetWriter = XMLOutputFactory.newInstance().createXMLEventWriter(target);
     }
@@ -125,13 +125,13 @@ public class NoteAdditionTest extends AbstractServiceTest{
         text.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
         text.append("ja sulhais-vaatteisin puettuna olen, koska h\u00E4n takaisin pal");
         documentRepo.addNote(sourceReader, targetWriter, element, element, text.toString(), localId);
-        
+
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         System.out.println(content);
-        assertTrue(content.contains(start(localId) + "matkalle, nimitt\u00E4in."));
-        assertTrue(content.contains(" takaisin palajaa" + end(localId)));
+        assertTrue(content.contains(start(localId) + "matkalle, nimitt\u00E4in"));
+        assertTrue(content.contains(" takaisin pal" + end(localId)));
     }
-    
+
     @Override
     protected Class<?> getServiceClass() {
         return null;
