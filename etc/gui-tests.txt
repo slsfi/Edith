@@ -1,0 +1,11 @@
+* add note
+
+* edit note metadata
+
+* update note boundaries
+
+* select note in text
+
+* select multiple notes in text
+
+* delete note (OPTIONAL)
