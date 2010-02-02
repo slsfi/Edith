@@ -1,5 +1,5 @@
 jQuery(document).ready(function(){
-    jQuery('.notecontent').bind('click',
+    jQuery('.notecontent').live('click',
         function(event) {
             var classes = jQuery(this).attr('class').replace('notecontent ','').replace(' ', '/');
             Editor.updateEditZone(classes);
@@ -33,16 +33,17 @@ jQuery(document).ready(function(){
     	}
     );
     
-    //Dynamically bind the click handlers to all links whose 
-    //class is 
-    var updateLongTextBindings = function() {
-    	jQuery("#longTextEdit").html(TextSelector.getSelection());
-    	jQuery("#longTextEdit").addClass("edited");
-		jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
-		jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
-		jQuery(":input[name='selectedText_2']").val(TextSelector.getSelection());
-    }
-    
+    jQuery('#longTextEditLink').live('click',
+        	function(event) {
+	        	jQuery("#longTextEdit").html(TextSelector.getSelection());
+	        	jQuery("#longTextEdit").addClass("edited");
+	    		jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
+	    		jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
+	    		jQuery(":input[name='selectedText_2']").val(TextSelector.getSelection());
+	    		return false;
+        	}
+    );
+      
     var findContainer = function(element) {
 		return jQuery(element).parents(".sp,.stage").eq(0);
 	}
@@ -50,22 +51,23 @@ jQuery(document).ready(function(){
     jQuery('.act').live('mouseup',
     	function(event) {
     		TextSelector.stopSelection(findContainer(event.target));
-    		if(!TextSelector.getSelection())
+    		if(!TextSelector.getSelection()) {
     			jQuery(".selection-link").addClass('disabled');
-    		
-    		updateLongTextBindings();
+    		}
     	}
     );
     jQuery('.act').live('mousedown',
         	function(event) {
         		TextSelector.startSelection(findContainer(event.target));
         		jQuery(".selection-link").addClass('disabled');
+        		jQuery("#longTextEditLink").hide();
         	}
         );
     jQuery('.act').live('mousemove',
         	function(event) {
         		if(!TextSelector.isBeingSelected()) return;
         		jQuery(".selection-link").removeClass('disabled');
+        		jQuery("#longTextEditLink").show();
         	}
         );
 });

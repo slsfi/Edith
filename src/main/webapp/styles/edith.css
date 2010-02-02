@@ -166,3 +166,9 @@ div.note_edit {
 .note_edit .edited {
     color: #aa00cc;
 }
+
+.note_edit a {
+    font-size: 80%;	
+}
+
+

@@ -53,7 +53,7 @@
             <t:if test="docNotes">
             <ul class="notes">
                 <t:loop source="docNotes" value="note">
-                <li>    
+                <li> 
                     <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
                 </li>
                 </t:loop>
@@ -63,22 +63,22 @@
         </t:block>
          
         <t:block t:id="noteEdit">
-            <t:if test="selectedNotes">
+            <t:if test="!selectedNotes.empty">
             <div class="panel narrow">
                 
-                <t:if test="!noteOnEdit">
+                <t:if test="moreThanOneSelectable">
                 <h3>${message:selectNote}</h3>
                 <ul class="notes">
                     
                     <t:loop source="selectedNotes" value="note">
-                        <li>    
-                            <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
+                        <li>
+                            <t:eventlink t:event="edit" context="editContext" 
+                                t:zone="editZone" class="notelink">${note.lemma}</t:eventlink> 
                         </li>
                     </t:loop>
                 </ul>
+                </t:if>
                 
-                
-                <p:else>
                 <h3>${message:noteEdit}</h3>
                 <div class="note_edit">
                     <b>${noteOnEdit.lemma}</b>
@@ -86,8 +86,10 @@
                         <t:errors/>
                         ${message:lemma-label}<br/><t:textField value="noteOnEdit.lemma"/><br/>
                         ${message:basicForm-label}<br/><t:textField value="noteOnEdit.basicForm"/><br/>
-                        ${message:longText-label}<br/><div id="longTextEdit">${noteOnEdit.longText}</div>
+                        ${message:longText-label} <a id="longTextEditLink" href="#" style="display:none">${message:update}</a>
+                        <br/><div id="longTextEdit">${noteOnEdit.longText}</div>
                         <br/>
+                        
                         <t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection"/>
                         <t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId"/>
                         <t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId"/>                                                
@@ -95,8 +97,6 @@
                     </t:form>
                    
                 </div>
-                </p:else>
-                </t:if>
             </div>      
           </t:if>                            
         </t:block>

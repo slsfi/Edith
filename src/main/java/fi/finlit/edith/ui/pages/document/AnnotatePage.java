@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
@@ -77,6 +78,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     
     @Property
     private SelectedText updateLongTextSelection;
+    
+    @Property
+    private boolean moreThanOneSelectable;
 
     @AfterRender
     void addScript() {
@@ -100,16 +104,32 @@ public class AnnotatePage extends AbstractDocumentPage {
         DocumentRevision documentRevision = getDocumentRevision();
         selectedNotes = new ArrayList<NoteRevision>(context.getCount());
         for (int i = 0; i < context.getCount(); i++) {
-            String localId = context.get(String.class, i).substring(1);
+            String localId = context.get(String.class, i);
+            //XXX Where is this n coming?
+            if (localId.startsWith("n"))
+                localId = localId.substring(1);
+            
             NoteRevision rev = noteRevisionRepo.getByLocalId(document, documentRevision
                     .getRevision(), localId);
             if (rev != null) {
                 selectedNotes.add(rev);
             }
         }
-     
-        if (selectedNotes.size() == 1)
+        
+        if (selectedNotes.size() > 0 ) {
             noteOnEdit = selectedNotes.get(0);
+        }
+        
+        //Order on lemma after we have selected the first one as
+        //a selection
+        Collections.sort(selectedNotes, new Comparator<NoteRevision>() {
+            public int compare(NoteRevision o1, NoteRevision o2) {
+                return o1.getLemma().compareTo(o2.getLemma());
+            }
+        });
+        
+        moreThanOneSelectable = selectedNotes.size() > 1;
+            
         
         return noteEdit;
     }
@@ -140,13 +160,12 @@ public class AnnotatePage extends AbstractDocumentPage {
         Document document = getDocument();
 
         if (updateLongTextSelection.hasSelection()) {
-            getDocumentRepo().updateNote(document, note, updateLongTextSelection.startId,
+            note = getDocumentRepo().updateNote(document, note, updateLongTextSelection.startId,
                     updateLongTextSelection.endId, updateLongTextSelection.selection);
-            note.setLongText(updateLongTextSelection.selection);
+        } else {
+            noteRevisionRepo.save(note);
         }
-
-        noteRevisionRepo.save(note);
-
+        
         // notesList content
         DocumentRevision documentRevision = getDocumentRevision();
         documentRevision.setRevision(note.getSvnRevision());
@@ -157,6 +176,23 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView);
+    }
+    
+    private String localId(NoteRevision noteRev) {
+        return noteRev.getRevisionOf().getLocalId(); 
+    }
+    
+    
+    public Object[] getEditContext() {
+        List<String> ctx = new ArrayList<String>(selectedNotes.size());
+        //Adding the current note to head
+        ctx.add(localId(note));
+        for(NoteRevision r : selectedNotes) {
+            if (!r.equals(note)) {
+                ctx.add(localId(r));
+            }
+        }
+        return ctx.toArray();
     }
         
     public static class SelectedText {

@@ -305,7 +305,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
 
     @Override
-    public void updateNote(Document document, final NoteRevision note, final String startId, final String endId,
+    public NoteRevision updateNote(Document document, final NoteRevision note, final String startId, final String endId,
             final String text) throws IOException {
         Long newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(),
                 new UpdateCallback() {
@@ -327,6 +327,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         copy.setLongText(text);
         copy.setSVNRevision(newRevision);
         noteRevisionRepository.save(copy);
+        return copy;
     }
 
     private static EventFilter createRemoveFilter(Note... notes) {
