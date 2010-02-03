@@ -1,0 +1,36 @@
+teiHeader				[teiHeader]
+
+	fileDesc			[teiHeader-]fileDesc
+
+		titleStmt		[teiHeader-]fileDesc-titleStmt
+
+			title		[teiHeader-]fileDesc-titleStmt-title
+
+			author		[teiHeader-]fileDesc-titleStmt-author
+
+		editionStmt		[teiHeader-]fileDesc-editionStmt
+
+			edition		[teiHeader-]fileDesc-editionStmt-edition
+
+			respStmt	[teiHeader-]fileDesc-editionStmt-respStmt
+
+
+text					[text]
+
+	body				[text-body]
+
+		div[type=play]		[text-body-]play
+
+
+		  div[type=act,n=1] 	[text-body-]play-act
+
+			sp		[text-body-]play-act-sp
+			
+
+fileDesc-titleStmt-title
+
+fileDesc-titleStmt-author
+
+
+play-act-sp - play-act-sp2
+
