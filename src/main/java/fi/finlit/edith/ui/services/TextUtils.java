@@ -22,23 +22,15 @@ public class TextUtils {
                 return lastIndex;
             }
         } else {
-            // TODO cleanup
-            String word = noteLongText.split("\\s+")[0];
-            int j = 0;
-            while (true) {
-                int i = xmlCharacters.indexOf(word);
-                if (i == -1) {
-                    return -1;
-                }
+            for (int i = 0; i < xmlCharacters.length(); ++i) {
                 if (xmlCharacters.charAt(i) == noteLongText.charAt(0)
                         && (xmlCharacters.substring(i).replaceAll("\\s+", " ").startsWith(
                                 noteLongText) || noteLongText.startsWith(xmlCharacters.substring(i)
                                 .replaceAll("\\s+", " ")))) {
-                    return i + j;
+                    return i;
                 }
-                j += word.length();
-                xmlCharacters = xmlCharacters.substring(word.length());
             }
+            return -1;
         }
     }
 
@@ -70,7 +62,7 @@ public class TextUtils {
                     return i;
                 }
                 // TODO This might have a bug even though none of the tests prove it
-                // the original length probably should be taken into consideration as 
+                // the original length probably should be taken into consideration as
                 // in the finding of the start index.
                 xmlCharacters = xmlCharacters.substring(0, i);
             }
