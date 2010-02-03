@@ -165,6 +165,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
+        termOnEdit = getEditTerm(noteOnEdit);
         return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);
     }
     
