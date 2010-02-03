@@ -48,7 +48,7 @@ public class NoteRevision extends Identifiable{
     @Predicate
     private boolean deleted;
     
-    // not directly persisted
+    // NOTE : not persisted
     private DocumentRevision docRevision;
     
     public NoteRevision createCopy() {        
@@ -140,5 +140,9 @@ public class NoteRevision extends Identifiable{
     public String getLocalId(){
         return revisionOf.getLocalId();
     }
+    
+//    public Document getDocument(){
+//        return revisionOf.getDocument();
+//    }
  
 }

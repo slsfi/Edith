@@ -31,5 +31,9 @@ public interface TermRepository extends Repository<Term,String>{
      */
     List<Term> findByStartOfBasicForm(String partial, int maxResults);
     
+    /**
+     * @param basicForm
+     * @return
+     */
     Term findByBasicForm(String basicForm);
 }

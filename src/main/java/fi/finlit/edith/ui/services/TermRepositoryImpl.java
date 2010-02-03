@@ -25,17 +25,21 @@ import fi.finlit.edith.domain.TermRepository;
  */
 public class TermRepositoryImpl extends AbstractRepository<Term> implements TermRepository {
     
-    public TermRepositoryImpl(@Inject SessionFactory sessionFactory, @Inject AuthService authService) {
+    public TermRepositoryImpl(@Inject SessionFactory sessionFactory) {
         super(sessionFactory, term);
     }
 
     public List<Term> findByStartOfBasicForm(String partial, int maxResults) {
-        return getSession().from(term).where(term.basicForm.startsWith(partial)).limit(maxResults)
-                .list(term);
+        return getSession().from(term)
+            .where(term.basicForm.startsWith(partial))
+            .limit(maxResults)
+            .list(term);
     }
 
     public Term findByBasicForm(String basicForm) {
-        return getSession().from(term).where(term.basicForm.eq(basicForm)).uniqueResult(term);
+        return getSession().from(term)
+            .where(term.basicForm.eq(basicForm))
+            .uniqueResult(term);
     }    
     
 
