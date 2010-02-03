@@ -45,7 +45,11 @@ jQuery(document).ready(function(){
     );
       
     var findContainer = function(element) {
-		return jQuery(element).parents(".sp,.stage").eq(0);
+    	var e = jQuery(element);
+    	if (e.hasClass("sp") || e.hasClass("stage"))
+    		return e;
+    	
+		return e.parents(".sp,.stage").eq(0);
 	}
     
     jQuery('.act').live('mouseup',
