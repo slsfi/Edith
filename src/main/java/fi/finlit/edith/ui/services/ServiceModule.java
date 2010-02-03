@@ -75,7 +75,7 @@ public class ServiceModule {
         binder.bind(SubversionService.class, SubversionServiceImpl.class);
         binder.bind(DocumentRenderer.class, DocumentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
-        binder.bind(TimeService.class, TimeServiceImpl.class);
+        binder.bind(TimeService.class, SimpleTimeService.class);
     }
 
     public static Configuration buildConfiguration(IdentityService identityService){

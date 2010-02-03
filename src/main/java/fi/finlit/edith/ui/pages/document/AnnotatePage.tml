@@ -9,7 +9,7 @@
             <t:delegate to="documentView"/>
         </t:zone>
         <t:block t:id="documentView">
-            <t:document.view document="documentRevision"/>        
+          <t:document.view document="documentRevision"/>       
         </t:block>                
     </div>
     
@@ -22,12 +22,15 @@
     <p:leftPanel>
         <t:dashboard/>
         
+        <p>
+            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a>
+        </p>
+        
         <div class="panel narrow">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>
             <div style="clear:both;"></div>
         </div>
-
         
     </p:leftPanel>
 

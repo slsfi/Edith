@@ -22,6 +22,17 @@
         </p>
 
         <div class="panel narrow">
+            <h3>${message:revisions}</h3>
+            <ul>
+                <t:loop source="revisions" value="revision">
+                <li>
+                    <t:pagelink page="document/viewPage" t:context="[document.id,revision]">${revision}</t:pagelink>
+                </li>
+                </t:loop>
+            </ul>            
+        </div>
+
+        <div class="panel narrow">
             <h3>${message:pages}</h3>
             <t:document.pages document="documentRevision"/>
             <div style="clear:both;"></div>
@@ -31,8 +42,21 @@
 
     <p:rightPanel>      
     
-        <!--  ?!? -->
-        
+        <div class="panel narrow">
+            <h3>${message:notes}</h3>
+            <t:if test="docNotes">
+                <ul class="notes">
+                    <t:loop source="docNotes" value="note">
+                    <li> 
+                        <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
+                    </li>
+                    </t:loop>
+                </ul>        
+                <p:else>${message:no-notes}</p:else>
+            </t:if>
+            <div style="clear:both;"></div>
+        </div>    
+                
     </p:rightPanel>
 
 </html>

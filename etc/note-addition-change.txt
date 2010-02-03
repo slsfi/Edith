@@ -1,0 +1,8 @@
+ - start id 
+ - index of first word in start text body 
+  
+ if end id != start id : 
+ - end id
+ - index of last word in end text body  
+ 
+ 

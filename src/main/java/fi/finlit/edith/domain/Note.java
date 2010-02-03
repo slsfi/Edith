@@ -90,5 +90,4 @@ public class Note extends Identifiable{
         this.term = term;
     }
     
-    
 }

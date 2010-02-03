@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.EventFilter;
@@ -81,18 +80,22 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
     private final SubversionService svnService;
-
+    
+    private final TimeService timeService;
+    
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject SubversionService svnService,
             @Inject NoteRepository noteRepository,
-            @Inject NoteRevisionRepository noteRevisionRepository)throws SVNException {
+            @Inject NoteRevisionRepository noteRevisionRepository,
+            @Inject TimeService timeService)throws SVNException {
         super(sessionFactory, document);
         this.documentRoot = documentRoot;
         this.svnService = svnService;
         this.noteRepository = noteRepository;
         this.noteRevisionRepository = noteRevisionRepository;
+        this.timeService = timeService;
     }
 
     private static EventFilter createRemoveFilter(Note... notes) {
@@ -131,7 +134,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Override
     public NoteRevision addNote(DocumentRevision docRevision, final SelectedText selection) throws IOException{
-        final String localId = UUID.randomUUID().toString();
+        final String localId = String.valueOf(timeService.currentTimeMillis());
         Long newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
@@ -146,11 +149,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
         docRevision = new DocumentRevision(docRevision, newRevision);
         // persisted noteRevision has svnRevision of newly created commit
-        String lemma = selection.getSelection();
-        if (lemma.length() > 10 && lemma.indexOf(" ") > -1){
-            lemma = lemma.substring(0, lemma.indexOf(" "));
-        }
-        return noteRepository.createNote(docRevision, localId, lemma, selection.getSelection()).getLatestRevision();
+        return noteRepository.createNote(docRevision, localId,selection.getSelection()).getLatestRevision();
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText selection, String localId) throws Exception {
@@ -308,7 +307,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         svnService.delete(document.getSvnPath());
     }
 
-    public void removeNoteAnchors(XMLEventReader reader, XMLEventWriter writer) throws Exception {
+    public void streamEvents(XMLEventReader reader, XMLEventWriter writer) throws Exception {
         try {
             while (reader.hasNext()) {
                 writer.add(reader.nextEvent());
@@ -325,7 +324,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
-                    removeNoteAnchors(inFactory.createFilteredReader(inFactory
+                    streamEvents(inFactory.createFilteredReader(inFactory
                             .createXMLEventReader(source), createRemoveFilter(notes)), outFactory
                             .createXMLEventWriter(target));
                 } catch (Exception e) {

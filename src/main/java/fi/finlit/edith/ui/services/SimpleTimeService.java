@@ -11,11 +11,11 @@ package fi.finlit.edith.ui.services;
  * @author tiwe
  * @version $Id$
  */
-public class TimeServiceImpl implements TimeService{
-
+public class SimpleTimeService implements TimeService{
+    
     @Override
     public long currentTimeMillis() {
-        return System.currentTimeMillis();
+        return System.currentTimeMillis();        
     }
 
 }

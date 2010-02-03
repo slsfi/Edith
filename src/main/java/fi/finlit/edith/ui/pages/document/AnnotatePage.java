@@ -40,8 +40,7 @@ import fi.finlit.edith.domain.TermRepository;
  * @version $Id$
  */
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "classpath:TapestryExt.js",
-        "AnnotatePage.js" })
+@IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "classpath:TapestryExt.js", "AnnotatePage.js" })
 @IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage extends AbstractDocumentPage {
 

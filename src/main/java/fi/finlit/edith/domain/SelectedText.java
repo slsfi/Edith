@@ -11,6 +11,8 @@ package fi.finlit.edith.domain;
  */
 public class SelectedText {
     
+    // TODO : add startIndex and endIndex
+    
     private String selection;
     
     private String startId;

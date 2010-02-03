@@ -13,7 +13,7 @@
             include="basicForm,meaning" add="appearances">
             <p:appearancesCell>
                 <t:loop source="term.notes" value="note">
-                    <div>${note.latestRevision.lemma} (${note.latestRevision.longText}</div>
+                    <div>${note.latestRevision.lemma} (${note.latestRevision.longText})</div>
                 </t:loop>
             </p:appearancesCell>
             <p:empty>

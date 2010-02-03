@@ -24,6 +24,7 @@ import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.AdminService;
+import fi.finlit.edith.ui.services.NoteRepositoryImpl;
 
 /**
  * NoteRepositoryTest provides
@@ -79,9 +80,9 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         List<Long> revisions = documentRepo.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).longValue();
 
-        String lemma = UUID.randomUUID().toString();
-        noteRepo.createNote(document.getRevision(latestRevision), "10", lemma, "longText");
-        assertTrue(noteRepo.queryDictionary(lemma).getAvailableRows() > 0);
+        String longText = UUID.randomUUID().toString();
+        noteRepo.createNote(document.getRevision(latestRevision), "10", longText);
+        assertTrue(noteRepo.queryDictionary(longText).getAvailableRows() > 0);
 
 //        assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "10"));
     }
@@ -92,10 +93,17 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         List<Long> revisions = documentRepo.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).longValue();
 
-        String lemma = UUID.randomUUID().toString();
-        noteRepo.createNote(document.getRevision(latestRevision), "10", lemma, "longText");
+        String longText = UUID.randomUUID().toString();
+        noteRepo.createNote(document.getRevision(latestRevision), "10", longText);
     }
 
+    @Test
+    public void getLemmaForLongText(){
+        assertEquals("word", NoteRepositoryImpl.getLemmaForLongText("word"));
+        assertEquals("word1 -- word2", NoteRepositoryImpl.getLemmaForLongText("word1 word2"));
+        assertEquals("word1 -- word3", NoteRepositoryImpl.getLemmaForLongText("word1 word3"));
+        assertEquals("word1 -- word3", NoteRepositoryImpl.getLemmaForLongText("word1\t word2 \nword3"));        
+    }    
 
     @Override
     protected Class<?> getServiceClass() {

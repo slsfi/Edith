@@ -63,10 +63,10 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         latestRevision = revisions.get(revisions.size() - 1).longValue();
 
         docRev = document.getRevision(latestRevision);
-        noteRepo.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
-        noteRepo.createNote(docRev, "2", "k\u00E4skyn annoit", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
-        noteRepo.createNote(docRev, "3", "tulee", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
-        noteRepo.createNote(docRev, "4", "m\u00E4\u00E4r\u00E4tty", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        noteRepo.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
+        noteRepo.createNote(docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
+        noteRepo.createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
+        noteRepo.createNote(docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
     }
 
     @Test

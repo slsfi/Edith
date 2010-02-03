@@ -26,11 +26,10 @@ public interface NoteRepository extends Repository<Note,String>{
      * 
      * @param docRevision
      * @param localId
-     * @param lemma
      * @param longText
      * @return
      */
-     Note createNote(DocumentRevision docRevision, String localId, String lemma, String longText);
+     Note createNote(DocumentRevision docRevision, String localId, String longText);
 
     
     /**
@@ -57,5 +56,6 @@ public interface NoteRepository extends Repository<Note,String>{
      * @param newRevision
      */
     void remove(Note note, long revision);
+
     
 }
