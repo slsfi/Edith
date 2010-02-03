@@ -64,7 +64,7 @@ public class TextUtils {
                 // TODO This might have a bug even though none of the tests prove it
                 // the original length probably should be taken into consideration as
                 // in the finding of the start index.
-                xmlCharacters = xmlCharacters.substring(0, i);
+                xmlCharacters = xmlCharacters.substring(0, i - 1);
             }
         } else {
             for (int i = 0; i < noteLongText.length(); i++) {
