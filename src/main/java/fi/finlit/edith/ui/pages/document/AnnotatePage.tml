@@ -9,7 +9,7 @@
             <t:delegate to="documentView"/>
         </t:zone>
         <t:block t:id="documentView">
-        <t:document.view document="documentRevision"/>        
+            <t:document.view document="documentRevision"/>        
         </t:block>                
     </div>
     
