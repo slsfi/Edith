@@ -26,7 +26,7 @@ public interface SubversionService {
     void delete(String svnPath);
 
     /**
-     * Deletes the repository directory.
+     * Deletes the repository directory and related caches and working copy directories.
      */
     void destroy();
 

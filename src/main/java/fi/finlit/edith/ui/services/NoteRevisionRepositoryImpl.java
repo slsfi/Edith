@@ -39,13 +39,17 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     
     private static final QNoteRevision otherNote = new QNoteRevision("other");
     
+    private final TimeService timeService;
+    
     private final UserRepository userRepository;
     
     public NoteRevisionRepositoryImpl(
             @Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository) {
+            @Inject UserRepository userRepository,
+            @Inject TimeService timeService) {
         super(sessionFactory, noteRevision);
         this.userRepository = userRepository;
+        this.timeService = timeService;
     }
             
     @Override
@@ -95,7 +99,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     @Override
     public NoteRevision save(NoteRevision note) {
         UserInfo createdBy = userRepository.getCurrentUser();  
-        note.setCreatedOn(System.currentTimeMillis());
+        note.setCreatedOn(timeService.currentTimeMillis());
         note.setCreatedBy(createdBy);
         note.getRevisionOf().setLatestRevision(note);
         return super.save(note);

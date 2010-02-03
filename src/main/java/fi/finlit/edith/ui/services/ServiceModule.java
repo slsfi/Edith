@@ -67,15 +67,15 @@ public class ServiceModule {
 
     public static void bind(ServiceBinder binder){
         binder.bind(AdminService.class, AdminServiceImpl.class);
-        binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class).withId("DocumentRepository");
+        binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
         binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
         binder.bind(NoteRevisionRepository.class, NoteRevisionRepositoryImpl.class);
         binder.bind(TermRepository.class, TermRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
-        binder.bind(SubversionService.class, SubversionServiceImpl.class).withId("SubversionService");
-
+        binder.bind(SubversionService.class, SubversionServiceImpl.class);
         binder.bind(DocumentRenderer.class, DocumentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
+        binder.bind(TimeService.class, TimeServiceImpl.class);
     }
 
     public static Configuration buildConfiguration(IdentityService identityService){

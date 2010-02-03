@@ -198,8 +198,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
         }finally{
             reader.close();
             is.close();
-        }
-        
+        }        
 
     }
 

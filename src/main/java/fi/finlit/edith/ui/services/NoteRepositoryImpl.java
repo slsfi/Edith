@@ -24,7 +24,6 @@ import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
@@ -44,12 +43,15 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private final UserRepository userRepository;
     
+    private final TimeService timeService;
+    
     public NoteRepositoryImpl(
-            @Inject SessionFactory sessionFactory,
-            @Inject AuthService authService, 
-            @Inject UserRepository userRepository) {
+            @Inject SessionFactory sessionFactory, 
+            @Inject UserRepository userRepository,
+            @Inject TimeService timeService) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
+        this.timeService = timeService;
     }
         
     @Override
@@ -57,7 +59,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         UserInfo createdBy = userRepository.getCurrentUser();
         
         NoteRevision rev = new NoteRevision();
-        rev.setCreatedOn(System.currentTimeMillis());
+        rev.setCreatedOn(timeService.currentTimeMillis());
         rev.setCreatedBy(createdBy);
         rev.setSVNRevision(docRevision.getRevision());
         rev.setLemma(lemma);
@@ -96,7 +98,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     revision = new NoteRevision();
                     revision.setRevisionOf(new Note());
                     revision.getRevisionOf().setLatestRevision(revision);
-                    revision.setCreatedOn(System.currentTimeMillis());
+                    revision.setCreatedOn(timeService.currentTimeMillis());
                     term = null;
                 }
                 
@@ -142,7 +144,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         
         UserInfo createdBy = userRepository.getCurrentUser();
         NoteRevision noteRevision = note.getLatestRevision().createCopy();
-        noteRevision.setCreatedOn(System.currentTimeMillis());
+        noteRevision.setCreatedOn(timeService.currentTimeMillis());
         noteRevision.setCreatedBy(createdBy);
         noteRevision.setSVNRevision(revision);
         noteRevision.setDeleted(true);
