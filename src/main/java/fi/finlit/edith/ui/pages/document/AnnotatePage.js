@@ -16,12 +16,15 @@ jQuery(document).ready(function(){
     
     jQuery('#createTermLink').bind('click',
     	function(event) {
-    		if (!TextSelector.startId || !TextSelector.endId) {
-    			Tapestry.Logging.info("no selection");
-    			Tapestry.Logging.info("startId " + TextSelector.startId);
-    			Tapestry.Logging.info("endId " + TextSelector.endId);
+    		if (!TextSelector.startId) {
+    			Tapestry.Logging.info("missing startId");
     			return false;
     		}
+			if (!TextSelector.endId) {
+				Tapestry.Logging.info("missing endId");
+				return false;
+			}
+
     		
     		jQuery(":input[name='selectedStartId_1']").val(TextSelector.startId);
     		jQuery(":input[name='selectedEndId_1']").val(TextSelector.endId);
@@ -35,7 +38,15 @@ jQuery(document).ready(function(){
     
     jQuery('#longTextEditLink').live('click',
         	function(event) {
-	        	jQuery("#longTextEdit").html(TextSelector.getSelection());
+			    if (!TextSelector.startId) {
+					Tapestry.Logging.info("missing startId");
+					return false;
+				}
+				if (!TextSelector.endId) {
+					Tapestry.Logging.info("missing endId");
+					return false;
+				}
+				jQuery("#longTextEdit").html(TextSelector.getSelection());
 	        	jQuery("#longTextEdit").addClass("edited");
 	    		jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
 	    		jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
