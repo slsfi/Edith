@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -72,15 +72,18 @@ public class TextUtils {
                 xmlCharacters = xmlCharacters.substring(0, i - 1);
             }
         } else {
-            for (int i = 0; i < noteLongText.length(); i++) {
-                String s = noteLongText.substring(i);
-                if (noteLongText.charAt(i) == xmlCharacters.charAt(0)
-                        && xmlCharacters.startsWith(noteLongText.substring(i))) {
-                    return noteLongText.length() - i;
+            for (int i = xmlCharacters.length() - 1; 0 <= i; --i) {
+                String nlt = noteLongText;
+                String xmlc = xmlCharacters.substring(0, i + 1);
+                if (xmlCharacters.charAt(i) == noteLongText.charAt(noteLongText.length() - 1)
+                        && (xmlCharacters.substring(0, i).replaceAll("\\s+", " ").endsWith(
+                                noteLongText.replaceAll("\\s+", " ")) || (noteLongText.replaceAll(
+                                "\\s+", " ").endsWith(xmlCharacters.substring(0, i + 1).replaceAll(
+                                "\\s+", " "))))) {
+                    return i + 1;
                 }
             }
         }
         return -1;
     }
-
 }
