@@ -43,6 +43,9 @@ public class NoteRevision extends Identifiable{
     private Note revisionOf;
     
     @Predicate
+    private String subtextSources;
+    
+    @Predicate
     private long svnRevision;
     
     @Predicate
@@ -140,9 +143,19 @@ public class NoteRevision extends Identifiable{
     public String getLocalId(){
         return revisionOf.getLocalId();
     }
+
+    public String getSubtextSources() {
+        return subtextSources;
+    }
+
+    public void setSubtextSources(String subtextSources) {
+        this.subtextSources = subtextSources;
+    }
     
 //    public Document getDocument(){
 //        return revisionOf.getDocument();
 //    }
+    
+    
  
 }

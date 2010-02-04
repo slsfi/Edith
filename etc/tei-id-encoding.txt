@@ -1,30 +1,30 @@
-teiHeader				[teiHeader]
+teiHeader						[teiHeader]
 
-	fileDesc			[teiHeader-]fileDesc
+	fileDesc					[teiHeader-]fileDesc
 
-		titleStmt		[teiHeader-]fileDesc-titleStmt
+		titleStmt				[teiHeader-]fileDesc-titleStmt
 
-			title		[teiHeader-]fileDesc-titleStmt-title
+			title				[teiHeader-]fileDesc-titleStmt-title
 
-			author		[teiHeader-]fileDesc-titleStmt-author
+			author				[teiHeader-]fileDesc-titleStmt-author
 
-		editionStmt		[teiHeader-]fileDesc-editionStmt
+		editionStmt				[teiHeader-]fileDesc-editionStmt
 
-			edition		[teiHeader-]fileDesc-editionStmt-edition
+			edition				[teiHeader-]fileDesc-editionStmt-edition
 
-			respStmt	[teiHeader-]fileDesc-editionStmt-respStmt
+			respStmt			[teiHeader-]fileDesc-editionStmt-respStmt
 
 
-text					[text]
+text							[text]
 
-	body				[text-body]
+	body						[text-body]
 
-		div[type=play]		[text-body-]play
+		div[type=play]			[text-body-]play
 
 
 		  div[type=act,n=1] 	[text-body-]play-act
 
-			sp		[text-body-]play-act-sp
+			sp					[text-body-]play-act-sp
 			
 
 fileDesc-titleStmt-title
