@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -42,30 +42,32 @@ import fi.finlit.edith.domain.UserRepository;
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository{
 
     private final UserRepository userRepository;
-    
+
     private final TimeService timeService;
-    
+
     public NoteRepositoryImpl(
-            @Inject SessionFactory sessionFactory, 
+            @Inject SessionFactory sessionFactory,
             @Inject UserRepository userRepository,
             @Inject TimeService timeService) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
         this.timeService = timeService;
     }
-    
+
     public static String getLemmaForLongText(String longText){
         if (longText.contains(" ")){
             String[] words = longText.split("\\s+");
-            if (words.length > 1) return words[0] + " -- " + words[words.length-1];   
+            if (words.length > 1) {
+                return words[0] + " -- " + words[words.length-1];
+            }
         }
         return longText;
     }
-        
+
     @Override
     public Note createNote(DocumentRevision docRevision, String localId, String longText) {
         UserInfo createdBy = userRepository.getCurrentUser();
-        
+
         NoteRevision rev = new NoteRevision();
         rev.setCreatedOn(timeService.currentTimeMillis());
         rev.setCreatedBy(createdBy);
@@ -73,35 +75,34 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         rev.setLemma(getLemmaForLongText(longText));
         rev.setLongText(longText);
         getSession().save(rev);
-        
+
         Note note = new Note();
-        note.setStatus(NoteStatus.Draft);
         note.setDocument(docRevision.getDocument());
         note.setLocalId(localId);
         note.setLatestRevision(rev);
         rev.setRevisionOf(note);
         getSession().save(note);
-        
+
         return note;
     }
-        
+
     @Override
     public int importNotes(File file) throws Exception {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
-        
+
         NoteRevision revision = null;
         Term term = null;
-        String text = null;        
+        String text = null;
         int counter = 0;
-        
+
         Session session = getSession();
-        
+
         while (true) {
             int event = reader.next();
-            
+
             if (event == XMLStreamConstants.START_ELEMENT){
-                String localName = reader.getLocalName();    
+                String localName = reader.getLocalName();
                 if (localName.equals("note")){
                     revision = new NoteRevision();
                     revision.setRevisionOf(new Note());
@@ -109,15 +110,15 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     revision.setCreatedOn(timeService.currentTimeMillis());
                     term = null;
                 }
-                
+
             }else if (event == XMLStreamConstants.END_ELEMENT){
                 String localName = reader.getLocalName();
-                
+
                 if (localName.equals("note")){
                     if (term != null) {
                         revision.getRevisionOf().setTerm(term);
-                        session.save(term);    
-                    }                    
+                        session.save(term);
+                    }
                     session.save(revision.getRevisionOf());
                     session.save(revision);
                     counter++;
@@ -126,30 +127,34 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 }else if (localName.equals("text")){
                     revision.setLongText(text);
                 }else if (localName.equals("baseform")){
-                    if (term == null) term = new Term();
+                    if (term == null) {
+                        term = new Term();
+                    }
                     term.setBasicForm(text);
                 }else if (localName.equals("meaning")){
-                    if (term == null) term = new Term();
+                    if (term == null) {
+                        term = new Term();
+                    }
                     term.setMeaning(text);
                 }else if (localName.equals("description")){
                     revision.setDescription(text);
                 }
-                    
+
             }else if (event == XMLStreamConstants.CHARACTERS){
                 text = reader.getText();
-                
+
             }else if (event == XMLStreamConstants.END_DOCUMENT) {
                 reader.close();
                 break;
             }
-        }        
+        }
         return counter;
     }
 
     @Override
     public void remove(Note note, long revision) {
         Assert.notNull(note, "note was null");
-        
+
         UserInfo createdBy = userRepository.getCurrentUser();
         NoteRevision noteRevision = note.getLatestRevision().createCopy();
         noteRevision.setCreatedOn(timeService.currentTimeMillis());
@@ -157,23 +162,23 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         noteRevision.setSVNRevision(revision);
         noteRevision.setDeleted(true);
         note.setLatestRevision(noteRevision);
-        
+
         getSession().save(revision);
         getSession().save(note);
     }
 
     @Override
     public GridDataSource queryDictionary(String searchTerm) {
-        Assert.notNull(searchTerm);        
+        Assert.notNull(searchTerm);
         if (!searchTerm.equals("*")){
-            BooleanBuilder builder = new BooleanBuilder();        
+            BooleanBuilder builder = new BooleanBuilder();
             builder.or(termWithNotes.basicForm.contains(searchTerm, false));
             builder.or(termWithNotes.meaning.contains(searchTerm, false));
-            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc(), builder.getValue());    
+            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc(), builder.getValue());
         }else{
             return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc());
         }
-        
+
     }
-    
+
 }

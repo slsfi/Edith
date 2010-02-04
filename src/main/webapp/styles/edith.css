@@ -175,3 +175,7 @@ div.note_edit {
 .notelink {
 	font-style: italic;
 }
+
+.Initial:before {
+	content: "* ";
+}

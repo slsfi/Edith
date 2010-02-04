@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
@@ -14,13 +14,13 @@ import fi.finlit.edith.EDITH;
 
 /**
  * Note provides
- * 
+ *
  * @author tiwe
  * @version $Id$
  */
 @ClassMapping(ns = EDITH.NS)
 public class Note extends Identifiable{
-    
+
     @Predicate
     private Document document;
 
@@ -34,7 +34,7 @@ public class Note extends Identifiable{
     private String localId;
 
     @Predicate
-    private NoteStatus status;
+    private NoteStatus status = NoteStatus.Initial;
 
     @Predicate(ln = "tagged")
     private Set<Tag> tags;
@@ -89,5 +89,5 @@ public class Note extends Identifiable{
     public void setTerm(Term term) {
         this.term = term;
     }
-    
+
 }

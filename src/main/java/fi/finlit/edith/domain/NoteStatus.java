@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
@@ -18,19 +18,21 @@ import fi.finlit.edith.EDITH;
 @ClassMapping(ns=EDITH.NS)
 public enum NoteStatus {
     /**
-     * 
+     *
      */
     Draft,
     /**
-     * 
+     *
      */
     Finished,
     /**
-     * 
+     *
      */
     LockedForEdit,
     /**
-     * 
+     *
      */
-    Publishable;
+    Publishable,
+
+    Initial;
 }

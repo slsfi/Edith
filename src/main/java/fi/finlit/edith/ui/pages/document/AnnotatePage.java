@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.pages.document;
 
@@ -29,13 +29,14 @@ import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermRepository;
 
 /**
  * AnnotatePage provides
- * 
+ *
  * @author tiwe
  * @version $Id$
  */
@@ -45,14 +46,14 @@ import fi.finlit.edith.domain.TermRepository;
 public class AnnotatePage extends AbstractDocumentPage {
 
     private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
-    
+
     @Inject
     @Property
     private Block notesList;
-    
+
     @Inject
     private Block noteEdit;
-    
+
     @Inject
     private Block emptyBlock;
 
@@ -62,10 +63,10 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Property
     private List<NoteRevision> selectedNotes;
-    
-    @Property 
+
+    @Property
     private NoteRevision noteOnEdit;
-    
+
     @Property
     private Term termOnEdit;
 
@@ -80,25 +81,25 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
-    
+
     @Inject
     private NoteRepository noteRepo;
 
     @Inject
     private TermRepository termRepo;
-    
+
     @Property
     private List<NoteRevision> docNotes;
 
     @Property
     private SelectedText createTermSelection;
-    
+
     @Property
     private SelectedText updateLongTextSelection;
-    
+
     @Property
     private boolean moreThanOneSelectable;
-    
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
@@ -121,8 +122,8 @@ public class AnnotatePage extends AbstractDocumentPage {
             //XXX Where is this n coming?
             if (localId.startsWith("n")){
                 localId = localId.substring(1);
-            }               
-            
+            }
+
             NoteRevision rev = noteRevisionRepo.getByLocalId(getDocumentRevision(), localId);
             if (rev != null) {
                 selectedNotes.add(rev);
@@ -130,22 +131,22 @@ public class AnnotatePage extends AbstractDocumentPage {
                 logger.error("Note with localId " + localId + " coundn't be found in " + getDocumentRevision());
             }
         }
-        
+
         if (selectedNotes.size() > 0 ) {
             noteOnEdit = selectedNotes.get(0);
             termOnEdit = getEditTerm(noteOnEdit);
         }
-        
+
         //Order on lemma after we have selected the first one as a selection
         Collections.sort(selectedNotes, new Comparator<NoteRevision>() {
             public int compare(NoteRevision o1, NoteRevision o2) {
                 return o1.getLemma().compareTo(o2.getLemma());
             }
         });
-        
+
         moreThanOneSelectable = selectedNotes.size() > 1;
-            
-        
+
+
         return noteEdit;
     }
 
@@ -167,22 +168,25 @@ public class AnnotatePage extends AbstractDocumentPage {
         termOnEdit = getEditTerm(noteOnEdit);
         return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);
     }
-    
+
     void onPrepareForSubmit(String noteRev) {
         note = noteRevisionRepo.getById(noteRev).createCopy();
         noteOnEdit = note;
         termOnEdit = getEditTerm(noteOnEdit);
     }
-    
+
     Object onSuccessFromNoteEditForm() throws IOException {
 	NoteRevision noteRevision;
-      
+	if (note.getRevisionOf().getStatus() == NoteStatus.Initial) {
+	    note.getRevisionOf().setStatus(NoteStatus.Draft);
+	}
+
         if (updateLongTextSelection.hasSelection()) {
             noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
         } else {
             noteRevision = noteRevisionRepo.save(note);
         }
-        
+
         //XXX This doesn't look good
         if (termOnEdit.getBasicForm() != null && !termOnEdit.getBasicForm().trim().isEmpty()) {
             Term term = termRepo.findByBasicForm(termOnEdit.getBasicForm());
@@ -194,7 +198,7 @@ public class AnnotatePage extends AbstractDocumentPage {
             noteRevision.getRevisionOf().setTerm(term);
             noteRepo.save(noteRevision.getRevisionOf());
         }
-        
+
         // prepare view (with possibly new revision)
         getDocumentRevision().setRevision(noteRevision.getSvnRevision());
         docNotes = noteRevisionRepo.getOfDocument(noteRevision.getDocumentRevision());
@@ -213,15 +217,15 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         // prepare view with new revision
         getDocumentRevision().setRevision(documentRevision.getRevision());
-        docNotes = noteRevisionRepo.getOfDocument(documentRevision);        
+        docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
         return new MultiZoneUpdate("editZone", emptyBlock).add("listZone", notesList).add("documentZone", documentView);
     }
-    
+
     List<String> onProvideCompletionsFromBasicForm(String partial) {
-        
+
         List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
-        
+
         List<String> matches = new ArrayList<String>(terms.size());
         for (Term term : terms) {
             matches.add(term.getBasicForm());
@@ -229,7 +233,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         return matches;
     }
 
-    
+
     public Object[] getEditContext() {
         List<String> ctx = new ArrayList<String>(selectedNotes.size());
         //Adding the current note to head
@@ -241,5 +245,5 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
         return ctx.toArray();
     }
-        
+
 }
