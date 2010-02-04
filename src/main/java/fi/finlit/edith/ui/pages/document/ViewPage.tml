@@ -40,15 +40,14 @@
         
     </p:leftPanel>
 
-    <p:rightPanel>      
-    
+    <p:rightPanel>
         <div class="panel narrow">
             <h3>${message:notes}</h3>
             <t:if test="docNotes">
                 <ul class="notes">
                     <t:loop source="docNotes" value="note">
-                    <li> 
-                        <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>
+                    <li>
+                        <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>${noteMetadata}
                     </li>
                     </t:loop>
                 </ul>        

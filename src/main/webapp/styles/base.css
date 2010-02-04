@@ -64,12 +64,12 @@ p{
 	margin-left: 0;
 	padding-left: 0;		
 	list-style: none;	
-}	
+}
 
-.panel li {
+.dashboard li {
 	font-weight: bold;
 }
 
-.panel li a {
+.dashboard li a {
 	font-weight: normal;
 }

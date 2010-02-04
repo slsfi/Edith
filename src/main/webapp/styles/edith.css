@@ -172,4 +172,6 @@ div.note_edit {
     float:right;	
 }
 
-
+.notelink {
+	font-style: italic;
+}

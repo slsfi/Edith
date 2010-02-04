@@ -90,9 +90,19 @@
                         <t:errors/>
                         ${message:lemma-label}<br/>
                         <t:textField value="noteOnEdit.lemma"/><br/>
+                        
                         ${message:basicForm-label}<br/>
                         <t:textField t:id="basicForm" value="termOnEdit.basicForm" t:mixins="autocomplete"/><br/>
-                        <!--t:textField t:id="meaning" value="termOnEdit.meaning"/><br/-->
+                        
+                        ${message:description-label}<br/>                     
+                        <t:textField t:id="description" value="noteOnEdit.description"/><br/>
+
+                        ${message:subtextSources-label}<br/>                     
+                        <t:textField t:id="subtextSources" value="noteOnEdit.subtextSources"/><br/>
+
+						<!-- ${message:meaning-label}?<br/>                     
+                        <t:textField t:id="meaning" value="termOnEdit.meaning"/><br/> -->
+                        
                         ${message:longText-label} <a id="longTextEditLink" href="#" style="display:none">${message:update}</a><br/>
                         <div id="longTextEdit">${noteOnEdit.longText}</div><br/>
                         
