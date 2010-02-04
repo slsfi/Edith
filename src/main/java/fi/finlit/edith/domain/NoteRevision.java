@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
@@ -19,50 +19,51 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns=EDITH.NS)
 public class NoteRevision extends Identifiable{
-    
+
     @Predicate
-    private UserInfo createdBy; 
-    
+    private UserInfo createdBy;
+
     @Predicate
     private long createdOn;
-    
+
     @Predicate
     private String description;
-    
+
     @Predicate(ln="latestRevision", inv=true)
     private Note latestRevisionOf;
 
     @Predicate
-    private String lemma; 
+    private String lemma;
 
     @Predicate
-    private String longText; 
-       
+    private String longText;
+
     @Predicate
     @QueryInit({"*", "term.meaning"})
     private Note revisionOf;
-    
+
     @Predicate
     private String subtextSources;
-    
+
     @Predicate
     private long svnRevision;
-    
+
     @Predicate
     private boolean deleted;
-    
+
     // NOTE : not persisted
     private DocumentRevision docRevision;
-    
-    public NoteRevision createCopy() {        
+
+    public NoteRevision createCopy() {
         NoteRevision copy = new NoteRevision();
         copy.setDescription(description);
         copy.setLemma(lemma);
         copy.setLongText(longText);
         copy.setRevisionOf(revisionOf);
         copy.setSVNRevision(svnRevision);
+        copy.setSubtextSources(subtextSources);
         return copy;
-        
+
     }
 
     public DocumentRevision getDocumentRevision(){
@@ -83,7 +84,7 @@ public class NoteRevision extends Identifiable{
     public String getDescription() {
         return description;
     }
-        
+
     public Note getLatestRevisionOf() {
         return latestRevisionOf;
     }
@@ -131,7 +132,7 @@ public class NoteRevision extends Identifiable{
     public void setSVNRevision(long svnRevision) {
         this.svnRevision = svnRevision;
     }
- 
+
     public boolean isDeleted() {
         return deleted;
     }
@@ -139,7 +140,7 @@ public class NoteRevision extends Identifiable{
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-    
+
     public String getLocalId(){
         return revisionOf.getLocalId();
     }
@@ -151,11 +152,11 @@ public class NoteRevision extends Identifiable{
     public void setSubtextSources(String subtextSources) {
         this.subtextSources = subtextSources;
     }
-    
+
 //    public Document getDocument(){
 //        return revisionOf.getDocument();
 //    }
-    
-    
- 
+
+
+
 }
