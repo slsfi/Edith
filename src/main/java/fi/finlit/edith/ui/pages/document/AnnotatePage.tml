@@ -57,7 +57,7 @@
             <ul class="notes">
                 <t:loop source="docNotes" value="note">
                 <li> 
-                    <a href="#start${note.revisionOf.localId}" class="notelemma notelink ${note.revisionOf.status}">${note.lemma}</a>
+                    <a href="#start${note.revisionOf.localId}" class="notelink ${note.revisionOf.status}"><em>${note.lemma}</em></a>
                 </li>
                 </t:loop>
             </ul>        
@@ -76,7 +76,7 @@
                     <t:loop source="selectedNotes" value="note">
                         <li>
                             <t:eventlink t:event="edit" context="editContext" 
-                                t:zone="editZone" class="notelemma notelink">${note.lemma}</t:eventlink> 
+                                t:zone="editZone" class="notelink"><em>${note.lemma}</em></t:eventlink> 
                         </li>
                     </t:loop>
                 </ul>

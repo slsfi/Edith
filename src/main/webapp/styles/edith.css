@@ -172,10 +172,6 @@ div.note_edit {
     float:right;	
 }
 
-.notelemma {
-	font-style: italic;
-}
-
 .Initial:before {
 	content: "* ";
 }

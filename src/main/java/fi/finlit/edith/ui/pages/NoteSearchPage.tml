@@ -33,7 +33,7 @@
                     <t:if test="editMode">
                         <t:inlineField t:id="lemma" value="note.lemma" value1="note.lemma"/>
                         <p:else>
-                            <span class="notelemma">${note.lemma}</span>
+                            <em>${note.lemma}</em>
                         </p:else>
                     </t:if>
                 </p:lemmaCell>
