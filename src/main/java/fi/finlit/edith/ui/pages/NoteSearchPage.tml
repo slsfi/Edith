@@ -47,7 +47,7 @@
                     <t:if test="editMode">
                         <t:inlineField t:id="description" value="note.description" value1="note.description" />
                         <p:else>
-                            ${note.description}
+                            <t:markdown value="note.description"/>
                         </p:else>
                     </t:if>
                 </p:descriptionCell>                
@@ -55,7 +55,7 @@
                         ${note.revisionOf.term?.meaning}
                 </p:meaningCell>
                 <p:subtextSourcesCell>
-                        ${note.subtextSources}
+                        <t:markdown value="note.subtextSources"/>
                 </p:subtextSourcesCell>
                 <p:statusCell>
 					<t:fmt.message key="NoteStatus.${note.revisionOf.status}"/>
