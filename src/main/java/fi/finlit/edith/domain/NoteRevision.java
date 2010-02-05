@@ -5,6 +5,8 @@
  */
 package fi.finlit.edith.domain;
 
+import java.util.regex.Pattern;
+
 import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
@@ -20,6 +22,8 @@ import fi.finlit.edith.EDITH;
 @ClassMapping(ns=EDITH.NS)
 public class NoteRevision extends Identifiable{
 
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+    
     @Predicate
     private UserInfo createdBy;
 
@@ -155,7 +159,7 @@ public class NoteRevision extends Identifiable{
 
     public void setLemmaFromLongText(){
         if (longText.contains(" ")){
-            String[] words = longText.split("\\s+");
+            String[] words = WHITESPACE.split(longText);
             if (words.length > 1) {
                 lemma = words[0] + " – – " + words[words.length-1];
                 return;

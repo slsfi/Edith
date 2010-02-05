@@ -38,7 +38,6 @@ public interface NoteRepository extends Repository<Note,String>{
      * @param file
      * @throws Exception 
      */
-     @Deprecated
     int importNotes(File file) throws Exception;
 
     /**

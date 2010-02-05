@@ -9,8 +9,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.List;
 
+import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
@@ -47,7 +49,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
 
     @Inject
     private DocumentRepository documentRepo;
-
+    
     private Document document;
     
     private DocumentRevision docRev;
@@ -81,6 +83,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     public void queryNotes(){
         assertTrue(noteRevisionRepo.queryNotes("annoit").getAvailableRows() > 0);
     }
+
 
     @Test
     public void getOfDocument(){

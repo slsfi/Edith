@@ -13,6 +13,9 @@ package fi.finlit.edith.ui.services;
  */
 public interface TimeService {
 
+    /**
+     * @return
+     */
     long currentTimeMillis();
     
 }
