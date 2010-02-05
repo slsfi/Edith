@@ -157,13 +157,13 @@ public class NoteRevision extends Identifiable{
         if (longText.contains(" ")){
             String[] words = longText.split("\\s+");
             if (words.length > 1) {
-                lemma = words[0] + " -- " + words[words.length-1];
+                lemma = words[0] + " – – " + words[words.length-1];
                 return;
             }
         }
         lemma = longText;
     }
-    
+
     public String getMetadata() {
         StringBuilder sb = new StringBuilder();
         if (description != null) {
