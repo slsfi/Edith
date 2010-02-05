@@ -158,13 +158,10 @@ public class NoteRevision extends Identifiable{
             String[] words = longText.split("\\s+");
             if (words.length > 1) {
                 lemma = words[0] + " -- " + words[words.length-1];
-            }else{
-                lemma = longText;
+                return;
             }
-        }else{
-            lemma = longText;
         }
-
+        lemma = longText;
     }
     
     public String getMetadata() {
