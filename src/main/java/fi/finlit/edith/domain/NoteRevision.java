@@ -153,20 +153,30 @@ public class NoteRevision extends Identifiable{
         this.subtextSources = subtextSources;
     }
 
+    public void setLemmaFromLongText(){
+        if (longText.contains(" ")){
+            String[] words = longText.split("\\s+");
+            if (words.length > 1) {
+                lemma = words[0] + " -- " + words[words.length-1];
+            }else{
+                lemma = longText;
+            }
+        }else{
+            lemma = longText;
+        }
+
+    }
+    
     public String getMetadata() {
         StringBuilder sb = new StringBuilder();
         if (description != null) {
-            sb.append(", ");
-            sb.append(description);
+            sb.append(", ").append(description);
         }
         if (subtextSources != null) {
-            sb.append(", ");
-            sb.append(subtextSources);
+            sb.append(", ").append(subtextSources);
         }
-        if (revisionOf.getTerm() != null
-                && revisionOf.getTerm().getMeaning() != null) {
-            sb.append(", ");
-            sb.append(revisionOf.getTerm().getMeaning());
+        if (revisionOf.getTerm() != null && revisionOf.getTerm().getMeaning() != null) {
+            sb.append(", ").append(revisionOf.getTerm().getMeaning());
         }
         return sb.toString();
     }

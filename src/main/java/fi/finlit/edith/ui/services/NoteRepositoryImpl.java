@@ -54,16 +54,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         this.timeService = timeService;
     }
 
-    public static String getLemmaForLongText(String longText){
-        if (longText.contains(" ")){
-            String[] words = longText.split("\\s+");
-            if (words.length > 1) {
-                return words[0] + " -- " + words[words.length-1];
-            }
-        }
-        return longText;
-    }
-
     @Override
     public Note createNote(DocumentRevision docRevision, String localId, String longText) {
         UserInfo createdBy = userRepository.getCurrentUser();
@@ -72,8 +62,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         rev.setCreatedOn(timeService.currentTimeMillis());
         rev.setCreatedBy(createdBy);
         rev.setSVNRevision(docRevision.getRevision());
-        rev.setLemma(getLemmaForLongText(longText));
         rev.setLongText(longText);
+        rev.setLemmaFromLongText();        
         getSession().save(rev);
 
         Note note = new Note();

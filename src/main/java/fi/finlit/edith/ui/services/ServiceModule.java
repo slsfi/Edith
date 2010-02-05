@@ -49,7 +49,7 @@ public class ServiceModule {
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
         // app config
-        configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
+//        configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
         Properties properties = new Properties();
         properties.load(AppModule.class.getResourceAsStream("/edith.properties"));
         for (Map.Entry<Object, Object> entry : properties.entrySet()){
