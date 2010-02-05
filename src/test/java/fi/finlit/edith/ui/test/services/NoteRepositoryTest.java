@@ -74,7 +74,7 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         assertEquals(133, noteRepo.importNotes(noteTestData));
         assertTrue(noteRepo.queryDictionary("*").getAvailableRows() > 0);
     }
-    
+
     @Test
     public void queryDictionary2() throws Exception{
         assertEquals(133, noteRepo.importNotes(noteTestData));
@@ -83,7 +83,7 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         int count2 = dataSource.getAvailableRows();
         assertEquals(count1, count2);
     }
-    
+
     @Test
     @Ignore
     public void createNote() throws SVNException{
@@ -111,10 +111,10 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     @Test
     public void getLemmaForLongText(){
         assertEquals("word", getLemmaForLongText("word"));
-        assertEquals("word1 -- word2", getLemmaForLongText("word1 word2"));
-        assertEquals("word1 -- word3", getLemmaForLongText("word1 word3"));
-        assertEquals("word1 -- word3", getLemmaForLongText("word1\t word2 \nword3"));        
-    }    
+        assertEquals("word1 – – word2", getLemmaForLongText("word1 word2"));
+        assertEquals("word1 – – word3", getLemmaForLongText("word1 word3"));
+        assertEquals("word1 – – word3", getLemmaForLongText("word1\t word2 \nword3"));
+    }
 
     private String getLemmaForLongText(String longText) {
         NoteRevision rev = new NoteRevision();
