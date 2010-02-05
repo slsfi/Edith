@@ -39,22 +39,4 @@ public class ViewPage extends AbstractDocumentPage {
         docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
     }
 
-    public String getNoteMetadata() {
-        StringBuilder sb = new StringBuilder();
-        if (note.getDescription() != null) {
-            sb.append(", ");
-            sb.append(note.getDescription());
-        }
-        if (note.getSubtextSources() != null) {
-            sb.append(", ");
-            sb.append(note.getSubtextSources());
-        }
-        if (note.getRevisionOf().getTerm() != null
-                && note.getRevisionOf().getTerm().getMeaning() != null) {
-            sb.append(", ");
-            sb.append(note.getRevisionOf().getTerm().getMeaning());
-        }
-        return sb.toString();
-    }
-
 }

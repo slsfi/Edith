@@ -153,9 +153,23 @@ public class NoteRevision extends Identifiable{
         this.subtextSources = subtextSources;
     }
 
-//    public Document getDocument(){
-//        return revisionOf.getDocument();
-//    }
+    public String getMetadata() {
+        StringBuilder sb = new StringBuilder();
+        if (description != null) {
+            sb.append(", ");
+            sb.append(description);
+        }
+        if (subtextSources != null) {
+            sb.append(", ");
+            sb.append(subtextSources);
+        }
+        if (revisionOf.getTerm() != null
+                && revisionOf.getTerm().getMeaning() != null) {
+            sb.append(", ");
+            sb.append(revisionOf.getTerm().getMeaning());
+        }
+        return sb.toString();
+    }
 
 
 

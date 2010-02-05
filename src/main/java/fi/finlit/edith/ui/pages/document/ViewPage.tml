@@ -47,7 +47,7 @@
                 <ul class="notes">
                     <t:loop source="docNotes" value="note">
                     <li>
-                        <a href="#start${note.revisionOf.localId}" class="notelink">${note.lemma}</a>${noteMetadata}
+                        <a href="#start${note.revisionOf.localId}" class="notelemma notelink">${note.lemma}</a>${note.metadata}
                     </li>
                     </t:loop>
                 </ul>        
