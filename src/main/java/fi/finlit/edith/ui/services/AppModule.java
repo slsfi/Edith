@@ -55,6 +55,7 @@ public class AppModule {
 
         // Login page is the only one allowed for anonymous users
         configuration.add(new RequestInvocationDefinition("/login", "ROLE_ANONYMOUS"));
+        configuration.add(new RequestInvocationDefinition("/assets/**", "ROLE_ANONYMOUS"));
         configuration.add(new RequestInvocationDefinition("/**", "ROLE_USER"));
     }
 
