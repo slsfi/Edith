@@ -242,9 +242,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
     
-    private int getIndex(String str, String word, int occurrence) {
-        // TODO Timo : take occurrence into account
-        return str.indexOf(word);
+    public static int getIndex(String str, String word, int occurrence) {
+        int index = -1;
+        while (occurrence > 0){
+            index = str.indexOf(word, index+1);
+            occurrence--;
+        }
+        return index;
+        
     }
 
     private Document createDocument(String path, String title, String description) {
