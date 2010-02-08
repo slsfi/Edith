@@ -1,11 +1,13 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
+
+import nu.localhost.tapestry5.springsecurity.services.RequestInvocationDefinition;
 
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.Configuration;
@@ -32,21 +34,28 @@ import com.mysema.tapestry.PageMappingRule;
  */
 @SubModule( { DataModule.class, ServiceModule.class })
 public class AppModule {
-    
+
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
         // general config
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "fi,en,sv,de");
         configuration.add(SymbolConstants.PRODUCTION_MODE, System.getProperty("production.mode", "false"));
         configuration.add(SymbolConstants.APPLICATION_VERSION, "0.1.0");
-        
+
         // Spring Security config
         configuration.add("spring-security.loginform.url", "/login");
 //        configuration.add("spring-security.force.ssl.login", "true");
         configuration.add("spring-security.check.url", "/security_check");
         configuration.add("spring-security.failure.url", "/loginfailed");
         configuration.add("spring-security.accessDenied.url", "/forbidden");
-        
+    }
+
+    public static void contributeFilterSecurityInterceptor(
+            Configuration<RequestInvocationDefinition> configuration) {
+
+        // Login page is the only one allowed for anonymous users
+        configuration.add(new RequestInvocationDefinition("/login", "ROLE_ANONYMOUS"));
+        configuration.add(new RequestInvocationDefinition("/**", "ROLE_USER"));
     }
 
     public static void contributeURLRewriter(
@@ -56,10 +65,10 @@ public class AppModule {
         configuration.add("pageMapping", new PageMappingRule(componentResolver));
     }
 
-    public static void bind(ServiceBinder binder){        
-        binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);        
+    public static void bind(ServiceBinder binder){
+        binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
     }
-    
+
     public static void contributeAlias(Configuration<AliasContribution<PasswordEncoder>> configuration ) {
         configuration.add( AliasContribution.create(PasswordEncoder.class, new ShaPasswordEncoder() ) );
     }
