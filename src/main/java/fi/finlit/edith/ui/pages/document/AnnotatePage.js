@@ -54,31 +54,23 @@ jQuery(document).ready(function(){
 	    		return false;
         	}
     );
-      
-    var findContainer = function(element) {
-    	var e = jQuery(element);
-    	if (e.hasClass("sp") || e.hasClass("stage"))
-    		return e;
-    	
-		return e.parents(".sp,.stage").eq(0);
-	}
-    
-    jQuery('.act').live('mouseup',
+          
+    jQuery('.tei').live('mouseup',
     	function(event) {
-    		TextSelector.stopSelection(findContainer(event.target));
+    		TextSelector.stopSelection(jQuery(event.target));
     		if(!TextSelector.getSelection()) {
     			jQuery(".selection-link").addClass('disabled');
     		}
     	}
     );
-    jQuery('.act').live('mousedown',
+    jQuery('.tei').live('mousedown',
         	function(event) {
-        		TextSelector.startSelection(findContainer(event.target));
+        		TextSelector.startSelection(jQuery(event.target));
         		jQuery(".selection-link").addClass('disabled');
         		jQuery("#longTextEditLink").hide();
         	}
         );
-    jQuery('.act').live('mousemove',
+    jQuery('.tei').live('mousemove',
         	function(event) {
         		if(!TextSelector.isBeingSelected()) return;
         		jQuery(".selection-link").removeClass('disabled');
@@ -131,12 +123,11 @@ var TextSelector = {
 		 * @return the selected text
 		 */
 		getSelection: function() {
-			if (document.getSelection) {
+		    if (window.getSelection) { 
+			    return window.getSelection();
+		    }else if (document.getSelection) {      
 				return document.getSelection();
-			}
-			else if (window.getSelection) {
-				return window.getSelection();
-			}else {
+			}else { 
 				return document.selection.createRange().text;
 			}	
 		}

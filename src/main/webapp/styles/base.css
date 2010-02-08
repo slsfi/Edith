@@ -49,8 +49,8 @@ p{
 
 .panel {	
 	border: solid 1px #D0D0D0;
-	-moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
+	-moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
 	padding: 0.3em;
 	margin-bottom: 1em;
 }

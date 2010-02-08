@@ -28,7 +28,6 @@ import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;

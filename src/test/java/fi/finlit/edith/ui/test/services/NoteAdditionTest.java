@@ -82,7 +82,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Test
     public void addNote_for_p() throws Exception{
-        String element = "act1-sp2";
+        String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text), localId);
 
@@ -92,7 +92,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Test
     public void addNote_for_speaker() throws Exception{
-        String element = "act1-sp1";
+        String element = "play-act-sp-speaker";
         String text = "Esko.";
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text), localId);
 
@@ -102,8 +102,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Test
     public void addNote_multiple_elements() throws Exception{
-        String start = "act1-sp2";
-        String end = "act1-sp3";
+        String start = "play-act-sp2-p";
+        String end = "play-act-sp3-speaker";
         String text = "ja polvip\u00F6ksyt. Esko.";
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(start, end, text), localId);
 
@@ -114,8 +114,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Test
     public void addNote_multiple_elements_2() throws Exception{
-        String start = "act1-sp2";
-        String end = "act1-sp3";
+        String start = "play-act-sp2-p";
+        String end = "play-act-sp3-p";
         String text = "ja polvip\u00F6ksyt. Esko. (panee ty\u00F6ns\u00E4 pois).";
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(start, end, text), localId);
 
@@ -126,7 +126,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Test
     public void addNote_long() throws Exception{
-        String element = "act1-sp1";
+        String element = "play-act-sp-p";
         StringBuilder text = new StringBuilder();
         text.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
         text.append("ja sulhais-vaatteisin puettuna olen, koska h\u00E4n takaisin pal");

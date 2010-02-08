@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -64,6 +63,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
+    
+    private static final QName TEI_TYPE_QNAME = new QName(null, "type");
     
     private static final QName XML_ID_QNAME = new QName(XML_NS, "id");
 
@@ -153,52 +154,34 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText selection, String localId) throws Exception {
-        AnchorPosition startPosition = new AnchorPosition(Assert.notNull(selection.getStartId()));
-        AnchorPosition endPosition = new AnchorPosition(selection.getEndId());
-        System.err.println(startPosition + " - " + endPosition + " : " + selection.getSelection());
+        String startId = selection.getStartId();
+        String endId = selection.getEndId();
+        System.err.println(startId + " - " + endId + " : " + selection.getSelection());
 
+        ElementContext context = new ElementContext(3);
+        
         try {
-            int act = 0;
-            int sp = 0;
-            int stage = 0;
-            boolean inSp = false;
             while (reader.hasNext()) {
                 boolean handled = false;
                 XMLEvent event = reader.nextEvent();
                 if (event.isStartElement()) {
                     StartElement element = event.asStartElement();
                     String localName = element.getName().getLocalPart();
-                    if (localName.equals("div")) {
-                        Iterator<Attribute> attributes = element.getAttributes();
-                        boolean isAct = false;
-                        int n = 0;
-                        while (attributes.hasNext()) {
-                            Attribute attr = attributes.next();
-                            if (attr.getName().getLocalPart().equals("type") && attr.getValue().equals("act")) {
-                                isAct = true;
-                            } else if (attr.getName().getLocalPart().equals("n")) {
-                                n = Integer.valueOf(attr.getValue());
-                            }
-                        }
-                        if (isAct) {
-                            act = n;
-                            stage = 0;
-                            sp = 0;
-                        }
-                    } else if (localName.equals("stage")) {
-                        stage++;
-                        inSp = false;
-
-                    } else if (localName.equals("sp")) {
-                        sp++;
-                        inSp = true;
+                    String name = localName;
+                    if (localName.equals("div")){
+                        name = element.getAttributeByName(TEI_TYPE_QNAME).getValue();
                     }
+                    context.push(name);
+                    
+                } else if (event.isEndElement()){
+                    context.pop();
+                    
                 } else if (event.isCharacters()) {
                     Characters characters = event.asCharacters();
                     String data = characters.getData();
                     int index = 0;
 
-                    if (startPosition.matches(act, inSp ? sp : stage, inSp)) {
+                    if (startId.equals(context.getPath())){                        
                         index = TextUtils.getStartIndex(data, selection.getSelection());
                         if (index > -1) {
                             // insert start anchor : start${localId}
@@ -215,7 +198,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         }
                     }
 
-                    if (endPosition.matches(act, inSp ? sp : stage, inSp)) {
+                    if (endId.equals(context.getPath())){
                         int end = TextUtils.getEndIndex(data, selection.getSelection());
                         if (end > -1) {
                             if (end > index) {

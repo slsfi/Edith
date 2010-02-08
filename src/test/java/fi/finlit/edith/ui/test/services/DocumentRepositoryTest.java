@@ -121,7 +121,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
 
-        String element = "act1-sp2";
+        String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
         
@@ -146,7 +146,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
                 + "/Nummisuutarit rakenteistettuna.xml");
 
 //        act1-sp4 - act1-sp4 : minä; ja nytpä, luulen,
-        String element = "act1-sp4";
+        String element = "play-act-sp4-p";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
 
         NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
@@ -158,7 +158,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
 
-        String element = "act1-sp2";
+        String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
         NoteRevision noteRev = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
@@ -182,7 +182,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
 
-        String element = "act1-sp2";
+        String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
         String text2 = "ottaa";
         String text3 = "ullakosta";
@@ -215,7 +215,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
 
-        String element = "act1-sp2";
+        String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
         NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));

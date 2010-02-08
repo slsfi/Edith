@@ -30,17 +30,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
 
-    // sp -> speech, pb -> page break, lg -> line group, l -> line
-
     static final Set<String> emptyElements = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
-
-    static final Set<String> toDiv = new HashSet<String>(Arrays.asList(
-            "title", "l","lg","publisher","pubPlace","teiHeader","text"));
-
-    static final Set<String> toP = new HashSet<String>();
-
-    static final Set<String> toSpan = new HashSet<String>(Arrays.asList(
-            "actor","camera","caption","date","desc","docAuthor","gap","orig","ref","role","roleDesc","set","sound","speaker","tech","view"));
 
     static final Set<String> toUl = new HashSet<String>(Arrays.asList("castGroup","castList","listPerson"));
 
@@ -55,8 +45,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
     }
 
     @Override
-    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception{
-        
+    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception{        
         InputStream is = documentRepo.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
@@ -96,49 +85,44 @@ public class DocumentRendererImpl implements DocumentRenderer {
 
         boolean noteContent = false;
         Set<String> noteIds = new HashSet<String>();
-
-        int act = 0;
-        int sp = 0;
-        int stage = 0;
-
+        ElementContext context = new ElementContext(3);
+        
         try{
             while (true) {
                 int event = reader.next();
                 if (event == XMLStreamConstants.START_ELEMENT){
                     String localName = reader.getLocalName();
-                    if (toDiv.contains(localName)){
-                        writer.element("div", "class", localName);
-                    }else if (toP.contains(localName)){
-                        writer.element("p", "class", localName);
-                    }else if (toSpan.contains(localName)){
-                        writer.element("span", "class", localName);
-                    }else if (toUl.contains(localName)){
+                    String name = localName;
+                    if (localName.equals("div")){
+                        name = reader.getAttributeValue(null, "type");
+                    }
+                    context.push(name);
+                    String path = context.getPath();
+                    
+                    if (toUl.contains(localName)){
                         writer.element("ul", "class", localName);
+                        if (path != null) writer.attributes("id", path);
+                        
                     }else if (toLi.contains(localName)){
                         writer.element("li", "class", localName);
-                    }else if (localName.equals("sp")){
-                        sp++;
-                        writer.element("div", "class", localName, "id", "act"+act+"-sp"+sp);
-                    }else if (localName.equals("stage")){
-                        stage++;
-                        writer.element("div", "class", localName, "id", "act"+act+"-stage"+stage);
+                        if (path != null) writer.attributes("id", path);
+                    
                     }else if (localName.equals("p")){
                         writer.element(localName);
+                        if (path != null) writer.attributes("id", path);
+                    
                     }else if (localName.equals("div")){
                         String type = reader.getAttributeValue(null, "type");
-                        if ("act".equals(type)){
-                            act = Integer.valueOf(reader.getAttributeValue(null, "n"));
-                            sp = 0;
-                            stage = 0;
-                            writer.element(localName, "class", "act", "id", "act" + act);
-                        }else{
-                            writer.element(localName);
-                        }
+                        writer.element(localName, "class", type);
+                        if (path != null) writer.attributes("id", path);
+                    
                     }else if (localName.equals("TEI")){
                         writer.element("div", "class", "tei");
+                    
                     }else if (localName.equals("lb")){
                         writer.element("br");
                         writer.end();
+                    
                     }else if (localName.equals("pb")){
                         String page = reader.getAttributeValue(null, "n");
                         if (page != null){
@@ -146,6 +130,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                             writer.writeRaw(page + ".");
                             writer.end();
                         }
+                    
                     }else if (localName.equals("anchor")){
                         String id = reader.getAttributeValue(XML_NS, "id");
                         if (id == null){
@@ -165,10 +150,13 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         }
 
                     }else{
-                        writer.element("div", "class", localName);
+                        writer.element("div", "class", name);
+                        if (path != null) writer.attributes("id", path);
                     }
 
                 }else if (event == XMLStreamConstants.END_ELEMENT){
+                    context.pop();
+                    
                     String localName = reader.getLocalName();
                     if (!emptyElements.contains(localName)){
                         writer.end();

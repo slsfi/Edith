@@ -11,20 +11,24 @@ package fi.finlit.edith.domain;
  */
 public class SelectedText {
     
-    // TODO : add startIndex and endIndex
+    private int startIndex, endIndex;
     
     private String selection;
     
-    private String startId;
+    private String startId, endId;
     
-    private String endId;
-
     public SelectedText(){}
     
-    public SelectedText(String startId, String endId, String selection) {
+    public SelectedText(String startId, String endId, int startIndex, int endIndex, String selection) {
         this.startId = startId;
         this.endId = endId;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
         this.selection = selection;
+    }
+    
+    public SelectedText(String startId, String endId, String selection) {
+        this(startId, endId, 1, 1, selection);
     }
 
     public String getSelection() {
@@ -61,4 +65,24 @@ public class SelectedText {
     public String toString(){
         return startId + "," + endId + ":[" + selection + "]";
     }
+
+    public int getStartIndex() {
+        return startIndex;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    public int getEndIndex() {
+        return endIndex;
+    }
+
+    public void setEndIndex(int endIndex) {
+        this.endIndex = endIndex;
+    }
+    
+    
+    
+    
 }

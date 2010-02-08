@@ -49,11 +49,6 @@
 	padding: 1em 0em;
 }	
 
-.teiHeader{
-	/*border: solid 1px #E0E0E0;*/	
-	/*padding: 1em 0em;*/
-}
-
 .respStmt .resp{
 	width: 10em;
 	float: left;
@@ -100,11 +95,10 @@
 	padding-left: 2.5em;	
 }	
 
-/*
-.fileDesc{
-	border: solid 1px gray;
-}
-*/
+.actor, .camera, .caption, .date, .desc, .docAuthor, .gap, .orig, .ref, .role, .roleDesc, .set, .sound, .speaker, .tech, .view{
+	display: inline;	
+}	
+
 
 .notecontent{
 	color: #40D040;
@@ -114,3 +108,6 @@
 .notecontent:hover{
 	border-bottom: solid 2px;
 }
+
+
+
