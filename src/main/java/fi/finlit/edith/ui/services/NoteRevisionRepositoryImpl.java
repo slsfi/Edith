@@ -53,6 +53,39 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     }
             
     @Override
+    public NoteRevision getByLocalId(DocumentRevision docRevision, String localId) {
+        Assert.notNull(docRevision);
+        Assert.notNull(localId);
+        return getSession().from(noteRevision)
+            .where(noteRevision.revisionOf.document.eq(docRevision.getDocument()),
+                   noteRevision.revisionOf.localId.eq(localId),
+                   noteRevision.svnRevision.loe(docRevision.getRevision()),
+                   noteRevision.deleted.eq(false),
+                   latestFor(docRevision.getRevision()))
+            .uniqueResult(noteRevision);
+    }
+
+    @Override
+    public List<NoteRevision> getOfDocument(DocumentRevision docRevision) {
+        Assert.notNull(docRevision);
+        return getSession().from(noteRevision)
+            .where(noteRevision.revisionOf.document.eq(docRevision.getDocument()),
+                   noteRevision.svnRevision.loe(docRevision.getRevision()),
+                   noteRevision.deleted.eq(false),
+                   latestFor(docRevision.getRevision()))
+            .orderBy(noteRevision.longText.asc())
+            .list(noteRevision);
+    }
+    
+    private EBoolean latestFor(long svnRevision){
+        return sub(otherNote).where(
+            otherNote.ne(noteRevision),
+            otherNote.revisionOf.eq(noteRevision.revisionOf),
+            otherNote.svnRevision.loe(svnRevision),
+            otherNote.createdOn.gt(noteRevision.createdOn)).notExists();
+    }
+
+    @Override
     public GridDataSource queryNotes(String searchTerm) {
         Assert.notNull(searchTerm);        
         BooleanBuilder builder = new BooleanBuilder();        
@@ -68,34 +101,11 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
             }    
         }        
         builder.and(noteRevision.eq(noteRevision.revisionOf.latestRevision));
-        return createGridDataSource(noteRevision, noteRevision.revisionOf.term.basicForm.asc(), builder.getValue());
-    }
-
-    @Override
-    public NoteRevision getByLocalId(DocumentRevision docRevision, String localId) {
-        Assert.notNull(docRevision);
-        Assert.notNull(localId);
-        return getSession().from(noteRevision)
-            .where(noteRevision.revisionOf.document.eq(docRevision.getDocument()),
-                   noteRevision.revisionOf.localId.eq(localId),
-                   noteRevision.svnRevision.loe(docRevision.getRevision()),
-                   noteRevision.deleted.eq(false),
-                   latestFor(docRevision.getRevision()))
-            .uniqueResult(noteRevision);
+        return createGridDataSource(noteRevision, 
+                noteRevision.revisionOf.term.basicForm.asc(), 
+                builder.getValue());
     }
     
-    @Override
-    public List<NoteRevision> getOfDocument(DocumentRevision docRevision) {
-        Assert.notNull(docRevision);
-        return getSession().from(noteRevision)
-            .where(noteRevision.revisionOf.document.eq(docRevision.getDocument()),
-                   noteRevision.svnRevision.loe(docRevision.getRevision()),
-                   noteRevision.deleted.eq(false),
-                   latestFor(docRevision.getRevision()))
-            .orderBy(noteRevision.longText.asc())
-            .list(noteRevision);
-    }
-
     @Override
     public NoteRevision save(NoteRevision note) {
         UserInfo createdBy = userRepository.getCurrentUser();  
@@ -103,18 +113,10 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         note.setCreatedBy(createdBy);
         note.getRevisionOf().setLatestRevision(note);
         return super.save(note);
-    }
-    
-    private BeanSubQuery sub(PEntity<?> entity){
-        return new BeanSubQuery().from(entity);
     }    
 
-    private EBoolean latestFor(long svnRevision){
-        return sub(otherNote).where(
-            otherNote.ne(noteRevision),
-            otherNote.revisionOf.eq(noteRevision.revisionOf),
-            otherNote.svnRevision.loe(svnRevision),
-            otherNote.createdOn.gt(noteRevision.createdOn)).notExists();
+    private BeanSubQuery sub(PEntity<?> entity){
+        return new BeanSubQuery().from(entity);
     }
     
 }

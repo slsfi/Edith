@@ -56,8 +56,6 @@ public class SubversionServiceImpl implements SubversionService {
 
     private final String documentRoot;
 
-    private final String teiMaterialRoot;
-
     private final File readCache;
 
     private final SVNURL repoSvnURL;
@@ -67,6 +65,8 @@ public class SubversionServiceImpl implements SubversionService {
     private final File svnRepo;
 
     private SVNRepository svnRepository;
+
+    private final String teiMaterialRoot;
 
     private final File workingCopies;
 

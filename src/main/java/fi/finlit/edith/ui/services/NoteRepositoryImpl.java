@@ -40,9 +40,9 @@ import fi.finlit.edith.domain.UserRepository;
  */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository{
 
-    private final UserRepository userRepository;
-
     private final TimeService timeService;
+
+    private final UserRepository userRepository;
 
     public NoteRepositoryImpl(
             @Inject SessionFactory sessionFactory,
@@ -141,6 +141,20 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
+    public GridDataSource queryDictionary(String searchTerm) {
+        Assert.notNull(searchTerm);
+        if (!searchTerm.equals("*")){
+            BooleanBuilder builder = new BooleanBuilder();
+            builder.or(termWithNotes.basicForm.contains(searchTerm, false));
+            builder.or(termWithNotes.meaning.contains(searchTerm, false));
+            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc(), builder.getValue());
+        }else{
+            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc());
+        }
+
+    }
+
+    @Override
     public void remove(Note note, long revision) {
         Assert.notNull(note, "note was null");
 
@@ -154,20 +168,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
         getSession().save(revision);
         getSession().save(note);
-    }
-
-    @Override
-    public GridDataSource queryDictionary(String searchTerm) {
-        Assert.notNull(searchTerm);
-        if (!searchTerm.equals("*")){
-            BooleanBuilder builder = new BooleanBuilder();
-            builder.or(termWithNotes.basicForm.contains(searchTerm, false));
-            builder.or(termWithNotes.meaning.contains(searchTerm, false));
-            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc(), builder.getValue());
-        }else{
-            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc());
-        }
-
     }
 
 }

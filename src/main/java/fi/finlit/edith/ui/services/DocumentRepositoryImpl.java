@@ -32,6 +32,8 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNException;
 
 import com.mysema.commons.lang.Assert;
@@ -56,6 +58,8 @@ import fi.finlit.edith.domain.SelectedText;
  */
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements
         DocumentRepository {
+    
+    private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
     
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
 
@@ -151,7 +155,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
-        System.err.println(sel.getStartId() + " - " + sel.getEndId() + " : " + sel.getSelection());        
+        logger.info(sel.getStartId() + " - " + sel.getEndId() + " : " + sel.getSelection());        
         ElementContext context = new ElementContext(3);
         StringBuilder startBuilder = new StringBuilder();
         StringBuilder endBuilder = new StringBuilder();
@@ -175,12 +179,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     
                 } else if (event.isCharacters()) {
                     Characters chars = event.asCharacters();
-
+                    int index = 0;
+                    
                     // in start
                     if (sel.getStartId().equals(context.getPath())){
                         startBuilder.append(chars.getData());
                         String str = startBuilder.toString();                        
-                        int index = 0;
                         
                         // found first word
                         if (str.contains(sel.getFirstWord()) && !startMatched){
@@ -192,35 +196,21 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                 if (index > 0){
                                     writer.add(eventFactory.createCharacters(chars.getData().substring(0, index)));
                                 }
-                                writeStartAnchor(writer, localId);
-                            }                            
-                        }
-                        
-                        // found last word
-                        if (sel.getStartId().equals(sel.getEndId()) && str.contains(sel.getLastWord()) && !endMatched){                            
-                            int endIndex = getIndex(str, sel.getLastWord(), sel.getEndIndex());
-                            if (endIndex >= 0){
-                                endMatched = true;
-                                handled = true;
-                                endIndex = endIndex - str.length() + chars.getData().length() + sel.getLastWord().length();
-                                writer.add(eventFactory.createCharacters(chars.getData().substring(index, endIndex)));
-                                writeEndAnchor(writer, localId);
-                                if (endIndex < chars.getData().length() - 1){
-                                    writer.add(eventFactory.createCharacters(chars.getData().substring(endIndex +1)));
-                                }
-                            }else if (handled){
-                                writer.add(eventFactory.createCharacters(chars.getData().substring(index)));
+                                writeAnchor(writer, "start"+localId);
+                            }else{
+                                index = 0;
                             }
-                            
-                        }else if (handled){
-                            writer.add(eventFactory.createCharacters(chars.getData().substring(index)));
+                        }                        
+                    }
+                    
+                    // in end
+                    if (sel.getEndId().equals(context.getPath())){
+                        String str;
+                        if (sel.getStartId().equals(sel.getEndId())){
+                            str = startBuilder.toString();
+                        }else{
+                            str = endBuilder.append(chars.getData()).toString();
                         }
-                        
-                        
-                    // in end    
-                    }else if (sel.getEndId().equals(context.getPath())){
-                        endBuilder.append(chars.getData());
-                        String str = endBuilder.toString();
                         if (str.contains(sel.getLastWord()) && !endMatched){
                             int endIndex = getIndex(str, sel.getLastWord(), sel.getEndIndex());
                             
@@ -229,13 +219,16 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                 endMatched = true;
                                 handled = true;
                                 endIndex = endIndex - str.length() + chars.getData().length() + sel.getLastWord().length();
-                                writer.add(eventFactory.createCharacters(chars.getData().substring(0, endIndex)));
-                                writeEndAnchor(writer, localId);
-                                if (endIndex < chars.getData().length() - 1){
-                                    writer.add(eventFactory.createCharacters(chars.getData().substring(endIndex +1)));
-                                }
+                                writer.add(eventFactory.createCharacters(chars.getData().substring(index, endIndex)));
+                                writeAnchor(writer, "end"+localId);
+                                index = endIndex + 1;
                             }                            
                         }
+                    }
+                    
+                    // stream rest as characters
+                    if (handled && index < chars.getData().length()){
+                        writer.add(eventFactory.createCharacters(chars.getData().substring(index)));
                     }
 
                 }
@@ -250,7 +243,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
     
     private int getIndex(String str, String word, int occurrence) {
-        // TODO : take occurrence into account
+        // TODO Timo : take occurrence into account
         return str.indexOf(word);
     }
 
@@ -377,15 +370,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return copy;
     }
 
-    private void writeEndAnchor(XMLEventWriter writer, String localId) throws XMLStreamException{
+    private void writeAnchor(XMLEventWriter writer, String anchorId) throws XMLStreamException{
         writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
-        writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "end" + localId));
-        writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
-    }
-
-    private void writeStartAnchor(XMLEventWriter writer, String localId) throws XMLStreamException{
-        writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
-        writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "start" + localId));
+        writer.add(eventFactory.createAttribute("xml", XML_NS, "id", anchorId));
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
     }
 

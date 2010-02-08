@@ -19,6 +19,16 @@ import java.util.List;
  */
 public interface SubversionService {
     /**
+     *
+     * TODO Apparently returns -1 at least when there are no changes.
+     *
+     * @param svnPath
+     * @param revision
+     * @param callback
+     */
+    long commit(String svnPath, long revision, UpdateCallback callback);
+
+    /**
      * Delete the given svn path
      *
      * @param svnPath
@@ -40,16 +50,6 @@ public interface SubversionService {
     Collection<String> getEntries(String svnFolder, long revision);
 
     /**
-     * Get read access to given svn path with given revision
-     *
-     * @param svnPath svn path of file
-     * @param revision
-     * @return
-     * @throws IOException
-     */
-    InputStream getStream(String svnPath, long revision) throws IOException;
-
-    /**
      * Retrieves the latest revision number.
      *
      * @return
@@ -65,6 +65,16 @@ public interface SubversionService {
     List<Long> getRevisions(String svnPath);
 
     /**
+     * Get read access to given svn path with given revision
+     *
+     * @param svnPath svn path of file
+     * @param revision
+     * @return
+     * @throws IOException
+     */
+    InputStream getStream(String svnPath, long revision) throws IOException;
+
+    /**
      * Import the given file into SVN (SVN add + import)
      *
      * @param svnPath target path
@@ -77,15 +87,5 @@ public interface SubversionService {
      * Creates the repository and adds the directory structure.
      */
     void initialize();
-
-    /**
-     *
-     * TODO Apparently returns -1 at least when there are no changes.
-     *
-     * @param svnPath
-     * @param revision
-     * @param callback
-     */
-    long commit(String svnPath, long revision, UpdateCallback callback);
 
 }
