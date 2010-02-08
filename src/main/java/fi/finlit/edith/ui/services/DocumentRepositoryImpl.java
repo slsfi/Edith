@@ -24,6 +24,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
@@ -31,8 +32,6 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNException;
 
 import com.mysema.commons.lang.Assert;
@@ -57,8 +56,6 @@ import fi.finlit.edith.domain.SelectedText;
  */
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements
         DocumentRepository {
-
-    private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
     
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
 
@@ -67,7 +64,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private static final QName TEI_TYPE_QNAME = new QName(null, "type");
     
     private static final QName XML_ID_QNAME = new QName(XML_NS, "id");
-
+    
     private final String documentRoot;
 
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
@@ -153,12 +150,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return noteRepository.createNote(docRevision, localId,selection.getSelection()).getLatestRevision();
     }
 
-    public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText selection, String localId) throws Exception {
-        String startId = selection.getStartId();
-        String endId = selection.getEndId();
-        System.err.println(startId + " - " + endId + " : " + selection.getSelection());
-
+    public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
+        System.err.println(sel.getStartId() + " - " + sel.getEndId() + " : " + sel.getSelection());        
         ElementContext context = new ElementContext(3);
+        StringBuilder startBuilder = new StringBuilder();
+        StringBuilder endBuilder = new StringBuilder();
+        boolean startMatched = false, endMatched = false;
         
         try {
             while (reader.hasNext()) {
@@ -172,50 +169,75 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         name = element.getAttributeByName(TEI_TYPE_QNAME).getValue();
                     }
                     context.push(name);
-                    
+                                        
                 } else if (event.isEndElement()){
                     context.pop();
                     
                 } else if (event.isCharacters()) {
-                    Characters characters = event.asCharacters();
-                    String data = characters.getData();
-                    int index = 0;
+                    Characters chars = event.asCharacters();
 
-                    if (startId.equals(context.getPath())){                        
-                        index = TextUtils.getStartIndex(data, selection.getSelection());
-                        if (index > -1) {
-                            // insert start anchor : start${localId}
-                            if (index > 0) {
-                                writer.add(eventFactory.createCharacters(data.substring(0, index)));
+                    // in start
+                    if (sel.getStartId().equals(context.getPath())){
+                        startBuilder.append(chars.getData());
+                        String str = startBuilder.toString();                        
+                        int index = 0;
+                        
+                        // found first word
+                        if (str.contains(sel.getFirstWord()) && !startMatched){
+                            index = getIndex(str, sel.getFirstWord(), sel.getStartIndex());
+                            if (index >= 0){
+                                startMatched = true;
+                                handled = true;
+                                index = index - str.length() + chars.getData().length();
+                                if (index > 0){
+                                    writer.add(eventFactory.createCharacters(chars.getData().substring(0, index)));
+                                }
+                                writeStartAnchor(writer, localId);
+                            }                            
+                        }
+                        
+                        // found last word
+                        if (sel.getStartId().equals(sel.getEndId()) && str.contains(sel.getLastWord()) && !endMatched){                            
+                            int endIndex = getIndex(str, sel.getLastWord(), sel.getEndIndex());
+                            if (endIndex >= 0){
+                                endMatched = true;
+                                handled = true;
+                                endIndex = endIndex - str.length() + chars.getData().length() + sel.getLastWord().length();
+                                writer.add(eventFactory.createCharacters(chars.getData().substring(index, endIndex)));
+                                writeEndAnchor(writer, localId);
+                                if (endIndex < chars.getData().length() - 1){
+                                    writer.add(eventFactory.createCharacters(chars.getData().substring(endIndex +1)));
+                                }
+                            }else if (handled){
+                                writer.add(eventFactory.createCharacters(chars.getData().substring(index)));
                             }
-                            writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
-                            writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "start" + localId));
-                            writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
-                            logger.info("start"+localId +" added");
-                            handled = true;
-                        } else {
-                            index = 0;
+                            
+                        }else if (handled){
+                            writer.add(eventFactory.createCharacters(chars.getData().substring(index)));
+                        }
+                        
+                        
+                    // in end    
+                    }else if (sel.getEndId().equals(context.getPath())){
+                        endBuilder.append(chars.getData());
+                        String str = endBuilder.toString();
+                        if (str.contains(sel.getLastWord()) && !endMatched){
+                            int endIndex = getIndex(str, sel.getLastWord(), sel.getEndIndex());
+                            
+                            // found last word
+                            if (endIndex >= 0){
+                                endMatched = true;
+                                handled = true;
+                                endIndex = endIndex - str.length() + chars.getData().length() + sel.getLastWord().length();
+                                writer.add(eventFactory.createCharacters(chars.getData().substring(0, endIndex)));
+                                writeEndAnchor(writer, localId);
+                                if (endIndex < chars.getData().length() - 1){
+                                    writer.add(eventFactory.createCharacters(chars.getData().substring(endIndex +1)));
+                                }
+                            }                            
                         }
                     }
 
-                    if (endId.equals(context.getPath())){
-                        int end = TextUtils.getEndIndex(data, selection.getSelection());
-                        if (end > -1) {
-                            if (end > index) {
-                                writer.add(eventFactory.createCharacters(data.substring(index, end)));
-                            }
-                            writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
-                            writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "end" + localId));
-                            writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
-                            logger.info("end"+localId +" added");
-                            index = end;
-                            handled = true;
-                        }
-                    }
-
-                    if (handled && index < data.length() - 1) {
-                        writer.add(eventFactory.createCharacters(data.substring(index)));
-                    }
                 }
                 if (!handled) {
                     writer.add(event);
@@ -226,6 +248,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             reader.close();
         }
     }
+    
+    private int getIndex(String str, String word, int occurrence) {
+        // TODO : take occurrence into account
+        return str.indexOf(word);
+    }
 
     private Document createDocument(String path, String title, String description) {
         Document document = new Document();
@@ -234,7 +261,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         document.setDescription(description);
         return save(document);
     }
-
+    
     @Override
     public Collection<Document> getAll() {
         return getDocumentsOfFolder(documentRoot);
@@ -290,17 +317,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         svnService.delete(document.getSvnPath());
     }
 
-    public void streamEvents(XMLEventReader reader, XMLEventWriter writer) throws Exception {
-        try {
-            while (reader.hasNext()) {
-                writer.add(reader.nextEvent());
-            }
-        } finally {
-            writer.close();
-            reader.close();
-        }
-    }
-
     @Override
     public DocumentRevision removeNotes(DocumentRevision docRevision, final Note... notes)throws IOException {
         long newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), new UpdateCallback() {
@@ -322,6 +338,17 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
         
         return new DocumentRevision(docRevision, newRevision);
+    }
+
+    public void streamEvents(XMLEventReader reader, XMLEventWriter writer) throws Exception {
+        try {
+            while (reader.hasNext()) {
+                writer.add(reader.nextEvent());
+            }
+        } finally {
+            writer.close();
+            reader.close();
+        }
     }
 
     @Override
@@ -348,6 +375,18 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         copy.setSVNRevision(newRevision);
         noteRevisionRepository.save(copy);
         return copy;
+    }
+
+    private void writeEndAnchor(XMLEventWriter writer, String localId) throws XMLStreamException{
+        writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
+        writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "end" + localId));
+        writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
+    }
+
+    private void writeStartAnchor(XMLEventWriter writer, String localId) throws XMLStreamException{
+        writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
+        writer.add(eventFactory.createAttribute("xml", XML_NS, "id", "start" + localId));
+        writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
     }
 
 }

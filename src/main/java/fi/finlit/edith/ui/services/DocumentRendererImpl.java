@@ -30,11 +30,11 @@ public class DocumentRendererImpl implements DocumentRenderer {
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
 
-    static final Set<String> emptyElements = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
+    static final Set<String> EMPTY_ELEMENTS = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
 
-    static final Set<String> toUl = new HashSet<String>(Arrays.asList("castGroup","castList","listPerson"));
+    static final Set<String> UL_ELEMENTS = new HashSet<String>(Arrays.asList("castGroup","castList","listPerson"));
 
-    static final Set<String> toLi = new HashSet<String>(Arrays.asList("castItem","person"));
+    static final Set<String> LI_ELEMENTS = new HashSet<String>(Arrays.asList("castItem","person"));
 
     private final DocumentRepository documentRepo;
     
@@ -99,11 +99,11 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     context.push(name);
                     String path = context.getPath();
                     
-                    if (toUl.contains(localName)){
+                    if (UL_ELEMENTS.contains(localName)){
                         writer.element("ul", "class", localName);
                         if (path != null) writer.attributes("id", path);
                         
-                    }else if (toLi.contains(localName)){
+                    }else if (LI_ELEMENTS.contains(localName)){
                         writer.element("li", "class", localName);
                         if (path != null) writer.attributes("id", path);
                     
@@ -158,7 +158,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     context.pop();
                     
                     String localName = reader.getLocalName();
-                    if (!emptyElements.contains(localName)){
+                    if (!EMPTY_ELEMENTS.contains(localName)){
                         writer.end();
                     }
 
