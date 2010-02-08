@@ -5,7 +5,7 @@
     <p:title>${document.title}</p:title>  
 
     <div class="content">
-        <t:document.view document="documentRevision"/>        
+        <t:document.view document="documentRevision"/>
     </div>
     
     <p:breadcrumbs>
@@ -48,7 +48,7 @@
                     <t:loop source="docNotes" value="note">
                     <li>
                         <a href="#start${note.revisionOf.localId}" class="notelink"><em>${note.lemma}</em></a>
-                        <t:note.metadata note="note"/>                        
+                        <t:note.metadata note="note"/>
                     </li>
                     </t:loop>
                 </ul>        

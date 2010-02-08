@@ -1,5 +1,11 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
-    <t:content>
-    	${note.lemma}
-    </t:content>    
+	<t:content>
+		<span>
+			<t:if test="note.description">, <t:markdown value="note.description"/></t:if>
+			<t:if test="note.subtextSources">, <t:markdown value="note.subtextSources"/></t:if>
+			<t:if test="note.revisionOf.term">
+				<t:if test="note.revisionOf.term.meaning">, ${note.revisionOf.term.meaning}</t:if>
+			</t:if>
+		</span>
+    </t:content>
 </html>

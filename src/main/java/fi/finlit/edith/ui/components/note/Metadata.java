@@ -7,9 +7,10 @@ import fi.finlit.edith.domain.NoteRevision;
 
 @SuppressWarnings("unused")
 public class Metadata {
-    
+
     @Property
     @Parameter(required = true)
     private NoteRevision note;
+
 
 }

@@ -23,7 +23,7 @@ import fi.finlit.edith.EDITH;
 public class NoteRevision extends Identifiable{
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-    
+
     @Predicate
     private UserInfo createdBy;
 
@@ -167,21 +167,4 @@ public class NoteRevision extends Identifiable{
         }
         lemma = longText;
     }
-
-    public String getMetadata() {
-        StringBuilder sb = new StringBuilder();
-        if (description != null) {
-            sb.append(", ").append(description);
-        }
-        if (subtextSources != null) {
-            sb.append(", ").append(subtextSources);
-        }
-        if (revisionOf.getTerm() != null && revisionOf.getTerm().getMeaning() != null) {
-            sb.append(", ").append(revisionOf.getTerm().getMeaning());
-        }
-        return sb.toString();
-    }
-
-
-
 }
