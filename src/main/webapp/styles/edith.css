@@ -175,3 +175,12 @@ div.note_edit {
 .Initial:before {
 	content: "* ";
 }
+
+#listZone {
+	overflow: auto; 
+	height: 15em;
+}
+
+.note_edit th {
+	text-align: left;	
+}
