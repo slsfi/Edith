@@ -59,9 +59,7 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     }
 
     @Test
-    @Ignore
     public void importNotes() throws Exception{
-        // FIXME Lassi / Timo fix this
         assertEquals(133, noteRepo.importNotes(noteTestData));
         assertEquals(133, noteRevisionRepo.queryNotes("*").getAvailableRows());
         assertEquals(1, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
