@@ -77,12 +77,12 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void getAll() {
-        assertEquals(7, documentRepo.getAll().size());
+        assertEquals(6, documentRepo.getAll().size());
     }
 
     @Test
     public void getDocumentsOfFolder() {
-        assertEquals(7, documentRepo.getDocumentsOfFolder(documentRoot).size());
+        assertEquals(6, documentRepo.getDocumentsOfFolder(documentRoot).size());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        
+
         NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
 
         // TODO Resource handling into setup + teardown?
