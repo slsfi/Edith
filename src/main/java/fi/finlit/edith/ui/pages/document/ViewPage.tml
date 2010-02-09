@@ -18,7 +18,7 @@
         <t:dashboard/>
 
         <p>
-            <t:pagelink page="document/printPage" t:context="[document.id,revision]">${message:print}</t:pagelink>
+            <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
         </p>
 
         <div class="panel narrow">
