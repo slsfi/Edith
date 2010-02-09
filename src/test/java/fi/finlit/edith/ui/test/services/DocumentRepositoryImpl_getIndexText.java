@@ -22,6 +22,10 @@ public class DocumentRepositoryImpl_getIndexText {
         
         assertEquals(5, DocumentRepositoryImpl.getIndex("This is a is ", "is", 2));
         assertEquals(10, DocumentRepositoryImpl.getIndex("This is a is ", "is", 3));
+        
+        assertEquals(0, DocumentRepositoryImpl.getIndex("This is a", "This", 1));
+        assertEquals(8, DocumentRepositoryImpl.getIndex("This is a", "a", 1));
+        assertEquals(3, DocumentRepositoryImpl.getIndex("12 123", "123", 1));
     }
 
 }
