@@ -112,15 +112,34 @@
       <version>4.6</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.openqa.selenium.webdriver</groupId>
+      <artifactId>webdriver-htmlunit</artifactId>
+      <version>0.6.964</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openqa.selenium.webdriver</groupId>
+      <artifactId>webdriver-support</artifactId>
+      <version>0.6.964</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openqa.selenium.webdriver</groupId>
+      <artifactId>webdriver-firefox</artifactId>
+      <version>0.6.964</version>
+      <scope>test</scope>
+    </dependency>
+    
 
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>localhost.nu</id>
-      <url>http://www.localhost.nu/java/mvn</url>
-    </repository>
-  </repositories>
+	<repositories>
+		<repository>
+			<id>localhost.nu</id>
+			<url>http://www.localhost.nu/java/mvn</url>
+		</repository>
+	</repositories>
   
   <profiles>
     <profile>
