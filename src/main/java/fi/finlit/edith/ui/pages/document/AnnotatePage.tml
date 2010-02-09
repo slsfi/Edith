@@ -96,39 +96,44 @@
                         <t:errors/>
                         <table>
                         <tr>
-                        <th>${message:lemma-label}</th>
-                        <td><t:textField value="noteOnEdit.lemma"/></td>
+                          <th>${message:lemma-label}</th>
+                          <td><t:textField value="noteOnEdit.lemma"/></td>
                         </tr>
                         
                         <tr>
-                        <th>${message:basicForm-label}</th>
-                        <td><t:textField t:id="basicForm" value="termOnEdit.basicForm" t:mixins="autocomplete"/></td>
+                          <th>${message:basicForm-label}</th>
+                          <td><t:textField t:id="basicForm" value="termOnEdit.basicForm" t:mixins="autocomplete"/></td>
                         </tr>
                         
                         <tr>
-                        <th>${message:description-label}</th>                     
-                        <td><t:textField t:id="description" value="noteOnEdit.description"/></td>
+                          <th>${message:description-label}</th>                     
+                          <td><t:textField t:id="description" value="noteOnEdit.description"/></td>
 						</tr>
 
 						<tr>
-                        <th>${message:subtextSources-label}</th>                     
-                        <td><t:textField t:id="subtextSources" value="noteOnEdit.subtextSources"/></td>
+                          <th>${message:subtextSources-label}</th>                     
+                          <td><t:textField t:id="subtextSources" value="noteOnEdit.subtextSources"/></td>
 						</tr>
 						
 						<tr>
-						<!-- <th>${message:meaning-label}?</th>                     
-                        <td><t:textField t:id="meaning" value="termOnEdit.meaning"/></td> -->
+						  <!-- <th>${message:meaning-label}?</th>                     
+                          <td><t:textField t:id="meaning" value="termOnEdit.meaning"/></td> -->
                         </tr>
                         
-                        <tr><th></th><td><a id="longTextEditLink" href="#" style="display:none">${message:update}</a></td></tr>
                         <tr>
-                        <th>${message:longText-label}</th>
-                        <td><div id="longTextEdit">${noteOnEdit.longText}</div></td>
+                          <th></th>
+                          <td><a id="longTextEditLink" href="#" style="display:none">${message:update}</a></td>
+                        </tr>
+                        
+                        <tr>
+                          <th>${message:longText-label}</th>
+                          <td><div id="longTextEdit">${noteOnEdit.longText}</div></td>
                         </tr>
                         
                         <t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection"/>
                         <t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId"/>
-                        <t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId"/>                                                
+                        <t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId"/>            
+                                                            
                         </table>
                         <input type="submit" value="${message:save}"/>
                         
