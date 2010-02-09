@@ -1,5 +1,7 @@
 package fi.finlit.edith.ui.web;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -12,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.internal.runners.statements.Fail;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,6 +29,10 @@ import fi.finlit.edith.EDITH;
 public class CrawlingTest {
     private WebDriver webDriver;
     private String baseUrl = "http://localhost:8080";
+
+    private static final String USERNAME = "vesa";
+    private static final String PASSWORD = "vesa";
+
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -51,38 +58,39 @@ public class CrawlingTest {
 
     @Test
     @Ignore
-    public void crawlAnonymous() throws Exception {
-        crawl();
-    }
-
-    @Test
-    @Ignore
-    public void crawlLoggedIn() throws Exception {
+    public void browsePages() throws Exception {
         webDriver.get(baseUrl + "/login");
-        WebElement loginForm = webDriver.findElement(By.name("j_username"));
-        loginForm.sendKeys("vesa");
-        webDriver.findElement(By.name("j_password")).sendKeys("vesa");
-        loginForm.submit();
-        Set<String> visited = new HashSet<String>();
-        visited.add("/logout");
-        crawl(visited);
+        webDriver.findElement(By.name("j_username")).sendKeys(USERNAME);
+        webDriver.findElement(By.name("j_password")).sendKeys(PASSWORD);
+        webDriver.findElement(By.id("loginForm")).submit();
+        Set<String> pages = crawl();
         webDriver.get(baseUrl + "/logout");
+        for (String page : pages) {
+            webDriver.get(baseUrl + page);
+            String currentUrl = webDriver.getCurrentUrl();
+            if (!currentUrl.contains("login") && !currentUrl.contains("about")) {
+                fail(currentUrl + " should not be accessible!");
+            }
+        }
     }
 
-    private void crawl() {
-        crawl(new HashSet<String>());
-    }
-
-    private void crawl(Set<String> visited) {
+    private Set<String> crawl() {
         Stack<String> links = new Stack<String>();
+        Set<String> result = new HashSet<String>();
+        Set<String> visited = new HashSet<String>();
         links.add("/");
+        visited.add("/logout");
         while (!links.isEmpty()) {
             String current = links.pop();
             current = current.startsWith("/") ? current : "/" + current;
             if (visited.contains(current)) {
                 continue;
             }
+            result.add(current);
             webDriver.get(baseUrl + current);
+            if (webDriver.getTitle().contains("Exception")) {
+                fail(webDriver.getCurrentUrl() + " contained an exception!");
+            }
             visited.add(current);
             for (WebElement element : webDriver.findElements(By.tagName("a"))) {
                 String href = null;
@@ -100,6 +108,7 @@ public class CrawlingTest {
             }
             System.out.println(webDriver.getCurrentUrl());
         }
+        return result;
     }
 
 }
