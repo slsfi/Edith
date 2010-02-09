@@ -57,7 +57,6 @@ public class CrawlingTest {
     }
 
     @Test
-    @Ignore
     public void browsePages() throws Exception {
         webDriver.get(baseUrl + "/login");
         webDriver.findElement(By.name("j_username")).sendKeys(USERNAME);
@@ -88,10 +87,11 @@ public class CrawlingTest {
             }
             result.add(current);
             webDriver.get(baseUrl + current);
+            visited.add(current);
+            System.out.println(webDriver.getCurrentUrl());
             if (webDriver.getTitle().contains("Exception")) {
                 fail(webDriver.getCurrentUrl() + " contained an exception!");
             }
-            visited.add(current);
             for (WebElement element : webDriver.findElements(By.tagName("a"))) {
                 String href = null;
                 try {
@@ -99,14 +99,11 @@ public class CrawlingTest {
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
                 }
-                if (href == null || href.startsWith("mailto:") || href.startsWith("http")
-                        || href.contains("#")) {
-                    continue;
-                } else {
+                if (href != null && !href.startsWith("mailto:") && !href.startsWith("http")
+                        && !href.contains("#")) {
                     links.add(href);
                 }
             }
-            System.out.println(webDriver.getCurrentUrl());
         }
         return result;
     }
