@@ -53,8 +53,9 @@ public class AppModule {
     public static void contributeFilterSecurityInterceptor(
             Configuration<RequestInvocationDefinition> configuration) {
 
-        // Login page is the only one allowed for anonymous users
+        // Login and about page are the only ones allowed for anonymous users
         configuration.add(new RequestInvocationDefinition("/login", "ROLE_ANONYMOUS"));
+        configuration.add(new RequestInvocationDefinition("/about", "ROLE_ANONYMOUS"));
         configuration.add(new RequestInvocationDefinition("/assets/**", "ROLE_ANONYMOUS"));
         configuration.add(new RequestInvocationDefinition("/**", "ROLE_USER"));
     }
