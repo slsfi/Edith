@@ -1,11 +1,13 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- *
+ * 
  */
 package fi.finlit.edith.domain;
 
 import java.util.regex.Pattern;
+
+import org.joda.time.DateTime;
 
 import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -21,44 +23,44 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns=EDITH.NS)
 public class NoteRevision extends Identifiable{
-
+    
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
     @Predicate
-    private UserInfo createdBy;
-
+    private UserInfo createdBy; 
+    
     @Predicate
     private long createdOn;
-
+    
     @Predicate
     private String description;
-
+    
     @Predicate(ln="latestRevision", inv=true)
     private Note latestRevisionOf;
 
     @Predicate
-    private String lemma;
+    private String lemma; 
 
     @Predicate
-    private String longText;
-
+    private String longText; 
+       
     @Predicate
     @QueryInit({"*", "term.meaning"})
     private Note revisionOf;
-
+    
     @Predicate
     private String subtextSources;
 
     @Predicate
     private long svnRevision;
-
+    
     @Predicate
     private boolean deleted;
-
+    
     // NOTE : not persisted
     private DocumentRevision docRevision;
-
-    public NoteRevision createCopy() {
+    
+    public NoteRevision createCopy() {        
         NoteRevision copy = new NoteRevision();
         copy.setDescription(description);
         copy.setLemma(lemma);
@@ -67,7 +69,7 @@ public class NoteRevision extends Identifiable{
         copy.setSVNRevision(svnRevision);
         copy.setSubtextSources(subtextSources);
         return copy;
-
+        
     }
 
     public DocumentRevision getDocumentRevision(){
@@ -88,7 +90,7 @@ public class NoteRevision extends Identifiable{
     public String getDescription() {
         return description;
     }
-
+        
     public Note getLatestRevisionOf() {
         return latestRevisionOf;
     }
@@ -136,7 +138,7 @@ public class NoteRevision extends Identifiable{
     public void setSVNRevision(long svnRevision) {
         this.svnRevision = svnRevision;
     }
-
+ 
     public boolean isDeleted() {
         return deleted;
     }
@@ -144,11 +146,11 @@ public class NoteRevision extends Identifiable{
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
+    
     public String getLocalId(){
         return revisionOf.getLocalId();
     }
-
+    
     public String getSubtextSources() {
         return subtextSources;
     }
@@ -156,7 +158,15 @@ public class NoteRevision extends Identifiable{
     public void setSubtextSources(String subtextSources) {
         this.subtextSources = subtextSources;
     }
-
+    
+    public DateTime getCreatedOnDate() {
+        return new DateTime(createdOn);
+    }
+    
+//    public Document getDocument(){
+//        return revisionOf.getDocument();
+//    }
+ 
     public void setLemmaFromLongText(){
         if (longText.contains(" ")){
             String[] words = WHITESPACE.split(longText);

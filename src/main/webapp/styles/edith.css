@@ -172,6 +172,11 @@ div.note_edit {
     float:right;	
 }
 
+#edited_info {
+	float:right;
+    font-size: 80%;	
+}
+
 .Initial:before {
 	content: "* ";
 }

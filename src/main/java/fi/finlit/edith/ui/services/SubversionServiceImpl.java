@@ -79,6 +79,7 @@ public class SubversionServiceImpl implements SubversionService {
             AuthService authService) {
         this.clientManager = SVNClientManager.newInstance();
         this.svnCache = svnCache;
+        //System.out.println("Svncache location: " + svnCache.getAbsolutePath());
         this.readCache = new File(svnCache + "/readCache");
         this.workingCopies = new File(svnCache + "/workingCopies");
         this.svnRepo = svnRepo;

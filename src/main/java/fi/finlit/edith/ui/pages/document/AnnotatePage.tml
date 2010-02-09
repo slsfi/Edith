@@ -9,7 +9,7 @@
             <t:delegate to="documentView"/>
         </t:zone>
         <t:block t:id="documentView">
-          <t:document.view document="documentRevision"/>       
+        <t:document.view document="documentRevision"/>        
         </t:block>                
     </div>
     
@@ -31,6 +31,7 @@
             <t:document.pages document="documentRevision"/>
             <div style="clear:both;"></div>
         </div>
+
         
     </p:leftPanel>
 
@@ -83,6 +84,11 @@
                 </t:if>
                 
                 <h3>${message:noteEdit}</h3>
+                <p id="edited_info"> 
+                    <t:dateTimeFormat date="noteOnEdit.createdOnDate" format="message:dateformat-compact"/>
+                    ${noteOnEdit.createdBy.username}
+                </p>
+                <div class="cleaner"></div>
                 <div class="note_edit">
                     <em><strong>${noteOnEdit.lemma}</strong></em> 
                     <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:delete}</t:eventlink>
