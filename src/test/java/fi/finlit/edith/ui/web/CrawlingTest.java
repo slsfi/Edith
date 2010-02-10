@@ -12,11 +12,17 @@ import java.util.Stack;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
@@ -25,37 +31,65 @@ import com.mysema.commons.jetty.JettyHelper;
 import fi.finlit.edith.EDITH;
 
 public class CrawlingTest {
-    
-    // TODO : make sure resources (CSS etc) are accessible for BOTH anonymous and authenticated users
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(CrawlingTest.class);
+
+    // TODO : make sure resources (CSS etc) are accessible for BOTH anonymous and authenticated
+    // users
+
+    // TODO Empty page? Not redirected to login?
+
     private WebDriver webDriver;
     private String baseUrl = "http://localhost:8080";
 
     private static final String USERNAME = "vesa";
     private static final String PASSWORD = "vesa";
 
+    private static boolean applicationStarted = false;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        FSRepositoryFactory.setup();
-        File svnRepo = new File("target/repo");
+        if (System.getProperty("webtest") != null) {
+            applicationStarted = true;
+            FSRepositoryFactory.setup();
+            File svnRepo = new File("target/repo");
 
-        System.setProperty("org.mortbay.jetty.webapp.parentLoaderPriority", "true");
-        System.setProperty("production.mode", "false");
-        System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
-        System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
-        JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
+            System.setProperty("org.mortbay.jetty.webapp.parentLoaderPriority", "true");
+            System.setProperty("production.mode", "false");
+            System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
+            System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
+            JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
+        }
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        JettyHelper.stopJettyAtPort(8080);
+        if (applicationStarted) {
+            JettyHelper.stopJettyAtPort(8080);
+        }
     }
 
     @Before
     public void setUp() {
         webDriver = new HtmlUnitDriver();
     }
+
+    @Rule
+    public MethodRule rule = new MethodRule() {
+        @Override
+        public Statement apply(final Statement base, FrameworkMethod method, Object target) {
+            return new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    if (applicationStarted) {
+                        base.evaluate();
+                    } else {
+                        logger.debug("Skipping webtest...");
+                    }
+                }
+            };
+        }
+    };
 
     @Test
     public void browsePages() throws Exception {
@@ -89,7 +123,7 @@ public class CrawlingTest {
             result.add(current);
             webDriver.get(baseUrl + current);
             visited.add(current);
-            System.out.println(webDriver.getCurrentUrl());
+            logger.debug(webDriver.getCurrentUrl());
             if (webDriver.getTitle().contains("Exception")) {
                 fail(webDriver.getCurrentUrl() + " contained an exception!");
             }
