@@ -35,6 +35,7 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.SubversionService;
 
 /**
@@ -145,7 +146,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote2() throws IOException{
+    public void addNote2() throws IOException, NoteAdditionFailedException{
         Document document = documentRepo.getDocumentForPath(documentRoot
                 + "/Nummisuutarit rakenteistettuna.xml");
 

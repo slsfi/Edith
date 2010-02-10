@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mysema.rdfbean.dao.Repository;
 
+import fi.finlit.edith.ui.services.NoteAdditionFailedException;
+
 /**
  * DocumentRepository provides
  * 
@@ -38,8 +40,9 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @param selection
      * @return
      * @throws IOException
+     * @throws NoteAdditionFailedException 
      */
-    NoteRevision addNote(DocumentRevision docRevision, SelectedText selection) throws IOException;
+    NoteRevision addNote(DocumentRevision docRevision, SelectedText selection) throws IOException, NoteAdditionFailedException;
 
     /**
      * Update the boundaries of the given note

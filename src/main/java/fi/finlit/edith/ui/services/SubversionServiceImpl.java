@@ -117,7 +117,7 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public long commit(String svnPath, long revision, UpdateCallback callback) {
+    public long commit(String svnPath, long revision, UpdateCallback callback) throws Exception {
         File userCheckout = new File(workingCopies + "/" + authService.getUsername());
         svnPath = svnPath.substring(documentRoot.length());
         if (userCheckout.exists()) {
@@ -138,8 +138,6 @@ public class SubversionServiceImpl implements SubversionService {
                 is.close();
             }
             FileUtils.copyFile(tmp, file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         } finally {
             if (tmp != null) {
                 tmp.delete();
@@ -152,8 +150,8 @@ public class SubversionServiceImpl implements SubversionService {
     public void delete(String svnPath) {
         try {
             SVNURL targetURL = repoSvnURL.appendPath(svnPath, false);
-            System.out.println(clientManager.getCommitClient().doDelete(
-                    new SVNURL[] { targetURL }, "removed " + svnPath));
+            logger.info(clientManager.getCommitClient().doDelete(
+                    new SVNURL[] { targetURL }, "removed " + svnPath).toString());
         } catch (SVNException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

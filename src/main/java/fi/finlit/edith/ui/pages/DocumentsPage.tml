@@ -4,20 +4,24 @@
       
     <p:title>${message:documents}</p:title>  
 
-    <ul>
-    <t:loop source="documents" value="document">
-        <li>
-            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${document.title}</a>
-            ( 
-              <a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>
-            )
-        </li>    
-    </t:loop>
-    </ul>
+    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="view,annotate,removeNotes">
+        <p:viewCell>
+          <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${document.title}</a>
+        </p:viewCell>
+        <p:annotateCell>
+          <a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>
+        </p:annotateCell>
+        <p:removeNotesCell>
+          <a t:type="eventLink" t:event="removeNotes" t:context="${document.id}">${message:remove-all-notes}</a>
+        </p:removeNotesCell>
+        <p:empty>
+            <p>${message:no-documents}</p>
+        </p:empty>
+    </t:grid>
+
+    <h3>${message:add-document}</h3>
    
-   <h3>${message:add-document}</h3>
-   
-   <t:document.upload/>
+    <t:document.upload/>
        
     <p:breadcrumbs>
         <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:documents}

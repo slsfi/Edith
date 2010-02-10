@@ -20,11 +20,11 @@ import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
@@ -33,6 +33,7 @@ import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermRepository;
+import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
 /**
  * AnnotatePage provides
@@ -56,6 +57,18 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Inject
     private Block emptyBlock;
+    
+    @Inject
+    private Block infoBlock;
+    
+    @Inject
+    private Block errorBlock;
+    
+    @Inject
+    private Messages messages;
+    
+    @Property
+    private String infoMessage;
 
     @Inject
     @Property
@@ -156,9 +169,17 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onSuccessFromCreateTerm() throws IOException {
-        System.out.println(createTermSelection);
+        logger.info(createTermSelection.toString());
         DocumentRevision documentRevision = getDocumentRevision();
-        NoteRevision noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
+        
+        NoteRevision noteRevision = null;
+        try{
+            noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);    
+        }catch(NoteAdditionFailedException e){
+            logger.error(e.getMessage(), e);
+            infoMessage = messages.format("note-addition-failed");
+            return new MultiZoneUpdate("editZone", errorBlock);
+        }        
 
         // prepare view (with new revision)
         documentRevision.setRevision(noteRevision.getSvnRevision());
@@ -194,7 +215,6 @@ public class AnnotatePage extends AbstractDocumentPage {
                 term = termOnEdit;
                 termRepo.save(term);
             }
-
             noteRevision.getRevisionOf().setTerm(term);
             noteRepo.save(noteRevision.getRevisionOf());
         }
@@ -223,16 +243,13 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     List<String> onProvideCompletionsFromBasicForm(String partial) {
-
         List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
-
         List<String> matches = new ArrayList<String>(terms.size());
         for (Term term : terms) {
             matches.add(term.getBasicForm());
         }
         return matches;
     }
-
 
     public Object[] getEditContext() {
         List<String> ctx = new ArrayList<String>(selectedNotes.size());

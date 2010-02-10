@@ -189,3 +189,8 @@ div.note_edit {
 .note_edit th {
 	text-align: left;	
 }
+
+.error{
+	font-weight: bold;
+	color: red;	
+}	

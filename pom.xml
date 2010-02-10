@@ -241,6 +241,8 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <argLine>-Xms256m -Xmx512m</argLine>
 					<systemProperties>
 						<property>
 							<name>webtest</name>

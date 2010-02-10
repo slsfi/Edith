@@ -144,6 +144,14 @@
           </t:if>                            
         </t:block>
         
+        <t:block id="infoBlock">
+            ${infoMessage}
+        </t:block>
+        
+        <t:block id="errorBlock">
+            <div class="error">${infoMessage}</div>
+        </t:block>
+        
         <t:block id="emptyBlock">
             <span/>
         </t:block>

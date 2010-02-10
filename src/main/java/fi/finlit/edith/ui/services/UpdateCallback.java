@@ -20,6 +20,6 @@ public interface UpdateCallback {
      * @param source
      * @param target
      */
-    void update(InputStream source, OutputStream target);
+    void update(InputStream source, OutputStream target) throws Exception;
 
 }

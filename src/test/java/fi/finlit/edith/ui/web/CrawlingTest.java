@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.mysema.commons.jetty.JettyHelper;
 
 import fi.finlit.edith.EDITH;
@@ -71,7 +72,14 @@ public class CrawlingTest {
 
     @Before
     public void setUp() {
-        webDriver = new HtmlUnitDriver();
+        webDriver = new HtmlUnitDriver(){
+            protected WebClient modifyWebClient(WebClient client) {
+                client.setThrowExceptionOnFailingStatusCode(true);
+                client.setPrintContentOnFailingStatusCode(true);
+                client.setJavaScriptEnabled(false);
+                return client;
+            }
+        };
     }
 
     @Rule

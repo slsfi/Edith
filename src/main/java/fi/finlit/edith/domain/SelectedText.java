@@ -90,7 +90,7 @@ public class SelectedText {
         String[] words = WHITESPACE.split(selection);
         return words[words.length-1];
     }
-    
+        
     @Override
     public String toString(){
         return startId + "," + endId + ":[" + selection + "]";

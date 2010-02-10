@@ -28,7 +28,7 @@ public interface SubversionService {
      * @param revision
      * @param callback
      */
-    long commit(String svnPath, long revision, UpdateCallback callback);
+    long commit(String svnPath, long revision, UpdateCallback callback) throws Exception;
 
     /**
      * Delete the given svn path
