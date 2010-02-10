@@ -221,7 +221,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                 endIndex = endIndex - str.length() + chars.getData().length() + sel.getLastWord().length();
                                 writer.add(eventFactory.createCharacters(chars.getData().substring(index, endIndex)));
                                 writeAnchor(writer, "end"+localId);
-                                index = endIndex + 1;
+                                index = endIndex;
                             }                            
                         }
                     }
