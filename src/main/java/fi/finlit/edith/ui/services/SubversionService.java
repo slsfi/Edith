@@ -65,7 +65,7 @@ public interface SubversionService {
      * @return
      * @throws SVNException 
      */
-    long getLatestRevision(String svnPath) throws SVNException;    
+    long getLatestRevision(String svnPath);    
     
     /**
      * Get revisions of given path

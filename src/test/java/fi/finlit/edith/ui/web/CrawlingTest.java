@@ -15,8 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,6 +27,7 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import com.mysema.commons.jetty.JettyHelper;
 
 import fi.finlit.edith.EDITH;
+import fi.finlit.edith.testutil.SystemPropertyCheckRule;
 
 public class CrawlingTest {
 
@@ -40,6 +39,7 @@ public class CrawlingTest {
     // TODO Empty page? Not redirected to login?
 
     private WebDriver webDriver;
+    
     private String baseUrl = "http://localhost:8080";
 
     private static final String USERNAME = "vesa";
@@ -75,21 +75,7 @@ public class CrawlingTest {
     }
 
     @Rule
-    public MethodRule rule = new MethodRule() {
-        @Override
-        public Statement apply(final Statement base, FrameworkMethod method, Object target) {
-            return new Statement() {
-                @Override
-                public void evaluate() throws Throwable {
-                    if (applicationStarted) {
-                        base.evaluate();
-                    } else {
-                        logger.debug("Skipping webtest...");
-                    }
-                }
-            };
-        }
-    };
+    public MethodRule rule = new SystemPropertyCheckRule("webtest");
 
     @Test
     public void browsePages() throws Exception {

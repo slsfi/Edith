@@ -129,6 +129,16 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         };
     }
 
+    public static int getIndex(String str, String word, int occurrence) {
+        int index = -1;
+        while (occurrence > 0){
+            index = str.indexOf(word, index+1);
+            occurrence--;
+        }
+        return index;
+        
+    }
+
     @Override
     public void addDocument(String svnPath, File file) {
         svnService.importFile(svnPath, file);
@@ -153,7 +163,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         // persisted noteRevision has svnRevision of newly created commit
         return noteRepository.createNote(docRevision, localId,selection.getSelection()).getLatestRevision();
     }
-
+    
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
         logger.info(sel.getStartId() + " - " + sel.getEndId() + " : " + sel.getSelection());        
         ElementContext context = new ElementContext(3);
@@ -241,16 +251,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             reader.close();
         }
     }
-    
-    public static int getIndex(String str, String word, int occurrence) {
-        int index = -1;
-        while (occurrence > 0){
-            index = str.indexOf(word, index+1);
-            occurrence--;
-        }
-        return index;
-        
-    }
 
     private Document createDocument(String path, String title, String description) {
         Document document = new Document();
@@ -316,7 +316,19 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public DocumentRevision removeNotes(DocumentRevision docRevision, final Note... notes)throws IOException {
+    public DocumentRevision removeAllNotes(Document document) {
+        long revision = svnService.getLatestRevision(document.getSvnPath());
+        DocumentRevision docRevision = document.getRevision(revision);
+        List<NoteRevision> noteRevisions = noteRevisionRepository.getOfDocument(docRevision);
+        Note[] notes = new Note[noteRevisions.size()];
+        for (int i = 0; i < notes.length; i++){
+            notes[i] = noteRevisions.get(i).getRevisionOf();
+        }
+        return removeNotes(docRevision, notes);
+    }
+
+    @Override
+    public DocumentRevision removeNotes(DocumentRevision docRevision, final Note... notes){
         long newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
@@ -379,23 +391,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
         writer.add(eventFactory.createAttribute("xml", XML_NS, "id", anchorId));
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
-    }
-
-    @Override
-    public DocumentRevision removeAllNotes(Document document) throws IOException {
-        try {
-            long revision = svnService.getLatestRevision(document.getSvnPath());
-            DocumentRevision docRevision = document.getRevision(revision);
-            List<NoteRevision> noteRevisions = noteRevisionRepository.getOfDocument(docRevision);
-            Note[] notes = new Note[noteRevisions.size()];
-            for (int i = 0; i < notes.length; i++){
-                notes[i] = noteRevisions.get(i).getRevisionOf();
-            }
-            return removeNotes(docRevision, notes);
-        } catch (SVNException e) {
-            throw new IOException(e);
-        }
-        
     }
 
 }

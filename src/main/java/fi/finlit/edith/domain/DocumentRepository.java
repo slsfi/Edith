@@ -90,7 +90,7 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @return
      * @throws IOException 
      */
-    DocumentRevision removeAllNotes(Document document) throws IOException;
+    DocumentRevision removeAllNotes(Document document);
 
     /**
      * Remove the given anchors from the given Document
@@ -99,6 +99,6 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @param notes
      * @throws IOException
      */
-    DocumentRevision removeNotes(DocumentRevision docRevision, Note... notes) throws IOException;
+    DocumentRevision removeNotes(DocumentRevision docRevision, Note... notes);
 
 }

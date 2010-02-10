@@ -22,6 +22,9 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Modules {
     
+    /**
+     * @return
+     */
     Class<?>[] value();
 
 }
