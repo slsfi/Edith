@@ -82,6 +82,15 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @return
      */
     List<Long> getRevisions(Document document);
+    
+    /**
+     * Remove all notes from the given Document
+     * 
+     * @param document
+     * @return
+     * @throws IOException 
+     */
+    DocumentRevision removeAllNotes(Document document) throws IOException;
 
     /**
      * Remove the given anchors from the given Document

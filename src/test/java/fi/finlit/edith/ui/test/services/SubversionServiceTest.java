@@ -24,6 +24,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.SubversionService;
@@ -271,6 +272,17 @@ public class SubversionServiceTest extends AbstractServiceTest {
         long expected = revision + 1;
         subversionService.importFile(documentRoot + "/foobar", noteTestData);
         assertEquals(expected, subversionService.getLatestRevision());
+    }
+    
+    @Test
+    public void getLatestRevision_String() throws IOException, SVNException{
+        String svnPath = documentRoot + "/testFile.txt";
+        subversionService.importFile(svnPath, testFile);
+        subversionService.checkout(checkoutDirectory, -1);
+        File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
+        FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
+        long revision = subversionService.commit(modifiedFile);
+        assertEquals(revision, subversionService.getLatestRevision(svnPath));
     }
 
     @Test

@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
+import org.tmatesoft.svn.core.SVNException;
+
 /**
  * SubversionService provides Subversion client functionality
  *
@@ -56,6 +58,15 @@ public interface SubversionService {
      */
     long getLatestRevision();
 
+    /**
+     * Retrieves the latest revision number for the given path
+     * 
+     * @param svnPath
+     * @return
+     * @throws SVNException 
+     */
+    long getLatestRevision(String svnPath) throws SVNException;    
+    
     /**
      * Get revisions of given path
      *

@@ -202,7 +202,8 @@ public class SubversionServiceImpl implements SubversionService {
         }
     }
 
-    private long getLatestRevision(String svnPath) throws SVNException {
+    @Override
+    public long getLatestRevision(String svnPath) throws SVNException {
         List<SVNFileRevision> revisions = getFileRevisions(svnPath);
         long revision = 0;
         for (SVNFileRevision rev : revisions) {

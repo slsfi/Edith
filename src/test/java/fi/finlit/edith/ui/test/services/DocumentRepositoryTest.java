@@ -33,6 +33,7 @@ import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.SubversionService;
 
@@ -46,6 +47,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepo;
+    
+    @Inject
+    private NoteRevisionRepository noteRevisionRepo;
 
     @Inject
     private SubversionService subversionService;
@@ -235,6 +239,23 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String localId = noteRevision.getRevisionOf().getLocalId();
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));
+    }
+    
+    @Test    
+    public void removeAllNotes() throws Exception{
+        Document document = documentRepo.getDocumentForPath(documentRoot+ "/Nummisuutarit rakenteistettuna.xml");
+        String element = "play-act-sp2-p";
+        String text = "sun ullakosta ottaa";
+
+        NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentRevision docRevision = noteRevision.getDocumentRevision();
+        
+        List<NoteRevision> revs = noteRevisionRepo.getOfDocument(docRevision);
+        assertTrue(revs.size() > 0);
+        
+        docRevision = documentRepo.removeAllNotes(document);
+        revs = noteRevisionRepo.getOfDocument(docRevision);
+        assertTrue(revs.isEmpty());                
     }
 
     @Override

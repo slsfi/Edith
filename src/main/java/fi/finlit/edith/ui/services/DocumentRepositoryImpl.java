@@ -381,4 +381,21 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
     }
 
+    @Override
+    public DocumentRevision removeAllNotes(Document document) throws IOException {
+        try {
+            long revision = svnService.getLatestRevision(document.getSvnPath());
+            DocumentRevision docRevision = document.getRevision(revision);
+            List<NoteRevision> noteRevisions = noteRevisionRepository.getOfDocument(docRevision);
+            Note[] notes = new Note[noteRevisions.size()];
+            for (int i = 0; i < notes.length; i++){
+                notes[i] = noteRevisions.get(i).getRevisionOf();
+            }
+            return removeNotes(docRevision, notes);
+        } catch (SVNException e) {
+            throw new IOException(e);
+        }
+        
+    }
+
 }
