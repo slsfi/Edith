@@ -1,0 +1,7 @@
+mvn -Psks clean package
+scp target/edith.war root@edith:/opt/jetty/
+
+ssh root@edith
+service jetty stop
+mv /opt/jetty/edith.war /opt/jetty/webapps/edith.war
+service jetty start
