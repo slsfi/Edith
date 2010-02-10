@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 
@@ -87,7 +87,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-        assertTrue(content.contains(start(localId) + text + end(localId)));
+        assertTrue(content.contains("k\u00E4ski " + start(localId) + text + end(localId) + " p\u00E4\u00E4lles"));
     }
 
     @Test
