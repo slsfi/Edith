@@ -1,0 +1,9 @@
+- Find number of occurance of first word in start
+element
+- Find number of occurance of last word in start
+ element
+- If selection is one word and start id equals end id
+then start index equals end index
+
+- Get start element characters content and find
+ number of first word string occurance
