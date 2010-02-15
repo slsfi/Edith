@@ -34,9 +34,32 @@
             assertEquals(1, getOccurrenceInElement(child, text.indexOf("text"), "text"));
             assertEquals(2, getOccurrenceInElement(child, text.lastIndexOf("text"), "text"));                      
         }
-        
-        function testIsInverseSelection(){
-            // TODO
+
+        function Selection(anchorOffset, focusOffset, anchorNode, focusNode) {
+			this.anchorOffset = anchorOffset;
+			this.focusOffset = focusOffset;
+			this.anchorNode = anchorNode;
+			this.focusNode = focusNode;
+        }
+               
+        function testIsInverseSelection_In_Same_Element() {
+            var selection = new Selection(0, 100, document.getElementById("first"), document.getElementById("first"));
+            assertFalse(isInverseSelection(selection));
+        }
+
+        function testIsInverseSelection_In_Different_Elements() {
+            var selection = new Selection(0, 100, document.getElementById("first"), document.getElementById("second"));
+            assertFalse(isInverseSelection(selection));
+        }
+
+        function testIsInverseSelection_In_Same_Element_Inverted() {
+            var selection = new Selection(100, 0, document.getElementById("first"), document.getElementById("first"));
+            assertTrue(isInverseSelection(selection));
+        }
+
+        function testIsInverseSelection_In_Different_Elements_Inverted() {
+            var selection = new Selection(0, 100, document.getElementById("second"), document.getElementById("first"));
+            assertTrue(isInverseSelection(selection));
         }
         
     </script>
@@ -44,8 +67,13 @@
 </head>
 
 <body>
-    <p>Tests for getOccurrences</p>
-    <p id="paragraph">This is a paragraph with some text. The word text has multiple occurrences in this paragraph.</p>
+	<h1>Test material</h1>
+
+    <h2>Tests for getOccurrences</h2>
+    <p>This is a paragraph with some text. The word text has multiple occurrences in this paragraph.</p>
     
+    <h2>Tests for isInverseSelection</h2>
+    <p id="first">This is the first paragraph with sentences!</p>
+    <p id="second">This is the second paragraph with more sentences!</p>
 </body>
 </html>

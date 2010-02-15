@@ -33,8 +33,8 @@ var getOccurrenceInElement = function(element, offset, substr) {
 	return prevOccurrences + occurrence;
 }
 
-var isInverseSelection = function() {
-	var selection = window.getSelection();
+// tested
+var isInverseSelection = function(selection) {
 	var isInDifferentElements = selection.anchorNode != selection.focusNode;
 	if (!isInDifferentElements) {
 		return selection.anchorOffset > selection.focusOffset;
@@ -52,7 +52,7 @@ jQuery(document).ready(function() {
 			var startOffset = selection.anchorOffset;
 			var endOffset = selection.focusOffset;
 			
-			if (isInverseSelection()) {
+			if (isInverseSelection(selection)) {
 				startNode = jQuery(selection.focusNode);
 				endNode = jQuery(selection.anchorNode);
 				startOffset = selection.focusOffset;
