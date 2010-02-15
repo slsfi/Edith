@@ -41,24 +41,28 @@
 			this.anchorNode = anchorNode;
 			this.focusNode = focusNode;
         }
+        
+        function byId(id){
+            return document.getElementById(id);
+        }
                
         function testIsInverseSelection_In_Same_Element() {
-            var selection = new Selection(0, 100, document.getElementById("first"), document.getElementById("first"));
+            var selection = new Selection(0, 100, byId("first"), byId("first"));
             assertFalse(isInverseSelection(selection));
         }
 
         function testIsInverseSelection_In_Different_Elements() {
-            var selection = new Selection(0, 100, document.getElementById("first"), document.getElementById("second"));
+            var selection = new Selection(0, 100, byId("first"), byId("second"));
             assertFalse(isInverseSelection(selection));
         }
 
         function testIsInverseSelection_In_Same_Element_Inverted() {
-            var selection = new Selection(100, 0, document.getElementById("first"), document.getElementById("first"));
+            var selection = new Selection(100, 0, byId("first"), byId("first"));
             assertTrue(isInverseSelection(selection));
         }
 
         function testIsInverseSelection_In_Different_Elements_Inverted() {
-            var selection = new Selection(0, 100, document.getElementById("second"), document.getElementById("first"));
+            var selection = new Selection(0, 100, byId("second"), byId("first"));
             assertTrue(isInverseSelection(selection));
         }
 
