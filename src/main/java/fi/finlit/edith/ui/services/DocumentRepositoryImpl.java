@@ -135,8 +135,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             index = str.indexOf(word, index+1);
             occurrence--;
         }
-        return index;
-        
+        return index;        
     }
 
     @Override

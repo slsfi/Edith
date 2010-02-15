@@ -16,7 +16,7 @@ import org.apache.commons.lang.mutable.MutableInt;
  */
 public class ElementContext {
     
-    public class Item {
+    public static class Item {
         
         private final String name;
         

@@ -15,6 +15,8 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.upload.services.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.EDITH;
@@ -29,6 +31,8 @@ import fi.finlit.edith.domain.DocumentRepository;
 @SuppressWarnings("unused")
 public class Upload {    
 
+    private static final Logger logger = LoggerFactory.getLogger(Upload.class);
+    
     @Inject
     private DocumentRepository documentRepo;
     
@@ -56,7 +60,9 @@ public class Upload {
             documentRepo.addDocument(path, tempFile);    
             message = messages.format("document-stored-msg", file.getFileName());
         }finally{
-            tempFile.delete();
+            if (!tempFile.delete()){
+                logger.error("Delete of " + tempFile.getAbsolutePath() + " failed");
+            }
         }
     }
     

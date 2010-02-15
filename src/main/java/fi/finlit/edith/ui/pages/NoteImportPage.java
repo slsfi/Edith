@@ -13,6 +13,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.upload.services.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.NoteRepository;
 
@@ -24,6 +26,8 @@ import fi.finlit.edith.domain.NoteRepository;
  */
 @SuppressWarnings("unused")
 public class NoteImportPage {
+    
+    private static final Logger logger = LoggerFactory.getLogger(NoteImportPage.class);
 
     @Inject
     private NoteRepository noteRepo;
@@ -47,8 +51,12 @@ public class NoteImportPage {
             file.write(tempFile);
             int rv = noteRepo.importNotes(tempFile);
             message = messages.format("notes-imported-msg", rv);
-        } finally {
-            tempFile.delete();
+        } finally {            
+            if (!tempFile.delete()){
+                if (!tempFile.delete()){
+                    logger.error("Delete of " + tempFile.getAbsolutePath() + " failed");
+                }
+            }
         }
     }
 

@@ -140,7 +140,9 @@ public class SubversionServiceImpl implements SubversionService {
             FileUtils.copyFile(tmp, file);
         } finally {
             if (tmp != null) {
-                tmp.delete();
+                if (!tmp.delete()){
+                    logger.error("Delete of " + tmp.getAbsolutePath() + " failed");
+                }
             }
         }
         return commit(file);
