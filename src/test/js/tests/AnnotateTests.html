@@ -35,9 +35,14 @@
             assertEquals(2, getOccurrenceInElement(child, text.lastIndexOf("text"), "text"));                      
         }
         
-        function testGetOccurrenceInElement2(){
+        function testGetOccurrenceInElement2() {
             var element = jQuery("#span1");            
             assertEquals(2, getOccurrenceInElement(element, 0, "some"));
+        }
+
+        function testGetOccurrenceInElement_Substring_Longer_Than_Previous_Annotation(){
+            var element = jQuery("#span2");            
+            assertEquals(1, getOccurrenceInElement(element, 0, "some text."));
         }
 
         function Selection(anchorOffset, focusOffset, anchorNode, focusNode) {
@@ -71,6 +76,11 @@
             assertTrue(isInverseSelection(selection));
         }
 
+        function testPrevAll() {
+            var notecontent = jQuery("#prevall.notecontent").get(0);
+            var text = prevAllString(notecontent);
+            assertEquals("start This is a paragraph", text.trim().replace(/\s+/g, " "));
+        }
         
     </script>
 
@@ -85,9 +95,17 @@
     <h2>Test for getOccurrencesInElement</h2>
     <p>This is some paragraph with <span id="span1" class="notecontent">some text.</span> The word text has multiple occurrences in this paragraph.</p>
     
+    <h2>Another test for getOccurrencesInElement</h2>
+    <p>This is some paragraph with <span id="span2" class="notecontent">some text</span>. The word text has multiple occurrences in this paragraph.</p>
+    
+    
     <h2>Tests for isInverseSelection</h2>
     <p id="first">This is the first paragraph with sentences!</p>
-    <p id="second">This is the second paragraph with more sentences!</p>
-    
+	<p id="second">This is the second paragraph with more sentences!</p>
+	
+	<h2>Tests for prevAll</h2>
+	<p id="prev"><span>start</span> This is a paragraph <span
+		id="prevall" class="notecontent">this is an element inside</span> with sentences! <span>end</span>
+	</p>
 </body>
 </html>

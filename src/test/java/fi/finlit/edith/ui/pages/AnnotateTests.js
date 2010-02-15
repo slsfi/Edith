@@ -6,7 +6,7 @@ var getOccurrenceInString = function(str, substr, minIndex) {
 	for (var i = 0; i < str.length; ++i) {
 		if (str.substring(i).indexOf(substr) == 0) {
 			++occurrence;
-			if (i >= minIndex) { // TODO Verify if this works for whitespace + added '='
+			if (i >= minIndex) {
 				return occurrence;
 			}
 		}
@@ -17,7 +17,7 @@ var getOccurrenceInString = function(str, substr, minIndex) {
 // tested
 var getOccurrences = function(str, substr) {
 	var occurrence = 0;
-	for ( var i = 0; i < str.length; ++i) {
+	for (var i = 0; i < str.length; ++i) {
 		if (str.substring(i).indexOf(substr) == 0) {
 			++occurrence;
 		}
@@ -25,17 +25,26 @@ var getOccurrences = function(str, substr) {
 	return occurrence;
 }
 
-var prevAll = function(element) {
-	return element.parent().parent().children().filter(function(){
-		return element.get(0).compareDocumentPosition(this) == 4;
-	});	
+// tested
+var prevAllString = function(element) {
+	var text = new Array();
+	element = element.previousSibling;
+	while (element != null) {
+		text.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
+		element = element.previousSibling;
+	}
+	text.reverse();
+	return text.join("");			
 }
 
 // tested
 var getOccurrenceInElement = function(element, offset, substr) {
-	// TODO Handle also selections with already annotated sections
-	var occurrence = getOccurrenceInString(element.text(), substr, offset);
-	return occurrence;
+	var prevOccurrences = getOccurrences(prevAllString(element.get(0)), substr);
+	if (element.parent().hasClass("notecontent")){
+		prevOccurrences += getOccurrences(prevAllString(element.parent().get(0)), substr);
+	}
+	var occurrence = getOccurrenceInString(element.text(), substr.substring(0, element.text().length), offset);
+	return prevOccurrences + occurrence;
 }
 
 // tested
@@ -64,8 +73,7 @@ jQuery(document).ready(function() {
 				endOffset = selection.anchorOffset;
 			}
 			
-			var whitespaceRe = new RegExp(/\s/g);
-			// TODO Splitting strings like "foo  bar" returns ["foo", "", "bar"] which is not very nice I guess
+			var whitespaceRe = new RegExp(/\s+/g);
 			var selectionString = selection.toString();
 			if (selectionString.charAt(selectionString.length - 1) == " ") {
 				--endOffset;
