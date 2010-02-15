@@ -25,10 +25,19 @@ var getOccurrences = function(str, substr) {
 	return occurrence;
 }
 
+var prevAll = function(element) {
+	return element.parent().parent().children().filter(function(){
+		return element.get(0).compareDocumentPosition(this) == 4;
+	});	
+}
+
 // tested
 var getOccurrenceInElement = function(element, offset, substr) {
-	// TODO Handle also selections with already annotated sections	
+	// TODO Handle also selections with already annotated sections		
 	var prevOccurrences = getOccurrences(element.prevAll().text(), substr);
+	if (element.parent().hasClass("notecontent")){
+		prevOccurrences += getOccurrences(element.parent().prevAll().text(), substr);
+	}
 	var occurrence = getOccurrenceInString(element.text(), substr, offset);
 	return prevOccurrences + occurrence;
 }
