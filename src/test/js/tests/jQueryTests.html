@@ -8,15 +8,15 @@
     <script type="text/javascript" src="../../../main/resources/jquery-1.4.1.js"></script>     
     <script type="text/javascript">
         
-        function testPrevAll_text(){
-            var element = jQuery(":contains('Rest')").last();
-            var prevAllText = element.parent().children().text();
-            assertTrue("Lorem isn't contained", prevAllText.indexOf("Lorem") > -1);
-            assertTrue("dolorem isn't contained", prevAllText.indexOf("dolorem") > -1);
+        function testPrevAll1() {
+            var p = jQuery(":contains('paragraph')").parent();
+            var text = p.children().text();
+            assertTrue("Not contained1", text.indexOf("This is a paragraph") > -1);
+            assertTrue("Not contained2", text.indexOf("an element inside") > -1);
+            assertTrue("Not contained3", text.indexOf("with sentences!") > -1);
         }
         
-        function testPrevAll() {
-            //var p = jQuery(":contains('paragraph')").parent();
+        function testPrevAll2() {
             var p = jQuery("#prev");
             var text = p.children().text();
             assertTrue("Not contained1", text.indexOf("This is a paragraph") > -1);
@@ -35,6 +35,5 @@
     <h2>Tests for prevAll</h2>
     <p id="prev">This is a paragraph <span>this is an element inside</span> with sentences!</p>
 
-    <p>Lorem ipsum <span>dolorem</span>. Rest my case.<span>end</span></p>
 </body>
 </html>
