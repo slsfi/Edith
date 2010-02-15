@@ -76,7 +76,7 @@ jQuery(document).ready(function() {
 			var startIndex = getOccurrenceInElement(startNode, startOffset, words[0]);
 			var endIndex = startIndex;
 			if (words.length > 1) {
-				// TODO The following offset "fix" is dirty and will be broken for inverse selection
+				// TODO The following offset "fix" is dirty and will probably be broken for inverse selection
 				endIndex = getOccurrenceInElement(endNode, endOffset - words[words.length - 1].length, words[words.length - 1]);
 			}
 			Tapestry.Logging.info("Start index: " + startIndex);
