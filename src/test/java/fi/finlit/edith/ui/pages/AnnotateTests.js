@@ -1,10 +1,24 @@
+jQuery.noConflict();
+
 var getOccurrenceInString = function(str, substr, index) {
+//	var whitespaceRe = new RegExp(/\s/g); // TODO Global?
+//	str = str.replace(whitespaceRe, " ");
+//	substr = substr.replace(whitespaceRe, " ");
+//	// Increment offset when character is whitespace
+//	for (var i = index; i < str.length; ++i) {
+//		if (whitespaceRe.test(str.charAt(i))) {
+//			++index
+//		} else {
+//			break;
+//		}
+//	}
+	
 	var occurrence = 0;
-	for ( var i = 0; i < str.length; ++i) {
+	for (var i = 0; i < str.length; ++i) {
 		var currentText = str.substring(i);
 		if (currentText.startsWith(substr)) {
 			++occurrence;
-			if (i == index) {
+			if (i >= index) { // TODO Verify if this works for whitespace + added '='
 				return occurrence;
 			}
 		}
@@ -39,7 +53,11 @@ var isInverseSelection = function() {
 		return selection.anchorOffset > selection.focusOffset;
 	} else {
 		// TODO Compare ancestors in document
-		return false
+		// return true if inverse else false
+		
+		var startNode = jQuery(selection.anchorNode);
+		var endNode = jQuery(selection.focusNode);
+		return
 	}
 }
 
@@ -60,22 +78,14 @@ jQuery(document).ready(function() {
 			}
 			
 			var whitespaceRe = new RegExp(/\s/g);	
-			var words = selection.split(whitespaceRe);
+			var words = selection.toString().split(whitespaceRe);
 			var startIndex = getOccurrenceInElement(startNode, startOffset, words[0]);
 			var endIndex = startIndex;
 			if (words.length > 1) {
-				endIndex = getOccurrenceInElement(endNode, endOffset, words[words.length - 1]);
+				// TODO The following offset "fix" is dirty and will be broken for inverse selection
+				endIndex = getOccurrenceInElement(endNode, endOffset - words[words.length - 1].length, words[words.length - 1]);
 			}
-				
-//			text = text.replace(whitespaceRe, " ");
-//			selection = selection.toString().replace(whitespaceRe, " ");
-//			// Increment offset when character is whitespace
-//			for (var i = offset; i < text.length; ++i) {
-//				if (re.test(text.charAt(i))) {
-//					++offset
-//				} else {
-//					break;
-//				}
-//			}
+			Tapestry.Logging.info("Start index: " + startIndex);
+			Tapestry.Logging.info("End index: " + endIndex);
 	});
 });
