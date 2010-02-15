@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNRevisionProperty;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -219,14 +220,18 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public List<Long> getRevisions(String svnPath) {
+    public List<SubversionRevisionInfo> getRevisions(String svnPath) {
         try {
             List<SVNFileRevision> revisions = getFileRevisions(svnPath);
-            List<Long> revisionIds = new ArrayList<Long>(revisions.size());
+            List<SubversionRevisionInfo> revisionInfos = new ArrayList<SubversionRevisionInfo>(revisions.size());
             for (SVNFileRevision rev : revisions) {
-                revisionIds.add(rev.getRevision());
+//                revisionInfos.add(rev.getRevision());
+                long svnRevision = rev.getRevision();
+                String created = rev.getRevisionProperties().getStringValue(SVNRevisionProperty.DATE);
+                String creator = rev.getRevisionProperties().getStringValue(SVNRevisionProperty.AUTHOR);
+                revisionInfos.add(new SubversionRevisionInfo(svnRevision, created, creator));
             }
-            return revisionIds;
+            return revisionInfos;
         } catch (SVNException s) {
             throw new RuntimeException(s.getMessage(), s);
         }

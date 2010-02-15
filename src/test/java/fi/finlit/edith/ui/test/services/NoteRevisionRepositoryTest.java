@@ -9,10 +9,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.util.List;
 
-import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
@@ -26,6 +24,7 @@ import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.AdminService;
+import fi.finlit.edith.ui.services.SubversionRevisionInfo;
 
 /**
  * NoteRevisionRepositoryTest provides
@@ -61,8 +60,8 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         adminService.removeNotesAndTerms();
 
         document = documentRepo.getDocumentForPath(testDocument);
-        List<Long> revisions = documentRepo.getRevisions(document);
-        latestRevision = revisions.get(revisions.size() - 1).longValue();
+        List<SubversionRevisionInfo> revisions = documentRepo.getRevisions(document);
+        latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         docRev = document.getRevision(latestRevision);
         noteRepo.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");

@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.tmatesoft.svn.core.SVNException;
 
+
 /**
  * SubversionService provides Subversion client functionality
  *
@@ -73,7 +74,7 @@ public interface SubversionService {
      * @param svnPath
      * @return
      */
-    List<Long> getRevisions(String svnPath);
+    List<SubversionRevisionInfo> getRevisions(String svnPath);
 
     /**
      * Get read access to given svn path with given revision

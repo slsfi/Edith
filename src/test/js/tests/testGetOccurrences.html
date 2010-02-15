@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Tests for getOccurrences</title>
+    <link rel="stylesheet" type="text/css" href="../jsunit/css/jsUnitStyle.css"/>
+    <script type="text/javascript" src="../jsunit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="../../../main/resources/jquery-1.4.1.js"></script>     
+    <script type="text/javascript" src="../../java/fi/finlit/edith/ui/pages/AnnotateTests.js"></script>
+    <script type="text/javascript">
+
+        function testGetOccurrences() {
+            assertEquals(1, getOccurrenceInString("Hello World", "World", 6));
+        }
+
+    </script>
+
+</head>
+
+<body>
+    <p>Tests for getOccurrences</p>
+</body>
+</html>

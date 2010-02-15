@@ -15,8 +15,7 @@ var getOccurrenceInString = function(str, substr, index) {
 	
 	var occurrence = 0;
 	for (var i = 0; i < str.length; ++i) {
-		var currentText = str.substring(i);
-		if (currentText.startsWith(substr)) {
+		if (str.substring(i).indexOf(substr) == 0) {
 			++occurrence;
 			if (i >= index) { // TODO Verify if this works for whitespace + added '='
 				return occurrence;

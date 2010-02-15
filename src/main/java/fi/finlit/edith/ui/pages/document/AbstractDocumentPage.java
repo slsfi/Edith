@@ -17,6 +17,7 @@ import com.mysema.tapestry.core.Context;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.ui.services.SubversionRevisionInfo;
 
 /**
  * AbstractDocumentPage provides
@@ -35,16 +36,17 @@ public class AbstractDocumentPage {
     private DocumentRevision documentRevision;
 
     @Property
-    private List<Long> revisions;
+    private List<SubversionRevisionInfo> revisions;
 
     @Property
-    private Long revision;
+    private SubversionRevisionInfo revision;
 
     private Context context;
 
     void onActivate(EventContext context) throws SVNException{
         this.context = new Context(context);
         document = documentRepo.getById(context.get(String.class, 0));
+
         revisions = documentRepo.getRevisions(document);
         long revision;
         if (context.getCount() > 1){
@@ -52,7 +54,7 @@ public class AbstractDocumentPage {
             revision = context.get(Long.class, 1);
         }else{
             // get latest
-            revision = revisions.get(revisions.size() - 1);
+            revision = revisions.get(revisions.size() - 1).getSvnRevision();
         }
         documentRevision = new DocumentRevision(document, revision);
 

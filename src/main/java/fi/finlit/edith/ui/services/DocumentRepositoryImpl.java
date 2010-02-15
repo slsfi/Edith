@@ -254,7 +254,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
         
         if (!startMatched || !endMatched){
-            throw new NoteAdditionFailedException(sel, localId);
+            throw new NoteAdditionFailedException(sel, localId, startMatched, endMatched);
         }
     }
 
@@ -310,7 +310,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public List<Long> getRevisions(Document document) {
+    public List<SubversionRevisionInfo> getRevisions(Document document) {
         Assert.notNull(document, "document was null");
         return svnService.getRevisions(document.getSvnPath());
     }
