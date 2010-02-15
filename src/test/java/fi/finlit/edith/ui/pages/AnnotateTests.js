@@ -1,15 +1,34 @@
-var findOccurance = function(str, substr, index) {
-	var occurance = 0;
+var getOccurrenceInString = function(str, substr, index) {
+	var occurrence = 0;
 	for ( var i = 0; i < str.length; ++i) {
 		var currentText = str.substring(i);
 		if (currentText.startsWith(substr)) {
-			++occurance;
+			++occurrence;
 			if (i == index) {
-				return occurance;
+				return occurrence;
 			}
 		}
 	}
 	return null;
+}
+
+var getOccurrences = function(str, substr) {
+	var occurrence = 0;
+	for ( var i = 0; i < str.length; ++i) {
+		var currentText = str.substring(i);
+		if (currentText.startsWith(substr)) {
+			++occurrence;
+		}
+	}
+	return occurrence;
+}
+
+var getOccurrenceInElement = function(element, offset, substr) {
+	// TODO Handle also selections with already annotated sections	
+	var ancestor = element.parent();
+	var prevOccurrences = getOccurrences(element.prevAll().text(), substr);
+	var occurrence = getOccurrenceInString(element.text(), substr, offset);
+	return prevOccurrences + occurrence;
 }
 
 var isInverseSelection = function() {
@@ -28,41 +47,35 @@ jQuery(document).ready(function() {
 		// Basic case
 		jQuery("button").click(function() {
 			var selection = window.getSelection();
-			var anchorNode = jQuery(selection.anchorNode);
-			var focusNode = jQuery(selection.focusNode);
-			var anchorOffset = selection.anchorOffset;
-			var focusOffset = selection.focusOffset;
-			var offset = null;
-			var text = anchorNode.parent().text();
+			var startNode = jQuery(selection.anchorNode);
+			var endNode = jQuery(selection.focusNode);
+			var startOffset = selection.anchorOffset;
+			var endOffset = selection.focusOffset;
 			
-			/* TODO 
-			 * Detect start and end element
-			 * 
-			 * If start != end and first word != last word
-			 * 		Find occurrences in previous siblings for start and end
-			 * Else
-			 * 		Handle only start
-			 * 
-			 * Start index = occurrence of selection's first word in start element
-			 * End index = occurrence of selections's last word in end element
-			 */
-
-			// TODO anchorNode switch focusNode and anchorOffset switch focusOffset if inverseSelection
-			offset = isInverseSelection() ? focusOffset : anchorOffset; 
-			
-			// This works only for single element selections
-			var re = new RegExp(/\s/g);
-			text = text.replace(re, " ");
-			selection = selection.toString().replace(re, " ");
-			// Increment offset when character is whitespace
-			for (var i = offset; i < text.length; ++i) {
-				if (re.test(text.charAt(i))) {
-					++offset
-				} else {
-					break;
-				}
+			if (isInverseSelection()) {
+				startNode = jQuery(selection.focusNode);
+				endNode = jQuery(selection.anchorNode);
+				startOffset = selection.focusOffset;
+				endOffset = selection.anchorOffset;
 			}
-			var occurance = findOccurance(text, selection, offset)
-			Tapestry.Logging.info("Occurance: " + occurance);
+			
+			var whitespaceRe = new RegExp(/\s/g);	
+			var words = selection.split(whitespaceRe);
+			var startIndex = getOccurrenceInElement(startNode, startOffset, words[0]);
+			var endIndex = startIndex;
+			if (words.length > 1) {
+				endIndex = getOccurrenceInElement(endNode, endOffset, words[words.length - 1]);
+			}
+				
+//			text = text.replace(whitespaceRe, " ");
+//			selection = selection.toString().replace(whitespaceRe, " ");
+//			// Increment offset when character is whitespace
+//			for (var i = offset; i < text.length; ++i) {
+//				if (re.test(text.charAt(i))) {
+//					++offset
+//				} else {
+//					break;
+//				}
+//			}
 	});
 });
