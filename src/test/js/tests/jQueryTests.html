@@ -7,13 +7,26 @@
     <script type="text/javascript" src="../jsunit/app/jsUnitCore.js"></script>
     <script type="text/javascript" src="../../../main/resources/jquery-1.4.1.js"></script>     
     <script type="text/javascript">
-        
+		function prevAllString(element) {
+			var ss = new Array();
+			element = element.previousSibling;
+			while (element != null) {
+				ss.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
+				element = element.previousSibling;
+			}
+			ss.reverse();
+			var result = "";
+			for (var i = 0; i < ss.length; ++i) {
+				result += ss[i];
+			}
+			return result;
+		}
+
+    
         function testPrevAll() {
-            var p = jQuery("#prev");
-            var text = p.text();
-            assertTrue("Not contained1", text.indexOf("This is a paragraph") > -1);
-            assertTrue("Not contained2", text.indexOf("an element inside") > -1);
-            assertTrue("Not contained3", text.indexOf("with sentences!") > -1);
+            var notecontent = jQuery(".notecontent").get(0);
+            var text = prevAllString(notecontent);
+            assertEquals("start This is a paragraph", text.trim().replace(/\s+/g, " "));
         }
         
     </script>
