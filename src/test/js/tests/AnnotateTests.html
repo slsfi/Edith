@@ -30,8 +30,11 @@
             var text = child.text();
             
             assertEquals(1, getOccurrenceInElement(child, text.indexOf("text"), "text"));
-            assertEquals(2, getOccurrenceInElement(child, text.lastIndexOf("text"), "text"));            
-            
+            assertEquals(2, getOccurrenceInElement(child, text.lastIndexOf("text"), "text"));                      
+        }
+        
+        function testIsInverseSelection(){
+            // TODO
         }
         
     </script>
