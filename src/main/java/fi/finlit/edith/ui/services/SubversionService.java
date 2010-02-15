@@ -74,7 +74,7 @@ public interface SubversionService {
      * @param svnPath
      * @return
      */
-    List<SubversionRevisionInfo> getRevisions(String svnPath);
+    List<RevisionInfo> getRevisions(String svnPath);
 
     /**
      * Get read access to given svn path with given revision

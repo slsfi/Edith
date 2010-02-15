@@ -220,16 +220,16 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public List<SubversionRevisionInfo> getRevisions(String svnPath) {
+    public List<RevisionInfo> getRevisions(String svnPath) {
         try {
             List<SVNFileRevision> revisions = getFileRevisions(svnPath);
-            List<SubversionRevisionInfo> revisionInfos = new ArrayList<SubversionRevisionInfo>(revisions.size());
+            List<RevisionInfo> revisionInfos = new ArrayList<RevisionInfo>(revisions.size());
             for (SVNFileRevision rev : revisions) {
 //                revisionInfos.add(rev.getRevision());
                 long svnRevision = rev.getRevision();
                 String created = rev.getRevisionProperties().getStringValue(SVNRevisionProperty.DATE);
                 String creator = rev.getRevisionProperties().getStringValue(SVNRevisionProperty.AUTHOR);
-                revisionInfos.add(new SubversionRevisionInfo(svnRevision, created, creator));
+                revisionInfos.add(new RevisionInfo(svnRevision, created, creator));
             }
             return revisionInfos;
         } catch (SVNException s) {

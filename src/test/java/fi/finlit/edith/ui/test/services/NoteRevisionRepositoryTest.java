@@ -24,7 +24,7 @@ import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.SubversionRevisionInfo;
+import fi.finlit.edith.ui.services.RevisionInfo;
 
 /**
  * NoteRevisionRepositoryTest provides
@@ -60,7 +60,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         adminService.removeNotesAndTerms();
 
         document = documentRepo.getDocumentForPath(testDocument);
-        List<SubversionRevisionInfo> revisions = documentRepo.getRevisions(document);
+        List<RevisionInfo> revisions = documentRepo.getRevisions(document);
         latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         docRev = document.getRevision(latestRevision);

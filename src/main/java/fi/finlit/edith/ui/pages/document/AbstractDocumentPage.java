@@ -17,7 +17,7 @@ import com.mysema.tapestry.core.Context;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.ui.services.SubversionRevisionInfo;
+import fi.finlit.edith.ui.services.RevisionInfo;
 
 /**
  * AbstractDocumentPage provides
@@ -36,10 +36,10 @@ public class AbstractDocumentPage {
     private DocumentRevision documentRevision;
 
     @Property
-    private List<SubversionRevisionInfo> revisions;
+    private List<RevisionInfo> revisions;
 
     @Property
-    private SubversionRevisionInfo revision;
+    private RevisionInfo revision;
 
     private Context context;
 

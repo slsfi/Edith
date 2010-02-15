@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mysema.rdfbean.dao.Repository;
 
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
-import fi.finlit.edith.ui.services.SubversionRevisionInfo;
+import fi.finlit.edith.ui.services.RevisionInfo;
 
 /**
  * DocumentRepository provides
@@ -85,7 +85,7 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @param document
      * @return
      */
-    List<SubversionRevisionInfo> getRevisions(Document document);
+    List<RevisionInfo> getRevisions(Document document);
     
     /**
      * Remove all notes from the given Document

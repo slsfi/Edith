@@ -16,7 +16,7 @@ import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.SubversionRevisionInfo;
+import fi.finlit.edith.ui.services.RevisionInfo;
 
 /**
  * TestDataPage provides
@@ -49,7 +49,7 @@ public class DummyDataPage {
 
     void onAddAnnotateTestData() throws SVNException{
         Document document = documentRepository.getDocumentForPath(TEST_DOCUMENT_SVNPATH);
-        List<SubversionRevisionInfo> revisions = documentRepository.getRevisions(document);
+        List<RevisionInfo> revisions = documentRepository.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         DocumentRevision docRev = document.getRevision(latestRevision);

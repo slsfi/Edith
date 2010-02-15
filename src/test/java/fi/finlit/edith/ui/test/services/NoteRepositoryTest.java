@@ -26,7 +26,7 @@ import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.SubversionRevisionInfo;
+import fi.finlit.edith.ui.services.RevisionInfo;
 
 /**
  * NoteRepositoryTest provides
@@ -86,7 +86,7 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     @Ignore
     public void createNote() throws SVNException{
         Document document = documentRepo.getDocumentForPath(testDocument);
-        List<SubversionRevisionInfo> revisions = documentRepo.getRevisions(document);
+        List<RevisionInfo> revisions = documentRepo.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         String longText = UUID.randomUUID().toString();
@@ -99,7 +99,7 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     @Test
     public void remove(){
         Document document = documentRepo.getDocumentForPath(testDocument);
-        List<SubversionRevisionInfo> revisions = documentRepo.getRevisions(document);
+        List<RevisionInfo> revisions = documentRepo.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         String longText = UUID.randomUUID().toString();

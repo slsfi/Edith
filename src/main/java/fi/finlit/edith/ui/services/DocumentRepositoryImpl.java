@@ -310,7 +310,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public List<SubversionRevisionInfo> getRevisions(Document document) {
+    public List<RevisionInfo> getRevisions(Document document) {
         Assert.notNull(document, "document was null");
         return svnService.getRevisions(document.getSvnPath());
     }

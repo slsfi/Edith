@@ -7,7 +7,7 @@ package fi.finlit.edith.ui.services;
  * @author tiwe
  * @version $Id$
  */
-public class SubversionRevisionInfo {
+public class RevisionInfo {
 
     private final long svnRevision;
     
@@ -15,7 +15,7 @@ public class SubversionRevisionInfo {
     
     private final String creator;
     
-    public SubversionRevisionInfo(long svnRevision, String created, String creator){
+    public RevisionInfo(long svnRevision, String created, String creator){
         this.svnRevision = svnRevision;
         this.created = created;
         this.creator = creator;
