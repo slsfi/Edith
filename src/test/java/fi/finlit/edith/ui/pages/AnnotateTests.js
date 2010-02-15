@@ -33,13 +33,9 @@ var prevAll = function(element) {
 
 // tested
 var getOccurrenceInElement = function(element, offset, substr) {
-	// TODO Handle also selections with already annotated sections		
-	var prevOccurrences = getOccurrences(element.prevAll().text(), substr);
-	if (element.parent().hasClass("notecontent")){
-		prevOccurrences += getOccurrences(element.parent().prevAll().text(), substr);
-	}
+	// TODO Handle also selections with already annotated sections
 	var occurrence = getOccurrenceInString(element.text(), substr, offset);
-	return prevOccurrences + occurrence;
+	return occurrence;
 }
 
 // tested
