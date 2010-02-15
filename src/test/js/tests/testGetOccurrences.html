@@ -9,11 +9,18 @@
     <script type="text/javascript" src="../../java/fi/finlit/edith/ui/pages/AnnotateTests.js"></script>
     <script type="text/javascript">
 
-        function testGetOccurrences() {
+        function testGetOccurrenceInString() {
             assertEquals(1, getOccurrenceInString("Hello World", "World", 6));
             assertEquals(1, getOccurrenceInString("Hello World", "World", 5));
             assertEquals(3, getOccurrenceInString("Hello World Wor World", "Wor", 15));
             assertEquals(0, getOccurrenceInString("Hello World", "Mary", 6));
+        }
+        
+        function testGetOccurrences(){
+            assertEquals(0, getOccurrences("Hello World", "Mary"));
+            assertEquals(3, getOccurrences("Hello World", "l"));
+            assertEquals(1, getOccurrences("Hello World", "Hello"));
+            assertEquals(1, getOccurrences("Hello World", "World"));
         }
 
     </script>

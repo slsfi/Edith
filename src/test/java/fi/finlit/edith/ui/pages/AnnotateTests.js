@@ -12,6 +12,7 @@ jQuery.noConflict();
 //	}
 //}
 
+// tested
 var getOccurrenceInString = function(str, substr, minIndex) {	
 	var occurrence = 0;
 	for (var i = 0; i < str.length; ++i) {
@@ -25,11 +26,11 @@ var getOccurrenceInString = function(str, substr, minIndex) {
 	return 0;
 }
 
+// tested
 var getOccurrences = function(str, substr) {
 	var occurrence = 0;
 	for ( var i = 0; i < str.length; ++i) {
-		var currentText = str.substring(i);
-		if (currentText.startsWith(substr)) {
+		if (str.substring(i).indexOf(substr) == 0) {
 			++occurrence;
 		}
 	}
