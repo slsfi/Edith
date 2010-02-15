@@ -11,6 +11,9 @@
 
         function testGetOccurrences() {
             assertEquals(1, getOccurrenceInString("Hello World", "World", 6));
+            assertEquals(1, getOccurrenceInString("Hello World", "World", 5));
+            assertEquals(3, getOccurrenceInString("Hello World Wor World", "Wor", 15));
+            assertEquals(0, getOccurrenceInString("Hello World", "Mary", 6));
         }
 
     </script>

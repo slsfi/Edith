@@ -1,28 +1,28 @@
 jQuery.noConflict();
 
-var getOccurrenceInString = function(str, substr, index) {
-//	var whitespaceRe = new RegExp(/\s/g); // TODO Global?
-//	str = str.replace(whitespaceRe, " ");
-//	substr = substr.replace(whitespaceRe, " ");
-//	// Increment offset when character is whitespace
-//	for (var i = index; i < str.length; ++i) {
-//		if (whitespaceRe.test(str.charAt(i))) {
-//			++index
-//		} else {
-//			break;
-//		}
+//var whitespaceRe = new RegExp(/\s/g); // TODO Global?
+//str = str.replace(whitespaceRe, " ");
+//substr = substr.replace(whitespaceRe, " ");
+//// Increment offset when character is whitespace
+//for (var i = index; i < str.length; ++i) {
+//	if (whitespaceRe.test(str.charAt(i))) {
+//		++index
+//	} else {
+//		break;
 //	}
-	
+//}
+
+var getOccurrenceInString = function(str, substr, minIndex) {	
 	var occurrence = 0;
 	for (var i = 0; i < str.length; ++i) {
 		if (str.substring(i).indexOf(substr) == 0) {
 			++occurrence;
-			if (i >= index) { // TODO Verify if this works for whitespace + added '='
+			if (i >= minIndex) { // TODO Verify if this works for whitespace + added '='
 				return occurrence;
 			}
 		}
 	}
-	return null;
+	return 0;
 }
 
 var getOccurrences = function(str, substr) {
