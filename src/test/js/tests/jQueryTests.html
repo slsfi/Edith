@@ -8,14 +8,13 @@
     <script type="text/javascript" src="../../../main/resources/jquery-1.4.1.js"></script>     
     <script type="text/javascript">
         
-        function testPrevAll1() {
+        function testPrevAll() {
             var p = jQuery("#prev");
-            var text = p.children().text();
+            var text = p.text();
             assertTrue("Not contained1", text.indexOf("This is a paragraph") > -1);
             assertTrue("Not contained2", text.indexOf("an element inside") > -1);
             assertTrue("Not contained3", text.indexOf("with sentences!") > -1);
         }
-   
         
     </script>
 
@@ -25,6 +24,10 @@
     <h1>Test material</h1>
     
     <h2>Tests for prevAll</h2>
-    <p id="prev">This is a paragraph <span>this is an element inside</span> with sentences!</p>
+    <p id="prev">
+        <span>start</span> 
+        This is a paragraph <span class="notecontent">this is an element inside</span> with sentences! 
+        <span>end</span>
+    </p>
 </body>
 </html>

@@ -34,6 +34,11 @@
             assertEquals(1, getOccurrenceInElement(child, text.indexOf("text"), "text"));
             assertEquals(2, getOccurrenceInElement(child, text.lastIndexOf("text"), "text"));                      
         }
+        
+        function testGetOccurrenceInElement2(){
+            var element = jQuery("#span1");            
+            assertEquals(2, getOccurrenceInElement(element, 0, "some"));
+        }
 
         function Selection(anchorOffset, focusOffset, anchorNode, focusNode) {
 			this.anchorOffset = anchorOffset;
@@ -76,6 +81,9 @@
 
     <h2>Tests for getOccurrences</h2>
     <p>This is a paragraph with some text. The word text has multiple occurrences in this paragraph.</p>
+    
+    <h2>Test for getOccurrencesInElement</h2>
+    <p>This is some paragraph with <span id="span1" class="notecontent">some text.</span> The word text has multiple occurrences in this paragraph.</p>
     
     <h2>Tests for isInverseSelection</h2>
     <p id="first">This is the first paragraph with sentences!</p>
