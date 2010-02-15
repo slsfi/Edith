@@ -51,12 +51,7 @@ var isInverseSelection = function() {
 	if (!isInDifferentElements) {
 		return selection.anchorOffset > selection.focusOffset;
 	} else {
-		// TODO Compare ancestors in document
-		// return true if inverse else false
-		
-		var startNode = jQuery(selection.anchorNode);
-		var endNode = jQuery(selection.focusNode);
-		return
+		return selection.anchorNode.compareDocumentPosition(selection.focusNode) == 2;
 	}
 }
 
