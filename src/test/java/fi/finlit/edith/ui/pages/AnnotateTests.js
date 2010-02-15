@@ -61,7 +61,11 @@ jQuery(document).ready(function() {
 			
 			var whitespaceRe = new RegExp(/\s/g);
 			// TODO Splitting strings like "foo  bar" returns ["foo", "", "bar"] which is not very nice I guess
-			var words = selection.toString().trim().split(whitespaceRe);
+			var selectionString = selection.toString();
+			if (selectionString.charAt(selectionString.length - 1) == " ") {
+				--endOffset;
+			}
+			var words = selectionString.trim().split(whitespaceRe);
 			var startIndex = getOccurrenceInElement(startNode, startOffset, words[0]);
 			var endIndex = startIndex;
 			if (words.length > 1) {
