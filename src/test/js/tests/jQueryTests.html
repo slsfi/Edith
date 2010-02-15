@@ -8,18 +8,14 @@
     <script type="text/javascript" src="../../../main/resources/jquery-1.4.1.js"></script>     
     <script type="text/javascript">
 		function prevAllString(element) {
-			var ss = new Array();
+			var text = new Array();
 			element = element.previousSibling;
 			while (element != null) {
-				ss.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
+				text.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
 				element = element.previousSibling;
 			}
-			ss.reverse();
-			var result = "";
-			for (var i = 0; i < ss.length; ++i) {
-				result += ss[i];
-			}
-			return result;
+			text.reverse();
+			return text.join("");			
 		}
 
     
