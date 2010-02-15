@@ -72,13 +72,15 @@ jQuery(document).ready(function() {
 				endOffset = selection.anchorOffset;
 			}
 			
-			var whitespaceRe = new RegExp(/\s/g);	
-			var words = selection.toString().split(whitespaceRe);
+			var whitespaceRe = new RegExp(/\s/g);
+			// TODO Splitting strings like "foo  bar" returns ["foo", "", "bar"] which is not very nice I guess
+			var words = selection.toString().trim().split(whitespaceRe);
 			var startIndex = getOccurrenceInElement(startNode, startOffset, words[0]);
 			var endIndex = startIndex;
 			if (words.length > 1) {
 				// TODO The following offset "fix" is dirty and will probably be broken for inverse selection
-				endIndex = getOccurrenceInElement(endNode, endOffset - words[words.length - 1].length, words[words.length - 1]);
+				var lastWord = words[words.length - 1];
+				endIndex = getOccurrenceInElement(endNode, endOffset - lastWord.length, lastWord);
 			}
 			Tapestry.Logging.info("Start index: " + startIndex);
 			Tapestry.Logging.info("End index: " + endIndex);
