@@ -1,17 +1,5 @@
 jQuery.noConflict();
 
-//var whitespaceRe = new RegExp(/\s/g); // TODO Global?
-//str = str.replace(whitespaceRe, " ");
-//substr = substr.replace(whitespaceRe, " ");
-//// Increment offset when character is whitespace
-//for (var i = index; i < str.length; ++i) {
-//	if (whitespaceRe.test(str.charAt(i))) {
-//		++index
-//	} else {
-//		break;
-//	}
-//}
-
 // tested
 var getOccurrenceInString = function(str, substr, minIndex) {	
 	var occurrence = 0;
