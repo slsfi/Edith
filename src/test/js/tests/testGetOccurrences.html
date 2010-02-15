@@ -21,13 +21,26 @@
             assertEquals(3, getOccurrences("Hello World", "l"));
             assertEquals(1, getOccurrences("Hello World", "Hello"));
             assertEquals(1, getOccurrences("Hello World", "World"));
+            assertEquals(1, getOccurrences(" Hello World", "World"));
+            assertEquals(1, getOccurrences("Hello World", " World"));
         }
-
+         
+        function testGetOccurrenceInElement(){
+            var child = jQuery(":contains('text')").last();
+            var text = child.text();
+            
+            assertEquals(1, getOccurrenceInElement(child, text.indexOf("text"), "text"));
+            assertEquals(2, getOccurrenceInElement(child, text.lastIndexOf("text"), "text"));            
+            
+        }
+        
     </script>
 
 </head>
 
 <body>
     <p>Tests for getOccurrences</p>
+    <p id="paragraph">This is a paragraph with some text. The word text has multiple occurrences in this paragraph.</p>
+    
 </body>
 </html>

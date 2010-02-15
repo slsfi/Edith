@@ -37,9 +37,9 @@ var getOccurrences = function(str, substr) {
 	return occurrence;
 }
 
+// tested
 var getOccurrenceInElement = function(element, offset, substr) {
 	// TODO Handle also selections with already annotated sections	
-	var ancestor = element.parent();
 	var prevOccurrences = getOccurrences(element.prevAll().text(), substr);
 	var occurrence = getOccurrenceInString(element.text(), substr, offset);
 	return prevOccurrences + occurrence;
@@ -47,8 +47,7 @@ var getOccurrenceInElement = function(element, offset, substr) {
 
 var isInverseSelection = function() {
 	var selection = window.getSelection();
-	// TODO Parent node check is not enough, we need to get ancestor with ID (jQuery)
-	var isInDifferentElements = selection.anchorNode.parentNode != selection.focusNode.parentNode;
+	var isInDifferentElements = selection.anchorNode != selection.focusNode;
 	if (!isInDifferentElements) {
 		return selection.anchorOffset > selection.focusOffset;
 	} else {
