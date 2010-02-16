@@ -6,11 +6,13 @@ var TextSelector = {
 		endId : null,
 		startIndex: null,
 		endIndex : null,
+		selection : null,
 
 		// tested
 		getOccurrenceInString : function(str, substr, minIndex) {	
 			var occurrence = 0;
 			for (var i = 0; i < str.length; ++i) {
+				var s = str.substring(i);
 				if (str.substring(i).indexOf(substr) == 0) {
 					++occurrence;
 					if (i >= minIndex) {
@@ -80,7 +82,8 @@ var TextSelector = {
 			if (whitespaceRe.test(selectionString.charAt(selectionString.length - 1))) {
 				--this.endOffset;
 			}
-			var words = selectionString.trim().split(whitespaceRe);
+			/* TODO Just the start char */
+			var words = selectionString.replace(/#/g, "").trim().split(whitespaceRe);
 			this.startIndex = this.getOccurrenceInElement(startNode, startOffset, words[0]);
 			this.endIndex = this.startIndex;
 			if (words.length > 1) {
@@ -88,8 +91,13 @@ var TextSelector = {
 				var lastWord = words[words.length - 1];
 				this.endIndex = this.getOccurrenceInElement(endNode, endOffset - lastWord.length, lastWord);
 			}
-			Tapestry.Logging.info("Start index: " + this.startIndex);
-			Tapestry.Logging.info("End index: " + this.endIndex);
+			Tapestry.Logging.info("Selection: " + this.selection);
+			this.startId = startNode.parent().attr("id");
+			Tapestry.Logging.info("Start ID: " + this.startId);
+			this.endId = endNode.parent().attr("id");
+			Tapestry.Logging.info("End ID: " + this.endId);
+			Tapestry.Logging.info("Start index: " + this.startIndex)
+			Tapestry.Logging.info("End index: " + this.endIndex)
 		},
 		
 		startSelection: function(target) {
@@ -115,7 +123,8 @@ var TextSelector = {
 				this.endIndex = null;
 				return;
 			}
-			this.endId = target.attr("id");
+			/* TODO Just the start char */
+			this.selection = this.getSelection().toString().replace(/#/g, " ");
 			this.updateIndices(this.getSelection());
 		},
 

@@ -30,7 +30,9 @@ jQuery(document).ready(function(){
     		
     		jQuery(":input[name='selectedStartId_1']").val(TextSelector.startId);
     		jQuery(":input[name='selectedEndId_1']").val(TextSelector.endId);
-    		jQuery(":input[name='selectedText_1']").val(TextSelector.getSelection());
+    		jQuery(":input[name='selectedText_1']").val(TextSelector.selection);
+    		jQuery(":input[name='selectedStartIndex_1']").val(TextSelector.startIndex);
+    		jQuery(":input[name='selectedEndIndex_1']").val(TextSelector.endIndex);
     	
     		//Submit form
     		TapestryExt.submitZoneForm(jQuery("#createTerm").get(0));
@@ -52,7 +54,9 @@ jQuery(document).ready(function(){
 	        	jQuery("#longTextEdit").addClass("edited");
 	    		jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
 	    		jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
-	    		jQuery(":input[name='selectedText_2']").val(TextSelector.getSelection());
+	    		jQuery(":input[name='selectedText_2']").val(TextSelector.selection);
+	    		jQuery(":input[name='selectedStartIndex_2']").val(TextSelector.startIndex);
+	    		jQuery(":input[name='selectedEndIndex_2']").val(TextSelector.endIndex);
 	    		return false;
         	}
     );
