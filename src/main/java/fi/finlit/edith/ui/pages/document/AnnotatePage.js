@@ -1,3 +1,5 @@
+jQuery.noConflict();
+
 jQuery(document).ready(function(){
     jQuery('.notecontent').live('click',
         function(event) {
@@ -87,48 +89,3 @@ var Editor = {
 	
 }
 
-var TextSelector = {
-		started : false,
-		startId : null,
-		endId : null,
-		
-		startSelection: function(target) {
-			this.started = true;
-			this.startId = target.attr("id");
-			this.endId = null;
-		},
-		
-		isBeingSelected: function() {
-			if (!this.started ) return false;
-			if(this.getSelection()) return true;
-			return false;
-		},
-		
-		stopSelection: function(target) {
-			this.started = false;
-			if(!this.getSelection()) {
-				this.startId = null;
-				this.endId = null;
-				return;
-			}
-			this.endId = target.attr("id");
-			
-			//Tapestry.Logging.info("startId " + this.startId);
-			//Tapestry.Logging.info("endId " + this.endId);
-			//Tapestry.Logging.info("selected text " + this.getSelection());
-		},
-
-		/**
-		 * Cross browser way to get selected text
-		 * @return the selected text
-		 */
-		getSelection: function() {
-		    if (window.getSelection) { 
-			    return window.getSelection();
-		    }else if (document.getSelection) {      
-				return document.getSelection();
-			}else { 
-				return document.selection.createRange().text;
-			}	
-		}
-}

@@ -42,7 +42,7 @@ import fi.finlit.edith.ui.services.NoteAdditionFailedException;
  * @version $Id$
  */
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "classpath:TapestryExt.js", "AnnotatePage.js" })
+@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js", "TextSelector.js", "AnnotatePage.js" })
 @IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage extends AbstractDocumentPage {
 
@@ -57,16 +57,16 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Inject
     private Block emptyBlock;
-    
+
     @Inject
     private Block infoBlock;
-    
+
     @Inject
     private Block errorBlock;
-    
+
     @Inject
     private Messages messages;
-    
+
     @Property
     private String infoMessage;
 
@@ -171,15 +171,15 @@ public class AnnotatePage extends AbstractDocumentPage {
     Object onSuccessFromCreateTerm() throws IOException {
         logger.info(createTermSelection.toString());
         DocumentRevision documentRevision = getDocumentRevision();
-        
+
         NoteRevision noteRevision = null;
         try{
-            noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);    
+            noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
         }catch(NoteAdditionFailedException e){
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
             return new MultiZoneUpdate("editZone", errorBlock);
-        }        
+        }
 
         // prepare view (with new revision)
         documentRevision.setRevision(noteRevision.getSvnRevision());

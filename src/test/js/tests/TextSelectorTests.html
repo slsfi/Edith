@@ -6,9 +6,14 @@
     <link rel="stylesheet" type="text/css" href="../jsunit/css/jsUnitStyle.css"/>
     <script type="text/javascript" src="../jsunit/app/jsUnitCore.js"></script>
     <script type="text/javascript" src="../../../main/resources/jquery-1.4.1.js"></script>     
-    <script type="text/javascript" src="../../java/fi/finlit/edith/ui/pages/AnnotateTests.js"></script>
+    <script type="text/javascript" src="../../../main/java/fi/finlit/edith/ui/pages/document/TextSelector.js"></script>
     <script type="text/javascript">
-
+    	var getOccurrenceInString = TextSelector.getOccurrenceInString;
+    	var getOccurrences = TextSelector.getOccurrences;
+    	var getOccurrenceInElement = TextSelector.getOccurrenceInElement;
+    	var isInverseSelection = TextSelector.isInverseSelection;
+    	var prevAllString = TextSelector.prevAllString;
+		
         function testGetOccurrenceInString() {
             assertEquals(1, getOccurrenceInString("Hello World", "World", 6));
             assertEquals(1, getOccurrenceInString("Hello World", "World", 5));
@@ -30,9 +35,8 @@
         function testGetOccurrenceInElement(){
             var child = jQuery(":contains('text')").last();
             var text = child.text();
-            
             assertEquals(1, getOccurrenceInElement(child, text.indexOf("text"), "text"));
-            assertEquals(2, getOccurrenceInElement(child, text.lastIndexOf("text"), "text"));                      
+            assertEquals(1, getOccurrenceInElement(child, text.lastIndexOf("text"), "text"));                      
         }
         
         function testGetOccurrenceInElement2() {
