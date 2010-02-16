@@ -8,7 +8,6 @@ var TextSelector = {
 		endIndex : null,
 		selection : null,
 
-		// tested
 		getOccurrenceInString : function(str, substr, minIndex) {	
 			var occurrence = 0;
 			for (var i = 0; i < str.length; ++i) {
@@ -23,7 +22,6 @@ var TextSelector = {
 			return 0;
 		},
 
-		// tested
 		getOccurrences : function(str, substr) {
 			var occurrence = 0;
 			for (var i = 0; i < str.length; ++i) {
@@ -34,7 +32,6 @@ var TextSelector = {
 			return occurrence;
 		},
 
-		// tested
 		prevAllString : function(element) {
 			var text = new Array();
 			element = element.previousSibling;
@@ -46,7 +43,6 @@ var TextSelector = {
 			return text.join("");			
 		},
 
-		// tested
 		getOccurrenceInElement : function(element, offset, substr) {
 			var prevOccurrences = this.getOccurrences(this.prevAllString(element.get(0)), substr);
 			if (element.parent().hasClass("notecontent")){
@@ -56,7 +52,6 @@ var TextSelector = {
 			return prevOccurrences + occurrence;
 		},
 
-		// tested
 		isInverseSelection : function(selection) {
 			var isInDifferentElements = selection.anchorNode != selection.focusNode;
 			if (!isInDifferentElements) {
@@ -128,10 +123,6 @@ var TextSelector = {
 			this.updateIndices(this.getSelection());
 		},
 
-		/**
-		 * Cross browser way to get selected text
-		 * @return the selected text
-		 */
 		getSelection: function() {
 		    if (window.getSelection) { 
 			    return window.getSelection();

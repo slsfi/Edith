@@ -22,8 +22,6 @@ import fi.finlit.edith.ui.components.note.Metadata;
  * @author tiwe
  * @version $Id$
  */
-// @IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "classpath:TapestryExt.js",
-// "ViewPage.js" })
 @IncludeStylesheet("context:styles/tei.css")
 @SuppressWarnings("unused")
 public class ViewPage extends AbstractDocumentPage {
