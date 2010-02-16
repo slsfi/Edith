@@ -107,10 +107,10 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         writer.element("li", "class", localName);
                         if (path != null) writer.attributes("id", path);
                     
-                    }else if (localName.equals("p")){
-                        writer.element(localName);
-                        if (path != null) writer.attributes("id", path);
-                    
+//                    }else if (localName.equals("p")){
+//                        writer.element(localName);
+//                        if (path != null) writer.attributes("id", path);
+//                    
                     }else if (localName.equals("div")){
                         String type = reader.getAttributeValue(null, "type");
                         writer.element(localName, "class", type);
