@@ -1,3 +1,5 @@
+ANNOTATION BUGS
+
 works!
 <div id="play-act-sp3" class="sp">
     <div id="play-act-sp3-speaker" class="speaker">Esko.</div>
@@ -20,3 +22,7 @@ When clicking on the asterisk the smaller DIV is selected. The reason why the se
 when <BR/> is used.
 
 [ Parent DIV [ I am a smaller DIV <br/> ]			   *		]
+
+
+The same problem occurs in other situations as well. A solution I am currently looking into is checking if the start element contains the
+searched string and if it doesn't the start element is changed into the start element's next sibling.
