@@ -1,0 +1,22 @@
+works!
+<div id="play-act-sp3" class="sp">
+    <div id="play-act-sp3-speaker" class="speaker">Esko.</div>
+    <p id="play-act-sp3-p">(panee työnsä pois). Peijakas! Tästä rientää täytyy, sillä askeleen otan,
+        jota ei nauraa tule. <div id="play-act-sp3-p-stage" class="stage">(Menee perältä ulos)</div>.</p>
+</div>
+
+doesn't work!
+<div id="play-act-sp46" class="sp">
+    <div id="play-act-sp46-speaker" class="speaker">Martta.</div>
+    <p id="play-act-sp46-p">Että haarapussi olalla hän tästä lähtee morsius<div id="play-act-sp46-p-orig" class="orig">-<br/></div>taloon Mikko
+        Vilkastuksen seurassa.</p>
+</div>
+
+The selection doesn't work when not clicking exactly in the right container.
+
+[ Parent DIV [ I am a smaller DIV                      *       ] ]
+
+When clicking on the asterisk the smaller DIV is selected. The reason why the second situation doesn't work is due to the fact that the DIV "breaks"
+when <BR/> is used.
+
+[ Parent DIV [ I am a smaller DIV <br/> ]			   *		]
