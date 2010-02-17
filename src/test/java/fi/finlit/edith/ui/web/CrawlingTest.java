@@ -40,7 +40,7 @@ public class CrawlingTest {
     // TODO Empty page? Not redirected to login?
 
     private WebDriver webDriver;
-    
+
     private String baseUrl = "http://localhost:8080";
 
     private static final String USERNAME = "vesa";
@@ -73,6 +73,7 @@ public class CrawlingTest {
     @Before
     public void setUp() {
         webDriver = new HtmlUnitDriver(){
+            @Override
             protected WebClient modifyWebClient(WebClient client) {
                 client.setThrowExceptionOnFailingStatusCode(true);
                 client.setPrintContentOnFailingStatusCode(true);
