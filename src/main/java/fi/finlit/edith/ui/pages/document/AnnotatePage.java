@@ -113,6 +113,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Property
     private boolean moreThanOneSelectable;
 
+    @Property
+    private boolean submitSuccess;
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
@@ -225,6 +228,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit);
+        submitSuccess = true;
 
         return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView);

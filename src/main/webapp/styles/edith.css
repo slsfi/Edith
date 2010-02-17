@@ -193,4 +193,9 @@ div.note_edit {
 .error{
 	font-weight: bold;
 	color: red;	
-}	
+}
+
+#submit_success_info {
+	color: green;
+	float: right;
+}
