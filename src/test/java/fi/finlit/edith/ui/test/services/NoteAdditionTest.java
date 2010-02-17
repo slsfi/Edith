@@ -138,6 +138,19 @@ public class NoteAdditionTest extends AbstractServiceTest{
         assertTrue(content.contains(" takaisin pal" + end(localId)));
     }
 
+    @Test
+    public void addNote_short_note() throws Exception {
+        String element = "play-act-stage";
+        StringBuilder text = new StringBuilder();
+        text.append("es");
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, 2, 2,
+                text.toString()), localId);
+
+        String content = FileUtils.readFileToString(targetFile, "UTF-8");
+        System.out.println(content);
+        assertTrue(content.contains(" vier" + start(localId) + "es" + end(localId) + "s\u00E4, "));
+    }
+
     @Override
     protected Class<?> getServiceClass() {
         return null;
