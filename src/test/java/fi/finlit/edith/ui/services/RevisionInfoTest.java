@@ -26,4 +26,11 @@ public class RevisionInfoTest {
     public void testHashCode() {
         assertEquals(ri.hashCode(), ri2.hashCode());
     }
+
+    @Test
+    public void testRevisionInfo_Long() {
+        RevisionInfo revisionInfo = new RevisionInfo(666);
+        assertEquals("", revisionInfo.getCreated());
+        assertEquals("", revisionInfo.getCreator());
+    }
 }

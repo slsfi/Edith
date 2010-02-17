@@ -21,6 +21,12 @@ public class RevisionInfo {
         this.creator = creator;
     }
 
+    public RevisionInfo(long svnRevision){
+        this.svnRevision = svnRevision;
+        this.created = "";
+        this.creator = "";
+    }
+
     public long getSvnRevision() {
         return svnRevision;
     }
