@@ -59,10 +59,14 @@ public class AbstractDocumentPage {
             response.sendError(404, "Document not found!");
             return;
         }
-        long revision;
+        long revision = -1;
         if (context.getCount() > 1){
             // TODO : block this for AnnotatePage
-            revision = context.get(Long.class, 1);
+            try {
+                revision = context.get(Long.class, 1);
+            } catch (RuntimeException e) {
+                response.sendError(404, "Revision not numerical!");
+            };
             if (!revisions.contains(new RevisionInfo(revision))) {
                 response.sendError(404, "Document revision not found!");
             }
