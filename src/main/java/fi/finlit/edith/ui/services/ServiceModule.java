@@ -25,7 +25,6 @@ import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
-import com.mysema.rdfbean.object.identity.IdentityService;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
 
@@ -78,11 +77,10 @@ public class ServiceModule {
         binder.bind(TimeService.class, SimpleTimeService.class);
     }
 
-    public static Configuration buildConfiguration(IdentityService identityService){
+    public static Configuration buildConfiguration(){
         DefaultConfiguration configuration = new DefaultConfiguration();
         configuration.setFetchStrategies(Collections.<FetchStrategy>singletonList(new PredicateWildcardFetch()));
         configuration.addPackages(Document.class.getPackage());
-        configuration.setIdentityService(identityService);
         return configuration;
     }
 

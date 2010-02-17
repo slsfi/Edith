@@ -133,6 +133,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         int index = -1;
         while (occurrence > 0){
             index = str.indexOf(word, index+1);
+            if (index == -1) return -1;
             occurrence--;
         }
         return index;        

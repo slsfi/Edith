@@ -27,5 +27,28 @@ public class DocumentRepositoryImpl_getIndexText {
         assertEquals(8, DocumentRepositoryImpl.getIndex("This is a", "a", 1));
         assertEquals(3, DocumentRepositoryImpl.getIndex("12 123", "123", 1));
     }
+    
+    @Test
+    public void complex(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("(Topiaksen huone: perällä ovi ja akkuna, oikealla pöytä, ");
+        builder.append("vasemmalla sivu-ovi ja enemmän edessä samalla sivulla rahi ja siinä suutarin ");
+        builder.append("kaluja. Jaana istuu pöydän ääressä, kutoen sukkaa, Esko rahin vieressä, neuloen).");
+        
+        assertEquals(90, DocumentRepositoryImpl.getIndex(builder.toString(), "es", 1));
+        assertEquals(164, DocumentRepositoryImpl.getIndex(builder.toString(), "es", 2));
+        assertEquals(200, DocumentRepositoryImpl.getIndex(builder.toString(), "es", 3));
+    }
+    
+    @Test
+    public void complex2(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("(Topiaksen huone: perällä ovi ja akkuna, oikealla pöytä, ");
+        builder.append("vasemmalla sivu-ovi ja enemmän edessä samalla sivulla");
+        
+        assertEquals(90, DocumentRepositoryImpl.getIndex(builder.toString(), "es", 1));
+        assertEquals(-1, DocumentRepositoryImpl.getIndex(builder.toString(), "es", 2));
+        assertEquals(-1, DocumentRepositoryImpl.getIndex(builder.toString(), "es", 3));
+    }
 
 }
