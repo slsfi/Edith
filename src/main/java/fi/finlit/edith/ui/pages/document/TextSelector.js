@@ -86,13 +86,13 @@ var TextSelector = {
 				var lastWord = words[words.length - 1];
 				this.endIndex = this.getOccurrenceInElement(endNode, endOffset - lastWord.length, lastWord);
 			}
-			Tapestry.Logging.info("Selection: " + this.selection);
 			this.startId = startNode.parent().attr("id");
-			Tapestry.Logging.info("Start ID: " + this.startId);
 			this.endId = endNode.parent().attr("id");
-			Tapestry.Logging.info("End ID: " + this.endId);
-			Tapestry.Logging.info("Start index: " + this.startIndex)
-			Tapestry.Logging.info("End index: " + this.endIndex)
+//			Tapestry.Logging.info("Start ID: " + this.startId);
+//			Tapestry.Logging.info("Selection: " + this.selection);
+//			Tapestry.Logging.info("End ID: " + this.endId);
+//			Tapestry.Logging.info("Start index: " + this.startIndex)
+//			Tapestry.Logging.info("End index: " + this.endIndex)
 		},
 		
 		startSelection: function(target) {
