@@ -143,7 +143,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String element = "play-act-stage";
         StringBuilder text = new StringBuilder();
         text.append("es");
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, 2, 2,
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, 3, 3,
                 text.toString()), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
