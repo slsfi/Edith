@@ -15,7 +15,7 @@ import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 public class DocumentRepositoryImpl_getIndexText {
     
     @Test
-    public void test(){
+    public void shortText(){
         assertEquals(8, DocumentRepositoryImpl.getIndex("This is a sentence", "a", 1));
         assertEquals(5, DocumentRepositoryImpl.getIndex("This is a sentence", "is", 2));
         assertEquals(-1, DocumentRepositoryImpl.getIndex("This is a sentence", "b", 1));
@@ -29,7 +29,7 @@ public class DocumentRepositoryImpl_getIndexText {
     }
     
     @Test
-    public void complex(){
+    public void longText1(){
         StringBuilder builder = new StringBuilder();
         builder.append("(Topiaksen huone: perällä ovi ja akkuna, oikealla pöytä, ");
         builder.append("vasemmalla sivu-ovi ja enemmän edessä samalla sivulla rahi ja siinä suutarin ");
@@ -41,7 +41,7 @@ public class DocumentRepositoryImpl_getIndexText {
     }
     
     @Test
-    public void complex2(){
+    public void longText2(){
         StringBuilder builder = new StringBuilder();
         builder.append("(Topiaksen huone: perällä ovi ja akkuna, oikealla pöytä, ");
         builder.append("vasemmalla sivu-ovi ja enemmän edessä samalla sivulla");
