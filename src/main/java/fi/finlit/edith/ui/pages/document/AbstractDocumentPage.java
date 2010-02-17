@@ -5,12 +5,13 @@
  */
 package fi.finlit.edith.ui.pages.document;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.tmatesoft.svn.core.SVNException;
+import org.apache.tapestry5.services.Response;
 
 import com.mysema.tapestry.core.Context;
 
@@ -43,21 +44,33 @@ public class AbstractDocumentPage {
 
     private Context context;
 
-    void onActivate(EventContext context) throws SVNException{
-        this.context = new Context(context);
-        document = documentRepo.getById(context.get(String.class, 0));
+    @Inject
+    private Response response;
 
-        revisions = documentRepo.getRevisions(document);
+    void onActivate(EventContext context) throws IOException {
+        this.context = new Context(context);
+        if (context.getCount() == 0) {
+            response.sendError(404, "No document ID given!");
+        }
+        try {
+            document = documentRepo.getById(context.get(String.class, 0));
+            revisions = documentRepo.getRevisions(document);
+        } catch (Exception e) {
+            response.sendError(404, "Document not found!");
+            return;
+        }
         long revision;
         if (context.getCount() > 1){
             // TODO : block this for AnnotatePage
             revision = context.get(Long.class, 1);
+            if (!revisions.contains(new RevisionInfo(revision))) {
+                response.sendError(404, "Document revision not found!");
+            }
         }else{
             // get latest
             revision = revisions.get(revisions.size() - 1).getSvnRevision();
         }
         documentRevision = new DocumentRevision(document, revision);
-
     }
 
     Object[] onPassivate(){
