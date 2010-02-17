@@ -41,10 +41,7 @@ public class RevisionInfo {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (svnRevision ^ (svnRevision >>> 32));
-        return result;
+        return Long.valueOf(svnRevision).hashCode();
     }
 
     @Override
