@@ -88,11 +88,13 @@ var TextSelector = {
 			}
 			this.startId = startNode.parent().attr("id");
 			this.endId = endNode.parent().attr("id");
-//			Tapestry.Logging.info("Start ID: " + this.startId);
 //			Tapestry.Logging.info("Selection: " + this.selection);
+//			Tapestry.Logging.info("Start ID: " + this.startId);
 //			Tapestry.Logging.info("End ID: " + this.endId);
-//			Tapestry.Logging.info("Start index: " + this.startIndex)
-//			Tapestry.Logging.info("End index: " + this.endIndex)
+//			Tapestry.Logging.info("Start word: " + words[0]);
+//			Tapestry.Logging.info("End word: " + words[words.length - 1]);
+//			Tapestry.Logging.info("Start index: " + this.startIndex);
+//			Tapestry.Logging.info("End index: " + this.endIndex);
 		},
 		
 		startSelection: function(target) {
