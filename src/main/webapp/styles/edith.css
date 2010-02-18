@@ -167,9 +167,8 @@ div.note_edit {
     color: #aa00cc;
 }
 
-.note_edit a {
-    font-size: 80%;
-    float:right;	
+.note_edit #delete_note {
+	float: right; font-size: 80%;	
 }
 
 #edited_info {
@@ -196,6 +195,11 @@ div.note_edit {
 }
 
 #submit_success_info {
+	color: green;
+	float: right;
+}
+
+#create_success_info {
 	color: green;
 	float: right;
 }

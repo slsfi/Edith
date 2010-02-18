@@ -92,8 +92,30 @@
                 </p>
                 <div class="cleaner"></div>
                 <div class="note_edit">
-                    <em><strong>${noteOnEdit.lemma}</strong></em> 
-                    <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:delete}</t:eventlink>
+                    <em><strong>${noteOnEdit.lemma}</strong></em>
+                    <!-- This could be externalized? -->
+                    <script type="text/javascript">
+                    	jQuery("#delete_dialog").hide();
+                    
+                    	jQuery("#delete_question").click(function(event) {
+                    		jQuery("#delete_dialog").show();
+                    		jQuery("#delete_question").hide();
+                    		event.preventDefault();
+                    	});
+                    	
+                    	jQuery("#delete_note_decline").click(function(event) {
+                    		jQuery("#delete_question").show();
+                    		jQuery("#delete_dialog").hide();
+                    		event.preventDefault();
+                    	});
+                    </script>
+                    <span id="delete_note">
+                    	<a href="" id="delete_question">${message:delete}?</a>
+                    	<span id="delete_dialog">
+                    		${message:delete}? <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
+                    		/ <a href="" id="delete_note_decline">${message:no}</a>
+                    	</span>
+                    </span>
                     <t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
                         <t:errors/>
                         <table>
