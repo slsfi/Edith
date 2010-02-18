@@ -36,3 +36,13 @@ Annotation update seems to be broken.
 Note listings still seems broken.
 
 -------------------------------------------------------------------------------
+
+Page break in paragraph causes havoc the following as an example:
+Topias.
+Enkeli taivaasta tuli ja tarjoi itsensä puhemieheksi nuorelle Topiakselle, joka kernaasti suostui kauppaan; ja as
+12.
+telit he tapsuttelit kahdenkesken kivistä tietä myöden, mutta koska ehdeit viimein erään virran, niin huusi Topiaksen poika peloissaan korkealla äänellä, sillä suuri kala . . .
+
+If '.' is the last selected character on the client side it is counted as the 4th occurrence even though the backend thinks it is the 3rd.
+
+-------------------------------------------------------------------------------
