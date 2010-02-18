@@ -112,6 +112,8 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         assertEquals("word1 \u2013 \u2013 word2", getLemmaForLongText("word1 word2"));
         assertEquals("word1 \u2013 \u2013 word3", getLemmaForLongText("word1 word3"));
         assertEquals("word1 \u2013 \u2013 word3", getLemmaForLongText("word1\t word2 \nword3"));
+        assertEquals("foo \u2013 \u2013 bar", getLemmaForLongText(" \n      foo \n \t     bar    \n\t\t"));
+        assertEquals("foo", getLemmaForLongText(" \n      foo \n \t   \n\t\t"));
     }
 
     private String getLemmaForLongText(String longText) {

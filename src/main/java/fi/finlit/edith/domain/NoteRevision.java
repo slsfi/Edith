@@ -7,6 +7,7 @@ package fi.finlit.edith.domain;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import com.mysema.query.annotations.QueryInit;
@@ -168,13 +169,15 @@ public class NoteRevision extends Identifiable{
 //    }
 
     public void setLemmaFromLongText(){
-        if (longText.contains(" ")){
-            String[] words = WHITESPACE.split(longText);
+        if (WHITESPACE.matcher(longText).find()){
+            String[] words = StringUtils.split(longText);
             if (words.length > 1) {
                 lemma = words[0] + " \u2013 \u2013 " + words[words.length-1];
-                return;
+            } else {
+                lemma = words[0];
             }
+        } else {
+            lemma = longText;
         }
-        lemma = longText;
     }
 }
