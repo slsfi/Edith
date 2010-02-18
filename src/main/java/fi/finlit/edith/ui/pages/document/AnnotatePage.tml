@@ -165,5 +165,9 @@
         </t:block>
         
     </p:rightPanel>
-
+	
+	<script type="text/javascript">
+		var l10n = new Array();
+		l10n.invalidSelection = "${message:invalid-selection-error}";
+	</script>
 </html>

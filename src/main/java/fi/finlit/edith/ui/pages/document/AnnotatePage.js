@@ -1,5 +1,29 @@
 jQuery.noConflict();
 
+var createNote = function() {
+	if (!TextSelector.updateIndices(TextSelector.getSelection())) {
+			alert(l10n.invalidSelection);
+			return;
+	}
+	jQuery(":input[name='selectedStartId_1']").val(TextSelector.startId);
+	jQuery(":input[name='selectedEndId_1']").val(TextSelector.endId);
+	jQuery(":input[name='selectedText_1']").val(TextSelector.selection);
+	jQuery(":input[name='selectedStartIndex_1']").val(TextSelector.startIndex);
+	jQuery(":input[name='selectedEndIndex_1']").val(TextSelector.endIndex);
+
+	//Submit form
+	TapestryExt.submitZoneForm(jQuery("#createTerm").get(0));
+	return false;
+}
+
+var updateSelectionLink = function() {
+	if(TextSelector.getSelection() == "") { 
+		jQuery(".selection-link").addClass('disabled');
+	} else {
+		jQuery(".selection-link").removeClass('disabled');
+	}
+}
+
 jQuery(document).ready(function(){
     jQuery('.notecontent').live('click',
         function(event) {
@@ -16,30 +40,14 @@ jQuery(document).ready(function(){
     	}
     );
     
-    jQuery('#createTermLink').bind('click',
-    	function(event) {
-    		if (!TextSelector.startId) {
-    			Tapestry.Logging.info("missing startId");
-    			return false;
-    		}
-			if (!TextSelector.endId) {
-				Tapestry.Logging.info("missing endId");
-				return false;
-			}
-
-    		
-    		jQuery(":input[name='selectedStartId_1']").val(TextSelector.startId);
-    		jQuery(":input[name='selectedEndId_1']").val(TextSelector.endId);
-    		jQuery(":input[name='selectedText_1']").val(TextSelector.selection);
-    		jQuery(":input[name='selectedStartIndex_1']").val(TextSelector.startIndex);
-    		jQuery(":input[name='selectedEndIndex_1']").val(TextSelector.endIndex);
-    	
-    		//Submit form
-    		TapestryExt.submitZoneForm(jQuery("#createTerm").get(0));
-    		return false;
-    	}
-    );
+    jQuery('#createTermLink').bind('click', createNote);
     
+    jQuery(document).keypress(function(event) {
+    	if (event.which == 97) {
+    		createNote();
+    	}
+    });
+    /*
     jQuery('#longTextEditLink').live('click',
         	function(event) {
 			    if (!TextSelector.startId) {
@@ -60,29 +68,9 @@ jQuery(document).ready(function(){
 	    		return false;
         	}
     );
-          
-    jQuery('.tei').live('mouseup',
-    	function(event) {
-    		TextSelector.stopSelection(jQuery(event.target));
-    		if(!TextSelector.getSelection()) {
-    			jQuery(".selection-link").addClass('disabled');
-    		}
-    	}
-    );
-    jQuery('.tei').live('mousedown',
-        	function(event) {
-        		TextSelector.startSelection(jQuery(event.target));
-        		jQuery(".selection-link").addClass('disabled');
-        		jQuery("#longTextEditLink").hide();
-        	}
-        );
-    jQuery('.tei').live('mousemove',
-        	function(event) {
-        		if(!TextSelector.isBeingSelected()) return;
-        		jQuery(".selection-link").removeClass('disabled');
-        		jQuery("#longTextEditLink").show();
-        	}
-        );
+    */
+
+    jQuery('.tei').live('mousemove', updateSelectionLink);
 });
 
 var Editor = {		

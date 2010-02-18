@@ -1,7 +1,6 @@
 jQuery.noConflict();
 
 var TextSelector = {
-	started : false,
 	startId : null,
 	endId : null,
 	startIndex : null,
@@ -83,7 +82,6 @@ var TextSelector = {
 				.charAt(selectionString.length - 1))) {
 			--this.endOffset;
 		}
-		/* TODO Just the start char */
 		var words = selectionString.replace(/#/g, "").trim()
 				.split(whitespaceRe);
 		this.startIndex = this.getOccurrenceInElement(startNode, startOffset,
@@ -95,6 +93,7 @@ var TextSelector = {
 		}
 		this.startId = startNode.parent().attr("id");
 		this.endId = endNode.parent().attr("id");
+		this.selection = this.getSelection().toString().replace(/#/g, " ");
 //		 Tapestry.Logging.info("Selection: " + this.selection);
 //		 Tapestry.Logging.info("Start ID: " + this.startId);
 //		 Tapestry.Logging.info("End ID: " + this.endId);
@@ -102,36 +101,7 @@ var TextSelector = {
 //		 Tapestry.Logging.info("End word: " + words[words.length - 1]);
 //		 Tapestry.Logging.info("Start index: " + this.startIndex);
 //		 Tapestry.Logging.info("End index: " + this.endIndex);
-	},
-
-	startSelection : function(target) {
-		this.started = true;
-		this.startId = target.attr("id");
-		this.startIndex = null;
-		this.endIndex = null;
-		this.endId = null;
-	},
-
-	isBeingSelected : function() {
-		if (!this.started)
-			return false;
-		if (this.getSelection())
-			return true;
-		return false;
-	},
-
-	stopSelection : function(target) {
-		this.started = false;
-		if (!this.getSelection()) {
-			this.startId = null;
-			this.endId = null;
-			this.startIndex = null;
-			this.endIndex = null;
-			return;
-		}
-		/* TODO Just the start char */
-		this.selection = this.getSelection().toString().replace(/#/g, " ");
-		this.updateIndices(this.getSelection());
+		return this.isValidSelection();
 	},
 
 	getSelection : function() {
@@ -142,5 +112,12 @@ var TextSelector = {
 		} else {
 			return document.selection.createRange().text;
 		}
+	},
+	
+	isValidSelection : function() {
+		return this.selection != "" && 
+			this.startId != null && this.endId != null &&
+			this.startIndex != null && this.startIndex != 0 &&
+			this.endIndex != null && this.endIndex != 0;
 	}
 }
