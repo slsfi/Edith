@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -36,16 +37,18 @@ public class DocumentRendererImpl implements DocumentRenderer {
 
     static final Set<String> LI_ELEMENTS = new HashSet<String>(Arrays.asList("castItem","person"));
 
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
     private final DocumentRepository documentRepo;
-    
+
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
-    
+
     public DocumentRendererImpl(@Inject DocumentRepository documentRepo){
         this.documentRepo = documentRepo;
     }
 
     @Override
-    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception{        
+    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception{
         InputStream is = documentRepo.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
@@ -66,7 +69,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         }
                     }
 
-                }else if (event == XMLStreamConstants.END_DOCUMENT) {                    
+                }else if (event == XMLStreamConstants.END_DOCUMENT) {
                     break;
                 }
             }
@@ -86,7 +89,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
         boolean noteContent = false;
         Set<String> noteIds = new HashSet<String>();
         ElementContext context = new ElementContext(3);
-        
+
         try{
             while (true) {
                 int event = reader.next();
@@ -98,31 +101,37 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     }
                     context.push(name);
                     String path = context.getPath();
-                    
+
                     if (UL_ELEMENTS.contains(localName)){
                         writer.element("ul", "class", localName);
-                        if (path != null) writer.attributes("id", path);
-                        
+                        if (path != null) {
+                            writer.attributes("id", path);
+                        }
+
                     }else if (LI_ELEMENTS.contains(localName)){
                         writer.element("li", "class", localName);
-                        if (path != null) writer.attributes("id", path);
-                    
+                        if (path != null) {
+                            writer.attributes("id", path);
+                        }
+
 //                    }else if (localName.equals("p")){
 //                        writer.element(localName);
 //                        if (path != null) writer.attributes("id", path);
-//                    
+//
                     }else if (localName.equals("div")){
                         String type = reader.getAttributeValue(null, "type");
                         writer.element(localName, "class", type);
-                        if (path != null) writer.attributes("id", path);
-                    
+                        if (path != null) {
+                            writer.attributes("id", path);
+                        }
+
                     }else if (localName.equals("TEI")){
                         writer.element("div", "class", "tei");
-                    
+
                     }else if (localName.equals("lb")){
                         writer.element("br");
                         writer.end();
-                    
+
                     }else if (localName.equals("pb")){
                         String page = reader.getAttributeValue(null, "n");
                         if (page != null){
@@ -130,7 +139,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                             writer.writeRaw(page + ".");
                             writer.end();
                         }
-                    
+
                     }else if (localName.equals("anchor")){
                         String id = reader.getAttributeValue(XML_NS, "id");
                         if (id == null){
@@ -151,12 +160,14 @@ public class DocumentRendererImpl implements DocumentRenderer {
 
                     }else{
                         writer.element("div", "class", name);
-                        if (path != null) writer.attributes("id", path);
+                        if (path != null) {
+                            writer.attributes("id", path);
+                        }
                     }
 
                 }else if (event == XMLStreamConstants.END_ELEMENT){
                     context.pop();
-                    
+
                     String localName = reader.getLocalName();
                     if (!EMPTY_ELEMENTS.contains(localName)){
                         writer.end();
@@ -166,7 +177,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     // ?!?
 
                 }else if (event == XMLStreamConstants.CHARACTERS){
-                    String text = reader.getText();
+                    String text = WHITESPACE.matcher(reader.getText()).replaceAll(" ");
                     if (noteContent && !text.trim().isEmpty()){
                         StringBuilder classes = new StringBuilder("notecontent");
                         for (String noteId : noteIds){
@@ -179,14 +190,14 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         writer.writeRaw(text);
                     }
 
-                }else if (event == XMLStreamConstants.END_DOCUMENT) {                
+                }else if (event == XMLStreamConstants.END_DOCUMENT) {
                     break;
                 }
             }
         }finally{
             reader.close();
             is.close();
-        }        
+        }
 
     }
 
