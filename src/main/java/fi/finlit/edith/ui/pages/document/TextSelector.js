@@ -66,21 +66,6 @@ var TextSelector = {
 		}
 	},
 
-//	findActualOffset : function(str, substr, index) {
-//		var whitespaceRe = new RegExp(/\s/g); // TODO global?
-//		str = str.replace(whitespaceRe, " ");
-//		substr = substr.replace(whitespaceRe, " ");
-//		// Increment offset when character is whitespace
-//		for (var i = index; i < str.length; ++i) {
-//			if (whitespaceRe.test(str.charAt(i))) {
-//				++index
-//			} else {
-//				break;
-//			}
-//		}
-//		return index;
-//	},
-
 	updateIndices : function(selection) {
 		var startNode = jQuery(selection.anchorNode);
 		var endNode = jQuery(selection.focusNode);
