@@ -137,7 +137,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         assertTrue(content.contains(start(localId) + "matkalle, nimitt\u00E4in"));
         assertTrue(content.contains(" takaisin pal" + end(localId)));
     }
-    
+
     @Test
     public void addNote_short_note_1() throws Exception {
         String element = "play-act-stage";
@@ -149,7 +149,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         System.out.println(content);
         assertTrue(content.contains("ed" + start(localId) + "es" + end(localId) + "s\u00E4"));
     }
-    
+
     @Test
     public void addNote_short_note_2() throws Exception {
         String element = "play-act-stage";
@@ -172,6 +172,19 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         System.out.println(content);
         assertTrue(content.contains("vier" + start(localId) + "es" + end(localId) + "s\u00E4,"));
+    }
+
+    @Test
+    public void addNote_line_breaks_in_selection() throws Exception {
+        String startElement = "play-description-castList-castItem8-roleDesc";
+        String endElement = "play-description-castList-castItem9-roleDesc";
+        String text = " \nori sepp\u00E4\n.\nKarri\n,\ntalon";
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement, endElement, 1, 1,
+                text), localId);
+        String content = FileUtils.readFileToString(targetFile, "UTF-8");
+        System.out.println(content);
+        assertTrue(content.contains("nu" + start(localId) + "ori"));
+        assertTrue(content.contains("talon" + end(localId) + "is\u00E4nt\u00E4"));
     }
 
     @Override

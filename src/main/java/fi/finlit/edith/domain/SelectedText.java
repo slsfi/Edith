@@ -1,9 +1,9 @@
 /**
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
-import java.util.regex.Pattern;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * SelectedText provides
@@ -12,17 +12,14 @@ import java.util.regex.Pattern;
  * @version $Id$
  */
 public class SelectedText {
-    
-    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-    
     private String selection;
-    
+
     private String startId, endId;
-        
+
     private int startIndex = 1, endIndex = 1;
-    
+
     public SelectedText(){}
-    
+
     public SelectedText(String startId, String endId, int startIndex, int endIndex, String selection) {
         this.startId = startId;
         this.endId = endId;
@@ -30,7 +27,7 @@ public class SelectedText {
         this.endIndex = endIndex;
         this.selection = selection;
     }
-    
+
     public SelectedText(String startId, String endId, String selection) {
         this(startId, endId, 1, 1, selection);
     }
@@ -64,7 +61,7 @@ public class SelectedText {
     public void setEndId(String endId) {
         this.endId = endId;
     }
-    
+
     public void setEndIndex(int endIndex) {
         this.endIndex = endIndex;
     }
@@ -82,21 +79,21 @@ public class SelectedText {
     }
 
     public String getFirstWord(){
-        String[] words = WHITESPACE.split(selection);
+        String[] words = StringUtils.split(selection);
         return words[0];
     }
-    
+
     public String getLastWord(){
-        String[] words = WHITESPACE.split(selection);
+        String[] words = StringUtils.split(selection);
         return words[words.length-1];
     }
-        
+
     @Override
     public String toString(){
         return startId + "," + endId + ":[" + selection + "]";
     }
-    
-    
-    
-    
+
+
+
+
 }
