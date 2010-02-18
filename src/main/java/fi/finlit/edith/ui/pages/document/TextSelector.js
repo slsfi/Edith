@@ -91,8 +91,6 @@ var TextSelector = {
 		this.endIndex = this.startIndex;
 		if (words.length > 1) {
 			var lastWord = words[words.length - 1];
-			// TODO The following offset "fix" is dirty and will probably be
-			// broken for inverse selection
 			this.endIndex = this.getOccurrenceInElement(endNode, endOffset - lastWord.length - 1, lastWord);
 		}
 		this.startId = startNode.parent().attr("id");
