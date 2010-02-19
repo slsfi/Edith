@@ -112,7 +112,9 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         note.setCreatedOn(timeService.currentTimeMillis());
         note.setCreatedBy(createdBy);
         note.getRevisionOf().setLatestRevision(note);
-        return super.save(note);
+        getSession().save(note);
+        getSession().save(note.getRevisionOf());
+        return note;
     }    
 
     private BeanSubQuery sub(PEntity<?> entity){
