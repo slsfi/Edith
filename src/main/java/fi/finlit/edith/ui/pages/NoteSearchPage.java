@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.pages;
 
@@ -11,6 +11,7 @@ import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Environmental;
+import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.grid.GridDataSource;
@@ -26,12 +27,13 @@ import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 /**
  * NoteSearch provides
- * 
+ *
  * @author tiwe
  * @version $Id$
  */
 //FIXME Use dto instead of NoteRevision to get the editing ability right
 @SuppressWarnings("unused")
+@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "NoteSearchPage.js" })
 public class NoteSearchPage {
 
     @Property
@@ -48,9 +50,9 @@ public class NoteSearchPage {
     @Property
     private NoteRevision note;
 
-    @Inject 
+    @Inject
     private NoteRevisionRepository noteRevisionRepo;
-    
+
     @Property
     private PrimaryKeyEncoder<NoteRevision> encoder;
 
@@ -111,5 +113,5 @@ public class NoteSearchPage {
         // other css includes
         support.addStylesheetLink(stylesheet, null);
     }
-    
+
 }

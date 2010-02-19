@@ -61,8 +61,13 @@
 					<t:fmt.message key="NoteStatus.${note.revisionOf.status}"/>
                 </p:statusCell>
                 <p:actionsCell>
-                    <t:actionlink t:id="delete" context="note.id">${message:delete}
-                    </t:actionlink>
+                	<span class="delete_note">
+                		<a href="" class="delete_question">${message:delete}</a>
+                		<span class="delete_dialog">
+                    		${message:delete}? <t:actionlink t:id="delete" context="note.id">${message:yes}</t:actionlink>
+                    		/ <a href="" class="delete_note_decline">${message:no}</a>
+                    	</span>
+                    </span>
                 </p:actionsCell>
                 <p:empty>
                     <p>${message:no-results}</p>
