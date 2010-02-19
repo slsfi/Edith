@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -36,13 +36,13 @@ import fi.finlit.edith.domain.UserRepository;
  * @version $Id$
  */
 public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision> implements NoteRevisionRepository {
-    
+
     private static final QNoteRevision otherNote = new QNoteRevision("other");
-    
+
     private final TimeService timeService;
-    
+
     private final UserRepository userRepository;
-    
+
     public NoteRevisionRepositoryImpl(
             @Inject SessionFactory sessionFactory,
             @Inject UserRepository userRepository,
@@ -51,7 +51,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         this.userRepository = userRepository;
         this.timeService = timeService;
     }
-            
+
     @Override
     public NoteRevision getByLocalId(DocumentRevision docRevision, String localId) {
         Assert.notNull(docRevision);
@@ -76,7 +76,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
             .orderBy(noteRevision.longText.asc())
             .list(noteRevision);
     }
-    
+
     private EBoolean latestFor(long svnRevision){
         return sub(otherNote).where(
             otherNote.ne(noteRevision),
@@ -87,38 +87,39 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
 
     @Override
     public GridDataSource queryNotes(String searchTerm) {
-        Assert.notNull(searchTerm);        
-        BooleanBuilder builder = new BooleanBuilder();        
+        Assert.notNull(searchTerm);
+        BooleanBuilder builder = new BooleanBuilder();
         if (!searchTerm.equals("*")){
             for (PString path : Arrays.asList(
-                    noteRevision.lemma, 
+                    noteRevision.lemma,
                     noteRevision.longText,
                     noteRevision.revisionOf.term.basicForm,
                     noteRevision.revisionOf.term.meaning,
                     noteRevision.description
                     )){
                 builder.or(path.contains(searchTerm, false));
-            }    
-        }        
+            }
+        }
         builder.and(noteRevision.eq(noteRevision.revisionOf.latestRevision));
-        return createGridDataSource(noteRevision, 
-                noteRevision.revisionOf.term.basicForm.asc(), 
+        builder.and(noteRevision.deleted.eq(false));
+        return createGridDataSource(noteRevision,
+                noteRevision.revisionOf.term.basicForm.asc(),
                 builder.getValue());
     }
-    
+
     @Override
     public NoteRevision save(NoteRevision note) {
-        UserInfo createdBy = userRepository.getCurrentUser();  
+        UserInfo createdBy = userRepository.getCurrentUser();
         note.setCreatedOn(timeService.currentTimeMillis());
         note.setCreatedBy(createdBy);
         note.getRevisionOf().setLatestRevision(note);
         getSession().save(note);
         getSession().save(note.getRevisionOf());
         return note;
-    }    
+    }
 
     private BeanSubQuery sub(PEntity<?> entity){
         return new BeanSubQuery().from(entity);
     }
-    
+
 }
