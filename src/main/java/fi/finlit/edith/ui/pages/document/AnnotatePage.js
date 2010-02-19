@@ -39,14 +39,18 @@ jQuery(document).ready(function(){
     		Editor.updateEditZone("n"+id);
     	}
     );
-    
+  
+/* TODO disable for note editing!
     jQuery('#createTermLink').bind('click', createNote);
     
-    jQuery(document).keypress(function(event) {
-    	if (event.which == 97) {
+    jQuery(document).keydown(function(event) {
+    	if (event.which == 65) {
     		createNote();
     	}
     });
+*/
+    
+    
     /*
     jQuery('#longTextEditLink').live('click',
         	function(event) {
@@ -80,4 +84,3 @@ var Editor = {
 	},
 	
 }
-
