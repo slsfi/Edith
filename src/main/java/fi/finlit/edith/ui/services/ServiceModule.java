@@ -16,6 +16,8 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
+import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
 
 import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.FetchStrategy;
@@ -85,13 +87,20 @@ public class ServiceModule {
     }
 
     public static Repository buildRepository(
-            @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir) {
+            @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir,
+            RegistryShutdownHub hub) {
         Namespaces.register("edith", EDITH.NS);
-        MemoryRepository repository = new MemoryRepository();
+        final MemoryRepository repository = new MemoryRepository();
         repository.setDataDirName(rdfbeanDataDir);
         repository.setSources(
             new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS)
         );
+        hub.addRegistryShutdownListener(new RegistryShutdownListener(){
+            @Override
+            public void registryDidShutdown() {
+                repository.close();
+            }            
+        });
         return repository;
     }
 }

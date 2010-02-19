@@ -32,7 +32,7 @@ public class DocumentRendererTest extends AbstractServiceTest {
         MarkupWriter writer = new MarkupWriterImpl();
         String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
         renderer.renderDocument(docRepo.getDocumentForPath(svnPath).getRevision(-1), writer);
-        System.out.println(writer.toString());
+//        System.out.println(writer.toString());
     }
 
     @Test

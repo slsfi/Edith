@@ -133,7 +133,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text.toString()), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains(start(localId) + "matkalle, nimitt\u00E4in"));
         assertTrue(content.contains(" takaisin pal" + end(localId)));
     }
@@ -146,7 +146,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
                 text.toString()), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("ed" + start(localId) + "es" + end(localId) + "s\u00E4"));
     }
 
@@ -158,7 +158,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
                 text.toString()), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("\u00E4\u00E4r" + start(localId) + "es" + end(localId) + "s\u00E4,"));
     }
 
@@ -170,7 +170,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
                 text.toString()), localId);
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("vier" + start(localId) + "es" + end(localId) + "s\u00E4,"));
     }
 
@@ -182,7 +182,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement, endElement, 1, 1,
                 text), localId);
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("nu" + start(localId) + "ori"));
         assertTrue(content.contains("talon" + end(localId) + "is\u00E4nt\u00E4"));
     }
