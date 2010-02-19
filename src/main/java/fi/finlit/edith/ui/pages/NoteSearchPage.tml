@@ -28,7 +28,7 @@
             </div>
             <div class="cleaner"> </div>
             <t:grid source="notes" row="note" rowsPerPage="20" t:encoder="encoder"
-                include="lemma,longText,description,subtextSources" add="basicForm,meaning,status,actions">
+                include="lemma,longText,description,subtextSources" add="documentRevision,basicForm,meaning,status,actions">
                 <p:lemmaCell>
                     <t:if test="editMode">
                         <t:inlineField t:id="lemma" value="note.lemma" value1="note.lemma"/>
@@ -37,6 +37,9 @@
                         </p:else>
                     </t:if>
                 </p:lemmaCell>
+                <p:documentRevisionCell>
+                    ${note.documentRevision?.document.title}
+                </p:documentRevisionCell>
                 <p:basicFormCell>
                     ${note.revisionOf.term?.basicForm}
                 </p:basicFormCell>
