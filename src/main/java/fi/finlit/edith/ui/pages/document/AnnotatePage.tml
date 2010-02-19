@@ -110,7 +110,7 @@
                     	});
                     </script>
                     <span id="delete_note">
-                    	<a href="" id="delete_question">${message:delete}?</a>
+                    	<button id="delete_question">${message:delete}?</button>
                     	<span id="delete_dialog">
                     		${message:delete}? <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
                     		/ <a href="" id="delete_note_decline">${message:no}</a>
@@ -131,7 +131,7 @@
                         
                         <tr>
                           <th>${message:description-label}</th>                     
-                          <td><t:textField t:id="description" value="noteOnEdit.description"/></td>
+                          <td><t:textArea t:id="description" value="noteOnEdit.description" rows="4"/></td>
 						</tr>
 
 						<tr>
