@@ -25,6 +25,9 @@
         <p>
             <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a>
         </p>
+        <p>
+            <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
+        </p>
         
         <div class="panel narrow">
             <h3>${message:pages}</h3>

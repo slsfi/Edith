@@ -18,6 +18,9 @@
         <t:dashboard/>
 
         <p>
+        	<a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:to-annotate-document}</a>
+        </p>
+        <p>
             <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
         </p>
 
