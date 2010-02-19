@@ -114,10 +114,6 @@ public class DocumentRendererImpl implements DocumentRenderer {
                             writer.attributes("id", path);
                         }
 
-//                    }else if (localName.equals("p")){
-//                        writer.element(localName);
-//                        if (path != null) writer.attributes("id", path);
-//
                     }else if (localName.equals("div")){
                         String type = reader.getAttributeValue(null, "type");
                         writer.element(localName, "class", type);
@@ -172,9 +168,6 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     if (!EMPTY_ELEMENTS.contains(localName)){
                         writer.end();
                     }
-
-                }else if (event == XMLStreamConstants.ATTRIBUTE){
-                    // ?!?
 
                 }else if (event == XMLStreamConstants.CHARACTERS){
                     String text = WHITESPACE.matcher(reader.getText()).replaceAll(" ");

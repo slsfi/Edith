@@ -13,7 +13,7 @@ import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.userdetails.UserDetails;
 
 /**
- * ShiroAuthService provides
+ * SpringSecurityAuthService provides
  *
  * @author tiwe
  * @version $Id$
