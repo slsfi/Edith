@@ -13,6 +13,8 @@
     	var getOccurrenceInElement = TextSelector.getOccurrenceInElement;
     	var isInverseSelection = TextSelector.isInverseSelection;
     	var prevAllString = TextSelector.prevAllString;
+    	var updateIndices = TextSelector.updateIndices;
+    	var isValidSelection = TextSelector.isValidSelection;
 		
         function testGetOccurrenceInString() {
             assertEquals(1, getOccurrenceInString("Hello World", "World", 6));
@@ -85,6 +87,11 @@
             var text = prevAllString(notecontent);
             assertEquals("start This is a paragraph", text.trim().replace(/\s+/g, " "));
         }
+
+        function testNoteBreakingWord() {
+			var selection = new Selection(6, 1, byId("play-act-sp95-p"), byId("play-act-sp95-p"));
+			assertTrue(updateIndices(selection));
+        }
         
     </script>
 
@@ -111,5 +118,9 @@
 	<p id="prev"><span>start</span> This is a paragraph <span
 		id="prevall" class="notecontent">this is an element inside</span> with sentences! <span>end</span>
 	</p>
+	
+	<h2>Tests for difficult element boundaries or something // TODO better title</h2>
+	<div id="play-act-sp95-p" class="p">Laita o<span id="start1266592466565" class="notestart"></span><span class="notecontent n1266592466565">n täm</span>ä, näkeekö kanttoori.</div>
+	
 </body>
 </html>
