@@ -91,8 +91,8 @@ var TextSelector = {
 			var lastWord = words[words.length - 1];
 			this.endIndex = this.getOccurrenceInElement(endNode, endOffset - lastWord.length - 1, lastWord);
 		}
-		this.startId = startNode.parent().attr("id");
-		this.endId = endNode.parent().attr("id");
+		this.startId = (startNode.parent().attr("id") != "" ? startNode.parent().attr("id") : startNode.parent().parent().attr("id"));
+		this.endId = (endNode.parent().attr("id") != "" ? endNode.parent().attr("id") : endNode.parent().parent().attr("id"));
 		this.selection = this.getSelection().toString().replace(/#/g, " ");
 //		 Tapestry.Logging.info("Selection: " + this.selection);
 //		 Tapestry.Logging.info("Start ID: " + this.startId);

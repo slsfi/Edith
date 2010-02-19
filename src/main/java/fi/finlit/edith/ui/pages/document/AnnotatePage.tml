@@ -149,7 +149,7 @@
                         
                         <tr>
                           <th></th>
-                          <td><a id="longTextEditLink" href="#" style="display:none">${message:update}</a></td>
+                          <td><a id="longTextEditLink" href="#">${message:update}</a></td>
                         </tr>
                         
                         <tr>

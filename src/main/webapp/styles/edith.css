@@ -181,6 +181,10 @@ div.note_edit {
     font-size: 80%;	
 }
 
+#longTextEditLink {
+	font-size: 80%;	
+}
+
 .Initial:before {
 	content: "* ";
 }

@@ -16,11 +16,34 @@ var createNote = function() {
 	return false;
 }
 
+var updateNote = function() {
+	if (!TextSelector.updateIndices(TextSelector.getSelection())) {
+		alert(l10n.invalidSelection);
+		return;
+	}
+	
+	jQuery("#longTextEdit").html(TextSelector.selection);
+	jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
+	jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
+	jQuery(":input[name='selectedText_2']").val(TextSelector.selection);
+	jQuery(":input[name='selectedStartIndex_2']").val(TextSelector.startIndex);
+	jQuery(":input[name='selectedEndIndex_2']").val(TextSelector.endIndex);
+	return false;
+}
+
 var updateSelectionLink = function() {
 	if(TextSelector.getSelection() == "") { 
 		jQuery(".selection-link").addClass('disabled');
 	} else {
 		jQuery(".selection-link").removeClass('disabled');
+	}
+}
+
+var updateUpdateLink = function() {
+	if(TextSelector.getSelection() == "") { 
+		jQuery("#longTextEditLink").hide();
+	} else {
+		jQuery("#longTextEditLink").show();
 	}
 }
 
@@ -50,31 +73,11 @@ jQuery(document).ready(function(){
     });
     */
     
-    
-    /*
-    jQuery('#longTextEditLink').live('click',
-        	function(event) {
-			    if (!TextSelector.startId) {
-					Tapestry.Logging.info("missing startId");
-					return false;
-				}
-				if (!TextSelector.endId) {
-					Tapestry.Logging.info("missing endId");
-					return false;
-				}
-				jQuery("#longTextEdit").html(TextSelector.getSelection());
-	        	jQuery("#longTextEdit").addClass("edited");
-	    		jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
-	    		jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
-	    		jQuery(":input[name='selectedText_2']").val(TextSelector.selection);
-	    		jQuery(":input[name='selectedStartIndex_2']").val(TextSelector.startIndex);
-	    		jQuery(":input[name='selectedEndIndex_2']").val(TextSelector.endIndex);
-	    		return false;
-        	}
-    );
-    */
+    jQuery('#longTextEditLink').live('click', updateNote);
 
-    jQuery('.tei').live('mousemove', updateSelectionLink);
+    jQuery('body').live('mousemove', updateSelectionLink);
+    
+    jQuery('body').live('mousemove', updateUpdateLink);
 });
 
 var Editor = {		
