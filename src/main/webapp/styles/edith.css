@@ -163,12 +163,17 @@ div.note_edit {
 /*
 * Content edited
 */
+.note_edit form {
+	clear: both;	
+}
+
 .note_edit .edited {
     color: #aa00cc;
 }
 
 .note_edit #delete_note {
-	float: right; font-size: 80%;	
+	float: right;
+	font-size: 80%;	
 }
 
 #edited_info {
