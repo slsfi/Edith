@@ -40,15 +40,15 @@ jQuery(document).ready(function(){
     	}
     );
   
-/* TODO disable for note editing!
     jQuery('#createTermLink').bind('click', createNote);
     
+    /* TODO disable for note editing!
     jQuery(document).keydown(function(event) {
     	if (event.which == 65) {
     		createNote();
     	}
     });
-*/
+    */
     
     
     /*
