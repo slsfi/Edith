@@ -37,6 +37,8 @@ import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.TermRepository;
 import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.ui.services.svn.SubversionService;
+import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
 
 /**
  * ServiceModule provides service bindings and RDFBean configuration elements

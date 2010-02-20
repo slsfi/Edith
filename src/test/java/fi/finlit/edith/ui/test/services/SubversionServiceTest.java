@@ -27,9 +27,10 @@ import org.junit.Test;
 import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.ui.services.SubversionService;
-import fi.finlit.edith.ui.services.SubversionServiceImpl;
-import fi.finlit.edith.ui.services.UpdateCallback;
+import fi.finlit.edith.ui.services.AuthService;
+import fi.finlit.edith.ui.services.svn.SubversionService;
+import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
+import fi.finlit.edith.ui.services.svn.UpdateCallback;
 
 /**
  * SubversionServiceTest provides
@@ -43,6 +44,9 @@ public class SubversionServiceTest extends AbstractServiceTest {
     @Autobuild
     @Inject
     private SubversionServiceImpl subversionService;
+    
+    @Inject
+    private AuthService authService;
 
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
@@ -194,7 +198,8 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void commit() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         long oldRevision = subversionService.importFile(svnPath, testFile);
-        subversionService.commit(svnPath, subversionService.getLatestRevision(), new UpdateCallback() {
+        subversionService.commit(svnPath, subversionService.getLatestRevision(), authService.getUsername(), 
+                new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
@@ -205,7 +210,8 @@ public class SubversionServiceTest extends AbstractServiceTest {
                 }
             }
         });
-        long currentRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), new UpdateCallback() {
+        long currentRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), authService.getUsername(), 
+                new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {

@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mysema.rdfbean.dao.Repository;
 
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
-import fi.finlit.edith.ui.services.RevisionInfo;
+import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**
  * DocumentRepository provides

@@ -3,7 +3,7 @@
  * All rights reserved.
  * 
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.svn;
 
 import java.io.InputStream;
 import java.io.OutputStream;

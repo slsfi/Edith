@@ -1,4 +1,4 @@
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.svn;
 
 
 /**

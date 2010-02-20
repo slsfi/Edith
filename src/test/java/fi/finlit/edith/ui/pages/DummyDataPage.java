@@ -16,7 +16,7 @@ import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.RevisionInfo;
+import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**
  * TestDataPage provides

@@ -50,6 +50,11 @@ public class NoteRevisionQueryTest extends AbstractServiceTest{
     }
     
     @Test
+    public void queryNotes(){
+        noteRevisionRepo.queryNotes("*").getAvailableRows();
+    }
+    
+    @Test
     public void queryNotes_kaikki() throws Exception{        
         GridDataSource dataSource = noteRevisionRepo.queryNotes("kaikki");
         assertEquals(3, dataSource.getAvailableRows());

@@ -18,7 +18,7 @@ import com.mysema.tapestry.core.Context;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.ui.services.RevisionInfo;
+import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**
  * AbstractDocumentPage provides

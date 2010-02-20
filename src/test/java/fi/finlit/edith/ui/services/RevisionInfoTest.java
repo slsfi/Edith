@@ -6,6 +6,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.finlit.edith.ui.services.svn.RevisionInfo;
+
 
 public class RevisionInfoTest {
     private RevisionInfo ri;

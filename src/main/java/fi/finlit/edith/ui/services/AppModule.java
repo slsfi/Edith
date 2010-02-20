@@ -47,7 +47,6 @@ public class AppModule {
 //        configuration.add("spring-security.force.ssl.login", "true");
         configuration.add("spring-security.check.url", "/security_check");
         configuration.add("spring-security.failure.url", "/loginfailed");
-        configuration.add("spring-security.accessDenied.url", "/forbidden");
     }
 
     public static void contributeFilterSecurityInterceptor(

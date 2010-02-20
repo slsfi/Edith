@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.svn;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,6 +34,7 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import fi.finlit.edith.EDITH;
+import fi.finlit.edith.ui.services.AuthService;
 
 /**
  * SubversionServiceImpl is the default implementation of the SubversionService
@@ -50,8 +51,6 @@ public class SubversionServiceImpl implements SubversionService {
     static {
         FSRepositoryFactory.setup();
     }
-
-    private final AuthService authService;
 
     private final SVNClientManager clientManager;
 
@@ -76,17 +75,14 @@ public class SubversionServiceImpl implements SubversionService {
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) File svnRepo,
             @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
-            @Inject @Symbol(EDITH.TEI_MATERIAL_ROOT) String materialTeiRoot,
-            AuthService authService) {
+            @Inject @Symbol(EDITH.TEI_MATERIAL_ROOT) String materialTeiRoot) {
         this.clientManager = SVNClientManager.newInstance();
         this.svnCache = svnCache;
-        //System.out.println("Svncache location: " + svnCache.getAbsolutePath());
         this.readCache = new File(svnCache + "/readCache");
         this.workingCopies = new File(svnCache + "/workingCopies");
         this.svnRepo = svnRepo;
         this.documentRoot = documentRoot;
         this.teiMaterialRoot = materialTeiRoot;
-        this.authService = authService;
         try {
             this.repoSvnURL = SVNURL.parseURIEncoded(repoURL);
         } catch (SVNException e) {
@@ -118,8 +114,8 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public long commit(String svnPath, long revision, UpdateCallback callback) throws Exception {
-        File userCheckout = new File(workingCopies + "/" + authService.getUsername());
+    public long commit(String svnPath, long revision, String username, UpdateCallback callback) throws Exception {
+        File userCheckout = new File(workingCopies + "/" + username);
         svnPath = svnPath.substring(documentRoot.length());
         if (userCheckout.exists()) {
             update(userCheckout);

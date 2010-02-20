@@ -166,7 +166,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         noteRevision.setDeleted(true);
         note.setLatestRevision(noteRevision);
 
-        getSession().save(revision);
+        getSession().save(noteRevision);
         getSession().save(note);
     }
 

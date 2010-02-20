@@ -180,4 +180,9 @@ public class NoteRevision extends Identifiable{
             lemma = longText;
         }
     }
+    
+    @Override
+    public String toString(){
+        return deleted ? (lemma + " (deleted)") : lemma;
+    }
 }

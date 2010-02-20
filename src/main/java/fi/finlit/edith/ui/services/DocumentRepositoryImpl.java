@@ -49,6 +49,9 @@ import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.ui.services.svn.RevisionInfo;
+import fi.finlit.edith.ui.services.svn.SubversionService;
+import fi.finlit.edith.ui.services.svn.UpdateCallback;
 
 /**
  * DocumentRepositoryImpl provides
@@ -85,19 +88,23 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     
     private final TimeService timeService;
     
+    private final AuthService authService;
+    
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject SubversionService svnService,
             @Inject NoteRepository noteRepository,
             @Inject NoteRevisionRepository noteRevisionRepository,
-            @Inject TimeService timeService)throws SVNException {
+            @Inject TimeService timeService,
+            @Inject AuthService authService)throws SVNException {
         super(sessionFactory, document);
         this.documentRoot = documentRoot;
         this.svnService = svnService;
         this.noteRepository = noteRepository;
         this.noteRevisionRepository = noteRevisionRepository;
         this.timeService = timeService;
+        this.authService = authService;
     }
 
     private static EventFilter createRemoveFilter(Note... notes) {
@@ -149,7 +156,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         final String localId = String.valueOf(timeService.currentTimeMillis());
         long newRevision;
         try {
-            newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), new UpdateCallback() {
+            newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), authService.getUsername(),
+                    new UpdateCallback() {
                 @Override
                 public void update(InputStream source, OutputStream target) throws Exception {
                     addNote(inFactory.createXMLEventReader(source), outFactory
@@ -338,7 +346,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public DocumentRevision removeNotes(DocumentRevision docRevision, final Note... notes){
         long newRevision;
         try {
-            newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), new UpdateCallback() {
+            newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), authService.getUsername(), 
+                    new UpdateCallback() {
                 @Override
                 public void update(InputStream source, OutputStream target) throws Exception {
                     streamEvents(inFactory.createFilteredReader(inFactory
@@ -374,7 +383,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         Document document = note.getRevisionOf().getDocument();        
         long newRevision;
         try {
-            newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(),
+            newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(), authService.getUsername(),
                     new UpdateCallback() {
                         @Override
                         public void update(InputStream source, OutputStream target) {

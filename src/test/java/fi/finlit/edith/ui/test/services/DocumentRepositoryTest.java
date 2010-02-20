@@ -16,11 +16,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
@@ -32,11 +35,12 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
-import fi.finlit.edith.ui.services.SubversionService;
+import fi.finlit.edith.ui.services.svn.SubversionService;
 
 /**
  * DocumentRepositoryTest provides
@@ -48,6 +52,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepo;
+    
+    @Inject
+    private NoteRepository noteRepo;
     
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
@@ -181,6 +188,36 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         tmpFile.delete();
         assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
     }
+    
+    @Test
+    public void addRemoveNote() throws IOException, NoteAdditionFailedException{
+        Document document = documentRepo.getDocumentForPath(documentRoot
+                + "/Nummisuutarit rakenteistettuna.xml");
+        
+        int count = noteRevisionRepo.queryNotes("*").getAvailableRows();
+        
+        // add
+        String element = "play-act-sp4-p";
+        String text = "min\u00E4; ja nytp\u00E4, luulen,";
+        NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
+        
+        assertEquals(count+1, noteRevisionRepo.queryNotes("*").getAvailableRows());
+        
+        // remove
+        documentRepo.removeNotes(document.getRevision(note.getSvnRevision()), note.getRevisionOf());
+        
+        Note deletedNote = noteRepo.getById(note.getRevisionOf().getId());
+        assertTrue(deletedNote.getLatestRevision().isDeleted());
+        
+        GridDataSource dataSource = noteRevisionRepo.queryNotes("*");
+        int available = dataSource.getAvailableRows();
+        dataSource.prepare(0, available-1, Collections.<SortConstraint>emptyList());
+        for (int i = 0; i < available; i++){
+            NoteRevision rev = (NoteRevision) dataSource.getRowValue(i);
+            assertEquals(rev, rev.getRevisionOf().getLatestRevision());
+        }        
+        assertEquals(count, available);
+    }
 
     @Test
     public void removeNotes_several() throws Exception {
@@ -244,6 +281,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     
     @Test    
     public void removeAllNotes() throws Exception{
+        // TODO : fix in RDFBean
         Document document = documentRepo.getDocumentForPath(documentRoot+ "/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";

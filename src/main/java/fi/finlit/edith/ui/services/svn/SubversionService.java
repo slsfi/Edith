@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.svn;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.tmatesoft.svn.core.SVNException;
+
 
 
 /**
@@ -27,9 +28,10 @@ public interface SubversionService {
      *
      * @param svnPath
      * @param revision
+     * @param username
      * @param callback
      */
-    long commit(String svnPath, long revision, UpdateCallback callback) throws Exception;
+    long commit(String svnPath, long revision, String username, UpdateCallback callback) throws Exception;
 
     /**
      * Delete the given svn path
