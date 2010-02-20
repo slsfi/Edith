@@ -41,7 +41,7 @@ public class CrawlingTest {
 
     private WebDriver webDriver;
 
-    private String baseUrl = "http://localhost:8080";
+    private String baseUrl = "http://localhost:9080";
 
     private static final String USERNAME = "vesa";
     private static final String PASSWORD = "vesa";
@@ -66,7 +66,7 @@ public class CrawlingTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
         if (applicationStarted) {
-            JettyHelper.stopJettyAtPort(8080);
+            JettyHelper.stopJettyAtPort(9080);
         }
     }
 
