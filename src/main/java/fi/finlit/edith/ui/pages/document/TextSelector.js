@@ -35,8 +35,7 @@ var TextSelector = {
 		var text = new Array();
 		element = element.previousSibling;
 		while (element != null) {
-			text.push(element.nodeValue != null ? element.nodeValue
-					: element.innerHTML);
+			text.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
 			element = element.previousSibling;
 		}
 		text.reverse();
@@ -44,14 +43,11 @@ var TextSelector = {
 	},
 
 	getOccurrenceInElement : function(element, offset, substr) {
-		var prevOccurrences = this.getOccurrences(this.prevAllString(element
-				.get(0)), substr);
+		var prevOccurrences = this.getOccurrences(this.prevAllString(element.get(0)), substr);
 		if (element.parent().hasClass("notecontent")) {
-			prevOccurrences += this.getOccurrences(this.prevAllString(element
-					.parent().get(0)), substr);
+			prevOccurrences += this.getOccurrences(this.prevAllString(element.parent().get(0)), substr);
 		}
-		var occurrence = this.getOccurrenceInString(element.text(), substr
-				.substring(0, element.text().length), offset);
+		var occurrence = this.getOccurrenceInString(element.text(), substr.substring(0, element.text().length), offset);
 		return prevOccurrences + occurrence;
 	},
 
@@ -60,8 +56,7 @@ var TextSelector = {
 		if (!isInDifferentElements) {
 			return selection.anchorOffset > selection.focusOffset;
 		} else {
-			return selection.anchorNode
-					.compareDocumentPosition(selection.focusNode) == 2;
+			return selection.anchorNode.compareDocumentPosition(selection.focusNode) == 2;
 		}
 	},
 
@@ -78,14 +73,11 @@ var TextSelector = {
 		}
 		var whitespaceRe = new RegExp(/\s+/g);
 		var selectionString = selection.toString();
-		if (whitespaceRe.test(selectionString
-				.charAt(selectionString.length - 1))) {
+		if (whitespaceRe.test(selectionString.charAt(selectionString.length - 1))) {
 			--this.endOffset;
 		}
-		var words = selectionString.replace(/#/g, "").trim()
-				.split(whitespaceRe);
-		this.startIndex = this.getOccurrenceInElement(startNode, startOffset,
-				words[0]);
+		var words = selectionString.replace(/#/g, "").trim().split(whitespaceRe);
+		this.startIndex = this.getOccurrenceInElement(startNode, startOffset,words[0]);
 		this.endIndex = this.startIndex;
 		if (words.length > 1) {
 			var lastWord = words[words.length - 1];
