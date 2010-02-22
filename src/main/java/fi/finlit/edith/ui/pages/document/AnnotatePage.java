@@ -178,7 +178,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         NoteRevision noteRevision = null;
         try{
             noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
-        }catch(NoteAdditionFailedException e){
+        }catch(Exception e){
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
             return new MultiZoneUpdate("editZone", errorBlock);
@@ -205,12 +205,18 @@ public class AnnotatePage extends AbstractDocumentPage {
 	    note.getRevisionOf().setStatus(NoteStatus.Draft);
 	}
 
-        if (updateLongTextSelection.hasSelection()) {
-            noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
-        } else {
-            noteRevision = noteRevisionRepo.save(note);
+	try{
+	    if (updateLongTextSelection.hasSelection()) {
+	        noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
+	    } else {
+	        noteRevision = noteRevisionRepo.save(note);
+	    }    
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            infoMessage = messages.format("note-addition-failed");
+            return new MultiZoneUpdate("editZone", errorBlock);
         }
-
+        
         //XXX This doesn't look good
         if (termOnEdit.getBasicForm() != null && !termOnEdit.getBasicForm().trim().isEmpty()) {
             Term term = termRepo.findByBasicForm(termOnEdit.getBasicForm());

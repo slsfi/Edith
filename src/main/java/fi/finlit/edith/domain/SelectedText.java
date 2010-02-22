@@ -90,7 +90,11 @@ public class SelectedText {
 
     @Override
     public String toString(){
-        return startId + "," + endId + ":[" + selection + "]";
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(startId + "[" + startIndex + "] , ");
+        buffer.append(endId + "[" + endIndex + "] : ");
+        buffer.append(selection);
+        return buffer.toString();
     }
 
 

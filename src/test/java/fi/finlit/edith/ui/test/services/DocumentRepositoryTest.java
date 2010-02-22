@@ -10,11 +10,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +27,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
@@ -70,6 +70,15 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     private static boolean initialized = false;
 
+    private String getContent(String svnPath, long svnRevision) throws IOException{
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        InputStream in = register(subversionService.getStream(svnPath, svnRevision));
+        IOUtils.copy(in, out);
+        in.close();
+        out.close();
+        return new String(out.toByteArray(), "UTF-8");
+    }
+    
     @Before
     public void setUp(){
         if (!initialized){
@@ -141,15 +150,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
 
-        // TODO Resource handling into setup + teardown?
-        File tmpFile = File.createTempFile("nummarit", ".xml");
-        OutputStream out = new FileOutputStream(tmpFile);
-        InputStream in = register(subversionService.getStream(document.getSvnPath(), -1));
-        IOUtils.copy(in, out);
-        out.close();
-
-        String content = FileUtils.readFileToString(tmpFile, "UTF-8");
-        tmpFile.delete();
+        String content = getContent(document.getSvnPath(), -1);
         String localId = note.getRevisionOf().getLocalId();
         assertTrue(content.contains(start(localId) + text + end(localId)));
     }
@@ -175,15 +176,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Note note = noteRev.getRevisionOf();
         documentRepo.removeNotes(document.getRevision(-1), new Note[] { note });
 
-        // TODO Resource handling into setup + teardown?
-        File tmpFile = File.createTempFile("nummarit", ".xml");
-        OutputStream out = new FileOutputStream(tmpFile);
-        InputStream in = register(subversionService.getStream(document.getSvnPath(), -1));
-        IOUtils.copy(in, out);
-        out.close();
-
-        String content = FileUtils.readFileToString(tmpFile, "UTF-8");
-        tmpFile.delete();
+        String content = getContent(document.getSvnPath(), -1);
         assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
     }
     
@@ -235,15 +228,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Note note3 = noteRev3.getRevisionOf();
         documentRepo.removeNotes(document.getRevision(-1), new Note[] { note, note3 });
 
-        // TODO Resource handling into setup + teardown?
-        File tmpFile = File.createTempFile("nummarit", ".xml");
-        OutputStream out = new FileOutputStream(tmpFile);
-        InputStream in = register(subversionService.getStream(document.getSvnPath(), -1));
-        IOUtils.copy(in, out);
-        out.close();
-
-        String content = FileUtils.readFileToString(tmpFile, "UTF-8");
-        tmpFile.delete();
+        String content = getContent(document.getSvnPath(), -1);
         assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
         assertTrue(content.contains(start(note2.getLocalId()) + text2 + end(note2.getLocalId())));
         assertFalse(content.contains(start(note3.getLocalId()) + text3 + end(note3.getLocalId())));
@@ -260,18 +245,31 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String newText = "sun ullakosta";
         documentRepo.updateNote(noteRevision, new SelectedText(element, element, newText));
 
-        // TODO Resource handling into setup + teardown?
-        File tmpFile = File.createTempFile("nummarit", ".xml");
-        OutputStream out = new FileOutputStream(tmpFile);
-        InputStream in = register(subversionService.getStream(document.getSvnPath(), -1));
-        IOUtils.copy(in, out);
-        out.close();
-
-        String content = FileUtils.readFileToString(tmpFile, "UTF-8");
-        tmpFile.delete();
+        String content = getContent(document.getSvnPath(), -1);        
         String localId = noteRevision.getRevisionOf().getLocalId();
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));
+    }
+        
+    @Test
+    @Ignore
+    public void updateNote2() throws IOException, NoteAdditionFailedException{
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        String element = "play-act-sp3-p";
+        String text = "\u00E4st";
+        
+        NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
+        
+        //T-äst-ä
+        String newText = "T\u00E4st\u00E4";
+        documentRepo.updateNote(noteRevision, new SelectedText(element, element, newText));
+        
+        String content = getContent(document.getSvnPath(), -1);
+        String localId = noteRevision.getRevisionOf().getLocalId();
+        System.out.println(content);
+        assertFalse(content.contains(start(localId) + text + end(localId)));
+        assertTrue(content.contains(start(localId) + newText + end(localId)));
+        // Täst<anchor xml:id="start1266836640612"/>ä<anchor xml:id="end1266836640612"/> rientää
     }
     
     @Test    
