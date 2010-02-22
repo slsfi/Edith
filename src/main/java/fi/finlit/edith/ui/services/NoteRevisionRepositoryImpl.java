@@ -95,7 +95,8 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
                     noteRevision.longText,
                     noteRevision.revisionOf.term.basicForm,
                     noteRevision.revisionOf.term.meaning,
-                    noteRevision.description
+                    noteRevision.description,
+                    noteRevision.subtextSources
                     )){
                 builder.or(path.contains(searchTerm, false));
             }
