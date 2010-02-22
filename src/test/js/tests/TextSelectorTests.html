@@ -9,7 +9,6 @@
     <script type="text/javascript" src="../../../main/java/fi/finlit/edith/ui/pages/document/TextSelector.js"></script>
     <script type="text/javascript">
     	var getOccurrenceInString = TextSelector.getOccurrenceInString;
-    	var getOccurrences = TextSelector.getOccurrences;
     	var getOccurrenceInElement = TextSelector.getOccurrenceInElement;
     	var isInverseSelection = TextSelector.isInverseSelection;
     	var prevAllString = TextSelector.prevAllString;
@@ -23,16 +22,6 @@
             assertEquals(3, getOccurrenceInString("Hello World Wor World", "Wor", 15));
             assertEquals(1, getOccurrenceInString("Hello World Wor World", "Wor ", 12));
             assertEquals(0, getOccurrenceInString("Hello World", "Mary", 6));
-        }
-        
-        function testGetOccurrences(){
-            assertEquals(0, getOccurrences("Hello World", "Mary"));
-            assertEquals(3, getOccurrences("Hello World", "l"));
-            assertEquals(1, getOccurrences("Hello World", "Hello"));
-            assertEquals(1, getOccurrences("Hello World", "World"));
-            assertEquals(1, getOccurrences(" Hello World", "World"));
-            assertEquals(1, getOccurrences("Hello World", " World"));
-            assertEquals(2, getOccurrences("Hello World Hello World", " World"));
         }
          
         function testGetOccurrenceInElement(){
@@ -108,7 +97,17 @@
 			updateIndices(selection);            
             assertEquals("on", TextSelector.selection);
         }*/
-        
+
+        function testMishitSelection() {
+			var startNode = document.getElementById("mishit");
+			var endNode = document.getElementById("actual").childNodes[0];
+			var selection = new Selection(13, 12, startNode, endNode);
+			selection.toString = function() {
+				return "This is the d";
+			}
+			updateIndices(selection);
+			assertTrue(isValidSelection());
+        }
     </script>
 
 </head>
@@ -138,5 +137,8 @@
 	<h2>Tests for difficult element boundaries or something // TODO better title</h2>
 	<div id="play-act-sp95-p" class="p">Laita o<span id="start1266592466565" class="notestart"></span><span class="notecontent n1266592466565">n täm</span>ä, näkeekö kanttoori.</div>
 	
+	<h2>Tests for mishit selections</h2>
+	<div id="mishit">A                    </div>
+	<div id="actual">This is the div that needs to be annotated</div>
 </body>
 </html>
