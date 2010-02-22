@@ -82,7 +82,6 @@ public class ServiceTestModule {
         };
         configuration.add(AuthService.class, authService);
         
-//        configuration.add(IdentityService.class, MemoryIdentityService.instance());
     }
 
     public static PasswordEncoder buildPaswordEncoder() {

@@ -127,12 +127,14 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
             assertFalse(documentRepo.getRevisions(document).isEmpty());
         }
     }
+    
+    private Document getDocument(String path){
+        return documentRepo.getDocumentForPath(documentRoot + path);
+    }
 
     @Test
     public void addNote() throws Exception {
-        Document document = documentRepo.getDocumentForPath(documentRoot
-                + "/Nummisuutarit rakenteistettuna.xml");
-
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
@@ -154,9 +156,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void addNote2() throws IOException, NoteAdditionFailedException{
-        Document document = documentRepo.getDocumentForPath(documentRoot
-                + "/Nummisuutarit rakenteistettuna.xml");
-
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
 //        act1-sp4 - act1-sp4 : minä; ja nytpä, luulen,
         String element = "play-act-sp4-p";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
@@ -167,9 +167,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void removeNotes() throws Exception {
-        Document document = documentRepo.getDocumentForPath(documentRoot
-                + "/Nummisuutarit rakenteistettuna.xml");
-
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
@@ -191,9 +189,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     
     @Test
     public void addRemoveNote() throws IOException, NoteAdditionFailedException{
-        Document document = documentRepo.getDocumentForPath(documentRoot
-                + "/Nummisuutarit rakenteistettuna.xml");
-        
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");        
         int count = noteRevisionRepo.queryNotes("*").getAvailableRows();
         
         // add
@@ -202,10 +198,10 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
         
         assertEquals(count+1, noteRevisionRepo.queryNotes("*").getAvailableRows());
+        int countInDoc = noteRevisionRepo.getOfDocument(document.getRevision(note.getSvnRevision())).size();
         
         // remove
-        documentRepo.removeNotes(document.getRevision(note.getSvnRevision()), note.getRevisionOf());
-        
+        documentRepo.removeNotes(document.getRevision(note.getSvnRevision()), note.getRevisionOf());        
         Note deletedNote = noteRepo.getById(note.getRevisionOf().getId());
         assertTrue(deletedNote.getLatestRevision().isDeleted());
         
@@ -216,14 +212,15 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
             NoteRevision rev = (NoteRevision) dataSource.getRowValue(i);
             assertEquals(rev, rev.getRevisionOf().getLatestRevision());
         }        
+        
+        long svnRevision = deletedNote.getLatestRevision().getSvnRevision();
+        assertEquals(countInDoc - 1, noteRevisionRepo.getOfDocument(document.getRevision(svnRevision)).size());
         assertEquals(count, available);
     }
 
     @Test
     public void removeNotes_several() throws Exception {
-        Document document = documentRepo.getDocumentForPath(documentRoot
-                + "/Nummisuutarit rakenteistettuna.xml");
-
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
         String text2 = "ottaa";
@@ -254,9 +251,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void updateNote() throws Exception {
-        Document document = documentRepo.getDocumentForPath(documentRoot
-                + "/Nummisuutarit rakenteistettuna.xml");
-
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
@@ -281,8 +276,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     
     @Test    
     public void removeAllNotes() throws Exception{
-        // TODO : fix in RDFBean
-        Document document = documentRepo.getDocumentForPath(documentRoot+ "/Nummisuutarit rakenteistettuna.xml");
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 

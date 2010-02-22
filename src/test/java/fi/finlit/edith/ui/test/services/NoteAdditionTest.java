@@ -79,12 +79,16 @@ public class NoteAdditionTest extends AbstractServiceTest{
         source.close();
         target.close();
     }
+    
+    private void addNote(SelectedText selectedText) throws Exception{
+        documentRepo.addNote(sourceReader, targetWriter, selectedText, localId);
+    }
 
     @Test
     public void addNote_for_p() throws Exception{
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text), localId);
+        addNote(new SelectedText(element, element, text));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains("k\u00E4ski " + start(localId) + text + end(localId) + " p\u00E4\u00E4lles"));
@@ -94,7 +98,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_for_speaker() throws Exception{
         String element = "play-act-sp-speaker";
         String text = "Esko.";
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text), localId);
+        addNote(new SelectedText(element, element, text));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains("<speaker>" + start(localId) + text + end(localId) + "</speaker>"));
@@ -105,7 +109,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String start = "play-act-sp2-p";
         String end = "play-act-sp3-speaker";
         String text = "ja polvip\u00F6ksyt. Esko.";
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(start, end, text), localId);
+        addNote(new SelectedText(start, end, text));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
@@ -117,7 +121,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String start = "play-act-sp2-p";
         String end = "play-act-sp3-p";
         String text = "ja polvip\u00F6ksyt. Esko. (panee ty\u00F6ns\u00E4 pois).";
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(start, end, text), localId);
+        addNote(new SelectedText(start, end, text));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
@@ -130,7 +134,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         StringBuilder text = new StringBuilder();
         text.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
         text.append("ja sulhais-vaatteisin puettuna olen, koska h\u00E4n takaisin pal");
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, text.toString()), localId);
+        addNote(new SelectedText(element, element, text.toString()));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
 //        System.out.println(content);
@@ -142,11 +146,9 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_short_note_1() throws Exception {
         String element = "play-act-stage";
         String text = "es";
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, 1, 1,
-                text.toString()), localId);
+        addNote(new SelectedText(element, element, 1, 1, text.toString()));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-//        System.out.println(content);
         assertTrue(content.contains("ed" + start(localId) + "es" + end(localId) + "s\u00E4"));
     }
 
@@ -154,11 +156,9 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_short_note_2() throws Exception {
         String element = "play-act-stage";
         String text = "es";
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, 2, 2,
-                text.toString()), localId);
+        addNote(new SelectedText(element, element, 2, 2, text));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-//        System.out.println(content);
         assertTrue(content.contains("\u00E4\u00E4r" + start(localId) + "es" + end(localId) + "s\u00E4,"));
     }
 
@@ -166,11 +166,9 @@ public class NoteAdditionTest extends AbstractServiceTest{
     public void addNote_short_note_3() throws Exception {
         String element = "play-act-stage";
         String text = "es";
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(element, element, 3, 3,
-                text.toString()), localId);
+        addNote(new SelectedText(element, element, 3, 3, text));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-//        System.out.println(content);
         assertTrue(content.contains("vier" + start(localId) + "es" + end(localId) + "s\u00E4,"));
     }
 
@@ -179,10 +177,9 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String startElement = "play-description-castList-castItem8-roleDesc";
         String endElement = "play-description-castList-castItem9-roleDesc";
         String text = " \nori sepp\u00E4\n.\nKarri\n,\ntalon";
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement, endElement, 1, 1,
-                text), localId);
+        addNote(new SelectedText(startElement, endElement, 1, 1, text));
+        
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-//        System.out.println(content);
         assertTrue(content.contains("nu" + start(localId) + "ori"));
         assertTrue(content.contains("talon" + end(localId) + "is\u00E4nt\u00E4"));
     }

@@ -83,7 +83,6 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         assertTrue(noteRevisionRepo.queryNotes("annoit").getAvailableRows() > 0);
     }
 
-
     @Test
     public void getOfDocument(){
         assertEquals(4, noteRevisionRepo.getOfDocument(docRev).size());

@@ -21,32 +21,31 @@ import fi.finlit.edith.ui.services.DocumentRenderer;
  */
 public class DocumentRendererTest extends AbstractServiceTest {
 
+    private static final String doc1 = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
+    
+    private static final String doc2 = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
+        
     @Inject
     private DocumentRenderer renderer;
     
     @Inject
     private DocumentRepository docRepo;
+    
+    private MarkupWriter writer = new MarkupWriterImpl();
 
     @Test
     public void renderDocument() throws Exception {
-        MarkupWriter writer = new MarkupWriterImpl();
-        String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
-        renderer.renderDocument(docRepo.getDocumentForPath(svnPath).getRevision(-1), writer);
-//        System.out.println(writer.toString());
+        renderer.renderDocument(docRepo.getDocumentForPath(doc1).getRevision(-1), writer);
     }
 
     @Test
     public void renderPageLinks() throws Exception {
-        MarkupWriter writer = new MarkupWriterImpl();
-        String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
-        renderer.renderPageLinks(docRepo.getDocumentForPath(svnPath).getRevision(-1), writer);
+        renderer.renderPageLinks(docRepo.getDocumentForPath(doc1).getRevision(-1), writer);
     }
 
     @Test
     public void renderDocumentWithNotes() throws Exception {
-        MarkupWriter writer = new MarkupWriterImpl();
-        String svnPath = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
-        renderer.renderDocument(docRepo.getDocumentForPath(svnPath).getRevision(-1), writer);
+        renderer.renderDocument(docRepo.getDocumentForPath(doc2).getRevision(-1), writer);
     }
 
     @Override
