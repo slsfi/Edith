@@ -13,6 +13,7 @@
     	var getOccurrenceInElement = TextSelector.getOccurrenceInElement;
     	var isInverseSelection = TextSelector.isInverseSelection;
     	var prevAllString = TextSelector.prevAllString;
+        var nextAllString = TextSelector.nextAllString;
     	var updateIndices = TextSelector.updateIndices;
     	var isValidSelection = TextSelector.isValidSelection;
 		
@@ -88,10 +89,25 @@
             assertEquals("start This is a paragraph", text.trim().replace(/\s+/g, " "));
         }
 
-        function testNoteBreakingWord() {
-			var selection = new Selection(6, 1, byId("play-act-sp95-p"), byId("play-act-sp95-p"));
-			assertTrue(updateIndices(selection));
+        function getTextNode(element, text){
+            var nodes = element.childNodes;
+            for (var i = 0;  i < nodes.length; i++){
+                var node = nodes.item(i);
+                var content = node.nodeValue != null ? node.nodeValue : node.innerHTML;
+                if (text == content) return node;
+            }
+            alert("Didnt' find text '" + text + "'");
         }
+
+        /*function testNoteBreakingWord() {
+            var container = byId("play-act-sp95-p");
+            var start = getTextNode(container, "Laita o");
+            var end = getTextNode(container, "n täm");
+            
+			var selection = new Selection(6, 1, start, end);
+			updateIndices(selection);            
+            assertEquals("on", TextSelector.selection);
+        }*/
         
     </script>
 

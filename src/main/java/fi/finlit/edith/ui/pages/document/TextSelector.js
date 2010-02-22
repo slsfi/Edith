@@ -42,13 +42,32 @@ var TextSelector = {
 		return text.join("");
 	},
 
-	getOccurrenceInElement : function(element, offset, substr) {
-		var prevOccurrences = this.getOccurrences(this.prevAllString(element.get(0)), substr);
-		if (element.parent().hasClass("notecontent")) {
-			prevOccurrences += this.getOccurrences(this.prevAllString(element.parent().get(0)), substr);
+	nextAllString : function(element) {
+		var text = new Array();
+		element = element.nextSibling;
+		while (element != null) {
+			text.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
+			element = element.nextSibling;
 		}
-		var occurrence = this.getOccurrenceInString(element.text(), substr.substring(0, element.text().length), offset);
-		return prevOccurrences + occurrence;
+		return text.join("");
+	},	
+	
+	getOccurrenceInElement : function(element, offset, substr) {
+		var text = new Array();
+		if (element.parent().hasClass("notecontent")) {
+			text.push(this.prevAllString(element.parent().get(0)));
+			offset += text[0].length;
+		}
+		text.push(this.prevAllString(element.get(0)));
+		offset += text[text.length-1].length;
+		text.push(element.text());
+		if (element.parent().hasClass("notecontent")){
+			text.push(this.nextAllString(element.parent().get(0)));
+		}	
+		text.push(this.nextAllString(element.get(0)));
+		text = text.join("");
+		
+		return this.getOccurrenceInString(text, substr, offset);
 	},
 
 	isInverseSelection : function(selection) {
