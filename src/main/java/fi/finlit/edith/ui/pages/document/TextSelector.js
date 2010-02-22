@@ -20,17 +20,7 @@ var TextSelector = {
 		}
 		return 0;
 	},
-
-	getOccurrences : function(str, substr) {
-		var occurrence = 0;
-		for ( var i = 0; i < str.length; ++i) {
-			if (str.substring(i).indexOf(substr) == 0) {
-				++occurrence;
-			}
-		}
-		return occurrence;
-	},
-
+	
 	prevAllString : function(element) {
 		var text = new Array();
 		element = element.previousSibling;
