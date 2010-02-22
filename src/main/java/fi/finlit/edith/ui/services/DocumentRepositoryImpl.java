@@ -180,6 +180,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         StringBuilder endBuilder = new StringBuilder();
         boolean startMatched = false, endMatched = false;
         
+        // TODO : cache events in start element and process them, when start scope is exited
+        
         try {
             while (reader.hasNext()) {
                 boolean handled = false;
@@ -203,10 +205,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     // in start
                     if (sel.getStartId().equals(context.getPath())){
                         startBuilder.append(chars.getData());
-                        String str = startBuilder.toString();                        
-                        
+                        String str = startBuilder.toString();                 
+                                                
                         // found first word
-                        if (!startMatched){
+                        if (!startMatched){                            
                             index = getIndex(str, sel.getFirstWord(), sel.getStartIndex());
                             if (index >= 0){
                                 startMatched = true;

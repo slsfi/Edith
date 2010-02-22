@@ -73,7 +73,7 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
                    noteRevision.svnRevision.loe(docRevision.getRevision()),
                    noteRevision.deleted.eq(false),
                    latestFor(docRevision.getRevision()))
-            .orderBy(noteRevision.longText.asc())
+            .orderBy(noteRevision.createdOn.asc())
             .list(noteRevision);
     }
 
