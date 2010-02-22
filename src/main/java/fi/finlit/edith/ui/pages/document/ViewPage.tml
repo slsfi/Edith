@@ -25,6 +25,12 @@
         </p>
 
         <div class="panel narrow">
+            <h3>${message:pages}</h3>
+            <t:document.pages document="documentRevision"/>
+            <div style="clear:both;"></div>
+        </div>
+
+        <div class="panel narrow">
             <h3>${message:revisions}</h3>
             <ul>
                 <t:loop source="revisions" value="revision">
@@ -37,12 +43,6 @@
                 </li>
                 </t:loop>
             </ul>            
-        </div>
-
-        <div class="panel narrow">
-            <h3>${message:pages}</h3>
-            <t:document.pages document="documentRevision"/>
-            <div style="clear:both;"></div>
         </div>
         
     </p:leftPanel>

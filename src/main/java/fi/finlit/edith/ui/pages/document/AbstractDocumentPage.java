@@ -6,6 +6,7 @@
 package fi.finlit.edith.ui.pages.document;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.tapestry5.EventContext;
@@ -74,6 +75,7 @@ public class AbstractDocumentPage {
             // get latest
             revision = revisions.get(revisions.size() - 1).getSvnRevision();
         }
+        Collections.reverse(revisions);
         documentRevision = new DocumentRevision(document, revision);
     }
 
