@@ -2,7 +2,29 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
       xmlns:p="tapestry:parameter">
       
-    <p:title>${message:help}</p:title>  
+    <p:title>${message:help}</p:title>
+    
+    <div class="content">
+    <h3>Annotointi</h3>
+    <p>Tekstin annotointi on mahdollista dokumentin annotointinäkymässä.
+    Ensimmäinen askel on maalata haluttu teksti hiiren vasemmalla näppäimellä
+    ja toinen askel on klikata oikealla ylhäällä olevaa "Luo sanaselitys"
+     -linkkiä.</p>
+
+	<h4>Mahdollisia ongelmia</h4>
+	<p>Jo annotoidusta tekstistä ei pysty aloittamaan uutta annotointia.
+	Tämä johtuu siitä, että annotoitu teksti on linkki.</p>
+	
+	<p>Annotointi tyhjältä alueelta voi aiheuttaa ongelmia. On toivottavaa
+	aloittaa maalaus siten, että maalauksen ja sanan väliin ei jää tyhjiä
+	merkkejä. Eli mielummin "|maalaus..." eikä "| maalaus..."</p>
+	
+	<p>Osittain annotoidun sanan päivittäminen voi hajota. Esimerkiksi
+	jos on lause "hieno te|ksti|", josta "ksti" on jo annotoitu niin annotoinnin
+	päivitys muotoon "hieno |teksti|" epäonnistuu. Annotointi "hien|o teksti|"
+	kuitenkin onnistuu.</p>
+	
+    </div>  
     
     <p:breadcrumbs>
         <a t:type="pageLink" t:page="index">${message:frontpage}</a> 
@@ -14,7 +36,7 @@
     </p:leftPanel>
 
     <p:rightPanel>
-        
+
     </p:rightPanel>
 
 </html>
