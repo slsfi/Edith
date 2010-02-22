@@ -95,7 +95,7 @@ var TextSelector = {
 		var whitespaceRe = new RegExp(/\s+/g);
 		var selectionString = selection.toString();
 		if (whitespaceRe.test(selectionString.charAt(selectionString.length - 1))) {
-			--this.endOffset;
+			--endOffset;
 		}
 		var words = selectionString.replace(/#/g, "").trim().split(whitespaceRe);
 		this.startIndex = this.getOccurrenceInElement(startNode, startOffset ,words[0]);
