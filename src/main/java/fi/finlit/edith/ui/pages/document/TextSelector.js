@@ -65,24 +65,27 @@ var TextSelector = {
 		var endNode = jQuery(selection.focusNode);
 		var startOffset = selection.anchorOffset;
 		var endOffset = selection.focusOffset;
+		
 		if (this.isInverseSelection(selection)) {
 			startNode = jQuery(selection.focusNode);
 			endNode = jQuery(selection.anchorNode);
 			startOffset = selection.focusOffset;
 			endOffset = selection.anchorOffset;
 		}
+		
 		var whitespaceRe = new RegExp(/\s+/g);
 		var selectionString = selection.toString();
 		if (whitespaceRe.test(selectionString.charAt(selectionString.length - 1))) {
 			--this.endOffset;
 		}
 		var words = selectionString.replace(/#/g, "").trim().split(whitespaceRe);
-		this.startIndex = this.getOccurrenceInElement(startNode, startOffset,words[0]);
+		this.startIndex = this.getOccurrenceInElement(startNode, startOffset ,words[0]);
 		this.endIndex = this.startIndex;
 		if (words.length > 1) {
 			var lastWord = words[words.length - 1];
 			this.endIndex = this.getOccurrenceInElement(endNode, endOffset - lastWord.length - 1, lastWord);
 		}
+		
 		this.startId = (startNode.parent().attr("id") != "" ? startNode.parent().attr("id") : startNode.parent().parent().attr("id"));
 		this.endId = (endNode.parent().attr("id") != "" ? endNode.parent().attr("id") : endNode.parent().parent().attr("id"));
 		this.selection = this.getSelection().toString().replace(/#/g, " ");
