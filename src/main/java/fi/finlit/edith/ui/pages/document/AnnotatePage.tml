@@ -113,9 +113,9 @@
                     	});
                     </script>
                     <span id="delete_note">
-                    	<button id="delete_question">${message:delete}?</button>
+                    	<button id="delete_question">${message:delete}</button>
                     	<span id="delete_dialog">
-                    		${message:delete}? <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
+                    		${message:delete} <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
                     		/ <a href="" id="delete_note_decline">${message:no}</a>
                     	</span>
                     </span>
