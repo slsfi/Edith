@@ -58,7 +58,12 @@
                         ${note.revisionOf.term?.meaning}
                 </p:meaningCell>
                 <p:subtextSourcesCell>
-                        <t:markdown value="note.subtextSources"/>
+                	<t:if test="editMode">
+                        <t:inlineField t:id="subtextSources" value="note.subtextSources" value1="note.subtextSources" />
+                        <p:else>
+                            <t:markdown value="note.subtextSources"/>
+                        </p:else>
+                    </t:if>
                 </p:subtextSourcesCell>
                 <p:statusCell>
 					<t:fmt.message key="NoteStatus.${note.revisionOf.status}"/>
