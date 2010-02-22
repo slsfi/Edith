@@ -252,7 +252,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
         
     @Test
-    @Ignore
     public void updateNote2() throws IOException, NoteAdditionFailedException{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp3-p";

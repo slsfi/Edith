@@ -350,9 +350,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     new UpdateCallback() {
                 @Override
                 public void update(InputStream source, OutputStream target) throws Exception {
-                    streamEvents(inFactory.createFilteredReader(inFactory
-                            .createXMLEventReader(source), createRemoveFilter(notes)), outFactory
-                            .createXMLEventWriter(target));
+                    streamEvents(inFactory.createFilteredReader(
+                            inFactory.createXMLEventReader(source), 
+                            createRemoveFilter(notes)), 
+                            outFactory.createXMLEventWriter(target));
                 }
             });
         } catch (Exception e) {
@@ -388,11 +389,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         @Override
                         public void update(InputStream source, OutputStream target) {
                             try {
-                                addNote(inFactory.createFilteredReader(inFactory
-                                        .createXMLEventReader(source),
-                                        createRemoveFilter(new Note[] { note.getRevisionOf() })),
-                                        outFactory.createXMLEventWriter(target), selection,
-                                        note.getRevisionOf().getLocalId());
+                                XMLEventReader eventReader = inFactory.createFilteredReader(
+                                        inFactory.createXMLEventReader(source),
+                                        createRemoveFilter(new Note[] { note.getRevisionOf() })); 
+                                eventReader = new MergeCharactersReader(eventReader);
+                                addNote(eventReader,
+                                        outFactory.createXMLEventWriter(target), 
+                                        selection, note.getRevisionOf().getLocalId());
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
