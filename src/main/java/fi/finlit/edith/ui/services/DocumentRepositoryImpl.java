@@ -212,10 +212,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                 startMatched = true;
                                 handled = true;
                                 index = index - str.length() + chars.getData().length();
-                                if (index > 0){
+                                if (index >= 0){
                                     writer.add(eventFactory.createCharacters(chars.getData().substring(0, index)));
                                 }else{
-                                    index = 0;
+                                    // text should have been matched before
+                                    throw new NoteAdditionFailedException(sel, localId, false, false);
                                 }
                                 writeAnchor(writer, "start"+localId);
                             }else{
