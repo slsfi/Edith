@@ -98,6 +98,8 @@
             assertEquals("on", TextSelector.selection);
         }*/
 
+        /* FIXME all the text content on the page is somehow gone through in the
+        TextSelector. */
         function testMishitSelection() {
 			var startNode = document.getElementById("mishit");
 			var endNode = document.getElementById("actual").childNodes[0];
