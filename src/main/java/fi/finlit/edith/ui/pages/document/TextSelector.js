@@ -97,7 +97,7 @@ var TextSelector = {
 		
 		this.startId = (startNode.parent().attr("id") != "" ? startNode.parent().attr("id") : startNode.parent().parent().attr("id"));
 		this.endId = (endNode.parent().attr("id") != "" ? endNode.parent().attr("id") : endNode.parent().parent().attr("id"));
-		this.selection = this.getSelection().toString().replace(/#/g, " ");
+		this.selection = selection.toString().replace(/#/g, " ");
 //		 Tapestry.Logging.info("Selection: " + this.selection);
 //		 Tapestry.Logging.info("Start ID: " + this.startId);
 //		 Tapestry.Logging.info("End ID: " + this.endId);
