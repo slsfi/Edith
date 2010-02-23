@@ -84,7 +84,7 @@ public class NoteRepositoryTest extends AbstractServiceTest{
 
     @Test
     @Ignore
-    public void createNote() throws SVNException{
+    public void createNote() {
         Document document = documentRepo.getDocumentForPath(testDocument);
         List<RevisionInfo> revisions = documentRepo.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
