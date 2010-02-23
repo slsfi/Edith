@@ -55,7 +55,7 @@ public class Layout {
     private ComponentResources resources;
         
     public boolean isOnPage(String page){
-        return resources.getPageName().toLowerCase().equals(page.toLowerCase());
+        return resources.getPageName().equalsIgnoreCase(page);
     }
 
 }
