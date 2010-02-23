@@ -136,10 +136,8 @@ public class SubversionServiceImpl implements SubversionService {
             }
             FileUtils.copyFile(tmp, file);
         } finally {
-            if (tmp != null) {
-                if (!tmp.delete()){
-                    logger.error("Delete of " + tmp.getAbsolutePath() + " failed");
-                }
+            if (tmp != null && !tmp.delete()) {
+                logger.error("Delete of " + tmp.getAbsolutePath() + " failed");
             }
         }
         return commit(file);
@@ -209,10 +207,10 @@ public class SubversionServiceImpl implements SubversionService {
                     revision = rev.getRevision();
                 }
             }
-            return revision;    
+            return revision;
         }catch(SVNException e){
             throw new RuntimeException(e);
-        }        
+        }
     }
 
     @Override

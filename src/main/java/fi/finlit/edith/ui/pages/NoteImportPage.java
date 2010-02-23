@@ -26,7 +26,7 @@ import fi.finlit.edith.domain.NoteRepository;
  */
 @SuppressWarnings("unused")
 public class NoteImportPage {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(NoteImportPage.class);
 
     @Inject
@@ -51,11 +51,9 @@ public class NoteImportPage {
             file.write(tempFile);
             int rv = noteRepo.importNotes(tempFile);
             message = messages.format("notes-imported-msg", rv);
-        } finally {            
-            if (!tempFile.delete()){
-                if (!tempFile.delete()){
-                    logger.error("Delete of " + tempFile.getAbsolutePath() + " failed");
-                }
+        } finally {
+            if (!tempFile.delete() && !tempFile.delete()) {
+                logger.error("Delete of " + tempFile.getAbsolutePath() + " failed");
             }
         }
     }
