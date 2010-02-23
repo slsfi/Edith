@@ -61,17 +61,17 @@ import fi.finlit.edith.ui.services.svn.UpdateCallback;
  */
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements
         DocumentRepository {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
-    
+
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
-    
+
     private static final QName TEI_TYPE_QNAME = new QName(null, "type");
-    
+
     private static final QName XML_ID_QNAME = new QName(XML_NS, "id");
-    
+
     private final String documentRoot;
 
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
@@ -85,11 +85,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
     private final SubversionService svnService;
-    
+
     private final TimeService timeService;
-    
+
     private final AuthService authService;
-    
+
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
@@ -116,7 +116,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
 
         return new EventFilter() {
-            private boolean removeNextEndElement = false;            
+            private boolean removeNextEndElement = false;
             @Override
             public boolean accept(XMLEvent event) {
                 if (event.isStartElement()) {
@@ -138,10 +138,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         int index = -1;
         while (occurrence > 0){
             index = str.indexOf(word, index+1);
-            if (index == -1) return -1;
+            if (index == -1) {
+                return -1;
+            }
             occurrence--;
         }
-        return index;        
+        return index;
     }
 
     @Override
@@ -162,8 +164,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             .createXMLEventWriter(target), selection, localId);
                 }
             });
-        } catch(NoteAdditionFailedException e){    
-            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -172,16 +172,16 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         // persisted noteRevision has svnRevision of newly created commit
         return noteRepository.createNote(docRevision, localId,selection.getSelection()).getLatestRevision();
     }
-    
+
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
-        logger.info(sel.toString());        
+        logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
         StringBuilder startBuilder = new StringBuilder();
         StringBuilder endBuilder = new StringBuilder();
         boolean startMatched = false, endMatched = false;
-        
+
         // TODO : cache events in start element and process them, when start scope is exited
-        
+
         try {
             while (reader.hasNext()) {
                 boolean handled = false;
@@ -194,21 +194,21 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         name = element.getAttributeByName(TEI_TYPE_QNAME).getValue();
                     }
                     context.push(name);
-                                        
+
                 } else if (event.isEndElement()){
                     context.pop();
-                    
+
                 } else if (event.isCharacters()) {
                     Characters chars = event.asCharacters();
                     int index = 0;
-                    
+
                     // in start
                     if (sel.getStartId().equals(context.getPath())){
                         startBuilder.append(chars.getData());
-                        String str = startBuilder.toString();                 
-                                                
+                        String str = startBuilder.toString();
+
                         // found first word
-                        if (!startMatched){                            
+                        if (!startMatched){
                             index = getIndex(str, sel.getFirstWord(), sel.getStartIndex());
                             if (index >= 0){
                                 startMatched = true;
@@ -224,9 +224,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             }else{
                                 index = 0;
                             }
-                        }                        
+                        }
                     }
-                    
+
                     // in end
                     if (sel.getEndId().equals(context.getPath())){
                         String str;
@@ -237,7 +237,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         }
                         if (!endMatched){
                             int endIndex = getIndex(str, sel.getLastWord(), sel.getEndIndex());
-                            
+
                             // found last word
                             if (endIndex >= 0){
                                 endMatched = true;
@@ -246,10 +246,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                 writer.add(eventFactory.createCharacters(chars.getData().substring(index, endIndex)));
                                 writeAnchor(writer, "end"+localId);
                                 index = endIndex;
-                            }                            
+                            }
                         }
                     }
-                    
+
                     // stream rest as characters
                     if (handled && index < chars.getData().length()){
                         writer.add(eventFactory.createCharacters(chars.getData().substring(index)));
@@ -264,7 +264,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             writer.close();
             reader.close();
         }
-        
+
         if (!startMatched || !endMatched){
             throw new NoteAdditionFailedException(sel, localId, startMatched, endMatched);
         }
@@ -277,7 +277,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         document.setDescription(description);
         return save(document);
     }
-    
+
     @Override
     public Collection<Document> getAll() {
         return getDocumentsOfFolder(documentRoot);
@@ -349,13 +349,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public DocumentRevision removeNotes(DocumentRevision docRevision, final Note... notes){
         long newRevision;
         try {
-            newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), authService.getUsername(), 
+            newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), authService.getUsername(),
                     new UpdateCallback() {
                 @Override
                 public void update(InputStream source, OutputStream target) throws Exception {
                     streamEvents(inFactory.createFilteredReader(
-                            inFactory.createXMLEventReader(source), 
-                            createRemoveFilter(notes)), 
+                            inFactory.createXMLEventReader(source),
+                            createRemoveFilter(notes)),
                             outFactory.createXMLEventWriter(target));
                 }
             });
@@ -367,7 +367,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         for (Note note : notes) {
             noteRepository.remove(note, newRevision);
         }
-        
+
         return new DocumentRevision(docRevision, newRevision);
     }
 
@@ -384,7 +384,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Override
     public NoteRevision updateNote(final NoteRevision note, final SelectedText selection) throws IOException {
-        Document document = note.getRevisionOf().getDocument();        
+        Document document = note.getRevisionOf().getDocument();
         long newRevision;
         try {
             newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(), authService.getUsername(),
@@ -394,10 +394,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             try {
                                 XMLEventReader eventReader = inFactory.createFilteredReader(
                                         inFactory.createXMLEventReader(source),
-                                        createRemoveFilter(new Note[] { note.getRevisionOf() })); 
+                                        createRemoveFilter(new Note[] { note.getRevisionOf() }));
                                 eventReader = new MergeCharactersReader(eventReader);
                                 addNote(eventReader,
-                                        outFactory.createXMLEventWriter(target), 
+                                        outFactory.createXMLEventWriter(target),
                                         selection, note.getRevisionOf().getLocalId());
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
