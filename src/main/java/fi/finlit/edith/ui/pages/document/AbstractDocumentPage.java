@@ -67,7 +67,7 @@ public class AbstractDocumentPage {
                 revision = context.get(Long.class, 1);
             } catch (RuntimeException e) {
                 response.sendError(404, "Revision not numerical!");
-            };
+            }
             if (!revisions.contains(new RevisionInfo(revision))) {
                 response.sendError(404, "Document revision not found!");
             }
