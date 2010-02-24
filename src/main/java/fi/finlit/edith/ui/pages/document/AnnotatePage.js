@@ -50,7 +50,7 @@ var updateUpdateLink = function() {
 jQuery(document).ready(function(){
     jQuery('.notecontent').live('click',
         function(event) {
-            var classes = jQuery(this).attr('class').replace('notecontent ','').replace(' ', '/');
+            var classes = jQuery(this).attr('class').replace(/notecontent\ /g,'').replace(/\ /g, '/');
             Editor.updateEditZone(classes);
         }    
     );
