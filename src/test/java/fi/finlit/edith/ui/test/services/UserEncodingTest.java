@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 
@@ -24,25 +24,25 @@ import fi.finlit.edith.ui.services.UserDetailsImpl;
  * @version $Id$
  */
 public class UserEncodingTest extends AbstractServiceTest{
-    
+
     @Inject
     private UserRepository userRepository;
-    
+
     @Test
     @Ignore
     public void encoding() throws Exception{
         PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
-        
+
         SaltSourceImpl saltSource = new SaltSourceImpl();
         saltSource.setSystemWideSalt("DEADBEEF");
         saltSource.afterPropertiesSet();
-        
+
         for (User user : userRepository.getOrderedByName()){
             UserDetailsImpl userDetails = new UserDetailsImpl(
-                    user.getUsername(), user.getPassword(), 
+                    user.getUsername(), user.getPassword(),
                     user.getProfile().getAuthorities());
             String password = passwordEncoder.encodePassword(user.getUsername(),saltSource.getSalt(userDetails));
-            System.err.println(user.getUsername() + " : " + password);
+//            System.err.println(user.getUsername() + " : " + password);
         }
     }
 
