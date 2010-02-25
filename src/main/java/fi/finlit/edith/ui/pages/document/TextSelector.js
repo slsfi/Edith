@@ -25,7 +25,9 @@ var TextSelector = {
 		var text = new Array();
 		element = element.previousSibling;
 		while (element != null) {
-			text.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
+			if (element.id === undefined || element.id === "") {
+				text.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
+			}
 			element = element.previousSibling;
 		}
 		text.reverse();
@@ -36,7 +38,9 @@ var TextSelector = {
 		var text = new Array();
 		element = element.nextSibling;
 		while (element != null) {
-			text.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
+			if (element.id === undefined || element.id === "") {
+				text.push(element.nodeValue != null ? element.nodeValue : element.innerHTML);
+			}
 			element = element.nextSibling;
 		}
 		return text.join("");
@@ -117,6 +121,9 @@ var TextSelector = {
 			return document.selection.createRange().text;
 		}
 	},
+	
+	getStartIndex : function() { return this.startIndex; },
+	getEndIndex : function() { return this.endIndex; },
 	
 	isValidSelection : function() {
 		return this.selection != "" && 
