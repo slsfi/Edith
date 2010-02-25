@@ -79,7 +79,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         source.close();
         target.close();
     }
-    
+
     private void addNote(SelectedText selectedText) throws Exception{
         documentRepo.addNote(sourceReader, targetWriter, selectedText, localId);
     }
@@ -173,12 +173,22 @@ public class NoteAdditionTest extends AbstractServiceTest{
     }
 
     @Test
+    public void addNote_one_char() throws Exception {
+        String element = "play-act-stage";
+        String text = "i";
+        addNote(new SelectedText(element, element, 12, 12, text));
+
+        String content = FileUtils.readFileToString(targetFile, "UTF-8");
+        assertTrue(content.contains("v" + start(localId) + "i" + end(localId) + "eress\u00E4,"));
+    }
+
+    @Test
     public void addNote_line_breaks_in_selection() throws Exception {
         String startElement = "play-description-castList-castItem8-roleDesc";
         String endElement = "play-description-castList-castItem9-roleDesc";
         String text = " \nori sepp\u00E4\n.\nKarri\n,\ntalon";
         addNote(new SelectedText(startElement, endElement, 1, 1, text));
-        
+
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
         assertTrue(content.contains("nu" + start(localId) + "ori"));
         assertTrue(content.contains("talon" + end(localId) + "is\u00E4nt\u00E4"));
