@@ -323,6 +323,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     writer.add(eventFactory.createCharacters(eventString.substring(relativeIndex)));
                     matched = true;
                 }
+            } else {
+                writer.add(e);
             }
         }
         return matched;

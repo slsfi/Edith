@@ -202,8 +202,21 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(startElement, endElement, 1, 1, text));
 
         String content = FileUtils.readFileToString(targetFile, "UTF-8");
-        System.out.println(content);
         assertTrue(content.contains("huon" + start(localId) + text + end(localId) + "er"));
+    }
+
+    @Test
+    public void addNote_verify_subelement_not_eaten() throws Exception {
+        String element = "play-act-stage";
+        String text = "Topi";
+        addNote(new SelectedText(element, element, 1, 1, text));
+
+        String content = FileUtils.readFileToString(new File(testDocument), "UTF-8");
+        assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
+        content = FileUtils.readFileToString(targetFile, "UTF-8");
+        System.out.println(content);
+        assertTrue(content.contains(start(localId) + text + end(localId)));
+        assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
     }
 
     @Override
