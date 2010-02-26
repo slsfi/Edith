@@ -245,13 +245,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
      */
     private void bufferCharacters(XMLEvent event, ElementContext context, SelectedText sel,
             List<XMLEvent> events, StringBuilder startBuilder, StringBuilder endBuilder) {
-        if (sel.getStartId().equals(context.getPath()) || sel.getEndId().equals(context.getPath())) {
             events.add(event);
-            if (sel.getStartId().equals(context.getPath())) {
-                startBuilder.append(event.asCharacters().getData());
-            } else if (!sel.getEndId().equals(sel.getStartId()) && sel.getEndId().equals(context.getPath())) {
-                endBuilder.append(event.asCharacters().getData());
-            }
+        if (sel.getStartId().equals(context.getPath())) {
+            startBuilder.append(event.asCharacters().getData());
+        } else if (!sel.getEndId().equals(sel.getStartId())
+                && sel.getEndId().equals(context.getPath())) {
+            endBuilder.append(event.asCharacters().getData());
         }
     }
 
