@@ -198,8 +198,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     if (buffering) {
                         events.add(event);
                         if (isInContext(event, context, sel)){
-                            builder.append(event.asCharacters().getData());    
-                        }                        
+                            builder.append(event.asCharacters().getData());
+                        }
                         continue;
                     }
                 } else if (event.isEndElement()) {
@@ -208,26 +208,26 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         startMatched = true;
                         endMatched = true;
                         buffering = false;
-                        
+
                     } else if (!startMatched && sel.getStartId().equals(context.getPath())) {
                         startMatched = flushStartEvents(writer, events, context, builder.toString(), sel, localId);
                         if (startMatched){
                             builder = new StringBuilder();
                             buffering = false;
                         }
-                        
+
                     } else if(startMatched && !endMatched && sel.getEndId().equals(context.getPath())) {
                         endMatched = flushEndEvents(writer, events, context, builder.toString(), sel, localId);
                         if (endMatched){
                             buffering = false;
                         }
-                        
+
                     } else if (buffering) {
                         events.add(event);
                         context.pop();
                         continue;
-                    }                    
-                    
+                    }
+
                     events.clear();
                     context.pop();
                 }
@@ -321,6 +321,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     writeAnchor(writer, localId);
                     writer.add(eventFactory.createCharacters(eventString.substring(relativeIndex)));
                     matched = true;
+                } else {
+                    writer.add(e);
                 }
             } else {
                 writer.add(e);

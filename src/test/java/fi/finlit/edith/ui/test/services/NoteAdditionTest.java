@@ -207,7 +207,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String content = FileUtils.readFileToString(new File(testDocument), "UTF-8");
         assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
         content = getContent();
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
     }

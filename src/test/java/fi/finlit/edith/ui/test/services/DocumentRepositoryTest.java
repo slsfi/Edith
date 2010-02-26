@@ -285,6 +285,26 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
+    public void addNote_twice_overlapping2() throws IOException, NoteAdditionFailedException{
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        String startElement = "play-description-castList-castItem7-role";
+        String endElement = "play-description-castList-castItem8-roleDesc";
+        String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
+
+        NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(startElement, endElement, 3, 1, text));
+
+        String newText = "\nna\n,\nhänen tyttärensä, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
+        NoteRevision noteRevision2 = documentRepo.addNote(document.getRevision(noteRevision.getSvnRevision()), new SelectedText(startElement, endElement, 1, 1, newText));
+
+        String content = getContent(document.getSvnPath(), -1);
+        String localId = noteRevision.getRevisionOf().getLocalId();
+        String localId2 = noteRevision2.getRevisionOf().getLocalId();
+        System.out.println(content);
+        assertTrue(content.contains("Jaa" + start(localId2) + "n" + start(localId) + "a</role>, <roleDesc>hänen tyttärensä, Topiaksen\n"));
+        assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId2) + "eppä</roleDesc>.</castItem>"));
+    }
+
+    @Test
     public void removeAllNotes() throws Exception{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
