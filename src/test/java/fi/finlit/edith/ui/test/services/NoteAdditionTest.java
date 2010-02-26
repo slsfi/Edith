@@ -72,8 +72,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
     }
 
     private void addNote(SelectedText selectedText) throws Exception{
-        XMLEventReader sourceReader = XMLInputFactory.newInstance().createXMLEventReader(source);
-        XMLEventWriter targetWriter = XMLOutputFactory.newInstance().createXMLEventWriter(target);
+        XMLEventReader sourceReader = inFactory.createXMLEventReader(source);
+        XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target);
         documentRepo.addNote(sourceReader, targetWriter, selectedText, localId);
     }
 

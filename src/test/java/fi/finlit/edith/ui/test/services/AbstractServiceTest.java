@@ -13,6 +13,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
+
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +48,11 @@ public abstract class AbstractServiceTest {
 
     protected abstract Class<?> getServiceClass();
 
-    private List<InputStream> openStreams = new ArrayList<InputStream>();
+    private final List<InputStream> openStreams = new ArrayList<InputStream>();
+
+    protected static final XMLInputFactory inFactory = XMLInputFactory.newInstance();
+    
+    protected static final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
     protected InputStream register(InputStream is){
         openStreams.add(is);
