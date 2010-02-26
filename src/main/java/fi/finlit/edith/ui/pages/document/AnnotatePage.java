@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventContext;
@@ -33,7 +34,6 @@ import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermRepository;
-import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
 /**
  * AnnotatePage provides
@@ -216,9 +216,9 @@ public class AnnotatePage extends AbstractDocumentPage {
             infoMessage = messages.format("note-addition-failed");
             return new MultiZoneUpdate("editZone", errorBlock);
         }
-        
-        //XXX This doesn't look good
-        if (termOnEdit.getBasicForm() != null && !termOnEdit.getBasicForm().trim().isEmpty()) {
+
+        //Handling the embedded term edit
+        if( StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
             Term term = termRepo.findByBasicForm(termOnEdit.getBasicForm());
             if (term == null) {
                 term = termOnEdit;
@@ -254,11 +254,11 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     List<String> onProvideCompletionsFromBasicForm(String partial) {
         List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
-        List<String> matches = new ArrayList<String>(terms.size());
-        for (Term term : terms) {
-            matches.add(term.getBasicForm());
+        List<String> results = new ArrayList<String>(terms.size());
+        for(Term term : terms) {
+            results.add(term.getBasicForm());
         }
-        return matches;
+        return results;
     }
 
     public Object[] getEditContext() {

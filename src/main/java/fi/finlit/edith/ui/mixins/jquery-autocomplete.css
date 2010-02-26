@@ -1,0 +1,8 @@
+/**
+* Customizations to override the jquery settings as
+* unfortunately they are loaded after all other css
+*/
+
+.ui-autocomplete {
+    font-size: 80%;
+}

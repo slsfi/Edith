@@ -129,7 +129,15 @@
                         
                         <tr>
                           <th>${message:basicForm-label}</th>
-                          <td><t:textField t:id="basicForm" value="termOnEdit.basicForm" t:mixins="autocomplete"/></td>
+                          <td><t:textField t:id="basicForm" value="termOnEdit.basicForm" 
+                            t:mixins="jQueryAutocomplete"/>
+                           </td>
+                        </tr>
+                        
+                        <tr>
+                          <th>${message:meaning-label}</th>
+                          <td><t:textField t:id="meaning" value="termOnEdit.meaning"/>
+                          </td>
                         </tr>
                         
                         <tr>
