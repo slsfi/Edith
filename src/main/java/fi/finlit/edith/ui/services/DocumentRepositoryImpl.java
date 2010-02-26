@@ -179,10 +179,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         StringBuilder endBuilder = new StringBuilder();
         List<XMLEvent> events = new ArrayList<XMLEvent>();
 
+        boolean startMatched = false;
+        boolean endMatched = false;
         try {
             boolean buffering = false;
-            boolean startMatched = false;
-            boolean endMatched = false;
             boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
             while (reader.hasNext()) {
                 XMLEvent event = reader.nextEvent();
@@ -204,11 +204,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         startMatched = true;
                         endMatched = true;
                     } else if (!startMatched && sel.getStartId().equals(context.getPath())) {
-                        flushStartEvents(writer, events, context, startBuilder.toString(), sel, localId);
-                        startMatched = true;
+                        startMatched = flushStartEvents(writer, events, context, startBuilder.toString(), sel, localId);
                     } else if(startMatched && !endMatched && sel.getEndId().equals(context.getPath())) {
-                        flushEndEvents(writer, events, context, endBuilder.toString(), sel, localId);
-                        endMatched = true;
+                        endMatched = flushEndEvents(writer, events, context, endBuilder.toString(), sel, localId);
                     } else if (buffering) {
                         events.add(event);
                         context.pop();
@@ -221,6 +219,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 writer.add(event);
             }
         } finally {
+            if (!startMatched || !endMatched) {
+                throw new NoteAdditionFailedException(sel, localId, startMatched, endMatched);
+            }
             writer.close();
             reader.close();
         }
@@ -303,7 +304,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     /*
      * Flushes given elements, only one anchor will be added
      */
-    private void flushEventsAddSingleAnchor(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, String id, String localId, int index) throws XMLStreamException {
+    private boolean flushEventsAddSingleAnchor(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, String id, String localId, int index) throws XMLStreamException {
         int offset = 0;
         boolean matched = false;
         for (XMLEvent e : events) {
@@ -325,14 +326,15 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 }
             }
         }
+        return matched;
     }
 
-    private void flushStartEvents(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, SelectedText sel, String localId) throws XMLStreamException {
-        flushEventsAddSingleAnchor(writer, events, context, string, sel.getStartId(), "start" + localId, getIndex(string, sel.getFirstWord(), sel.getStartIndex()));
+    private boolean flushStartEvents(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, SelectedText sel, String localId) throws XMLStreamException {
+        return flushEventsAddSingleAnchor(writer, events, context, string, sel.getStartId(), "start" + localId, getIndex(string, sel.getFirstWord(), sel.getStartIndex()));
     }
 
-    private void flushEndEvents(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, SelectedText sel, String localId) throws XMLStreamException {
-        flushEventsAddSingleAnchor(writer, events, context, string, sel.getEndId(), "end" + localId, getIndex(string, sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length());
+    private boolean flushEndEvents(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, SelectedText sel, String localId) throws XMLStreamException {
+        return flushEventsAddSingleAnchor(writer, events, context, string, sel.getEndId(), "end" + localId, getIndex(string, sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length());
     }
 
     private String extractName(StartElement element) {
