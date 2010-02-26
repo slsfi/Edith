@@ -423,7 +423,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                 XMLEventReader eventReader = inFactory.createFilteredReader(
                                         inFactory.createXMLEventReader(source),
                                         createRemoveFilter(new Note[] { note.getRevisionOf() }));
-                                eventReader = new MergeCharactersReader(eventReader);
                                 addNote(eventReader,
                                         outFactory.createXMLEventWriter(target),
                                         selection, note.getRevisionOf().getLocalId());
