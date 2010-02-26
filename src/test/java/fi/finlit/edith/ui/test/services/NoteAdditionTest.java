@@ -41,7 +41,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_FILE_KEY)
     private String testDocument;
-    
+
     // TODO : expose testDocument content as byte array into registry (key : TEST_DOCUMENT_CONTENT_KEY)
 
     @Autobuild
@@ -60,7 +60,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         target = new ByteArrayOutputStream();
         localId = UUID.randomUUID().toString();
     }
-    
+
     private String getContent() throws UnsupportedEncodingException{
         return new String(target.toByteArray(), "UTF-8");
     }
@@ -84,6 +84,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(element, element, text));
 
         String content = getContent();
+        System.out.println(content);
         assertTrue(content.contains("k\u00E4ski " + start(localId) + text + end(localId) + " p\u00E4\u00E4lles"));
     }
 
@@ -142,6 +143,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(element, element, 1, 1, text.toString()));
 
         String content = getContent();
+        System.out.println(content);
         assertTrue(content.contains("ed" + start(localId) + "es" + end(localId) + "s\u00E4"));
     }
 
@@ -172,6 +174,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(element, element, 12, 12, text));
 
         String content = getContent();
+//        System.out.println(content);
         assertTrue(content.contains("v" + start(localId) + "i" + end(localId) + "eress\u00E4,"));
     }
 
@@ -188,21 +191,32 @@ public class NoteAdditionTest extends AbstractServiceTest{
     }
 
     @Test
-    public void addNote_different_elements() throws Exception {
+    public void addNote_start_element_inside_end_element() throws Exception {
         String startElement = "play-act-stage-ref";
         String endElement = "play-act-stage";
-        String text = "e\n: p";
-        addNote(new SelectedText(startElement, endElement, 1, 1, text));
+        String text = "uone\n: per";
+        addNote(new SelectedText(startElement, endElement, text));
 
         String content = getContent();
-        assertTrue(content.contains("huon" + start(localId) + text + end(localId) + "er"));
+        assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId) + "\u00E4ll\u00E4"));
+    }
+
+    @Test
+    public void addNote_end_element_inside_start_element() throws Exception {
+        String startElement = "play-act-stage";
+        String endElement = "play-act-stage-ref";
+        String text = "piaksen huo";
+        addNote(new SelectedText(startElement, endElement, text));
+
+        String content = getContent();
+        assertTrue(content.contains("(Top" + start(localId) + "iaksen <ref xml:id=\"ref.3\" target=\"note.3\">huo" + end(localId) + "ne"));
     }
 
     @Test
     public void addNote_verify_subelement_not_eaten() throws Exception {
         String element = "play-act-stage";
         String text = "Topi";
-        addNote(new SelectedText(element, element, 1, 1, text));
+        addNote(new SelectedText(element, element, text));
 
         String content = FileUtils.readFileToString(new File(testDocument), "UTF-8");
         assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));

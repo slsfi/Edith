@@ -214,7 +214,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     if (isInContext(event, context, sel)) {
                         int offset = 0;
                         int startIndex = getIndex(builder.toString(), sel.getFirstWord(), sel.getStartIndex());
-                        int endIndex = getIndex(builder.toString(), sel.getLastWord(), sel.getEndIndex());
+                        int endIndex = getIndex(builder.toString(), sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length();
                         for (XMLEvent e : events) {
                             boolean innerHandled = false;
                             if (e.isStartElement()) {
@@ -224,7 +224,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             } else if (e.isCharacters() && isInContext(event, context, sel)) {
                                 String eventString = e.asCharacters().getData();
                                 int relativeStart = startIndex - offset;
-                                int relativeEnd = endIndex - offset + sel.getLastWord().length();
+                                int relativeEnd = endIndex - offset;
                                 int index = -1;
                                 offset += eventString.length();
                                 if (sel.getStartId().equals(context.getPath())) {
@@ -241,7 +241,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                         if (!startAndEndInSameElement) {
                                             writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
                                         } else {
-                                            writer.add(eventFactory.createCharacters(eventString.substring(relativeStart, relativeEnd)));
+                                            writer.add(eventFactory.createCharacters(eventString.substring(relativeStart > -1 ? relativeStart : 0, relativeEnd)));
                                         }
                                         writeAnchor(writer, endAnchor);
                                         endMatched = true;
