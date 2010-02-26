@@ -191,11 +191,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         events.add(event);
                         continue;
                     }
-                    buffering = isBuffering(event, context, sel);
+                    if (isInContext(event, context, sel)){
+                        buffering = true;
+                    }
                 } else if (event.isCharacters()) {
                     if (buffering) {
                         events.add(event);
-                        if (context.getPath().equals(sel.getStartId()) || context.getPath().equals(sel.getEndId())){
+                        if (isInContext(event, context, sel)){
                             builder.append(event.asCharacters().getData());    
                         }                        
                         continue;
@@ -205,19 +207,25 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         flushStartAndEndEvents(writer, events, context, builder.toString(), sel, localId);
                         startMatched = true;
                         endMatched = true;
+                        buffering = false;
                     } else if (!startMatched && sel.getStartId().equals(context.getPath())) {
                         startMatched = flushStartEvents(writer, events, context, builder.toString(), sel, localId);
                         if (startMatched){
                             builder = new StringBuilder();
+                            buffering = false;
                         }
+                        
                     } else if(startMatched && !endMatched && sel.getEndId().equals(context.getPath())) {
                         endMatched = flushEndEvents(writer, events, context, builder.toString(), sel, localId);
+                        if (endMatched){
+                            buffering = false;
+                        }
                     } else if (buffering) {
                         events.add(event);
                         context.pop();
                         continue;
-                    }
-                    buffering = false;
+                    }                    
+                    
                     events.clear();
                     context.pop();
                 }
@@ -235,7 +243,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     /*
      * Evaluates if we are in an element that should be buffered
      */
-    private boolean isBuffering(XMLEvent event, ElementContext context, SelectedText sel) {
+    // TODO : find better name
+    private boolean isInContext(XMLEvent event, ElementContext context, SelectedText sel) {
         return sel.getStartId().equals(context.getPath()) || sel.getEndId().equals(context.getPath());
     }
 
