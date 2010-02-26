@@ -208,6 +208,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         startMatched = true;
                         endMatched = true;
                         buffering = false;
+                        
                     } else if (!startMatched && sel.getStartId().equals(context.getPath())) {
                         startMatched = flushStartEvents(writer, events, context, builder.toString(), sel, localId);
                         if (startMatched){
@@ -220,6 +221,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         if (endMatched){
                             buffering = false;
                         }
+                        
                     } else if (buffering) {
                         events.add(event);
                         context.pop();
