@@ -175,8 +175,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
         logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
-        StringBuilder startBuilder = new StringBuilder();
-        StringBuilder endBuilder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         List<XMLEvent> events = new ArrayList<XMLEvent>();
 
         boolean startMatched = false;
@@ -192,21 +191,27 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         events.add(event);
                         continue;
                     }
-                    buffering = startBuffering(event, context, sel);
+                    buffering = isBuffering(event, context, sel);
                 } else if (event.isCharacters()) {
                     if (buffering) {
-                        bufferCharacters(event, context, sel, events, startBuilder, endBuilder);
+                        events.add(event);
+                        if (context.getPath().equals(sel.getStartId()) || context.getPath().equals(sel.getEndId())){
+                            builder.append(event.asCharacters().getData());    
+                        }                        
                         continue;
                     }
                 } else if (event.isEndElement()) {
                     if (startAndEndInSameElement && sel.getStartId().equals(context.getPath())) {
-                        flushStartAndEndEvents(writer, events, context, startBuilder.toString(), sel, localId);
+                        flushStartAndEndEvents(writer, events, context, builder.toString(), sel, localId);
                         startMatched = true;
                         endMatched = true;
                     } else if (!startMatched && sel.getStartId().equals(context.getPath())) {
-                        startMatched = flushStartEvents(writer, events, context, startBuilder.toString(), sel, localId);
+                        startMatched = flushStartEvents(writer, events, context, builder.toString(), sel, localId);
+                        if (startMatched){
+                            builder = new StringBuilder();
+                        }
                     } else if(startMatched && !endMatched && sel.getEndId().equals(context.getPath())) {
-                        endMatched = flushEndEvents(writer, events, context, endBuilder.toString(), sel, localId);
+                        endMatched = flushEndEvents(writer, events, context, builder.toString(), sel, localId);
                     } else if (buffering) {
                         events.add(event);
                         context.pop();
@@ -230,34 +235,17 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     /*
      * Evaluates if we are in an element that should be buffered
      */
-    private boolean startBuffering(XMLEvent event, ElementContext context, SelectedText sel) {
-        if (sel.getStartId().equals(context.getPath())) {
-            return true;
-        } else if (!sel.getEndId().equals(sel.getStartId()) && sel.getEndId().equals(context.getPath())) {
-            return true;
-        } else {
-            return false;
-        }
+    private boolean isBuffering(XMLEvent event, ElementContext context, SelectedText sel) {
+        return sel.getStartId().equals(context.getPath()) || sel.getEndId().equals(context.getPath());
     }
 
-    /*
-     * Buffers chars into the given events-list.
-     */
-    private void bufferCharacters(XMLEvent event, ElementContext context, SelectedText sel,
-            List<XMLEvent> events, StringBuilder startBuilder, StringBuilder endBuilder) {
-            events.add(event);
-        if (sel.getStartId().equals(context.getPath())) {
-            startBuilder.append(event.asCharacters().getData());
-        } else if (!sel.getEndId().equals(sel.getStartId())
-                && sel.getEndId().equals(context.getPath())) {
-            endBuilder.append(event.asCharacters().getData());
-        }
-    }
 
     private void flushStartAndEndEvents(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, SelectedText sel, String localId) throws XMLStreamException {
         int offset = 0;
         int startIndex = getIndex(string, sel.getFirstWord(), sel.getStartIndex());
         int endIndex = getIndex(string, sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length();
+        String startAnchor = "start"+localId;
+        String endAnchor = "end"+localId;
         boolean startMatched = false;
         boolean endMatched = false;
         for (XMLEvent e : events) {
@@ -274,21 +262,21 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 offset += eventString.length();
                 if (!startMatched && startIndex <= offset && endIndex <= offset) {
                     writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
-                    writeStartAnchor(writer, localId);
+                    writeAnchor(writer, startAnchor);
                     writer.add(eventFactory.createCharacters(eventString.substring(relativeStart, relativeEnd)));
-                    writeEndAnchor(writer, localId);
+                    writeAnchor(writer, endAnchor);
                     writer.add(eventFactory.createCharacters(eventString.substring(relativeEnd)));
                     startMatched = true;
                     endMatched = true;
                 } else if (!startMatched && startIndex <= offset) {
                     // The following two are for overlapping strings case stupid as hell.
                     writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
-                    writeStartAnchor(writer, localId);
+                    writeAnchor(writer, startAnchor);
                     writer.add(eventFactory.createCharacters(eventString.substring(relativeStart)));
                     startMatched = true;
                 } else if (!endMatched && endIndex <= offset) {
                     writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
-                    writeEndAnchor(writer, localId);
+                    writeAnchor(writer, endAnchor);
                     writer.add(eventFactory.createCharacters(eventString.substring(relativeEnd)));
                     endMatched = true;
                 } else {
@@ -496,14 +484,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
         writer.add(eventFactory.createAttribute("xml", XML_NS, "id", anchorId));
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
-    }
-
-    private void writeStartAnchor(XMLEventWriter writer, String localId) throws XMLStreamException {
-        writeAnchor(writer, "start" + localId);
-    }
-
-    private void writeEndAnchor(XMLEventWriter writer, String localId) throws XMLStreamException {
-        writeAnchor(writer, "end" + localId);
     }
 
 }
