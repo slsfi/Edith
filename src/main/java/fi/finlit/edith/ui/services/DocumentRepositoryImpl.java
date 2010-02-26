@@ -26,7 +26,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
@@ -178,96 +177,171 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         ElementContext context = new ElementContext(3);
         StringBuilder startBuilder = new StringBuilder();
         StringBuilder endBuilder = new StringBuilder();
-        boolean startMatched = false, endMatched = false;
-
-        // TODO : cache events in start element and process them, when start scope is exited
+        List<XMLEvent> events = new ArrayList<XMLEvent>();
 
         try {
+            boolean buffering = false;
+            boolean startMatched = false;
+            boolean endMatched = false;
+            boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
             while (reader.hasNext()) {
-                boolean handled = false;
                 XMLEvent event = reader.nextEvent();
                 if (event.isStartElement()) {
-                    StartElement element = event.asStartElement();
-                    String localName = element.getName().getLocalPart();
-                    String name = localName;
-                    if (localName.equals("div")){
-                        name = element.getAttributeByName(TEI_TYPE_QNAME).getValue();
+                    context.push(extractName(event.asStartElement()));
+                    if (buffering) {
+                        events.add(event);
+                        continue;
                     }
-                    context.push(name);
-
-                } else if (event.isEndElement()){
-                    context.pop();
-
+                    buffering = startBuffering(event, context, sel);
                 } else if (event.isCharacters()) {
-                    Characters chars = event.asCharacters();
-                    int index = 0;
-
-                    // in start
-                    if (sel.getStartId().equals(context.getPath())){
-                        startBuilder.append(chars.getData());
-                        String str = startBuilder.toString();
-
-                        // found first word
-                        if (!startMatched){
-                            index = getIndex(str, sel.getFirstWord(), sel.getStartIndex());
-                            if (index >= 0){
-                                startMatched = true;
-                                handled = true;
-                                index = index - str.length() + chars.getData().length();
-                                if (index >= 0){
-                                    writer.add(eventFactory.createCharacters(chars.getData().substring(0, index)));
-                                }else{
-                                    // text should have been matched before
-                                    throw new NoteAdditionFailedException(sel, localId, false, false);
-                                }
-                                writeAnchor(writer, "start"+localId);
-                            }else{
-                                index = 0;
-                            }
-                        }
+                    if (buffering) {
+                        bufferCharacters(event, context, sel, events, startBuilder, endBuilder);
+                        continue;
                     }
-
-                    // in end
-                    if (sel.getEndId().equals(context.getPath())){
-                        String str;
-                        if (sel.getStartId().equals(sel.getEndId())){
-                            str = startBuilder.toString();
-                        }else{
-                            str = endBuilder.append(chars.getData()).toString();
-                        }
-                        if (!endMatched){
-                            int endIndex = getIndex(str, sel.getLastWord(), sel.getEndIndex());
-
-                            // found last word
-                            if (endIndex >= 0){
-                                endMatched = true;
-                                handled = true;
-                                endIndex = endIndex - str.length() + chars.getData().length() + sel.getLastWord().length();
-                                writer.add(eventFactory.createCharacters(chars.getData().substring(index, endIndex)));
-                                writeAnchor(writer, "end"+localId);
-                                index = endIndex;
-                            }
-                        }
+                } else if (event.isEndElement()) {
+                    if (startAndEndInSameElement && sel.getStartId().equals(context.getPath())) {
+                        flushStartAndEndEvents(writer, events, context, startBuilder.toString(), sel, localId);
+                        startMatched = true;
+                        endMatched = true;
+                    } else if (!startMatched && sel.getStartId().equals(context.getPath())) {
+                        flushStartEvents(writer, events, context, startBuilder.toString(), sel, localId);
+                        startMatched = true;
+                    } else if(startMatched && !endMatched && sel.getEndId().equals(context.getPath())) {
+                        flushEndEvents(writer, events, context, endBuilder.toString(), sel, localId);
+                        endMatched = true;
+                    } else if (buffering) {
+                        events.add(event);
+                        context.pop();
+                        continue;
                     }
-
-                    // stream rest as characters
-                    if (handled && index < chars.getData().length()){
-                        writer.add(eventFactory.createCharacters(chars.getData().substring(index)));
-                    }
-
+                    buffering = false;
+                    events.clear();
+                    context.pop();
                 }
-                if (!handled) {
-                    writer.add(event);
-                }
+                writer.add(event);
             }
         } finally {
             writer.close();
             reader.close();
         }
+    }
 
-        if (!startMatched || !endMatched){
-            throw new NoteAdditionFailedException(sel, localId, startMatched, endMatched);
+    /*
+     * Evaluates if we are in an element that should be buffered
+     */
+    private boolean startBuffering(XMLEvent event, ElementContext context, SelectedText sel) {
+        if (sel.getStartId().equals(context.getPath())) {
+            return true;
+        } else if (!sel.getEndId().equals(sel.getStartId()) && sel.getEndId().equals(context.getPath())) {
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    /*
+     * Buffers chars into the given events-list.
+     */
+    private void bufferCharacters(XMLEvent event, ElementContext context, SelectedText sel,
+            List<XMLEvent> events, StringBuilder startBuilder, StringBuilder endBuilder) {
+        if (sel.getStartId().equals(context.getPath()) || sel.getEndId().equals(context.getPath())) {
+            events.add(event);
+            if (sel.getStartId().equals(context.getPath())) {
+                startBuilder.append(event.asCharacters().getData());
+            } else if (!sel.getEndId().equals(sel.getStartId()) && sel.getEndId().equals(context.getPath())) {
+                endBuilder.append(event.asCharacters().getData());
+            }
+        }
+    }
+
+    private void flushStartAndEndEvents(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, SelectedText sel, String localId) throws XMLStreamException {
+        int offset = 0;
+        int startIndex = getIndex(string, sel.getFirstWord(), sel.getStartIndex());
+        int endIndex = getIndex(string, sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length();
+        boolean startMatched = false;
+        boolean endMatched = false;
+        for (XMLEvent e : events) {
+            if (e.isStartElement()) {
+                context.push(extractName(e.asStartElement()));
+                writer.add(e);
+            } else if (e.isEndElement()) {
+                context.pop();
+                writer.add(e);
+            } else if ((sel.getStartId().equals(context.getPath()) || sel.getEndId().equals(context.getPath())) && e.isCharacters()) {
+                String eventString = e.asCharacters().getData();
+                int relativeStart = startIndex - offset;
+                int relativeEnd = endIndex - offset;
+                offset += eventString.length();
+                if (!startMatched && startIndex <= offset && endIndex <= offset) {
+                    writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
+                    writeStartAnchor(writer, localId);
+                    writer.add(eventFactory.createCharacters(eventString.substring(relativeStart, relativeEnd)));
+                    writeEndAnchor(writer, localId);
+                    writer.add(eventFactory.createCharacters(eventString.substring(relativeEnd)));
+                    startMatched = true;
+                    endMatched = true;
+                } else if (!startMatched && startIndex <= offset) {
+                    // The following two are for overlapping strings case stupid as hell.
+                    writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
+                    writeStartAnchor(writer, localId);
+                    writer.add(eventFactory.createCharacters(eventString.substring(relativeStart)));
+                    startMatched = true;
+                } else if (!endMatched && endIndex <= offset) {
+                    writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
+                    writeEndAnchor(writer, localId);
+                    writer.add(eventFactory.createCharacters(eventString.substring(relativeEnd)));
+                    endMatched = true;
+                } else {
+                    writer.add(e);
+                }
+            } else {
+                writer.add(e);
+            }
+        }
+    }
+
+    /*
+     * Flushes given elements, only one anchor will be added
+     */
+    private void flushEventsAddSingleAnchor(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, String id, String localId, int index) throws XMLStreamException {
+        int offset = 0;
+        boolean matched = false;
+        for (XMLEvent e : events) {
+            if (e.isStartElement()) {
+                context.push(extractName(e.asStartElement()));
+                writer.add(e);
+            } else if (e.isEndElement()) {
+                context.pop();
+                writer.add(e);
+            } else if (id.equals(context.getPath()) && e.isCharacters()) {
+                String eventString = e.asCharacters().getData();
+                int relativeIndex = index - offset;
+                offset += eventString.length();
+                if (!matched && index <= offset) {
+                    writer.add(eventFactory.createCharacters(eventString.substring(0, relativeIndex)));
+                    writeAnchor(writer, localId);
+                    writer.add(eventFactory.createCharacters(eventString.substring(relativeIndex)));
+                    matched = true;
+                }
+            }
+        }
+    }
+
+    private void flushStartEvents(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, SelectedText sel, String localId) throws XMLStreamException {
+        flushEventsAddSingleAnchor(writer, events, context, string, sel.getStartId(), "start" + localId, getIndex(string, sel.getFirstWord(), sel.getStartIndex()));
+    }
+
+    private void flushEndEvents(XMLEventWriter writer, List<XMLEvent> events, ElementContext context, String string, SelectedText sel, String localId) throws XMLStreamException {
+        flushEventsAddSingleAnchor(writer, events, context, string, sel.getEndId(), "end" + localId, getIndex(string, sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length());
+    }
+
+    private String extractName(StartElement element) {
+        String localName = element.getName().getLocalPart();
+        String name = localName;
+        if (localName.equals("div")){
+            name = element.getAttributeByName(TEI_TYPE_QNAME).getValue();
+        }
+        return name;
     }
 
     private Document createDocument(String path, String title, String description) {
@@ -419,6 +493,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
         writer.add(eventFactory.createAttribute("xml", XML_NS, "id", anchorId));
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
+    }
+
+    private void writeStartAnchor(XMLEventWriter writer, String localId) throws XMLStreamException {
+        writeAnchor(writer, "start" + localId);
+    }
+
+    private void writeEndAnchor(XMLEventWriter writer, String localId) throws XMLStreamException {
+        writeAnchor(writer, "end" + localId);
     }
 
 }

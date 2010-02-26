@@ -194,6 +194,18 @@ public class NoteAdditionTest extends AbstractServiceTest{
         assertTrue(content.contains("talon" + end(localId) + "is\u00E4nt\u00E4"));
     }
 
+    @Test
+    public void addNote_different_elements() throws Exception {
+        String startElement = "play-act-stage-ref";
+        String endElement = "play-act-stage";
+        String text = "e\n: p";
+        addNote(new SelectedText(startElement, endElement, 1, 1, text));
+
+        String content = FileUtils.readFileToString(targetFile, "UTF-8");
+        System.out.println(content);
+        assertTrue(content.contains("huon" + start(localId) + text + end(localId) + "er"));
+    }
+
     @Override
     protected Class<?> getServiceClass() {
         return null;

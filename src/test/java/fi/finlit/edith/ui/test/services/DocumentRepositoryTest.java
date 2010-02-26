@@ -14,7 +14,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +26,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
@@ -39,6 +37,7 @@ import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
@@ -52,10 +51,10 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepo;
-    
+
     @Inject
     private NoteRepository noteRepo;
-    
+
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
 
@@ -63,12 +62,11 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     private SubversionService subversionService;
 
     @Inject
+    private AdminService adminService;
+
+    @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
-
-    private List<Document> savedDocs = new ArrayList<Document>();
-
-    private static boolean initialized = false;
 
     private String getContent(String svnPath, long svnRevision) throws IOException{
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -78,22 +76,17 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         out.close();
         return new String(out.toByteArray(), "UTF-8");
     }
-    
+
     @Before
-    public void setUp(){
-        if (!initialized){
-            subversionService.destroy();
-            subversionService.initialize();
-            initialized = true;
-        }
+    public void setUp() throws Exception {
     }
 
     @After
     public void tearDown() throws IOException{
         closeStreams();
-        for (Document doc : savedDocs){
-            documentRepo.remove(doc);
-        }
+        adminService.removeNotesAndTerms();
+        subversionService.destroy();
+        subversionService.initialize();
     }
 
     @Test
@@ -126,7 +119,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         documentRepo.addDocument(targetPath, file);
 
         Document document = documentRepo.getDocumentForPath(targetPath);
-        savedDocs.add(document);
         assertFalse(documentRepo.getRevisions(document).isEmpty());
     }
 
@@ -136,7 +128,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
             assertFalse(documentRepo.getRevisions(document).isEmpty());
         }
     }
-    
+
     private Document getDocument(String path){
         return documentRepo.getDocumentForPath(documentRoot + path);
     }
@@ -146,7 +138,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
-
 
         NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
 
@@ -179,33 +170,33 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String content = getContent(document.getSvnPath(), -1);
         assertFalse(content.contains(start(note.getLocalId()) + text + end(note.getLocalId())));
     }
-    
+
     @Test
     public void addRemoveNote() throws IOException, NoteAdditionFailedException{
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");        
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         int count = noteRevisionRepo.queryNotes("*").getAvailableRows();
-        
+
         // add
         String element = "play-act-sp4-p";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
         NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
-        
+
         assertEquals(count+1, noteRevisionRepo.queryNotes("*").getAvailableRows());
         int countInDoc = noteRevisionRepo.getOfDocument(document.getRevision(note.getSvnRevision())).size();
-        
+
         // remove
-        documentRepo.removeNotes(document.getRevision(note.getSvnRevision()), note.getRevisionOf());        
+        documentRepo.removeNotes(document.getRevision(note.getSvnRevision()), note.getRevisionOf());
         Note deletedNote = noteRepo.getById(note.getRevisionOf().getId());
         assertTrue(deletedNote.getLatestRevision().isDeleted());
-        
+
         GridDataSource dataSource = noteRevisionRepo.queryNotes("*");
         int available = dataSource.getAvailableRows();
         dataSource.prepare(0, available-1, Collections.<SortConstraint>emptyList());
         for (int i = 0; i < available; i++){
             NoteRevision rev = (NoteRevision) dataSource.getRowValue(i);
             assertEquals(rev, rev.getRevisionOf().getLatestRevision());
-        }        
-        
+        }
+
         long svnRevision = deletedNote.getLatestRevision().getSvnRevision();
         assertEquals(countInDoc - 1, noteRevisionRepo.getOfDocument(document.getRevision(svnRevision)).size());
         assertEquals(count, available);
@@ -245,33 +236,55 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String newText = "sun ullakosta";
         documentRepo.updateNote(noteRevision, new SelectedText(element, element, newText));
 
-        String content = getContent(document.getSvnPath(), -1);        
+        String content = getContent(document.getSvnPath(), -1);
         String localId = noteRevision.getRevisionOf().getLocalId();
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));
     }
-        
+
     @Test
     public void updateNote2() throws IOException, NoteAdditionFailedException{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp3-p";
         String text = "\u00E4st";
-        
+
         NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
-        
+
         //T-äst-ä
         String newText = "T\u00E4st\u00E4";
         documentRepo.updateNote(noteRevision, new SelectedText(element, element, newText));
-        
+
         String content = getContent(document.getSvnPath(), -1);
         String localId = noteRevision.getRevisionOf().getLocalId();
-        System.out.println(content);
+//        System.out.println(content);
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));
         // Täst<anchor xml:id="start1266836640612"/>ä<anchor xml:id="end1266836640612"/> rientää
     }
-    
-    @Test    
+
+    @Test
+    public void addNote_twice_overlapping() throws IOException, NoteAdditionFailedException{
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        String element = "play-act-sp3-p";
+        String text = "\u00E4st";
+
+        NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
+
+        //T-äst-ä
+        String newText = "T\u00E4st\u00E4";
+        NoteRevision noteRevision2 = documentRepo.addNote(document.getRevision(noteRevision.getSvnRevision()), new SelectedText(element, element, newText));
+
+        String content = getContent(document.getSvnPath(), -1);
+        String localId = noteRevision.getRevisionOf().getLocalId();
+        String localId2 = noteRevision2.getRevisionOf().getLocalId();
+//        System.out.println(content);
+//        assertTrue(content.contains(start(localId) + text + end(localId)));
+//        assertTrue(content.contains(start(localId) + newText + end(localId)));
+        assertTrue(content.contains(start(localId2) + "T" + start(localId) + text + end(localId) + "\u00E4" + end(localId2)));
+        // Täst<anchor xml:id="start1266836640612"/>ä<anchor xml:id="end1266836640612"/> rientää
+    }
+
+    @Test
     public void removeAllNotes() throws Exception{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
@@ -279,13 +292,13 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
         DocumentRevision docRevision = noteRevision.getDocumentRevision();
-        
+
         List<NoteRevision> revs = noteRevisionRepo.getOfDocument(docRevision);
         assertTrue(revs.size() > 0);
-        
+
         docRevision = documentRepo.removeAllNotes(document);
         revs = noteRevisionRepo.getOfDocument(docRevision);
-        assertTrue(revs.isEmpty());                
+        assertTrue(revs.isEmpty());
     }
 
     @Override
