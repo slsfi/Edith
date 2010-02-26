@@ -17,8 +17,6 @@ import java.util.UUID;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.io.FileUtils;
@@ -43,6 +41,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_FILE_KEY)
     private String testDocument;
+    
+    // TODO : expose testDocument content as byte array into registry (key : TEST_DOCUMENT_CONTENT_KEY)
 
     @Autobuild
     @Inject
