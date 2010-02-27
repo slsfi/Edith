@@ -45,16 +45,10 @@ public class AdminServiceTest extends AbstractServiceTest{
 
     @Test
     public void removeNotes() throws Exception {
-        long s = System.currentTimeMillis();
         noteRepo.importNotes(noteTestData);
-        long e = System.currentTimeMillis();
-//        System.err.println("Import took " + (e-s) + "ms");
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() > 0);
 
-        s = System.currentTimeMillis();
         adminService.removeNotes();
-        e = System.currentTimeMillis();
-//        System.err.println("Removal took " + (e-s) + "ms");
         assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() == 0);
     }
 

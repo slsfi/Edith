@@ -84,7 +84,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(element, element, text));
 
         String content = getContent();
-        System.out.println(content);
+        //System.out.println(content);
         assertTrue(content.contains("k\u00E4ski " + start(localId) + text + end(localId) + " p\u00E4\u00E4lles"));
     }
 
@@ -143,7 +143,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(element, element, 1, 1, text.toString()));
 
         String content = getContent();
-        System.out.println(content);
+        //System.out.println(content);
         assertTrue(content.contains("ed" + start(localId) + "es" + end(localId) + "s\u00E4"));
     }
 

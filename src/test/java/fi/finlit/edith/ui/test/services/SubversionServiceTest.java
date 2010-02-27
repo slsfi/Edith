@@ -24,6 +24,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.EDITH;
@@ -41,6 +43,8 @@ import fi.finlit.edith.ui.services.svn.UpdateCallback;
  */
 public class SubversionServiceTest extends AbstractServiceTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(SubversionServiceTest.class);
+    
     @Autobuild
     @Inject
     private SubversionServiceImpl subversionService;
@@ -86,11 +90,17 @@ public class SubversionServiceTest extends AbstractServiceTest {
         closeStreams();
         FileUtils.deleteDirectory(checkoutDirectory);
         FileUtils.deleteDirectory(anotherCheckoutDirectory);
-        testFile.delete();
+        if (testFile.exists()){
+            if (!testFile.delete()){
+                logger.error("Deletion of " + testFile.getPath() + " failed");
+            }
+        }
 
         // recover the svn repository from the copy
         subversionService.destroy();
-        svnRepoCopy.renameTo(svnRepo);
+        if (!svnRepoCopy.renameTo(svnRepo)){
+            logger.error("Rename of " + svnRepoCopy.getPath() + " to " + svnRepo.getPath() + " failed");
+        }
     }
 
     @Test
