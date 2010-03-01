@@ -198,10 +198,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             allStrings = new StringBuilder();
                             allEvents.clear();
                             handled = false;
-                        } else if (matched.isStartMatched() && context.equalsAny(sel.getEndId())) {
+                        } else if (context.equalsAny(sel.getEndId())) {
                             ElementContext tempContext = (ElementContext) context.clone();
                             tempContext.pop();
-                            flush(writer, endStrings.toString(), sel, allEvents, tempContext, matched, localId, new EndPosition());
+                            flush(writer, startStrings.toString(), sel, allEvents, tempContext, matched, localId, new EndPosition());
                             allStrings = new StringBuilder();
                             allEvents.clear();
                             handled = false;
