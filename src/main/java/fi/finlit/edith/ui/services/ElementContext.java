@@ -105,4 +105,14 @@ public class ElementContext implements Cloneable {
         return clone;
     }
 
+    public boolean equalsAny(String... strings) {
+        String path = getPath();
+        for (String s : strings) {
+            if (s.equals(path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

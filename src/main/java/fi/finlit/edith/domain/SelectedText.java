@@ -88,6 +88,16 @@ public class SelectedText {
         return words[words.length-1];
     }
 
+    // FIXME Not reliable, this could be elsewhere?
+    public boolean startIsChildOfEnd() {
+        return startId.startsWith(endId) && endId.length() < startId.length();
+    }
+
+    // FIXME Not reliable, this could be elsewhere?
+    public boolean endIsChildOfStart() {
+        return endId.startsWith(startId)  && endId.length() > startId.length();
+    }
+
     @Override
     public String toString(){
         StringBuffer buffer = new StringBuffer();
@@ -96,6 +106,8 @@ public class SelectedText {
         buffer.append(selection);
         return buffer.toString();
     }
+
+
 
 
 

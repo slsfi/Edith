@@ -176,10 +176,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
         StringBuilder allStrings = new StringBuilder();
+        StringBuilder startStrings = new StringBuilder();
+        StringBuilder endStrings = new StringBuilder();
+        List<XMLEvent> allEvents = new ArrayList<XMLEvent>();
+        EndPosition endPosition = new EndPosition();
 
         Matched matched = new Matched(false, false);
         try {
-            List<XMLEvent> allEvents = new ArrayList<XMLEvent>();
             boolean buffering = false;
             while (reader.hasNext()) {
                 boolean handled = false;
@@ -188,34 +191,39 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     context.push(extractName(event.asStartElement()));
                     if (buffering) {
                         handled = true;
-                        if (isInStartContext(event, context, sel)) {
+                        if (context.equalsAny(sel.getStartId())) {
                             ElementContext tempContext = (ElementContext) context.clone();
                             tempContext.pop();
-                            flush(writer, allStrings.toString(), sel, allEvents, tempContext, matched, localId);
+                            flush(writer, startStrings.toString(), sel, allEvents, tempContext, matched, localId, endPosition);
                             allStrings = new StringBuilder();
                             allEvents.clear();
                             handled = false;
-                        } else if (isInEndContext(event, context, sel)) {
+                        } else if (matched.isStartMatched() && context.equalsAny(sel.getEndId())) {
                             ElementContext tempContext = (ElementContext) context.clone();
                             tempContext.pop();
-                            flush(writer, allStrings.toString(), sel, allEvents, tempContext, matched, localId);
+                            flush(writer, endStrings.toString(), sel, allEvents, tempContext, matched, localId, new EndPosition());
                             allStrings = new StringBuilder();
                             allEvents.clear();
                             handled = false;
                         } else {
                             allEvents.add(event);
                         }
-
                     }
-                    if (isInContext(event, context, sel)){
+                    if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
                         buffering = true;
                     }
                 } else if (event.isCharacters()) {
                     if (buffering) {
                         allEvents.add(event);
                         handled = true;
-                        if (isInContext(event, context, sel)){
+                        if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
                             allStrings.append(event.asCharacters().getData());
+                        }
+                        if (context.equalsAny(sel.getStartId())) {
+                            startStrings.append(event.asCharacters().getData());
+                        }
+                        if (context.equalsAny(sel.getEndId())) {
+                            endStrings.append(event.asCharacters().getData());
                         }
                     }
                 } else if (event.isEndElement()) {
@@ -224,19 +232,19 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                      * - in start context when end context begins flush start
                      * - in end context when start context begins and ends
                      */
-                    if (isInContext(event, context, sel)) {
-                        flush(writer, allStrings.toString(), sel, allEvents, context, matched, localId);
+                    if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
+                        flush(writer, !matched.isStartMatched() ? allStrings.toString() : endStrings.toString(), sel, allEvents, context, matched, localId, endPosition);
                         buffering = false;
                         allEvents.clear();
                         allStrings = new StringBuilder();
                     }
                     context.pop();
                     if (buffering) {
-                        buffering = isInContext(event, context, sel);
+                        buffering = (context.equalsAny(sel.getStartId(), sel.getEndId()));
                         allEvents.add(event);
                         handled = true;
                     }
-                    buffering = isInContext(event, context, sel);
+                    buffering = (context.equalsAny(sel.getStartId(), sel.getEndId()));
                 }
                 if (!handled) {
                     writer.add(event);
@@ -251,7 +259,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
-    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, ElementContext context, Matched matched, String localId) throws XMLStreamException {
+    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, ElementContext context, Matched matched, String localId, EndPosition endPosition) throws XMLStreamException {
         String startAnchor = "start"+localId;
         String endAnchor = "end"+localId;
         boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
@@ -264,13 +272,16 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 context.push(extractName(e.asStartElement()));
             } else if (e.isEndElement()) {
                 context.pop();
-            } else if (e.isCharacters() && isInContext(e, context, sel)) {
+            } else if (e.isCharacters() && (context.equalsAny(sel.getStartId(), sel.getEndId()))) {
                 String eventString = e.asCharacters().getData();
                 int relativeStart = startIndex - offset;
-                int relativeEnd = endIndex - offset;
+                int relativeEnd = endIndex - offset - endPosition.getOffset();
                 int index = -1;
                 offset += eventString.length();
-                if (isInStartContext(e, context, sel)) {
+                if (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd()) {
+                    endPosition.setOffset(endPosition.getOffset() + offset);
+                }
+                if (context.equalsAny(sel.getStartId())) {
                     if (!matched.isStartMatched() && startIndex <= offset) {
                         writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
                         writeAnchor(writer, startAnchor);
@@ -279,7 +290,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         index = relativeStart;
                     }
                 }
-                if (isInEndContext(e, context, sel)) {
+                if (context.equalsAny(sel.getEndId())) {
                     if (matched.isStartMatched() && !matched.isEndMatched() && endIndex <= offset) {
                         if (!startAndEndInSameElement) {
                             writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
@@ -302,17 +313,17 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
-    private boolean isInContext(XMLEvent event, ElementContext context, SelectedText sel) {
-        return isInStartContext(event, context, sel) || isInEndContext(event, context, sel);
-    }
-
-    private boolean isInStartContext(XMLEvent event, ElementContext context, SelectedText sel) {
-        return sel.getStartId().equals(context.getPath());
-    }
-
-    private boolean isInEndContext(XMLEvent event, ElementContext context, SelectedText sel) {
-        return sel.getEndId().equals(context.getPath());
-    }
+//    private boolean isInContext(XMLEvent event, ElementContext context, SelectedText sel) {
+//        return isInStartContext(event, context, sel) || isInEndContext(event, context, sel);
+//    }
+//
+//    private boolean isInStartContext(XMLEvent event, ElementContext context, SelectedText sel) {
+//        return sel.getStartId().equals(context.getPath());
+//    }
+//
+//    private boolean isInEndContext(XMLEvent event, ElementContext context, SelectedText sel) {
+//        return sel.getEndId().equals(context.getPath());
+//    }
 
     private String extractName(StartElement element) {
         String localName = element.getName().getLocalPart();
@@ -496,8 +507,22 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         public boolean areBothMatched() {
             return this.startMatched && this.endMatched;
         }
+    }
 
+    private class EndPosition {
+        private int offset;
 
+        public EndPosition() {
+            offset = 0;
+        }
+
+        public int getOffset() {
+            return offset;
+        }
+
+        public void setOffset(int offset) {
+            this.offset = offset;
+        }
     }
 
 }
