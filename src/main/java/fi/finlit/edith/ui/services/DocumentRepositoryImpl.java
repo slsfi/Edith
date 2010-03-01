@@ -237,7 +237,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                     }
                                 }
                                 if (sel.getEndId().equals(context.getPath())) {
-                                    if (startMatched && !endMatched && endIndex <= offset) {
+                                    if (!endMatched && endIndex <= offset) {
                                         if (!startAndEndInSameElement) {
                                             writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
                                         } else {
