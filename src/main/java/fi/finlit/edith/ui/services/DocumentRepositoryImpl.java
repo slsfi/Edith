@@ -313,18 +313,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
-//    private boolean isInContext(XMLEvent event, ElementContext context, SelectedText sel) {
-//        return isInStartContext(event, context, sel) || isInEndContext(event, context, sel);
-//    }
-//
-//    private boolean isInStartContext(XMLEvent event, ElementContext context, SelectedText sel) {
-//        return sel.getStartId().equals(context.getPath());
-//    }
-//
-//    private boolean isInEndContext(XMLEvent event, ElementContext context, SelectedText sel) {
-//        return sel.getEndId().equals(context.getPath());
-//    }
-
     private String extractName(StartElement element) {
         String localName = element.getName().getLocalPart();
         String name = localName;
@@ -507,7 +495,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
-    private class EndPosition {
+    @Deprecated
+    private class EndPosition { // TODO : replace with MutableInt
+        
         private int offset;
 
         public EndPosition() {
