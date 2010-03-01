@@ -198,6 +198,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(startElement, endElement, text));
 
         String content = getContent();
+        System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId) + "\u00E4ll\u00E4"));
     }
 
@@ -209,7 +210,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(startElement, endElement, text));
 
         String content = getContent();
-        assertTrue(content.contains("(Top" + start(localId) + "iaksen <ref xml:id=\"ref.3\" target=\"note.3\">huo" + end(localId) + "ne"));
+//        System.out.println(content);
+        assertTrue(content.contains("(To" + start(localId) + "piaksen <ref xml:id=\"ref.3\" target=\"note.3\">huo" + end(localId) + "ne"));
     }
 
     @Test

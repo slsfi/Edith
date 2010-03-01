@@ -175,34 +175,47 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
         logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
-        StringBuilder builder = new StringBuilder();
-        List<XMLEvent> events = new ArrayList<XMLEvent>();
-        String startAnchor = "start"+localId;
-        String endAnchor = "end"+localId;
+        StringBuilder allStrings = new StringBuilder();
 
-        boolean startMatched = false;
-        boolean endMatched = false;
+        Matched matched = new Matched(false, false);
         try {
+            List<XMLEvent> allEvents = new ArrayList<XMLEvent>();
             boolean buffering = false;
-            boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
             while (reader.hasNext()) {
                 boolean handled = false;
                 XMLEvent event = reader.nextEvent();
                 if (event.isStartElement()) {
                     context.push(extractName(event.asStartElement()));
                     if (buffering) {
-                        events.add(event);
                         handled = true;
+                        if (isInStartContext(event, context, sel)) {
+                            ElementContext tempContext = (ElementContext) context.clone();
+                            tempContext.pop();
+                            flush(writer, allStrings.toString(), sel, allEvents, tempContext, matched, localId);
+                            allStrings = new StringBuilder();
+                            allEvents.clear();
+                            handled = false;
+                        } else if (isInEndContext(event, context, sel)) {
+                            ElementContext tempContext = (ElementContext) context.clone();
+                            tempContext.pop();
+                            flush(writer, allStrings.toString(), sel, allEvents, tempContext, matched, localId);
+                            allStrings = new StringBuilder();
+                            allEvents.clear();
+                            handled = false;
+                        } else {
+                            allEvents.add(event);
+                        }
+
                     }
                     if (isInContext(event, context, sel)){
                         buffering = true;
                     }
                 } else if (event.isCharacters()) {
                     if (buffering) {
-                        events.add(event);
+                        allEvents.add(event);
                         handled = true;
                         if (isInContext(event, context, sel)){
-                            builder.append(event.asCharacters().getData());
+                            allStrings.append(event.asCharacters().getData());
                         }
                     }
                 } else if (event.isEndElement()) {
@@ -212,81 +225,93 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                      * - in end context when start context begins and ends
                      */
                     if (isInContext(event, context, sel)) {
-                        int offset = 0;
-                        int startIndex = getIndex(builder.toString(), sel.getFirstWord(), sel.getStartIndex());
-                        int endIndex = getIndex(builder.toString(), sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length();
-                        for (XMLEvent e : events) {
-                            boolean innerHandled = false;
-                            if (e.isStartElement()) {
-                                context.push(extractName(e.asStartElement()));
-                            } else if (e.isEndElement()) {
-                                context.pop();
-                            } else if (e.isCharacters() && isInContext(event, context, sel)) {
-                                String eventString = e.asCharacters().getData();
-                                int relativeStart = startIndex - offset;
-                                int relativeEnd = endIndex - offset;
-                                int index = -1;
-                                offset += eventString.length();
-                                if (sel.getStartId().equals(context.getPath())) {
-                                    if (!startMatched && startIndex <= offset) {
-                                        writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
-                                        writeAnchor(writer, startAnchor);
-                                        startMatched = true;
-                                        innerHandled = true;
-                                        index = relativeStart;
-                                    }
-                                }
-                                if (sel.getEndId().equals(context.getPath())) {
-                                    if (!endMatched && endIndex <= offset) {
-                                        if (!startAndEndInSameElement) {
-                                            writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
-                                        } else {
-                                            writer.add(eventFactory.createCharacters(eventString.substring(relativeStart > -1 ? relativeStart : 0, relativeEnd)));
-                                        }
-                                        writeAnchor(writer, endAnchor);
-                                        endMatched = true;
-                                        innerHandled = true;
-                                        index = relativeEnd;
-                                    }
-                                }
-                                if (innerHandled) {
-                                    writer.add(eventFactory.createCharacters(eventString.substring(index)));
-                                }
-                            }
-                            if (!innerHandled) {
-                                writer.add(e);
-                            }
-                        }
+                        flush(writer, allStrings.toString(), sel, allEvents, context, matched, localId);
                         buffering = false;
-                        events.clear();
-                        builder = new StringBuilder();
+                        allEvents.clear();
+                        allStrings = new StringBuilder();
                     }
                     context.pop();
                     if (buffering) {
                         buffering = isInContext(event, context, sel);
-                        events.add(event);
+                        allEvents.add(event);
                         handled = true;
                     }
+                    buffering = isInContext(event, context, sel);
                 }
                 if (!handled) {
                     writer.add(event);
                 }
             }
         } finally {
-            if (!startMatched || !endMatched) {
-                throw new NoteAdditionFailedException(sel, localId, startMatched, endMatched);
+            if (!matched.areBothMatched()) {
+                throw new NoteAdditionFailedException(sel, localId, matched.isStartMatched(), matched.isEndMatched());
             }
             writer.close();
             reader.close();
         }
     }
 
-    /*
-     * Evaluates if we are in an element that should be buffered
-     */
-    // TODO : find better name
+    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, ElementContext context, Matched matched, String localId) throws XMLStreamException {
+        String startAnchor = "start"+localId;
+        String endAnchor = "end"+localId;
+        boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
+        int offset = 0;
+        int startIndex = getIndex(string.toString(), sel.getFirstWord(), sel.getStartIndex());
+        int endIndex = getIndex(string.toString(), sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length();
+        for (XMLEvent e : events) {
+            boolean handled = false;
+            if (e.isStartElement()) {
+                context.push(extractName(e.asStartElement()));
+            } else if (e.isEndElement()) {
+                context.pop();
+            } else if (e.isCharacters() && isInContext(e, context, sel)) {
+                String eventString = e.asCharacters().getData();
+                int relativeStart = startIndex - offset;
+                int relativeEnd = endIndex - offset;
+                int index = -1;
+                offset += eventString.length();
+                if (isInStartContext(e, context, sel)) {
+                    if (!matched.isStartMatched() && startIndex <= offset) {
+                        writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
+                        writeAnchor(writer, startAnchor);
+                        matched.setStartMatched(true);
+                        handled = true;
+                        index = relativeStart;
+                    }
+                }
+                if (isInEndContext(e, context, sel)) {
+                    if (matched.isStartMatched() && !matched.isEndMatched() && endIndex <= offset) {
+                        if (!startAndEndInSameElement) {
+                            writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
+                        } else {
+                            writer.add(eventFactory.createCharacters(eventString.substring(relativeStart > -1 ? relativeStart : 0, relativeEnd)));
+                        }
+                        writeAnchor(writer, endAnchor);
+                        matched.setEndMatched(true);
+                        handled = true;
+                        index = relativeEnd;
+                    }
+                }
+                if (handled) {
+                    writer.add(eventFactory.createCharacters(eventString.substring(index)));
+                }
+            }
+            if (!handled) {
+                writer.add(e);
+            }
+        }
+    }
+
     private boolean isInContext(XMLEvent event, ElementContext context, SelectedText sel) {
-        return sel.getStartId().equals(context.getPath()) || sel.getEndId().equals(context.getPath());
+        return isInStartContext(event, context, sel) || isInEndContext(event, context, sel);
+    }
+
+    private boolean isInStartContext(XMLEvent event, ElementContext context, SelectedText sel) {
+        return sel.getStartId().equals(context.getPath());
+    }
+
+    private boolean isInEndContext(XMLEvent event, ElementContext context, SelectedText sel) {
+        return sel.getEndId().equals(context.getPath());
     }
 
     private String extractName(StartElement element) {
@@ -446,6 +471,33 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
         writer.add(eventFactory.createAttribute("xml", XML_NS, "id", anchorId));
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
+    }
+
+    private class Matched {
+        private boolean startMatched;
+        private boolean endMatched;
+        public Matched(boolean startMatched, boolean endMatched) {
+            this.startMatched = startMatched;
+            this.endMatched = endMatched;
+        }
+        public boolean isStartMatched() {
+            return startMatched;
+        }
+        public void setStartMatched(boolean startMatched) {
+            this.startMatched = startMatched;
+        }
+        public boolean isEndMatched() {
+            return endMatched;
+        }
+        public void setEndMatched(boolean endMatched) {
+            this.endMatched = endMatched;
+        }
+
+        public boolean areBothMatched() {
+            return this.startMatched && this.endMatched;
+        }
+
+
     }
 
 }
