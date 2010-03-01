@@ -5,8 +5,11 @@
  */
 package fi.finlit.edith.ui.test.services;
 
+import static org.junit.Assert.fail;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +23,7 @@ import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -198,7 +202,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(startElement, endElement, text));
 
         String content = getContent();
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId) + "\u00E4ll\u00E4"));
     }
 
@@ -210,7 +214,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         addNote(new SelectedText(startElement, endElement, 1, 2, text));
 
         String content = getContent();
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: p" + end(localId) + "er\u00E4ll\u00E4"));
     }
 
@@ -224,38 +228,45 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String content = getContent();
 //        System.out.println(content);
         assertTrue(content.contains("(To" + start(localId) + "piaksen <ref xml:id=\"ref.3\" target=\"note.3\">huo" + end(localId) + "ne"));
+        assertEquals(1, StringUtils.countMatches(content, "Jaana istuu pöydän ääressä, kutoen sukkaa,"));
     }
 
-//    @Test
-//    public void addNote_start_element_inside_end_element_and_end_element_inside_start_element() throws Exception {
-//        String startElement = "play-act-stage-ref";
-//        String endElement = "play-act-stage";
-//        String text = "uone\n: per";
-//        addNote(new SelectedText(startElement, endElement, text));
-//
-//        String startElement2 = "play-act-stage";
-//        String endElement2 = "play-act-stage-ref2";
-//        String text2 = "sivulla ra";
-//        ByteArrayOutputStream target2 = new ByteArrayOutputStream();
-//        XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(target.toByteArray()));
-//        XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target);
-//        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement2, endElement2, text2), localId);
-//        String content = new String(target.toByteArray(), "UTF-8");
-//        System.out.println(content);
-//    }
-//
-//    @Test
-//    public void addNote_end_element_inside_start_element_and_start_element_inside_end_element_() throws Exception {
-//        String startElement = "play-act-stage";
-//        String endElement = "play-act-stage-ref";
-//        String text = "piaksen huo";
-//        addNote(new SelectedText(startElement, endElement, text));
-//
-//        String startElement2 = "play-act-stage-ref";
-//        String endElement2 = "play-act-stage";
-//        String text2 = "uone\n: per";
-//        addNote(new SelectedText(startElement2, endElement2, text2));
-//    }
+    @Test
+    public void addNote_start_element_inside_end_element_and_end_element_inside_start_element() throws Exception {
+        String startElement = "play-act-stage-ref";
+        String endElement = "play-act-stage";
+        String text = "uone\n: per";
+        addNote(new SelectedText(startElement, endElement, text));
+
+        String startElement2 = "play-act-stage";
+        String endElement2 = "play-act-stage-ref2";
+        String text2 = "sivulla ra";
+        ByteArrayOutputStream target2 = new ByteArrayOutputStream();
+        XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(target.toByteArray()));
+        XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement2, endElement2, text2), localId);
+        String content = new String(target2.toByteArray(), "UTF-8");
+        assertTrue(content.contains("h" + start(localId) + "uone</ref>: p" + end(localId) + "er\u00E4ll\u00E4"));
+    }
+
+    @Test
+    public void addNote_end_element_inside_start_element_and_start_element_inside_end_element_() throws Exception {
+        String startElement = "play-act-stage";
+        String endElement = "play-act-stage-ref2";
+        String text = "sivulla ra";
+        addNote(new SelectedText(startElement, endElement, text));
+
+        String startElement2 = "play-act-stage-ref";
+        String endElement2 = "play-act-stage";
+        String text2 = "uone\n: per";
+        ByteArrayOutputStream target2 = new ByteArrayOutputStream();
+        XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(target.toByteArray()));
+        XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement2, endElement2, text2), localId);
+        String content = new String(target2.toByteArray(), "UTF-8");
+        System.out.println(content);
+        assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId) + "\u00E4ll\u00E4"));
+    }
 
     @Test
     public void addNote_verify_subelement_not_eaten() throws Exception {
