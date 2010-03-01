@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -19,14 +19,14 @@ import org.apache.commons.lang.mutable.MutableInt;
  * @author tiwe
  * @version $Id$
  */
-public class ElementContext {
-    
-    public static class Item {
-        
+public class ElementContext implements Cloneable {
+
+    public static class Item implements Cloneable {
+
         private final String name;
-        
-        private final Map<String,MutableInt> counts = new HashMap<String,MutableInt>();
-        
+
+        private Map<String,MutableInt> counts = new HashMap<String,MutableInt>();
+
         Item(String name){
             this.name = name;
         }
@@ -40,44 +40,69 @@ public class ElementContext {
             }else{
                 intValue.add(1);
                 return name + intValue;
-            }            
-        }      
+            }
+        }
+
+        @Override
+        public Object clone() throws CloneNotSupportedException{
+            Item item = (Item) super.clone();
+            item.counts = new HashMap<String, MutableInt>();
+            for (String key : counts.keySet()) {
+                item.counts.put(key, counts.get(key));
+            }
+
+            return item;
+        }
 
     }
-    
-    private final Stack<Item> stack = new Stack<Item>();
-    
+
+    private Stack<Item> stack = new Stack<Item>();
+
     private final int offset;
-    
+
     public ElementContext(int offset){
         this.offset = offset;
     }
-    
+
     public void push(String name){
         if (!stack.isEmpty()){
             name = stack.peek().getName(name);
         }
-        stack.push(new Item(name));        
+        stack.push(new Item(name));
     }
-    
+
     public void pop(){
         stack.pop();
     }
-    
-    
+
+
     @Nullable
     public String getPath(){
         if (stack.size() > offset){
             StringBuilder b = new StringBuilder();
             for (int i = offset; i < stack.size(); i++){
-                if (i > offset) b.append("-");
+                if (i > offset) {
+                    b.append("-");
+                }
                 b.append(stack.get(i).name);
             }
-            return b.toString();    
+            return b.toString();
         }else{
             return null;
         }
-        
+
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        ElementContext clone = (ElementContext) super.clone();
+        clone.stack = new Stack<Item>();
+
+        for (Item item : stack) {
+            clone.stack.push((Item) item.clone());
+        }
+
+        return clone;
     }
 
 }
