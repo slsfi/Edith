@@ -146,6 +146,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertTrue(content.contains(start(localId) + text + end(localId)));
     }
 
+ // TODO move into NoteAdditionTest
     @Test
     public void addNote2() throws IOException, NoteAdditionFailedException{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
@@ -262,6 +263,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         // Täst<anchor xml:id="start1266836640612"/>ä<anchor xml:id="end1266836640612"/> rientää
     }
 
+    // TODO move into NoteAdditionTest
     @Test
     public void addNote_twice_overlapping() throws IOException, NoteAdditionFailedException{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
@@ -280,6 +282,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertTrue(content.contains(start(localId2) + "T" + start(localId) + text + end(localId) + "\u00E4" + end(localId2)));
     }
 
+ // TODO move into NoteAdditionTest
     @Test
     public void addNote_twice_overlapping2() throws IOException, NoteAdditionFailedException{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
@@ -300,6 +303,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId2) + "epp\u00E4</roleDesc>.</castItem>"));
     }
 
+ // TODO move into NoteAdditionTest
     @Test
     public void addNote_role_description() throws IOException, NoteAdditionFailedException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
