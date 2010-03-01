@@ -241,7 +241,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                     buffering = (context.equalsAny(sel.getStartId(), sel.getEndId()));
                 }
-                if (!handled) {
+                if (!handled || matched.areBothMatched()) {
                     writer.add(event);
                 }
             }
