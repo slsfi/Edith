@@ -181,7 +181,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         List<XMLEvent> allEvents = new ArrayList<XMLEvent>();
         EndPosition endPosition = new EndPosition();
 
-        Matched matched = new Matched(false, false);
+        Matched matched = new Matched();
         try {
             boolean buffering = false;
             while (reader.hasNext()) {
@@ -285,7 +285,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     if (!matched.isStartMatched() && startIndex <= offset) {
                         writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
                         writeAnchor(writer, startAnchor);
-                        matched.setStartMatched(true);
+                        matched.matchStart();
                         handled = true;
                         index = relativeStart;
                     }
@@ -298,7 +298,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             writer.add(eventFactory.createCharacters(eventString.substring(relativeStart > -1 ? relativeStart : 0, relativeEnd)));
                         }
                         writeAnchor(writer, endAnchor);
-                        matched.setEndMatched(true);
+                        matched.matchEnd();
                         handled = true;
                         index = relativeEnd;
                     }
@@ -485,23 +485,21 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     private class Matched {
+        
         private boolean startMatched;
         private boolean endMatched;
-        public Matched(boolean startMatched, boolean endMatched) {
-            this.startMatched = startMatched;
-            this.endMatched = endMatched;
-        }
+        
         public boolean isStartMatched() {
             return startMatched;
         }
-        public void setStartMatched(boolean startMatched) {
-            this.startMatched = startMatched;
+        public void matchStart() {
+            this.startMatched = true;
         }
         public boolean isEndMatched() {
             return endMatched;
         }
-        public void setEndMatched(boolean endMatched) {
-            this.endMatched = endMatched;
+        public void matchEnd() {
+            this.endMatched = true;
         }
 
         public boolean areBothMatched() {
