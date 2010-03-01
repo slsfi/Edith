@@ -227,11 +227,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         }
                     }
                 } else if (event.isEndElement()) {
-                    /*
-                     * TODO Handle also cases where start context is in end context and end in start context.
-                     * - in start context when end context begins flush start
-                     * - in end context when start context begins and ends
-                     */
                     if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
                         flush(writer, !matched.isStartMatched() ? allStrings.toString() : endStrings.toString(), sel, allEvents, context, matched, localId, endPosition);
                         buffering = false;
@@ -473,10 +468,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     private class Matched {
-        
+
         private boolean startMatched;
         private boolean endMatched;
-        
+
         public boolean isStartMatched() {
             return startMatched;
         }
@@ -497,7 +492,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Deprecated
     private class EndPosition { // TODO : replace with MutableInt
-        
+
         private int offset;
 
         public EndPosition() {
