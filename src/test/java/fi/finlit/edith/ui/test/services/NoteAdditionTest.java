@@ -264,7 +264,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement2, endElement2, text2), localId);
         String content = new String(target2.toByteArray(), "UTF-8");
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId) + "\u00E4ll\u00E4"));
     }
 
