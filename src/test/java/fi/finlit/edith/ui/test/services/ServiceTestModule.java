@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
@@ -39,14 +40,18 @@ public class ServiceTestModule {
     public static final String TEST_DOCUMENT_KEY = "test.document";
     
     public static final String TEST_DOCUMENT_FILE_KEY = "test.document.file";
+    
+    public static final String TEST_DOCUMENT_CONTENT_KEY = "test.document.content";
 
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration)
             throws IOException, SVNException {
         File svnRepo = new File("target/repo");
         configuration.add(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
-        configuration.add(TEST_DOCUMENT_FILE_KEY, "etc/demo-material/tei/Nummisuutarit rakenteistettuna-annotoituna.xml");
-        configuration.add(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml");
+        File testDocumentFile = new File("etc/demo-material/tei/Nummisuutarit rakenteistettuna-annotoituna.xml");
+        configuration.add(TEST_DOCUMENT_FILE_KEY, testDocumentFile.getPath());
+        configuration.add(TEST_DOCUMENT_CONTENT_KEY, FileUtils.readFileToString(testDocumentFile,"UTF-8"));
+        configuration.add(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml");        
         configuration.add(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         configuration.add(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
     }

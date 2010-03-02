@@ -5,9 +5,8 @@
  */
 package fi.finlit.edith.ui.test.services;
 
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -42,11 +41,9 @@ import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
  * @version $Id$
  */
 public class NoteAdditionTest extends AbstractServiceTest{
-
-    @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_FILE_KEY)
-    private String testDocument;
-
-    // TODO : expose testDocument content as byte array into registry (key : TEST_DOCUMENT_CONTENT_KEY)
+    
+    @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_CONTENT_KEY)
+    private String testDocumentContent;
 
     @Autobuild
     @Inject
@@ -60,7 +57,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Before
     public void setUp() throws SVNException, IOException, XMLStreamException{
-        source = new FileInputStream(new File(testDocument));
+        source = new ByteArrayInputStream(testDocumentContent.getBytes("UTF-8"));
         target = new ByteArrayOutputStream();
         localId = UUID.randomUUID().toString();
     }
@@ -276,9 +273,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String text = "Topi";
         addNote(new SelectedText(element, element, text));
 
-        String content = FileUtils.readFileToString(new File(testDocument), "UTF-8");
-        assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
-        content = getContent();
+        assertTrue(testDocumentContent.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
+        String content = getContent();
 //        System.out.println(content);
         assertTrue(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
