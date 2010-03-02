@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.test.services;
 
+import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -39,11 +40,11 @@ import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
  * @version $Id$
  */
 public class NoteAdditionTest extends AbstractServiceTest{
-    
+
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_CONTENT_KEY)
     private String testDocumentContent;
 
-    @Inject @Autobuild    
+    @Inject @Autobuild
     private DocumentRepositoryImpl documentRepo;
 
     private Reader source;
@@ -262,6 +263,23 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String content = new String(target2.toByteArray(), "UTF-8");
 //        System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId) + "\u00E4ll\u00E4"));
+    }
+
+    @Test
+    public void addNote_on_top_of_another_note_in_child() throws Exception {
+        String startElement = "play-act-stage-ref";
+        String endElement = "play-act-stage";
+        String text = "ne\n: per\u00E4";
+        addNote(new SelectedText(startElement, endElement, text));
+
+        String text2 = "uone\n: per\u00E4ll\u00E4 o";
+        ByteArrayOutputStream target2 = new ByteArrayOutputStream();
+        XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(target.toByteArray()));
+        XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
+        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement, endElement, 1, 2, text2), localId);
+        String content = new String(target2.toByteArray(), "UTF-8");
+        System.out.println(content);
+        fail("Create a cool assertion!");
     }
 
     @Test
