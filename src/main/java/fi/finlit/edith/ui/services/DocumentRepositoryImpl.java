@@ -29,6 +29,7 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
@@ -179,7 +180,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         StringBuilder startStrings = new StringBuilder();
         StringBuilder endStrings = new StringBuilder();
         List<XMLEvent> allEvents = new ArrayList<XMLEvent>();
-        EndPosition endPosition = new EndPosition();
+        MutableInt endOffset = new MutableInt(0);
 
         Matched matched = new Matched();
         try {
@@ -189,19 +190,19 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 XMLEvent event = reader.nextEvent();
                 if (event.isStartElement()) {
                     context.push(extractName(event.asStartElement()));
-                    if (buffering) {
+                    if (buffering && !matched.areBothMatched()) {
                         handled = true;
                         if (context.equalsAny(sel.getStartId())) {
                             ElementContext tempContext = (ElementContext) context.clone();
                             tempContext.pop();
-                            flush(writer, startStrings.toString(), sel, allEvents, tempContext, matched, localId, endPosition);
+                            flush(writer, startStrings.toString(), sel, allEvents, tempContext, matched, localId, endOffset);
                             allStrings = new StringBuilder();
                             allEvents.clear();
                             handled = false;
                         } else if (context.equalsAny(sel.getEndId())) {
                             ElementContext tempContext = (ElementContext) context.clone();
                             tempContext.pop();
-                            flush(writer, startStrings.toString(), sel, allEvents, tempContext, matched, localId, new EndPosition());
+                            flush(writer, startStrings.toString(), sel, allEvents, tempContext, matched, localId, endOffset);
                             allStrings = new StringBuilder();
                             allEvents.clear();
                             handled = false;
@@ -209,11 +210,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             allEvents.add(event);
                         }
                     }
-                    if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
+                    if (context.equalsAny(sel.getStartId(), sel.getEndId()) && !matched.areBothMatched()) {
                         buffering = true;
                     }
                 } else if (event.isCharacters()) {
-                    if (buffering) {
+                    if (buffering && !matched.areBothMatched()) {
                         allEvents.add(event);
                         handled = true;
                         if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
@@ -227,14 +228,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         }
                     }
                 } else if (event.isEndElement()) {
-                    if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
-                        flush(writer, !matched.isStartMatched() ? allStrings.toString() : endStrings.toString(), sel, allEvents, context, matched, localId, endPosition);
+                    if (context.equalsAny(sel.getStartId(), sel.getEndId())  && !matched.areBothMatched()) {
+                        flush(writer, !matched.isStartMatched() ? allStrings.toString() : endStrings.toString(), sel, allEvents, context, matched, localId, endOffset);
                         buffering = false;
                         allEvents.clear();
                         allStrings = new StringBuilder();
                     }
                     context.pop();
-                    if (buffering) {
+                    if (buffering && !matched.areBothMatched()) {
                         buffering = (context.equalsAny(sel.getStartId(), sel.getEndId()));
                         allEvents.add(event);
                         handled = true;
@@ -254,7 +255,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
-    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, ElementContext context, Matched matched, String localId, EndPosition endPosition) throws XMLStreamException {
+    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, ElementContext context, Matched matched, String localId, MutableInt endOffset) throws XMLStreamException {
         String startAnchor = "start"+localId;
         String endAnchor = "end"+localId;
         boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
@@ -270,11 +271,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             } else if (e.isCharacters() && (context.equalsAny(sel.getStartId(), sel.getEndId()))) {
                 String eventString = e.asCharacters().getData();
                 int relativeStart = startIndex - offset;
-                int relativeEnd = endIndex - offset - endPosition.getOffset();
+                int relativeEnd = endIndex - offset - endOffset.intValue();
                 int index = -1;
                 offset += eventString.length();
                 if (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd()) {
-                    endPosition.setOffset(endPosition.getOffset() + offset);
+                    endOffset.add(offset);
                 }
                 if (context.equalsAny(sel.getStartId())) {
                     if (!matched.isStartMatched() && startIndex <= offset) {
@@ -487,24 +488,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
         public boolean areBothMatched() {
             return this.startMatched && this.endMatched;
-        }
-    }
-
-    @Deprecated
-    private class EndPosition { // TODO : replace with MutableInt
-
-        private int offset;
-
-        public EndPosition() {
-            offset = 0;
-        }
-
-        public int getOffset() {
-            return offset;
-        }
-
-        public void setOffset(int offset) {
-            this.offset = offset;
         }
     }
 
