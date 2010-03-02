@@ -185,6 +185,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         Matched matched = new Matched();
         try {
             boolean buffering = false;
+            // FIXME This prevents buffering from start of document, not very neat.
             boolean startedBuffering = false;
             while (reader.hasNext()) {
                 boolean handled = false;
