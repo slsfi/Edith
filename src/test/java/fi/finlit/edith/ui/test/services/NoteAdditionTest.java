@@ -43,8 +43,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_CONTENT_KEY)
     private String testDocumentContent;
 
-    @Autobuild
-    @Inject
+    @Inject @Autobuild    
     private DocumentRepositoryImpl documentRepo;
 
     private Reader source;
