@@ -15,6 +15,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -177,10 +178,10 @@ public class DocumentRendererImpl implements DocumentRenderer {
                             classes.append(" n").append(noteId);
                         }
                         writer.element("span", "class", classes);
-                        writer.writeRaw(text);
+                        writer.writeRaw(StringEscapeUtils.escapeXml(text));
                         writer.end();
                     }else{
-                        writer.writeRaw(text);
+                        writer.writeRaw(StringEscapeUtils.escapeXml(text));
                     }
 
                 }else if (event == XMLStreamConstants.END_DOCUMENT) {
