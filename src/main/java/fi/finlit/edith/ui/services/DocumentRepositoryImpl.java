@@ -240,7 +240,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         allEvents.add(event);
                         handled = true;
                     }
-                    buffering = (context.equalsAny(sel.getStartId(), sel.getEndId()));
+                    buffering = !matched.areBothMatched();
                 }
                 if (!handled || matched.areBothMatched()) {
                     writer.add(event);
