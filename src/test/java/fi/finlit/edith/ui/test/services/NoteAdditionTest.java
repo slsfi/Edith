@@ -10,10 +10,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
@@ -21,7 +20,6 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -49,7 +47,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     @Inject
     private DocumentRepositoryImpl documentRepo;
 
-    private InputStream source;
+    private Reader source;
 
     private ByteArrayOutputStream target;
 
@@ -57,7 +55,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     @Before
     public void setUp() throws SVNException, IOException, XMLStreamException{
-        source = new ByteArrayInputStream(testDocumentContent.getBytes("UTF-8"));
+        source = new StringReader(testDocumentContent);
         target = new ByteArrayOutputStream();
         localId = UUID.randomUUID().toString();
     }
