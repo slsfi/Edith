@@ -185,6 +185,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         Matched matched = new Matched();
         try {
             boolean buffering = false;
+            boolean startedBuffering = false;
             while (reader.hasNext()) {
                 boolean handled = false;
                 XMLEvent event = reader.nextEvent();
@@ -212,6 +213,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                     if (context.equalsAny(sel.getStartId(), sel.getEndId()) && !matched.areBothMatched()) {
                         buffering = true;
+                        startedBuffering = true;
                     }
                 } else if (event.isCharacters()) {
                     if (buffering && !matched.areBothMatched()) {
@@ -228,7 +230,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         }
                     }
                 } else if (event.isEndElement()) {
-                    if (context.equalsAny(sel.getStartId(), sel.getEndId())  && !matched.areBothMatched()) {
+                    if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
                         flush(writer, !matched.isStartMatched() ? allStrings.toString() : endStrings.toString(), sel, allEvents, context, matched, localId, endOffset);
                         buffering = false;
                         allEvents.clear();
@@ -236,13 +238,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                     context.pop();
                     if (buffering && !matched.areBothMatched()) {
-                        buffering = (context.equalsAny(sel.getStartId(), sel.getEndId()));
                         allEvents.add(event);
                         handled = true;
                     }
-                    buffering = !matched.areBothMatched();
+                    if (startedBuffering) {
+                        buffering = !matched.areBothMatched();
+                    }
                 }
-                if (!handled || matched.areBothMatched()) {
+                if (!handled) {
                     writer.add(event);
                 }
             }
@@ -251,7 +254,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             reader.close();
             if (!matched.areBothMatched()) {
                 throw new NoteAdditionFailedException(sel, localId, matched.isStartMatched(), matched.isEndMatched());
-            }            
+            }
         }
     }
 
@@ -275,7 +278,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 int index = -1;
                 offset += eventString.length();
                 if (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd()) {
-                    endOffset.add(offset);
+                    endOffset.add(eventString.length());
                 }
                 if (context.equalsAny(sel.getStartId())) {
                     if (!matched.isStartMatched() && startIndex <= offset) {
@@ -300,7 +303,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                 }
                 if (handled) {
-                    // TODO : skip this, if index == eventString.length() -1
+               	    // TODO : skip this, if index == eventString.length() -1
                     writer.add(eventFactory.createCharacters(eventString.substring(index)));
                 }
             }
