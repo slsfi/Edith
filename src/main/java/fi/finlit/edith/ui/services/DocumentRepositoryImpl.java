@@ -247,11 +247,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 }
             }
         } finally {
-            if (!matched.areBothMatched()) {
-                throw new NoteAdditionFailedException(sel, localId, matched.isStartMatched(), matched.isEndMatched());
-            }
             writer.close();
             reader.close();
+            if (!matched.areBothMatched()) {
+                throw new NoteAdditionFailedException(sel, localId, matched.isStartMatched(), matched.isEndMatched());
+            }            
         }
     }
 
@@ -300,6 +300,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                 }
                 if (handled) {
+                    // TODO : skip this, if index == eventString.length() -1
                     writer.add(eventFactory.createCharacters(eventString.substring(index)));
                 }
             }
