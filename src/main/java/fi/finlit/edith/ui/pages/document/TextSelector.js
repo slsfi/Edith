@@ -1,5 +1,9 @@
 jQuery.noConflict();
 
+var escapeXml = function(s) {
+	return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+};
+
 var TextSelector = {
 	startId : null,
 	endId : null,
@@ -44,7 +48,7 @@ var TextSelector = {
 			element = element.nextSibling;
 		}
 		return text.join("");
-	},	
+	},
 	
 	getOccurrenceInElement : function(element, offset, substr) {
 		var text = new Array();
@@ -54,14 +58,14 @@ var TextSelector = {
 		}
 		text.push(this.prevAllString(element.get(0)));
 		offset += text[text.length-1].length;
-		text.push(element.text());
+		text.push(escapeXml(element.text()));
 		if (element.parent().hasClass("notecontent")){
 			text.push(this.nextAllString(element.parent().get(0)));
 		}	
 		text.push(this.nextAllString(element.get(0)));
 		text = text.join("");
 		
-		return this.getOccurrenceInString(text, substr, offset);
+		return this.getOccurrenceInString(text, escapeXml(substr), offset);
 	},
 
 	isInverseSelection : function(selection) {
@@ -92,7 +96,7 @@ var TextSelector = {
 			--endOffset;
 		}
 		var words = selectionString.replace(/#/g, "").trim().split(whitespaceRe);
-		this.startIndex = this.getOccurrenceInElement(startNode, startOffset ,words[0]);
+		this.startIndex = this.getOccurrenceInElement(startNode, startOffset, words[0]);
 		this.endIndex = this.startIndex;
 		if (words.length > 1) {
 			var lastWord = words[words.length - 1];
