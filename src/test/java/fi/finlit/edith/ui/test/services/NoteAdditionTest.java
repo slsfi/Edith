@@ -341,6 +341,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
                 } else if (e.isEndElement()) {
                     context.pop();
                 } else if (e.isCharacters()) {
+                    // TODO : precompile regex
                     String characters = e.asCharacters().getData().replaceAll("\\s+", " ").trim();
                     if (characters.length() == 0) {
                         continue;
