@@ -1,6 +1,5 @@
 package fi.finlit.edith.ui.test.services;
 
-import static fi.finlit.edith.ui.services.DocumentRepositoryImpl.extractName;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -10,17 +9,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
@@ -33,7 +28,6 @@ import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
-import fi.finlit.edith.ui.services.ElementContext;
 
 /**
  * NoteAdditionTest provides
@@ -52,19 +46,19 @@ public class NoteAddition2Test extends AbstractServiceTest {
 
     private Reader source;
 
-    private ByteArrayOutputStream target;
+    private StringWriter target;
 
     private String localId;
 
     @Before
     public void setUp() throws SVNException, IOException, XMLStreamException {
         source = new StringReader(testDocumentContent);
-        target = new ByteArrayOutputStream();
+        target = new StringWriter();
         localId = UUID.randomUUID().toString();
     }
 
     private String getContent() throws UnsupportedEncodingException {
-        return new String(target.toByteArray(), "UTF-8");
+        return target.toString();
     }
 
     @After
@@ -249,7 +243,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         String text2 = "sivulla ra";
         ByteArrayOutputStream target2 = new ByteArrayOutputStream();
         XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(
-                target.toByteArray()));
+                target.toString().getBytes()));
         XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement2,
                 endElement2, text2), localId);
@@ -275,7 +269,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         String text2 = "uone\n: per";
         ByteArrayOutputStream target2 = new ByteArrayOutputStream();
         XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(
-                target.toByteArray()));
+                target.toString().getBytes()));
         XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement2,
                 endElement2, text2), localId);
@@ -295,7 +289,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         String text2 = "uone\n: per\u00E4ll\u00E4 o";
         ByteArrayOutputStream target2 = new ByteArrayOutputStream();
         XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(
-                target.toByteArray()));
+                target.toString().getBytes()));
         XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement, endElement,
                 1, 2, text2), localId);
