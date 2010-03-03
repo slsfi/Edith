@@ -314,7 +314,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
-    private String extractName(StartElement element) {
+    // TODO Better place for this method?
+    public static String extractName(StartElement element) {
         String localName = element.getName().getLocalPart();
         String name = localName;
         if (localName.equals("div")){
