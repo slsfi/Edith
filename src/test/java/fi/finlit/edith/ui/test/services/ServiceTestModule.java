@@ -38,9 +38,9 @@ public class ServiceTestModule {
     public static final String NOTE_TEST_DATA_KEY = "note.test.data";
 
     public static final String TEST_DOCUMENT_KEY = "test.document";
-    
+
     public static final String TEST_DOCUMENT_FILE_KEY = "test.document.file";
-    
+
     public static final String TEST_DOCUMENT_CONTENT_KEY = "test.document.content";
 
     public static void contributeApplicationDefaults(
@@ -48,21 +48,21 @@ public class ServiceTestModule {
             throws IOException, SVNException {
         File svnRepo = new File("target/repo");
         configuration.add(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
-        File testDocumentFile = new File("etc/demo-material/tei/Nummisuutarit rakenteistettuna-annotoituna.xml");
+        File testDocumentFile = new File("etc/demo-material/tei/Nummisuutarit rakenteistettuna.xml");
         configuration.add(TEST_DOCUMENT_FILE_KEY, testDocumentFile.getPath());
         configuration.add(TEST_DOCUMENT_CONTENT_KEY, FileUtils.readFileToString(testDocumentFile,"UTF-8"));
-        configuration.add(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml");        
+        configuration.add(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna.xml");
         configuration.add(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         configuration.add(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
     }
-    
+
     public static SaltSource buildSaltSource() throws Exception {
         SaltSourceImpl saltSource = new SaltSourceImpl();
         saltSource.setSystemWideSalt("DEADBEEF");
         saltSource.afterPropertiesSet();
         return saltSource;
     }
-    
+
     /**
      * Makes a memory based test configuration override
      */
@@ -72,7 +72,7 @@ public class ServiceTestModule {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(new RDFSource("classpath:/edith.ttl",Format.TURTLE, EDITH.NS));
         configuration.add(Repository.class, repository);
-        
+
         AuthService authService = new AuthService() {
             public String getUsername() {
                 return "timo";
@@ -86,7 +86,7 @@ public class ServiceTestModule {
             }
         };
         configuration.add(AuthService.class, authService);
-        
+
     }
 
     public static PasswordEncoder buildPaswordEncoder() {
