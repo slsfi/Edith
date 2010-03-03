@@ -6,18 +6,16 @@
 package fi.finlit.edith.ui.test.services;
 
 import static fi.finlit.edith.ui.services.DocumentRepositoryImpl.extractName;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -25,7 +23,6 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.lang.StringUtils;
@@ -40,6 +37,7 @@ import org.tmatesoft.svn.core.SVNException;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 import fi.finlit.edith.ui.services.ElementContext;
+import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
 /**
  * NoteAdditionTest provides
@@ -57,21 +55,17 @@ public class NoteAdditionTest extends AbstractServiceTest{
 
     private Reader source;
 
-    private ByteArrayOutputStream target;
+    private StringWriter target;
 
     private String localId;
 
-    private final Random random = new Random();
+    private final Random random = new Random(27);
 
     @Before
     public void setUp() throws SVNException, IOException, XMLStreamException{
         source = new StringReader(testDocumentContent);
-        target = new ByteArrayOutputStream();
+        target = new StringWriter();
         localId = UUID.randomUUID().toString();
-    }
-
-    private String getContent() throws UnsupportedEncodingException{
-        return new String(target.toByteArray(), "UTF-8");
     }
 
     @After
@@ -87,30 +81,25 @@ public class NoteAdditionTest extends AbstractServiceTest{
     }
 
     @Test
-    public void generic_selections() throws Exception {
-        for (SelectedText sel : createSelections()) {
-            System.out.println(sel);
-            addNote(sel);
+    public void generic_selections_in_cleared_document() throws Exception {
+        List<SelectedText> failedSelectedTexts = new ArrayList<SelectedText>();
+        List<SelectedText> selections = createSelections();
+        for (SelectedText sel : selections) {
+            source = new StringReader(testDocumentContent);
+            try {
+                addNote(sel);
+            } catch (NoteAdditionFailedException e) {
+                failedSelectedTexts.add(sel);
+            }
+        }
+        if (!failedSelectedTexts.isEmpty()) {
+            fail("There were " + failedSelectedTexts.size() + " exceptions out of " + selections.size() + ".");
         }
     }
 
     private List<SelectedText> createSelections() throws Exception {
-        // TODO Requirements
-        // Generate SelectedText instances
-        // For each characters block one selection
-        // For consecutive elements one selection
-
-        // TODO Create test material
-        // Go through event stream
-        // Update context
-        // Create SelectedText instances for the required cases
-
-        // TODO Run tests
-        // Clean run
-        // After that chained run
-        // Record failures and report in the end
-
         List<SelectedText> selections = new ArrayList<SelectedText>();
+        Map<String, StringBuilder> contextStrings = new HashMap<String, StringBuilder>();
         ElementContext context = new ElementContext(3);
         XMLEventReader reader = XMLInputFactory.newInstance().createXMLEventReader(source);
         String prevCharacters = null;
@@ -128,24 +117,33 @@ public class NoteAdditionTest extends AbstractServiceTest{
                     if (characters.length() == 0) {
                         continue;
                     }
+                    String currentContext = context.getPath();
+                    if (contextStrings.containsKey(currentContext)) {
+                        contextStrings.get(currentContext).append(" " + characters);
+                    } else {
+                        contextStrings.put(currentContext, new StringBuilder(characters));
+                    }
 
                     // Generate character block selection
-                    SelectedText singleElementSelection = createSingleElementSelectedText(characters, context);
+                    SelectedText singleElementSelection = createSingleElementSelectedText(contextStrings.get(currentContext).toString(), characters, currentContext);
                     if (singleElementSelection != null) {
                         selections.add(singleElementSelection);
                     }
 
                     // Generate character block to next character selection
                     if (prevCharacters == null) {
-                        prevCharacters = characters;
+                        prevCharacters = contextStrings.get(currentContext).toString();
+                        prevContext = currentContext;
                         continue;
                     }
 
-                    SelectedText multipleElementSelection = createMultipleElementSelectedText(prevCharacters, characters, prevContext, context);
-                    selections.add(multipleElementSelection);
+                    SelectedText multipleElementSelection = createMultipleElementSelectedText(prevCharacters, contextStrings.get(currentContext).toString(), characters, prevContext, currentContext);
+                    if (multipleElementSelection != null) {
+                        selections.add(multipleElementSelection);
+                    }
 
-                    prevCharacters = characters;
-                    prevContext = context.getPath();
+                    prevCharacters = contextStrings.get(currentContext).toString();
+                    prevContext = currentContext;
                 }
             }
         } finally {
@@ -155,34 +153,33 @@ public class NoteAdditionTest extends AbstractServiceTest{
     }
 
     // TODO Combine logic?
-    private SelectedText createSingleElementSelectedText(String characters, ElementContext context) {
+    private SelectedText createSingleElementSelectedText(String elementCharacters, String characters, String context) {
         int min = generateRandomNumber(0, characters.length());
         int max = generateRandomNumber(min, characters.length());
         String selection = characters.substring(min, max);
-        String startId = context.getPath();
-        String endId = context.getPath();
+        String id = context;
         String words[] = StringUtils.split(selection);
         if (words.length < 1) {
             return null;
         }
         String firstWord = words[0];
         String lastWord = words[words.length - 1];
-        int startIndex = findStartIndex(characters, firstWord, min);
-        int endIndex = findEndIndex(characters, lastWord, max);
+        int startIndex = findStartIndex(elementCharacters, firstWord, min + elementCharacters.indexOf(characters));
+        int endIndex = findEndIndex(elementCharacters, lastWord, max + elementCharacters.indexOf(characters));
         if (startIndex <= 0 || endIndex <= 0) {
             throw new RuntimeException("Couldn't find occurrences!");
         }
 
-        return new SelectedText(startId, endId, startIndex, endIndex, selection);
+        return new SelectedText(id, id, startIndex, endIndex, selection);
     }
 
-    private SelectedText createMultipleElementSelectedText(String prevCharacters, String characters, String prevContext, ElementContext context) {
+    private SelectedText createMultipleElementSelectedText(String prevCharacters, String elementCharacters, String characters, String prevContext, String context) {
         int min = generateRandomNumber(0, prevCharacters.length());
         int max = generateRandomNumber(0, characters.length());
         String startSelection = prevCharacters.substring(min);
         String endSelection = characters.substring(0, max);
         String startId = prevContext;
-        String endId = context.getPath();
+        String endId = context;
         String startWords[] = StringUtils.split(startSelection);
         String endWords[] = StringUtils.split(endSelection);
         if (startWords.length < 1 || endWords.length < 1) {
@@ -191,12 +188,12 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String firstWord = startWords[0];
         String lastWord = endWords[endWords.length - 1];
         int startIndex = findStartIndex(prevCharacters, firstWord, min);
-        int endIndex = findEndIndex(characters, lastWord, max);
+        int endIndex = findEndIndex(elementCharacters, lastWord, max + elementCharacters.indexOf(characters));
         if (startIndex <= 0 || endIndex <= 0) {
             throw new RuntimeException("Couldn't find occurrences!");
         }
 
-        return new SelectedText(startId, endId, startIndex, endIndex, startSelection + endSelection);
+        return new SelectedText(startId, endId, startIndex, endIndex, startSelection + " " + endSelection);
     }
 
     private int generateRandomNumber(int max, int min) {
