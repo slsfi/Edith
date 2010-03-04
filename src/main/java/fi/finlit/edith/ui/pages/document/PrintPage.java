@@ -6,12 +6,6 @@
 package fi.finlit.edith.ui.pages.document;
 
 import org.apache.tapestry5.annotations.IncludeStylesheet;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentRepository;
-import fi.finlit.edith.domain.DocumentRevision;
 
 /**
  * PrintPage provides

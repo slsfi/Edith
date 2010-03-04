@@ -34,7 +34,6 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.ui.services.AuthService;
 
 /**
  * SubversionServiceImpl is the default implementation of the SubversionService

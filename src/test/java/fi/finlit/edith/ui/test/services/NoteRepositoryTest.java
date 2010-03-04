@@ -18,7 +18,6 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;

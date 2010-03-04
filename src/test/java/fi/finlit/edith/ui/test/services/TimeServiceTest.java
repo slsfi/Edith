@@ -5,7 +5,7 @@
  */
 package fi.finlit.edith.ui.test.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Test;
