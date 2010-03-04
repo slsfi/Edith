@@ -176,9 +176,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
         logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
+        /* Used to concat all the strings while buffering. */
         StringBuilder allStrings = new StringBuilder();
+        /* Used to concat all end context strings while buffering. */
         StringBuilder startStrings = new StringBuilder();
+        /* Used to concat all start context strings while buffering. */
         StringBuilder endStrings = new StringBuilder();
+        /* Used to store all the events while buffering. */
         List<XMLEvent> events = new ArrayList<XMLEvent>();
         MutableInt endOffset = new MutableInt(0);
 
