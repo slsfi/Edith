@@ -41,7 +41,7 @@ public class MergeCharactersReader implements XMLEventReader{
         try {
             return nextEvent();
         } catch (XMLStreamException e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e);
         }
     }
 

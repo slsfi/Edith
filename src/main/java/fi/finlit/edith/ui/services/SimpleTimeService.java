@@ -21,7 +21,7 @@ public class SimpleTimeService implements TimeService{
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {               
-                throw new RuntimeException(e);
+                throw new ServiceException(e);
             }
         }
         return last = System.currentTimeMillis();        

@@ -165,7 +165,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e);
         }
 
         docRevision = new DocumentRevision(docRevision, newRevision);
@@ -433,7 +433,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e);
         }
 
         // persisted noteRevision has svnRevision of newly created commit
@@ -472,12 +472,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                         outFactory.createXMLEventWriter(target),
                                         selection, note.getRevisionOf().getLocalId());
                             } catch (Exception e) {
-                                throw new RuntimeException(e);
+                                throw new ServiceException(e);
                             }
                         }
             });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e);
         }
 
         NoteRevision copy = note.createCopy();

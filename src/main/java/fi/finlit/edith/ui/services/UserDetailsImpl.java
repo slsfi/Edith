@@ -14,9 +14,10 @@ import org.springframework.security.userdetails.UserDetails;
  * @author tiwe
  * @version $Id$
  */
-@SuppressWarnings("serial")
 public class UserDetailsImpl implements UserDetails{
     
+    private static final long serialVersionUID = -3810708516049551503L;
+
     private String username, password;
     
     private boolean nonExpired = true, nonLocked = true, enabled = true;
