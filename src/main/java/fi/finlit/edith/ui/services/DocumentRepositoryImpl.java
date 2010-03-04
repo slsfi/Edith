@@ -179,13 +179,15 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         StringBuilder allStrings = new StringBuilder();
         StringBuilder startStrings = new StringBuilder();
         StringBuilder endStrings = new StringBuilder();
-        List<XMLEvent> allEvents = new ArrayList<XMLEvent>();
+        List<XMLEvent> events = new ArrayList<XMLEvent>();
         MutableInt endOffset = new MutableInt(0);
 
         Matched matched = new Matched();
         try {
             boolean buffering = false;
-            // FIXME This prevents buffering from start of document, not very neat.
+            /* This boolean is used as a flag to signal if the buffering has been started at some point. This is
+             * because we don't want to buffer the whole document which would happen in isEndElement else if.
+             * FIXME I find this a bit ugly. */
             boolean startedBuffering = false;
             while (reader.hasNext()) {
                 boolean handled = false;
@@ -195,21 +197,28 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     if (buffering && !matched.areBothMatched()) {
                         handled = true;
                         if (context.equalsAny(sel.getStartId())) {
+                            /* If the end element is inside the start element, we want to flush the end elements that do not
+                             * contain the desired end anchor position. */
                             ElementContext tempContext = (ElementContext) context.clone();
+                            /* tempContext is used so that we can send the actual context in most of these use cases.
+                             * FIXME Unfortunately this doesn't fix all the context related issues and there is hopefully a
+                             * better solution to be found. NOTE: Same comment applies for the else if. */
                             tempContext.pop();
-                            flush(writer, startStrings.toString(), sel, allEvents, tempContext, matched, localId, endOffset);
+                            flush(writer, startStrings.toString(), sel, events, tempContext, matched, localId, endOffset);
                             allStrings = new StringBuilder();
-                            allEvents.clear();
+                            events.clear();
                             handled = false;
                         } else if (context.equalsAny(sel.getEndId())) {
+                            /* If the start element is inside the end element, we want to flush the start elements once
+                             * reaching the element containing the end anchor. */
                             ElementContext tempContext = (ElementContext) context.clone();
                             tempContext.pop();
-                            flush(writer, startStrings.toString(), sel, allEvents, tempContext, matched, localId, endOffset);
+                            flush(writer, startStrings.toString(), sel, events, tempContext, matched, localId, endOffset);
                             allStrings = new StringBuilder();
-                            allEvents.clear();
+                            events.clear();
                             handled = false;
                         } else {
-                            allEvents.add(event);
+                            events.add(event);
                         }
                     }
                     if (context.equalsAny(sel.getStartId(), sel.getEndId()) && !matched.areBothMatched()) {
@@ -218,7 +227,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                 } else if (event.isCharacters()) {
                     if (buffering && !matched.areBothMatched()) {
-                        allEvents.add(event);
+                        events.add(event);
                         handled = true;
                         if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
                             allStrings.append(event.asCharacters().getData());
@@ -232,14 +241,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                 } else if (event.isEndElement()) {
                     if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
-                        flush(writer, !matched.isStartMatched() ? allStrings.toString() : endStrings.toString(), sel, allEvents, context, matched, localId, endOffset);
+                        flush(writer, !matched.isStartMatched() ? allStrings.toString() : endStrings.toString(), sel, events, context, matched, localId, endOffset);
                         buffering = false;
-                        allEvents.clear();
+                        events.clear();
                         allStrings = new StringBuilder();
                     }
                     context.pop();
                     if (buffering && !matched.areBothMatched()) {
-                        allEvents.add(event);
+                        events.add(event);
                         handled = true;
                     }
                     if (startedBuffering) {
@@ -273,6 +282,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             } else if (e.isEndElement()) {
                 context.pop();
             } else if (e.isCharacters() && (context.equalsAny(sel.getStartId(), sel.getEndId()))) {
+                /* FIXME There are a few offset related issues. In some cases the event contains the position where we
+                 * want to insert the end anchor, but the offset is smaller than the endIndex. Another problem which
+                 * I've run into is that the relativeEnd is not correct, removing "- offset" helps with that but breaks
+                 * other tests. */
                 String eventString = e.asCharacters().getData();
                 int relativeStart = startIndex - offset;
                 int relativeEnd = endIndex - offset - endOffset.intValue();
@@ -295,6 +308,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         if (!startAndEndInSameElement) {
                             writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
                         } else {
+                            /* relativeStart might be negative which means that it is not in the current eventString, in this case
+                             * we start the character writing from the beginning of the eventString. */
                             writer.add(eventFactory.createCharacters(eventString.substring(relativeStart > -1 ? relativeStart : 0, relativeEnd)));
                         }
                         writeAnchor(writer, endAnchor);
