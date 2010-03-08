@@ -12,7 +12,6 @@ import java.util.List;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.internal.util.TapestryException;
 import org.apache.tapestry5.services.Response;
 
 import com.mysema.tapestry.core.Context;
