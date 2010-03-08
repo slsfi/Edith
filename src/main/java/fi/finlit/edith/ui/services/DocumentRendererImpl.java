@@ -120,10 +120,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
     private void handleStartElement(XMLStreamReader reader, MarkupWriter writer,
             ElementContext context, Set<String> noteIds, MutableBoolean noteContent) {
         String localName = reader.getLocalName();
-        String name = localName;
-        if (localName.equals(DIV)) {
-            name = reader.getAttributeValue(null, "type");
-        }
+        String name = extractName(reader, localName);
         context.push(name);
         String path = context.getPath();
 
@@ -132,7 +129,6 @@ public class DocumentRendererImpl implements DocumentRenderer {
             if (path != null) {
                 writer.attributes("id", path);
             }
-
         } else if (LI_ELEMENTS.contains(localName)) {
             writer.element("li", CLASS, localName);
             if (path != null) {
@@ -184,6 +180,13 @@ public class DocumentRendererImpl implements DocumentRenderer {
                 writer.attributes("id", path);
             }
         }
+    }
+
+    private String extractName(XMLStreamReader reader, String localName) {
+        if (localName.equals(DIV)) {
+            return reader.getAttributeValue(null, "type");
+        }
+        return localName;
     }
 
     private void handleEndElement(XMLStreamReader reader, MarkupWriter writer,
