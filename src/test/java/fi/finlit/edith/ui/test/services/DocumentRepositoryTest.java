@@ -319,7 +319,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String content = getContent(document.getSvnPath(), -1);
         String localId = noteRevision.getRevisionOf().getLocalId();
         String localId2 = noteRevision2.getRevisionOf().getLocalId();
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("Jaa" + start(localId2) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
         assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId2) + "epp\u00E4</roleDesc>.</castItem>"));
     }
