@@ -40,6 +40,10 @@ public class DocumentRendererImpl implements DocumentRenderer {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
+    private static final String CLASS = "class";
+
+    private static final String DIV = "div";
+
     private final DocumentRepository documentRepo;
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
@@ -54,7 +58,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
         try{
-            writer.element("ul", "class", "pages");
+            writer.element("ul", CLASS, "pages");
             while (true) {
                 int event = reader.next();
                 if (event == XMLStreamConstants.START_ELEMENT){
@@ -97,33 +101,33 @@ public class DocumentRendererImpl implements DocumentRenderer {
                 if (event == XMLStreamConstants.START_ELEMENT){
                     String localName = reader.getLocalName();
                     String name = localName;
-                    if (localName.equals("div")){
+                    if (localName.equals(DIV)){
                         name = reader.getAttributeValue(null, "type");
                     }
                     context.push(name);
                     String path = context.getPath();
 
                     if (UL_ELEMENTS.contains(localName)){
-                        writer.element("ul", "class", localName);
+                        writer.element("ul", CLASS, localName);
                         if (path != null) {
                             writer.attributes("id", path);
                         }
 
                     }else if (LI_ELEMENTS.contains(localName)){
-                        writer.element("li", "class", localName);
+                        writer.element("li", CLASS, localName);
                         if (path != null) {
                             writer.attributes("id", path);
                         }
 
-                    }else if (localName.equals("div")){
+                    }else if (localName.equals(DIV)){
                         String type = reader.getAttributeValue(null, "type");
-                        writer.element(localName, "class", type);
+                        writer.element(localName, CLASS, type);
                         if (path != null) {
                             writer.attributes("id", path);
                         }
 
                     }else if (localName.equals("TEI")){
-                        writer.element("div", "class", "tei");
+                        writer.element(DIV, CLASS, "tei");
 
                     }else if (localName.equals("lb")){
                         writer.element("br");
@@ -132,7 +136,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                     }else if (localName.equals("pb")){
                         String page = reader.getAttributeValue(null, "n");
                         if (page != null){
-                            writer.element("div", "id", "page" + page, "class", "page");
+                            writer.element(DIV, "id", "page" + page, CLASS, "page");
                             writer.writeRaw(page + ".");
                             writer.end();
                         }
@@ -143,7 +147,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                             continue;
                         }else if (id.startsWith("start")){
                             // start anchor
-                            writer.element("span", "class", "notestart", "id", id);
+                            writer.element("span", CLASS, "notestart", "id", id);
                             writer.end();
 
                             noteContent = true;
@@ -156,7 +160,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         }
 
                     }else{
-                        writer.element("div", "class", name);
+                        writer.element(DIV, CLASS, name);
                         if (path != null) {
                             writer.attributes("id", path);
                         }
@@ -177,7 +181,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         for (String noteId : noteIds){
                             classes.append(" n").append(noteId);
                         }
-                        writer.element("span", "class", classes);
+                        writer.element("span", CLASS, classes);
                         writer.writeRaw(StringEscapeUtils.escapeXml(text));
                         writer.end();
                     }else{
