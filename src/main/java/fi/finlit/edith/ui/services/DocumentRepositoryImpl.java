@@ -298,29 +298,33 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 if (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd()) {
                     endOffset.add(eventString.length());
                 }
-                if (context.equalsAny(sel.getStartId())) {
-                    if (!matched.isStartMatched() && startIndex <= offset) {
-                        writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
-                        writeAnchor(writer, startAnchor);
-                        matched.matchStart();
-                        handled = true;
-                        index = relativeStart;
-                    }
+                if (context.equalsAny(sel.getStartId()) && !matched.isStartMatched()
+                        && startIndex <= offset) {
+                    writer.add(eventFactory.createCharacters(eventString
+                            .substring(0, relativeStart)));
+                    writeAnchor(writer, startAnchor);
+                    matched.matchStart();
+                    handled = true;
+                    index = relativeStart;
                 }
-                if (context.equalsAny(sel.getEndId())) {
-                    if (matched.isStartMatched() && !matched.isEndMatched() && endIndex <= offset) {
-                        if (!startAndEndInSameElement) {
-                            writer.add(eventFactory.createCharacters(eventString.substring(0, relativeEnd)));
-                        } else {
-                            /* relativeStart might be negative which means that it is not in the current eventString, in this case
-                             * we start the character writing from the beginning of the eventString. */
-                            writer.add(eventFactory.createCharacters(eventString.substring(relativeStart > -1 ? relativeStart : 0, relativeEnd)));
-                        }
-                        writeAnchor(writer, endAnchor);
-                        matched.matchEnd();
-                        handled = true;
-                        index = relativeEnd;
+                if (context.equalsAny(sel.getEndId()) && matched.isStartMatched()
+                        && !matched.isEndMatched() && endIndex <= offset) {
+                    if (!startAndEndInSameElement) {
+                        writer.add(eventFactory.createCharacters(eventString.substring(0,
+                                relativeEnd)));
+                    } else {
+                        /*
+                         * relativeStart might be negative which means that it is not in the current
+                         * eventString, in this case we start the character writing from the
+                         * beginning of the eventString.
+                         */
+                        writer.add(eventFactory.createCharacters(eventString.substring(
+                                relativeStart > -1 ? relativeStart : 0, relativeEnd)));
                     }
+                    writeAnchor(writer, endAnchor);
+                    matched.matchEnd();
+                    handled = true;
+                    index = relativeEnd;
                 }
                 if (handled) {
                	    // TODO : skip this, if index == eventString.length() -1
