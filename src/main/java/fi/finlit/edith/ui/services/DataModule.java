@@ -29,20 +29,21 @@ import fi.finlit.edith.ui.services.svn.SubversionService;
  * @version $Id$
  */
 public class DataModule {
-    
+    private DataModule() {}
+
     private static final Logger logger = LoggerFactory.getLogger(DataModule.class);
-    
+
     public static void contributeSeedEntity(
             OrderedConfiguration<Object> configuration,
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) String svnRepoPath,
             SaltSource saltSource,
-            PasswordEncoder passwordEncoder, 
+            PasswordEncoder passwordEncoder,
             @Inject SubversionService subversionService) throws Exception {
 
         logger.info("Initializing DataModule");
 
         subversionService.initialize();
-        
+
         // users
         addUsers(configuration, saltSource, passwordEncoder);
     }
