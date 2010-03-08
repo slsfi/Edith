@@ -115,13 +115,13 @@ public class SubversionServiceImpl implements SubversionService {
     @Override
     public long commit(String svnPath, long revision, String username, UpdateCallback callback) throws Exception {
         File userCheckout = new File(workingCopies + "/" + username);
-        svnPath = svnPath.substring(documentRoot.length());
+        String path = svnPath.substring(documentRoot.length());
         if (userCheckout.exists()) {
             update(userCheckout);
         } else {
             checkout(userCheckout, revision);
         }
-        File file = new File(userCheckout + "/" + svnPath);
+        File file = new File(userCheckout + "/" + path);
         File tmp = null;
         try {
             tmp = File.createTempFile(UUID.randomUUID().toString(), null);
@@ -231,8 +231,9 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public InputStream getStream(String svnPath, long revision) throws IOException {
+    public InputStream getStream(String svnPath, long rev) throws IOException {
         try {
+            long revision = rev;
             if (revision == -1) {
                 revision = getLatestRevision(svnPath);
             }
