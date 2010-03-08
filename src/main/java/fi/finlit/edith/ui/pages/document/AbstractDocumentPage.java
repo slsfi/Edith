@@ -60,23 +60,23 @@ public class AbstractDocumentPage {
             response.sendError(404, "Document not found!");
             return;
         }
-        long revision = -1;
+        long rev = -1;
         if (context.getCount() > 1){
             // TODO : block this for AnnotatePage
             try {
-                revision = context.get(Long.class, 1);
+                rev = context.get(Long.class, 1);
             } catch (RuntimeException e) {
                 response.sendError(404, "Revision not numerical!");
             }
-            if (!revisions.contains(new RevisionInfo(revision))) {
+            if (!revisions.contains(new RevisionInfo(rev))) {
                 response.sendError(404, "Document revision not found!");
             }
         }else{
             // get latest
-            revision = revisions.get(revisions.size() - 1).getSvnRevision();
+            rev = revisions.get(revisions.size() - 1).getSvnRevision();
         }
         Collections.reverse(revisions);
-        documentRevision = new DocumentRevision(document, revision);
+        documentRevision = new DocumentRevision(document, rev);
     }
 
     Object[] onPassivate(){
