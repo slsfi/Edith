@@ -35,6 +35,8 @@ import com.mysema.tapestry.PageMappingRule;
 @SubModule( { DataModule.class, ServiceModule.class })
 public class AppModule {
 
+    private AppModule() {}
+
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
         // general config
