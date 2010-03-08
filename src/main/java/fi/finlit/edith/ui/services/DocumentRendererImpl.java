@@ -18,6 +18,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.mutable.MutableBoolean;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -93,112 +94,120 @@ public class DocumentRendererImpl implements DocumentRenderer {
         InputStream is = documentRepo.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
-        boolean noteContent = false;
+        MutableBoolean noteContent = new MutableBoolean(false);
         Set<String> noteIds = new HashSet<String>();
         ElementContext context = new ElementContext(3);
 
-        try{
+        try {
             while (true) {
                 int event = reader.next();
-                if (event == XMLStreamConstants.START_ELEMENT){
-                    String localName = reader.getLocalName();
-                    String name = localName;
-                    if (localName.equals(DIV)){
-                        name = reader.getAttributeValue(null, "type");
-                    }
-                    context.push(name);
-                    String path = context.getPath();
-
-                    if (UL_ELEMENTS.contains(localName)){
-                        writer.element("ul", CLASS, localName);
-                        if (path != null) {
-                            writer.attributes("id", path);
-                        }
-
-                    }else if (LI_ELEMENTS.contains(localName)){
-                        writer.element("li", CLASS, localName);
-                        if (path != null) {
-                            writer.attributes("id", path);
-                        }
-
-                    }else if (localName.equals(DIV)){
-                        String type = reader.getAttributeValue(null, "type");
-                        writer.element(localName, CLASS, type);
-                        if (path != null) {
-                            writer.attributes("id", path);
-                        }
-
-                    }else if (localName.equals("TEI")){
-                        writer.element(DIV, CLASS, "tei");
-
-                    }else if (localName.equals("lb")){
-                        writer.element("br");
-                        writer.end();
-
-                    }else if (localName.equals("pb")){
-                        String page = reader.getAttributeValue(null, "n");
-                        if (page != null){
-                            writer.element(DIV, "id", "page" + page, CLASS, "page");
-                            writer.writeRaw(page + ".");
-                            writer.end();
-                        }
-
-                    }else if (localName.equals("anchor")){
-                        String id = reader.getAttributeValue(XML_NS, "id");
-                        if (id == null){
-                            continue;
-                        }else if (id.startsWith("start")){
-                            // start anchor
-                            writer.element("span", CLASS, "notestart", "id", id);
-                            writer.end();
-
-                            noteContent = true;
-                            noteIds.add(id.substring("start".length()));
-                        }else if (id.startsWith("end")){
-                            noteIds.remove(id.substring("end".length()));
-                            if (noteIds.isEmpty()){
-                                noteContent = false;
-                            }
-                        }
-
-                    }else{
-                        writer.element(DIV, CLASS, name);
-                        if (path != null) {
-                            writer.attributes("id", path);
-                        }
-                    }
-
-                }else if (event == XMLStreamConstants.END_ELEMENT){
-                    context.pop();
-
-                    String localName = reader.getLocalName();
-                    if (!EMPTY_ELEMENTS.contains(localName)){
-                        writer.end();
-                    }
-
-                }else if (event == XMLStreamConstants.CHARACTERS){
-                    String text = WHITESPACE.matcher(reader.getText()).replaceAll(" ");
-                    if (noteContent && !text.trim().isEmpty()){
-                        StringBuilder classes = new StringBuilder("notecontent");
-                        for (String noteId : noteIds){
-                            classes.append(" n").append(noteId);
-                        }
-                        writer.element("span", CLASS, classes);
-                        writer.writeRaw(StringEscapeUtils.escapeXml(text));
-                        writer.end();
-                    }else{
-                        writer.writeRaw(StringEscapeUtils.escapeXml(text));
-                    }
-
-                }else if (event == XMLStreamConstants.END_DOCUMENT) {
+                if (event == XMLStreamConstants.START_ELEMENT) {
+                    handleStartElement(reader, writer, context, noteIds, noteContent);
+                } else if (event == XMLStreamConstants.END_ELEMENT) {
+                    handleEndElement(reader, writer, context);
+                } else if (event == XMLStreamConstants.CHARACTERS) {
+                    handleCharactersElement(reader, writer, noteIds, noteContent);
+                } else if (event == XMLStreamConstants.END_DOCUMENT) {
                     break;
                 }
             }
-        }finally{
+        } finally {
             reader.close();
             is.close();
         }
-
     }
 
+    private void handleStartElement(XMLStreamReader reader, MarkupWriter writer,
+            ElementContext context, Set<String> noteIds, MutableBoolean noteContent) {
+        String localName = reader.getLocalName();
+        String name = localName;
+        if (localName.equals(DIV)) {
+            name = reader.getAttributeValue(null, "type");
+        }
+        context.push(name);
+        String path = context.getPath();
+
+        if (UL_ELEMENTS.contains(localName)) {
+            writer.element("ul", CLASS, localName);
+            if (path != null) {
+                writer.attributes("id", path);
+            }
+
+        } else if (LI_ELEMENTS.contains(localName)) {
+            writer.element("li", CLASS, localName);
+            if (path != null) {
+                writer.attributes("id", path);
+            }
+
+        } else if (localName.equals(DIV)) {
+            String type = reader.getAttributeValue(null, "type");
+            writer.element(localName, CLASS, type);
+            if (path != null) {
+                writer.attributes("id", path);
+            }
+
+        } else if (localName.equals("TEI")) {
+            writer.element(DIV, CLASS, "tei");
+
+        } else if (localName.equals("lb")) {
+            writer.element("br");
+            writer.end();
+
+        } else if (localName.equals("pb")) {
+            String page = reader.getAttributeValue(null, "n");
+            if (page != null) {
+                writer.element(DIV, "id", "page" + page, CLASS, "page");
+                writer.writeRaw(page + ".");
+                writer.end();
+            }
+
+        } else if (localName.equals("anchor")) {
+            String id = reader.getAttributeValue(XML_NS, "id");
+            if (id == null) {
+                return;
+            } else if (id.startsWith("start")) {
+                // start anchor
+                writer.element("span", CLASS, "notestart", "id", id);
+                writer.end();
+
+                noteContent.setValue(true);
+                noteIds.add(id.substring("start".length()));
+            } else if (id.startsWith("end")) {
+                noteIds.remove(id.substring("end".length()));
+                if (noteIds.isEmpty()) {
+                    noteContent.setValue(false);
+                }
+            }
+        } else {
+            writer.element(DIV, CLASS, name);
+            if (path != null) {
+                writer.attributes("id", path);
+            }
+        }
+    }
+
+    private void handleEndElement(XMLStreamReader reader, MarkupWriter writer,
+            ElementContext context) {
+        context.pop();
+        String localName = reader.getLocalName();
+        if (!EMPTY_ELEMENTS.contains(localName)) {
+            writer.end();
+        }
+    }
+
+    private void handleCharactersElement(XMLStreamReader reader, MarkupWriter writer,
+            Set<String> noteIds, MutableBoolean noteContent) {
+        String text = WHITESPACE.matcher(reader.getText()).replaceAll(" ");
+        if (noteContent.booleanValue() && !text.trim().isEmpty()) {
+            StringBuilder classes = new StringBuilder("notecontent");
+            for (String noteId : noteIds) {
+                classes.append(" n").append(noteId);
+            }
+            writer.element("span", CLASS, classes);
+            writer.writeRaw(StringEscapeUtils.escapeXml(text));
+            writer.end();
+        } else {
+            writer.writeRaw(StringEscapeUtils.escapeXml(text));
+        }
+    }
 }
