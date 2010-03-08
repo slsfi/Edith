@@ -52,10 +52,20 @@ public class SelectedText {
         return startIndex;
     }
 
-    public boolean hasSelection() {
-        return selection != null && startId != null && endId != null
-                && selection.trim().length() > 0 && startId.trim().length() > 0
-                && endId.trim().length() > 0;
+    public boolean isValid() {
+        return hasSelection() && hasStart() && hasEnd();
+    }
+
+    private boolean hasSelection() {
+        return selection != null && selection.trim().length() > 0;
+    }
+
+    private boolean hasStart() {
+        return startId != null && startId.trim().length() > 0;
+    }
+
+    private boolean hasEnd() {
+        return endId != null && endId.trim().length() > 0;
     }
 
     public void setEndId(String endId) {
