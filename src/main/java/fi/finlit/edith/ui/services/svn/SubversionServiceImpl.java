@@ -240,10 +240,8 @@ public class SubversionServiceImpl implements SubversionService {
             File documentFolder = new File(readCache, URLEncoder.encode(svnPath, "UTF-8"));
             File documentFile = new File(documentFolder, String.valueOf(rev));
             if (!documentFile.exists()) {
-                if (!documentFolder.exists()) {
-                    if (!documentFolder.mkdirs()) {
-                        throw new IOException("Could not create directory: " + documentFolder.getAbsolutePath());
-                    }
+                if (!documentFolder.exists() && !documentFolder.mkdirs()) {
+                    throw new IOException("Could not create directory: " + documentFolder.getAbsolutePath());
                 }
                 OutputStream out = new FileOutputStream(documentFile);
                 try {
