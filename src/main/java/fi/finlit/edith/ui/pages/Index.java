@@ -24,7 +24,7 @@ public class Index {
 
     void onActivate(EventContext eventContext) throws IOException {
         if (eventContext.getCount() > 0) {
-            response.sendError(404, "Page not found!");
+            response.sendError(HttpError.PAGE_NOT_FOUND, "Page not found!");
         }
     }
 

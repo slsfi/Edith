@@ -19,6 +19,7 @@ import com.mysema.tapestry.core.Context;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.ui.pages.HttpError;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**
@@ -51,13 +52,13 @@ public class AbstractDocumentPage {
     void onActivate(EventContext context) throws IOException {
         this.context = new Context(context);
         if (context.getCount() == 0) {
-            response.sendError(404, "No document ID given!");
+            response.sendError(HttpError.PAGE_NOT_FOUND, "No document ID given!");
         }
         try {
             document = documentRepo.getById(context.get(String.class, 0));
             revisions = documentRepo.getRevisions(document);
         } catch (RuntimeException e) {
-            response.sendError(404, "Document not found!");
+            response.sendError(HttpError.PAGE_NOT_FOUND, "Document not found!");
             return;
         }
         long rev = -1;
@@ -66,10 +67,10 @@ public class AbstractDocumentPage {
             try {
                 rev = context.get(Long.class, 1);
             } catch (RuntimeException e) {
-                response.sendError(404, "Revision not numerical!");
+                response.sendError(HttpError.PAGE_NOT_FOUND, "Revision not numerical!");
             }
             if (!revisions.contains(new RevisionInfo(rev))) {
-                response.sendError(404, "Document revision not found!");
+                response.sendError(HttpError.PAGE_NOT_FOUND, "Document revision not found!");
             }
         }else{
             // get latest
