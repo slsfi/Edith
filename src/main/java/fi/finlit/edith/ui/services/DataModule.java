@@ -28,7 +28,7 @@ import fi.finlit.edith.ui.services.svn.SubversionService;
  * @author tiwe
  * @version $Id$
  */
-public class DataModule {
+public final class DataModule {
     private DataModule() {}
 
     private static final Logger logger = LoggerFactory.getLogger(DataModule.class);

@@ -33,7 +33,7 @@ import com.mysema.tapestry.PageMappingRule;
  * @version $Id$
  */
 @SubModule( { DataModule.class, ServiceModule.class })
-public class AppModule {
+public final class AppModule {
 
     private AppModule() {}
 

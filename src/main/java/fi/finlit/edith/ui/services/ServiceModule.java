@@ -47,7 +47,7 @@ import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
  * @version $Id$
  *
  */
-public class ServiceModule {
+public final class ServiceModule {
     private ServiceModule() {}
 
     public static void contributeApplicationDefaults(
