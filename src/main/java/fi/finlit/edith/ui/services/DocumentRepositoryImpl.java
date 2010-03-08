@@ -493,7 +493,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
     }
 
-    private class Matched {
+    private static class Matched {
 
         private boolean startMatched;
         private boolean endMatched;
