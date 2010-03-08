@@ -12,11 +12,11 @@ import javax.xml.stream.events.XMLEvent;
  * @version $Id$
  */
 public class MergeCharactersReader implements XMLEventReader{
-    
+
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
 
     private final XMLEventReader reader;
-    
+
     public MergeCharactersReader(XMLEventReader reader) {
         this.reader = reader;
     }
@@ -29,7 +29,7 @@ public class MergeCharactersReader implements XMLEventReader{
         return reader.getElementText();
     }
 
-    public Object getProperty(String arg0) throws IllegalArgumentException {
+    public Object getProperty(String arg0) {
         return reader.getProperty(arg0);
     }
 
@@ -53,7 +53,7 @@ public class MergeCharactersReader implements XMLEventReader{
                 builder.append(nextEvent().asCharacters().getData());
             }
             return eventFactory.createCharacters(builder.toString());
-            
+
         }else{
             return event;
         }
