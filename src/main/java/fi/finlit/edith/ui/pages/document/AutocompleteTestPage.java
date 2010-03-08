@@ -44,8 +44,8 @@ public class AutocompleteTestPage {
 
         List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
         List<String> results = new ArrayList<String>(terms.size());
-        for (Term term : terms) {
-            results.add(term.getBasicForm());
+        for (Term t : terms) {
+            results.add(t.getBasicForm());
         }
         return results;
     }
