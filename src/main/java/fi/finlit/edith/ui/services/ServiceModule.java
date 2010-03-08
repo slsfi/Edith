@@ -48,6 +48,7 @@ import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
  *
  */
 public class ServiceModule {
+    private ServiceModule() {}
 
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
@@ -101,7 +102,7 @@ public class ServiceModule {
             @Override
             public void registryDidShutdown() {
                 repository.close();
-            }            
+            }
         });
         return repository;
     }
