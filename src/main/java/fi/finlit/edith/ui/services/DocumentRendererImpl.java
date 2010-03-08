@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.services;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -53,7 +55,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
     }
 
     @Override
-    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws Exception{
+    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException {
         InputStream is = documentRepo.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
@@ -87,7 +89,7 @@ public class DocumentRendererImpl implements DocumentRenderer {
     }
 
     @Override
-    public void renderDocument(DocumentRevision document, MarkupWriter writer) throws Exception{
+    public void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException {
         InputStream is = documentRepo.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 

@@ -1,9 +1,13 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.components.document;
+
+import java.io.IOException;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.BeginRender;
@@ -20,16 +24,16 @@ import fi.finlit.edith.ui.services.DocumentRenderer;
  * @version $Id$
  */
 public class View {
-    
+
     @Inject
     private DocumentRenderer renderer;
-    
+
     @Parameter
     private DocumentRevision document;
 
     @BeginRender
-    void beginRender(MarkupWriter writer) throws Exception {
+    void beginRender(MarkupWriter writer) throws IOException, XMLStreamException {
         renderer.renderDocument(document, writer);
     }
-    
+
 }
