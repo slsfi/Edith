@@ -136,12 +136,13 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     public static int getIndex(String str, String word, int occurrence) {
         int index = -1;
-        while (occurrence > 0){
+        int n = occurrence;
+        while (n > 0){
             index = str.indexOf(word, index+1);
             if (index == -1) {
                 return -1;
             }
-            occurrence--;
+            n--;
         }
         return index;
     }
@@ -277,8 +278,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         String endAnchor = "end"+localId;
         boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
         int offset = 0;
-        int startIndex = getIndex(string.toString(), sel.getFirstWord(), sel.getStartIndex());
-        int endIndex = getIndex(string.toString(), sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length();
+        int startIndex = getIndex(string, sel.getFirstWord(), sel.getStartIndex());
+        int endIndex = getIndex(string, sel.getLastWord(), sel.getEndIndex()) + sel.getLastWord().length();
         for (XMLEvent e : events) {
             boolean handled = false;
             if (e.isStartElement()) {
