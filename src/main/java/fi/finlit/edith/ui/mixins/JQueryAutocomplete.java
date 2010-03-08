@@ -23,6 +23,8 @@ import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ResponseRenderer;
 import org.apache.tapestry5.util.TextStreamResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @IncludeJavaScriptLibrary( { "jquery-autocomplete.js", "classpath:jquery-1.4.1.js",
         "classpath:ui/jquery.ui.core.js", "classpath:ui/jquery.ui.widget.js",
@@ -34,6 +36,8 @@ public class JQueryAutocomplete {
     static final String EVENT_NAME = "jqueryautocomplete";
 
     private static final String PARAM_NAME = "term";
+
+    private static final Logger logger = LoggerFactory.getLogger(JQueryAutocomplete.class);
 
     @InjectContainer
     private Field field;
@@ -64,14 +68,14 @@ public class JQueryAutocomplete {
         // config.put("indicator", loaderId);
         //
 
-        System.out.println("ac Uri" + link.toAbsoluteURI());
+        logger.debug("ac Uri" + link.toAbsoluteURI());
         renderSupport.addInit("jQueryAutocompleter", new JSONArray(id, link.toAbsoluteURI()));
     }
 
     Object onJQueryAutocomplete() {
 
         String input = request.getParameter(PARAM_NAME);
-        System.out.println("onAutocomplete " + input);
+        logger.debug("onAutocomplete " + input);
 
         final Holder<List<String>> matchesHolder = Holder.create();
 
