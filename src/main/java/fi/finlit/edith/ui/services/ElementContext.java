@@ -65,10 +65,11 @@ public class ElementContext implements Cloneable {
     }
 
     public void push(String name){
+        String s = name;
         if (!stack.isEmpty()){
-            name = stack.peek().getName(name);
+            s = stack.peek().getName(s);
         }
-        stack.push(new Item(name));
+        stack.push(new Item(s));
     }
 
     public void pop(){
