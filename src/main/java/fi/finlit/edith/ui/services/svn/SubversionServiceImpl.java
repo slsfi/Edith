@@ -85,7 +85,7 @@ public class SubversionServiceImpl implements SubversionService {
         try {
             this.repoSvnURL = SVNURL.parseURIEncoded(repoURL);
         } catch (SVNException e) {
-            throw new RuntimeException(e);
+            throw new SubversionException(e);
         }
         this.svnRepository = null;
     }
@@ -97,7 +97,7 @@ public class SubversionServiceImpl implements SubversionService {
                     SVNRevision.create(revision),
                     SVNRevision.create(revision), true);
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
     }
 
@@ -108,7 +108,7 @@ public class SubversionServiceImpl implements SubversionService {
                     new File[] { file }, true, file.getName() + " committed", false,
                     false).getNewRevision();
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
     }
 
@@ -149,7 +149,7 @@ public class SubversionServiceImpl implements SubversionService {
             logger.info(clientManager.getCommitClient().doDelete(
                     new SVNURL[] { targetURL }, "removed " + svnPath).toString());
         } catch (SVNException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new SubversionException(e.getMessage(), e);
         }
     }
 
@@ -160,7 +160,7 @@ public class SubversionServiceImpl implements SubversionService {
             FileUtils.deleteDirectory(svnCache);
             FileUtils.deleteDirectory(svnRepo);
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new SubversionException(e.getMessage(), e);
         }
 
     }
@@ -176,7 +176,7 @@ public class SubversionServiceImpl implements SubversionService {
             }
             return rv;
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
     }
 
@@ -192,7 +192,7 @@ public class SubversionServiceImpl implements SubversionService {
         try {
             return svnRepository.getLatestRevision();
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
     }
 
@@ -208,7 +208,7 @@ public class SubversionServiceImpl implements SubversionService {
             }
             return revision;
         }catch(SVNException e){
-            throw new RuntimeException(e);
+            throw new SubversionException(e);
         }
     }
 
@@ -226,7 +226,7 @@ public class SubversionServiceImpl implements SubversionService {
             }
             return revisionInfos;
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
     }
 
@@ -256,7 +256,7 @@ public class SubversionServiceImpl implements SubversionService {
             }
             return new FileInputStream(documentFile);
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
 
     }
@@ -269,7 +269,7 @@ public class SubversionServiceImpl implements SubversionService {
                     repoSvnURL.appendPath(svnPath, false), svnPath + " added",
                     false).getNewRevision();
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
 
     }
@@ -296,7 +296,7 @@ public class SubversionServiceImpl implements SubversionService {
                 }
             }
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
     }
 
@@ -306,7 +306,7 @@ public class SubversionServiceImpl implements SubversionService {
             clientManager.getUpdateClient().doUpdate(file,
                     SVNRevision.create(getLatestRevision()), false);
         } catch (SVNException s) {
-            throw new RuntimeException(s.getMessage(), s);
+            throw new SubversionException(s.getMessage(), s);
         }
     }
 
