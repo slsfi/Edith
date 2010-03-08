@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
@@ -154,16 +155,19 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
 
         //Order on lemma after we have selected the first one as a selection
-        Collections.sort(selectedNotes, new Comparator<NoteRevision>() {
-            public int compare(NoteRevision o1, NoteRevision o2) {
-                return o1.getLemma().compareTo(o2.getLemma());
-            }
-        });
+        Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
 
 
         return noteEdit;
+    }
+
+    private static final class NoteComparator implements Comparator<NoteRevision> {
+        @Override
+        public int compare(NoteRevision o1, NoteRevision o2) {
+            return o1.getLemma().compareTo(o2.getLemma());
+        }
     }
 
     private Term getEditTerm(NoteRevision noteRevision) {
@@ -206,11 +210,11 @@ public class AnnotatePage extends AbstractDocumentPage {
 	}
 
 	try{
-	    if (updateLongTextSelection.hasSelection()) {
+	    if (updateLongTextSelection.isValid()) {
 	        noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
 	    } else {
 	        noteRevision = noteRevisionRepo.save(note);
-	    }    
+	    }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
