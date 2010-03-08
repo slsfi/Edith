@@ -38,7 +38,7 @@ public class DataModule {
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) String svnRepoPath,
             SaltSource saltSource,
             PasswordEncoder passwordEncoder,
-            @Inject SubversionService subversionService) throws Exception {
+            @Inject SubversionService subversionService) throws IOException {
 
         logger.info("Initializing DataModule");
 
