@@ -89,10 +89,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             throw new ServiceException(e);
         }
 
-        NoteRevision revision = null;
-        Term term = null;
-        String text = null;
-        int counter = 0;
+        LoopData data = new LoopData();
 
         Session session = getSession();
 
@@ -103,49 +100,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             } catch (XMLStreamException e) {
                 throw new ServiceException(e);
             }
-
             if (event == XMLStreamConstants.START_ELEMENT){
-                String localName = reader.getLocalName();
-                if (localName.equals("note")){
-                    revision = new NoteRevision();
-                    revision.setRevisionOf(new Note());
-                    revision.getRevisionOf().setLatestRevision(revision);
-                    revision.setCreatedOn(timeService.currentTimeMillis());
-                    term = null;
-                }
-
+                handleStartElement(reader, data);
             }else if (event == XMLStreamConstants.END_ELEMENT){
-                String localName = reader.getLocalName();
-
-                if (localName.equals("note")){
-                    if (term != null) {
-                        revision.getRevisionOf().setTerm(term);
-                        session.save(term);
-                    }
-                    session.save(revision.getRevisionOf());
-                    session.save(revision);
-                    counter++;
-                }else if (localName.equals("lemma")){
-                    revision.setLemma(text);
-                }else if (localName.equals("text")){
-                    revision.setLongText(text);
-                }else if (localName.equals("baseform")){
-                    if (term == null) {
-                        term = new Term();
-                    }
-                    term.setBasicForm(text);
-                }else if (localName.equals("meaning")){
-                    if (term == null) {
-                        term = new Term();
-                    }
-                    term.setMeaning(text);
-                }else if (localName.equals("description")){
-                    revision.setDescription(text);
-                }
-
+                handleEndElement(reader, session, data);
             }else if (event == XMLStreamConstants.CHARACTERS){
-                text = reader.getText();
-
+                data.text = reader.getText();
             }else if (event == XMLStreamConstants.END_DOCUMENT) {
                 try {
                     reader.close();
@@ -155,7 +115,63 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 break;
             }
         }
-        return counter;
+        return data.counter;
+    }
+
+    private void handleStartElement(XMLStreamReader reader, LoopData data) {
+        String localName = reader.getLocalName();
+        if (localName.equals("note")){
+            data.revision = new NoteRevision();
+            data.revision.setRevisionOf(new Note());
+            data.revision.getRevisionOf().setLatestRevision(data.revision);
+            data.revision.setCreatedOn(timeService.currentTimeMillis());
+            data.term = null;
+        }
+    }
+
+    private void handleEndElement(XMLStreamReader reader, Session session, LoopData data) {
+        String localName = reader.getLocalName();
+
+        if (localName.equals("note")){
+            if (data.term != null) {
+                data.revision.getRevisionOf().setTerm(data.term);
+                session.save(data.term);
+            }
+            session.save(data.revision.getRevisionOf());
+            session.save(data.revision);
+            data.counter++;
+        }else if (localName.equals("lemma")){
+            data.revision.setLemma(data.text);
+        }else if (localName.equals("text")){
+            data.revision.setLongText(data.text);
+        }else if (localName.equals("baseform")){
+            if (data.term == null) {
+                data.term = new Term();
+            }
+            data.term.setBasicForm(data.text);
+        }else if (localName.equals("meaning")){
+            if (data.term == null) {
+                data.term = new Term();
+            }
+            data.term.setMeaning(data.text);
+        }else if (localName.equals("description")){
+            data.revision.setDescription(data.text);
+        }
+
+    }
+
+    private static class LoopData {
+        private NoteRevision revision;
+        private Term term;
+        private String text;
+        private int counter;
+
+        private LoopData() {
+            revision = null;
+            term = null;
+            text = null;
+            counter = 0;
+        }
     }
 
     @Override
