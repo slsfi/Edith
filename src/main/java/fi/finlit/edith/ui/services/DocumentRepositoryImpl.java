@@ -156,24 +156,26 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public NoteRevision addNote(DocumentRevision docRevision, final SelectedText selection) throws IOException, NoteAdditionFailedException{
         final String localId = String.valueOf(timeService.currentTimeMillis());
         long newRevision;
-        try {
-            newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), authService.getUsername(),
-                    new UpdateCallback() {
-                @Override
-                public void update(InputStream source, OutputStream target) throws Exception {
-                    addNote(inFactory.createXMLEventReader(source), outFactory
-                            .createXMLEventWriter(target), selection, localId);
-                }
-            });
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
+        newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
+                authService.getUsername(), new UpdateCallback() {
+                    @Override
+                    public void update(InputStream source, OutputStream target) throws IOException {
+                        try {
+                            addNote(inFactory.createXMLEventReader(source), outFactory
+                                    .createXMLEventWriter(target), selection, localId);
+                        } catch (XMLStreamException e) {
+                            throw new ServiceException(e);
+                        } catch (NoteAdditionFailedException e) {
+                            throw new ServiceException(e);
+                        }
+                    }
+                });
 
         // persisted noteRevision has svnRevision of newly created commit
         return noteRepository.createNote(new DocumentRevision(docRevision, newRevision), localId,selection.getSelection()).getLatestRevision();
     }
 
-    public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
+    public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws NoteAdditionFailedException {
         logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
         /* Used to concat all the strings while buffering. */
@@ -263,9 +265,17 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     writer.add(event);
                 }
             }
+        } catch (XMLStreamException e) {
+            logger.error("", e);
+        } catch (CloneNotSupportedException e) {
+            logger.error("", e);
         } finally {
-            writer.close();
-            reader.close();
+            try {
+                writer.close();
+                reader.close();
+            } catch (XMLStreamException e) {
+                logger.error("", e);
+            }
             if (!matched.areBothMatched()) {
                 throw new NoteAdditionFailedException(sel, localId, matched.isStartMatched(), matched.isEndMatched());
             }
@@ -425,20 +435,19 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public DocumentRevision removeNotes(DocumentRevision docRevision, final Note... notes){
         long newRevision;
-        try {
-            newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(), authService.getUsername(),
-                    new UpdateCallback() {
-                @Override
-                public void update(InputStream source, OutputStream target) throws Exception {
-                    streamEvents(inFactory.createFilteredReader(
-                            inFactory.createXMLEventReader(source),
-                            createRemoveFilter(notes)),
-                            outFactory.createXMLEventWriter(target));
-                }
-            });
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
+        newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
+                authService.getUsername(), new UpdateCallback() {
+                    @Override
+                    public void update(InputStream source, OutputStream target) {
+                        try {
+                            streamEvents(inFactory.createFilteredReader(inFactory
+                                    .createXMLEventReader(source), createRemoveFilter(notes)),
+                                    outFactory.createXMLEventWriter(target));
+                        } catch (XMLStreamException e) {
+                            throw new ServiceException(e);
+                        }
+                    }
+                });
 
         // persisted noteRevision has svnRevision of newly created commit
         for (Note note : notes) {
@@ -448,7 +457,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return new DocumentRevision(docRevision, newRevision);
     }
 
-    public void streamEvents(XMLEventReader reader, XMLEventWriter writer) throws Exception {
+    public void streamEvents(XMLEventReader reader, XMLEventWriter writer) throws XMLStreamException {
         try {
             while (reader.hasNext()) {
                 writer.add(reader.nextEvent());
@@ -463,26 +472,24 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public NoteRevision updateNote(final NoteRevision note, final SelectedText selection) throws IOException {
         Document document = note.getRevisionOf().getDocument();
         long newRevision;
-        try {
-            newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(), authService.getUsername(),
-                    new UpdateCallback() {
-                        @Override
-                        public void update(InputStream source, OutputStream target) {
-                            try {
-                                XMLEventReader eventReader = inFactory.createFilteredReader(
-                                        inFactory.createXMLEventReader(source),
-                                        createRemoveFilter(new Note[] { note.getRevisionOf() }));
-                                addNote(eventReader,
-                                        outFactory.createXMLEventWriter(target),
-                                        selection, note.getRevisionOf().getLocalId());
-                            } catch (Exception e) {
-                                throw new ServiceException(e);
-                            }
-                        }
-            });
-        } catch (Exception e) {
-            throw new ServiceException(e);
-        }
+        newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(), authService
+                .getUsername(), new UpdateCallback() {
+            @Override
+            public void update(InputStream source, OutputStream target) {
+                try {
+                    XMLEventReader eventReader = inFactory.createFilteredReader(inFactory
+                            .createXMLEventReader(source), createRemoveFilter(new Note[] { note
+                            .getRevisionOf() }));
+                    addNote(eventReader, outFactory.createXMLEventWriter(target), selection, note
+                            .getRevisionOf().getLocalId());
+                } catch (XMLStreamException e) {
+                    throw new ServiceException(e);
+                } catch (NoteAdditionFailedException e) {
+                    throw new ServiceException(e);
+                }
+            }
+        });
+
 
         NoteRevision copy = note.createCopy();
         copy.setLongText(selection.getSelection());

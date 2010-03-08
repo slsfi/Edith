@@ -113,7 +113,7 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public long commit(String svnPath, long revision, String username, UpdateCallback callback) throws Exception {
+    public long commit(String svnPath, long revision, String username, UpdateCallback callback) {
         File userCheckout = new File(workingCopies + "/" + username);
         String path = svnPath.substring(documentRoot.length());
         if (userCheckout.exists()) {
@@ -134,6 +134,8 @@ public class SubversionServiceImpl implements SubversionService {
                 is.close();
             }
             FileUtils.copyFile(tmp, file);
+        } catch(IOException e) {
+            throw new SubversionException(e);
         } finally {
             if (tmp != null && !tmp.delete()) {
                 logger.error("Delete of " + tmp.getAbsolutePath() + " failed");
