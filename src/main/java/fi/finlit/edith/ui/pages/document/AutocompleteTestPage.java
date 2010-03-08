@@ -40,7 +40,7 @@ public class AutocompleteTestPage {
     }
 
     List<String> onProvideCompletionsFromTerm(String partial) {
-        System.out.println("onProvideCompletionsFromTerm " + partial);
+        logger.debug("onProvideCompletionsFromTerm " + partial);
 
         List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
         List<String> results = new ArrayList<String>(terms.size());
