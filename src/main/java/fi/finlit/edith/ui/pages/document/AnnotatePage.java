@@ -6,6 +6,7 @@
 package fi.finlit.edith.ui.pages.document;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
@@ -165,7 +165,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         return noteEdit;
     }
 
-    private static final class NoteComparator implements Comparator<NoteRevision> {
+    private static final class NoteComparator implements Comparator<NoteRevision>, Serializable {
+        private static final long serialVersionUID = 1172304280333678242L;
+
         @Override
         public int compare(NoteRevision o1, NoteRevision o2) {
             return o1.getLemma().compareTo(o2.getLemma());
