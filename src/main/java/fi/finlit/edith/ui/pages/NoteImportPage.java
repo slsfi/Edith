@@ -6,6 +6,7 @@
 package fi.finlit.edith.ui.pages;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.Persist;
@@ -45,7 +46,7 @@ public class NoteImportPage {
     void onActivate() {
     }
 
-    public void onSuccess() throws Exception {
+    public void onSuccess() throws IOException {
         File tempFile = File.createTempFile("upload", null);
         try {
             file.write(tempFile);

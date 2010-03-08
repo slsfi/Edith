@@ -10,9 +10,11 @@ import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.grid.GridDataSource;
@@ -62,7 +64,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         rev.setCreatedBy(createdBy);
         rev.setSVNRevision(docRevision.getRevision());
         rev.setLongText(longText);
-        rev.setLemmaFromLongText();        
+        rev.setLemmaFromLongText();
         getSession().save(rev);
 
         Note note = new Note();
@@ -76,9 +78,16 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public int importNotes(File file) throws Exception {
+    public int importNotes(File file) {
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
+        XMLStreamReader reader = null;
+        try {
+            reader = factory.createXMLStreamReader(new FileInputStream(file));
+        } catch (XMLStreamException e) {
+            throw new ServiceException(e);
+        } catch (FileNotFoundException e) {
+            throw new ServiceException(e);
+        }
 
         NoteRevision revision = null;
         Term term = null;
@@ -88,7 +97,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         Session session = getSession();
 
         while (true) {
-            int event = reader.next();
+            int event = -1;
+            try {
+                event = reader.next();
+            } catch (XMLStreamException e) {
+                throw new ServiceException(e);
+            }
 
             if (event == XMLStreamConstants.START_ELEMENT){
                 String localName = reader.getLocalName();
@@ -133,7 +147,11 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 text = reader.getText();
 
             }else if (event == XMLStreamConstants.END_DOCUMENT) {
-                reader.close();
+                try {
+                    reader.close();
+                } catch (XMLStreamException e) {
+                    throw new ServiceException(e);
+                }
                 break;
             }
         }
@@ -148,10 +166,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             builder.or(termWithNotes.basicForm.contains(searchTerm, false));
             builder.or(termWithNotes.meaning.contains(searchTerm, false));
             return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc(), builder.getValue());
-        }else{
-            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc());
         }
-
+        return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc());
     }
 
     @Override

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
@@ -20,30 +20,30 @@ import com.mysema.rdfbean.dao.Repository;
  */
 @Transactional
 public interface NoteRepository extends Repository<Note,String>{
-    
+
     /**
      * Create a new Note for the given DocumentRevision with the given local id, lemma and long text
-     * 
+     *
      * @param docRevision
      * @param localId
      * @param longText
      * @return
      */
-     // TODO : this could be in DocumentRepository 
+     // TODO : this could be in DocumentRepository
      Note createNote(DocumentRevision docRevision, String localId, String longText);
 
-    
+
     /**
      * Import notes from the given file
-     * 
+     *
      * @param file
-     * @throws Exception 
+     * @throws Exception
      */
-    int importNotes(File file) throws Exception;
+    int importNotes(File file);
 
     /**
      * Query for notes with the given search term
-     * 
+     *
      * @param searchTerm
      * @return
      */
@@ -51,12 +51,12 @@ public interface NoteRepository extends Repository<Note,String>{
 
     /**
      * Remove the give Note in the given revision
-     * 
+     *
      * @param note
      * @param newRevision
      */
-    // TODO : this could be in DocumentRepository    
+    // TODO : this could be in DocumentRepository
     void remove(Note note, long revision);
 
-    
+
 }
