@@ -117,6 +117,8 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Property
     private boolean submitSuccess;
 
+    private static final String EDIT_ZONE = "editZone";
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
@@ -185,7 +187,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
-            return new MultiZoneUpdate("editZone", errorBlock);
+            return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
         }
 
         // prepare view (with new revision)
@@ -194,7 +196,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit);
-        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add("documentZone", documentView);
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add("documentZone", documentView);
     }
 
     void onPrepareForSubmit(String noteRev) {
@@ -218,7 +220,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
-            return new MultiZoneUpdate("editZone", errorBlock);
+            return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
         }
 
         //Handling the embedded term edit
@@ -240,7 +242,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         termOnEdit = getEditTerm(noteOnEdit);
         submitSuccess = true;
 
-        return new MultiZoneUpdate("editZone", noteEdit).add("listZone", notesList).add(
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView);
     }
 
@@ -253,7 +255,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         getDocumentRevision().setRevision(documentRevision.getRevision());
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
-        return new MultiZoneUpdate("editZone", emptyBlock).add("listZone", notesList).add("documentZone", documentView);
+        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add("documentZone", documentView);
     }
 
     List<String> onProvideCompletionsFromBasicForm(String partial) {
