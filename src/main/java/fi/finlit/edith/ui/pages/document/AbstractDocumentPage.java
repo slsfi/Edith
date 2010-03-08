@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.internal.util.TapestryException;
 import org.apache.tapestry5.services.Response;
 
 import com.mysema.tapestry.core.Context;
@@ -56,7 +57,7 @@ public class AbstractDocumentPage {
         try {
             document = documentRepo.getById(context.get(String.class, 0));
             revisions = documentRepo.getRevisions(document);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             response.sendError(404, "Document not found!");
             return;
         }
