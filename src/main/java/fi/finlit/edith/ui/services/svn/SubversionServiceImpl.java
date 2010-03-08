@@ -231,14 +231,14 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public InputStream getStream(String svnPath, long rev) throws IOException {
+    public InputStream getStream(String svnPath, long revision) throws IOException {
         try {
-            long revision = rev;
-            if (revision == -1) {
-                revision = getLatestRevision(svnPath);
+            long rev = revision;
+            if (rev == -1) {
+                rev = getLatestRevision(svnPath);
             }
             File documentFolder = new File(readCache, URLEncoder.encode(svnPath, "UTF-8"));
-            File documentFile = new File(documentFolder, String.valueOf(revision));
+            File documentFile = new File(documentFolder, String.valueOf(rev));
             if (!documentFile.exists()) {
                 if (!documentFolder.exists()) {
                     if (!documentFolder.mkdirs()) {
@@ -247,7 +247,7 @@ public class SubversionServiceImpl implements SubversionService {
                 }
                 OutputStream out = new FileOutputStream(documentFile);
                 try {
-                    svnRepository.getFile(svnPath, revision, null, out);
+                    svnRepository.getFile(svnPath, rev, null, out);
                 } finally {
                     // SVNRepository.getFile doesn't close OutputStream,
                     // so we need to close it manually
