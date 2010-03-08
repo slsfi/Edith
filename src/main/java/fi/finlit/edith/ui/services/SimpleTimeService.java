@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -12,19 +12,20 @@ package fi.finlit.edith.ui.services;
  * @version $Id$
  */
 public class SimpleTimeService implements TimeService{
-    
+
     private long last = System.currentTimeMillis();
-    
+
     @Override
     public long currentTimeMillis() {
         while (last == System.currentTimeMillis()){
             try {
                 Thread.sleep(1);
-            } catch (InterruptedException e) {               
+            } catch (InterruptedException e) {
                 throw new ServiceException(e);
             }
         }
-        return last = System.currentTimeMillis();        
+        last = System.currentTimeMillis();
+        return last;
     }
 
 }
