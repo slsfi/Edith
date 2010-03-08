@@ -169,9 +169,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             throw new ServiceException(e);
         }
 
-        docRevision = new DocumentRevision(docRevision, newRevision);
         // persisted noteRevision has svnRevision of newly created commit
-        return noteRepository.createNote(docRevision, localId,selection.getSelection()).getLatestRevision();
+        return noteRepository.createNote(new DocumentRevision(docRevision, newRevision), localId,selection.getSelection()).getLatestRevision();
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws Exception {
