@@ -141,7 +141,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(element, element, 1, 1, text.toString()));
 
         String content = getContent();
-        // System.out.println(content);
+         System.out.println(content);
         assertTrue(content.contains("ed" + start(localId) + "es" + end(localId) + "s\u00E4"));
     }
 
@@ -294,8 +294,8 @@ public class NoteAddition2Test extends AbstractServiceTest {
         documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement, endElement,
                 1, 2, text2), localId);
         String content = new String(target2.toByteArray(), "UTF-8");
-        System.out.println(content);
-        fail("Create a cool assertion!");
+//        System.out.println(content);
+        assertTrue(content.contains("<ref xml:id=\"ref.3\" target=\"note.3\">h" + start(localId) + "uo" + start(localId) + "ne</ref>: per\u00E4" + end(localId) + "ll\u00E4 o" + end(localId) + "vi ja akkuna, oikealla"));
     }
 
     @Test

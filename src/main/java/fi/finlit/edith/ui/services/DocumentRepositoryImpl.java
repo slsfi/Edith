@@ -210,7 +210,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                              * FIXME Unfortunately this doesn't fix all the context related issues and there is hopefully a
                              * better solution to be found. NOTE: Same comment applies for the else if. */
                             tempContext.pop();
-                            flush(writer, startStrings.toString(), sel, events, tempContext, matched, localId, endOffset);
+                            flush(writer, endStrings.toString(), sel, events, tempContext, matched, localId, endOffset);
                             allStrings = new StringBuilder();
                             events.clear();
                             handled = false;
@@ -302,7 +302,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                  * other tests. */
                 String eventString = e.asCharacters().getData();
                 int relativeStart = startIndex - offset;
-                int relativeEnd = endIndex - offset - endOffset.intValue();
+                int relativeEnd = endIndex - (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd() ? endOffset.intValue() : offset);
                 int index = -1;
                 offset += eventString.length();
                 if (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd()) {
