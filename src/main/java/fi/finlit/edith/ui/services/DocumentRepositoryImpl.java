@@ -318,7 +318,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     index = relativeStart;
                 }
                 if (context.equalsAny(sel.getEndId()) && matched.isStartMatched()
-                        && !matched.isEndMatched() && endIndex <= offset) {
+                        && !matched.isEndMatched() && endIndex <= (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd() ? endOffset.intValue() : offset)) {
                     if (!startAndEndInSameElement) {
                         writer.add(eventFactory.createCharacters(eventString.substring(0,
                                 relativeEnd)));
