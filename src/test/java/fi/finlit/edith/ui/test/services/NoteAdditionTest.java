@@ -8,7 +8,6 @@ package fi.finlit.edith.ui.test.services;
 import static fi.finlit.edith.ui.services.DocumentRepositoryImpl.extractName;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -22,7 +21,6 @@ import java.util.UUID;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,7 +30,6 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
@@ -62,7 +59,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     private final Random random = new Random(27);
 
     @Before
-    public void setUp() throws SVNException, IOException, XMLStreamException{
+    public void setUp() {
         source = new StringReader(testDocumentContent);
         target = new StringWriter();
         localId = UUID.randomUUID().toString();
@@ -90,6 +87,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
                 addNote(sel);
             } catch (NoteAdditionFailedException e) {
                 failedSelectedTexts.add(sel);
+                System.err.println(sel);
             }
         }
         if (!failedSelectedTexts.isEmpty()) {
