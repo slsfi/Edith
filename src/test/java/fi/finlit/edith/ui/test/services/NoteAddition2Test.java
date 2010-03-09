@@ -2,20 +2,16 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
@@ -24,7 +20,6 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
@@ -51,13 +46,13 @@ public class NoteAddition2Test extends AbstractServiceTest {
     private String localId;
 
     @Before
-    public void setUp() throws SVNException, IOException, XMLStreamException {
+    public void setUp() {
         source = new StringReader(testDocumentContent);
         target = new StringWriter();
         localId = UUID.randomUUID().toString();
     }
 
-    private String getContent() throws UnsupportedEncodingException {
+    private String getContent() {
         return target.toString();
     }
 
