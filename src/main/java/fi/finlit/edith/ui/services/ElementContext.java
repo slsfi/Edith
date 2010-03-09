@@ -87,10 +87,8 @@ public class ElementContext implements Cloneable {
                 b.append(stack.get(i).name);
             }
             return b.toString();
-        }else{
-            return null;
         }
-
+        return null;
     }
 
     @Override
