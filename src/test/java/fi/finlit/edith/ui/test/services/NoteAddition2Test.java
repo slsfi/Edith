@@ -235,7 +235,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
 
         String content = getContent();
          System.out.println(content);
-        fail("Add proper assertions!");
+        fail("Add proper assertions! For this test to succeed there has to be two POPS.");
     }
 
     @Test
