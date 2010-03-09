@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -223,6 +224,18 @@ public class NoteAddition2Test extends AbstractServiceTest {
                 + "piaksen <ref xml:id=\"ref.3\" target=\"note.3\">huo" + end(localId) + "ne"));
         assertEquals(1, StringUtils.countMatches(content,
                 "Jaana istuu pöydän ääressä, kutoen sukkaa,"));
+    }
+
+    @Test
+    public void addNote_end_element_deeply_inside_start_element() throws Exception {
+        String startElement = "play-description-castList-castItem13";
+        String endElement = "play-description-castList-castItem13-roleDesc-ref";
+        String text = ", kraatari";
+        addNote(new SelectedText(startElement, endElement, text));
+
+        String content = getContent();
+         System.out.println(content);
+        fail("Add proper assertions!");
     }
 
     @Test
