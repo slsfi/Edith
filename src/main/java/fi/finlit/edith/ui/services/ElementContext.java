@@ -43,6 +43,11 @@ public class ElementContext implements Cloneable {
         }
 
         @Override
+        public String toString() {
+            return this.name;
+        }
+
+        @Override
         public Object clone() throws CloneNotSupportedException{
             Item item = (Item) super.clone();
             item.counts = new HashMap<String, MutableInt>();
@@ -75,6 +80,10 @@ public class ElementContext implements Cloneable {
         stack.pop();
     }
 
+    @Override
+    public String toString() {
+        return this.stack.toString();
+    }
 
     @Nullable
     public String getPath(){
