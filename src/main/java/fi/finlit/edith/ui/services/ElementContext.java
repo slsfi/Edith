@@ -37,10 +37,9 @@ public class ElementContext implements Cloneable {
                 intValue = new MutableInt(1);
                 counts.put(name, intValue);
                 return name;
-            }else{
-                intValue.add(1);
-                return name + intValue;
             }
+            intValue.add(1);
+            return name + intValue;
         }
 
         @Override
