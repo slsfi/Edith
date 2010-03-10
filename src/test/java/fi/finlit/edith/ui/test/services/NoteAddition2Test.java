@@ -332,6 +332,19 @@ public class NoteAddition2Test extends AbstractServiceTest {
         assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
     }
 
+    @Test
+    public void addNote_huge_difference_between_elements() throws Exception {
+        String startElement = "sourceDesc-biblStruct-monogr-imprint-date";
+        String endElement = "play-ref";
+        String text = "65 [H";
+        addNote(new SelectedText(startElement, endElement, text));
+
+        String content = getContent();
+//         System.out.println(content);
+        assertTrue(content.contains("<date>18" + start(localId) + "65</date>"));
+        assertTrue(content.contains("<ref xml:id=\"pageref.1\" target=\"helminauha.xml#pageref.1\">[H" + end(localId) + "elminauha]</ref>"));
+    }
+
     @Override
     protected Class<?> getServiceClass() {
         return null;
