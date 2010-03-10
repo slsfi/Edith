@@ -4,6 +4,11 @@ var escapeXml = function(s) {
 	return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
 
+var whitespaceRe = new RegExp(/\s+/g);
+var asteriskRe = new RegExp(/\*/g);
+var asteriskRe = new RegExp(/\*/g);
+var hashRe = new RegExp(/#/g);
+
 var TextSelector = {
 	startId : null,
 	endId : null,
@@ -90,12 +95,12 @@ var TextSelector = {
 			endOffset = selection.anchorOffset;
 		}
 		
-		var whitespaceRe = new RegExp(/\s+/g);
 		var selectionString = selection.toString();
 		if (whitespaceRe.test(selectionString.charAt(selectionString.length - 1))) {
 			--endOffset;
 		}
-		var words = selectionString.replace(/#/g, "").trim().split(whitespaceRe);
+		selectionString = selectionString.replace(hashRe, "").replace(asteriskRe, "").trim();
+		var words = selectionString.split(whitespaceRe);
 		this.startIndex = this.getOccurrenceInElement(startNode, startOffset, words[0]);
 		this.endIndex = this.startIndex;
 		if (words.length > 1) {
@@ -105,7 +110,7 @@ var TextSelector = {
 		
 		this.startId = (startNode.parent().attr("id") != "" ? startNode.parent().attr("id") : startNode.parent().parent().attr("id"));
 		this.endId = (endNode.parent().attr("id") != "" ? endNode.parent().attr("id") : endNode.parent().parent().attr("id"));
-		this.selection = selection.toString().replace(/#/g, " ");
+		this.selection = selectionString;
 //		 Tapestry.Logging.info("Selection: " + this.selection);
 //		 Tapestry.Logging.info("Start ID: " + this.startId);
 //		 Tapestry.Logging.info("End ID: " + this.endId);
