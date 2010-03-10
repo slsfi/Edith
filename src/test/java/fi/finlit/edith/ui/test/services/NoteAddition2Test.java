@@ -206,7 +206,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(startElement, endElement, 1, 3, text));
 
         String content = getContent();
-         System.out.println(content);
+//         System.out.println(content);
         assertTrue(content.contains("<stage>(Menee per" + start(localId) + "\u00E4lt\u00E4 ulos)</stage>." + end(localId) + "</p>"));
     }
 
