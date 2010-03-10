@@ -100,6 +100,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(start, end, text));
 
         String content = getContent();
+        System.out.println(content);
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
         assertTrue(content.contains("Esko." + end(localId)));
     }
@@ -234,8 +235,8 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(startElement, endElement, text));
 
         String content = getContent();
-         System.out.println(content);
-        fail("Add proper assertions! For this test to succeed there has to be two POPS.");
+//         System.out.println(content);
+        assertTrue(content.contains("<castItem><role>Antres</role>" + start(localId) + ", <roleDesc><ref xml:id=\"ref.1\" target=\"note.1\">kraatari" + end(localId) + "</ref> ja"));
     }
 
     @Test
