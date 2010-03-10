@@ -15,7 +15,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Test;
-import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
@@ -71,7 +70,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getByLocalId() throws SVNException{
+    public void getByLocalId() {
         assertNotNull(noteRevisionRepo.getByLocalId(docRev, "1"));
         assertNotNull(noteRevisionRepo.getByLocalId(docRev, "2"));
         assertNotNull(noteRevisionRepo.getByLocalId(docRev, "3"));

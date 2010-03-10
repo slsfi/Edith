@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 import static org.junit.Assert.assertEquals;
@@ -26,7 +26,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.AuthService;
@@ -44,11 +43,11 @@ import fi.finlit.edith.ui.services.svn.UpdateCallback;
 public class SubversionServiceTest extends AbstractServiceTest {
 
     private static final Logger logger = LoggerFactory.getLogger(SubversionServiceTest.class);
-    
+
     @Autobuild
     @Inject
     private SubversionServiceImpl subversionService;
-    
+
     @Inject
     private AuthService authService;
 
@@ -208,7 +207,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void commit() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         long oldRevision = subversionService.importFile(svnPath, testFile);
-        subversionService.commit(svnPath, subversionService.getLatestRevision(), authService.getUsername(), 
+        subversionService.commit(svnPath, subversionService.getLatestRevision(), authService.getUsername(),
                 new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
@@ -220,7 +219,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
                 }
             }
         });
-        long currentRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), authService.getUsername(), 
+        long currentRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), authService.getUsername(),
                 new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
@@ -289,9 +288,9 @@ public class SubversionServiceTest extends AbstractServiceTest {
         subversionService.importFile(documentRoot + "/foobar", noteTestData);
         assertEquals(expected, subversionService.getLatestRevision());
     }
-    
+
     @Test
-    public void getLatestRevision_String() throws IOException, SVNException{
+    public void getLatestRevision_String() throws IOException {
         String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);

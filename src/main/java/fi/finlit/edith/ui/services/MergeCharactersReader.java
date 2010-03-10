@@ -54,9 +54,8 @@ public class MergeCharactersReader implements XMLEventReader{
             }
             return eventFactory.createCharacters(builder.toString());
 
-        }else{
-            return event;
         }
+        return event;
     }
 
     public XMLEvent nextTag() throws XMLStreamException {
