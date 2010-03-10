@@ -12,7 +12,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +105,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         selections.addAll(createSelections());
         source = new StringReader(testDocumentContent);
         String content = "";
+//        int n = 0;
         for (SelectedText sel : selections) {
             target = new StringWriter();
             try {
@@ -116,12 +116,11 @@ public class NoteAdditionTest extends AbstractServiceTest{
             } catch (NoteAdditionFailedException e) {
                 failedSelectedTexts.add(sel);
                 System.err.println(sel);
-            } catch (EmptyStackException e) {
-                failedSelectedTexts.add(sel);
-                System.err.println("Empty stack exception!");
-                System.err.println(sel);
             }
             source = new StringReader(content);
+//            if (++n == selections.size()) {
+//                System.out.println(content);
+//            }
         }
         if (!failedSelectedTexts.isEmpty()) {
             fail("There were " + failedSelectedTexts.size() + " exceptions out of " + selections.size() + ".");
