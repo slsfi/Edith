@@ -3,6 +3,8 @@
  */
 package fi.finlit.edith.domain;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -19,6 +21,8 @@ public class SelectedText {
     private int startIndex = 1, endIndex = 1;
 
     public SelectedText(){}
+
+    private static final Pattern HYPHEN = Pattern.compile("-");
 
     public SelectedText(String startId, String endId, int startIndex, int endIndex, String selection) {
         this.startId = startId;
@@ -98,16 +102,14 @@ public class SelectedText {
         return words[words.length-1];
     }
 
-    // FIXME Not reliable, this could be elsewhere?
     public boolean startIsChildOfEnd() {
         return startId.startsWith(endId) && endId.length() < startId.length();
     }
 
- // TODO Pattern etc.
     public int howDeepIsStartInEnd() {
         int n = 0;
-        String start[] = startId.split("-");
-        String end[] = endId.split("-");
+        String start[] = HYPHEN.split(startId);
+        String end[] = HYPHEN.split(endId);
         for (int i = 0; i < start.length; ++i) {
             if (i < end.length) {
                 if (!start[i].equals(end[i])) {
@@ -120,11 +122,10 @@ public class SelectedText {
         return n;
     }
 
-    // TODO Pattern etc.
     public int howDeepIsEndInStart() {
         int n = 0;
-        String start[] = startId.split("-");
-        String end[] = endId.split("-");
+        String start[] = HYPHEN.split(startId);
+        String end[] = HYPHEN.split(endId);
         for (int i = 0; i < end.length; ++i) {
             if (i < start.length) {
                 if (!end[i].equals(start[i])) {
@@ -137,7 +138,6 @@ public class SelectedText {
         return n;
     }
 
-    // FIXME Not reliable, this could be elsewhere?
     public boolean endIsChildOfStart() {
         return endId.startsWith(startId)  && endId.length() > startId.length();
     }
