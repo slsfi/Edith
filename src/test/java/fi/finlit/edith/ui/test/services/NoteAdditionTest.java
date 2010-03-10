@@ -218,7 +218,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
         String firstWord = startWords[0];
         String lastWord = endWords[endWords.length - 1];
         int startIndex = findStartIndex(prevCharacters, firstWord, min);
-        int endIndex = findEndIndex(elementCharacters, lastWord, max + elementCharacters.indexOf(characters));
+        int endIndex = findEndIndex(elementCharacters, lastWord, max + elementCharacters.lastIndexOf(characters));
         if (startIndex <= 0 || endIndex <= 0) {
             throw new RuntimeException("Couldn't find occurrences!");
         }
