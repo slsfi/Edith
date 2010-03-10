@@ -103,6 +103,40 @@ public class SelectedText {
         return startId.startsWith(endId) && endId.length() < startId.length();
     }
 
+ // TODO Pattern etc.
+    public int howDeepIsStartInEnd() {
+        int n = 0;
+        String start[] = startId.split("-");
+        String end[] = endId.split("-");
+        for (int i = 0; i < start.length; ++i) {
+            if (i < end.length) {
+                if (!start[i].equals(end[i])) {
+                    return -1;
+                }
+            } else {
+                ++n;
+            }
+        }
+        return n;
+    }
+
+    // TODO Pattern etc.
+    public int howDeepIsEndInStart() {
+        int n = 0;
+        String start[] = startId.split("-");
+        String end[] = endId.split("-");
+        for (int i = 0; i < end.length; ++i) {
+            if (i < start.length) {
+                if (!end[i].equals(start[i])) {
+                    return -1;
+                }
+            } else {
+                ++n;
+            }
+        }
+        return n;
+    }
+
     // FIXME Not reliable, this could be elsewhere?
     public boolean endIsChildOfStart() {
         return endId.startsWith(startId)  && endId.length() > startId.length();
