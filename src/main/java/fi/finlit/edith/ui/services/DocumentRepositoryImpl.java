@@ -205,7 +205,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             /* If the end element is inside the start element, we want to flush the end elements that do not
                              * contain the desired end anchor position. */
                             ElementContext tempContext = (ElementContext) context.clone();
-                            /* tempContext is used so that we can send the actual context in most of these use cases. */
+                            /* tempContext is used so that we can send the actual context in most of these use cases.
+                             * The first pop is always mandatory, the following ones only if we are even deeper in. */
                             tempContext.pop();
                             if (sel.startIsChildOfEnd()) {
                                 for (int i = 1; i < sel.howDeepIsStartInEnd(); ++i) {
@@ -264,6 +265,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         events.add(event);
                         handled = true;
                     }
+                    /* The second comparison is to verify that we only start buffering if we are not going to have the chance
+                     * to pass the start element of the start/end block and restart the buffering then. */
                     if (startedBuffering && (sel.startIsChildOfEnd() || sel.endIsChildOfStart())) {
                         buffering = !matched.areBothMatched();
                     }
