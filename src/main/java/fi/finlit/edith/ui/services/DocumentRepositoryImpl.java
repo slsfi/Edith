@@ -175,7 +175,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws NoteAdditionFailedException {
-//        logger.info(sel.toString());
+        logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
         /* Used to concat all the strings while buffering. */
         StringBuilder allStrings = new StringBuilder();
@@ -205,13 +205,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             /* If the end element is inside the start element, we want to flush the end elements that do not
                              * contain the desired end anchor position. */
                             ElementContext tempContext = (ElementContext) context.clone();
-                            /* tempContext is used so that we can send the actual context in most of these use cases.
-                             * FIXME Unfortunately this doesn't fix all the context related issues and there is hopefully a
-                             * better solution to be found. NOTE: Same comment applies for the else if. */
-//                            if (events.get(0).isStartElement()) {
-//                                tempContext.pop();
-//                            }
-//                            tempContext.pop();
+                            /* tempContext is used so that we can send the actual context in most of these use cases. */
                             tempContext.pop();
                             if (sel.startIsChildOfEnd()) {
                                 for (int i = 1; i < sel.howDeepIsStartInEnd(); ++i) {
@@ -226,9 +220,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             /* If the start element is inside the end element, we want to flush the start elements once
                              * reaching the element containing the end anchor. */
                             ElementContext tempContext = (ElementContext) context.clone();
-//                            if (events.get(0).isStartElement()) {
-//                                tempContext.pop();
-//                            }
                             tempContext.pop();
                             if (sel.endIsChildOfStart()) {
                                 for (int i = 1; i < sel.howDeepIsEndInStart(); ++i) {
@@ -312,10 +303,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             } else if (e.isEndElement()) {
                 context.pop();
             } else if (e.isCharacters() && (context.equalsAny(sel.getStartId(), sel.getEndId()))) {
-                /* FIXME There are a few offset related issues. In some cases the event contains the position where we
-                 * want to insert the end anchor, but the offset is smaller than the endIndex. Another problem which
-                 * I've run into is that the relativeEnd is not correct, removing "- offset" helps with that but breaks
-                 * other tests. */
                 String eventString = e.asCharacters().getData();
                 int relativeStart = startIndex - offset;
                 int relativeEnd = endIndex - (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd() ? endOffset.intValue() : offset);
@@ -339,8 +326,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         writer.add(eventFactory.createCharacters(eventString.substring(0,
                                 relativeEnd)));
                     } else {
-                        /*
-                         * relativeStart might be negative which means that it is not in the current
+                        /* relativeStart might be negative which means that it is not in the current
                          * eventString, in this case we start the character writing from the
                          * beginning of the eventString.
                          */
