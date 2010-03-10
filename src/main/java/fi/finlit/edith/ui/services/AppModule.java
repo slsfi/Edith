@@ -5,8 +5,6 @@
  */
 package fi.finlit.edith.ui.services;
 
-import java.io.IOException;
-
 import nu.localhost.tapestry5.springsecurity.services.RequestInvocationDefinition;
 
 import org.apache.tapestry5.SymbolConstants;
@@ -38,7 +36,7 @@ public final class AppModule {
     private AppModule() {}
 
     public static void contributeApplicationDefaults(
-            MappedConfiguration<String, String> configuration) throws IOException {
+            MappedConfiguration<String, String> configuration) {
         // general config
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "fi,en,sv,de");
         configuration.add(SymbolConstants.PRODUCTION_MODE, System.getProperty("production.mode", "false"));
