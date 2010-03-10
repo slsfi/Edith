@@ -12,6 +12,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,38 @@ public class NoteAdditionTest extends AbstractServiceTest{
                 failedSelectedTexts.add(sel);
                 System.err.println(sel);
             }
+        }
+        if (!failedSelectedTexts.isEmpty()) {
+            fail("There were " + failedSelectedTexts.size() + " exceptions out of " + selections.size() + ".");
+        }
+    }
+
+    @Test
+    public void generic_selections_in_unmodified_document() throws Exception {
+        List<SelectedText> failedSelectedTexts = new ArrayList<SelectedText>();
+        List<SelectedText> selections = createSelections();
+        source = new StringReader(testDocumentContent);
+        selections.addAll(createSelections());
+        source = new StringReader(testDocumentContent);
+        selections.addAll(createSelections());
+        source = new StringReader(testDocumentContent);
+        String content = "";
+        for (SelectedText sel : selections) {
+            target = new StringWriter();
+            try {
+                XMLEventReader sourceReader = inFactory.createXMLEventReader(source);
+                XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target);
+                documentRepo.addNote(sourceReader, targetWriter, sel, localId);
+                content = target.toString();
+            } catch (NoteAdditionFailedException e) {
+                failedSelectedTexts.add(sel);
+                System.err.println(sel);
+            } catch (EmptyStackException e) {
+                failedSelectedTexts.add(sel);
+                System.err.println("Empty stack exception!");
+                System.err.println(sel);
+            }
+            source = new StringReader(content);
         }
         if (!failedSelectedTexts.isEmpty()) {
             fail("There were " + failedSelectedTexts.size() + " exceptions out of " + selections.size() + ".");
