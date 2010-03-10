@@ -4,5 +4,5 @@ scp target/edith.war root@edith:/opt/jetty/
 ssh root@edith
 service jetty stop
 mv /opt/jetty/edith.war /opt/jetty/webapps/edith.war
-chmod wwwrun /opt/jetty/webapps/edith.war # Jetty is run as wwwrun
+chown wwwrun /opt/jetty/webapps/edith.war # Jetty is run as wwwrun
 service jetty start
