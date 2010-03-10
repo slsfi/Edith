@@ -82,7 +82,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @After
-    public void tearDown() throws IOException{
+    public void tearDown() {
         closeStreams();
         adminService.removeNotesAndTerms();
         subversionService.destroy();
