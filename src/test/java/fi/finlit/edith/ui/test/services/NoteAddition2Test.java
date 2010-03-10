@@ -2,7 +2,6 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -197,6 +196,18 @@ public class NoteAddition2Test extends AbstractServiceTest {
         // System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId)
                 + "\u00E4ll\u00E4"));
+    }
+
+    @Test
+    public void addNote_start_element_inside_end_element2() throws Exception {
+        String startElement = "play-act-sp3-p-stage";
+        String endElement = "play-act-sp3-p";
+        String text = "\u00E4lt\u00E4 ulos) .";
+        addNote(new SelectedText(startElement, endElement, 1, 3, text));
+
+        String content = getContent();
+         System.out.println(content);
+        assertTrue(content.contains("<stage>(Menee per" + start(localId) + "\u00E4lt\u00E4 ulos)</stage>." + end(localId) + "</p>"));
     }
 
     @Test
