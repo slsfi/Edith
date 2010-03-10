@@ -273,7 +273,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         events.add(event);
                         handled = true;
                     }
-                    if (startedBuffering) {
+                    if (startedBuffering && (sel.startIsChildOfEnd() || sel.endIsChildOfStart())) {
                         buffering = !matched.areBothMatched();
                     }
                 }
