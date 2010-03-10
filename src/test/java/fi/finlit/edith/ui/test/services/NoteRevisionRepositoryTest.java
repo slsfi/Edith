@@ -48,9 +48,9 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
 
     @Inject
     private DocumentRepository documentRepo;
-    
+
     private Document document;
-    
+
     private DocumentRevision docRev;
 
     private long latestRevision;
@@ -89,7 +89,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getOfDocument_with_note_updates() throws InterruptedException{
+    public void getOfDocument_with_note_updates() {
         assertEquals(4, noteRevisionRepo.getOfDocument(docRev).size());
 
         for (NoteRevision rev : noteRevisionRepo.getOfDocument(docRev)){
