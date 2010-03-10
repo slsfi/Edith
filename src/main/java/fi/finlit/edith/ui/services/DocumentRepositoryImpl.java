@@ -34,7 +34,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tmatesoft.svn.core.SVNException;
 
 import com.mysema.commons.lang.Assert;
 import com.mysema.rdfbean.dao.AbstractRepository;
@@ -97,7 +96,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Inject NoteRepository noteRepository,
             @Inject NoteRevisionRepository noteRevisionRepository,
             @Inject TimeService timeService,
-            @Inject AuthService authService)throws SVNException {
+            @Inject AuthService authService) {
         super(sessionFactory, document);
         this.documentRoot = documentRoot;
         this.svnService = svnService;
@@ -176,7 +175,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws NoteAdditionFailedException {
-        logger.info(sel.toString());
+//        logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
         /* Used to concat all the strings while buffering. */
         StringBuilder allStrings = new StringBuilder();
@@ -209,7 +208,16 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             /* tempContext is used so that we can send the actual context in most of these use cases.
                              * FIXME Unfortunately this doesn't fix all the context related issues and there is hopefully a
                              * better solution to be found. NOTE: Same comment applies for the else if. */
+//                            if (events.get(0).isStartElement()) {
+//                                tempContext.pop();
+//                            }
+//                            tempContext.pop();
                             tempContext.pop();
+                            if (sel.startIsChildOfEnd()) {
+                                for (int i = 1; i < sel.howDeepIsStartInEnd(); ++i) {
+                                    tempContext.pop();
+                                }
+                            }
                             flush(writer, endStrings.toString(), sel, events, tempContext, matched, localId, endOffset);
                             allStrings = new StringBuilder();
                             events.clear();
@@ -218,7 +226,15 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             /* If the start element is inside the end element, we want to flush the start elements once
                              * reaching the element containing the end anchor. */
                             ElementContext tempContext = (ElementContext) context.clone();
+//                            if (events.get(0).isStartElement()) {
+//                                tempContext.pop();
+//                            }
                             tempContext.pop();
+                            if (sel.endIsChildOfStart()) {
+                                for (int i = 1; i < sel.howDeepIsEndInStart(); ++i) {
+                                    tempContext.pop();
+                                }
+                            }
                             flush(writer, startStrings.toString(), sel, events, tempContext, matched, localId, endOffset);
                             allStrings = new StringBuilder();
                             events.clear();
