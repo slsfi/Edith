@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.mixins;
 
@@ -15,7 +15,7 @@ import org.apache.tapestry5.corelib.components.Hidden;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ComponentDefaultProvider;
 
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "InlineMixin.js" })
+@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "InlineMixin.js" })
 public class InlineMixin {
 
     @InjectContainer

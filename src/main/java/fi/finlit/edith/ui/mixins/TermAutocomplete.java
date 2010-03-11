@@ -10,7 +10,7 @@ import org.apache.tapestry5.json.JSONObject;
 
 import fi.finlit.edith.domain.Term;
 
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.3.2.js", "TermAutocomplete.js" })
+@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "TermAutocomplete.js" })
 public class TermAutocomplete extends Autocomplete {
 
     @Override
