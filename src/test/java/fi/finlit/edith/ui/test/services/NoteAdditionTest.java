@@ -8,6 +8,8 @@ package fi.finlit.edith.ui.test.services;
 import static fi.finlit.edith.ui.services.DocumentRepositoryImpl.extractName;
 import static org.junit.Assert.fail;
 
+import info.aduna.text.PatternUtil;
+
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
@@ -27,6 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tools.ant.util.regexp.RegexpUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,6 +61,8 @@ public class NoteAdditionTest extends AbstractServiceTest{
     private String localId;
 
     private final Random random = new Random(27);
+
+    private final static Pattern WHITESPACE = Pattern.compile("\\s+");
 
     @Before
     public void setUp() {
@@ -142,8 +148,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
                 } else if (e.isEndElement()) {
                     context.pop();
                 } else if (e.isCharacters()) {
-                    // TODO : precompile regex
-                    String characters = e.asCharacters().getData().replaceAll("\\s+", " ").trim();
+                    String characters = WHITESPACE.matcher(e.asCharacters().getData()).replaceAll(" ").trim();
                     if (characters.length() == 0) {
                         continue;
                     }
