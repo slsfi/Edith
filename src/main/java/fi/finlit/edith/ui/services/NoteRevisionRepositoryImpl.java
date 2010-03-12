@@ -123,4 +123,18 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         return new BeanSubQuery().from(entity);
     }
 
+    @Override
+    public void remove(String noteRevisionId) {
+        NoteRevision note = super.getById(noteRevisionId);
+        Assert.notNull(note, "note was null");
+        NoteRevision deleted = note.createCopy();
+
+        deleted.setDeleted(true);
+        deleted.getRevisionOf().setLatestRevision(deleted);
+        deleted.setCreatedBy(userRepository.getCurrentUser());
+
+        getSession().save(deleted);
+        getSession().save(deleted.getRevisionOf());
+    }
+
 }

@@ -8,12 +8,14 @@ package fi.finlit.edith.ui.test.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.Document;
@@ -98,6 +100,12 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         }
 
         assertEquals(4, noteRevisionRepo.getOfDocument(docRev).size());
+    }
+
+    @Test
+    @Ignore
+    public void remove() {
+        fail("Not yet implemented");
     }
 
     @Override
