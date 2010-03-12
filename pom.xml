@@ -154,7 +154,7 @@
 		<finalName>edith</finalName>
 		<resources>
 			<resource>
-				<filtering>false</filtering>
+				<filtering>true</filtering>
 				<directory>${extraResources}</directory>
 			</resource>
 			<resource>
