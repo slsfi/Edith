@@ -48,10 +48,4 @@ public interface NoteRevisionRepository extends Repository<NoteRevision, String>
      */
     GridDataSource queryNotes(String searchTem);
 
-
-    /**
-     * Removes the given NoteRevision by id.
-     */
-    void remove(String noteRevision);
-
 }
