@@ -64,6 +64,8 @@ public class ElementContext implements Cloneable {
 
     private final int offset;
 
+    private String path = null;
+
     public ElementContext(int offset){
         this.offset = offset;
     }
@@ -74,10 +76,12 @@ public class ElementContext implements Cloneable {
             s = stack.peek().getName(s);
         }
         stack.push(new Item(s));
+        path = null;
     }
 
     public void pop(){
         stack.pop();
+        path = null;
     }
 
     @Override
@@ -86,8 +90,10 @@ public class ElementContext implements Cloneable {
     }
 
     @Nullable
-    public String getPath(){
-        // TODO : store path in local variable, recreate lazily and set to null on push and pop
+    public String getPath() {
+        if (path != null) {
+            return path;
+        }
         if (stack.size() > offset){
             StringBuilder b = new StringBuilder();
             for (int i = offset; i < stack.size(); i++){
@@ -114,9 +120,8 @@ public class ElementContext implements Cloneable {
     }
 
     public boolean equalsAny(String... strings) {
-        String path = getPath();
         for (String s : strings) {
-            if (s.equals(path)) {
+            if (s.equals(getPath())) {
                 return true;
             }
         }
