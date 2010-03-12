@@ -122,6 +122,8 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
     private BeanSubQuery sub(PEntity<?> entity){
         return new BeanSubQuery().from(entity);
     }
+    
+    // TODO Vesa : change also other remove
 
     @Override
     public void remove(String noteRevisionId) {
