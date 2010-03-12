@@ -110,7 +110,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         for (int i = 0; i < n; ++i) {
             String current = gds.getRowValue(i).toString().toLowerCase();
             if (previous != null) {
-                assertThat(previous, lessThanOrEqualTo(current));
+                assertThat("The actual value was probably in upper case!", previous, lessThanOrEqualTo(current));
             }
             previous = current;
         }
@@ -120,13 +120,11 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
 
         @Override
         public PropertyModel dataType(String dataType) {
-            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
         public PropertyConduit getConduit() {
-            // TODO Auto-generated method stub
             return null;
         }
 
@@ -137,13 +135,11 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
 
         @Override
         public String getId() {
-            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
         public String getLabel() {
-            // TODO Auto-generated method stub
             return null;
         }
 
@@ -153,7 +149,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         }
 
         @Override
-        public Class getPropertyType() {
+        public Class<NoteRevision> getPropertyType() {
             return NoteRevision.class;
         }
 
@@ -164,25 +160,21 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
 
         @Override
         public PropertyModel label(String label) {
-            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
-        public BeanModel model() {
-            // TODO Auto-generated method stub
+        public BeanModel<NoteRevision> model() {
             return null;
         }
 
         @Override
         public PropertyModel sortable(boolean sortable) {
-            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
         public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-            // TODO Auto-generated method stub
             return null;
         }
 
