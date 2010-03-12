@@ -6,10 +6,12 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -56,6 +58,8 @@ public final class ServiceModule {
 //        configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
         Properties properties = new Properties();
         properties.load(AppModule.class.getResourceAsStream("/edith.properties"));
+        String projectVersion = properties.getProperty(EDITH.PROJECT_VERSION);
+        configuration.add(SymbolConstants.APPLICATION_VERSION, projectVersion != null ? projectVersion : "" + Calendar.getInstance().getTimeInMillis());
         for (Map.Entry<Object, Object> entry : properties.entrySet()){
             configuration.add(entry.getKey().toString(), entry.getValue().toString());
         }
