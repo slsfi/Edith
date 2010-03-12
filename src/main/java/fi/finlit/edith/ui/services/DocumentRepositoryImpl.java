@@ -243,15 +243,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     if (buffering && !matched.areBothMatched()) {
                         events.add(event);
                         handled = true;
-                        // TODO Vesa : merge into if-else-if; equalsAny does some string building
-                        if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
-                            allStrings.append(event.asCharacters().getData());
-                        }
                         if (context.equalsAny(sel.getStartId())) {
                             startStrings.append(event.asCharacters().getData());
-                        }
-                        if (context.equalsAny(sel.getEndId())) {
+                            allStrings.append(event.asCharacters().getData());
+                        } else if (context.equalsAny(sel.getEndId())) {
                             endStrings.append(event.asCharacters().getData());
+                            allStrings.append(event.asCharacters().getData());
                         }
                     }
                 } else if (event.isEndElement()) {
