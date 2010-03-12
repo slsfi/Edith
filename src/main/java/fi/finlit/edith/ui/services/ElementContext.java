@@ -87,6 +87,7 @@ public class ElementContext implements Cloneable {
 
     @Nullable
     public String getPath(){
+        // TODO : store path in local variable, recreate lazily and set to null on push and pop
         if (stack.size() > offset){
             StringBuilder b = new StringBuilder();
             for (int i = offset; i < stack.size(); i++){

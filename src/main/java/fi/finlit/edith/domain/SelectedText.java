@@ -139,7 +139,7 @@ public class SelectedText {
     }
 
     public boolean endIsChildOfStart() {
-        return endId.startsWith(startId)  && endId.length() > startId.length();
+        return endId.startsWith(startId) && endId.length() > startId.length();
     }
 
     @Override

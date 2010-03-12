@@ -243,6 +243,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     if (buffering && !matched.areBothMatched()) {
                         events.add(event);
                         handled = true;
+                        // TODO Vesa : merge into if-else-if; equalsAny does some string building
                         if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
                             allStrings.append(event.asCharacters().getData());
                         }
@@ -314,10 +315,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 if (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd()) {
                     endOffset.add(eventString.length());
                 }
-                if (context.equalsAny(sel.getStartId()) && !matched.isStartMatched()
-                        && startIndex <= offset) {
-                    writer.add(eventFactory.createCharacters(eventString
-                            .substring(0, relativeStart)));
+                if (context.equalsAny(sel.getStartId()) && !matched.isStartMatched() && startIndex <= offset) {
+                    writer.add(eventFactory.createCharacters(eventString.substring(0, relativeStart)));
                     writeAnchor(writer, startAnchor);
                     matched.matchStart();
                     handled = true;
@@ -326,8 +325,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 if (context.equalsAny(sel.getEndId()) && matched.isStartMatched()
                         && !matched.isEndMatched() && endIndex <= (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd() ? endOffset.intValue() : offset)) {
                     if (!startAndEndInSameElement) {
-                        writer.add(eventFactory.createCharacters(eventString.substring(0,
-                                relativeEnd)));
+                        writer.add(eventFactory.createCharacters(eventString.substring(0,relativeEnd)));
                     } else {
                         /* relativeStart might be negative which means that it is not in the current
                          * eventString, in this case we start the character writing from the
