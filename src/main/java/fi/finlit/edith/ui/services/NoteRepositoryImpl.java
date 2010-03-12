@@ -89,7 +89,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             throw new ServiceException(e);
         }
 
-        LoopData data = new LoopData();
+        LoopContext data = new LoopContext();
 
         Session session = getSession();
 
@@ -118,7 +118,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return data.counter;
     }
 
-    private void handleStartElement(XMLStreamReader reader, LoopData data) {
+    private void handleStartElement(XMLStreamReader reader, LoopContext data) {
         String localName = reader.getLocalName();
         if (localName.equals("note")){
             data.revision = new NoteRevision();
@@ -129,7 +129,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         }
     }
 
-    private void handleEndElement(XMLStreamReader reader, Session session, LoopData data) {
+    private void handleEndElement(XMLStreamReader reader, Session session, LoopContext data) {
         String localName = reader.getLocalName();
 
         if (localName.equals("note")){
@@ -160,13 +160,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     }
 
-    private static final class LoopData { // TODO : rename to LoopContext ?!?
+    private static final class LoopContext {
         private NoteRevision revision;
         private Term term;
         private String text;
         private int counter;
 
-        private LoopData() {
+        private LoopContext() {
             revision = null;
             term = null;
             text = null;
