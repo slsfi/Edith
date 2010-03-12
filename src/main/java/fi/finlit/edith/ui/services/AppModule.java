@@ -40,7 +40,7 @@ public final class AppModule {
         // general config
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "fi,en,sv,de");
         configuration.add(SymbolConstants.PRODUCTION_MODE, System.getProperty("production.mode", "false"));
-        configuration.add(SymbolConstants.APPLICATION_VERSION, "0.1.4");
+        configuration.add(SymbolConstants.APPLICATION_VERSION, "0.1.5");
 
         // Spring Security config
         configuration.add("spring-security.loginform.url", "/login");
