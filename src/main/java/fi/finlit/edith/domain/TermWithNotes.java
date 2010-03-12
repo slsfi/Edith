@@ -46,7 +46,9 @@ public class TermWithNotes {
     public Set<Note> getUndeletedNotes() {
         Set<Note> result = new HashSet<Note>();
         for (Note note : notes) {
-            if (!note.getLatestRevision().isDeleted()) {
+            /* The null check is not necessary in a perfect world, but we have corrupted
+             * data in production so lets keep it here until that is fixed. */
+            if (note.getLatestRevision() != null && !note.getLatestRevision().isDeleted()) {
                 result.add(note);
             }
         }
