@@ -160,7 +160,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     }
 
-    private static final class LoopData {
+    private static final class LoopData { // TODO : rename to LoopContext ?!?
         private NoteRevision revision;
         private Term term;
         private String text;
