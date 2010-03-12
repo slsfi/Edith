@@ -1,10 +1,11 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -20,13 +21,13 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns=EDITH.NS, ln="Term")
 public class TermWithNotes {
-    
+
     @Predicate
     private String basicForm;
-    
+
     @Predicate
     private String meaning;
-    
+
     @Predicate(ln="term", inv=true)
     private Set<Note> notes;
 
@@ -42,6 +43,16 @@ public class TermWithNotes {
         return notes;
     }
 
+    public Set<Note> getUndeletedNotes() {
+        Set<Note> result = new HashSet<Note>();
+        for (Note note : notes) {
+            if (!note.getLatestRevision().isDeleted()) {
+                result.add(note);
+            }
+        }
+        return result;
+    }
+
     public void setBasicForm(String basicForm) {
         this.basicForm = basicForm;
     }
@@ -53,7 +64,5 @@ public class TermWithNotes {
     public void setNotes(Set<Note> notes) {
         this.notes = notes;
     }
-    
-    
 
 }
