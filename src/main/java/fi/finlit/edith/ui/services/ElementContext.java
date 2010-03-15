@@ -102,7 +102,8 @@ public class ElementContext implements Cloneable {
                 }
                 b.append(stack.get(i).name);
             }
-            return b.toString();
+            path = b.toString();
+            return path;
         }
         return null;
     }
