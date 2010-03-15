@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.components.document;
 
@@ -29,35 +29,35 @@ import fi.finlit.edith.domain.DocumentRepository;
  * @version $Id$
  */
 @SuppressWarnings("unused")
-public class Upload {    
+public class Upload {
 
     private static final Logger logger = LoggerFactory.getLogger(Upload.class);
-    
+
     @Inject
     private DocumentRepository documentRepo;
-    
-    @Inject 
+
+    @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
-    
+
     @Property
     private UploadedFile file;
-    
+
     @Persist(PersistenceConstants.FLASH)
     @Property
     private String message;
-    
+
     @Inject
     private Messages messages;
 
     // TODO : validate that the name has not been taken
-    
-    void onSuccess() throws IOException, SVNException{
-        File tempFile = File.createTempFile("upload", null);        
+
+    void onSuccess() throws IOException {
+        File tempFile = File.createTempFile("upload", null);
         try{
             file.write(tempFile);
             String path = documentRoot + "/" + file.getFileName();
-            documentRepo.addDocument(path, tempFile);    
+            documentRepo.addDocument(path, tempFile);
             message = messages.format("document-stored-msg", file.getFileName());
         }finally{
             if (!tempFile.delete()){
@@ -65,5 +65,5 @@ public class Upload {
             }
         }
     }
-    
+
 }
