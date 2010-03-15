@@ -231,6 +231,9 @@ public class AnnotatePage extends AbstractDocumentPage {
             if (term == null) {
                 term = termOnEdit;
                 termRepo.save(term);
+            } else if (termOnEdit.getMeaning() != null && !termOnEdit.getMeaning().equals(term.getMeaning())) {
+                term.setMeaning(termOnEdit.getMeaning());
+                termRepo.save(term);
             }
             noteRevision.getRevisionOf().setTerm(term);
             noteRepo.save(noteRevision.getRevisionOf());
