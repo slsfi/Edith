@@ -237,8 +237,10 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
 
         // prepare view (with possibly new revision)
-        getDocumentRevision().setRevision(noteRevision.getSvnRevision());
-        docNotes = noteRevisionRepo.getOfDocument(noteRevision.getDocumentRevision());
+        if (noteRevision.getSvnRevision() > getDocumentRevision().getRevision()) {
+            getDocumentRevision().setRevision(noteRevision.getSvnRevision());
+        }
+        docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit);
