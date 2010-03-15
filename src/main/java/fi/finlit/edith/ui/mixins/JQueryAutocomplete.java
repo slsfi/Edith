@@ -8,7 +8,6 @@ import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.ContentType;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Field;
-import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.Environmental;
@@ -58,35 +57,26 @@ public class JQueryAutocomplete {
     private ResponseRenderer responseRenderer;
 
     void afterRender(MarkupWriter writer) {
-        String id = field.getClientId();
-
-        Link link = resources.createEventLink(EVENT_NAME);
-
-        //
-        // JSONObject config = new JSONObject();
-        // config.put("paramName", PARAM_NAME);
-        // config.put("indicator", loaderId);
-        //
-
-        logger.debug("ac Uri" + link.toAbsoluteURI());
-        renderSupport.addInit("jQueryAutocompleter", new JSONArray(id, link.toAbsoluteURI()));
+        init(field.getClientId(), resources.createEventLink(EVENT_NAME).toAbsoluteURI(), renderSupport);
+    }
+    
+    protected void init(String elementId, String ajaxURI, RenderSupport renderSupport) {
+        renderSupport.addInit("jQueryAutocompleter", new JSONArray(elementId, ajaxURI));        
     }
 
     Object onJQueryAutocomplete() {
 
         String input = request.getParameter(PARAM_NAME);
-        logger.debug("onAutocomplete " + input);
 
-        final Holder<List<String>> matchesHolder = Holder.create();
+        final Holder<List<Object>> matchesHolder = Holder.create();
 
         // Default it to an empty list.
-
-        matchesHolder.put(Collections.<String> emptyList());
+        matchesHolder.put(Collections.<Object> emptyList());
 
         ComponentEventCallback<Object> callback = new ComponentEventCallback<Object>() {
             public boolean handleResult(Object result) {
                 @SuppressWarnings("unchecked")
-                List<String> matches = coercer.coerce(result, List.class);
+                List<Object> matches = coercer.coerce(result, List.class);
 
                 matchesHolder.put(matches);
 
@@ -99,19 +89,17 @@ public class JQueryAutocomplete {
 
         ContentType contentType = responseRenderer.findContentType(this);
 
-        return new TextStreamResponse(contentType.toString(), generateResponse(matchesHolder.get()));
+        return new TextStreamResponse(contentType.toString(), generateResponse(matchesHolder.get())
+                .toString());
     }
 
-    protected String generateResponse(List<String> matches) {
-
+    protected JSONArray generateResponse(List<Object> matches) {
         JSONArray a = new JSONArray();
 
-        // StringBuilder sb = new StringBuilder();
-        for (String match : matches) {
-            // sb.append(match).append("\n");
+        for (Object match : matches) {
             a.put(match);
         }
-        return a.toString();
+        return a;
     }
 
 }
