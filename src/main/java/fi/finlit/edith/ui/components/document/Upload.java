@@ -54,13 +54,13 @@ public class Upload {
 
     void onSuccess() throws IOException {
         File tempFile = File.createTempFile("upload", null);
-        try{
+        try {
             file.write(tempFile);
             String path = documentRoot + "/" + file.getFileName();
             documentRepo.addDocument(path, tempFile);
             message = messages.format("document-stored-msg", file.getFileName());
-        }finally{
-            if (!tempFile.delete()){
+        } finally {
+            if (!tempFile.delete()) {
                 logger.error("Delete of " + tempFile.getAbsolutePath() + " failed");
             }
         }
