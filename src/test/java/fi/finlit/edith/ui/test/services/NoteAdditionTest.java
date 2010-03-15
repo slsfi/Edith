@@ -8,8 +8,6 @@ package fi.finlit.edith.ui.test.services;
 import static fi.finlit.edith.ui.services.DocumentRepositoryImpl.extractName;
 import static org.junit.Assert.fail;
 
-import info.aduna.text.PatternUtil;
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -30,7 +28,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.apache.tools.ant.util.regexp.RegexpUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

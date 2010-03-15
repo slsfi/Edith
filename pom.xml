@@ -18,9 +18,8 @@
 	<properties>
 		<tapestry.version>5.1.0.5</tapestry.version>
 		<jetty.version>6.1.0-SNAPSHOT</jetty.version>
-		<rdfbean.version>1.2.7</rdfbean.version>
+		<rdfbean.version>1.2.8</rdfbean.version>
 		<commons.tapestry.version>0.1.8</commons.tapestry.version>
-		<extraResources>src/main/resources</extraResources>
 	</properties>
 
 	<dependencies>
@@ -144,19 +143,38 @@
 	<profiles>
 		<profile>
 			<id>sks</id>
-			<properties>
-				<extraResources>profiles/sks/res</extraResources>
-			</properties>
+            <build>
+              <resources>
+                <resource>
+                  <filtering>true</filtering>
+                  <directory>profiles/sks/res</directory>
+                </resource>
+                <resource>
+                  <filtering>false</filtering>
+                  <directory>src/main/resources</directory>
+                </resource>
+                <resource>
+                  <filtering>false</filtering>
+                  <directory>src/main/rdf</directory>
+                </resource>
+                <resource>
+                  <filtering>false</filtering>
+                  <directory>src/main/java</directory>
+                  <includes>
+                    <include>**</include>
+                  </includes>
+                  <excludes>
+                    <exclude>**/*.java</exclude>
+                  </excludes>
+                </resource>              
+              </resources>
+            </build>
 		</profile>
 	</profiles>
 
 	<build>
 		<finalName>edith</finalName>
 		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>${extraResources}</directory>
-			</resource>
 			<resource>
 				<filtering>false</filtering>
 				<directory>src/main/resources</directory>

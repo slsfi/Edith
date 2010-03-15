@@ -149,8 +149,8 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         }
 
         @Override
-        public Class<NoteRevision> getPropertyType() {
-            return NoteRevision.class;
+        public Class<String> getPropertyType() {
+            return String.class;
         }
 
         @Override

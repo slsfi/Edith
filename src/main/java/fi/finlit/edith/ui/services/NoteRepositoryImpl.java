@@ -181,9 +181,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             BooleanBuilder builder = new BooleanBuilder();
             builder.or(termWithNotes.basicForm.contains(searchTerm, false));
             builder.or(termWithNotes.meaning.contains(searchTerm, false));
-            return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc(), builder.getValue());
+            return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(), false, builder.getValue());
         }
-        return createGridDataSource(termWithNotes, termWithNotes.basicForm.asc());
+        return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(), false);
     }
 
     @Override

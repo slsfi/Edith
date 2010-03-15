@@ -104,7 +104,8 @@ public class NoteRevisionRepositoryImpl extends AbstractRepository<NoteRevision>
         builder.and(noteRevision.eq(noteRevision.revisionOf.latestRevision));
         builder.and(noteRevision.deleted.eq(false));
         return createGridDataSource(noteRevision,
-                noteRevision.revisionOf.term.basicForm.asc(),
+                noteRevision.revisionOf.term.basicForm.lower().asc(),
+                false,
                 builder.getValue());
     }
 
