@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -21,8 +23,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
+import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
 /**
  * NoteAdditionTest provides
@@ -39,7 +44,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     @Autobuild
     private DocumentRepositoryImpl documentRepo;
 
-    private Reader source;
+    private InputStream source;
 
     private StringWriter target;
 
@@ -47,7 +52,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
 
     @Before
     public void setUp() {
-        source = new StringReader(testDocumentContent);
+        source = new ByteArrayInputStream(testDocumentContent.getBytes());
         target = new StringWriter();
         localId = UUID.randomUUID().toString();
     }
@@ -62,10 +67,14 @@ public class NoteAddition2Test extends AbstractServiceTest {
         target.close();
     }
 
-    private void addNote(SelectedText selectedText) throws Exception {
-        XMLEventReader sourceReader = inFactory.createXMLEventReader(source);
+    private void addNote(SelectedText selectedText, InputStream reader) throws Exception {
+        XMLEventReader sourceReader = inFactory.createXMLEventReader(reader);
         XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target);
         documentRepo.addNote(sourceReader, targetWriter, selectedText, localId);
+    }
+
+    private void addNote(SelectedText selectedText) throws Exception {
+        addNote(selectedText, source);
     }
 
     @Test
@@ -99,7 +108,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(start, end, text));
 
         String content = getContent();
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
         assertTrue(content.contains("Esko." + end(localId)));
     }
@@ -137,7 +146,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(element, element, 1, 1, text.toString()));
 
         String content = getContent();
-         System.out.println(content);
+//         System.out.println(content);
         assertTrue(content.contains("ed" + start(localId) + "es" + end(localId) + "s\u00E4"));
     }
 
@@ -261,13 +270,9 @@ public class NoteAddition2Test extends AbstractServiceTest {
         String startElement2 = "play-act-stage";
         String endElement2 = "play-act-stage-ref2";
         String text2 = "sivulla ra";
-        ByteArrayOutputStream target2 = new ByteArrayOutputStream();
-        XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(
+        addNote(new SelectedText(startElement2, endElement2, text2), new ByteArrayInputStream(
                 target.toString().getBytes()));
-        XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement2,
-                endElement2, text2), localId);
-        String content = new String(target2.toByteArray(), "UTF-8");
+        String content = target.toString();
         // System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId)
                 + "\u00E4ll\u00E4"));
@@ -287,13 +292,9 @@ public class NoteAddition2Test extends AbstractServiceTest {
         String startElement2 = "play-act-stage-ref";
         String endElement2 = "play-act-stage";
         String text2 = "uone\n: per";
-        ByteArrayOutputStream target2 = new ByteArrayOutputStream();
-        XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(
-                target.toString().getBytes()));
-        XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement2,
-                endElement2, text2), localId);
-        String content = new String(target2.toByteArray(), "UTF-8");
+        addNote(new SelectedText(startElement2, endElement2, text2), new ByteArrayInputStream(
+                this.target.toString().getBytes()));
+        String content = target.toString();
         // System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId)
                 + "\u00E4ll\u00E4"));
@@ -307,13 +308,9 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(startElement, endElement, text));
 
         String text2 = "uone\n: per\u00E4ll\u00E4 o";
-        ByteArrayOutputStream target2 = new ByteArrayOutputStream();
-        XMLEventReader sourceReader = inFactory.createXMLEventReader(new ByteArrayInputStream(
-                target.toString().getBytes()));
-        XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target2);
-        documentRepo.addNote(sourceReader, targetWriter, new SelectedText(startElement, endElement,
-                1, 2, text2), localId);
-        String content = new String(target2.toByteArray(), "UTF-8");
+        addNote(new SelectedText(startElement, endElement, 1, 2, text2), new ByteArrayInputStream(
+                this.target.toString().getBytes()));
+        String content = target.toString();
 //        System.out.println(content);
         assertTrue(content.contains("<ref xml:id=\"ref.3\" target=\"note.3\">h" + start(localId) + "uo" + start(localId) + "ne</ref>: per\u00E4" + end(localId) + "ll\u00E4 o" + end(localId) + "vi ja akkuna, oikealla"));
     }
@@ -344,6 +341,67 @@ public class NoteAddition2Test extends AbstractServiceTest {
         assertTrue(content.contains("<date>18" + start(localId) + "65</date>"));
         assertTrue(content.contains("<ref xml:id=\"pageref.1\" target=\"helminauha.xml#pageref.1\">[H" + end(localId) + "elminauha]</ref>"));
     }
+
+    @Test
+    public void addNote_same_element()
+            throws Exception {
+        String element = "play-act-sp4-p";
+        String text = "min\u00E4; ja nytp\u00E4, luulen,";
+        addNote(new SelectedText(element, element, text));
+
+        String content = target.toString();
+        // System.out.println(content);
+        assertTrue(content.contains(start(localId) + "min\u00E4; ja nytp\u00E4, luulen," + end(localId)));
+    }
+
+    @Test
+    public void addNote_twice_overlapping() throws Exception {
+        String element = "play-act-sp3-p";
+        String text = "\u00E4st";
+
+        addNote(new SelectedText(element, element, text));
+
+        //T-äst-ä
+        String newText = "T\u00E4st\u00E4";
+        addNote(new SelectedText(element, element, newText), new ByteArrayInputStream(target.toString().getBytes()));
+
+        String content = target.toString();
+        assertTrue(content.contains(start(localId) + "T" + start(localId) + text + end(localId) + "\u00E4" + end(localId)));
+    }
+
+    @Test
+    public void addNote_twice_overlapping2() throws Exception {
+        String startElement = "play-description-castList-castItem7-role";
+        String endElement = "play-description-castList-castItem8-roleDesc";
+        String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
+
+        addNote(new SelectedText(startElement, endElement, 3, 1, text));
+
+        String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
+        addNote(new SelectedText(startElement, endElement, newText), new ByteArrayInputStream(target.toString().getBytes()));
+
+        String content = target.toString();
+        assertTrue(content.contains("Jaa" + start(localId) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
+        assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId) + "epp\u00E4</roleDesc>.</castItem>"));
+    }
+
+    @Test
+    public void addNote_role_description() throws Exception {
+        String startElement = "play-description-castList-castItem7-role";
+        String endElement = "play-description-castList-castItem8-roleDesc";
+        String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
+
+        addNote(new SelectedText(startElement, endElement, 3, 1, text));
+
+        String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
+        addNote(new SelectedText(startElement, endElement, 1, 1, newText), new ByteArrayInputStream(target.toString().getBytes()));
+
+        String content = target.toString();
+//        System.out.println(content);
+        assertTrue(content.contains("Jaa" + start(localId) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
+        assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId) + "epp\u00E4</roleDesc>.</castItem>"));
+    }
+
 
     @Override
     protected Class<?> getServiceClass() {

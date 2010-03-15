@@ -146,18 +146,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertTrue(content.contains(start(localId) + text + end(localId)));
     }
 
- // TODO move into NoteAdditionTest
-    @Test
-    public void addNote2() throws IOException, NoteAdditionFailedException{
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-//        act1-sp4 - act1-sp4 : minä; ja nytpä, luulen,
-        String element = "play-act-sp4-p";
-        String text = "min\u00E4; ja nytp\u00E4, luulen,";
-
-        NoteRevision note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
-        assertNotNull(note);
-    }
-
     @Test
     public void removeNotes() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
@@ -261,67 +249,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));
         // Täst<anchor xml:id="start1266836640612"/>ä<anchor xml:id="end1266836640612"/> rientää
-    }
-
-    // TODO move into NoteAdditionTest
-    @Test
-    public void addNote_twice_overlapping() throws IOException, NoteAdditionFailedException{
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp3-p";
-        String text = "\u00E4st";
-
-        NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
-
-        //T-äst-ä
-        String newText = "T\u00E4st\u00E4";
-        NoteRevision noteRevision2 = documentRepo.addNote(document.getRevision(noteRevision.getSvnRevision()), new SelectedText(element, element, newText));
-
-        String content = getContent(document.getSvnPath(), -1);
-        String localId = noteRevision.getRevisionOf().getLocalId();
-        String localId2 = noteRevision2.getRevisionOf().getLocalId();
-        assertTrue(content.contains(start(localId2) + "T" + start(localId) + text + end(localId) + "\u00E4" + end(localId2)));
-    }
-
- // TODO move into NoteAdditionTest
-    @Test
-    public void addNote_twice_overlapping2() throws IOException, NoteAdditionFailedException{
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String startElement = "play-description-castList-castItem7-role";
-        String endElement = "play-description-castList-castItem8-roleDesc";
-        String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
-
-        NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(startElement, endElement, 3, 1, text));
-
-        String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
-        NoteRevision noteRevision2 = documentRepo.addNote(document.getRevision(noteRevision.getSvnRevision()), new SelectedText(startElement, endElement, 1, 1, newText));
-
-        String content = getContent(document.getSvnPath(), -1);
-        String localId = noteRevision.getRevisionOf().getLocalId();
-        String localId2 = noteRevision2.getRevisionOf().getLocalId();
-//        System.out.println(content);
-        assertTrue(content.contains("Jaa" + start(localId2) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
-        assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId2) + "epp\u00E4</roleDesc>.</castItem>"));
-    }
-
- // TODO move into NoteAdditionTest
-    @Test
-    public void addNote_role_description() throws IOException, NoteAdditionFailedException {
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String startElement = "play-description-castList-castItem7-role";
-        String endElement = "play-description-castList-castItem8-roleDesc";
-        String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
-
-        NoteRevision noteRevision = documentRepo.addNote(document.getRevision(-1), new SelectedText(startElement, endElement, 3, 1, text));
-
-        String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
-        NoteRevision noteRevision2 = documentRepo.addNote(document.getRevision(noteRevision.getSvnRevision()), new SelectedText(startElement, endElement, 1, 1, newText));
-
-        String content = getContent(document.getSvnPath(), -1);
-        String localId = noteRevision.getRevisionOf().getLocalId();
-        String localId2 = noteRevision2.getRevisionOf().getLocalId();
-//        System.out.println(content);
-        assertTrue(content.contains("Jaa" + start(localId2) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
-        assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId2) + "epp\u00E4</roleDesc>.</castItem>"));
     }
 
     @Test
