@@ -135,8 +135,8 @@
                         </tr>
                         
                         <tr>
-                          <th>${message:meaning-label}</th>
-                          <td><t:textField t:id="meaning" value="termOnEdit.meaning"/>
+                          <td>- ${message:meaning-label}</td>
+                          <td><t:textArea t:id="meaning" value="termOnEdit.meaning"/>
                           </td>
                         </tr>
                         
