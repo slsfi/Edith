@@ -20,8 +20,7 @@ import java.util.List;
  */
 public interface SubversionService {
     /**
-     *
-     * TODO Apparently returns -1 at least when there are no changes.
+     * Commits changes of a file into the repository.
      *
      * @param svnPath
      * @param revision

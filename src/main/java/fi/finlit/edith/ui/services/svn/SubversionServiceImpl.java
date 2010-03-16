@@ -141,7 +141,8 @@ public class SubversionServiceImpl implements SubversionService {
                 logger.error("Delete of " + tmp.getAbsolutePath() + " failed");
             }
         }
-        return commit(file);
+        long newRevision = commit(file);
+        return newRevision != -1 ? newRevision : getLatestRevision();
     }
 
     @Override
