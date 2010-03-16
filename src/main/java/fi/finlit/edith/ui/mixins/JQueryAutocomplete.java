@@ -59,9 +59,9 @@ public class JQueryAutocomplete {
     void afterRender(MarkupWriter writer) {
         init(field.getClientId(), resources.createEventLink(EVENT_NAME).toAbsoluteURI(), renderSupport);
     }
-    
+
     protected void init(String elementId, String ajaxURI, RenderSupport renderSupport) {
-        renderSupport.addInit("jQueryAutocompleter", new JSONArray(elementId, ajaxURI));        
+        renderSupport.addInit("jQueryAutocompleter", new JSONArray(elementId, ajaxURI));
     }
 
     Object onJQueryAutocomplete() {

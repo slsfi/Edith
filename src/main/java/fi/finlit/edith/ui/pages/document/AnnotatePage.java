@@ -265,13 +265,13 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add("documentZone", documentView);
     }
 
-    List<String> onProvideCompletionsFromBasicForm(String partial) {
+    List<Term> onProvideCompletionsFromBasicForm(String partial) {
         List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
-        List<String> results = new ArrayList<String>(terms.size());
-        for(Term term : terms) {
-            results.add(term.getBasicForm());
-        }
-        return results;
+//        List<String> results = new ArrayList<String>(terms.size());
+//        for(Term term : terms) {
+//            results.add(term.getBasicForm());
+//        }
+        return terms;
     }
 
     public Object[] getEditContext() {
