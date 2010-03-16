@@ -130,7 +130,7 @@
                         <tr>
                           <th>${message:basicForm-label}</th>
                           <td><t:textField t:id="basicForm" value="termOnEdit.basicForm" 
-                            t:mixins="jQueryAutocomplete"/>
+                            t:mixins="termAutocomplete"/>
                            </td>
                         </tr>
                         
@@ -150,11 +150,6 @@
                           <td><t:textField t:id="subtextSources" value="noteOnEdit.subtextSources"/></td>
 						</tr>
 						
-						<tr>
-						  <!-- <th>${message:meaning-label}?</th>                     
-                          <td><t:textField t:id="meaning" value="termOnEdit.meaning"/></td> -->
-                        </tr>
-                        
                         <tr>
                           <th></th>
                           <td><a id="longTextEditLink" href="#">${message:update}</a></td>
