@@ -59,7 +59,7 @@ public final class ServiceModule {
         Properties properties = new Properties();
         properties.load(AppModule.class.getResourceAsStream("/edith.properties"));
         if (properties.getProperty(SymbolConstants.APPLICATION_VERSION) == null) {
-            configuration.add(SymbolConstants.APPLICATION_VERSION, "" + Calendar.getInstance().getTimeInMillis());
+            configuration.add(SymbolConstants.APPLICATION_VERSION, String.valueOf(Calendar.getInstance().getTimeInMillis()));
         }
         for (Map.Entry<Object, Object> entry : properties.entrySet()){
             configuration.add(entry.getKey().toString(), entry.getValue().toString());
