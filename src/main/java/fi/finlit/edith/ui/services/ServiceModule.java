@@ -58,8 +58,7 @@ public final class ServiceModule {
 //        configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
         Properties properties = new Properties();
         properties.load(AppModule.class.getResourceAsStream("/edith.properties"));
-        String projectVersion = properties.getProperty(EDITH.PROJECT_VERSION);
-        if (projectVersion == null) {
+        if (properties.getProperty(SymbolConstants.APPLICATION_VERSION) == null) {
             configuration.add(SymbolConstants.APPLICATION_VERSION, "" + Calendar.getInstance().getTimeInMillis());
         }
         for (Map.Entry<Object, Object> entry : properties.entrySet()){
