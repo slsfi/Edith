@@ -19,6 +19,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.tapestry.core.Context;
 
+import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
@@ -51,6 +52,9 @@ public class NoteSearchPage {
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
 
+    @Inject
+    private DocumentRepository documentRepository;
+
     @Property
     private PrimaryKeyEncoder<NoteRevision> encoder;
 
@@ -74,7 +78,9 @@ public class NoteSearchPage {
     }
 
     void onActionFromDelete(String noteRevisionId) {
-        noteRevisionRepo.remove(noteRevisionId);
+//        noteRevisionRepo.remove(noteRevisionId);
+        NoteRevision noteRevision = noteRevisionRepo.getById(noteRevisionId);
+        documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision.getRevisionOf());
     }
 
     void onActivate(EventContext context) {
