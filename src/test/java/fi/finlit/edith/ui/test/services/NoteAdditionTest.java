@@ -32,10 +32,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.finlit.edith.domain.NoteAdditionFailedException;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 import fi.finlit.edith.ui.services.ElementContext;
-import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
 /**
  * NoteAdditionTest provides

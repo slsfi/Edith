@@ -3,9 +3,8 @@
  * All rights reserved.
  * 
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.domain;
 
-import fi.finlit.edith.domain.SelectedText;
 
 /**
  * NoteAdditionFailedException provides

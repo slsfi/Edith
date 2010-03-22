@@ -44,6 +44,7 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteAdditionFailedException;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
