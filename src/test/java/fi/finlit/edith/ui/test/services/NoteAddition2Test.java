@@ -244,7 +244,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         assertTrue(content.contains("(To" + start(localId)
                 + "piaksen <ref xml:id=\"ref.3\" target=\"note.3\">huo" + end(localId) + "ne"));
         assertEquals(1, StringUtils.countMatches(content,
-                "Jaana istuu pöydän ääressä, kutoen sukkaa,"));
+                "Jaana istuu pöyd\u00E4n \u00E4\u00E4ress\u00E4, kutoen sukkaa,"));
     }
 
     @Test
@@ -293,7 +293,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         String endElement2 = "play-act-stage";
         String text2 = "uone\n: per";
         addNote(new SelectedText(startElement2, endElement2, text2), new ByteArrayInputStream(
-                this.target.toString().getBytes()));
+                target.toString().getBytes()));
         String content = target.toString();
         // System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId)
@@ -309,7 +309,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
 
         String text2 = "uone\n: per\u00E4ll\u00E4 o";
         addNote(new SelectedText(startElement, endElement, 1, 2, text2), new ByteArrayInputStream(
-                this.target.toString().getBytes()));
+                target.toString().getBytes()));
         String content = target.toString();
 //        System.out.println(content);
         assertTrue(content.contains("<ref xml:id=\"ref.3\" target=\"note.3\">h" + start(localId) + "uo" + start(localId) + "ne</ref>: per\u00E4" + end(localId) + "ll\u00E4 o" + end(localId) + "vi ja akkuna, oikealla"));
@@ -361,7 +361,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
 
         addNote(new SelectedText(element, element, text));
 
-        //T-äst-ä
+        //T-\u00E4st-\u00E4
         String newText = "T\u00E4st\u00E4";
         addNote(new SelectedText(element, element, newText), new ByteArrayInputStream(target.toString().getBytes()));
 
