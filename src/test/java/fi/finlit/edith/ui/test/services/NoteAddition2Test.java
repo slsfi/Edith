@@ -3,10 +3,6 @@ package fi.finlit.edith.ui.test.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -23,9 +19,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.NoteAdditionFailedException;
-import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 
@@ -44,7 +37,8 @@ public class NoteAddition2Test extends AbstractServiceTest {
     @Autobuild
     private DocumentRepositoryImpl documentRepo;
 
-    private InputStream source;
+    //private InputStream source;
+    private Reader source;
 
     private StringWriter target;
 
@@ -52,7 +46,8 @@ public class NoteAddition2Test extends AbstractServiceTest {
 
     @Before
     public void setUp() {
-        source = new ByteArrayInputStream(testDocumentContent.getBytes());
+        //source = new ByteArrayInputStream(testDocumentContent.getBytes());
+        source = new StringReader(testDocumentContent);
         target = new StringWriter();
         localId = UUID.randomUUID().toString();
     }
@@ -67,7 +62,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         target.close();
     }
 
-    private void addNote(SelectedText selectedText, InputStream reader) throws Exception {
+    private void addNote(SelectedText selectedText, /*InputStream reader*/ Reader reader) throws Exception {
         XMLEventReader sourceReader = inFactory.createXMLEventReader(reader);
         XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target);
         documentRepo.addNote(sourceReader, targetWriter, selectedText, localId);
@@ -270,8 +265,8 @@ public class NoteAddition2Test extends AbstractServiceTest {
         String startElement2 = "play-act-stage";
         String endElement2 = "play-act-stage-ref2";
         String text2 = "sivulla ra";
-        addNote(new SelectedText(startElement2, endElement2, text2), new ByteArrayInputStream(
-                target.toString().getBytes()));
+        addNote(new SelectedText(startElement2, endElement2, text2), new StringReader(
+                target.toString()));
         String content = target.toString();
         // System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId)
@@ -292,8 +287,8 @@ public class NoteAddition2Test extends AbstractServiceTest {
         String startElement2 = "play-act-stage-ref";
         String endElement2 = "play-act-stage";
         String text2 = "uone\n: per";
-        addNote(new SelectedText(startElement2, endElement2, text2), new ByteArrayInputStream(
-                target.toString().getBytes()));
+        addNote(new SelectedText(startElement2, endElement2, text2), new StringReader(
+                target.toString()));
         String content = target.toString();
         // System.out.println(content);
         assertTrue(content.contains("h" + start(localId) + "uone</ref>: per" + end(localId)
@@ -308,8 +303,8 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(startElement, endElement, text));
 
         String text2 = "uone\n: per\u00E4ll\u00E4 o";
-        addNote(new SelectedText(startElement, endElement, 1, 2, text2), new ByteArrayInputStream(
-                target.toString().getBytes()));
+        addNote(new SelectedText(startElement, endElement, 1, 2, text2), new StringReader(
+                target.toString()));
         String content = target.toString();
 //        System.out.println(content);
         assertTrue(content.contains("<ref xml:id=\"ref.3\" target=\"note.3\">h" + start(localId) + "uo" + start(localId) + "ne</ref>: per\u00E4" + end(localId) + "ll\u00E4 o" + end(localId) + "vi ja akkuna, oikealla"));
@@ -363,7 +358,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
 
         //T-\u00E4st-\u00E4
         String newText = "T\u00E4st\u00E4";
-        addNote(new SelectedText(element, element, newText), new ByteArrayInputStream(target.toString().getBytes()));
+        addNote(new SelectedText(element, element, newText), new StringReader(target.toString()));
 
         String content = target.toString();
         assertTrue(content.contains(start(localId) + "T" + start(localId) + text + end(localId) + "\u00E4" + end(localId)));
@@ -378,7 +373,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(startElement, endElement, 3, 1, text));
 
         String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
-        addNote(new SelectedText(startElement, endElement, newText), new ByteArrayInputStream(target.toString().getBytes()));
+        addNote(new SelectedText(startElement, endElement, newText), new StringReader(target.toString()));
 
         String content = target.toString();
         assertTrue(content.contains("Jaa" + start(localId) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
@@ -394,7 +389,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(startElement, endElement, 3, 1, text));
 
         String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
-        addNote(new SelectedText(startElement, endElement, 1, 1, newText), new ByteArrayInputStream(target.toString().getBytes()));
+        addNote(new SelectedText(startElement, endElement, 1, 1, newText), new StringReader(target.toString()));
 
         String content = target.toString();
 //        System.out.println(content);
