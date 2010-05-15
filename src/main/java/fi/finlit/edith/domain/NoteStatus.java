@@ -33,6 +33,8 @@ public enum NoteStatus {
      *
      */
     Publishable,
-
+    /**
+     * 
+     */
     Initial;
 }
