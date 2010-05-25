@@ -51,7 +51,7 @@ public class SubversionServiceImpl implements SubversionService {
         FSRepositoryFactory.setup();
     }
 
-    private final SVNClientManager clientManager;
+    private SVNClientManager clientManager;
 
     private final String documentRoot;
 
@@ -75,19 +75,23 @@ public class SubversionServiceImpl implements SubversionService {
             @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject @Symbol(EDITH.TEI_MATERIAL_ROOT) String materialTeiRoot) {
-        this.clientManager = SVNClientManager.newInstance();
+        clientManager = SVNClientManager.newInstance();
         this.svnCache = svnCache;
-        this.readCache = new File(svnCache + "/readCache");
-        this.workingCopies = new File(svnCache + "/workingCopies");
+        readCache = new File(svnCache + "/readCache");
+        workingCopies = new File(svnCache + "/workingCopies");
         this.svnRepo = svnRepo;
         this.documentRoot = documentRoot;
-        this.teiMaterialRoot = materialTeiRoot;
+        teiMaterialRoot = materialTeiRoot;
         try {
-            this.repoSvnURL = SVNURL.parseURIEncoded(repoURL);
+            repoSvnURL = SVNURL.parseURIEncoded(repoURL);
         } catch (SVNException e) {
             throw new SubversionException(e);
         }
-        this.svnRepository = null;
+        svnRepository = null;
+    }
+
+    public void setClientManager(SVNClientManager clientManager) {
+        this.clientManager = clientManager;
     }
 
     @SuppressWarnings("deprecation")

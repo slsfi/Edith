@@ -4,6 +4,14 @@
  *
  */
 package fi.finlit.edith.ui.test.services;
+
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.isNull;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -26,9 +34,18 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tmatesoft.svn.core.SVNErrorCode;
+import org.tmatesoft.svn.core.SVNErrorMessage;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNCommitClient;
+import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.AuthService;
+import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
 import fi.finlit.edith.ui.services.svn.UpdateCallback;
@@ -69,7 +86,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     private File testFile;
 
-    private File svnRepoCopy = new File("target/repoCopy");
+    private final File svnRepoCopy = new File("target/repoCopy");
 
     @Before
     public void setUp() throws Exception {
@@ -83,22 +100,22 @@ public class SubversionServiceTest extends AbstractServiceTest {
         FileUtils.copyDirectory(svnRepo, svnRepoCopy);
     }
 
-
     @After
     public void tearDown() throws Exception {
         closeStreams();
         FileUtils.deleteDirectory(checkoutDirectory);
         FileUtils.deleteDirectory(anotherCheckoutDirectory);
-        if (testFile.exists()){
-            if (!testFile.delete()){
+        if (testFile.exists()) {
+            if (!testFile.delete()) {
                 logger.error("Deletion of " + testFile.getPath() + " failed");
             }
         }
 
         // recover the svn repository from the copy
         subversionService.destroy();
-        if (!svnRepoCopy.renameTo(svnRepo)){
-            logger.error("Rename of " + svnRepoCopy.getPath() + " to " + svnRepo.getPath() + " failed");
+        if (!svnRepoCopy.renameTo(svnRepo)) {
+            logger.error("Rename of " + svnRepoCopy.getPath() + " to " + svnRepo.getPath()
+                    + " failed");
         }
     }
 
@@ -207,8 +224,8 @@ public class SubversionServiceTest extends AbstractServiceTest {
     public void commit() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         long oldRevision = subversionService.importFile(svnPath, testFile);
-        subversionService.commit(svnPath, subversionService.getLatestRevision(), authService.getUsername(),
-                new UpdateCallback() {
+        subversionService.commit(svnPath, subversionService.getLatestRevision(), authService
+                .getUsername(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
@@ -219,8 +236,8 @@ public class SubversionServiceTest extends AbstractServiceTest {
                 }
             }
         });
-        long currentRevision = subversionService.commit(svnPath, subversionService.getLatestRevision(), authService.getUsername(),
-                new UpdateCallback() {
+        long currentRevision = subversionService.commit(svnPath, subversionService
+                .getLatestRevision(), authService.getUsername(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
                 try {
@@ -254,7 +271,8 @@ public class SubversionServiceTest extends AbstractServiceTest {
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         long revision = subversionService.commit(modifiedFile);
         InputStream modifiedStream = register(new FileInputStream(modifiedFile));
-        assertTrue(IOUtils.contentEquals(modifiedStream, register(subversionService.getStream(svnPath, revision))));
+        assertTrue(IOUtils.contentEquals(modifiedStream, register(subversionService.getStream(
+                svnPath, revision))));
     }
 
     // TODO This test is really slow, find out why.
@@ -298,6 +316,39 @@ public class SubversionServiceTest extends AbstractServiceTest {
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         long revision = subversionService.commit(modifiedFile);
         assertEquals(revision, subversionService.getLatestRevision(svnPath));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test(expected = SubversionException.class)
+    public void Checkout_Throws_SubversionException() throws Exception {
+        SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
+        subversionService.setClientManager(clientManagerMock);
+        SVNUpdateClient updateClientMock = createMock(SVNUpdateClient.class);
+        expect(clientManagerMock.getUpdateClient()).andReturn(updateClientMock);
+        expect(
+                updateClientMock.doCheckout(isA(SVNURL.class), (File) isNull(),
+                        eq(SVNRevision.UNDEFINED), eq(SVNRevision.UNDEFINED), eq(true))).andThrow(
+                createSvnException());
+        replay(clientManagerMock, updateClientMock);
+        subversionService.checkout(null, -1);
+        verify(clientManagerMock, updateClientMock);
+    }
+
+    @Test(expected = SubversionException.class)
+    public void Delete_Throws_SubversionException() throws Exception {
+        SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
+        subversionService.setClientManager(clientManagerMock);
+        SVNCommitClient commitClientMock = createMock(SVNCommitClient.class);
+        expect(clientManagerMock.getCommitClient()).andReturn(commitClientMock);
+        expect(commitClientMock.doDelete(isA(SVNURL[].class), isA(String.class))).andThrow(
+                createSvnException());
+        replay(clientManagerMock, commitClientMock);
+        subversionService.delete("foo/bar");
+        verify(clientManagerMock, commitClientMock);
+    }
+
+    private SVNException createSvnException() {
+        return new SVNException(SVNErrorMessage.create(SVNErrorCode.REPOS_LOCKED));
     }
 
     @Test
