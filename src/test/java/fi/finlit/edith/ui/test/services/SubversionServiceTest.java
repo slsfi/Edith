@@ -137,7 +137,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
         assertTrue(result);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = SubversionException.class)
     public void delete() throws Exception {
         String svnPath = documentRoot + "/notesTestData.txt";
         long revision = subversionService.importFile(svnPath, noteTestData);
@@ -147,8 +147,6 @@ public class SubversionServiceTest extends AbstractServiceTest {
         assertTrue(result);
         subversionService.delete(svnPath);
         assertEquals(revision + 1, subversionService.getLatestRevision());
-        // This will throw a RuntimeException because
-        // the file isn't in the newest revision.
         register(subversionService.getStream(svnPath, -1));
     }
 
