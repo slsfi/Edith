@@ -36,16 +36,14 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 import fi.finlit.edith.EDITH;
 
 /**
- * SubversionServiceImpl is the default implementation of the SubversionService
- * interface
+ * SubversionServiceImpl is the default implementation of the SubversionService interface
  *
  * @author tiwe
  * @version $Id$
  */
 public class SubversionServiceImpl implements SubversionService {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(SubversionServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SubversionServiceImpl.class);
 
     static {
         FSRepositoryFactory.setup();
@@ -69,8 +67,7 @@ public class SubversionServiceImpl implements SubversionService {
 
     private final File workingCopies;
 
-    public SubversionServiceImpl(
-            @Inject @Symbol(EDITH.SVN_CACHE_DIR) File svnCache,
+    public SubversionServiceImpl(@Inject @Symbol(EDITH.SVN_CACHE_DIR) File svnCache,
             @Inject @Symbol(EDITH.REPO_FILE_PROPERTY) File svnRepo,
             @Inject @Symbol(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
@@ -97,9 +94,8 @@ public class SubversionServiceImpl implements SubversionService {
     @SuppressWarnings("deprecation")
     public void checkout(File destination, long revision) {
         try {
-            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, false), destination,
-                    SVNRevision.create(revision),
-                    SVNRevision.create(revision), true);
+            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, false),
+                    destination, SVNRevision.create(revision), SVNRevision.create(revision), true);
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
@@ -108,9 +104,8 @@ public class SubversionServiceImpl implements SubversionService {
     @SuppressWarnings("deprecation")
     public long commit(File file) {
         try {
-            return clientManager.getCommitClient().doCommit(
-                    new File[] { file }, true, file.getName() + " committed", false,
-                    false).getNewRevision();
+            return clientManager.getCommitClient().doCommit(new File[] { file }, true,
+                    file.getName() + " committed", false, false).getNewRevision();
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
@@ -138,7 +133,7 @@ public class SubversionServiceImpl implements SubversionService {
                 is.close();
             }
             FileUtils.copyFile(tmp, file);
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new SubversionException(e);
         } finally {
             if (tmp != null && !tmp.delete()) {
@@ -153,8 +148,8 @@ public class SubversionServiceImpl implements SubversionService {
     public void delete(String svnPath) {
         try {
             SVNURL targetURL = repoSvnURL.appendPath(svnPath, false);
-            logger.info(clientManager.getCommitClient().doDelete(
-                    new SVNURL[] { targetURL }, "removed " + svnPath).toString());
+            logger.info(clientManager.getCommitClient().doDelete(new SVNURL[] { targetURL },
+                    "removed " + svnPath).toString());
         } catch (SVNException e) {
             throw new SubversionException(e.getMessage(), e);
         }
@@ -169,7 +164,6 @@ public class SubversionServiceImpl implements SubversionService {
         } catch (IOException e) {
             throw new SubversionException(e.getMessage(), e);
         }
-
     }
 
     @Override
@@ -204,8 +198,8 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public long getLatestRevision(String svnPath){
-        try{
+    public long getLatestRevision(String svnPath) {
+        try {
             List<SVNFileRevision> revisions = getFileRevisions(svnPath);
             long revision = 0;
             for (SVNFileRevision rev : revisions) {
@@ -214,7 +208,7 @@ public class SubversionServiceImpl implements SubversionService {
                 }
             }
             return revision;
-        }catch(SVNException e){
+        } catch (SVNException e) {
             throw new SubversionException(e);
         }
     }
@@ -225,10 +219,11 @@ public class SubversionServiceImpl implements SubversionService {
             List<SVNFileRevision> revisions = getFileRevisions(svnPath);
             List<RevisionInfo> revisionInfos = new ArrayList<RevisionInfo>(revisions.size());
             for (SVNFileRevision rev : revisions) {
-//                revisionInfos.add(rev.getRevision());
                 long svnRevision = rev.getRevision();
-                String created = rev.getRevisionProperties().getStringValue(SVNRevisionProperty.DATE);
-                String creator = rev.getRevisionProperties().getStringValue(SVNRevisionProperty.AUTHOR);
+                String created = rev.getRevisionProperties().getStringValue(
+                        SVNRevisionProperty.DATE);
+                String creator = rev.getRevisionProperties().getStringValue(
+                        SVNRevisionProperty.AUTHOR);
                 revisionInfos.add(new RevisionInfo(svnRevision, created, creator));
             }
             return revisionInfos;
@@ -248,14 +243,13 @@ public class SubversionServiceImpl implements SubversionService {
             File documentFile = new File(documentFolder, String.valueOf(rev));
             if (!documentFile.exists()) {
                 if (!documentFolder.exists() && !documentFolder.mkdirs()) {
-                    throw new IOException("Could not create directory: " + documentFolder.getAbsolutePath());
+                    throw new IOException("Could not create directory: "
+                            + documentFolder.getAbsolutePath());
                 }
                 OutputStream out = new FileOutputStream(documentFile);
                 try {
                     svnRepository.getFile(svnPath, rev, null, out);
                 } finally {
-                    // SVNRepository.getFile doesn't close OutputStream,
-                    // so we need to close it manually
                     out.close();
                 }
             }
@@ -271,8 +265,8 @@ public class SubversionServiceImpl implements SubversionService {
     public long importFile(String svnPath, File file) {
         try {
             return clientManager.getCommitClient().doImport(file,
-                    repoSvnURL.appendPath(svnPath, false), svnPath + " added",
-                    false).getNewRevision();
+                    repoSvnURL.appendPath(svnPath, false), svnPath + " added", false)
+                    .getNewRevision();
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
@@ -288,10 +282,12 @@ public class SubversionServiceImpl implements SubversionService {
             }
             SVNRepositoryFactory.createLocalRepository(svnRepo, true, false);
 
-            clientManager.getCommitClient().doMkDir(
-                    new SVNURL[] { repoSvnURL.appendPath(documentRoot.split("/")[1], false),
-                            repoSvnURL.appendPath(documentRoot, false) },
-                    "created initial folders");
+            clientManager.getCommitClient()
+                    .doMkDir(
+                            new SVNURL[] {
+                                    repoSvnURL.appendPath(documentRoot.split("/")[1], false),
+                                    repoSvnURL.appendPath(documentRoot, false) },
+                            "created initial folders");
 
             if (new File(teiMaterialRoot).exists()) {
                 for (File file : new File(teiMaterialRoot).listFiles()) {
@@ -308,8 +304,8 @@ public class SubversionServiceImpl implements SubversionService {
     @SuppressWarnings("deprecation")
     public void update(File file) {
         try {
-            clientManager.getUpdateClient().doUpdate(file,
-                    SVNRevision.create(getLatestRevision()), false);
+            clientManager.getUpdateClient().doUpdate(file, SVNRevision.create(getLatestRevision()),
+                    false);
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
