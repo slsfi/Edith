@@ -47,11 +47,11 @@ public class DictionarySearchPage {
     @Environmental
     private RenderSupport support;
 
-    void onActivate(EventContext context) {
-        if (context.getCount() >= 1) {
-            this.searchTerm = context.get(String.class, 0);
+    void onActivate(EventContext ctx) {
+        if (ctx.getCount() >= 1) {
+            this.searchTerm = ctx.get(String.class, 0);
         }
-        this.context = new Context(context);
+        this.context = new Context(ctx);
     }
 
     void onSuccessFromSearch() {

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
@@ -18,10 +18,9 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns=EDITH.NS)
 public class Term extends Identifiable{
-    
     @Predicate
     private String basicForm;
-    
+
     @Predicate
     private String meaning;
 
@@ -47,5 +46,5 @@ public class Term extends Identifiable{
         term.setMeaning(meaning);
         return term;
     }
-    
+
 }

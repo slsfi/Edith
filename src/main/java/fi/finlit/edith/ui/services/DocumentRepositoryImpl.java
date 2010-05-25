@@ -359,11 +359,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     private Document createDocument(String path, String title, String description) {
-        Document document = new Document();
-        document.setSvnPath(path);
-        document.setTitle(title);
-        document.setDescription(description);
-        return save(document);
+        Document doc = new Document();
+        doc.setSvnPath(path);
+        doc.setTitle(title);
+        doc.setDescription(description);
+        return save(doc);
     }
 
     @Override
@@ -374,11 +374,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public Document getDocumentForPath(String svnPath) {
         Assert.notNull(svnPath, "svnPath was null");
-        Document document = getDocumentMetadata(svnPath);
-        if (document == null) {
-            document = createDocument(svnPath, svnPath.substring(svnPath.lastIndexOf('/') + 1), null);
+        Document doc = getDocumentMetadata(svnPath);
+        if (doc == null) {
+            doc = createDocument(svnPath, svnPath.substring(svnPath.lastIndexOf('/') + 1), null);
         }
-        return document;
+        return doc;
     }
 
     private Document getDocumentMetadata(String svnPath) {
@@ -394,37 +394,37 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         List<Document> documents = new ArrayList<Document>(entries.size());
         for (String entry : entries) {
             String path = svnFolder + "/" + entry;
-            Document document = getDocumentMetadata(path);
-            if (document == null) {
-                document = createDocument(path, entry, null);
+            Document doc = getDocumentMetadata(path);
+            if (doc == null) {
+                doc = createDocument(path, entry, null);
             }
-            documents.add(document);
+            documents.add(doc);
         }
         return documents;
     }
 
     @Override
-    public InputStream getDocumentStream(DocumentRevision document) throws IOException {
-        Assert.notNull(document, "document was null");
-        return svnService.getStream(document.getSvnPath(), document.getRevision());
+    public InputStream getDocumentStream(DocumentRevision doc) throws IOException {
+        Assert.notNull(doc, "document was null");
+        return svnService.getStream(doc.getSvnPath(), doc.getRevision());
     }
 
     @Override
-    public List<RevisionInfo> getRevisions(Document document) {
-        Assert.notNull(document, "document was null");
-        return svnService.getRevisions(document.getSvnPath());
+    public List<RevisionInfo> getRevisions(Document doc) {
+        Assert.notNull(doc, "document was null");
+        return svnService.getRevisions(doc.getSvnPath());
     }
 
     @Override
-    public void remove(Document document) {
-        Assert.notNull(document, "document was null");
-        svnService.delete(document.getSvnPath());
+    public void remove(Document doc) {
+        Assert.notNull(doc, "document was null");
+        svnService.delete(doc.getSvnPath());
     }
 
     @Override
-    public DocumentRevision removeAllNotes(Document document) {
-        long revision = svnService.getLatestRevision(document.getSvnPath());
-        DocumentRevision docRevision = document.getRevision(revision);
+    public DocumentRevision removeAllNotes(Document doc) {
+        long revision = svnService.getLatestRevision(doc.getSvnPath());
+        DocumentRevision docRevision = doc.getRevision(revision);
         List<NoteRevision> noteRevisions = noteRevisionRepository.getOfDocument(docRevision);
         Note[] notes = new Note[noteRevisions.size()];
         for (int i = 0; i < notes.length; i++){
@@ -471,9 +471,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Override
     public NoteRevision updateNote(final NoteRevision note, final SelectedText selection) throws IOException {
-        Document document = note.getRevisionOf().getDocument();
+        Document doc = note.getRevisionOf().getDocument();
         long newRevision;
-        newRevision = svnService.commit(document.getSvnPath(), note.getSvnRevision(), authService
+        newRevision = svnService.commit(doc.getSvnPath(), note.getSvnRevision(), authService
                 .getUsername(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {

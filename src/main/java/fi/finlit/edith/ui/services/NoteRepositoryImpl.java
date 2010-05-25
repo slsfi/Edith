@@ -67,14 +67,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         rev.setLemmaFromLongText();
         getSession().save(rev);
 
-        Note note = new Note();
-        note.setDocument(docRevision.getDocument());
-        note.setLocalId(localId);
-        note.setLatestRevision(rev);
-        rev.setRevisionOf(note);
-        getSession().save(note);
+        Note newNote = new Note();
+        newNote.setDocument(docRevision.getDocument());
+        newNote.setLocalId(localId);
+        newNote.setLatestRevision(rev);
+        rev.setRevisionOf(newNote);
+        getSession().save(newNote);
 
-        return note;
+        return newNote;
     }
 
     @Override

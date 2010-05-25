@@ -8,7 +8,6 @@ import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.ContentType;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Field;
-import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Events;
@@ -22,21 +21,16 @@ import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ResponseRenderer;
 import org.apache.tapestry5.util.TextStreamResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @IncludeJavaScriptLibrary( { "jquery-autocomplete.js", "classpath:jquery-1.4.1.js",
         "classpath:ui/jquery.ui.core.js", "classpath:ui/jquery.ui.widget.js",
         "classpath:ui/jquery.ui.position.js", "classpath:ui/jquery.ui.autocomplete.js" })
-@IncludeStylesheet( {"context:styles/themes/base/jquery-ui.css",
-    "jquery-autocomplete.css"})
+@IncludeStylesheet( { "context:styles/themes/base/jquery-ui.css", "jquery-autocomplete.css" })
 @Events(EventConstants.PROVIDE_COMPLETIONS)
 public class JQueryAutocomplete {
     static final String EVENT_NAME = "jqueryautocomplete";
 
     private static final String PARAM_NAME = "term";
-
-    private static final Logger logger = LoggerFactory.getLogger(JQueryAutocomplete.class);
 
     @InjectContainer
     private Field field;
@@ -56,12 +50,13 @@ public class JQueryAutocomplete {
     @Inject
     private ResponseRenderer responseRenderer;
 
-    void afterRender(MarkupWriter writer) {
-        init(field.getClientId(), resources.createEventLink(EVENT_NAME).toAbsoluteURI(), renderSupport);
+    void afterRender() {
+        init(field.getClientId(), resources.createEventLink(EVENT_NAME).toAbsoluteURI(),
+                renderSupport);
     }
 
-    protected void init(String elementId, String ajaxURI, RenderSupport renderSupport) {
-        renderSupport.addInit("jQueryAutocompleter", new JSONArray(elementId, ajaxURI));
+    protected void init(String elementId, String ajaxURI, RenderSupport support) {
+        support.addInit("jQueryAutocompleter", new JSONArray(elementId, ajaxURI));
     }
 
     Object onJQueryAutocomplete() {

@@ -49,23 +49,23 @@ public class AbstractDocumentPage {
     @Inject
     private Response response;
 
-    void onActivate(EventContext context) throws IOException {
-        this.context = new Context(context);
-        if (context.getCount() == 0) {
+    void onActivate(EventContext ctx) throws IOException {
+        this.context = new Context(ctx);
+        if (ctx.getCount() == 0) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "No document ID given!");
         }
         try {
-            document = documentRepo.getById(context.get(String.class, 0));
+            document = documentRepo.getById(ctx.get(String.class, 0));
             revisions = documentRepo.getRevisions(document);
         } catch (RuntimeException e) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "Document not found!");
             return;
         }
         long rev = -1;
-        if (context.getCount() > 1){
+        if (ctx.getCount() > 1){
             // TODO : block this for AnnotatePage
             try {
-                rev = context.get(Long.class, 1);
+                rev = ctx.get(Long.class, 1);
             } catch (RuntimeException e) {
                 response.sendError(HttpError.PAGE_NOT_FOUND, "Revision not numerical!");
             }

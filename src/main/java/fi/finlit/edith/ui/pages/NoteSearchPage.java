@@ -83,14 +83,14 @@ public class NoteSearchPage {
         documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision.getRevisionOf());
     }
 
-    void onActivate(EventContext context) {
-        if (context.getCount() >= 1) {
-            this.searchTerm = context.get(String.class, 0);
+    void onActivate(EventContext ctx) {
+        if (ctx.getCount() >= 1) {
+            this.searchTerm = ctx.get(String.class, 0);
         }
-        if (context.getCount() >= 2) {
-            this.editMode = context.get(String.class, 1);
+        if (ctx.getCount() >= 2) {
+            this.editMode = ctx.get(String.class, 1);
         }
-        this.context = new Context(context);
+        this.context = new Context(ctx);
     }
 
     void onSuccessFromSearch() {

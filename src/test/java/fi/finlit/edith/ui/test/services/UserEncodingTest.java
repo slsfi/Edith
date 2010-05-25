@@ -23,26 +23,24 @@ import fi.finlit.edith.ui.services.UserDetailsImpl;
  * @author tiwe
  * @version $Id$
  */
-public class UserEncodingTest extends AbstractServiceTest{
+public class UserEncodingTest extends AbstractServiceTest {
 
     @Inject
     private UserRepository userRepository;
 
     @Test
     @Ignore
-    public void encoding() throws Exception{
+    public void encoding() throws Exception {
         PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
 
         SaltSourceImpl saltSource = new SaltSourceImpl();
         saltSource.setSystemWideSalt("DEADBEEF");
         saltSource.afterPropertiesSet();
 
-        for (User user : userRepository.getOrderedByName()){
-            UserDetailsImpl userDetails = new UserDetailsImpl(
-                    user.getUsername(), user.getPassword(),
-                    user.getProfile().getAuthorities());
-            String password = passwordEncoder.encodePassword(user.getUsername(),saltSource.getSalt(userDetails));
-//            System.err.println(user.getUsername() + " : " + password);
+        for (User user : userRepository.getOrderedByName()) {
+            UserDetailsImpl userDetails = new UserDetailsImpl(user.getUsername(), user
+                    .getPassword(), user.getProfile().getAuthorities());
+            passwordEncoder.encodePassword(user.getUsername(), saltSource.getSalt(userDetails));
         }
     }
 
