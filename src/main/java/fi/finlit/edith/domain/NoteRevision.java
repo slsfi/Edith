@@ -8,7 +8,7 @@ package fi.finlit.edith.domain;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -72,6 +72,12 @@ public class NoteRevision extends Identifiable {
 
     @Predicate
     private NameForms person;
+
+    @Predicate
+    private LocalDate timeOfBirth;
+
+    @Predicate
+    private LocalDate timeOfDeath;
 
     // NOTE : not persisted
     private DocumentRevision docRevision;
@@ -177,8 +183,8 @@ public class NoteRevision extends Identifiable {
         this.subtextSources = subtextSources;
     }
 
-    public DateTime getCreatedOnDate() {
-        return new DateTime(createdOn);
+    public LocalDate getCreatedOnDate() {
+        return new LocalDate(createdOn);
     }
 
     public String getLemmaMeaning() {
@@ -219,6 +225,22 @@ public class NoteRevision extends Identifiable {
 
     public NameForms getPerson() {
         return person;
+    }
+
+    public void setTimeOfDeath(LocalDate timeOfDeath) {
+        this.timeOfDeath = timeOfDeath;
+    }
+
+    public void setTimeOfBirth(LocalDate timeOfBirth) {
+        this.timeOfBirth = timeOfBirth;
+    }
+
+    public LocalDate getTimeOfDeath() {
+        return timeOfDeath;
+    }
+
+    public LocalDate getTimeOfBirth() {
+        return timeOfBirth;
     }
 
     public void setLemmaFromLongText() {

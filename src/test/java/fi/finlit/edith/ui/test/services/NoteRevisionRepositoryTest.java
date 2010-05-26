@@ -26,6 +26,7 @@ import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,16 +34,15 @@ import org.junit.Test;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.NameForms;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.NameForms;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
-
 
 /**
  * NoteRevisionRepositoryTest provides
@@ -50,9 +50,10 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
  * @author tiwe
  * @version $Id$
  */
-public class NoteRevisionRepositoryTest extends AbstractServiceTest{
+public class NoteRevisionRepositoryTest extends AbstractServiceTest {
 
-    @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
+    @Inject
+    @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
     private String testDocument;
 
     @Inject
@@ -83,14 +84,19 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
 
         docRev = document.getRevision(latestRevision);
         noteRepo.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
-        noteRepo.createNote(docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
+        noteRepo.createNote(docRev, "2",
+                "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
         noteRepo.createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
-        noteRepo.createNote(docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        noteRepo
+                .createNote(docRev, "4",
+                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
     }
 
     @Test
     public void Store_And_Retrieve_Place_Note() {
-        Note note = noteRepo.createNote(docRev, "3", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        Note note = noteRepo
+                .createNote(docRev, "3",
+                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         NoteRevision noteRevision = new NoteRevision();
         noteRevision.setRevisionOf(note);
         noteRevision.setType(NoteType.PLACE);
@@ -102,13 +108,13 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
         assertEquals(noteRevision.getPlace(), persistedNoteRevision.getPlace());
         assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
-        System.err.println(persistedNoteRevision.getPlace());
-        System.err.println(persistedNoteRevision.getType());
     }
 
     @Test
     public void Store_And_Retrieve_Person_Note() {
-        Note note = noteRepo.createNote(docRev, "3", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        Note note = noteRepo
+                .createNote(docRev, "3",
+                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         NoteRevision noteRevision = new NoteRevision();
         noteRevision.setRevisionOf(note);
         noteRevision.setType(NoteType.PERSON);
@@ -116,12 +122,14 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Alexis Stenvall", "En jättebra skrivare."));
         noteRevision.setPerson(new NameForms(normalizedForm, otherForms));
+        noteRevision.setTimeOfBirth(new LocalDate(1834, 10, 10));
+        noteRevision.setTimeOfDeath(new LocalDate(1872, 12, 31));
         noteRevisionRepo.save(noteRevision);
         NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
         assertEquals(noteRevision.getPerson(), persistedNoteRevision.getPerson());
         assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
-        System.err.println(persistedNoteRevision.getPerson());
-        System.err.println(persistedNoteRevision.getType());
+        assertEquals(noteRevision.getTimeOfBirth(), persistedNoteRevision.getTimeOfBirth());
+        assertEquals(noteRevision.getTimeOfDeath(), persistedNoteRevision.getTimeOfDeath());
     }
 
     @Test
@@ -133,7 +141,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     }
 
     @Test
-    public void queryNotes(){
+    public void queryNotes() {
         assertTrue(noteRevisionRepo.queryNotes("annoit").getAvailableRows() > 0);
     }
 
@@ -152,7 +160,8 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         for (int i = 0; i < n; ++i) {
             String current = gds.getRowValue(i).toString().toLowerCase();
             if (previous != null) {
-                assertThat("The actual value was probably in upper case!", previous, lessThanOrEqualTo(current));
+                assertThat("The actual value was probably in upper case!", previous,
+                        lessThanOrEqualTo(current));
             }
             previous = current;
         }
@@ -223,7 +232,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getOfDocument(){
+    public void getOfDocument() {
         assertEquals(4, noteRevisionRepo.getOfDocument(docRev).size());
     }
 
@@ -231,9 +240,9 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
     public void getOfDocument_with_note_updates() {
         assertEquals(4, noteRevisionRepo.getOfDocument(docRev).size());
 
-        for (NoteRevision rev : noteRevisionRepo.getOfDocument(docRev)){
+        for (NoteRevision rev : noteRevisionRepo.getOfDocument(docRev)) {
             rev = rev.createCopy();
-            rev.setLemma(rev.getLemma() +"XXX");
+            rev.setLemma(rev.getLemma() + "XXX");
             noteRevisionRepo.save(rev);
         }
 
