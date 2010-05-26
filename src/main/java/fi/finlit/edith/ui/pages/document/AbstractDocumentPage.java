@@ -50,7 +50,7 @@ public class AbstractDocumentPage {
     private Response response;
 
     void onActivate(EventContext ctx) throws IOException {
-        this.context = new Context(ctx);
+        context = new Context(ctx);
         if (ctx.getCount() == 0) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "No document ID given!");
         }

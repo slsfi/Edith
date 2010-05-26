@@ -123,8 +123,18 @@
                         <t:errors/>
                         <table>
                         <tr>
+                          <th>${message:format-label}</th>
+                          <td><t:select t:id="format"/></td>
+                        </tr>
+                        
+                        <tr>
                           <th>${message:lemma-label}</th>
                           <td><t:textField value="noteOnEdit.lemma"/></td>
+                        </tr>
+                        
+                        <tr>
+                          <th>${message:lemmaMeaning-label}</th>
+                          <td><t:textField value="noteOnEdit.lemmaMeaning"/></td>
                         </tr>
                         
                         <tr>

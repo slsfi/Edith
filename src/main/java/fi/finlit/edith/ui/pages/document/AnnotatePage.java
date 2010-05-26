@@ -17,17 +17,21 @@ import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
+import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.util.EnumSelectModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
@@ -43,7 +47,8 @@ import fi.finlit.edith.domain.TermRepository;
  * @version $Id$
  */
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js", "TextSelector.js", "AnnotatePage.js" })
+@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
+        "TextSelector.js", "AnnotatePage.js" })
 @IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage extends AbstractDocumentPage {
 
@@ -138,30 +143,29 @@ public class AnnotatePage extends AbstractDocumentPage {
         selectedNotes = new ArrayList<NoteRevision>(context.getCount());
         for (int i = 0; i < context.getCount(); i++) {
             String localId = context.get(String.class, i);
-            //XXX Where is this n coming?
-            if (localId.startsWith("n")){
+            // XXX Where is this n coming?
+            if (localId.startsWith("n")) {
                 localId = localId.substring(1);
             }
 
             NoteRevision rev = noteRevisionRepo.getByLocalId(getDocumentRevision(), localId);
             if (rev != null) {
                 selectedNotes.add(rev);
-            }else{
-                logger.error("Note with localId " + localId + " coundn't be found in " + getDocumentRevision());
+            } else {
+                logger.error("Note with localId " + localId + " coundn't be found in "
+                        + getDocumentRevision());
             }
         }
 
-        if (selectedNotes.size() > 0 ) {
+        if (selectedNotes.size() > 0) {
             noteOnEdit = selectedNotes.get(0);
             termOnEdit = getEditTerm(noteOnEdit);
         }
 
-        //Order on lemma after we have selected the first one as a selection
+        // Order on lemma after we have selected the first one as a selection
         Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
-
-
         return noteEdit;
     }
 
@@ -184,9 +188,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         DocumentRevision documentRevision = getDocumentRevision();
 
         NoteRevision noteRevision = null;
-        try{
+        try {
             noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
             return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
@@ -198,7 +202,8 @@ public class AnnotatePage extends AbstractDocumentPage {
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit);
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add("documentZone", documentView);
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
+                "documentZone", documentView);
     }
 
     void onPrepareForSubmit(String noteRev) {
@@ -208,30 +213,31 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onSuccessFromNoteEditForm() throws IOException {
-	NoteRevision noteRevision;
-	if (note.getRevisionOf().getStatus() == NoteStatus.Initial) {
-	    note.getRevisionOf().setStatus(NoteStatus.Draft);
-	}
+        NoteRevision noteRevision;
+        if (note.getRevisionOf().getStatus() == NoteStatus.Initial) {
+            note.getRevisionOf().setStatus(NoteStatus.Draft);
+        }
 
-	try{
-	    if (updateLongTextSelection.isValid()) {
-	        noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
-	    } else {
-	        noteRevision = noteRevisionRepo.save(note);
-	    }
-        }catch(Exception e){
+        try {
+            if (updateLongTextSelection.isValid()) {
+                noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
+            } else {
+                noteRevision = noteRevisionRepo.save(note);
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
             return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
         }
 
-        //Handling the embedded term edit
-        if( StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
+        // Handling the embedded term edit
+        if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
             Term term = termRepo.findByBasicForm(termOnEdit.getBasicForm());
             if (term == null) {
                 term = termOnEdit;
                 termRepo.save(term);
-            } else if (termOnEdit.getMeaning() != null && !termOnEdit.getMeaning().equals(term.getMeaning())) {
+            } else if (termOnEdit.getMeaning() != null
+                    && !termOnEdit.getMeaning().equals(term.getMeaning())) {
                 term.setMeaning(termOnEdit.getMeaning());
                 termRepo.save(term);
             }
@@ -262,28 +268,34 @@ public class AnnotatePage extends AbstractDocumentPage {
         getDocumentRevision().setRevision(documentRevision.getRevision());
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
-        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add("documentZone", documentView);
+        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add(
+                "documentZone", documentView);
     }
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
         List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
-//        List<String> results = new ArrayList<String>(terms.size());
-//        for(Term term : terms) {
-//            results.add(term.getBasicForm());
-//        }
         return terms;
     }
 
     public Object[] getEditContext() {
         List<String> ctx = new ArrayList<String>(selectedNotes.size());
-        //Adding the current note to head
+        // Adding the current note to head
         ctx.add(note.getLocalId());
-        for(NoteRevision r : selectedNotes) {
+        for (NoteRevision r : selectedNotes) {
             if (!r.equals(note)) {
                 ctx.add(r.getLocalId());
             }
         }
         return ctx.toArray();
+    }
+
+    @Validate("required")
+    public NoteFormat getFormat() {
+        return noteOnEdit.getFormat();
+    }
+
+    public void setFormat(NoteFormat format) {
+        noteOnEdit.setFormat(format);
     }
 
 }

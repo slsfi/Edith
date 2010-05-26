@@ -22,8 +22,8 @@ import fi.finlit.edith.EDITH;
  * @author tiwe
  * @version $Id$
  */
-@ClassMapping(ns=EDITH.NS)
-public class NoteRevision extends Identifiable{
+@ClassMapping(ns = EDITH.NS)
+public class NoteRevision extends Identifiable {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
@@ -36,17 +36,23 @@ public class NoteRevision extends Identifiable{
     @Predicate
     private String description;
 
-    @Predicate(ln="latestRevision", inv=true)
+    @Predicate(ln = "latestRevision", inv = true)
     private Note latestRevisionOf;
 
     @Predicate
     private String lemma;
 
     @Predicate
+    private String lemmaMeaning;
+
+    @Predicate
+    private NoteFormat format;
+
+    @Predicate
     private String longText;
 
     @Predicate
-    @QueryInit({"*", "term.meaning"})
+    @QueryInit( { "*", "term.meaning" })
     private Note revisionOf;
 
     @Predicate
@@ -65,16 +71,18 @@ public class NoteRevision extends Identifiable{
         NoteRevision copy = new NoteRevision();
         copy.setDescription(description);
         copy.setLemma(lemma);
+        copy.setLemmaMeaning(lemmaMeaning);
         copy.setLongText(longText);
         copy.setRevisionOf(revisionOf);
         copy.setSVNRevision(svnRevision);
         copy.setSubtextSources(subtextSources);
+        copy.setFormat(format);
         return copy;
 
     }
 
-    public DocumentRevision getDocumentRevision(){
-        if (docRevision == null || docRevision.getRevision() != svnRevision){
+    public DocumentRevision getDocumentRevision() {
+        if (docRevision == null || docRevision.getRevision() != svnRevision) {
             docRevision = getRevisionOf().getDocument().getRevision(svnRevision);
         }
         return docRevision;
@@ -117,7 +125,7 @@ public class NoteRevision extends Identifiable{
     }
 
     public void setCreatedOn(long created) {
-        this.createdOn = created;
+        createdOn = created;
     }
 
     public void setDescription(String description) {
@@ -148,7 +156,7 @@ public class NoteRevision extends Identifiable{
         this.deleted = deleted;
     }
 
-    public String getLocalId(){
+    public String getLocalId() {
         return revisionOf.getLocalId();
     }
 
@@ -164,15 +172,27 @@ public class NoteRevision extends Identifiable{
         return new DateTime(createdOn);
     }
 
-//    public Document getDocument(){
-//        return revisionOf.getDocument();
-//    }
+    public String getLemmaMeaning() {
+        return lemmaMeaning;
+    }
 
-    public void setLemmaFromLongText(){
-        if (WHITESPACE.matcher(longText).find()){
+    public void setLemmaMeaning(String lemmaMeaning) {
+        this.lemmaMeaning = lemmaMeaning;
+    }
+
+    public NoteFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(NoteFormat format) {
+        this.format = format;
+    }
+
+    public void setLemmaFromLongText() {
+        if (WHITESPACE.matcher(longText).find()) {
             String[] words = StringUtils.split(longText);
             if (words.length > 1) {
-                lemma = words[0] + " \u2013 \u2013 " + words[words.length-1];
+                lemma = words[0] + " \u2013 \u2013 " + words[words.length - 1];
             } else {
                 lemma = words[0];
             }
@@ -180,9 +200,9 @@ public class NoteRevision extends Identifiable{
             lemma = longText;
         }
     }
-    
+
     @Override
-    public String toString(){
-        return deleted ? (lemma + " (deleted)") : lemma;
+    public String toString() {
+        return deleted ? lemma + " (deleted)" : lemma;
     }
 }

@@ -25,30 +25,30 @@ public class ElementContext implements Cloneable {
 
         private final String name;
 
-        private Map<String,MutableInt> counts = new HashMap<String,MutableInt>();
+        private Map<String, MutableInt> counts = new HashMap<String, MutableInt>();
 
-        Item(String name){
+        Item(String name) {
             this.name = name;
         }
 
-        public String getName(String name) {
-            MutableInt intValue = counts.get(name);
-            if (intValue == null){
+        public String getName(String elemName) {
+            MutableInt intValue = counts.get(elemName);
+            if (intValue == null) {
                 intValue = new MutableInt(1);
-                counts.put(name, intValue);
-                return name;
+                counts.put(elemName, intValue);
+                return elemName;
             }
             intValue.add(1);
-            return name + intValue;
+            return elemName + intValue;
         }
 
         @Override
         public String toString() {
-            return this.name;
+            return name;
         }
 
         @Override
-        public Object clone() throws CloneNotSupportedException{
+        public Object clone() throws CloneNotSupportedException {
             Item item = (Item) super.clone();
             item.counts = new HashMap<String, MutableInt>();
             for (String key : counts.keySet()) {
@@ -66,27 +66,27 @@ public class ElementContext implements Cloneable {
 
     private String path = null;
 
-    public ElementContext(int offset){
+    public ElementContext(int offset) {
         this.offset = offset;
     }
 
-    public void push(String name){
+    public void push(String name) {
         String s = name;
-        if (!stack.isEmpty()){
+        if (!stack.isEmpty()) {
             s = stack.peek().getName(s);
         }
         stack.push(new Item(s));
         path = null;
     }
 
-    public void pop(){
+    public void pop() {
         stack.pop();
         path = null;
     }
 
     @Override
     public String toString() {
-        return this.stack.toString();
+        return stack.toString();
     }
 
     @Nullable
@@ -94,9 +94,9 @@ public class ElementContext implements Cloneable {
         if (path != null) {
             return path;
         }
-        if (stack.size() > offset){
+        if (stack.size() > offset) {
             StringBuilder b = new StringBuilder();
-            for (int i = offset; i < stack.size(); i++){
+            for (int i = offset; i < stack.size(); i++) {
                 if (i > offset) {
                     b.append("-");
                 }
