@@ -172,7 +172,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         assertEquals(count+1, noteRevisionRepo.queryNotes("*").getAvailableRows());
         int countInDoc = noteRevisionRepo.getOfDocument(document.getRevision(note.getSvnRevision())).size();
-
         // remove
         documentRepo.removeNotes(document.getRevision(note.getSvnRevision()), note.getRevisionOf());
         Note deletedNote = noteRepo.getById(note.getRevisionOf().getId());
@@ -180,11 +179,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         GridDataSource dataSource = noteRevisionRepo.queryNotes("*");
         int available = dataSource.getAvailableRows();
-        dataSource.prepare(0, available-1, Collections.<SortConstraint>emptyList());
-        for (int i = 0; i < available; i++){
-            NoteRevision rev = (NoteRevision) dataSource.getRowValue(i);
-            assertEquals(rev, rev.getRevisionOf().getLatestRevision());
-        }
+        assertEquals(0, available);
 
         long svnRevision = deletedNote.getLatestRevision().getSvnRevision();
         assertEquals(countInDoc - 1, noteRevisionRepo.getOfDocument(document.getRevision(svnRevision)).size());
