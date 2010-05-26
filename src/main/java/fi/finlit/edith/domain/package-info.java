@@ -20,7 +20,8 @@
     NoteFormat.class,
     NoteType.class,
     NameForms.class,
-    NameForm.class})
+    NameForm.class,
+    Date.class})
 package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.MappedClasses;

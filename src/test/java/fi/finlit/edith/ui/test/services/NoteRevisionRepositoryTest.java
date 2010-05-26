@@ -26,11 +26,11 @@ import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.finlit.edith.domain.Date;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
@@ -122,8 +122,8 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Alexis Stenvall", "En jättebra skrivare."));
         noteRevision.setPerson(new NameForms(normalizedForm, otherForms));
-        noteRevision.setTimeOfBirth(new LocalDate(1834, 10, 10));
-        noteRevision.setTimeOfDeath(new LocalDate(1872, 12, 31));
+        noteRevision.setTimeOfBirth(new Date(1834, 10, 10));
+        noteRevision.setTimeOfDeath(new Date(1872, 12, 31));
         noteRevisionRepo.save(noteRevision);
         NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
         assertEquals(noteRevision.getPerson(), persistedNoteRevision.getPerson());
