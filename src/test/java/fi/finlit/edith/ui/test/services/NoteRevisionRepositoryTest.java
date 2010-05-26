@@ -14,7 +14,9 @@ import static org.junit.Assert.fail;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.tapestry5.PropertyConduit;
 import org.apache.tapestry5.beaneditor.BeanModel;
@@ -31,9 +33,13 @@ import org.junit.Test;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.NameForms;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -80,6 +86,42 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest{
         noteRepo.createNote(docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
         noteRepo.createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
         noteRepo.createNote(docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+    }
+
+    @Test
+    public void Store_And_Retrieve_Place_Note() {
+        Note note = noteRepo.createNote(docRev, "3", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        NoteRevision noteRevision = new NoteRevision();
+        noteRevision.setRevisionOf(note);
+        noteRevision.setType(NoteType.PLACE);
+        NameForm normalizedForm = new NameForm("Tampere", "Kaupunki Hämeessä.");
+        Set<NameForm> otherForms = new HashSet<NameForm>();
+        otherForms.add(new NameForm("Tammerfors", "Ruotsinkielinen nimitys."));
+        noteRevision.setPlace(new NameForms(normalizedForm, otherForms));
+        noteRevisionRepo.save(noteRevision);
+        NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
+        assertEquals(noteRevision.getPlace(), persistedNoteRevision.getPlace());
+        assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
+        System.err.println(persistedNoteRevision.getPlace());
+        System.err.println(persistedNoteRevision.getType());
+    }
+
+    @Test
+    public void Store_And_Retrieve_Person_Note() {
+        Note note = noteRepo.createNote(docRev, "3", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        NoteRevision noteRevision = new NoteRevision();
+        noteRevision.setRevisionOf(note);
+        noteRevision.setType(NoteType.PERSON);
+        NameForm normalizedForm = new NameForm("Aleksis Kivi", "Suomen hienoin kirjailija ikinä.");
+        Set<NameForm> otherForms = new HashSet<NameForm>();
+        otherForms.add(new NameForm("Alexis Stenvall", "En jättebra skrivare."));
+        noteRevision.setPerson(new NameForms(normalizedForm, otherForms));
+        noteRevisionRepo.save(noteRevision);
+        NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
+        assertEquals(noteRevision.getPerson(), persistedNoteRevision.getPerson());
+        assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
+        System.err.println(persistedNoteRevision.getPerson());
+        System.err.println(persistedNoteRevision.getType());
     }
 
     @Test

@@ -64,6 +64,15 @@ public class NoteRevision extends Identifiable {
     @Predicate
     private boolean deleted;
 
+    @Predicate
+    private NoteType type;
+
+    @Predicate
+    private NameForms place;
+
+    @Predicate
+    private NameForms person;
+
     // NOTE : not persisted
     private DocumentRevision docRevision;
 
@@ -186,6 +195,30 @@ public class NoteRevision extends Identifiable {
 
     public void setFormat(NoteFormat format) {
         this.format = format;
+    }
+
+    public NoteType getType() {
+        return type;
+    }
+
+    public void setType(NoteType type) {
+        this.type = type;
+    }
+
+    public NameForms getPlace() {
+        return place;
+    }
+
+    public void setPlace(NameForms place) {
+        this.place = place;
+    }
+
+    public void setPerson(NameForms person) {
+        this.person = person;
+    }
+
+    public NameForms getPerson() {
+        return person;
     }
 
     public void setLemmaFromLongText() {

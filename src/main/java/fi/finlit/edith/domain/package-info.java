@@ -17,7 +17,10 @@
     Tag.class,
     User.class,
     UserInfo.class,
-    NoteFormat.class})
+    NoteFormat.class,
+    NoteType.class,
+    NameForms.class,
+    NameForm.class})
 package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.MappedClasses;
