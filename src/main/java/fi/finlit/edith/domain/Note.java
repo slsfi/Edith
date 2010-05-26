@@ -19,7 +19,7 @@ import fi.finlit.edith.EDITH;
  * @version $Id$
  */
 @ClassMapping(ns = EDITH.NS)
-public class Note extends Identifiable{
+public class Note extends Identifiable {
 
     @Predicate
     private Document document;

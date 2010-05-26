@@ -13,6 +13,7 @@ import org.apache.tapestry5.MarkupWriter;
 
 import fi.finlit.edith.domain.DocumentRevision;
 
+//TODO : cache rendering results
 /**
  * DocumentWriter provides
  *
@@ -26,7 +27,6 @@ public interface DocumentRenderer {
      * @param writer
      * @throws Exception
      */
-    // TODO : cache rendering results
     void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException;
 
     /**
@@ -34,7 +34,6 @@ public interface DocumentRenderer {
      * @param writer
      * @throws Exception
      */
-    // TODO : cache rendering results
     void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException;
 
 }

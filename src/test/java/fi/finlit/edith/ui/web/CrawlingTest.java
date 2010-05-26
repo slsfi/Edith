@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.web;
 
@@ -40,13 +40,11 @@ public class CrawlingTest {
     private static final Logger logger = LoggerFactory.getLogger(CrawlingTest.class);
 
     // TODO : make sure resources (CSS etc) are accessible for BOTH anonymous and authenticated
-    // users
-
-    // TODO Empty page? Not redirected to login?
+    // users + Empty page? Not redirected to login?
 
     private WebDriver webDriver;
 
-    private String baseUrl = "http://localhost:9080";
+    private final String baseUrl = "http://localhost:9080";
 
     private static final String USERNAME = "vesa";
     private static final String PASSWORD = "vesa";

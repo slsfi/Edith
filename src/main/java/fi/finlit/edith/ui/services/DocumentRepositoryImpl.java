@@ -304,7 +304,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 context.push(extractName(e.asStartElement()));
             } else if (e.isEndElement()) {
                 context.pop();
-            } else if (e.isCharacters() && (context.equalsAny(sel.getStartId(), sel.getEndId()))) {
+            } else if (e.isCharacters() && context.equalsAny(sel.getStartId(), sel.getEndId())) {
                 String eventString = e.asCharacters().getData();
                 int relativeStart = startIndex - offset;
                 int relativeEnd = endIndex - (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd() ? endOffset.intValue() : offset);
@@ -348,7 +348,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
-    // TODO Better place for this method?
     public static String extractName(StartElement element) {
         String localName = element.getName().getLocalPart();
         String name = localName;
@@ -514,17 +513,17 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             return startMatched;
         }
         public void matchStart() {
-            this.startMatched = true;
+            startMatched = true;
         }
         public boolean isEndMatched() {
             return endMatched;
         }
         public void matchEnd() {
-            this.endMatched = true;
+            endMatched = true;
         }
 
         public boolean areBothMatched() {
-            return this.startMatched && this.endMatched;
+            return startMatched && endMatched;
         }
     }
 

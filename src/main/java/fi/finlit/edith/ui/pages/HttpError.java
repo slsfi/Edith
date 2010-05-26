@@ -1,6 +1,5 @@
 package fi.finlit.edith.ui.pages;
 
-// TODO Create ErrorCodeResultProcessor... and refactor this.
 /**
  *
  * @author vema
