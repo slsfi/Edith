@@ -17,16 +17,13 @@ import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.util.EnumSelectModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +36,7 @@ import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.domain.TermRepository;
 
 /**
@@ -237,9 +235,9 @@ public class AnnotatePage extends AbstractDocumentPage {
             if (term == null) {
                 term = termOnEdit;
                 termRepo.save(term);
-            } else if (termOnEdit.getMeaning() != null
-                    && !termOnEdit.getMeaning().equals(term.getMeaning())) {
+            } else {
                 term.setMeaning(termOnEdit.getMeaning());
+                term.setLanguage(termOnEdit.getLanguage());
                 termRepo.save(term);
             }
             noteRevision.getRevisionOf().setTerm(term);
@@ -304,5 +302,13 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public void setType(NoteType type) {
         noteOnEdit.setType(type);
+    }
+
+    public void setLanguage(TermLanguage language) {
+        termOnEdit.setLanguage(language);
+    }
+
+    public TermLanguage getLanguage() {
+        return termOnEdit.getLanguage();
     }
 }

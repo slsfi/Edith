@@ -9,14 +9,13 @@ import org.apache.tapestry5.json.JSONObject;
 
 import fi.finlit.edith.domain.Term;
 
-
 @IncludeJavaScriptLibrary( { "term-autocomplete.js" })
 public class TermAutocomplete extends JQueryAutocomplete {
 
     @Override
     protected void init(String elementId, String ajaxURI, RenderSupport renderSupport) {
         super.init(elementId, ajaxURI, renderSupport);
-        //Hooking our own function
+        // Hooking our own function
         renderSupport.addInit("termAutocompleter", new JSONArray().put(elementId));
     }
 
@@ -24,10 +23,11 @@ public class TermAutocomplete extends JQueryAutocomplete {
     protected JSONArray generateResponse(List<Object> matches) {
         JSONArray a = new JSONArray();
 
-        for(Object o : matches)  {
+        for (Object o : matches) {
             Term term = (Term) o;
             /* "value" is the item used by the autocompletion to visualize the list element. */
-            a.put(new JSONObject().put("meaning", term.getMeaning()).put("value", term.getBasicForm()));
+            a.put(new JSONObject().put("meaning", term.getMeaning()).put("value",
+                    term.getBasicForm()).put("language", String.valueOf(term.getLanguage())));
         }
 
         return a;
