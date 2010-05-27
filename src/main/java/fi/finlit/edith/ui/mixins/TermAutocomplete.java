@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.mixins;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.json.JSONArray;
@@ -26,8 +27,10 @@ public class TermAutocomplete extends JQueryAutocomplete {
         for (Object o : matches) {
             Term term = (Term) o;
             /* "value" is the item used by the autocompletion to visualize the list element. */
-            a.put(new JSONObject().put("meaning", term.getMeaning()).put("value",
-                    term.getBasicForm()).put("language", String.valueOf(term.getLanguage())));
+            a.put(new JSONObject().put("basicForm", term.getBasicForm()).put("meaning",
+                    term.getMeaning())
+                    .put("value", term.getBasicForm() + " - " + StringUtils.abbreviate(term.getMeaning(), 32)).put("language",
+                            String.valueOf(term.getLanguage())));
         }
 
         return a;

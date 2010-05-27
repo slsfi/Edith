@@ -34,5 +34,5 @@ public interface TermRepository extends Repository<Term,String>{
      * @param basicForm
      * @return
      */
-    Term findByBasicForm(String basicForm);
+    List<Term> findByBasicForm(String basicForm);
 }

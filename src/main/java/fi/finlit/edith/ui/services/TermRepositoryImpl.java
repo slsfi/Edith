@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -19,12 +19,12 @@ import fi.finlit.edith.domain.TermRepository;
 
 /**
  * NoteRepositoryImpl provides
- * 
+ *
  * @author tiwe
  * @version $Id$
  */
 public class TermRepositoryImpl extends AbstractRepository<Term> implements TermRepository {
-    
+
     public TermRepositoryImpl(@Inject SessionFactory sessionFactory) {
         super(sessionFactory, term);
     }
@@ -36,11 +36,11 @@ public class TermRepositoryImpl extends AbstractRepository<Term> implements Term
             .list(term);
     }
 
-    public Term findByBasicForm(String basicForm) {
+    public List<Term> findByBasicForm(String basicForm) {
         return getSession().from(term)
             .where(term.basicForm.eq(basicForm))
-            .uniqueResult(term);
-    }    
-    
+            .list(term);
+    }
+
 
 }

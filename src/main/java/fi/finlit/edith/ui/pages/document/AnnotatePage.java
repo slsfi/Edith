@@ -231,15 +231,20 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         // Handling the embedded term edit
         if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
-            Term term = termRepo.findByBasicForm(termOnEdit.getBasicForm());
-            if (term == null) {
-                term = termOnEdit;
-                termRepo.save(term);
-            } else {
-                term.setMeaning(termOnEdit.getMeaning());
-                term.setLanguage(termOnEdit.getLanguage());
-                termRepo.save(term);
+            // FIXME The following is a bit hard to follow. -vema
+            List<Term> terms = termRepo.findByBasicForm(termOnEdit.getBasicForm());
+            Term term = terms.isEmpty() ? termOnEdit : null;
+            for (Term current : terms) {
+                if (termOnEdit.getMeaning().equals(current.getMeaning())) {
+                    term = current;
+                    term.setLanguage(termOnEdit.getLanguage());
+                    break;
+                }
             }
+            if (term == null) {
+                term = termOnEdit.createCopy();
+            }
+            termRepo.save(term);
             noteRevision.getRevisionOf().setTerm(term);
             noteRepo.save(noteRevision.getRevisionOf());
         }

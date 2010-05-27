@@ -133,7 +133,7 @@
                         </tr>
                         
                         <tr>
-                          <th>${message:lemmaMeaning-label}</th>
+                          <td>- ${message:meaning-label}</td>
                           <td><t:textField value="noteOnEdit.lemmaMeaning"/></td>
                         </tr>
                         
