@@ -36,6 +36,7 @@ import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.NoteStatus;
+import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermRepository;
@@ -289,7 +290,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         return ctx.toArray();
     }
 
-    @Validate("required")
     public NoteFormat getFormat() {
         return noteOnEdit.getFormat();
     }
@@ -298,4 +298,11 @@ public class AnnotatePage extends AbstractDocumentPage {
         noteOnEdit.setFormat(format);
     }
 
+    public NoteType getType() {
+        return noteOnEdit.getType();
+    }
+
+    public void setType(NoteType type) {
+        noteOnEdit.setType(type);
+    }
 }

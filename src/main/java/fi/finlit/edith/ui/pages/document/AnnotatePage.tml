@@ -87,7 +87,6 @@
                     </t:loop>
                 </ul>
                 </t:if>
-                
                 <h3>${message:noteEdit}</h3>
                 <p id="edited_info"> 
                     <t:dateTimeFormat date="noteOnEdit.createdOnDate" format="message:dateformat-compact"/>
@@ -122,9 +121,10 @@
                     <t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
                         <t:errors/>
                         <table>
+                        
                         <tr>
-                          <th>${message:format-label}</th>
-                          <td><t:select t:id="format"/></td>
+                          <th>${message:type-label}</th>
+                          <td><t:select t:id="type"/></td>
                         </tr>
                         
                         <tr>
@@ -135,6 +135,16 @@
                         <tr>
                           <th>${message:lemmaMeaning-label}</th>
                           <td><t:textField value="noteOnEdit.lemmaMeaning"/></td>
+                        </tr>
+                        
+                        <tr>
+                          <th>${message:placeName-label}</th>
+                          <td><t:textField value="noteOnEdit.place.normalizedForm.name"/></td>
+                        </tr>
+                        
+                        <tr>
+                          <th>${message:format-label}</th>
+                          <td><t:select t:id="format"/></td>
                         </tr>
                         
                         <tr>
