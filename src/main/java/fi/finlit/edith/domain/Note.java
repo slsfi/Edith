@@ -34,7 +34,7 @@ public class Note extends Identifiable {
     private String localId;
 
     @Predicate
-    private NoteStatus status = NoteStatus.Initial;
+    private NoteStatus status = NoteStatus.INITIAL;
 
     @Predicate(ln = "tagged")
     private Set<Tag> tags;

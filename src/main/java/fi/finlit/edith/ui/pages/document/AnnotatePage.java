@@ -213,8 +213,8 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     Object onSuccessFromNoteEditForm() throws IOException {
         NoteRevision noteRevision;
-        if (note.getRevisionOf().getStatus() == NoteStatus.Initial) {
-            note.getRevisionOf().setStatus(NoteStatus.Draft);
+        if (note.getRevisionOf().getStatus().equals(NoteStatus.INITIAL)) {
+            note.getRevisionOf().setStatus(NoteStatus.DRAFT);
         }
 
         try {

@@ -9,7 +9,6 @@ import com.mysema.rdfbean.annotations.ClassMapping;
 
 import fi.finlit.edith.EDITH;
 
-// TODO Rename according to Java naming conventions (CamelCase -> ALL_CAPS).
 /**
  * NoteStatus provides
  *
@@ -18,24 +17,5 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns = EDITH.NS)
 public enum NoteStatus {
-    /**
-     *
-     */
-    Draft,
-    /**
-     *
-     */
-    Finished,
-    /**
-     *
-     */
-    LockedForEdit,
-    /**
-     *
-     */
-    Publishable,
-    /**
-     *
-     */
-    Initial;
+    DRAFT, FINISHED, LOCKED_FOR_EDIT, PUBLISHABLE, INITIAL;
 }
