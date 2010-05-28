@@ -79,6 +79,9 @@ public class NoteRevision extends Identifiable {
     @Predicate
     private Date timeOfDeath;
 
+    @Predicate
+    private String sources;
+
     // NOTE : not persisted
     private DocumentRevision docRevision;
 
@@ -92,8 +95,8 @@ public class NoteRevision extends Identifiable {
         copy.setSVNRevision(svnRevision);
         copy.setSubtextSources(subtextSources);
         copy.setFormat(format);
+        copy.setSources(sources);
         return copy;
-
     }
 
     public DocumentRevision getDocumentRevision() {
@@ -241,6 +244,14 @@ public class NoteRevision extends Identifiable {
 
     public Date getTimeOfBirth() {
         return timeOfBirth;
+    }
+
+    public void setSources(String sources) {
+        this.sources = sources;
+    }
+
+    public String getSources() {
+        return sources;
     }
 
     public void setLemmaFromLongText() {

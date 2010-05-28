@@ -151,7 +151,7 @@
                         
                         <tr>
                           <td>- ${message:meaning-label}</td>
-                          <td><t:textArea t:id="meaning" value="termOnEdit.meaning"/>
+                          <td><t:textArea t:id="termMeaning" value="termOnEdit.meaning"/>
                           </td>
                         </tr>
                         
@@ -162,8 +162,13 @@
                         
                         <tr>
                           <th>${message:description-label}</th>                     
-                          <td><t:textArea t:id="description" value="noteOnEdit.description" rows="4"/></td>
+                          <td><t:textArea value="noteOnEdit.description" rows="4"/></td>
 						</tr>
+						
+						<tr>
+                          <th>${message:sources-label}</th>                     
+                          <td><t:textField value="noteOnEdit.sources" rows="4"/></td>
+                        </tr>
 
 						<tr>
                           <th>${message:subtextSources-label}</th>                     
