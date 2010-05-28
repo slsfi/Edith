@@ -85,5 +85,4 @@ var Editor = {
 		var link = editLink.replace('CONTEXT',context);
 		TapestryExt.updateZone('editZone', link);
 	},
-	
 }

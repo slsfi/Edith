@@ -118,6 +118,29 @@
                     		/ <a href="" id="delete_note_decline">${message:no}</a>
                     	</span>
                     </span>
+                    
+                    <script type="text/javascript">
+                        var hideBasedOnType = function() {
+                            /* TODO This is smelly. */
+                            var type = jQuery("select[name='type']").val();
+                            jQuery("#editZone .note").hide();
+                            jQuery("#editZone .place").hide();
+                            jQuery("#editZone .person").hide();
+                            if (type == "NOTE") {
+                                jQuery("#editZone .note").show();
+                            } else if (type == "PLACE") {
+                                jQuery("#editZone .place").show();
+                            } else if (type == "PERSON") {
+                                jQuery("#editZone .person").show();
+                            }
+                        }
+                        
+                        hideBasedOnType();
+                        
+                        jQuery("select[name='type']").change(function() {
+                            hideBasedOnType();
+                        });
+                    </script>
                     <t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
                         <t:errors/>
                         <table>
@@ -127,50 +150,60 @@
                           <td><t:select t:id="type"/></td>
                         </tr>
                         
-                        <tr>
+                        <tr class="note">
                           <th>${message:lemma-label}</th>
                           <td><t:textField value="noteOnEdit.lemma"/></td>
                         </tr>
                         
-                        <tr>
+                        <tr class="note">
                           <td>- ${message:meaning-label}</td>
                           <td><t:textField value="noteOnEdit.lemmaMeaning"/></td>
                         </tr>
                         
-                        <tr>
+                        <tr class="note">
                           <th>${message:format-label}</th>
                           <td><t:select t:id="format"/></td>
                         </tr>
                         
-                        <tr>
+                        <tr class="note">
                           <th>${message:basicForm-label}</th>
                           <td><t:textField t:id="basicForm" value="termOnEdit.basicForm" 
                             t:mixins="termAutocomplete"/>
                            </td>
                         </tr>
                         
-                        <tr>
+                        <tr class="note">
                           <td>- ${message:meaning-label}</td>
                           <td><t:textArea t:id="termMeaning" value="termOnEdit.meaning"/>
                           </td>
                         </tr>
                         
-                        <tr>
+                        <tr class="note">
                           <td>- ${message:language-label}</td>
                           <td><t:select t:id="language"/></td>
                         </tr>
                         
-                        <tr>
+                        <tr class="person">
+                          <th>${message:timeOfBirth-label}</th>                     
+                          <td><t:dateField t:id="timeOfBirth"/></td>
+                        </tr>
+                        
+                        <tr class="person">
+                          <th>${message:timeOfDeath-label}</th>                     
+                          <td><t:dateField t:id="timeOfDeath"/></td>
+                        </tr>
+                        
+                        <tr class="note person place">
                           <th>${message:description-label}</th>                     
                           <td><t:textArea value="noteOnEdit.description" rows="4"/></td>
 						</tr>
 						
-						<tr>
+						<tr class="note person place">
                           <th>${message:sources-label}</th>                     
                           <td><t:textField value="noteOnEdit.sources" rows="4"/></td>
                         </tr>
 
-						<tr>
+						<tr class="note person place">
                           <th>${message:subtextSources-label}</th>                     
                           <td><t:textField t:id="subtextSources" value="noteOnEdit.subtextSources"/></td>
 						</tr>

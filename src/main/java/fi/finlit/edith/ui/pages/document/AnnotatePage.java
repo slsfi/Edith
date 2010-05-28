@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,8 +23,10 @@ import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -293,6 +296,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         return ctx.toArray();
     }
 
+    @Validate("required")
     public NoteFormat getFormat() {
         return noteOnEdit.getFormat();
     }
@@ -305,10 +309,12 @@ public class AnnotatePage extends AbstractDocumentPage {
         return noteOnEdit.getType();
     }
 
+    @Validate("required")
     public void setType(NoteType type) {
         noteOnEdit.setType(type);
     }
 
+    @Validate("required")
     public void setLanguage(TermLanguage language) {
         termOnEdit.setLanguage(language);
     }
@@ -316,4 +322,27 @@ public class AnnotatePage extends AbstractDocumentPage {
     public TermLanguage getLanguage() {
         return termOnEdit.getLanguage();
     }
+
+    public Date getTimeOfBirth() {
+        return noteOnEdit.getTimeOfBirth() == null ? null : noteOnEdit.getTimeOfBirth()
+                .toDateMidnight().toDate();
+    }
+
+    public void setTimeOfBirth(Date timeOfBirth) {
+        if (timeOfBirth != null) {
+            noteOnEdit.setTimeOfBirth(new DateMidnight(timeOfBirth).toLocalDate());
+        }
+    }
+
+    public Date getTimeOfDeath() {
+        return noteOnEdit.getTimeOfDeath() == null ? null : noteOnEdit.getTimeOfDeath()
+                .toDateMidnight().toDate();
+    }
+
+    public void setTimeOfDeath(Date timeOfDeath) {
+        if (timeOfDeath != null) {
+            noteOnEdit.setTimeOfDeath(new DateMidnight(timeOfDeath).toLocalDate());
+        }
+    }
+
 }

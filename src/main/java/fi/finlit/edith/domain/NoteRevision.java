@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -74,10 +75,10 @@ public class NoteRevision extends Identifiable {
     private NameForms person;
 
     @Predicate
-    private Date timeOfBirth;
+    private LocalDate timeOfBirth;
 
     @Predicate
-    private Date timeOfDeath;
+    private LocalDate timeOfDeath;
 
     @Predicate
     private String sources;
@@ -230,28 +231,28 @@ public class NoteRevision extends Identifiable {
         return person;
     }
 
-    public void setTimeOfDeath(Date timeOfDeath) {
-        this.timeOfDeath = timeOfDeath;
-    }
-
-    public void setTimeOfBirth(Date timeOfBirth) {
-        this.timeOfBirth = timeOfBirth;
-    }
-
-    public Date getTimeOfDeath() {
-        return timeOfDeath;
-    }
-
-    public Date getTimeOfBirth() {
-        return timeOfBirth;
-    }
-
     public void setSources(String sources) {
         this.sources = sources;
     }
 
     public String getSources() {
         return sources;
+    }
+
+    public void setTimeOfBirth(LocalDate timeOfBirth) {
+        this.timeOfBirth = timeOfBirth;
+    }
+
+    public void setTimeOfDeath(LocalDate timeOfDeath) {
+        this.timeOfDeath = timeOfDeath;
+    }
+
+    public LocalDate getTimeOfBirth() {
+        return timeOfBirth;
+    }
+
+    public LocalDate getTimeOfDeath() {
+        return timeOfDeath;
     }
 
     public void setLemmaFromLongText() {
