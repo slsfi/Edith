@@ -1,6 +1,5 @@
 package fi.finlit.edith;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ import com.mysema.rdfbean.sesame.MemoryRepository;
 public class NoteStatusTest {
     @Ignore
     @Test
-    public void execute() throws IOException {
+    public void execute() {
         MemoryRepository repository = new MemoryRepository();
         repository.setDataDirName("target/data");
         repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
