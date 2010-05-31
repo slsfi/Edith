@@ -184,6 +184,47 @@
                         </tr>
                         
                         <tr class="person">
+                          <th>${message:normalizedForm-label}</th>
+                          <td><t:textField value="normalizedPerson.name"/></td>
+                        </tr>
+                        
+                        <tr class="person">
+                          <td>- ${message:description-label}</td>
+                          <td><t:textField value="normalizedPerson.description"/></td>
+                        </tr>
+
+                        <t:loop source="persons" value="otherPerson" volatile="true">
+                            <tr class="person">
+                                <th>${message:nameForm-label}</th>
+                                <td><t:textField t:id="name" value="otherName"/></td>
+                            </tr>
+                            <tr class="person">
+                                <td>- ${message:description-label}</td>
+                                <td><t:textField t:id="description" value="otherDescription"/></td>
+                            </tr>
+                        </t:loop>
+                        
+                        <tr class="person">
+                          <th>${message:createNameForm-label}</th>
+                          <td><t:textField value="newName"/></td>
+                        </tr>
+                        
+                        <tr class="person">
+                          <td>- ${message:description-label}</td>
+                          <td><t:textField value="newDescription"/></td>
+                        </tr>
+
+                        <tr class="place">
+                          <th>${message:normalizedForm-label}</th>
+                          <td><t:textField value="normalizedPlace.name"/></td>
+                        </tr>
+                        
+                        <tr class="place">
+                          <td>- ${message:description-label}</td>
+                          <td><t:textField value="normalizedPlace.description"/></td>
+                        </tr>
+                        
+                        <tr class="person">
                           <th>${message:timeOfBirth-label}</th>                     
                           <td><t:dateField t:id="timeOfBirth"/></td>
                         </tr>

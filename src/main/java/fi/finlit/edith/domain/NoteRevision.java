@@ -97,6 +97,10 @@ public class NoteRevision extends Identifiable {
         copy.setSubtextSources(subtextSources);
         copy.setFormat(format);
         copy.setSources(sources);
+        copy.setTimeOfBirth(timeOfBirth);
+        copy.setTimeOfDeath(timeOfDeath);
+        copy.setPerson(person);
+        copy.setPlace(place);
         return copy;
     }
 

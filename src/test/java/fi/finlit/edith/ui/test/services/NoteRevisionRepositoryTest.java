@@ -106,7 +106,10 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
         noteRevision.setPlace(new NameForms(normalizedForm, otherForms));
         noteRevisionRepo.save(noteRevision);
         NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
-        assertEquals(noteRevision.getPlace(), persistedNoteRevision.getPlace());
+        assertEquals(noteRevision.getPlace().getNormalizedForm().getName(), persistedNoteRevision
+                .getPlace().getNormalizedForm().getName());
+        assertEquals(noteRevision.getPlace().getNormalizedForm().getDescription(),
+                persistedNoteRevision.getPlace().getNormalizedForm().getDescription());
         assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
     }
 
@@ -126,7 +129,10 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
         noteRevision.setTimeOfDeath(new LocalDate(1872, 12, 31));
         noteRevisionRepo.save(noteRevision);
         NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
-        assertEquals(noteRevision.getPerson(), persistedNoteRevision.getPerson());
+        assertEquals(noteRevision.getPerson().getNormalizedForm().getName(), persistedNoteRevision
+                .getPerson().getNormalizedForm().getName());
+        assertEquals(noteRevision.getPerson().getNormalizedForm().getDescription(),
+                persistedNoteRevision.getPerson().getNormalizedForm().getDescription());
         assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
         assertEquals(noteRevision.getTimeOfBirth(), persistedNoteRevision.getTimeOfBirth());
         assertEquals(noteRevision.getTimeOfDeath(), persistedNoteRevision.getTimeOfDeath());

@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
@@ -31,6 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.NameForms;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
@@ -219,7 +224,18 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (note.getRevisionOf().getStatus().equals(NoteStatus.INITIAL)) {
             note.getRevisionOf().setStatus(NoteStatus.DRAFT);
         }
-
+        if (newName != null) {
+            note.getPerson().getOtherForms().add(new NameForm(newName, newDescription));
+        }
+        newName = null;
+        newDescription = null;
+        Iterator<NameForm> iter = noteOnEdit.getPerson().getOtherForms().iterator();
+        while (iter.hasNext()) {
+            NameForm current = iter.next();
+            if (current.getName() == null) {
+                iter.remove();
+            }
+        }
         try {
             if (updateLongTextSelection.isValid()) {
                 noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
@@ -344,5 +360,51 @@ public class AnnotatePage extends AbstractDocumentPage {
             noteOnEdit.setTimeOfDeath(new DateMidnight(timeOfDeath).toLocalDate());
         }
     }
+
+    public NameForm getNormalizedPerson() {
+        if (noteOnEdit.getPerson() == null) {
+            noteOnEdit.setPerson(new NameForms(new NameForm(), new HashSet<NameForm>()));
+        }
+        return noteOnEdit.getPerson().getNormalizedForm();
+    }
+
+    public NameForm getNormalizedPlace() {
+        if (noteOnEdit.getPlace() == null) {
+            noteOnEdit.setPlace(new NameForms(new NameForm(), new HashSet<NameForm>()));
+        }
+        return noteOnEdit.getPlace().getNormalizedForm();
+    }
+
+    public Set<NameForm> getPersons() {
+        if (noteOnEdit.getPerson() == null) {
+            noteOnEdit.setPerson(new NameForms(new NameForm(), new HashSet<NameForm>()));
+        }
+        return noteOnEdit.getPerson().getOtherForms();
+    }
+
+    @Property
+    private NameForm otherPerson;
+
+    public void setOtherName(String name) {
+        otherPerson.setName(name);
+    }
+
+    public void setOtherDescription(String description) {
+        otherPerson.setDescription(description);
+    }
+
+    public String getOtherName() {
+        return otherPerson.getName();
+    }
+
+    public String getOtherDescription() {
+        return otherPerson.getDescription();
+    }
+
+    @Property
+    private String newName;
+
+    @Property
+    private String newDescription;
 
 }

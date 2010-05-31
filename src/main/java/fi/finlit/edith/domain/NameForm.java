@@ -6,7 +6,7 @@ import com.mysema.rdfbean.annotations.Predicate;
 import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
-public class NameForm {
+public class NameForm extends Identifiable {
     @Predicate
     private String name;
 
@@ -29,12 +29,19 @@ public class NameForm {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (description == null ? 0 : description.hashCode());
-        result = prime * result + (name == null ? 0 : name.hashCode());
+        result = prime * result + (getId() == null ? 0 : getId().hashCode());
         return result;
     }
 
@@ -50,18 +57,11 @@ public class NameForm {
             return false;
         }
         NameForm other = (NameForm) obj;
-        if (description == null) {
-            if (other.description != null) {
+        if (getId() == null) {
+            if (other.getId() != null) {
                 return false;
             }
-        } else if (!description.equals(other.description)) {
-            return false;
-        }
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
+        } else if (!getId().equals(other.getId())) {
             return false;
         }
         return true;
@@ -69,8 +69,6 @@ public class NameForm {
 
     @Override
     public String toString() {
-        return "NameForm [name=" + name + ", description=" + description + "]";
+        return "NameForm [description=" + description + ", name=" + name + "]";
     }
-
-
 }
