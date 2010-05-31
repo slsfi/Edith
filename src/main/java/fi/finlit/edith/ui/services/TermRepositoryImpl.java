@@ -23,6 +23,7 @@ import fi.finlit.edith.domain.TermRepository;
  * @author tiwe
  * @version $Id$
  */
+// TODO Vesa : test me!
 public class TermRepositoryImpl extends AbstractRepository<Term> implements TermRepository {
 
     public TermRepositoryImpl(@Inject SessionFactory sessionFactory) {
