@@ -19,11 +19,10 @@ import fi.finlit.edith.domain.TermRepository;
 
 /**
  * NoteRepositoryImpl provides
- *
+ * 
  * @author tiwe
  * @version $Id$
  */
-// TODO Vesa : test me!
 public class TermRepositoryImpl extends AbstractRepository<Term> implements TermRepository {
 
     public TermRepositoryImpl(@Inject SessionFactory sessionFactory) {
@@ -31,17 +30,12 @@ public class TermRepositoryImpl extends AbstractRepository<Term> implements Term
     }
 
     public List<Term> findByStartOfBasicForm(String partial, int maxResults) {
-        return getSession().from(term)
-            .where(term.basicForm.startsWith(partial))
-            .limit(maxResults)
-            .list(term);
+        return getSession().from(term).where(term.basicForm.startsWith(partial)).limit(maxResults)
+                .list(term);
     }
 
     public List<Term> findByBasicForm(String basicForm) {
-        return getSession().from(term)
-            .where(term.basicForm.eq(basicForm))
-            .list(term);
+        return getSession().from(term).where(term.basicForm.eq(basicForm)).list(term);
     }
-
 
 }
