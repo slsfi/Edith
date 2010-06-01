@@ -7,6 +7,7 @@ package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -52,7 +53,7 @@ public final class DataModule {
         for (String line : lines){
             String[] values = line.split(";");
             User user = new User();
-            user.setUsername(values[0].toLowerCase());
+            user.setUsername(values[0].toLowerCase(Locale.getDefault()));
             user.setEmail(values[2]);
             user.setFirstName(values[0]);
             user.setLastName(values[1]);
