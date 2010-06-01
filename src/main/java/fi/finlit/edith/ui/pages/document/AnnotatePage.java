@@ -229,6 +229,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
         newName = null;
         newDescription = null;
+        // Removes person's name forms that don't have a "name" entered.
         Iterator<NameForm> iter = noteOnEdit.getPerson().getOtherForms().iterator();
         while (iter.hasNext()) {
             NameForm current = iter.next();

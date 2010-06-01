@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
@@ -19,10 +19,10 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns=EDITH.NS)
 public class Document extends Identifiable implements Comparable<Document>{
-    
+
     @Predicate
     private String description;
-    
+
     @Predicate
     @Unique
     private String svnPath;
@@ -47,20 +47,20 @@ public class Document extends Identifiable implements Comparable<Document>{
     public String getSvnPath() {
         return svnPath;
     }
-    
+
     public String getTitle() {
         return title;
     }
-    
+
     @Override
     public int hashCode(){
         return svnPath.hashCode();
     }
-        
+
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public void setSvnPath(String svnPath) {
         this.svnPath = svnPath;
     }
@@ -68,7 +68,7 @@ public class Document extends Identifiable implements Comparable<Document>{
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public DocumentRevision getRevision(long revision){
         return new DocumentRevision(this, revision);
     }
