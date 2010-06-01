@@ -19,18 +19,20 @@ import fi.finlit.edith.domain.UserRepository;
  * @author tiwe
  * @version $Id$
  */
-public class UserDetailsServiceImpl implements UserDetailsService{
-
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Inject
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.getByUsername(username);
-        if (user != null){
-            return new UserDetailsImpl(
-                    user.getUsername(), user.getPassword(),
-                    user.getProfile().getAuthorities());
+        if (user != null) {
+            return new UserDetailsImpl(user.getUsername(), user.getPassword(), user.getProfile()
+                    .getAuthorities());
         }
         throw new UsernameNotFoundException("User " + username + " not found");
     }
