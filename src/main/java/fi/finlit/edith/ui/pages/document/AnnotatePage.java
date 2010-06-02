@@ -29,6 +29,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.util.EnumSelectModel;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -301,6 +302,10 @@ public class AnnotatePage extends AbstractDocumentPage {
         return terms;
     }
 
+    List<NameForm> onProvideCompletionsFromNormalizedName(String partial) {
+        return null;
+    }
+
     public Object[] getEditContext() {
         List<String> ctx = new ArrayList<String>(selectedNotes.size());
         // Adding the current note to head
@@ -338,6 +343,22 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public TermLanguage getLanguage() {
         return termOnEdit.getLanguage();
+    }
+
+    @Validate("required")
+    public void setStatus(NoteStatus status) {
+        noteOnEdit.getRevisionOf().setStatus(status);
+    }
+
+    public NoteStatus getStatus() {
+        return noteOnEdit.getRevisionOf().getStatus();
+    }
+
+    public EnumSelectModel getStatusModel() {
+        NoteStatus[] availableStatuses = noteOnEdit.getRevisionOf().getStatus().equals(
+                NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
+                NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
+        return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
 
     public Date getTimeOfBirth() {

@@ -150,6 +150,11 @@
                           <td><t:select t:id="type"/></td>
                         </tr>
                         
+                        <tr>
+                          <th>${message:status-label}</th>
+                          <td><t:select model="statusModel" value="status"/></td>
+                        </tr>
+                        
                         <tr class="note">
                           <th>${message:lemma-label}</th>
                           <td><t:textField value="noteOnEdit.lemma"/></td>
@@ -185,12 +190,12 @@
                         
                         <tr class="person">
                           <th>${message:normalizedForm-label}</th>
-                          <td><t:textField value="normalizedPerson.name"/></td>
+                          <td><t:textField t:id="normalizedName" value="normalizedPerson.name" t:mixins="nameFormAutocomplete"/></td>
                         </tr>
                         
                         <tr class="person">
                           <td>- ${message:description-label}</td>
-                          <td><t:textField value="normalizedPerson.description"/></td>
+                          <td><t:textField t:id="normalizedDescription" value="normalizedPerson.description"/></td>
                         </tr>
 
                         <t:loop source="persons" value="otherPerson" volatile="true">

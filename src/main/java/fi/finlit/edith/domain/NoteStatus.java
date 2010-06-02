@@ -17,5 +17,5 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns = EDITH.NS)
 public enum NoteStatus {
-    DRAFT, FINISHED, LOCKED_FOR_EDIT, PUBLISHABLE, INITIAL;
+    INITIAL, DRAFT, LOCKED_FOR_EDIT, FINISHED, PUBLISHABLE;
 }
