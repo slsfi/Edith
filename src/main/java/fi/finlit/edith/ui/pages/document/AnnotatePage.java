@@ -36,13 +36,14 @@ import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.NameForms;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
@@ -362,44 +363,44 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public Date getTimeOfBirth() {
-        return noteOnEdit.getTimeOfBirth() == null ? null : noteOnEdit.getTimeOfBirth()
-                .toDateMidnight().toDate();
+        return noteOnEdit.getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getPerson()
+                .getTimeOfBirth().toDateMidnight().toDate();
     }
 
     public void setTimeOfBirth(Date timeOfBirth) {
         if (timeOfBirth != null) {
-            noteOnEdit.setTimeOfBirth(new DateMidnight(timeOfBirth).toLocalDate());
+            noteOnEdit.getPerson().setTimeOfBirth(new DateMidnight(timeOfBirth).toLocalDate());
         }
     }
 
     public Date getTimeOfDeath() {
-        return noteOnEdit.getTimeOfDeath() == null ? null : noteOnEdit.getTimeOfDeath()
-                .toDateMidnight().toDate();
+        return noteOnEdit.getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getPerson()
+                .getTimeOfDeath().toDateMidnight().toDate();
     }
 
     public void setTimeOfDeath(Date timeOfDeath) {
         if (timeOfDeath != null) {
-            noteOnEdit.setTimeOfDeath(new DateMidnight(timeOfDeath).toLocalDate());
+            noteOnEdit.getPerson().setTimeOfDeath(new DateMidnight(timeOfDeath).toLocalDate());
         }
     }
 
     public NameForm getNormalizedPerson() {
         if (noteOnEdit.getPerson() == null) {
-            noteOnEdit.setPerson(new NameForms(new NameForm(), new HashSet<NameForm>()));
+            noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
         }
         return noteOnEdit.getPerson().getNormalizedForm();
     }
 
     public NameForm getNormalizedPlace() {
         if (noteOnEdit.getPlace() == null) {
-            noteOnEdit.setPlace(new NameForms(new NameForm(), new HashSet<NameForm>()));
+            noteOnEdit.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
         }
         return noteOnEdit.getPlace().getNormalizedForm();
     }
 
     public Set<NameForm> getPersons() {
         if (noteOnEdit.getPerson() == null) {
-            noteOnEdit.setPerson(new NameForms(new NameForm(), new HashSet<NameForm>()));
+            noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
         }
         return noteOnEdit.getPerson().getOtherForms();
     }

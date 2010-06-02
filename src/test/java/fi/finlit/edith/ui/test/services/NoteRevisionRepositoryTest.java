@@ -35,12 +35,13 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.NameForms;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -103,7 +104,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
         NameForm normalizedForm = new NameForm("Tampere", "Kaupunki Hämeessä.");
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Tammerfors", "Ruotsinkielinen nimitys."));
-        noteRevision.setPlace(new NameForms(normalizedForm, otherForms));
+        noteRevision.setPlace(new Place(normalizedForm, otherForms));
         noteRevisionRepo.save(noteRevision);
         NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
         assertEquals(noteRevision.getPlace().getNormalizedForm().getName(), persistedNoteRevision
@@ -124,9 +125,9 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
         NameForm normalizedForm = new NameForm("Aleksis Kivi", "Suomen hienoin kirjailija ikinä.");
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Alexis Stenvall", "En jättebra skrivare."));
-        noteRevision.setPerson(new NameForms(normalizedForm, otherForms));
-        noteRevision.setTimeOfBirth(new LocalDate(1834, 10, 10));
-        noteRevision.setTimeOfDeath(new LocalDate(1872, 12, 31));
+        noteRevision.setPerson(new Person(normalizedForm, otherForms));
+        noteRevision.getPerson().setTimeOfBirth(new LocalDate(1834, 10, 10));
+        noteRevision.getPerson().setTimeOfDeath(new LocalDate(1872, 12, 31));
         noteRevisionRepo.save(noteRevision);
         NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
         assertEquals(noteRevision.getPerson().getNormalizedForm().getName(), persistedNoteRevision
@@ -134,8 +135,10 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
         assertEquals(noteRevision.getPerson().getNormalizedForm().getDescription(),
                 persistedNoteRevision.getPerson().getNormalizedForm().getDescription());
         assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
-        assertEquals(noteRevision.getTimeOfBirth(), persistedNoteRevision.getTimeOfBirth());
-        assertEquals(noteRevision.getTimeOfDeath(), persistedNoteRevision.getTimeOfDeath());
+        assertEquals(noteRevision.getPerson().getTimeOfBirth(), persistedNoteRevision.getPerson()
+                .getTimeOfBirth());
+        assertEquals(noteRevision.getPerson().getTimeOfDeath(), persistedNoteRevision.getPerson()
+                .getTimeOfDeath());
     }
 
     @Test

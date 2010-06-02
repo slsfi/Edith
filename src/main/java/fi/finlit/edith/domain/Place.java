@@ -8,17 +8,17 @@ import com.mysema.rdfbean.annotations.Predicate;
 import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
-public class NameForms {
+public class Place {
     @Predicate
     private NameForm normalizedForm;
 
     @Predicate
     private Set<NameForm> otherForms;
 
-    public NameForms() {
+    public Place() {
     }
 
-    public NameForms(NameForm normalizedForm, Set<NameForm> otherForms) {
+    public Place(NameForm normalizedForm, Set<NameForm> otherForms) {
         this.normalizedForm = normalizedForm;
         this.otherForms = otherForms;
     }
@@ -59,7 +59,7 @@ public class NameForms {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        NameForms other = (NameForms) obj;
+        Place other = (Place) obj;
         if (normalizedForm == null) {
             if (other.normalizedForm != null) {
                 return false;
@@ -77,8 +77,4 @@ public class NameForms {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "NameForms [normalizedForm=" + normalizedForm + ", otherForms=" + otherForms + "]";
-    }
 }

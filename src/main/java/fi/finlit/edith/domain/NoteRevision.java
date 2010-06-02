@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import com.mysema.query.annotations.QueryInit;
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -69,16 +68,10 @@ public class NoteRevision extends Identifiable {
     private NoteType type;
 
     @Predicate
-    private NameForms place;
+    private Place place;
 
     @Predicate
-    private NameForms person;
-
-    @Predicate
-    private LocalDate timeOfBirth;
-
-    @Predicate
-    private LocalDate timeOfDeath;
+    private Person person;
 
     @Predicate
     private String sources;
@@ -97,8 +90,6 @@ public class NoteRevision extends Identifiable {
         copy.setSubtextSources(subtextSources);
         copy.setFormat(format);
         copy.setSources(sources);
-        copy.setTimeOfBirth(timeOfBirth);
-        copy.setTimeOfDeath(timeOfDeath);
         copy.setPerson(person);
         copy.setPlace(place);
         return copy;
@@ -219,19 +210,19 @@ public class NoteRevision extends Identifiable {
         this.type = type;
     }
 
-    public NameForms getPlace() {
+    public Place getPlace() {
         return place;
     }
 
-    public void setPlace(NameForms place) {
+    public void setPlace(Place place) {
         this.place = place;
     }
 
-    public void setPerson(NameForms person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
 
-    public NameForms getPerson() {
+    public Person getPerson() {
         return person;
     }
 
@@ -241,22 +232,6 @@ public class NoteRevision extends Identifiable {
 
     public String getSources() {
         return sources;
-    }
-
-    public void setTimeOfBirth(LocalDate timeOfBirth) {
-        this.timeOfBirth = timeOfBirth;
-    }
-
-    public void setTimeOfDeath(LocalDate timeOfDeath) {
-        this.timeOfDeath = timeOfDeath;
-    }
-
-    public LocalDate getTimeOfBirth() {
-        return timeOfBirth;
-    }
-
-    public LocalDate getTimeOfDeath() {
-        return timeOfDeath;
     }
 
     public void setLemmaFromLongText() {
