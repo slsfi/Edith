@@ -299,8 +299,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
-        List<Term> terms = termRepo.findByStartOfBasicForm(partial, 10);
-        return terms;
+        return termRepo.findByStartOfBasicForm(partial, 10);
     }
 
     List<NameForm> onProvideCompletionsFromNormalizedName(String partial) {
