@@ -1,305 +1,361 @@
-<html t:type="layout"  
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-      xmlns:p="tapestry:parameter">
-      
-    <p:title>${document.title}</p:title>  
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
 
-    <div class="content">
-        <t:zone t:id="documentZone" update="show">
-            <t:delegate to="documentView"/>
-        </t:zone>
-        <t:block t:id="documentView">
-        <t:document.view document="documentRevision"/>        
-        </t:block>                
-    </div>
-    
-    <p:breadcrumbs>
-        <a t:type="pageLink" t:page="index">${message:frontpage}</a> 
-        &gt; <a t:type="pageLink" t:page="documentsPage">${message:documents}</a>
-        &gt; ${document.title}
-    </p:breadcrumbs>     
-        
-    <p:leftPanel>
-        <t:dashboard/>
-        
-        <p>
-            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a>
-        </p>
-        <p>
-            <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
-        </p>
-        
-        <div class="panel narrow">
-            <h3>${message:pages}</h3>
-            <t:document.pages document="documentRevision"/>
-            <div style="clear:both;"></div>
-        </div>
+	<p:title>${document.title}</p:title>
 
-        
-    </p:leftPanel>
+	<div class="content">
+		<t:zone t:id="documentZone" update="show">
+			<t:delegate to="documentView" />
+		</t:zone>
+		<t:block t:id="documentView">
+			<t:document.view document="documentRevision" />
+		</t:block>
+	</div>
 
-    <p:rightPanel>
-        <t:form t:id="createTerm" t:zone="listZone">
-            <t:hidden t:id="selectedText_1" value="createTermSelection.selection"/>
-            <t:hidden t:id="selectedStartId_1" value="createTermSelection.startId"/>
-            <t:hidden t:id="selectedEndId_1" value="createTermSelection.endId"/>
-            <t:hidden t:id="selectedStartIndex_1" value="createTermSelection.startIndex"/>
-            <t:hidden t:id="selectedEndIndex_1" value="createTermSelection.endIndex"/>
-            <a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a>
-        </t:form>
-           
-        <div class="panel narrow">
-            <h3>${message:notes}</h3>
-                <t:zone t:id="listZone" update="show">
-                    <t:delegate to="notesList"/>
-                </t:zone>
-            <div style="clear:both;"></div>
-        </div>    
-    
-        <t:zone t:id="editZone" update="show"/>
-        
-        <t:block t:id="notesList">
-            <t:if test="docNotes">
-            <ul class="notes">
-                <t:loop source="docNotes" value="note">
-                <li> 
-                    <a href="#start${note.revisionOf.localId}" class="notelink ${note.revisionOf.status}"><em>${note.lemma}</em></a>
-                </li>
-                </t:loop>
-            </ul>        
-                <p:else>${message:no-notes}</p:else>
-            </t:if>
-        </t:block>
-         
-        <t:block t:id="noteEdit">
-            <t:if test="!selectedNotes.empty">
-            <div class="panel narrow">
-                
-                <t:if test="moreThanOneSelectable">
-                <h3>${message:selectNote}</h3>
-                <ul class="notes">
-                    
-                    <t:loop source="selectedNotes" value="note">
-                        <li>
-                            <t:eventlink t:event="edit" context="editContext" 
-                                t:zone="editZone" class="notelink"><em>${note.lemma}</em></t:eventlink> 
-                        </li>
-                    </t:loop>
-                </ul>
-                </t:if>
-                <h3>${message:noteEdit}</h3>
-                <p id="edited_info"> 
-                    <t:dateTimeFormat date="noteOnEdit.createdOnDate" format="message:dateformat-compact"/>
-                    ${noteOnEdit.createdBy.username}
-                </p>
-                <div class="cleaner"></div>
-                <div class="note_edit">
-                    <em><strong>${noteOnEdit.lemma}</strong></em>
-                    <!-- This could be externalized? -->
-                    <script type="text/javascript">
-                    	jQuery("#delete_dialog").hide();
-                    
-                    	jQuery("#delete_question").click(function(event) {
-                    		jQuery("#delete_dialog").show();
-                    		jQuery("#delete_question").hide();
-                    		event.preventDefault();
-                    	});
-                    	
-                    	jQuery("#delete_note_decline").click(function(event) {
-                    		jQuery("#delete_question").show();
-                    		jQuery("#delete_dialog").hide();
-                    		event.preventDefault();
-                    	});
+	<p:breadcrumbs>
+		<a t:type="pageLink" t:page="index">${message:frontpage}</a>
+		&gt;
+		<a t:type="pageLink" t:page="documentsPage">${message:documents}</a>
+		&gt; ${document.title}
+	</p:breadcrumbs>
+
+	<p:leftPanel>
+		<t:dashboard />
+
+		<p>
+			<a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a>
+		</p>
+		<p>
+			<t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}
+			</t:pagelink>
+		</p>
+
+		<div class="panel narrow">
+			<h3>${message:pages}</h3>
+			<t:document.pages document="documentRevision" />
+			<div style="clear:both;"></div>
+		</div>
+
+
+	</p:leftPanel>
+
+	<p:rightPanel>
+		<t:form t:id="createTerm" t:zone="listZone">
+			<t:hidden t:id="selectedText_1" value="createTermSelection.selection" />
+			<t:hidden t:id="selectedStartId_1" value="createTermSelection.startId" />
+			<t:hidden t:id="selectedEndId_1" value="createTermSelection.endId" />
+			<t:hidden t:id="selectedStartIndex_1" value="createTermSelection.startIndex" />
+			<t:hidden t:id="selectedEndIndex_1" value="createTermSelection.endIndex" />
+			<a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a>
+		</t:form>
+
+		<div class="panel narrow">
+			<h3>${message:notes}</h3>
+			<t:zone t:id="listZone" update="show">
+				<t:delegate to="notesList" />
+			</t:zone>
+			<div style="clear:both;"></div>
+		</div>
+
+		<t:zone t:id="editZone" update="show" />
+
+		<t:block t:id="notesList">
+			<t:if test="docNotes">
+				<ul class="notes">
+					<t:loop source="docNotes" value="note">
+						<li>
+							<a href="#start${note.revisionOf.localId}" class="notelink ${note.revisionOf.status}">
+								<em>${note.lemma}</em>
+							</a>
+						</li>
+					</t:loop>
+				</ul>
+				<p:else>${message:no-notes}</p:else>
+			</t:if>
+		</t:block>
+
+		<t:block t:id="noteEdit">
+			<t:if test="!selectedNotes.empty">
+				<div class="panel narrow">
+
+					<t:if test="moreThanOneSelectable">
+						<h3>${message:selectNote}</h3>
+						<ul class="notes">
+
+							<t:loop source="selectedNotes" value="note">
+								<li>
+									<t:eventlink t:event="edit" context="editContext"
+										t:zone="editZone" class="notelink">
+										<em>${note.lemma}</em>
+									</t:eventlink>
+								</li>
+							</t:loop>
+						</ul>
+					</t:if>
+					<h3>${message:noteEdit}</h3>
+					<p id="edited_info">
+						<t:dateTimeFormat date="noteOnEdit.createdOnDate"
+							format="message:dateformat-compact" />
+						${noteOnEdit.createdBy.username}
+					</p>
+					<div class="cleaner"></div>
+					<div class="note_edit">
+						<em>
+							<strong>${noteOnEdit.lemma}</strong>
+						</em>
+						<!-- This could be externalized? -->
+						<script type="text/javascript">
+							jQuery("#delete_dialog").hide();
+
+							jQuery("#delete_question").click(function(event) {
+							     jQuery("#delete_dialog").show();
+							     jQuery("#delete_question").hide();
+							     event.preventDefault();
+							});
+
+							jQuery("#delete_note_decline").click(function(event) {
+							     jQuery("#delete_question").show();
+							     jQuery("#delete_dialog").hide();
+							     event.preventDefault();
+							});
                     </script>
-                    <span id="delete_note">
-                    	<button id="delete_question">${message:delete}</button>
-                    	<span id="delete_dialog">
-                    		${message:delete} <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
-                    		/ <a href="" id="delete_note_decline">${message:no}</a>
-                    	</span>
-                    </span>
-                    
-                    <script type="text/javascript">
-                        var hideBasedOnType = function() {
-                            /* TODO This is smelly. */
-                            var type = jQuery("select[name='type']").val();
-                            jQuery("#editZone .note").hide();
-                            jQuery("#editZone .place").hide();
-                            jQuery("#editZone .person").hide();
-                            if (type == "NOTE") {
-                                jQuery("#editZone .note").show();
-                            } else if (type == "PLACE") {
-                                jQuery("#editZone .place").show();
-                            } else if (type == "PERSON") {
-                                jQuery("#editZone .person").show();
-                            }
-                        }
-                        
-                        hideBasedOnType();
-                        
-                        jQuery("select[name='type']").change(function() {
-                            hideBasedOnType();
-                        });
+						<span id="delete_note">
+							<button id="delete_question">${message:delete}</button>
+							<span id="delete_dialog">
+								${message:delete}
+								<t:eventlink t:event="delete" t:zone="editZone"
+									context="noteOnEdit.id">${message:yes}</t:eventlink>
+								/
+								<a href="" id="delete_note_decline">${message:no}</a>
+							</span>
+						</span>
+
+						<script type="text/javascript">
+                            var hideBasedOnType = function() {
+							     var type = jQuery("select[name='type']").val();
+							     jQuery("#editZone .note").hide();
+							     jQuery("#editZone .place").hide();
+							     jQuery("#editZone .person").hide();
+							     if (type == "NOTE") {
+							         jQuery("#editZone .note").show();
+							     } else if (type == "PLACE") {
+							         jQuery("#editZone .place").show();
+							     } else if (type == "PERSON") {
+							         jQuery("#editZone .person").show();
+							     }
+							}
+
+							hideBasedOnType();
+
+							jQuery("select[name='type']").change(function() {
+							     hideBasedOnType();
+							});
                     </script>
-                    <t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
-                        <t:errors/>
-                        <table>
-                        
-                        <tr>
-                          <th>${message:type-label}</th>
-                          <td><t:select t:id="type"/></td>
-                        </tr>
-                        
-                        <tr>
-                          <th>${message:status-label}</th>
-                          <td><t:select model="statusModel" value="status"/></td>
-                        </tr>
-                        
-                        <tr class="note">
-                          <th>${message:lemma-label}</th>
-                          <td><t:textField value="noteOnEdit.lemma"/></td>
-                        </tr>
-                        
-                        <tr class="note">
-                          <td>- ${message:meaning-label}</td>
-                          <td><t:textField value="noteOnEdit.lemmaMeaning"/></td>
-                        </tr>
-                        
-                        <tr class="note">
-                          <th>${message:format-label}</th>
-                          <td><t:select t:id="format"/></td>
-                        </tr>
-                        
-                        <tr class="note">
-                          <th>${message:basicForm-label}</th>
-                          <td><t:textField t:id="basicForm" value="termOnEdit.basicForm" 
-                            t:mixins="termAutocomplete"/>
-                           </td>
-                        </tr>
-                        
-                        <tr class="note">
-                          <td>- ${message:meaning-label}</td>
-                          <td><t:textArea t:id="termMeaning" value="termOnEdit.meaning"/>
-                          </td>
-                        </tr>
-                        
-                        <tr class="note">
-                          <td>- ${message:language-label}</td>
-                          <td><t:select t:id="language"/></td>
-                        </tr>
-                        
-                        <tr class="person">
-                          <th>${message:normalizedForm-label}</th>
-                          <td><t:textField t:id="normalizedName" value="normalizedPerson.name" t:mixins="nameFormAutocomplete"/></td>
-                        </tr>
-                        
-                        <tr class="person">
-                          <td>- ${message:description-label}</td>
-                          <td><t:textField t:id="normalizedDescription" value="normalizedPerson.description"/></td>
-                        </tr>
+						<t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
+							<t:errors />
+								<div>
+									<div>${message:type-label}</div>
+									<div>
+										<t:select t:id="type" />
+									</div>
+								</div>
 
-                        <t:loop source="persons" value="otherPerson" volatile="true">
-                            <tr class="person">
-                                <th>${message:nameForm-label}</th>
-                                <td><t:textField t:id="name" value="otherName"/></td>
-                            </tr>
-                            <tr class="person">
-                                <td>- ${message:description-label}</td>
-                                <td><t:textField t:id="description" value="otherDescription"/></td>
-                            </tr>
-                        </t:loop>
-                        
-                        <tr class="person">
-                          <th>${message:createNameForm-label}</th>
-                          <td><t:textField value="newName"/></td>
-                        </tr>
-                        
-                        <tr class="person">
-                          <td>- ${message:description-label}</td>
-                          <td><t:textField value="newDescription"/></td>
-                        </tr>
+								<div>
+									<div>${message:status-label}</div>
+									<div>
+										<t:select model="statusModel" value="status" />
+									</div>
+								</div>
 
-                        <tr class="place">
-                          <th>${message:normalizedForm-label}</th>
-                          <td><t:textField value="normalizedPlace.name"/></td>
-                        </tr>
-                        
-                        <tr class="place">
-                          <td>- ${message:description-label}</td>
-                          <td><t:textField value="normalizedPlace.description"/></td>
-                        </tr>
-                        
-                        <tr class="person">
-                          <th>${message:timeOfBirth-label}</th>                     
-                          <td><t:dateField t:id="timeOfBirth"/></td>
-                        </tr>
-                        
-                        <tr class="person">
-                          <th>${message:timeOfDeath-label}</th>                     
-                          <td><t:dateField t:id="timeOfDeath"/></td>
-                        </tr>
-                        
-                        <tr class="note person place">
-                          <th>${message:description-label}</th>                     
-                          <td><t:textArea value="noteOnEdit.description" rows="4"/></td>
-						</tr>
-						
-						<tr class="note person place">
-                          <th>${message:sources-label}</th>                     
-                          <td><t:textField value="noteOnEdit.sources" rows="4"/></td>
-                        </tr>
+								<div class="note">
+									<div>${message:lemma-label}</div>
+									<div>
+										<t:textField value="noteOnEdit.lemma" />
+									</div>
+								</div>
 
-						<tr class="note person place">
-                          <th>${message:subtextSources-label}</th>                     
-                          <td><t:textField t:id="subtextSources" value="noteOnEdit.subtextSources"/></td>
-						</tr>
-						
-                        <tr>
-                          <th></th>
-                          <td><a id="longTextEditLink" href="#">${message:update}</a></td>
-                        </tr>
-                        
-                        <tr>
-                          <th>${message:longText-label}</th>
-                          <td><div id="longTextEdit">${noteOnEdit.longText}</div></td>
-                        </tr>
-                        
-                        <t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection"/>
-                        <t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId"/>
-                        <t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId"/>
-                        <t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex"/>
-                        <t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex"/>  
-                                                            
-                        </table>
-                        <input type="submit" value="${message:save}"/>
-                        <t:if test="submitSuccess">
-                        	<!-- This could be externalized? -->
-                         	<script type="text/javascript">jQuery(function() { jQuery("#submit_success_info").fadeOut(3000); });</script>
-                        	<p id="submit_success_info">${message:submit-success}</p>
-                        </t:if>
-                    </t:form>
-                   
-                </div>
-            </div>      
-          </t:if>                            
+								<div class="note">
+									<div>- ${message:meaning-label}</div>
+									<div>
+										<t:textField value="noteOnEdit.lemmaMeaning" />
+									</div>
+								</div>
+
+								<div class="note">
+									<div>${message:format-label}</div>
+									<div>
+										<t:select t:id="format" />
+									</div>
+								</div>
+
+								<div class="note">
+									<div>${message:basicForm-label}</div>
+									<div>
+										<t:textField t:id="basicForm" value="termOnEdit.basicForm"
+											t:mixins="termAutocomplete" />
+									</div>
+								</div>
+
+								<div class="note">
+									<div>- ${message:meaning-label}</div>
+									<div>
+										<t:textArea t:id="termMeaning" value="termOnEdit.meaning" />
+									</div>
+								</div>
+
+								<div class="note">
+									<div>- ${message:language-label}</div>
+									<div>
+										<t:select t:id="language" />
+									</div>
+								</div>
+
+								<t:block t:id="personFieldsBlock">
+									<div class="person">
+										<div>${message:normalizedForm-label}</div>
+										<div>
+											<t:textField t:id="normalizedName" value="normalizedPerson.name"
+												t:mixins="nameFormAutocomplete" />
+										</div>
+									</div>
+									<!--
+										<div class="person"> <div>- ${message:description-label}</div>
+										<div><t:textField t:id="normalizedDescription"
+										value="normalizedPerson.description"/></div> </div>
+									-->
+									<t:loop source="persons" value="otherPerson" volatile="true">
+										<div class="person">
+											<div>${message:nameForm-label}</div>
+											<div>
+												<t:textField t:id="name" value="otherName" />
+											</div>
+										</div>
+										<!--
+											<div class="person"> <div>- ${message:description-label}</div>
+											<div><t:textField t:id="description"
+											value="otherDescription"/></div> </div>
+										-->
+									</t:loop>
+									<div class="person">
+										<div>${message:createNameForm-label}</div>
+										<div>
+											<t:textField value="newName" />
+										</div>
+									</div>
+									<!--
+										<div class="person"> <div>- ${message:description-label}</div>
+										<div><t:textField value="newDescription"/></div> </div>
+									-->
+								</t:block>
+
+								<div t:type="FormInjector" t:id="injector" position="above" t:context="noteOnEdit.id">${noteOnEdit.id}</div>
+
+                                <script type="text/javascript">
+                                    jQuery(".t-forminjector").get(0).trigger();
+                                </script>
+
+
+
+								<!--								<div class="place">-->
+								<!--									<div>${message:normalizedForm-label}</div>-->
+								<!--									<div>-->
+								<!--										<t:textField value="normalizedPlace.name" />-->
+								<!--									</div>-->
+								<!--								</div>-->
+<!---->
+								<!--								<div class="place">-->
+								<!--									<div>- ${message:description-label}</div>-->
+								<!--									<div>-->
+								<!--										<t:textField value="normalizedPlace.description" />-->
+								<!--									</div>-->
+								<!--								</div>-->
+
+								<div class="person">
+									<div>${message:timeOfBirth-label}</div>
+									<div>
+										<t:dateField t:id="timeOfBirth" />
+									</div>
+								</div>
+
+								<div class="person">
+									<div>${message:timeOfDeath-label}</div>
+									<div>
+										<t:dateField t:id="timeOfDeath" />
+									</div>
+								</div>
+
+								<div class="note person place">
+									<div>${message:description-label}</div>
+									<div>
+										<t:textArea value="noteOnEdit.description" rows="4" />
+									</div>
+								</div>
+
+								<div class="note person place">
+									<div>${message:sources-label}</div>
+									<div>
+										<t:textField value="noteOnEdit.sources" rows="4" />
+									</div>
+								</div>
+
+								<div class="note person place">
+									<div>${message:subtextSources-label}</div>
+									<div>
+										<t:textField t:id="subtextSources" value="noteOnEdit.subtextSources" />
+									</div>
+								</div>
+
+								<div>
+									<div></div>
+									<div>
+										<a id="longTextEditLink" href="#">${message:update}</a>
+									</div>
+								</div>
+
+								<div>
+									<div>${message:longText-label}</div>
+									<div>
+										<div id="longTextEdit">${noteOnEdit.longText}</div>
+									</div>
+								</div>
+
+								<t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection" />
+								<t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId" />
+								<t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId" />
+								<t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
+								<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
+
+							<input type="submit" value="${message:save}" />
+							<t:if test="submitSuccess">
+								<!-- This could be externalized? -->
+								<script type="text/javascript">jQuery(function() {
+									jQuery("#submit_success_info").fadeOut(3000); });</script>
+								<p id="submit_success_info">${message:submit-success}</p>
+							</t:if>
+						</t:form>
+
+					</div>
+				</div>
+			</t:if>
+		</t:block>
+
+		<t:block id="infoBlock">
+			${infoMessage}
         </t:block>
-        
-        <t:block id="infoBlock">
-            ${infoMessage}
-        </t:block>
-        
-        <t:block id="errorBlock">
-            <div class="error">${infoMessage}</div>
-        </t:block>
-        
-        <t:block id="emptyBlock">
-            <span/>
-        </t:block>
-        
-    </p:rightPanel>
-	
+
+		<t:block id="errorBlock">
+			<div class="error">${infoMessage}</div>
+		</t:block>
+
+		<t:block id="emptyBlock">
+			<span />
+		</t:block>
+
+	</p:rightPanel>
+
 	<script type="text/javascript">
 		var l10n = new Array();
-		l10n.invalidSelection = "${message:invalid-selection-error}";
+		l10n.invalidSelection =
+		"${message:invalid-selection-error}";
 	</script>
 </html>

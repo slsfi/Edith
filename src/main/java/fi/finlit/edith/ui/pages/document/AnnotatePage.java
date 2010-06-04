@@ -25,8 +25,11 @@ import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.util.EnumSelectModel;
@@ -421,6 +424,16 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public String getOtherDescription() {
         return otherPerson.getDescription();
+    }
+
+    @Inject
+    private Block personFieldsBlock;
+
+    @OnEvent(component = "injector")
+    Block loadPersonFields(String id) {
+        System.err.println(id);
+        noteOnEdit = noteRevisionRepo.getById(id);
+        return personFieldsBlock;
     }
 
     @Property

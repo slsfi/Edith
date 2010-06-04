@@ -33,7 +33,7 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
  * @author tiwe
  * @version $Id$
  */
-public class NoteRepositoryTest extends AbstractServiceTest{
+public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private AdminService adminService;
@@ -47,19 +47,21 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     @Inject
     private NoteRevisionRepository noteRevisionRepo;
 
-    @Inject @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
+    @Inject
+    @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
-    @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
+    @Inject
+    @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
     private String testDocument;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         adminService.removeNotesAndTerms();
     }
 
     @Test
-    public void importNotes() throws Exception{
+    public void importNotes() throws Exception {
         assertEquals(133, noteRepo.importNotes(noteTestData));
         assertEquals(133, noteRevisionRepo.queryNotes("*").getAvailableRows());
         assertEquals(1, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
@@ -67,13 +69,21 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     }
 
     @Test
-    public void queryDictionary() throws Exception{
+    public void Import_Notes() throws Exception{
+        assertEquals(133, noteRepo.importNotes(noteTestData));
+        assertEquals(133, noteRevisionRepo.queryNotes("*").getAvailableRows());
+        assertEquals(1, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
+        assertEquals(2, noteRevisionRepo.queryNotes("etten anna sinulle").getAvailableRows());
+    }
+
+    @Test
+    public void queryDictionary() throws Exception {
         assertEquals(133, noteRepo.importNotes(noteTestData));
         assertTrue(noteRepo.queryDictionary("*").getAvailableRows() > 0);
     }
 
     @Test
-    public void queryDictionary2() throws Exception{
+    public void queryDictionary2() throws Exception {
         assertEquals(133, noteRepo.importNotes(noteTestData));
         GridDataSource dataSource = noteRepo.queryDictionary("a");
         int count1 = dataSource.getAvailableRows();
@@ -92,11 +102,11 @@ public class NoteRepositoryTest extends AbstractServiceTest{
         noteRepo.createNote(document.getRevision(latestRevision), "10", longText);
         assertTrue(noteRepo.queryDictionary(longText).getAvailableRows() > 0);
 
-//        assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "10"));
+        // assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "10"));
     }
 
     @Test
-    public void remove(){
+    public void remove() {
         Document document = documentRepo.getDocumentForPath(testDocument);
         List<RevisionInfo> revisions = documentRepo.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
@@ -106,12 +116,13 @@ public class NoteRepositoryTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getLemmaForLongText(){
+    public void getLemmaForLongText() {
         assertEquals("word", getLemmaForLongText("word"));
         assertEquals("word1 \u2013 \u2013 word2", getLemmaForLongText("word1 word2"));
         assertEquals("word1 \u2013 \u2013 word3", getLemmaForLongText("word1 word3"));
         assertEquals("word1 \u2013 \u2013 word3", getLemmaForLongText("word1\t word2 \nword3"));
-        assertEquals("foo \u2013 \u2013 bar", getLemmaForLongText(" \n      foo \n \t     bar    \n\t\t"));
+        assertEquals("foo \u2013 \u2013 bar",
+                getLemmaForLongText(" \n      foo \n \t     bar    \n\t\t"));
         assertEquals("foo", getLemmaForLongText(" \n      foo \n \t   \n\t\t"));
     }
 

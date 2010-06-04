@@ -24,15 +24,15 @@ public class NameFormAutocomplete extends JQueryAutocomplete {
     protected JSONArray generateResponse(List<Object> matches) {
         JSONArray a = new JSONArray();
 
-        for (Object o : matches) {
-            NameForm nameForm = (NameForm) o;
+//        for (Object o : matches) {
+            NameForm nameForm = new NameForm("Aleksis Kivi", "Aleksin norminimi.");
             /* "value" is the item used by the autocompletion to visualize the list element. */
             a.put(new JSONObject().put("normalizedName", nameForm.getName()).put(
                     "normalizedDescription", nameForm.getDescription()).put(
                     "value",
                     nameForm.getName() + " - "
                             + StringUtils.abbreviate(nameForm.getDescription(), 32)));
-        }
+//        }
 
         return a;
     }
