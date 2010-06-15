@@ -34,6 +34,7 @@ import org.junit.Test;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Interval;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
@@ -126,8 +127,10 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Alexis Stenvall", "En jättebra skrivare."));
         noteRevision.setPerson(new Person(normalizedForm, otherForms));
-        noteRevision.getPerson().setTimeOfBirth(new LocalDate(1834, 10, 10));
-        noteRevision.getPerson().setTimeOfDeath(new LocalDate(1872, 12, 31));
+        Interval timeOfBirth = Interval.createDate(new LocalDate(1834, 10, 10));
+        Interval timeOfDeath = Interval.createDate(new LocalDate(1872, 12, 31));
+        noteRevision.getPerson().setTimeOfBirth(timeOfBirth);
+        noteRevision.getPerson().setTimeOfDeath(timeOfDeath);
         noteRevisionRepo.save(noteRevision);
         NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
         assertEquals(noteRevision.getPerson().getNormalizedForm().getName(), persistedNoteRevision
@@ -139,6 +142,25 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
                 .getTimeOfBirth());
         assertEquals(noteRevision.getPerson().getTimeOfDeath(), persistedNoteRevision.getPerson()
                 .getTimeOfDeath());
+    }
+
+    @Test
+    public void Store_And_Retrieve_Person_With_The_Same_Birth_And_Death_Date() {
+        Note note = noteRepo
+                .createNote(docRev, "3",
+                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        NoteRevision noteRevision = new NoteRevision();
+        noteRevision.setRevisionOf(note);
+        noteRevision.setType(NoteType.PERSON);
+        Interval timeOfBirth = Interval.createYear(1834);
+        Interval timeOfDeath = Interval.createYear(1834);
+        noteRevision.setPerson(new Person());
+        noteRevision.getPerson().setTimeOfBirth(timeOfBirth);
+        noteRevision.getPerson().setTimeOfDeath(timeOfDeath);
+        noteRevisionRepo.save(noteRevision);
+        NoteRevision persistedNoteRevision = noteRevisionRepo.getById(noteRevision.getId());
+        assertNotNull(persistedNoteRevision.getPerson().getTimeOfBirth());
+        assertNotNull(persistedNoteRevision.getPerson().getTimeOfDeath());
     }
 
     @Test

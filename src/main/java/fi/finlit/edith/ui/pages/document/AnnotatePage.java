@@ -10,11 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
@@ -25,19 +21,16 @@ import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
-import org.apache.tapestry5.annotations.InjectComponent;
-import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
-import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.util.EnumSelectModel;
-import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Interval;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteRepository;
@@ -45,8 +38,6 @@ import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
 import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
@@ -229,19 +220,19 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (note.getRevisionOf().getStatus().equals(NoteStatus.INITIAL)) {
             note.getRevisionOf().setStatus(NoteStatus.DRAFT);
         }
-//        if (newName != null) {
-//            note.getPerson().getOtherForms().add(new NameForm(newName, newDescription));
-//        }
-//        newName = null;
-//        newDescription = null;
-//        // Removes person's name forms that don't have a "name" entered.
-//        Iterator<NameForm> iter = noteOnEdit.getPerson().getOtherForms().iterator();
-//        while (iter.hasNext()) {
-//            NameForm current = iter.next();
-//            if (current.getName() == null) {
-//                iter.remove();
-//            }
-//        }
+        // if (newName != null) {
+        // note.getPerson().getOtherForms().add(new NameForm(newName, newDescription));
+        // }
+        // newName = null;
+        // newDescription = null;
+        // // Removes person's name forms that don't have a "name" entered.
+        // Iterator<NameForm> iter = noteOnEdit.getPerson().getOtherForms().iterator();
+        // while (iter.hasNext()) {
+        // NameForm current = iter.next();
+        // if (current.getName() == null) {
+        // iter.remove();
+        // }
+        // }
         try {
             if (updateLongTextSelection.isValid()) {
                 noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
@@ -364,77 +355,77 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
 
-//    public Date getTimeOfBirth() {
-//        return noteOnEdit.getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getPerson()
-//                .getTimeOfBirth().toDateMidnight().toDate();
-//    }
-//
-//    public void setTimeOfBirth(Date timeOfBirth) {
-//        if (timeOfBirth != null) {
-//            noteOnEdit.getPerson().setTimeOfBirth(new DateMidnight(timeOfBirth).toLocalDate());
-//        }
-//    }
-//
-//    public Date getTimeOfDeath() {
-//        return noteOnEdit.getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getPerson()
-//                .getTimeOfDeath().toDateMidnight().toDate();
-//    }
-//
-//    public void setTimeOfDeath(Date timeOfDeath) {
-//        if (timeOfDeath != null) {
-//            noteOnEdit.getPerson().setTimeOfDeath(new DateMidnight(timeOfDeath).toLocalDate());
-//        }
-//    }
-//
-//    public NameForm getNormalizedPerson() {
-//        if (noteOnEdit.getPerson() == null) {
-//            noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
-//        }
-//        return noteOnEdit.getPerson().getNormalizedForm();
-//    }
-//
-//    public NameForm getNormalizedPlace() {
-//        if (noteOnEdit.getPlace() == null) {
-//            noteOnEdit.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
-//        }
-//        return noteOnEdit.getPlace().getNormalizedForm();
-//    }
-//
-//    public Set<NameForm> getPersons() {
-//        if (noteOnEdit.getPerson() == null) {
-//            noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
-//        }
-//        return noteOnEdit.getPerson().getOtherForms();
-//    }
-//
-//    @Property
-//    private NameForm otherPerson;
-//
-//    public void setOtherName(String name) {
-//        otherPerson.setName(name);
-//    }
-//
-//    public void setOtherDescription(String description) {
-//        otherPerson.setDescription(description);
-//    }
-//
-//    public String getOtherName() {
-//        return otherPerson.getName();
-//    }
-//
-//    public String getOtherDescription() {
-//        return otherPerson.getDescription();
-//    }
+    public String getTimeOfBirth() {
+        return noteOnEdit.getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getPerson()
+                .getTimeOfBirth().asString();
+    }
 
-//    @Inject
-//    private Block personFieldsBlock;
+    public String getTimeOfDeath() {
+        return noteOnEdit.getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getPerson()
+                .getTimeOfDeath().asString();
+    }
 
-//    @OnEvent(component = "injector")
-//    Block loadPersonFields(String id) {
-//        System.err.println(id);
-//        noteOnEdit = noteRevisionRepo.getById(id);
-//        return personFieldsBlock;
-//    }
+    public void setTimeOfBirth(String time) {
+        if (time != null) {
+            noteOnEdit.getPerson().setTimeOfBirth(Interval.fromString(time));
+        }
+    }
+
+    public void setTimeOfDeath(String time) {
+        if (time != null) {
+            noteOnEdit.getPerson().setTimeOfDeath(Interval.fromString(time));
+        }
+    }
+
+    // public NameForm getNormalizedPerson() {
+    // if (noteOnEdit.getPerson() == null) {
+    // noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
+    // }
+    // return noteOnEdit.getPerson().getNormalizedForm();
+    // }
+    //
+    // public NameForm getNormalizedPlace() {
+    // if (noteOnEdit.getPlace() == null) {
+    // noteOnEdit.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
+    // }
+    // return noteOnEdit.getPlace().getNormalizedForm();
+    // }
+    //
+    // public Set<NameForm> getPersons() {
+    // if (noteOnEdit.getPerson() == null) {
+    // noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
+    // }
+    // return noteOnEdit.getPerson().getOtherForms();
+    // }
+    //
+    // @Property
+    // private NameForm otherPerson;
+    //
+    // public void setOtherName(String name) {
+    // otherPerson.setName(name);
+    // }
+    //
+    // public void setOtherDescription(String description) {
+    // otherPerson.setDescription(description);
+    // }
+    //
+    // public String getOtherName() {
+    // return otherPerson.getName();
+    // }
+    //
+    // public String getOtherDescription() {
+    // return otherPerson.getDescription();
+    // }
+
+    // @Inject
+    // private Block personFieldsBlock;
+
+    // @OnEvent(component = "injector")
+    // Block loadPersonFields(String id) {
+    // System.err.println(id);
+    // noteOnEdit = noteRevisionRepo.getById(id);
+    // return personFieldsBlock;
+    // }
 
     @Property
     private String newName;

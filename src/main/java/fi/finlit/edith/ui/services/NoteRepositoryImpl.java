@@ -30,6 +30,7 @@ import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
@@ -40,16 +41,14 @@ import fi.finlit.edith.domain.UserRepository;
  * @author tiwe
  * @version $Id$
  */
-public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository{
+public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
 
     private final TimeService timeService;
 
     private final UserRepository userRepository;
 
-    public NoteRepositoryImpl(
-            @Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository,
-            @Inject TimeService timeService) {
+    public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
+            @Inject UserRepository userRepository, @Inject TimeService timeService) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
         this.timeService = timeService;
@@ -65,6 +64,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         rev.setSVNRevision(docRevision.getRevision());
         rev.setLongText(longText);
         rev.setLemmaFromLongText();
+        rev.setPerson(new Person());
         getSession().save(rev);
 
         Note newNote = new Note();
@@ -100,13 +100,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             } catch (XMLStreamException e) {
                 throw new ServiceException(e);
             }
-            if (event == XMLStreamConstants.START_ELEMENT){
+            if (event == XMLStreamConstants.START_ELEMENT) {
                 handleStartElement(reader, data);
-            }else if (event == XMLStreamConstants.END_ELEMENT){
+            } else if (event == XMLStreamConstants.END_ELEMENT) {
                 handleEndElement(reader, session, data);
-            }else if (event == XMLStreamConstants.CHARACTERS){
+            } else if (event == XMLStreamConstants.CHARACTERS) {
                 data.text = reader.getText();
-            }else if (event == XMLStreamConstants.END_DOCUMENT) {
+            } else if (event == XMLStreamConstants.END_DOCUMENT) {
                 try {
                     reader.close();
                 } catch (XMLStreamException e) {
@@ -120,7 +120,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private void handleStartElement(XMLStreamReader reader, LoopContext data) {
         String localName = reader.getLocalName();
-        if (localName.equals("note")){
+        if (localName.equals("note")) {
             data.revision = new NoteRevision();
             data.revision.setRevisionOf(new Note());
             data.revision.getRevisionOf().setLatestRevision(data.revision);
@@ -132,7 +132,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     private void handleEndElement(XMLStreamReader reader, Session session, LoopContext data) {
         String localName = reader.getLocalName();
 
-        if (localName.equals("note")){
+        if (localName.equals("note")) {
             if (data.term != null) {
                 data.revision.getRevisionOf().setTerm(data.term);
                 session.save(data.term);
@@ -140,21 +140,21 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             session.save(data.revision.getRevisionOf());
             session.save(data.revision);
             data.counter++;
-        }else if (localName.equals("lemma")){
+        } else if (localName.equals("lemma")) {
             data.revision.setLemma(data.text);
-        }else if (localName.equals("text")){
+        } else if (localName.equals("text")) {
             data.revision.setLongText(data.text);
-        }else if (localName.equals("baseform")){
+        } else if (localName.equals("baseform")) {
             if (data.term == null) {
                 data.term = new Term();
             }
             data.term.setBasicForm(data.text);
-        }else if (localName.equals("meaning")){
+        } else if (localName.equals("meaning")) {
             if (data.term == null) {
                 data.term = new Term();
             }
             data.term.setMeaning(data.text);
-        }else if (localName.equals("description")){
+        } else if (localName.equals("description")) {
             data.revision.setDescription(data.text);
         }
 
@@ -177,11 +177,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     @Override
     public GridDataSource queryDictionary(String searchTerm) {
         Assert.notNull(searchTerm);
-        if (!searchTerm.equals("*")){
+        if (!searchTerm.equals("*")) {
             BooleanBuilder builder = new BooleanBuilder();
             builder.or(termWithNotes.basicForm.contains(searchTerm, false));
             builder.or(termWithNotes.meaning.contains(searchTerm, false));
-            return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(), false, builder.getValue());
+            return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(),
+                    false, builder.getValue());
         }
         return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(), false);
     }

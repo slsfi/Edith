@@ -294,6 +294,20 @@
 								</div>
 							</div>
 							 -->
+							 
+						  <div class="person">
+                                    <div>${message:timeOfBirth-label} (d.M.y)</div>
+                                    <div>
+                                        <t:textField t:id="timeOfBirth" />
+                                    </div>
+                                </div>
+
+                                <div class="person">
+                                    <div>${message:timeOfDeath-label} (d.M.y)</div>
+                                    <div>
+                                        <t:textField t:id="timeOfDeath" />
+                                    </div>
+                                </div>
 
 							<div class="note person place">
 								<div>${message:description-label}</div>

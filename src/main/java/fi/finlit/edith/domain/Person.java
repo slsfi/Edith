@@ -2,8 +2,6 @@ package fi.finlit.edith.domain;
 
 import java.util.Set;
 
-import org.joda.time.LocalDate;
-
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
@@ -18,10 +16,10 @@ public class Person {
     private Set<NameForm> otherForms;
 
     @Predicate
-    private LocalDate timeOfBirth;
+    private Interval timeOfBirth;
 
     @Predicate
-    private LocalDate timeOfDeath;
+    private Interval timeOfDeath;
 
     public Person() {
     }
@@ -47,19 +45,19 @@ public class Person {
         this.otherForms = otherForms;
     }
 
-    public LocalDate getTimeOfBirth() {
-        return timeOfBirth;
-    }
-
-    public void setTimeOfDeath(LocalDate timeOfDeath) {
+    public void setTimeOfDeath(Interval timeOfDeath) {
         this.timeOfDeath = timeOfDeath;
     }
 
-    public void setTimeOfBirth(LocalDate timeOfBirth) {
+    public void setTimeOfBirth(Interval timeOfBirth) {
         this.timeOfBirth = timeOfBirth;
     }
 
-    public LocalDate getTimeOfDeath() {
+    public Interval getTimeOfDeath() {
         return timeOfDeath;
+    }
+
+    public Interval getTimeOfBirth() {
+        return timeOfBirth;
     }
 }
