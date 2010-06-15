@@ -2,50 +2,61 @@ package fi.finlit.edith.domain;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.base.BaseInterval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Id;
-import com.mysema.rdfbean.annotations.InjectProperty;
 import com.mysema.rdfbean.annotations.Predicate;
 import com.mysema.rdfbean.model.IDType;
 
 import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
-public class Interval extends BaseInterval {
-    /**
-     *
-     */
+public class Interval {
+    
     private static final long serialVersionUID = 6320083216375055746L;
 
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("d.M.y");
 
     @Id(IDType.LOCAL)
-    private final String id;
+    private String id;
 
+    @Predicate
+    private DateTime start;
+    
+    @Predicate
+    private DateTime end;
+    
     public String getId() {
         return id;
     }
-
-    public Interval(@InjectProperty("id") String id, @InjectProperty("start") DateTime start,
-            @InjectProperty("end") DateTime end) {
-        super(start, end);
+    
+    public void setId(String id){
         this.id = id;
     }
+    
+    public Interval() {}
 
-    @Predicate
-    @Override
-    public DateTime getStart() {
-        return super.getStart();
+    public Interval(DateTime start, DateTime end) {
+        this.start = start;
+        this.end = end;
     }
 
-    @Predicate
-    @Override
+    public DateTime getStart() {
+        return start;
+    }
+
+    public void setStart(DateTime start) {
+        this.start = start;
+    }
+
     public DateTime getEnd() {
-        return super.getEnd();
+        return end;
+    }
+
+    public void setEnd(DateTime end) {
+        this.end = end;
     }
 
     public boolean isDate() {
@@ -66,8 +77,7 @@ public class Interval extends BaseInterval {
     }
 
     public static Interval createYear(int year) {
-        return new Interval(null, new DateTime(year, 1, 1, 0, 0, 0, 0), new DateTime(year + 1, 1, 1, 0,
-                0, 0, 0));
+        return new Interval(new DateTime(year, 1, 1, 0, 0, 0, 0), new DateTime(year + 1, 1, 1, 0, 0, 0, 0));
     }
 
     public static Interval createDate(LocalDate localDate) {
@@ -75,7 +85,7 @@ public class Interval extends BaseInterval {
     }
 
     public static Interval createDate(DateTime dateTime) {
-        return new Interval(null, dateTime, dateTime);
+        return new Interval(dateTime, dateTime);
     }
 
     public String asString() {
