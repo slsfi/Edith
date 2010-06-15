@@ -229,19 +229,19 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (note.getRevisionOf().getStatus().equals(NoteStatus.INITIAL)) {
             note.getRevisionOf().setStatus(NoteStatus.DRAFT);
         }
-        if (newName != null) {
-            note.getPerson().getOtherForms().add(new NameForm(newName, newDescription));
-        }
-        newName = null;
-        newDescription = null;
-        // Removes person's name forms that don't have a "name" entered.
-        Iterator<NameForm> iter = noteOnEdit.getPerson().getOtherForms().iterator();
-        while (iter.hasNext()) {
-            NameForm current = iter.next();
-            if (current.getName() == null) {
-                iter.remove();
-            }
-        }
+//        if (newName != null) {
+//            note.getPerson().getOtherForms().add(new NameForm(newName, newDescription));
+//        }
+//        newName = null;
+//        newDescription = null;
+//        // Removes person's name forms that don't have a "name" entered.
+//        Iterator<NameForm> iter = noteOnEdit.getPerson().getOtherForms().iterator();
+//        while (iter.hasNext()) {
+//            NameForm current = iter.next();
+//            if (current.getName() == null) {
+//                iter.remove();
+//            }
+//        }
         try {
             if (updateLongTextSelection.isValid()) {
                 noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
@@ -364,77 +364,77 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
 
-    public Date getTimeOfBirth() {
-        return noteOnEdit.getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getPerson()
-                .getTimeOfBirth().toDateMidnight().toDate();
-    }
+//    public Date getTimeOfBirth() {
+//        return noteOnEdit.getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getPerson()
+//                .getTimeOfBirth().toDateMidnight().toDate();
+//    }
+//
+//    public void setTimeOfBirth(Date timeOfBirth) {
+//        if (timeOfBirth != null) {
+//            noteOnEdit.getPerson().setTimeOfBirth(new DateMidnight(timeOfBirth).toLocalDate());
+//        }
+//    }
+//
+//    public Date getTimeOfDeath() {
+//        return noteOnEdit.getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getPerson()
+//                .getTimeOfDeath().toDateMidnight().toDate();
+//    }
+//
+//    public void setTimeOfDeath(Date timeOfDeath) {
+//        if (timeOfDeath != null) {
+//            noteOnEdit.getPerson().setTimeOfDeath(new DateMidnight(timeOfDeath).toLocalDate());
+//        }
+//    }
+//
+//    public NameForm getNormalizedPerson() {
+//        if (noteOnEdit.getPerson() == null) {
+//            noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
+//        }
+//        return noteOnEdit.getPerson().getNormalizedForm();
+//    }
+//
+//    public NameForm getNormalizedPlace() {
+//        if (noteOnEdit.getPlace() == null) {
+//            noteOnEdit.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
+//        }
+//        return noteOnEdit.getPlace().getNormalizedForm();
+//    }
+//
+//    public Set<NameForm> getPersons() {
+//        if (noteOnEdit.getPerson() == null) {
+//            noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
+//        }
+//        return noteOnEdit.getPerson().getOtherForms();
+//    }
+//
+//    @Property
+//    private NameForm otherPerson;
+//
+//    public void setOtherName(String name) {
+//        otherPerson.setName(name);
+//    }
+//
+//    public void setOtherDescription(String description) {
+//        otherPerson.setDescription(description);
+//    }
+//
+//    public String getOtherName() {
+//        return otherPerson.getName();
+//    }
+//
+//    public String getOtherDescription() {
+//        return otherPerson.getDescription();
+//    }
 
-    public void setTimeOfBirth(Date timeOfBirth) {
-        if (timeOfBirth != null) {
-            noteOnEdit.getPerson().setTimeOfBirth(new DateMidnight(timeOfBirth).toLocalDate());
-        }
-    }
+//    @Inject
+//    private Block personFieldsBlock;
 
-    public Date getTimeOfDeath() {
-        return noteOnEdit.getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getPerson()
-                .getTimeOfDeath().toDateMidnight().toDate();
-    }
-
-    public void setTimeOfDeath(Date timeOfDeath) {
-        if (timeOfDeath != null) {
-            noteOnEdit.getPerson().setTimeOfDeath(new DateMidnight(timeOfDeath).toLocalDate());
-        }
-    }
-
-    public NameForm getNormalizedPerson() {
-        if (noteOnEdit.getPerson() == null) {
-            noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
-        }
-        return noteOnEdit.getPerson().getNormalizedForm();
-    }
-
-    public NameForm getNormalizedPlace() {
-        if (noteOnEdit.getPlace() == null) {
-            noteOnEdit.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
-        }
-        return noteOnEdit.getPlace().getNormalizedForm();
-    }
-
-    public Set<NameForm> getPersons() {
-        if (noteOnEdit.getPerson() == null) {
-            noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
-        }
-        return noteOnEdit.getPerson().getOtherForms();
-    }
-
-    @Property
-    private NameForm otherPerson;
-
-    public void setOtherName(String name) {
-        otherPerson.setName(name);
-    }
-
-    public void setOtherDescription(String description) {
-        otherPerson.setDescription(description);
-    }
-
-    public String getOtherName() {
-        return otherPerson.getName();
-    }
-
-    public String getOtherDescription() {
-        return otherPerson.getDescription();
-    }
-
-    @Inject
-    private Block personFieldsBlock;
-
-    @OnEvent(component = "injector")
-    Block loadPersonFields(String id) {
-        System.err.println(id);
-        noteOnEdit = noteRevisionRepo.getById(id);
-        return personFieldsBlock;
-    }
+//    @OnEvent(component = "injector")
+//    Block loadPersonFields(String id) {
+//        System.err.println(id);
+//        noteOnEdit = noteRevisionRepo.getById(id);
+//        return personFieldsBlock;
+//    }
 
     @Property
     private String newName;
