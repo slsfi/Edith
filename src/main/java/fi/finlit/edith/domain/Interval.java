@@ -7,17 +7,33 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
+import com.mysema.rdfbean.annotations.Id;
 import com.mysema.rdfbean.annotations.InjectProperty;
 import com.mysema.rdfbean.annotations.Predicate;
+import com.mysema.rdfbean.model.IDType;
 
 import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class Interval extends BaseInterval {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 6320083216375055746L;
+
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("d.M.y");
 
-    public Interval(@InjectProperty("start") DateTime start, @InjectProperty("end") DateTime end) {
+    @Id(IDType.LOCAL)
+    private final String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public Interval(@InjectProperty("id") String id, @InjectProperty("start") DateTime start,
+            @InjectProperty("end") DateTime end) {
         super(start, end);
+        this.id = id;
     }
 
     @Predicate
@@ -50,7 +66,7 @@ public class Interval extends BaseInterval {
     }
 
     public static Interval createYear(int year) {
-        return new Interval(new DateTime(year, 1, 1, 0, 0, 0, 0), new DateTime(year + 1, 1, 1, 0,
+        return new Interval(null, new DateTime(year, 1, 1, 0, 0, 0, 0), new DateTime(year + 1, 1, 1, 0,
                 0, 0, 0));
     }
 
@@ -59,7 +75,7 @@ public class Interval extends BaseInterval {
     }
 
     public static Interval createDate(DateTime dateTime) {
-        return new Interval(dateTime, dateTime);
+        return new Interval(null, dateTime, dateTime);
     }
 
     public String asString() {
