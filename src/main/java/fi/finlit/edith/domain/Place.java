@@ -38,43 +38,4 @@ public class Place {
     public void setOtherForms(Set<NameForm> otherForms) {
         this.otherForms = otherForms;
     }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (normalizedForm == null ? 0 : normalizedForm.hashCode());
-        result = prime * result + (otherForms == null ? 0 : otherForms.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Place other = (Place) obj;
-        if (normalizedForm == null) {
-            if (other.normalizedForm != null) {
-                return false;
-            }
-        } else if (!normalizedForm.equals(other.normalizedForm)) {
-            return false;
-        }
-        if (otherForms == null) {
-            if (other.otherForms != null) {
-                return false;
-            }
-        } else if (!otherForms.equals(other.otherForms)) {
-            return false;
-        }
-        return true;
-    }
-
 }
