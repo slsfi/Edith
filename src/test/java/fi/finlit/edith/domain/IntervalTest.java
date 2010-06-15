@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.junit.Before;
 import org.junit.Test;
 
 public class IntervalTest {
@@ -88,4 +89,59 @@ public class IntervalTest {
         assertEquals(2010,  Interval.fromString("2010").getYear());
     }
 
+    private Interval interval;
+
+    @Before
+    public void setUp() {
+        interval = new Interval(new DateTime(), new DateTime());
+    }
+
+    @Test
+    public void Hash_Code_When_Id_Null() {
+        assertEquals(31, new Interval().hashCode());
+    }
+
+    @Test
+    public void Hash_Code() {
+        interval.setId("a");
+        assertEquals(31 + "a".hashCode(), interval.hashCode());
+    }
+
+    @Test
+    public void Equals_Same_Object() {
+        assertTrue(interval.equals(interval));
+    }
+
+    @Test
+    public void Equals_Other_Is_Null() {
+        assertFalse(interval.equals(null));
+    }
+
+    @Test
+    public void Equals_Other_Is_Different_Type() {
+        assertFalse(interval.equals("foo"));
+    }
+
+    @Test
+    public void Equals_Ids_Are_Not_Equal() {
+        interval.setId("a");
+        Interval other = new Interval();
+        other.setId("b");
+        assertFalse(interval.equals(other));
+    }
+
+    @Test
+    public void Equals_Id_Is_Null_And_Other_Id_Not() {
+        Interval other = new Interval();
+        other.setId("b");
+        assertFalse(interval.equals(other));
+    }
+
+    @Test
+    public void Equals_Ids_Are_Equal() {
+        interval.setId("a");
+        Interval other = new Interval();
+        other.setId("a");
+        assertTrue(interval.equals(other));
+    }
 }

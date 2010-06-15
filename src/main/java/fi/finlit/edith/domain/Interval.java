@@ -14,9 +14,6 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class Interval {
-    
-    private static final long serialVersionUID = 6320083216375055746L;
-
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("d.M.y");
 
     @Id(IDType.LOCAL)
@@ -24,18 +21,18 @@ public class Interval {
 
     @Predicate
     private DateTime start;
-    
+
     @Predicate
     private DateTime end;
-    
+
     public String getId() {
         return id;
     }
-    
+
     public void setId(String id){
         this.id = id;
     }
-    
+
     public Interval() {}
 
     public Interval(DateTime start, DateTime end) {
@@ -102,4 +99,37 @@ public class Interval {
             return Interval.createYear(Integer.parseInt(s));
         }
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (id == null ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Interval other = (Interval) obj;
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+
+
 }
