@@ -11,6 +11,7 @@ import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashSet;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -27,10 +28,12 @@ import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
@@ -64,7 +67,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         rev.setSVNRevision(docRevision.getRevision());
         rev.setLongText(longText);
         rev.setLemmaFromLongText();
-        rev.setPerson(new Person());
+        rev.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
+        rev.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
         getSession().save(rev);
 
         Note newNote = new Note();

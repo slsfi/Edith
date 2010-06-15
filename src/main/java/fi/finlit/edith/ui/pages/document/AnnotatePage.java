@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
@@ -215,24 +217,31 @@ public class AnnotatePage extends AbstractDocumentPage {
         termOnEdit = getEditTerm(noteOnEdit);
     }
 
+    private void updateSetContents(Set<NameForm> nameForms, String name, String description) {
+        if (name != null) {
+            nameForms.add(new NameForm(name, description));
+        }
+        // Removes name forms that don't have a name entered.
+        Iterator<NameForm> iter = nameForms.iterator();
+        while (iter.hasNext()) {
+            NameForm current = iter.next();
+            if (current.getName() == null) {
+                iter.remove();
+            }
+        }
+    }
+
     Object onSuccessFromNoteEditForm() throws IOException {
         NoteRevision noteRevision;
         if (note.getRevisionOf().getStatus().equals(NoteStatus.INITIAL)) {
             note.getRevisionOf().setStatus(NoteStatus.DRAFT);
         }
-        // if (newName != null) {
-        // note.getPerson().getOtherForms().add(new NameForm(newName, newDescription));
-        // }
-        // newName = null;
-        // newDescription = null;
-        // // Removes person's name forms that don't have a "name" entered.
-        // Iterator<NameForm> iter = noteOnEdit.getPerson().getOtherForms().iterator();
-        // while (iter.hasNext()) {
-        // NameForm current = iter.next();
-        // if (current.getName() == null) {
-        // iter.remove();
-        // }
-        // }
+        updateSetContents(note.getPerson().getOtherForms(), newPersonName, newPersonDescription);
+        newPersonName = null;
+        newPersonDescription = null;
+        updateSetContents(note.getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
+        newPlaceName = null;
+        newPlaceDescription = null;
         try {
             if (updateLongTextSelection.isValid()) {
                 noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
@@ -247,7 +256,8 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         // Handling the embedded term edit
         if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
-            // FIXME The following is a bit hard to follow. -vema
+            // The idea is that language can be changed without a new term being created. It is a
+            // bit hard to follow I admit. -vema
             List<Term> terms = termRepo.findByBasicForm(termOnEdit.getBasicForm());
             Term term = terms.isEmpty() ? termOnEdit : null;
             for (Term current : terms) {
@@ -377,60 +387,38 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
     }
 
-    // public NameForm getNormalizedPerson() {
-    // if (noteOnEdit.getPerson() == null) {
-    // noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
-    // }
-    // return noteOnEdit.getPerson().getNormalizedForm();
-    // }
-    //
-    // public NameForm getNormalizedPlace() {
-    // if (noteOnEdit.getPlace() == null) {
-    // noteOnEdit.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
-    // }
-    // return noteOnEdit.getPlace().getNormalizedForm();
-    // }
-    //
-    // public Set<NameForm> getPersons() {
-    // if (noteOnEdit.getPerson() == null) {
-    // noteOnEdit.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
-    // }
-    // return noteOnEdit.getPerson().getOtherForms();
-    // }
-    //
-    // @Property
-    // private NameForm otherPerson;
-    //
-    // public void setOtherName(String name) {
-    // otherPerson.setName(name);
-    // }
-    //
-    // public void setOtherDescription(String description) {
-    // otherPerson.setDescription(description);
-    // }
-    //
-    // public String getOtherName() {
-    // return otherPerson.getName();
-    // }
-    //
-    // public String getOtherDescription() {
-    // return otherPerson.getDescription();
-    // }
+    public NameForm getNormalizedPerson() {
+        return noteOnEdit.getPerson().getNormalizedForm();
+    }
 
-    // @Inject
-    // private Block personFieldsBlock;
+    public NameForm getNormalizedPlace() {
+        return noteOnEdit.getPlace().getNormalizedForm();
+    }
 
-    // @OnEvent(component = "injector")
-    // Block loadPersonFields(String id) {
-    // System.err.println(id);
-    // noteOnEdit = noteRevisionRepo.getById(id);
-    // return personFieldsBlock;
-    // }
+    public Set<NameForm> getPersons() {
+        return noteOnEdit.getPerson().getOtherForms();
+    }
+
+    public Set<NameForm> getPlaces() {
+        return noteOnEdit.getPlace().getOtherForms();
+    }
 
     @Property
-    private String newName;
+    private NameForm loopPerson;
 
     @Property
-    private String newDescription;
+    private NameForm loopPlace;
+
+    @Property
+    private String newPersonName;
+
+    @Property
+    private String newPersonDescription;
+
+    @Property
+    private String newPlaceName;
+
+    @Property
+    private String newPlaceDescription;
 
 }
