@@ -129,7 +129,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             data.revision.setRevisionOf(new Note());
             data.revision.getRevisionOf().setLatestRevision(data.revision);
             data.revision.setCreatedOn(timeService.currentTimeMillis());
-            data.term = null;
         }
     }
 
@@ -137,42 +136,27 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String localName = reader.getLocalName();
 
         if (localName.equals("note")) {
-            if (data.term != null) {
-                data.revision.getRevisionOf().setTerm(data.term);
-                session.save(data.term);
-            }
             session.save(data.revision.getRevisionOf());
             session.save(data.revision);
             data.counter++;
         } else if (localName.equals("lemma")) {
             data.revision.setLemma(data.text);
-        } else if (localName.equals("text")) {
-            data.revision.setLongText(data.text);
-        } else if (localName.equals("baseform")) {
-            if (data.term == null) {
-                data.term = new Term();
-            }
-            data.term.setBasicForm(data.text);
-        } else if (localName.equals("meaning")) {
-            if (data.term == null) {
-                data.term = new Term();
-            }
-            data.term.setMeaning(data.text);
+        } else if (localName.equals("lemma-meaning")) {
+            data.revision.setLemmaMeaning(data.text);
+        } else if (localName.equals("source")) {
+            data.revision.setSources(data.text);
         } else if (localName.equals("description")) {
             data.revision.setDescription(data.text);
         }
-
     }
 
     private static final class LoopContext {
         private NoteRevision revision;
-        private Term term;
         private String text;
         private int counter;
 
         private LoopContext() {
             revision = null;
-            term = null;
             text = null;
             counter = 0;
         }

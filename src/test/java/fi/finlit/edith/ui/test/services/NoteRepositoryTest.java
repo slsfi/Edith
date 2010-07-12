@@ -6,13 +6,16 @@
 package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
@@ -61,30 +64,36 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void importNotes() throws Exception {
-        assertEquals(133, noteRepo.importNotes(noteTestData));
-        assertEquals(133, noteRevisionRepo.queryNotes("*").getAvailableRows());
-        assertEquals(1, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
-        assertEquals(2, noteRevisionRepo.queryNotes("etten anna sinulle").getAvailableRows());
+    public void importNote() throws Exception {
+        noteRepo.importNotes(noteTestData);
+        GridDataSource gridDataSource = noteRevisionRepo.queryNotes("kereitten");
+        gridDataSource.prepare(0, 10000, new ArrayList<SortConstraint>());
+        NoteRevision note = (NoteRevision) gridDataSource.getRowValue(0);
+        assertNotNull(note);
+        assertEquals("kereitten", note.getLemma());
+        assertEquals("'keritte'", note.getLemmaMeaning());
+        // FIXME The following two don't work because they contain </bibliograph>.
+        // assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph>, 363).",
+        // note.getDescription());
+        // assertEquals("v", note.getSources());
     }
 
     @Test
-    public void Import_Notes() throws Exception{
-        assertEquals(133, noteRepo.importNotes(noteTestData));
-        assertEquals(133, noteRevisionRepo.queryNotes("*").getAvailableRows());
-        assertEquals(1, noteRevisionRepo.queryNotes("lemma").getAvailableRows());
-        assertEquals(2, noteRevisionRepo.queryNotes("etten anna sinulle").getAvailableRows());
+    public void importNotes() throws Exception {
+        assertEquals(9, noteRepo.importNotes(noteTestData));
+        assertEquals(9, noteRevisionRepo.queryNotes("*").getAvailableRows());
+        assertEquals(1, noteRevisionRepo.queryNotes("kereitten").getAvailableRows());
     }
 
     @Test
     public void queryDictionary() throws Exception {
-        assertEquals(133, noteRepo.importNotes(noteTestData));
-        assertTrue(noteRepo.queryDictionary("*").getAvailableRows() > 0);
+        assertEquals(9, noteRepo.importNotes(noteTestData));
+        assertEquals(0, noteRepo.queryDictionary("*").getAvailableRows());
     }
 
     @Test
     public void queryDictionary2() throws Exception {
-        assertEquals(133, noteRepo.importNotes(noteTestData));
+        assertEquals(9, noteRepo.importNotes(noteTestData));
         GridDataSource dataSource = noteRepo.queryDictionary("a");
         int count1 = dataSource.getAvailableRows();
         int count2 = dataSource.getAvailableRows();
