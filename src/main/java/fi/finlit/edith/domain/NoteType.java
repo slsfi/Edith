@@ -6,5 +6,5 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public enum NoteType {
-    NOTE, PLACE, PERSON
+    WORD_EXPLANATION, LITERARY, HISTORICAL, DICTUM, CRITIQUE
 }

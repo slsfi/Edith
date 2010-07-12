@@ -31,19 +31,7 @@ import org.apache.tapestry5.util.EnumSelectModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Interval;
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.NoteFormat;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.NoteRevisionRepository;
-import fi.finlit.edith.domain.NoteStatus;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.SelectedText;
-import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.TermLanguage;
-import fi.finlit.edith.domain.TermRepository;
+import fi.finlit.edith.domain.*;
 
 /**
  * AnnotatePage provides
@@ -323,12 +311,12 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     @Validate("required")
-    public NoteFormat getFormat() {
-        return noteOnEdit.getFormat();
+    public NoteType getFormat() {
+        return noteOnEdit.getType();
     }
 
-    public void setFormat(NoteFormat format) {
-        noteOnEdit.setFormat(format);
+    public void setFormat(NoteType format) {
+        noteOnEdit.setType(format);
     }
 
     public NoteType getType() {

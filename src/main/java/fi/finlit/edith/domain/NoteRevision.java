@@ -46,7 +46,7 @@ public class NoteRevision extends Identifiable {
     private String lemmaMeaning;
 
     @Predicate
-    private NoteFormat format;
+    private NoteType type;
 
     @Predicate
     private String longText;
@@ -65,7 +65,7 @@ public class NoteRevision extends Identifiable {
     private boolean deleted;
 
     @Predicate
-    private NoteType type;
+    private NoteFormat format;
 
     @Predicate
     private Place place;
@@ -88,7 +88,7 @@ public class NoteRevision extends Identifiable {
         copy.setRevisionOf(revisionOf);
         copy.setSVNRevision(svnRevision);
         copy.setSubtextSources(subtextSources);
-        copy.setFormat(format);
+        copy.setType(type);
         copy.setSources(sources);
         copy.setPerson(person);
         copy.setPlace(place);
@@ -194,20 +194,20 @@ public class NoteRevision extends Identifiable {
         this.lemmaMeaning = lemmaMeaning;
     }
 
-    public NoteFormat getFormat() {
-        return format;
-    }
-
-    public void setFormat(NoteFormat format) {
-        this.format = format;
-    }
-
     public NoteType getType() {
         return type;
     }
 
     public void setType(NoteType type) {
         this.type = type;
+    }
+
+    public NoteFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(NoteFormat format) {
+        this.format = format;
     }
 
     public Place getPlace() {

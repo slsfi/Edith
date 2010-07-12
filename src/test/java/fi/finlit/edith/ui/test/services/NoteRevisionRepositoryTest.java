@@ -40,7 +40,7 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
-import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.ui.services.AdminService;
@@ -101,7 +101,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         NoteRevision noteRevision = new NoteRevision();
         noteRevision.setRevisionOf(note);
-        noteRevision.setType(NoteType.PLACE);
+        noteRevision.setFormat(NoteFormat.PLACE);
         NameForm normalizedForm = new NameForm("Tampere", "Kaupunki Hämeessä.");
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Tammerfors", "Ruotsinkielinen nimitys."));
@@ -122,7 +122,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         NoteRevision noteRevision = new NoteRevision();
         noteRevision.setRevisionOf(note);
-        noteRevision.setType(NoteType.PERSON);
+        noteRevision.setFormat(NoteFormat.PERSON);
         NameForm normalizedForm = new NameForm("Aleksis Kivi", "Suomen hienoin kirjailija ikinä.");
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Alexis Stenvall", "En jättebra skrivare."));
@@ -151,7 +151,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         NoteRevision noteRevision = new NoteRevision();
         noteRevision.setRevisionOf(note);
-        noteRevision.setType(NoteType.PERSON);
+        noteRevision.setFormat(NoteFormat.PERSON);
         Interval timeOfBirth = Interval.createYear(1834);
         Interval timeOfDeath = Interval.createYear(1834);
         noteRevision.setPerson(new Person());
