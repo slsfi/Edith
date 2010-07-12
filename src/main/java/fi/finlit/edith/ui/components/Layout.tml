@@ -1,71 +1,56 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-    xmlns:p="tapestry:parameter">
-    <head>
-        <title><t:delegate to="title" /></title>
-    </head>
-    <body>
-        <div id="header">
-            <div class="content">
-                <div id="breadcrumbs">
-                    <t:delegate to="breadcrumbs" />
-                </div>
-                <div id="auth">
-                    <t:authPanel />
-                </div>
-                <div style="clear:both;"></div>
-            </div>
-        </div>
+	xmlns:p="tapestry:parameter">
+	<head>
+		<title><t:delegate to="title" /></title>
+	</head>
+	<body>
+		<div id="header">
+			<div class="content">
+				<a t:type="pagelink" t:page="index" id="homeLink">
+					<img src="${context:images/logo.jpg}" />
+				</a>
+				<t:dashboard />
+				<div id="auth">
+					<t:authPanel />
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
 
-        <div id="top">
-            <div class="content">
-                <a t:type="pagelink" t:page="index" id="homeLink">
-                    <img src="${context:images/logo.jpg}" />
-                </a>
-                <div class="title">
-                    <t:delegate to="title" />
-                </div>
-                <div style="clear:both;" />
-            </div>
-        </div>
+		<div id="main1">
+			<div id="main2">
+				<div id="left">
+					<div class="content">
+						<t:body />
+					</div>
+					<t:delegate to="leftPanel" />
+				</div>
+			</div>
+			<div id="right">
+				<div class="content">
+					<t:delegate to="rightPanel" />
+				</div>
+			</div>
+			<div class="cleaner">
+			</div>
+		</div>
 
-        <div id="main1">
-            <div id="main2">
-                <div id="left">
-                    <div class="content">
-                        <t:delegate to="leftPanel" />
-                    </div>
-                </div>
-                <div id="right">
-                    <div class="content">
-                        <t:delegate to="rightPanel" />
-                    </div>
-                </div>
-                <div id="center">
-                    <div class="content">
-                        <t:body />
-                    </div>
-                </div>
-                <div class="cleaner">
-                </div>
-            </div>
-        </div>
-
-        <div id="bottom">
-            <div class="content">
-                <ul class="actions">
-                    <li>
-                        <t:pagelink page="index" t:disabled="isOnPage('index')">${message:frontpage}</t:pagelink>
-                    </li>
-                    <li>
-                        <t:pagelink page="aboutPage" t:disabled="isOnPage('aboutPage')">${message:about}</t:pagelink>
-                    </li>
-                    <li>
-                        <a href="http://www.finlit.fi">SKS</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </body>
+		<div id="bottom">
+			<div class="content">
+				<ul class="actions">
+					<li>
+						<t:pagelink page="index" t:disabled="isOnPage('index')">${message:frontpage}</t:pagelink>
+					</li>
+					<li>
+						<t:pagelink page="aboutPage" t:disabled="isOnPage('aboutPage')">${message:about}</t:pagelink>
+					</li>
+					<li>
+						<a href="http://www.finlit.fi">SKS</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
 </html>
 

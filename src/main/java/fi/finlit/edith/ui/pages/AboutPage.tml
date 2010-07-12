@@ -6,14 +6,6 @@
     
     <h3>${message:about}</h3>
         
-    <p:breadcrumbs>
-        <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:about}
-    </p:breadcrumbs>        
-        
-    <p:leftPanel>
-        <t:dashboard/>
-    </p:leftPanel>
-
     <p:rightPanel>
 
     </p:rightPanel>

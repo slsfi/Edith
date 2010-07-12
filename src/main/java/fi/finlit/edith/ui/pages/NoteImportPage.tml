@@ -13,14 +13,6 @@
     <t:if test="message">
         <p class="msg">${message}</p>
     </t:if>
-    
-    <p:breadcrumbs>
-        <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:noteimport}
-    </p:breadcrumbs>       
-        
-    <p:leftPanel>
-        <t:dashboard/>
-    </p:leftPanel>
 
     <p:rightPanel>
         

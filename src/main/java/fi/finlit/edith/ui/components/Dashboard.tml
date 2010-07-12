@@ -2,7 +2,6 @@
     <t:content>
         <t:if test="loggedIn">
         <div class="dashboard panel">
-            <h3>${message:dashboard}</h3>
             <ul>
                 <li>
                     <a t:type="pagelink" t:page="index" t:disabled="isOnPage('index')">${message:frontpage}</a>

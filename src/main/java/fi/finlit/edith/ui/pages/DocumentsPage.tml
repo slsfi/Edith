@@ -19,15 +19,7 @@
     <h3>${message:add-document}</h3>
    
     <t:document.upload/>
-       
-    <p:breadcrumbs>
-        <a t:type="pageLink" t:page="index">${message:frontpage}</a> &gt; ${message:documents}
-    </p:breadcrumbs>        
         
-    <p:leftPanel>
-        <t:dashboard/>
-    </p:leftPanel>
-
     <p:rightPanel>
         
     </p:rightPanel>

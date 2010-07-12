@@ -87,15 +87,6 @@
         </p:else>
     </t:if>
 
-    <p:breadcrumbs>
-        <a t:type="pageLink" t:page="index">${message:frontpage}</a>
-        &gt; ${message:notesearch}
-    </p:breadcrumbs>
-
-    <p:leftPanel>
-        <t:dashboard />
-    </p:leftPanel>
-
     <p:rightPanel>
     
     </p:rightPanel>

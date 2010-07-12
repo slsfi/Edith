@@ -237,7 +237,9 @@ public class NoteRevision extends Identifiable {
     public void setLemmaFromLongText() {
         if (WHITESPACE.matcher(longText).find()) {
             String[] words = StringUtils.split(longText);
-            if (words.length > 1) {
+            if (words.length == 2) {
+                lemma = words[0] + " " + words[1];
+            } else if (words.length > 1) {
                 lemma = words[0] + " \u2013 \u2013 " + words[words.length - 1];
             } else {
                 lemma = words[0];

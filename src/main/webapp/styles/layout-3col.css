@@ -21,46 +21,13 @@ body {
  margin:0; padding:0;
 }
 
-/**
-* The fluid layout
-*/
-
-/*
-#left {
- float:left;
- width:12em;
- margin:0; padding:0;
-}
-
-
-#right {
- float:right;
- width:10em;
-}
-
-
-#center {
- margin:0 150px;
-}
-
-*/
-
-/**
-* The fixed positioning to get the center column scroll
-*/
-
-
 #header {
     height: 2em;
 }
 
-#top {
-    height: 3em;
-}
-
 #main1 {
     position: absolute;
-    top: 5em;
+    top: 3.5em;
     left: 0em;
     right: 0em;
     bottom: 2em;
@@ -72,7 +39,7 @@ body {
     top: 0em;
     left: 0em;
     bottom: 0em;
-    width: 10em;
+    width: 60%;
     overflow: auto;
 }
 
@@ -81,7 +48,7 @@ body {
     top: 0em;
     right: 0em; 
     bottom: 0em;
-    width: 25em;  
+    width: 40%;  
     overflow: auto;
 }
 

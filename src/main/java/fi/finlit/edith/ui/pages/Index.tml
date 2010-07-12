@@ -17,14 +17,6 @@
             <a t:type="pageLink" t:page="noteImportPage">${message:noteimport}</a>
         </li>
     </ul>
-    
-    <p:breadcrumbs>
-        ${message:frontpage}
-    </p:breadcrumbs>
-        
-    <p:leftPanel>
-        <t:dashboard/>
-    </p:leftPanel>
 
     <p:rightPanel>
         

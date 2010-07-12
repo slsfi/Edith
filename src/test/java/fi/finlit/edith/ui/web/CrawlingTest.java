@@ -51,9 +51,12 @@ public class CrawlingTest {
 
     private static boolean applicationStarted = false;
 
+    private static boolean runTests = false;
+
     @BeforeClass
     public static void setUpClass() throws Exception {
-        if (System.getProperty("webtest") != null) {
+        runTests = System.getProperty("webtest") != null;
+        if (runTests) {
             applicationStarted = true;
             FSRepositoryFactory.setup();
             File svnRepo = new File("target/repo");
@@ -75,15 +78,17 @@ public class CrawlingTest {
 
     @Before
     public void setUp() {
-        webDriver = new HtmlUnitDriver(){
-            @Override
-            protected WebClient modifyWebClient(WebClient client) {
-                client.setThrowExceptionOnFailingStatusCode(true);
-                client.setPrintContentOnFailingStatusCode(true);
-                client.setJavaScriptEnabled(false);
-                return client;
-            }
-        };
+        if (runTests) {
+            webDriver = new HtmlUnitDriver() {
+                @Override
+                protected WebClient modifyWebClient(WebClient client) {
+                    client.setThrowExceptionOnFailingStatusCode(true);
+                    client.setPrintContentOnFailingStatusCode(true);
+                    client.setJavaScriptEnabled(false);
+                    return client;
+                }
+            };
+        }
     }
 
     @Rule

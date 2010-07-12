@@ -8,10 +8,6 @@
 	 
     <t:loginForm/>
 
-    <p:leftPanel>
-        <t:dashboard/>
-    </p:leftPanel>
-
     <p:rightPanel>
         
     </p:rightPanel>

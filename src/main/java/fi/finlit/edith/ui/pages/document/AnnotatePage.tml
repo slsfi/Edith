@@ -12,16 +12,7 @@
 		</t:block>
 	</div>
 
-	<p:breadcrumbs>
-		<a t:type="pageLink" t:page="index">${message:frontpage}</a>
-		&gt;
-		<a t:type="pageLink" t:page="documentsPage">${message:documents}</a>
-		&gt; ${document.title}
-	</p:breadcrumbs>
-
 	<p:leftPanel>
-		<t:dashboard />
-
 		<p>
 			<a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a>
 		</p>
@@ -29,13 +20,6 @@
 			<t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}
 			</t:pagelink>
 		</p>
-
-		<div class="panel narrow">
-			<h3>${message:pages}</h3>
-			<t:document.pages document="documentRevision" />
-			<div style="clear:both;"></div>
-		</div>
-
 
 	</p:leftPanel>
 
@@ -154,7 +138,7 @@
 						<t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
 							<t:errors />
 							<div>
-								<div><strong>${message:type-label}</strong></div>
+								<div><strong>${message:format-label}</strong></div>
 								<div>
 									<t:select t:id="type" />
 								</div>
@@ -182,7 +166,7 @@
 							</div>
 
 							<div class="note">
-								<div><strong>${message:format-label}</strong></div>
+								<div><strong>${message:type-label}</strong></div>
 								<div>
 									<t:select t:id="format" />
 								</div>
