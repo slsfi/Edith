@@ -211,7 +211,8 @@
 									<strong>${message:normalizedForm-label}</strong>
 								</div>
 								<div>
-									<t:textField t:id="normalizedName" value="normalizedPerson.name" />
+									<t:textField t:id="normalizedFirst" value="normalizedPerson.first" />
+									<t:textField t:id="normalizedLast" value="normalizedPerson.last" />
 								</div>
 							</div>
 
@@ -228,7 +229,8 @@
 										<strong>${message:nameForm-label}</strong>
 									</div>
 									<div>
-										<t:textField value="loopPerson.name" />
+										<t:textField value="loopPerson.first" />
+										<t:textField value="loopPerson.last" />
 									</div>
 								</div>
 
@@ -245,7 +247,8 @@
 									<strong>${message:createNameForm-label}</strong>
 								</div>
 								<div>
-									<t:textField value="newPersonName" />
+									<t:textField value="newPersonFirst" />
+									<t:textField value="newPersonLast" />
 								</div>
 							</div>
 

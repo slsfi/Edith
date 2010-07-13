@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -205,15 +206,23 @@ public class AnnotatePage extends AbstractDocumentPage {
         termOnEdit = getEditTerm(noteOnEdit);
     }
 
-    private void updateSetContents(Set<NameForm> nameForms, String name, String description) {
-        if (name != null) {
-            nameForms.add(new NameForm(name, description));
+    private void updateName(Set<NameForm> nameForms, String name, String description) {
+        updateNames(nameForms, null, name, description);
+    }
+
+    private void updateNames(Set<NameForm> nameForms, String first, String last, String description) {
+        if (last != null) {
+            if (first == null) {
+                nameForms.add(new NameForm(last, description));
+            } else {
+                nameForms.add(new NameForm(first, last, description));
+            }
         }
         // Removes name forms that don't have a name entered.
         Iterator<NameForm> iter = nameForms.iterator();
         while (iter.hasNext()) {
             NameForm current = iter.next();
-            if (current.getName() == null) {
+            if (current.getLast() == null) {
                 iter.remove();
             }
         }
@@ -224,10 +233,12 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (note.getRevisionOf().getStatus().equals(NoteStatus.INITIAL)) {
             note.getRevisionOf().setStatus(NoteStatus.DRAFT);
         }
-        updateSetContents(note.getPerson().getOtherForms(), newPersonName, newPersonDescription);
-        newPersonName = null;
+        updateNames(note.getPerson().getOtherForms(), newPersonFirst, newPersonLast,
+                newPersonDescription);
+        newPersonFirst = null;
+        newPersonLast = null;
         newPersonDescription = null;
-        updateSetContents(note.getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
+        updateName(note.getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
         newPlaceName = null;
         newPlaceDescription = null;
         try {
@@ -320,6 +331,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public Set<NoteType> getSelectedTypes() {
+        if (noteOnEdit.getTypes() == null) {
+            noteOnEdit.setTypes(new HashSet<NoteType>());
+        }
         return noteOnEdit.getTypes();
     }
 
@@ -393,7 +407,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     private NameForm loopPlace;
 
     @Property
-    private String newPersonName;
+    private String newPersonFirst;
+
+    @Property
+    private String newPersonLast;
 
     @Property
     private String newPersonDescription;

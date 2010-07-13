@@ -8,16 +8,25 @@ import fi.finlit.edith.EDITH;
 @ClassMapping(ns = EDITH.NS)
 public class NameForm extends Identifiable {
     @Predicate
-    private String name;
+    private String description;
 
     @Predicate
-    private String description;
+    private String first;
+
+    @Predicate
+    private String last;
 
     public NameForm() {
     }
 
     public NameForm(String name, String description) {
-        this.name = name;
+        last = name;
+        this.description = description;
+    }
+
+    public NameForm(String first, String last, String description) {
+        this.first = first;
+        this.last = last;
         this.description = description;
     }
 
@@ -26,15 +35,31 @@ public class NameForm extends Identifiable {
     }
 
     public String getName() {
-        return name;
+        return first == null ? last : first + " " + last;
     }
 
     public void setName(String name) {
-        this.name = name;
+        last = name;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFirst() {
+        return first;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
     }
 
     @Override
@@ -69,6 +94,6 @@ public class NameForm extends Identifiable {
 
     @Override
     public String toString() {
-        return "NameForm [description=" + description + ", name=" + name + "]";
+        return "NameForm [description=" + description + ", name=" + getName() + "]";
     }
 }

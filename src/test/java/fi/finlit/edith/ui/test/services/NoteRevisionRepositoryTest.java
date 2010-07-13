@@ -123,9 +123,9 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
         NoteRevision noteRevision = new NoteRevision();
         noteRevision.setRevisionOf(note);
         noteRevision.setFormat(NoteFormat.PERSON);
-        NameForm normalizedForm = new NameForm("Aleksis Kivi", "Suomen hienoin kirjailija ikinä.");
+        NameForm normalizedForm = new NameForm("Aleksis",  "Kivi", "Suomen hienoin kirjailija ikinä.");
         Set<NameForm> otherForms = new HashSet<NameForm>();
-        otherForms.add(new NameForm("Alexis Stenvall", "En jättebra skrivare."));
+        otherForms.add(new NameForm("Alexis", "Stenvall", "En jättebra skrivare."));
         noteRevision.setPerson(new Person(normalizedForm, otherForms));
         Interval timeOfBirth = Interval.createDate(new LocalDate(1834, 10, 10));
         Interval timeOfDeath = Interval.createDate(new LocalDate(1872, 12, 31));
