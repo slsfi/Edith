@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.domain;
 
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -46,7 +47,7 @@ public class NoteRevision extends Identifiable {
     private String lemmaMeaning;
 
     @Predicate
-    private NoteType type;
+    private Set<NoteType> types;
 
     @Predicate
     private String longText;
@@ -88,7 +89,7 @@ public class NoteRevision extends Identifiable {
         copy.setRevisionOf(revisionOf);
         copy.setSVNRevision(svnRevision);
         copy.setSubtextSources(subtextSources);
-        copy.setType(type);
+        copy.setTypes(getTypes());
         copy.setSources(sources);
         copy.setPerson(person);
         copy.setPlace(place);
@@ -194,12 +195,12 @@ public class NoteRevision extends Identifiable {
         this.lemmaMeaning = lemmaMeaning;
     }
 
-    public NoteType getType() {
-        return type;
+    public Set<NoteType> getTypes() {
+        return types;
     }
 
-    public void setType(NoteType type) {
-        this.type = type;
+    public void setTypes(Set<NoteType> types) {
+        this.types = types;
     }
 
     public NoteFormat getFormat() {

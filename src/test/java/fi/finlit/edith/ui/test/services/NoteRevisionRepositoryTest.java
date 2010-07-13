@@ -112,7 +112,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
                 .getPlace().getNormalizedForm().getName());
         assertEquals(noteRevision.getPlace().getNormalizedForm().getDescription(),
                 persistedNoteRevision.getPlace().getNormalizedForm().getDescription());
-        assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
+        assertEquals(noteRevision.getFormat(), persistedNoteRevision.getFormat());
     }
 
     @Test
@@ -137,7 +137,7 @@ public class NoteRevisionRepositoryTest extends AbstractServiceTest {
                 .getPerson().getNormalizedForm().getName());
         assertEquals(noteRevision.getPerson().getNormalizedForm().getDescription(),
                 persistedNoteRevision.getPerson().getNormalizedForm().getDescription());
-        assertEquals(noteRevision.getType(), persistedNoteRevision.getType());
+        assertEquals(noteRevision.getFormat(), persistedNoteRevision.getFormat());
         assertEquals(noteRevision.getPerson().getTimeOfBirth().getDate(), persistedNoteRevision
                 .getPerson().getTimeOfBirth().getDate());
         assertEquals(noteRevision.getPerson().getTimeOfDeath().getDate(), persistedNoteRevision

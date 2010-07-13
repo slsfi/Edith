@@ -311,21 +311,16 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     @Validate("required")
-    public NoteType getFormat() {
-        return noteOnEdit.getType();
+    public NoteFormat getFormat() {
+        return noteOnEdit.getFormat();
     }
 
-    public void setFormat(NoteType format) {
-        noteOnEdit.setType(format);
+    public void setFormat(NoteFormat format) {
+        noteOnEdit.setFormat(format);
     }
 
-    public NoteType getType() {
-        return noteOnEdit.getType();
-    }
-
-    @Validate("required")
-    public void setType(NoteType type) {
-        noteOnEdit.setType(type);
+    public Set<NoteType> getSelectedTypes() {
+        return noteOnEdit.getTypes();
     }
 
     @Validate("required")
@@ -409,4 +404,22 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Property
     private String newPlaceDescription;
 
+    public NoteType[] getTypes() {
+        return NoteType.values();
+    }
+
+    @Property
+    private NoteType type;
+
+    public boolean isSelected() {
+        return getSelectedTypes().contains(type);
+    }
+
+    public void setSelected(boolean selected) {
+        if (selected) {
+            getSelectedTypes().add(type);
+        } else {
+            getSelectedTypes().remove(type);
+        }
+    }
 }
