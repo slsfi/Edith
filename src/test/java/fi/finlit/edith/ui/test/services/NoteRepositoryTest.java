@@ -6,6 +6,7 @@
 package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -22,8 +23,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
@@ -140,6 +143,19 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         rev.setLongText(longText);
         rev.setLemmaFromLongText();
         return rev.getLemma();
+    }
+
+    @Test
+    public void createComment() {
+        Note note = new Note();
+        noteRepo.save(note);
+//        noteRepo.getById(note.getId()).getComments().get(0);
+        noteRepo.createComment(note, "boomboomboom");
+        noteRepo.createComment(note, "boomboomboomjeee");
+        List<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
+        System.err.println(comments);
+        assertFalse(comments.isEmpty());
+        assertEquals("boomboomboom", comments.get(0).getMessage());
     }
 
     @Override

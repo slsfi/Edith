@@ -386,9 +386,24 @@
 									});</script>
 								<p id="submit_success_info">${message:submit-success}</p>
 							</t:if>
+							
+							<div>
+                                <div>
+                                    <strong>${message:createNewComment-label}</strong>
+                                </div>
+                                <div>
+                                    <t:textField value="newCommentMessage" />
+                                </div>
+							</div>
+							
 						</t:form>
-
 					</div>
+					                           <div id="comments">
+                                 <t:loop source="noteOnEdit.revisionOf.comments" value="comment">
+                                     ${comment.message}
+                                     ${comment.createdAt} ${comment.username}
+                                 </t:loop>
+                            </div>
 				</div>
 			</t:if>
 		</t:block>

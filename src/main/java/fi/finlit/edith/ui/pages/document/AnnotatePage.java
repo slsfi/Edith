@@ -241,6 +241,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         updateName(note.getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
         newPlaceName = null;
         newPlaceDescription = null;
+
+        noteRepo.createComment(noteOnEdit.getRevisionOf(), newCommentMessage);
+        newCommentMessage = null;
         try {
             if (updateLongTextSelection.isValid()) {
                 noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
@@ -255,23 +258,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         // Handling the embedded term edit
         if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
-            // The idea is that language can be changed without a new term being created. It is a
-            // bit hard to follow I admit. -vema
-            List<Term> terms = termRepo.findByBasicForm(termOnEdit.getBasicForm());
-            Term term = terms.isEmpty() ? termOnEdit : null;
-            for (Term current : terms) {
-                if (termOnEdit.getMeaning().equals(current.getMeaning())) {
-                    term = current;
-                    term.setLanguage(termOnEdit.getLanguage());
-                    break;
-                }
-            }
-            if (term == null) {
-                term = termOnEdit.createCopy();
-            }
-            termRepo.save(term);
-            noteRevision.getRevisionOf().setTerm(term);
-            noteRepo.save(noteRevision.getRevisionOf());
+            saveTerm(noteRevision);
         }
 
         // prepare view (with possibly new revision)
@@ -283,9 +270,28 @@ public class AnnotatePage extends AbstractDocumentPage {
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit);
         submitSuccess = true;
-
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView);
+    }
+
+    private void saveTerm(NoteRevision noteRevision) {
+        // The idea is that language can be changed without a new term being created. It is a
+        // bit hard to follow I admit. -vema
+        List<Term> terms = termRepo.findByBasicForm(termOnEdit.getBasicForm());
+        Term term = terms.isEmpty() ? termOnEdit : null;
+        for (Term current : terms) {
+            if (termOnEdit.getMeaning().equals(current.getMeaning())) {
+                term = current;
+                term.setLanguage(termOnEdit.getLanguage());
+                break;
+            }
+        }
+        if (term == null) {
+            term = termOnEdit.createCopy();
+        }
+        termRepo.save(term);
+        noteRevision.getRevisionOf().setTerm(term);
+        noteRepo.save(noteRevision.getRevisionOf());
     }
 
     Object onDelete(EventContext context) throws IOException {
@@ -303,10 +309,6 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
         return termRepo.findByStartOfBasicForm(partial, 10);
-    }
-
-    List<NameForm> onProvideCompletionsFromNormalizedName(String partial) {
-        return null;
     }
 
     public Object[] getEditContext() {
@@ -439,4 +441,10 @@ public class AnnotatePage extends AbstractDocumentPage {
             getSelectedTypes().remove(type);
         }
     }
+
+    @Property
+    private NoteComment comment;
+
+    @Property
+    private String newCommentMessage;
 }

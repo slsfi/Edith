@@ -3,10 +3,10 @@
  * All rights reserved.
  *
  */
-@MappedClasses( { Document.class, Identifiable.class, Note.class, NoteComment.class,
+@MappedClasses( { Document.class, Identifiable.class, Note.class,
         NoteRevision.class, NoteStatus.class, Term.class, TermWithNotes.class, Profile.class,
         Tag.class, User.class, UserInfo.class, NoteType.class, NoteFormat.class, Person.class,
-        Place.class, NameForm.class, Interval.class })
+        Place.class, NameForm.class, Interval.class, NoteComment.class })
 package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.MappedClasses;

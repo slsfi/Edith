@@ -11,6 +11,7 @@ import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.xml.stream.XMLInputFactory;
@@ -27,16 +28,7 @@ import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.domain.*;
 
 /**
  * NoteRepositoryImpl provides
@@ -50,11 +42,15 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private final UserRepository userRepository;
 
+    private final AuthService authService;
+
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, @Inject TimeService timeService) {
+            @Inject UserRepository userRepository, @Inject TimeService timeService,
+            @Inject AuthService authService) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
         this.timeService = timeService;
+        this.authService = authService;
     }
 
     @Override
@@ -191,4 +187,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         getSession().save(noteToBeRemoved);
     }
 
+    @Override
+    public void createComment(Note note, String message) {
+        NoteComment comment = new NoteComment(note, message, authService.getUsername());
+        getSession().save(comment);
+//        getSession().save(note);
+    }
 }

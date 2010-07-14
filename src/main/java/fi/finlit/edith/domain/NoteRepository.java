@@ -57,5 +57,11 @@ public interface NoteRepository extends Repository<Note,String>{
      */
     void remove(Note note, long revision);
 
-
+    /**
+     * Creates a comment for the given note.
+     *
+     * @param note
+     * @param message
+     */
+    void createComment(Note note, String message);
 }

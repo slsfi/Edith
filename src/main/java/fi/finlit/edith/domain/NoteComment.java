@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2009 Mysema Ltd.
- * All rights reserved.
- * 
- */
 package fi.finlit.edith.domain;
 
 import org.joda.time.DateTime;
@@ -12,68 +7,66 @@ import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
 
-/**
- * NoteComment provides
- *
- * @author tiwe
- * @version $Id$
- */
-@ClassMapping(ns=EDITH.NS)
-public class NoteComment extends Identifiable{
-    
-    @Predicate
-    private UserInfo createdBy;
-    
-    @Predicate
-    private DateTime createdOn;
-    
+@ClassMapping(ns = EDITH.NS)
+public class NoteComment extends Identifiable {
     @Predicate
     private Note note;
 
     @Predicate
-    private String text;
+    private String message;
 
     @Predicate
-    private String title;
-    
-    public UserInfo getCreatedBy() {
-        return createdBy;
+    private String username;
+
+    @Predicate
+    private DateTime createdAt;
+
+    public NoteComment() {
     }
 
-    public DateTime getCreatedOn() {
-        return createdOn;
+    public NoteComment(Note note, String message, String username) {
+        this.note = note;
+        this.message = message;
+        this.username = username;
+        createdAt = new DateTime();
     }
 
     public Note getNote() {
         return note;
     }
 
-    public String getText() {
-        return text;
-    }
-    
-    public String getTitle() {
-        return title;
-    }
-    
-    public void setCreatedBy(UserInfo createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public void setCreatedOn(DateTime createdOn) {
-        this.createdOn = createdOn;
-    }
-
     public void setNote(Note note) {
         this.note = note;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public String getMessage() {
+        return message;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setMessage(String message) {
+        this.message = message;
     }
-    
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public DateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(DateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment [message=" + message + "]";
+    }
+
+
 }
