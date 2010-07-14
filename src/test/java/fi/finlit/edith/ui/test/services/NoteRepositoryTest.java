@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,10 +24,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteRevision;
 import fi.finlit.edith.domain.NoteRevisionRepository;
@@ -148,14 +149,14 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void createComment() {
         Note note = new Note();
-        noteRepo.save(note);
-//        noteRepo.getById(note.getId()).getComments().get(0);
-        noteRepo.createComment(note, "boomboomboom");
-        noteRepo.createComment(note, "boomboomboomjeee");
-        List<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
+        noteRepo.save(note);        
+        NoteComment comment1 = noteRepo.createComment(note, "boomboomboom");
+        NoteComment comment2 = noteRepo.createComment(note, "boomboomboomjeee");
+        
+        Collection<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
         System.err.println(comments);
-        assertFalse(comments.isEmpty());
-        assertEquals("boomboomboom", comments.get(0).getMessage());
+        assertEquals(2, comments.size());
+        assertTrue(comments.iterator().next() != null);
     }
 
     @Override

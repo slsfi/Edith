@@ -63,5 +63,5 @@ public interface NoteRepository extends Repository<Note,String>{
      * @param note
      * @param message
      */
-    void createComment(Note note, String message);
+    NoteComment createComment(Note note, String message);
 }

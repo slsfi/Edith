@@ -5,7 +5,6 @@
  */
 package fi.finlit.edith.domain;
 
-import java.util.List;
 import java.util.Set;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -44,7 +43,7 @@ public class Note extends Identifiable {
     private Term term;
 
     @Predicate(ln = "note", inv = true)
-    private List<NoteComment> comments;
+    private Set<NoteComment> comments;
 
     public Document getDocument() {
         return document;
@@ -94,11 +93,11 @@ public class Note extends Identifiable {
         this.term = term;
     }
 
-    public List<NoteComment> getComments() {
+    public Set<NoteComment> getComments() {
         return comments;
     }
 
-    public void setComments(List<NoteComment> comments) {
+    public void setComments(Set<NoteComment> comments) {
         this.comments = comments;
     }
 }
