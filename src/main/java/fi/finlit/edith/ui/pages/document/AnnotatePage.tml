@@ -77,11 +77,11 @@
 						</ul>
 					</t:if>
 					<h3>${message:noteEdit}</h3>
-					<p id="edited_info">
+					<div class="metadata">
 						<t:dateTimeFormat date="noteOnEdit.createdOnDate"
 							format="message:dateformat-compact" />
 						${noteOnEdit.createdBy.username}
-					</p>
+					</div>
 					<div class="cleaner"></div>
 					<div class="note_edit">
 						<em>
@@ -116,15 +116,19 @@
 
 						<script type="text/javascript">
 							var hideBasedOnFormat = function() {
-							var type = jQuery("select[name='format']").val();
-							jQuery("#editZone .note").hide();
+							var type
+							=jQuery("select[name='format']").val();
+							jQuery("#editZone.note").hide();
 							jQuery("#editZone .place").hide();
 							jQuery("#editZone .person").hide();
-							if (type == "NOTE") {
+							if (type ==
+							"NOTE") {
 							jQuery("#editZone .note").show();
-							} else if (type == "PLACE") {
+							} else if (type ==
+							"PLACE") {
 							jQuery("#editZone .place").show();
-							} else if (type == "PERSON") {
+							} else if (type ==
+							"PERSON") {
 							jQuery("#editZone .person").show();
 							}
 							}
@@ -177,7 +181,10 @@
 								</div>
 								<div>
 									<t:loop source="types" value="type">
-									   <div><t:checkbox value="selected"/><t:fmt.message key="${type}"/></div>
+										<div>
+											<t:checkbox value="selected" />
+											<t:fmt.message key="${type}" />
+										</div>
 									</t:loop>
 								</div>
 							</div>
@@ -386,27 +393,50 @@
 									});</script>
 								<p id="submit_success_info">${message:submit-success}</p>
 							</t:if>
-							
-							<div>
-                                <div>
-                                    <strong>${message:createNewComment-label}</strong>
-                                </div>
-                                <div>
-                                    <t:textField value="newCommentMessage" />
-                                </div>
-							</div>
-							
 						</t:form>
 					</div>
-					                           <div id="comments">
-                                 <t:loop source="noteOnEdit.revisionOf.comments" value="comment">
-                                     ${comment.message}
-                                     ${comment.createdAt} ${comment.username}
-                                 </t:loop>
-                            </div>
 				</div>
 			</t:if>
 		</t:block>
+		<t:zone t:id="commentZone">
+			<t:if test="noteId">
+				<div id="comments">
+					<h3>${message:comments}</h3>
+					<t:loop source="noteOnEdit.revisionOf.comments" value="comment"
+						volatile="true">
+						<div>
+							<div>${comment.message}</div>
+							<div class="metadata">
+								<t:dateTimeFormat date="comment.createdAt"
+									format="message:dateformat-compact" />
+								${comment.username}
+							</div>
+						<span id="delete_note">
+                            <button id="delete_question">${message:delete}</button>
+                            <span id="delete_dialog">
+                                ${message:delete}
+                                <t:eventlink t:event="deleteComment" t:zone="commentZone" 
+                                    context="comment.id">${message:yes}</t:eventlink>
+                                /
+                                <a href="" id="delete_note_decline">${message:no}</a>
+                            </span>
+                        </span>
+						</div>
+					</t:loop>
+					<div>
+						<strong>${message:createNewComment-label}</strong>
+					</div>
+					<div>
+						<t:form t:id="commentForm" t:zone="commentZone" t:context="noteId">
+							<t:textField value="newCommentMessage" />
+							<input type="submit" value="${message:save}" />
+						</t:form>
+					</div>
+				</div>
+			</t:if>
+		</t:zone>
+
+
 
 		<t:block id="infoBlock">
 			${infoMessage}

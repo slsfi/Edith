@@ -68,5 +68,14 @@ public class NoteComment extends Identifiable {
         return "Comment [message=" + message + "]";
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 
 }

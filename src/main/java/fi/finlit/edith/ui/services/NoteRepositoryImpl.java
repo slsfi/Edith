@@ -11,7 +11,6 @@ import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.xml.stream.XMLInputFactory;
@@ -191,7 +190,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     public NoteComment createComment(Note note, String message) {
         NoteComment comment = new NoteComment(note, message, authService.getUsername());
         getSession().save(comment);
-//        getSession().save(note);
+        return comment;
+    }
+
+    @Override
+    public NoteComment removeComment(String commentId) {
+        NoteComment comment = getSession().getById(commentId, NoteComment.class);
+        getSession().delete(comment);
         return comment;
     }
 }

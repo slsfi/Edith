@@ -6,7 +6,6 @@
 package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -149,14 +148,24 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void createComment() {
         Note note = new Note();
-        noteRepo.save(note);        
-        NoteComment comment1 = noteRepo.createComment(note, "boomboomboom");
-        NoteComment comment2 = noteRepo.createComment(note, "boomboomboomjeee");
-        
+        noteRepo.save(note);
+        NoteComment comment = noteRepo.createComment(note, "boomboomboom");
         Collection<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
-        System.err.println(comments);
-        assertEquals(2, comments.size());
-        assertTrue(comments.iterator().next() != null);
+        assertEquals(1, comments.size());
+        assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
+    }
+
+    @Test
+    public void removeComment() {
+        Note note = new Note();
+        noteRepo.save(note);
+        NoteComment comment = noteRepo.createComment(note, "boomboomboom");
+        Collection<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
+        assertEquals(1, comments.size());
+        assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
+        noteRepo.removeComment(comment.getId());
+        comments = noteRepo.getById(note.getId()).getComments();
+        assertTrue(comments.isEmpty());
     }
 
     @Override

@@ -24,8 +24,10 @@ import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.util.EnumSelectModel;
@@ -54,6 +56,9 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Inject
     private Block noteEdit;
+
+    @InjectComponent
+    private Zone commentZone;
 
     @Inject
     private Block emptyBlock;
@@ -116,6 +121,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Property
     private boolean submitSuccess;
 
+    @Property
+    private String noteId;
+
     private static final String EDIT_ZONE = "editZone";
 
     @AfterRender
@@ -160,7 +168,8 @@ public class AnnotatePage extends AbstractDocumentPage {
         Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
-        return noteEdit;
+        noteId = noteOnEdit.getRevisionOf().getId();
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
 
     private static final class NoteComparator implements Comparator<NoteRevision>, Serializable {
@@ -196,15 +205,23 @@ public class AnnotatePage extends AbstractDocumentPage {
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit);
+        noteId = noteOnEdit.getRevisionOf().getId();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
-                "documentZone", documentView);
+                "documentZone", documentView).add("commentZone", commentZone.getBody());
     }
 
-    void onPrepareForSubmit(String noteRev) {
+    void onPrepareFromNoteEditForm(String noteRev) {
         note = noteRevisionRepo.getById(noteRev).createCopy();
         noteOnEdit = note;
         termOnEdit = getEditTerm(noteOnEdit);
     }
+
+    void onPrepareFromCommentForm(String noteId) {
+        this.noteId = noteId;
+    }
+
+    @Property
+    private String noteRevisionId;
 
     private void updateName(Set<NameForm> nameForms, String name, String description) {
         updateNames(nameForms, null, name, description);
@@ -228,6 +245,16 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
     }
 
+    Object onSuccessFromCommentForm() throws IOException {
+        Note note = noteRepo.getById(noteId);
+        if (newCommentMessage != null) {
+            note.getComments().add(noteRepo.createComment(note, newCommentMessage));
+            newCommentMessage = null;
+        }
+        noteOnEdit = note.getLatestRevision();
+        return commentZone.getBody();
+    }
+
     Object onSuccessFromNoteEditForm() throws IOException {
         NoteRevision noteRevision;
         if (note.getRevisionOf().getStatus().equals(NoteStatus.INITIAL)) {
@@ -242,8 +269,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         newPlaceName = null;
         newPlaceDescription = null;
 
-        noteRepo.createComment(noteOnEdit.getRevisionOf(), newCommentMessage);
-        newCommentMessage = null;
         try {
             if (updateLongTextSelection.isValid()) {
                 noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
@@ -269,9 +294,10 @@ public class AnnotatePage extends AbstractDocumentPage {
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit);
+        noteId = noteOnEdit.getRevisionOf().getId();
         submitSuccess = true;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
-                "documentZone", documentView);
+                "documentZone", documentView).add("commentZone", commentZone.getBody());
     }
 
     private void saveTerm(NoteRevision noteRevision) {
@@ -304,7 +330,14 @@ public class AnnotatePage extends AbstractDocumentPage {
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
         return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add(
-                "documentZone", documentView);
+                "documentZone", documentView).add("commentZone", emptyBlock);
+    }
+
+    Object onDeleteComment(String commentId) {
+        NoteComment deletedComment = noteRepo.removeComment(commentId);
+        noteId = deletedComment.getNote().getId();
+        noteOnEdit = noteRepo.getById(noteId).getLatestRevision();
+        return commentZone.getBody();
     }
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
