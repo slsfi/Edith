@@ -340,7 +340,7 @@
 									<strong>${message:description-label}</strong>
 								</div>
 								<div>
-									<t:textArea value="noteOnEdit.description" rows="4" />
+									<t:textArea value="description" rows="4" />
 								</div>
 							</div>
 
@@ -349,7 +349,7 @@
 									<strong>${message:sources-label}</strong>
 								</div>
 								<div>
-									<t:textField value="noteOnEdit.sources" rows="4" />
+									<t:textField value="sources" rows="4" />
 								</div>
 							</div>
 

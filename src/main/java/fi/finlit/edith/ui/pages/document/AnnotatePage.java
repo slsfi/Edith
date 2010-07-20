@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
@@ -217,7 +219,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     void onPrepareFromCommentForm(String id) {
-        this.noteId = id;
+        noteId = id;
     }
 
     @Property
@@ -480,4 +482,27 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Property
     private String newCommentMessage;
+
+    public String getDescription() {
+        if (noteOnEdit.getDescription() == null) {
+            return null;
+        }
+        return noteOnEdit.getDescription().toString();
+    }
+
+    public void setDescription(String description) throws XMLStreamException {
+        noteOnEdit.setDescription(Paragraph.parseParagraph(description));
+    }
+
+    public String getSources() {
+        if (noteOnEdit.getSources() == null) {
+            return null;
+        }
+        return noteOnEdit.getSources().toString();
+    }
+
+    public void setSources(String sources) throws XMLStreamException {
+        noteOnEdit.setSources(Paragraph.parseParagraph(sources));
+    }
+
 }

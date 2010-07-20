@@ -108,8 +108,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 if (data.paragraphs == null) {
                     data.text = reader.getText();
                 } else {
-                    // FIXME Optimize
-                    String text = reader.getText().replaceAll("\\s+", " ").trim();
+                    String text = reader.getText();
                     if (data.inBib) {
                         LinkElement el = new LinkElement(text);
                         if (data.attr != null) {

@@ -76,8 +76,8 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals("kereitten", note.getLemma());
         assertEquals("'keritte'", note.getLemmaMeaning());
         assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
-                note.getDescription().toString());
-        assertEquals("<bibliograph>v</bibliograph>", note.getSources().toString());
+                note.getDescription().toString().replaceAll("\\s+", " ").trim());
+        assertEquals("<bibliograph>v</bibliograph>", note.getSources().toString().replaceAll("\\s+", " ").trim());
     }
 
     @Test
