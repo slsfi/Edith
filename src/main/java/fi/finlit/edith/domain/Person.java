@@ -8,7 +8,7 @@ import com.mysema.rdfbean.annotations.Predicate;
 import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
-public class Person {
+public class Person extends Identifiable {
     @Predicate
     private NameForm normalizedForm;
 
