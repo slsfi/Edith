@@ -17,7 +17,6 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.upload.services.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentRepository;

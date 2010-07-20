@@ -31,7 +31,18 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Interval;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 

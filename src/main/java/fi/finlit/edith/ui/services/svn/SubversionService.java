@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
+import org.tmatesoft.svn.core.SVNException;
+
 
 /**
  * SubversionService provides Subversion client functionality

@@ -6,10 +6,8 @@
 package fi.finlit.edith.ui.pages.document;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +34,23 @@ import org.apache.tapestry5.util.EnumSelectModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Interval;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.NoteComparator;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.NoteStatus;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.Paragraph;
+import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.TermLanguage;
+import fi.finlit.edith.domain.TermRepository;
 
 /**
  * AnnotatePage provides
@@ -50,6 +64,8 @@ import fi.finlit.edith.domain.*;
 @IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage extends AbstractDocumentPage {
 
+    private static final String EDIT_ZONE = "editZone";
+    
     private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
 
     @Inject
@@ -126,7 +142,38 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Property
     private String noteId;
 
-    private static final String EDIT_ZONE = "editZone";
+    @Property
+    private NameForm loopPerson;
+
+    @Property
+    private NameForm loopPlace;
+
+    @Property
+    private String newPersonFirst;
+
+    @Property
+    private String newPersonLast;
+
+    @Property
+    private String newPersonDescription;
+
+    @Property
+    private String newPlaceName;
+
+    @Property
+    private String newPlaceDescription;
+    
+    @Property
+    private NoteComment comment;
+
+    @Property
+    private String newCommentMessage;
+
+    @Property
+    private String noteRevisionId;
+
+    @Property
+    private NoteType type;
 
     @AfterRender
     void addScript() {
@@ -174,15 +221,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
 
-    private static final class NoteComparator implements Comparator<NoteRevision>, Serializable {
-        private static final long serialVersionUID = 1172304280333678242L;
-
-        @Override
-        public int compare(NoteRevision o1, NoteRevision o2) {
-            return o1.getLemma().compareTo(o2.getLemma());
-        }
-    }
-
     private Term getEditTerm(NoteRevision noteRevision) {
         return noteRevision.getRevisionOf().getTerm() != null ? noteRevision.getRevisionOf()
                 .getTerm().createCopy() : new Term();
@@ -222,8 +260,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         noteId = id;
     }
 
-    @Property
-    private String noteRevisionId;
 
     private void updateName(Set<NameForm> nameForms, String name, String description) {
         updateNames(nameForms, null, name, description);
@@ -437,33 +473,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         return noteOnEdit.getPlace().getOtherForms();
     }
 
-    @Property
-    private NameForm loopPerson;
-
-    @Property
-    private NameForm loopPlace;
-
-    @Property
-    private String newPersonFirst;
-
-    @Property
-    private String newPersonLast;
-
-    @Property
-    private String newPersonDescription;
-
-    @Property
-    private String newPlaceName;
-
-    @Property
-    private String newPlaceDescription;
-
     public NoteType[] getTypes() {
         return NoteType.values();
     }
-
-    @Property
-    private NoteType type;
 
     public boolean isSelected() {
         return getSelectedTypes().contains(type);
@@ -476,12 +488,6 @@ public class AnnotatePage extends AbstractDocumentPage {
             getSelectedTypes().remove(type);
         }
     }
-
-    @Property
-    private NoteComment comment;
-
-    @Property
-    private String newCommentMessage;
 
     public String getDescription() {
         if (noteOnEdit.getDescription() == null) {

@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.pages.document;
+package fi.finlit.edith.ui.pages;
 
 import java.util.ArrayList;
 import java.util.List;

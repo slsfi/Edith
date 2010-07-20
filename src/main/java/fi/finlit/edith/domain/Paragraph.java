@@ -12,8 +12,6 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.commons.lang.StringUtils;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
-import com.mysema.rdfbean.annotations.Container;
-import com.mysema.rdfbean.annotations.ContainerType;
 import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
