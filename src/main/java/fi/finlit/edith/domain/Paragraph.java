@@ -21,7 +21,6 @@ import fi.finlit.edith.EDITH;
 @ClassMapping(ns = EDITH.NS)
 public class Paragraph extends Identifiable {
     @Predicate
-    @Container(ContainerType.LIST)
     private List<ParagraphElement> elements;
 
     public Paragraph() {

@@ -491,7 +491,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public void setDescription(String description) throws XMLStreamException {
-        noteOnEdit.setDescription(Paragraph.parseParagraph(description));
+        if (description != null) {
+            noteOnEdit.setDescription(Paragraph.parseParagraph(description));
+        }
     }
 
     public String getSources() {
@@ -502,7 +504,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public void setSources(String sources) throws XMLStreamException {
-        noteOnEdit.setSources(Paragraph.parseParagraph(sources));
+        if (sources != null) {
+            noteOnEdit.setSources(Paragraph.parseParagraph(sources));
+        }
     }
 
 }
