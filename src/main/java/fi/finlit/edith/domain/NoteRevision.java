@@ -35,7 +35,7 @@ public class NoteRevision extends Identifiable {
     private long createdOn;
 
     @Predicate
-    private String description;
+    private Paragraph description;
 
     @Predicate(ln = "latestRevision", inv = true)
     private Note latestRevisionOf;
@@ -75,7 +75,7 @@ public class NoteRevision extends Identifiable {
     private Person person;
 
     @Predicate
-    private String sources;
+    private Paragraph sources;
 
     // NOTE : not persisted
     private DocumentRevision docRevision;
@@ -111,7 +111,7 @@ public class NoteRevision extends Identifiable {
         return createdOn;
     }
 
-    public String getDescription() {
+    public Paragraph getDescription() {
         return description;
     }
 
@@ -143,7 +143,7 @@ public class NoteRevision extends Identifiable {
         createdOn = created;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(Paragraph description) {
         this.description = description;
     }
 
@@ -227,11 +227,11 @@ public class NoteRevision extends Identifiable {
         return person;
     }
 
-    public void setSources(String sources) {
+    public void setSources(Paragraph sources) {
         this.sources = sources;
     }
 
-    public String getSources() {
+    public Paragraph getSources() {
         return sources;
     }
 

@@ -11,6 +11,7 @@ import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.xml.stream.XMLInputFactory;
@@ -104,7 +105,22 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             } else if (event == XMLStreamConstants.END_ELEMENT) {
                 handleEndElement(reader, session, data);
             } else if (event == XMLStreamConstants.CHARACTERS) {
-                data.text = reader.getText();
+                if (data.paragraphs == null) {
+                    data.text = reader.getText();
+                } else {
+                    // FIXME Optimize
+                    String text = reader.getText().replaceAll("\\s+", " ").trim();
+                    if (data.inBib) {
+                        LinkElement el = new LinkElement(text);
+                        if (data.attr != null) {
+                            el.setReference(data.attr);
+                        }
+                        data.paragraphs.addElement(el);
+                    } else {
+                        data.paragraphs.addElement(new StringElement(text));
+                    }
+
+                }
             } else if (event == XMLStreamConstants.END_DOCUMENT) {
                 try {
                     reader.close();
@@ -124,6 +140,17 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             data.revision.setRevisionOf(new Note());
             data.revision.getRevisionOf().setLatestRevision(data.revision);
             data.revision.setCreatedOn(timeService.currentTimeMillis());
+        } else if (localName.equals("source") || localName.equals("description")) {
+            data.paragraphs = new Paragraph(new ArrayList<ParagraphElement>());
+        }
+        if (localName.equals("bibliograph")) {
+            data.inBib = true;
+            if (reader.getAttributeCount() > 0) {
+                data.attr = reader.getAttributeValue(0);
+            }
+        } else {
+            data.inBib = false;
+            data.attr = null;
         }
     }
 
@@ -139,16 +166,23 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         } else if (localName.equals("lemma-meaning")) {
             data.revision.setLemmaMeaning(data.text);
         } else if (localName.equals("source")) {
-            data.revision.setSources(data.text);
+            data.revision.setSources(data.paragraphs);
+            data.paragraphs = null;
         } else if (localName.equals("description")) {
-            data.revision.setDescription(data.text);
+            data.revision.setDescription(data.paragraphs);
+            data.paragraphs = null;
+        } else if (localName.equals("bibliograph")) {
+            data.inBib = false;
         }
     }
 
     private static final class LoopContext {
         private NoteRevision revision;
         private String text;
+        private Paragraph paragraphs;
         private int counter;
+        private boolean inBib;
+        private String attr;
 
         private LoopContext() {
             revision = null;

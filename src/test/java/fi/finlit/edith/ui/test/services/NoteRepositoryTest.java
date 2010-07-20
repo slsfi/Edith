@@ -75,10 +75,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(note);
         assertEquals("kereitten", note.getLemma());
         assertEquals("'keritte'", note.getLemmaMeaning());
-        // FIXME The following two don't work because they contain </bibliograph>.
-        // assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph>, 363).",
-        // note.getDescription());
-        // assertEquals("v", note.getSources());
+        assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
+                note.getDescription().toString());
+        assertEquals("<bibliograph>v</bibliograph>", note.getSources().toString());
     }
 
     @Test

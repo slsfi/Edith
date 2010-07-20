@@ -80,7 +80,7 @@
 			<lemma-meaning></lemma-meaning>
 			<description>
 				Tarkoittaa
-				<bibliograph>
+				<bibliograph ref="jotain">
 					Siionin virsiä
 			</bibliograph>
 				, joka on heränneiden laulukokoelma. Kiven lapsuudenkodissa olivat

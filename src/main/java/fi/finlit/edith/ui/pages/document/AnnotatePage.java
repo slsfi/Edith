@@ -246,12 +246,12 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onSuccessFromCommentForm() throws IOException {
-        Note note = noteRepo.getById(noteId);
+        Note n = noteRepo.getById(noteId);
         if (newCommentMessage != null) {
-            note.getComments().add(noteRepo.createComment(note, newCommentMessage));
+            n.getComments().add(noteRepo.createComment(n, newCommentMessage));
             newCommentMessage = null;
         }
-        noteOnEdit = note.getLatestRevision();
+        noteOnEdit = n.getLatestRevision();
         return commentZone.getBody();
     }
 
