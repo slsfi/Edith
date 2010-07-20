@@ -216,8 +216,8 @@ public class AnnotatePage extends AbstractDocumentPage {
         termOnEdit = getEditTerm(noteOnEdit);
     }
 
-    void onPrepareFromCommentForm(String noteId) {
-        this.noteId = noteId;
+    void onPrepareFromCommentForm(String id) {
+        this.noteId = id;
     }
 
     @Property
