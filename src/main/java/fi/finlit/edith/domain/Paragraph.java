@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
+import com.mysema.rdfbean.annotations.Container;
+import com.mysema.rdfbean.annotations.ContainerType;
 import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
@@ -12,6 +14,7 @@ import fi.finlit.edith.EDITH;
 @ClassMapping(ns = EDITH.NS)
 public class Paragraph extends Identifiable {
     @Predicate
+    @Container(ContainerType.LIST)
     private List<ParagraphElement> elements;
 
     public Paragraph() {
