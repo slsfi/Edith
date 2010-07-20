@@ -34,23 +34,8 @@ import org.apache.tapestry5.util.EnumSelectModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Interval;
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteComparator;
-import fi.finlit.edith.domain.NoteFormat;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.NoteRevisionRepository;
-import fi.finlit.edith.domain.NoteStatus;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.SelectedText;
-import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.TermLanguage;
-import fi.finlit.edith.domain.TermRepository;
+import fi.finlit.edith.domain.*;
+import fi.finlit.edith.ui.services.ParagraphParser;
 
 /**
  * AnnotatePage provides
@@ -65,7 +50,7 @@ import fi.finlit.edith.domain.TermRepository;
 public class AnnotatePage extends AbstractDocumentPage {
 
     private static final String EDIT_ZONE = "editZone";
-    
+
     private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
 
     @Inject
@@ -162,7 +147,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Property
     private String newPlaceDescription;
-    
+
     @Property
     private NoteComment comment;
 
@@ -181,13 +166,122 @@ public class AnnotatePage extends AbstractDocumentPage {
         renderSupport.addScript("editLink = '" + link + "';");
     }
 
+    public String getDescription() {
+        if (noteOnEdit.getDescription() == null) {
+            return null;
+        }
+        return noteOnEdit.getDescription().toString();
+    }
+
+    public Object[] getEditContext() {
+        List<String> ctx = new ArrayList<String>(selectedNotes.size());
+        // Adding the current note to head
+        ctx.add(note.getLocalId());
+        for (NoteRevision r : selectedNotes) {
+            if (!r.equals(note)) {
+                ctx.add(r.getLocalId());
+            }
+        }
+        return ctx.toArray();
+    }
+
+    private Term getEditTerm(NoteRevision noteRevision) {
+        return noteRevision.getRevisionOf().getTerm() != null ? noteRevision.getRevisionOf()
+                .getTerm().createCopy() : new Term();
+    }
+
+    @Validate("required")
+    public NoteFormat getFormat() {
+        return noteOnEdit.getFormat();
+    }
+
+    public TermLanguage getLanguage() {
+        return termOnEdit.getLanguage();
+    }
+
+    public NameForm getNormalizedPerson() {
+        return noteOnEdit.getPerson().getNormalizedForm();
+    }
+
+    public NameForm getNormalizedPlace() {
+        return noteOnEdit.getPlace().getNormalizedForm();
+    }
+
+
+    public Set<NameForm> getPersons() {
+        return noteOnEdit.getPerson().getOtherForms();
+    }
+
+    public Set<NameForm> getPlaces() {
+        return noteOnEdit.getPlace().getOtherForms();
+    }
+
+    public Set<NoteType> getSelectedTypes() {
+        if (noteOnEdit.getTypes() == null) {
+            noteOnEdit.setTypes(new HashSet<NoteType>());
+        }
+        return noteOnEdit.getTypes();
+    }
+
+    public String getSources() {
+        if (noteOnEdit.getSources() == null) {
+            return null;
+        }
+        return noteOnEdit.getSources().toString();
+    }
+
+    public NoteStatus getStatus() {
+        return noteOnEdit.getRevisionOf().getStatus();
+    }
+
+    public EnumSelectModel getStatusModel() {
+        NoteStatus[] availableStatuses = noteOnEdit.getRevisionOf().getStatus().equals(
+                NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
+                NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
+        return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
+    }
+
+    public String getTimeOfBirth() {
+        return noteOnEdit.getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getPerson()
+                .getTimeOfBirth().asString();
+    }
+
+    public String getTimeOfDeath() {
+        return noteOnEdit.getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getPerson()
+                .getTimeOfDeath().asString();
+    }
+
+    public NoteType[] getTypes() {
+        return NoteType.values();
+    }
+
+    public boolean isSelected() {
+        return getSelectedTypes().contains(type);
+    }
+
     void onActivate() {
         createTermSelection = new SelectedText();
         updateLongTextSelection = new SelectedText();
     }
 
-    void setupRender() {
-        docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
+    Object onDelete(EventContext context) throws IOException {
+        note = noteRevisionRepo.getById(context.get(String.class, 0));
+        DocumentRevision documentRevision = getDocumentRevision();
+        documentRevision = getDocumentRepo().removeNotes(documentRevision, note.getRevisionOf());
+
+        // prepare view with new revision
+        getDocumentRevision().setRevision(documentRevision.getRevision());
+        docNotes = noteRevisionRepo.getOfDocument(documentRevision);
+        selectedNotes = Collections.emptyList();
+        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add(
+                "documentZone", documentView).add("commentZone", emptyBlock);
+    }
+
+    Object onDeleteComment(String commentId) {
+        NoteComment deletedComment = noteRepo.removeComment(commentId);
+        noteId = deletedComment.getNote().getId();
+        noteOnEdit = noteRepo.getById(noteId).getLatestRevision();
+        return commentZone.getBody();
     }
 
     Object onEdit(EventContext context) {
@@ -221,9 +315,28 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
 
-    private Term getEditTerm(NoteRevision noteRevision) {
-        return noteRevision.getRevisionOf().getTerm() != null ? noteRevision.getRevisionOf()
-                .getTerm().createCopy() : new Term();
+    void onPrepareFromCommentForm(String id) {
+        noteId = id;
+    }
+
+    void onPrepareFromNoteEditForm(String noteRev) {
+        note = noteRevisionRepo.getById(noteRev).createCopy();
+        noteOnEdit = note;
+        termOnEdit = getEditTerm(noteOnEdit);
+    }
+
+    List<Term> onProvideCompletionsFromBasicForm(String partial) {
+        return termRepo.findByStartOfBasicForm(partial, 10);
+    }
+
+    Object onSuccessFromCommentForm() throws IOException {
+        Note n = noteRepo.getById(noteId);
+        if (newCommentMessage != null) {
+            n.getComments().add(noteRepo.createComment(n, newCommentMessage));
+            newCommentMessage = null;
+        }
+        noteOnEdit = n.getLatestRevision();
+        return commentZone.getBody();
     }
 
     Object onSuccessFromCreateTerm() throws IOException {
@@ -248,49 +361,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         noteId = noteOnEdit.getRevisionOf().getId();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", commentZone.getBody());
-    }
-
-    void onPrepareFromNoteEditForm(String noteRev) {
-        note = noteRevisionRepo.getById(noteRev).createCopy();
-        noteOnEdit = note;
-        termOnEdit = getEditTerm(noteOnEdit);
-    }
-
-    void onPrepareFromCommentForm(String id) {
-        noteId = id;
-    }
-
-
-    private void updateName(Set<NameForm> nameForms, String name, String description) {
-        updateNames(nameForms, null, name, description);
-    }
-
-    private void updateNames(Set<NameForm> nameForms, String first, String last, String description) {
-        if (last != null) {
-            if (first == null) {
-                nameForms.add(new NameForm(last, description));
-            } else {
-                nameForms.add(new NameForm(first, last, description));
-            }
-        }
-        // Removes name forms that don't have a name entered.
-        Iterator<NameForm> iter = nameForms.iterator();
-        while (iter.hasNext()) {
-            NameForm current = iter.next();
-            if (current.getLast() == null) {
-                iter.remove();
-            }
-        }
-    }
-
-    Object onSuccessFromCommentForm() throws IOException {
-        Note n = noteRepo.getById(noteId);
-        if (newCommentMessage != null) {
-            n.getComments().add(noteRepo.createComment(n, newCommentMessage));
-            newCommentMessage = null;
-        }
-        noteOnEdit = n.getLatestRevision();
-        return commentZone.getBody();
     }
 
     Object onSuccessFromNoteEditForm() throws IOException {
@@ -358,56 +428,14 @@ public class AnnotatePage extends AbstractDocumentPage {
         noteRepo.save(noteRevision.getRevisionOf());
     }
 
-    Object onDelete(EventContext context) throws IOException {
-        note = noteRevisionRepo.getById(context.get(String.class, 0));
-        DocumentRevision documentRevision = getDocumentRevision();
-        documentRevision = getDocumentRepo().removeNotes(documentRevision, note.getRevisionOf());
-
-        // prepare view with new revision
-        getDocumentRevision().setRevision(documentRevision.getRevision());
-        docNotes = noteRevisionRepo.getOfDocument(documentRevision);
-        selectedNotes = Collections.emptyList();
-        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add(
-                "documentZone", documentView).add("commentZone", emptyBlock);
-    }
-
-    Object onDeleteComment(String commentId) {
-        NoteComment deletedComment = noteRepo.removeComment(commentId);
-        noteId = deletedComment.getNote().getId();
-        noteOnEdit = noteRepo.getById(noteId).getLatestRevision();
-        return commentZone.getBody();
-    }
-
-    List<Term> onProvideCompletionsFromBasicForm(String partial) {
-        return termRepo.findByStartOfBasicForm(partial, 10);
-    }
-
-    public Object[] getEditContext() {
-        List<String> ctx = new ArrayList<String>(selectedNotes.size());
-        // Adding the current note to head
-        ctx.add(note.getLocalId());
-        for (NoteRevision r : selectedNotes) {
-            if (!r.equals(note)) {
-                ctx.add(r.getLocalId());
-            }
+    public void setDescription(String description) throws XMLStreamException {
+        if (description != null) {
+            noteOnEdit.setDescription(ParagraphParser.parseParagraph(description));
         }
-        return ctx.toArray();
-    }
-
-    @Validate("required")
-    public NoteFormat getFormat() {
-        return noteOnEdit.getFormat();
     }
 
     public void setFormat(NoteFormat format) {
         noteOnEdit.setFormat(format);
-    }
-
-    public Set<NoteType> getSelectedTypes() {
-        if (noteOnEdit.getTypes() == null) {
-            noteOnEdit.setTypes(new HashSet<NoteType>());
-        }
-        return noteOnEdit.getTypes();
     }
 
     @Validate("required")
@@ -415,34 +443,23 @@ public class AnnotatePage extends AbstractDocumentPage {
         termOnEdit.setLanguage(language);
     }
 
-    public TermLanguage getLanguage() {
-        return termOnEdit.getLanguage();
+    public void setSelected(boolean selected) {
+        if (selected) {
+            getSelectedTypes().add(type);
+        } else {
+            getSelectedTypes().remove(type);
+        }
+    }
+
+    public void setSources(String sources) throws XMLStreamException {
+        if (sources != null) {
+            noteOnEdit.setSources(ParagraphParser.parseParagraph(sources));
+        }
     }
 
     @Validate("required")
     public void setStatus(NoteStatus status) {
         noteOnEdit.getRevisionOf().setStatus(status);
-    }
-
-    public NoteStatus getStatus() {
-        return noteOnEdit.getRevisionOf().getStatus();
-    }
-
-    public EnumSelectModel getStatusModel() {
-        NoteStatus[] availableStatuses = noteOnEdit.getRevisionOf().getStatus().equals(
-                NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
-                NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
-        return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
-    }
-
-    public String getTimeOfBirth() {
-        return noteOnEdit.getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getPerson()
-                .getTimeOfBirth().asString();
-    }
-
-    public String getTimeOfDeath() {
-        return noteOnEdit.getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getPerson()
-                .getTimeOfDeath().asString();
     }
 
     public void setTimeOfBirth(String time) {
@@ -457,61 +474,29 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
     }
 
-    public NameForm getNormalizedPerson() {
-        return noteOnEdit.getPerson().getNormalizedForm();
+    void setupRender() {
+        docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
     }
 
-    public NameForm getNormalizedPlace() {
-        return noteOnEdit.getPlace().getNormalizedForm();
+    private void updateName(Set<NameForm> nameForms, String name, String description) {
+        updateNames(nameForms, null, name, description);
     }
 
-    public Set<NameForm> getPersons() {
-        return noteOnEdit.getPerson().getOtherForms();
-    }
-
-    public Set<NameForm> getPlaces() {
-        return noteOnEdit.getPlace().getOtherForms();
-    }
-
-    public NoteType[] getTypes() {
-        return NoteType.values();
-    }
-
-    public boolean isSelected() {
-        return getSelectedTypes().contains(type);
-    }
-
-    public void setSelected(boolean selected) {
-        if (selected) {
-            getSelectedTypes().add(type);
-        } else {
-            getSelectedTypes().remove(type);
+    private void updateNames(Set<NameForm> nameForms, String first, String last, String description) {
+        if (last != null) {
+            if (first == null) {
+                nameForms.add(new NameForm(last, description));
+            } else {
+                nameForms.add(new NameForm(first, last, description));
+            }
         }
-    }
-
-    public String getDescription() {
-        if (noteOnEdit.getDescription() == null) {
-            return null;
-        }
-        return noteOnEdit.getDescription().toString();
-    }
-
-    public void setDescription(String description) throws XMLStreamException {
-        if (description != null) {
-            noteOnEdit.setDescription(Paragraph.parseParagraph(description));
-        }
-    }
-
-    public String getSources() {
-        if (noteOnEdit.getSources() == null) {
-            return null;
-        }
-        return noteOnEdit.getSources().toString();
-    }
-
-    public void setSources(String sources) throws XMLStreamException {
-        if (sources != null) {
-            noteOnEdit.setSources(Paragraph.parseParagraph(sources));
+        // Removes name forms that don't have a name entered.
+        Iterator<NameForm> iter = nameForms.iterator();
+        while (iter.hasNext()) {
+            NameForm current = iter.next();
+            if (current.getLast() == null) {
+                iter.remove();
+            }
         }
     }
 
