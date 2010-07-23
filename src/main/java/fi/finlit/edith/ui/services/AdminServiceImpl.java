@@ -12,7 +12,7 @@ import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteRevision;
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Term;
 
 /**
@@ -30,7 +30,7 @@ public class AdminServiceImpl extends AbstractService implements AdminService{
     @Override
     public void removeNotes() {
         Session session = getSession();
-        removeAll(session, NoteRevision.class);
+        removeAll(session, DocumentNote.class);
         removeAll(session, Note.class);
         session.flush();
     }
@@ -38,7 +38,7 @@ public class AdminServiceImpl extends AbstractService implements AdminService{
     @Override
     public void removeNotesAndTerms() {
         Session session = getSession();
-        removeAll(session, NoteRevision.class);
+        removeAll(session, DocumentNote.class);
         removeAll(session, Note.class);
         removeAll(session, Term.class);       
         session.flush();

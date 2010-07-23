@@ -48,9 +48,10 @@ public class TermWithNotes {
         for (Note note : notes) {
             /* The null check is not necessary in a perfect world, but we have corrupted
              * data in production so lets keep it here until that is fixed. */
-            if (note.getLatestRevision() != null && !note.getLatestRevision().isDeleted()) {
+//            if (note.getLatestRevision() != null && !note.getLatestRevision().isDeleted()) {
                 result.add(note);
-            }
+//            }
+            // FIXME
         }
         return result;
     }

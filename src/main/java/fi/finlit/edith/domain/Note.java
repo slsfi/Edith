@@ -6,6 +6,9 @@
 package fi.finlit.edith.domain;
 
 import java.util.Set;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
@@ -20,84 +23,155 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns = EDITH.NS)
 public class Note extends Identifiable {
+    @Predicate
+    private DocumentNote latestRevision;
 
     @Predicate
-    private Document document;
+    private Paragraph description;
 
     @Predicate
-    private NoteRevision latestRevision;
-
-    /**
-     * the id of the note in the context of the TEI document
-     */
-    @Predicate
-    private String localId;
-
-    @Predicate
-    private NoteStatus status = NoteStatus.INITIAL;
-
-    @Predicate(ln = "tagged")
-    private Set<Tag> tags;
+    private Set<NoteType> types;
 
     @Predicate
     private Term term;
 
+    // FIXME
     @Predicate(ln = "note", inv = true)
     private Set<NoteComment> comments;
 
-    public Document getDocument() {
-        return document;
-    }
+    @Predicate
+    private String subtextSources;
 
-    public NoteRevision getLatestRevision() {
-        return latestRevision;
-    }
+    @Predicate
+    private Paragraph sources;
 
-    public String getLocalId() {
-        return localId;
-    }
+    @Predicate
+    private NoteFormat format;
 
-    public NoteStatus getStatus() {
-        return status;
-    }
+    @Predicate
+    private Place place;
 
-    public Set<Tag> getTags() {
-        return tags;
-    }
+    @Predicate
+    private Person person;
 
-    public Term getTerm() {
-        return term;
-    }
+    @Predicate
+    private String lemma;
 
-    public void setDocument(Document document) {
-        this.document = document;
-    }
+    @Predicate
+    private String lemmaMeaning;
 
-    public void setLatestRevision(NoteRevision latestRevision) {
-        this.latestRevision = latestRevision;
-    }
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
-    public void setLocalId(String localId) {
-        this.localId = localId;
-    }
-
-    public void setStatus(NoteStatus status) {
-        this.status = status;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public void setTerm(Term term) {
-        this.term = term;
+    public static String createLemmaFromLongText(String text) {
+        String result = null;
+        if (WHITESPACE.matcher(text).find()) {
+            String[] words = StringUtils.split(text);
+            if (words.length == 2) {
+                result = words[0] + " " + words[1];
+            } else if (words.length > 1) {
+                result = words[0] + " \u2013 \u2013 " + words[words.length - 1];
+            } else {
+                result = words[0];
+            }
+        } else {
+            result = text;
+        }
+        return result;
     }
 
     public Set<NoteComment> getComments() {
         return comments;
     }
 
+    public Paragraph getDescription() {
+        return description;
+    }
+
+//    public DocumentNote getLatestRevision() {
+//        return latestRevision;
+//    }
+
+    public NoteFormat getFormat() {
+        return format;
+    }
+
+    public String getLemma() {
+        return lemma;
+    }
+
+    public String getLemmaMeaning() {
+        return lemmaMeaning;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public Paragraph getSources() {
+        return sources;
+    }
+
+    public String getSubtextSources() {
+        return subtextSources;
+    }
+
+    public Term getTerm() {
+        return term;
+    }
+
+    public Set<NoteType> getTypes() {
+        return types;
+    }
+
     public void setComments(Set<NoteComment> comments) {
         this.comments = comments;
+    }
+
+    public void setDescription(Paragraph description) {
+        this.description = description;
+    }
+
+//    public void setLatestRevision(DocumentNote latestRevision) {
+//        this.latestRevision = latestRevision;
+//    }
+
+    public void setFormat(NoteFormat format) {
+        this.format = format;
+    }
+
+    public void setLemma(String lemma) {
+        this.lemma = lemma;
+    }
+
+    public void setLemmaMeaning(String lemmaMeaning) {
+        this.lemmaMeaning = lemmaMeaning;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
+
+    public void setSources(Paragraph sources) {
+        this.sources = sources;
+    }
+
+    public void setSubtextSources(String subtextSources) {
+        this.subtextSources = subtextSources;
+    }
+
+    public void setTerm(Term term) {
+        this.term = term;
+    }
+
+    public void setTypes(Set<NoteType> types) {
+        this.types = types;
     }
 }

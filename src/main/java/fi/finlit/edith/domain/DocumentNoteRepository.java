@@ -18,7 +18,7 @@ import com.mysema.rdfbean.dao.Repository;
  * The Interface NoteRevisionRepository.
  */
 @Transactional
-public interface NoteRevisionRepository extends Repository<NoteRevision, String> {
+public interface DocumentNoteRepository extends Repository<DocumentNote, String> {
 
     /**
      * Get the NoteRevision with the given local id in the scope of the given document revision
@@ -29,7 +29,7 @@ public interface NoteRevisionRepository extends Repository<NoteRevision, String>
      * @return
      */
     @Nullable
-    NoteRevision getByLocalId(DocumentRevision docRevision, String localId);
+    DocumentNote getByLocalId(DocumentRevision docRevision, String localId);
 
     /**
      * Get the note revisions of the given document revision
@@ -38,7 +38,7 @@ public interface NoteRevisionRepository extends Repository<NoteRevision, String>
      * @param revision
      * @return
      */
-    List<NoteRevision> getOfDocument(DocumentRevision docRevision);
+    List<DocumentNote> getOfDocument(DocumentRevision docRevision);
 
     /**
      * Query for notes matching the given search term

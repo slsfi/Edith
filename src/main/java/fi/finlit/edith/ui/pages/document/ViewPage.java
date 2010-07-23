@@ -11,8 +11,8 @@ import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 
 /**
  * ViewPage provides
@@ -25,13 +25,13 @@ import fi.finlit.edith.domain.NoteRevisionRepository;
 public class ViewPage extends AbstractDocumentPage {
 
     @Inject
-    private NoteRevisionRepository noteRevisionRepo;
+    private DocumentNoteRepository noteRevisionRepo;
 
     @Property
-    private NoteRevision note;
+    private DocumentNote note;
 
     @Property
-    private List<NoteRevision> docNotes;
+    private List<DocumentNote> docNotes;
 
     void setupRender() {
         docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());

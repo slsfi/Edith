@@ -83,16 +83,19 @@ public class AnnotatePage extends AbstractDocumentPage {
     private Block documentView;
 
     @Property
-    private List<NoteRevision> selectedNotes;
+    private List<DocumentNote> selectedNotes;
 
     @Property
-    private NoteRevision noteOnEdit;
+    private Note noteOnEdit;
 
     @Property
     private Term termOnEdit;
 
     @Property
-    private NoteRevision note;
+    private DocumentNote documentNote;
+
+    @Property
+    private DocumentNote note;
 
     @Inject
     private RenderSupport renderSupport;
@@ -101,7 +104,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     private ComponentResources resources;
 
     @Inject
-    private NoteRevisionRepository noteRevisionRepo;
+    private DocumentNoteRepository noteRevisionRepo;
 
     @Inject
     private NoteRepository noteRepo;
@@ -110,7 +113,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     private TermRepository termRepo;
 
     @Property
-    private List<NoteRevision> docNotes;
+    private List<DocumentNote> docNotes;
 
     @Property
     private SelectedText createTermSelection;
@@ -176,8 +179,8 @@ public class AnnotatePage extends AbstractDocumentPage {
     public Object[] getEditContext() {
         List<String> ctx = new ArrayList<String>(selectedNotes.size());
         // Adding the current note to head
-        ctx.add(note.getLocalId());
-        for (NoteRevision r : selectedNotes) {
+        ctx.add(documentNote.getLocalId());
+        for (DocumentNote r : selectedNotes) {
             if (!r.equals(note)) {
                 ctx.add(r.getLocalId());
             }
@@ -185,8 +188,8 @@ public class AnnotatePage extends AbstractDocumentPage {
         return ctx.toArray();
     }
 
-    private Term getEditTerm(NoteRevision noteRevision) {
-        return noteRevision.getRevisionOf().getTerm() != null ? noteRevision.getRevisionOf()
+    private Term getEditTerm(Note note) {
+        return note.getTerm() != null ? note
                 .getTerm().createCopy() : new Term();
     }
 
@@ -231,11 +234,11 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public NoteStatus getStatus() {
-        return noteOnEdit.getRevisionOf().getStatus();
+        return documentNote.getStatus();
     }
 
     public EnumSelectModel getStatusModel() {
-        NoteStatus[] availableStatuses = noteOnEdit.getRevisionOf().getStatus().equals(
+        NoteStatus[] availableStatuses = documentNote.getStatus().equals(
                 NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
                 NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
         return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
@@ -267,7 +270,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     Object onDelete(EventContext context) throws IOException {
         note = noteRevisionRepo.getById(context.get(String.class, 0));
         DocumentRevision documentRevision = getDocumentRevision();
-        documentRevision = getDocumentRepo().removeNotes(documentRevision, note.getRevisionOf());
+        documentRevision = getDocumentRepo().removeNotes(documentRevision, note);
 
         // prepare view with new revision
         getDocumentRevision().setRevision(documentRevision.getRevision());
@@ -280,12 +283,12 @@ public class AnnotatePage extends AbstractDocumentPage {
     Object onDeleteComment(String commentId) {
         NoteComment deletedComment = noteRepo.removeComment(commentId);
         noteId = deletedComment.getNote().getId();
-        noteOnEdit = noteRepo.getById(noteId).getLatestRevision();
+        noteOnEdit = noteRepo.getById(noteId);
         return commentZone.getBody();
     }
 
     Object onEdit(EventContext context) {
-        selectedNotes = new ArrayList<NoteRevision>(context.getCount());
+        selectedNotes = new ArrayList<DocumentNote>(context.getCount());
         for (int i = 0; i < context.getCount(); i++) {
             String localId = context.get(String.class, i);
             // XXX Where is this n coming?
@@ -293,7 +296,7 @@ public class AnnotatePage extends AbstractDocumentPage {
                 localId = localId.substring(1);
             }
 
-            NoteRevision rev = noteRevisionRepo.getByLocalId(getDocumentRevision(), localId);
+            DocumentNote rev = noteRevisionRepo.getByLocalId(getDocumentRevision(), localId);
             if (rev != null) {
                 selectedNotes.add(rev);
             } else {
@@ -303,15 +306,16 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
 
         if (selectedNotes.size() > 0) {
-            noteOnEdit = selectedNotes.get(0);
+            noteOnEdit = selectedNotes.get(0).getNote();
             termOnEdit = getEditTerm(noteOnEdit);
         }
 
         // Order on lemma after we have selected the first one as a selection
-        Collections.sort(selectedNotes, new NoteComparator());
+        // FIXME
+//        Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
-        noteId = noteOnEdit.getRevisionOf().getId();
+        noteId = noteOnEdit.getId();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
 
@@ -321,7 +325,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     void onPrepareFromNoteEditForm(String noteRev) {
         note = noteRevisionRepo.getById(noteRev).createCopy();
-        noteOnEdit = note;
+        noteOnEdit = note.getNote();
         termOnEdit = getEditTerm(noteOnEdit);
     }
 
@@ -335,7 +339,7 @@ public class AnnotatePage extends AbstractDocumentPage {
             n.getComments().add(noteRepo.createComment(n, newCommentMessage));
             newCommentMessage = null;
         }
-        noteOnEdit = n.getLatestRevision();
+        noteOnEdit = n;
         return commentZone.getBody();
     }
 
@@ -343,7 +347,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         logger.info(createTermSelection.toString());
         DocumentRevision documentRevision = getDocumentRevision();
 
-        NoteRevision noteRevision = null;
+        DocumentNote noteRevision = null;
         try {
             noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
         } catch (Exception e) {
@@ -356,24 +360,24 @@ public class AnnotatePage extends AbstractDocumentPage {
         documentRevision.setRevision(noteRevision.getSvnRevision());
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.singletonList(noteRevision);
-        noteOnEdit = noteRevision;
+        noteOnEdit = noteRevision.getNote();
         termOnEdit = getEditTerm(noteOnEdit);
-        noteId = noteOnEdit.getRevisionOf().getId();
+        noteId = noteOnEdit.getId();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", commentZone.getBody());
     }
 
     Object onSuccessFromNoteEditForm() throws IOException {
-        NoteRevision noteRevision;
-        if (note.getRevisionOf().getStatus().equals(NoteStatus.INITIAL)) {
-            note.getRevisionOf().setStatus(NoteStatus.DRAFT);
+        DocumentNote noteRevision;
+        if (note.getStatus().equals(NoteStatus.INITIAL)) {
+            note.setStatus(NoteStatus.DRAFT);
         }
-        updateNames(note.getPerson().getOtherForms(), newPersonFirst, newPersonLast,
+        updateNames(noteOnEdit.getPerson().getOtherForms(), newPersonFirst, newPersonLast,
                 newPersonDescription);
         newPersonFirst = null;
         newPersonLast = null;
         newPersonDescription = null;
-        updateName(note.getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
+        updateName(noteOnEdit.getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
         newPlaceName = null;
         newPlaceDescription = null;
 
@@ -400,15 +404,15 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
         docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
         selectedNotes = Collections.singletonList(noteRevision);
-        noteOnEdit = noteRevision;
+        noteOnEdit = noteRevision.getNote();
         termOnEdit = getEditTerm(noteOnEdit);
-        noteId = noteOnEdit.getRevisionOf().getId();
+        noteId = noteOnEdit.getId();
         submitSuccess = true;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", commentZone.getBody());
     }
 
-    private void saveTerm(NoteRevision noteRevision) {
+    private void saveTerm(DocumentNote noteRevision) {
         // The idea is that language can be changed without a new term being created. It is a
         // bit hard to follow I admit. -vema
         List<Term> terms = termRepo.findByBasicForm(termOnEdit.getBasicForm());
@@ -424,8 +428,8 @@ public class AnnotatePage extends AbstractDocumentPage {
             term = termOnEdit.createCopy();
         }
         termRepo.save(term);
-        noteRevision.getRevisionOf().setTerm(term);
-        noteRepo.save(noteRevision.getRevisionOf());
+        noteRevision.getNote().setTerm(term);
+        noteRepo.save(noteRevision.getNote());
     }
 
     public void setDescription(String description) throws XMLStreamException {
@@ -459,7 +463,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Validate("required")
     public void setStatus(NoteStatus status) {
-        noteOnEdit.getRevisionOf().setStatus(status);
+        note.setStatus(status);
     }
 
     public void setTimeOfBirth(String time) {

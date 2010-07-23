@@ -15,7 +15,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.AdminService;
 
 /**
@@ -30,7 +30,7 @@ public class AdminServiceTest extends AbstractServiceTest{
     private NoteRepository noteRepo;
 
     @Inject
-    private NoteRevisionRepository noteRevisionRepo;
+    private DocumentNoteRepository noteRevisionRepo;
 
     @Inject
     private AdminService adminService;

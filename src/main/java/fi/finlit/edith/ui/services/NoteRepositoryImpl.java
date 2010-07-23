@@ -28,20 +28,7 @@ import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.LinkElement;
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.ParagraphElement;
-import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.StringElement;
-import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.domain.*;
 
 /**
  * NoteRepositoryImpl provides
@@ -50,6 +37,21 @@ import fi.finlit.edith.domain.UserRepository;
  * @version $Id$
  */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
+
+    private static final class LoopContext {
+        private DocumentNote revision;
+        private String text;
+        private Paragraph paragraphs;
+        private int counter;
+        private boolean inBib;
+        private String attr;
+
+        private LoopContext() {
+            revision = null;
+            text = null;
+            counter = 0;
+        }
+    }
 
     private final TimeService timeService;
 
@@ -67,27 +69,88 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public Note createNote(DocumentRevision docRevision, String localId, String longText) {
+    public NoteComment createComment(Note note, String message) {
+        NoteComment comment = new NoteComment(note, message, authService.getUsername());
+        getSession().save(comment);
+        return comment;
+    }
+
+    @Override
+    public DocumentNote createNote(DocumentRevision docRevision, String localId, String longText) {
         UserInfo createdBy = userRepository.getCurrentUser();
 
-        NoteRevision rev = new NoteRevision();
-        rev.setCreatedOn(timeService.currentTimeMillis());
-        rev.setCreatedBy(createdBy);
-        rev.setSVNRevision(docRevision.getRevision());
-        rev.setLongText(longText);
-        rev.setLemmaFromLongText();
-        rev.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
-        rev.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
-        getSession().save(rev);
+        DocumentNote documentNote = new DocumentNote();
+        documentNote.setCreatedOn(timeService.currentTimeMillis());
+        documentNote.setCreatedBy(createdBy);
+        documentNote.setSVNRevision(docRevision.getRevision());
+        documentNote.setLongText(longText);
 
-        Note newNote = new Note();
-        newNote.setDocument(docRevision.getDocument());
-        newNote.setLocalId(localId);
-        newNote.setLatestRevision(rev);
-        rev.setRevisionOf(newNote);
+        String lemma = Note.createLemmaFromLongText(longText);
+        Note newNote = find(lemma);
+        if (newNote == null) {
+            newNote = new Note();
+            newNote.setLemma(lemma);
+        }
+        documentNote.setDocument(docRevision.getDocument());
+        documentNote.setDocRevision(docRevision);
+        documentNote.setLocalId(localId);
+        documentNote.setNote(newNote);
+        getSession().save(documentNote);
         getSession().save(newNote);
 
-        return newNote;
+        return documentNote;
+    }
+
+    @Override
+    public Note find(String lemma) {
+        return getSession().from(note).where(note.lemma.eq(lemma)).uniqueResult(note);
+    }
+
+    private void handleEndElement(XMLStreamReader reader, Session session, LoopContext data) {
+        String localName = reader.getLocalName();
+
+        if (localName.equals("note")) {
+            // FIXME
+//            session.save(data.revision.getRevisionOf());
+            session.save(data.revision.getNote());
+            session.save(data.revision);
+            data.counter++;
+        } else if (localName.equals("lemma")) {
+            data.revision.getNote().setLemma(data.text);
+        } else if (localName.equals("lemma-meaning")) {
+            data.revision.getNote().setLemmaMeaning(data.text);
+        } else if (localName.equals("source")) {
+            data.revision.getNote().setSources(data.paragraphs);
+            data.paragraphs = null;
+        } else if (localName.equals("description")) {
+            data.revision.getNote().setDescription(data.paragraphs);
+            data.paragraphs = null;
+        } else if (localName.equals("bibliograph")) {
+            data.inBib = false;
+        }
+    }
+
+    private void handleStartElement(XMLStreamReader reader, LoopContext data) {
+        String localName = reader.getLocalName();
+        if (localName.equals("note")) {
+            data.revision = new DocumentNote();
+            data.revision.setNote(new Note());
+            // FIXME
+//            data.revision.setRevisionOf(new Note());
+//            data.revision.getRevisionOf().setLatestRevision(data.revision);
+            data.revision.setCreatedOn(timeService.currentTimeMillis());
+        } else if (localName.equals("source") || localName.equals("description")) {
+            data.paragraphs = new Paragraph(new ArrayList<ParagraphElement>());
+        }
+        if (localName.equals("bibliograph")) {
+            data.inBib = true;
+            if (reader.getAttributeCount() > 0) {
+                data.attr = reader.getAttributeValue(0);
+            }
+        } else {
+            data.inBib = false;
+            data.attr = null;
+        }
     }
 
     @Override
@@ -145,64 +208,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return data.counter;
     }
 
-    private void handleStartElement(XMLStreamReader reader, LoopContext data) {
-        String localName = reader.getLocalName();
-        if (localName.equals("note")) {
-            data.revision = new NoteRevision();
-            data.revision.setRevisionOf(new Note());
-            data.revision.getRevisionOf().setLatestRevision(data.revision);
-            data.revision.setCreatedOn(timeService.currentTimeMillis());
-        } else if (localName.equals("source") || localName.equals("description")) {
-            data.paragraphs = new Paragraph(new ArrayList<ParagraphElement>());
-        }
-        if (localName.equals("bibliograph")) {
-            data.inBib = true;
-            if (reader.getAttributeCount() > 0) {
-                data.attr = reader.getAttributeValue(0);
-            }
-        } else {
-            data.inBib = false;
-            data.attr = null;
-        }
-    }
-
-    private void handleEndElement(XMLStreamReader reader, Session session, LoopContext data) {
-        String localName = reader.getLocalName();
-
-        if (localName.equals("note")) {
-            session.save(data.revision.getRevisionOf());
-            session.save(data.revision);
-            data.counter++;
-        } else if (localName.equals("lemma")) {
-            data.revision.setLemma(data.text);
-        } else if (localName.equals("lemma-meaning")) {
-            data.revision.setLemmaMeaning(data.text);
-        } else if (localName.equals("source")) {
-            data.revision.setSources(data.paragraphs);
-            data.paragraphs = null;
-        } else if (localName.equals("description")) {
-            data.revision.setDescription(data.paragraphs);
-            data.paragraphs = null;
-        } else if (localName.equals("bibliograph")) {
-            data.inBib = false;
-        }
-    }
-
-    private static final class LoopContext {
-        private NoteRevision revision;
-        private String text;
-        private Paragraph paragraphs;
-        private int counter;
-        private boolean inBib;
-        private String attr;
-
-        private LoopContext() {
-            revision = null;
-            text = null;
-            counter = 0;
-        }
-    }
-
     @Override
     public GridDataSource queryDictionary(String searchTerm) {
         Assert.notNull(searchTerm);
@@ -217,26 +222,20 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public void remove(Note noteToBeRemoved, long revision) {
+    public void remove(DocumentNote noteToBeRemoved, long revision) {
         Assert.notNull(noteToBeRemoved, "note was null");
 
         UserInfo createdBy = userRepository.getCurrentUser();
-        NoteRevision noteRevision = noteToBeRemoved.getLatestRevision().createCopy();
+        DocumentNote noteRevision = noteToBeRemoved.createCopy();
         noteRevision.setCreatedOn(timeService.currentTimeMillis());
         noteRevision.setCreatedBy(createdBy);
         noteRevision.setSVNRevision(revision);
         noteRevision.setDeleted(true);
-        noteToBeRemoved.setLatestRevision(noteRevision);
+        // FIXME
+//        noteToBeRemoved.setLatestRevision(noteRevision);
 
         getSession().save(noteRevision);
         getSession().save(noteToBeRemoved);
-    }
-
-    @Override
-    public NoteComment createComment(Note note, String message) {
-        NoteComment comment = new NoteComment(note, message, authService.getUsername());
-        getSession().save(comment);
-        return comment;
     }
 
     @Override

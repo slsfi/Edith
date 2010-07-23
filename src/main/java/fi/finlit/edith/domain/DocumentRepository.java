@@ -18,7 +18,7 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**
  * DocumentRepository provides
- * 
+ *
  * @author tiwe
  * @version $Id$
  */
@@ -27,7 +27,7 @@ public interface DocumentRepository extends Repository<Document, String> {
 
     /**
      * Import the given File to the given svnPath
-     * 
+     *
      * @param svnPath
      * @param file
      */
@@ -35,27 +35,18 @@ public interface DocumentRepository extends Repository<Document, String> {
 
     /**
      * Add the given note for the given Document
-     * 
+     *
      * @param docRevision
      * @param selection
      * @return
      * @throws IOException
-     * @throws NoteAdditionFailedException 
+     * @throws NoteAdditionFailedException
      */
-    NoteRevision addNote(DocumentRevision docRevision, SelectedText selection) throws IOException, NoteAdditionFailedException;
-
-    /**
-     * Update the boundaries of the given note
-     * 
-     * @param note
-     * @param selection
-     * @throws IOException
-     */
-    NoteRevision updateNote(NoteRevision note, SelectedText selection) throws IOException;
+    DocumentNote addNote(DocumentRevision docRevision, SelectedText selection) throws IOException, NoteAdditionFailedException;
 
     /**
      * Get a Document handle for the given path
-     * 
+     *
      * @param svnPath
      * @return
      */
@@ -63,7 +54,7 @@ public interface DocumentRepository extends Repository<Document, String> {
 
     /**
      * Get the Documents of the given directory path and its subpaths
-     * 
+     *
      * @param svnFolder
      * @return
      */
@@ -71,7 +62,7 @@ public interface DocumentRepository extends Repository<Document, String> {
 
     /**
      * Get the file for the given document for reading
-     * 
+     *
      * @param docRevision
      * @return
      * @throws IOException
@@ -80,28 +71,37 @@ public interface DocumentRepository extends Repository<Document, String> {
 
     /**
      * Get the SVN revisions for the given document in ascending order
-     * 
+     *
      * @param document
      * @return
      */
     List<RevisionInfo> getRevisions(Document document);
-    
+
     /**
      * Remove all notes from the given Document
-     * 
+     *
      * @param document
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     DocumentRevision removeAllNotes(Document document);
 
     /**
      * Remove the given anchors from the given Document
-     * 
+     *
      * @param docRevision
      * @param notes
      * @throws IOException
      */
-    DocumentRevision removeNotes(DocumentRevision docRevision, Note... notes);
+    DocumentRevision removeNotes(DocumentRevision docRevision, DocumentNote... notes);
+
+    /**
+     * Update the boundaries of the given note
+     *
+     * @param note
+     * @param selection
+     * @throws IOException
+     */
+    DocumentNote updateNote(DocumentNote note, SelectedText selection) throws IOException;
 
 }

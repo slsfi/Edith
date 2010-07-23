@@ -23,6 +23,14 @@ import com.mysema.rdfbean.dao.Repository;
 public interface NoteRepository extends Repository<Note, String> {
 
     /**
+     * Creates a comment for the given note.
+     *
+     * @param note
+     * @param message
+     */
+    NoteComment createComment(Note note, String message);
+
+    /**
      * Create a new Note for the given DocumentRevision with the given local id, lemma and long text
      *
      * @param docRevision
@@ -30,7 +38,9 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param longText
      * @return
      */
-    Note createNote(DocumentRevision docRevision, String localId, String longText);
+    DocumentNote createNote(DocumentRevision docRevision, String localId, String longText);
+
+    Note find(String lemma);
 
     /**
      * Import notes from the given file
@@ -54,15 +64,7 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param note
      * @param newRevision
      */
-    void remove(Note note, long revision);
-
-    /**
-     * Creates a comment for the given note.
-     *
-     * @param note
-     * @param message
-     */
-    NoteComment createComment(Note note, String message);
+    void remove(DocumentNote note, long revision);
 
     /**
      * Removes a NoteComment based on its id. Returns the deleted comment.

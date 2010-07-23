@@ -41,13 +41,12 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteAdditionFailedException;
 import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
@@ -62,6 +61,29 @@ import fi.finlit.edith.ui.services.svn.UpdateCallback;
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements
         DocumentRepository {
 
+    private static class Matched {
+
+        private boolean startMatched;
+        private boolean endMatched;
+
+        public boolean areBothMatched() {
+            return startMatched && endMatched;
+        }
+        public boolean isEndMatched() {
+            return endMatched;
+        }
+        public boolean isStartMatched() {
+            return startMatched;
+        }
+        public void matchEnd() {
+            endMatched = true;
+        }
+
+        public void matchStart() {
+            startMatched = true;
+        }
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
 
     private static final String TEI_NS = "http://www.tei-c.org/ns/1.0";
@@ -72,45 +94,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private static final QName XML_ID_QNAME = new QName(XML_NS, "id");
 
-    private final String documentRoot;
-
-    private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
-
-    private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
-
-    private final NoteRepository noteRepository;
-
-    private final NoteRevisionRepository noteRevisionRepository;
-
-    private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
-
-    private final SubversionService svnService;
-
-    private final TimeService timeService;
-
-    private final AuthService authService;
-
-    public DocumentRepositoryImpl(
-            @Inject SessionFactory sessionFactory,
-            @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
-            @Inject SubversionService svnService,
-            @Inject NoteRepository noteRepository,
-            @Inject NoteRevisionRepository noteRevisionRepository,
-            @Inject TimeService timeService,
-            @Inject AuthService authService) {
-        super(sessionFactory, document);
-        this.documentRoot = documentRoot;
-        this.svnService = svnService;
-        this.noteRepository = noteRepository;
-        this.noteRevisionRepository = noteRevisionRepository;
-        this.timeService = timeService;
-        this.authService = authService;
-    }
-
-    private static EventFilter createRemoveFilter(Note... notes) {
+    private static EventFilter createRemoveFilter(DocumentNote... notes) {
         final Set<String> anchors = new HashSet<String>(notes.length * 2);
 
-        for (Note note : notes) {
+        for (DocumentNote note : notes) {
             anchors.add("start" + note.getLocalId());
             anchors.add("end" + note.getLocalId());
         }
@@ -134,6 +121,15 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         };
     }
 
+    public static String extractName(StartElement element) {
+        String localName = element.getName().getLocalPart();
+        String name = localName;
+        if (localName.equals("div")){
+            name = element.getAttributeByName(TEI_TYPE_QNAME).getValue();
+        }
+        return name;
+    }
+
     public static int getIndex(String str, String word, int occurrence) {
         int index = -1;
         int n = occurrence;
@@ -147,13 +143,48 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return index;
     }
 
+    private final String documentRoot;
+
+    private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+
+    private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
+
+    private final NoteRepository noteRepository;
+
+    private final DocumentNoteRepository noteRevisionRepository;
+
+    private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
+
+    private final SubversionService svnService;
+
+    private final TimeService timeService;
+
+    private final AuthService authService;
+
+    public DocumentRepositoryImpl(
+            @Inject SessionFactory sessionFactory,
+            @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
+            @Inject SubversionService svnService,
+            @Inject NoteRepository noteRepository,
+            @Inject DocumentNoteRepository noteRevisionRepository,
+            @Inject TimeService timeService,
+            @Inject AuthService authService) {
+        super(sessionFactory, document);
+        this.documentRoot = documentRoot;
+        this.svnService = svnService;
+        this.noteRepository = noteRepository;
+        this.noteRevisionRepository = noteRevisionRepository;
+        this.timeService = timeService;
+        this.authService = authService;
+    }
+
     @Override
     public void addDocument(String svnPath, File file) {
         svnService.importFile(svnPath, file);
     }
 
     @Override
-    public NoteRevision addNote(DocumentRevision docRevision, final SelectedText selection) throws IOException, NoteAdditionFailedException{
+    public DocumentNote addNote(DocumentRevision docRevision, final SelectedText selection) throws IOException, NoteAdditionFailedException{
         final String localId = String.valueOf(timeService.currentTimeMillis());
         long newRevision;
         newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
@@ -172,7 +203,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 });
 
         // persisted noteRevision has svnRevision of newly created commit
-        return noteRepository.createNote(new DocumentRevision(docRevision, newRevision), localId,selection.getSelection()).getLatestRevision();
+        return noteRepository.createNote(new DocumentRevision(docRevision, newRevision), localId,selection.getSelection());
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws NoteAdditionFailedException {
@@ -291,6 +322,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
     }
 
+    private Document createDocument(String path, String title, String description) {
+        Document doc = new Document();
+        doc.setSvnPath(path);
+        doc.setTitle(title);
+        doc.setDescription(description);
+        return save(doc);
+    }
+
     private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, ElementContext context, Matched matched, String localId, MutableInt endOffset) throws XMLStreamException {
         String startAnchor = "start"+localId;
         String endAnchor = "end"+localId;
@@ -346,23 +385,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 writer.add(e);
             }
         }
-    }
-
-    public static String extractName(StartElement element) {
-        String localName = element.getName().getLocalPart();
-        String name = localName;
-        if (localName.equals("div")){
-            name = element.getAttributeByName(TEI_TYPE_QNAME).getValue();
-        }
-        return name;
-    }
-
-    private Document createDocument(String path, String title, String description) {
-        Document doc = new Document();
-        doc.setSvnPath(path);
-        doc.setTitle(title);
-        doc.setDescription(description);
-        return save(doc);
     }
 
     @Override
@@ -424,16 +446,16 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public DocumentRevision removeAllNotes(Document doc) {
         long revision = svnService.getLatestRevision(doc.getSvnPath());
         DocumentRevision docRevision = doc.getRevision(revision);
-        List<NoteRevision> noteRevisions = noteRevisionRepository.getOfDocument(docRevision);
-        Note[] notes = new Note[noteRevisions.size()];
+        List<DocumentNote> noteRevisions = noteRevisionRepository.getOfDocument(docRevision);
+        DocumentNote[] notes = new DocumentNote[noteRevisions.size()];
         for (int i = 0; i < notes.length; i++){
-            notes[i] = noteRevisions.get(i).getRevisionOf();
+            notes[i] = noteRevisions.get(i);
         }
         return removeNotes(docRevision, notes);
     }
 
     @Override
-    public DocumentRevision removeNotes(DocumentRevision docRevision, final Note... notes){
+    public DocumentRevision removeNotes(DocumentRevision docRevision, final DocumentNote... notes){
         long newRevision;
         newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
                 authService.getUsername(), new UpdateCallback() {
@@ -450,7 +472,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 });
 
         // persisted noteRevision has svnRevision of newly created commit
-        for (Note note : notes) {
+        for (DocumentNote note : notes) {
             noteRepository.remove(note, newRevision);
         }
 
@@ -469,8 +491,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public NoteRevision updateNote(final NoteRevision note, final SelectedText selection) throws IOException {
-        Document doc = note.getRevisionOf().getDocument();
+    public DocumentNote updateNote(final DocumentNote note, final SelectedText selection) throws IOException {
+        Document doc = note.getDocument();
         long newRevision;
         newRevision = svnService.commit(doc.getSvnPath(), note.getSvnRevision(), authService
                 .getUsername(), new UpdateCallback() {
@@ -478,10 +500,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             public void update(InputStream source, OutputStream target) {
                 try {
                     XMLEventReader eventReader = inFactory.createFilteredReader(inFactory
-                            .createXMLEventReader(source), createRemoveFilter(new Note[] { note
-                            .getRevisionOf() }));
-                    addNote(eventReader, outFactory.createXMLEventWriter(target), selection, note
-                            .getRevisionOf().getLocalId());
+                            .createXMLEventReader(source), createRemoveFilter(new DocumentNote [] { note }));
+                    addNote(eventReader, outFactory.createXMLEventWriter(target), selection, note.getLocalId());
                 } catch (XMLStreamException e) {
                     throw new ServiceException(e);
                 } catch (NoteAdditionFailedException e) {
@@ -491,7 +511,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         });
 
 
-        NoteRevision copy = note.createCopy();
+        DocumentNote copy = note.createCopy();
         copy.setLongText(selection.getSelection());
         copy.setSVNRevision(newRevision);
         noteRevisionRepository.save(copy);
@@ -502,29 +522,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createStartElement("", TEI_NS, "anchor"));
         writer.add(eventFactory.createAttribute("xml", XML_NS, "id", anchorId));
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
-    }
-
-    private static class Matched {
-
-        private boolean startMatched;
-        private boolean endMatched;
-
-        public boolean isStartMatched() {
-            return startMatched;
-        }
-        public void matchStart() {
-            startMatched = true;
-        }
-        public boolean isEndMatched() {
-            return endMatched;
-        }
-        public void matchEnd() {
-            endMatched = true;
-        }
-
-        public boolean areBothMatched() {
-            return startMatched && endMatched;
-        }
     }
 
 }

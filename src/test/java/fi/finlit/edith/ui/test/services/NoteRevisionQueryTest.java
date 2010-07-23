@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.AdminService;
 
 /**
@@ -39,7 +39,7 @@ public class NoteRevisionQueryTest extends AbstractServiceTest{
     private AdminService adminService;
 
     @Inject
-    private NoteRevisionRepository noteRevisionRepo;
+    private DocumentNoteRepository noteRevisionRepo;
 
     @Inject @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
     private File noteTestData;

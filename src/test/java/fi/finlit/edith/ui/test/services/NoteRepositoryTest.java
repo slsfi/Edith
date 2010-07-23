@@ -24,12 +24,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -51,7 +51,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     private DocumentRepository documentRepo;
 
     @Inject
-    private NoteRevisionRepository noteRevisionRepo;
+    private DocumentNoteRepository noteRevisionRepo;
 
     @Inject
     @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
@@ -61,9 +61,58 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
     private String testDocument;
 
-    @Before
-    public void setUp() {
-        adminService.removeNotesAndTerms();
+    @Test
+    public void createComment() {
+        Note note = new Note();
+        noteRepo.save(note);
+        NoteComment comment = noteRepo.createComment(note, "boomboomboom");
+        Collection<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
+        assertEquals(1, comments.size());
+        assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
+    }
+
+    @Test
+    public void createLemmaForLongText() {
+        assertEquals("word", Note.createLemmaFromLongText("word"));
+        assertEquals("word1 word2", Note.createLemmaFromLongText("word1 word2"));
+        assertEquals("word1 \u2013 \u2013 word3", Note.createLemmaFromLongText("word1 word2 word3"));
+        assertEquals("word1 \u2013 \u2013 word3", Note.createLemmaFromLongText("word1\t word2 \nword3"));
+        assertEquals("foo \u2013 \u2013 bar",
+                Note.createLemmaFromLongText(" \n      foo \n \t baz    bar    \n\t\t"));
+        assertEquals("foo", Note.createLemmaFromLongText(" \n      foo \n \t   \n\t\t"));
+    }
+
+    @Test
+    public void createNote() {
+        Document document = documentRepo.getDocumentForPath(testDocument);
+
+        String longText = "two words";
+        DocumentNote documentNote = noteRepo.createNote(document.getRevision(-1), "10", longText);
+
+        assertNotNull(documentNote);
+    }
+
+    @Test
+    public void createNote_Note_With_The_Lemma_Already_Exists_Notes_Are_Same() {
+        Document document = documentRepo.getDocumentForPath(testDocument);
+
+        String longText = "two words";
+        DocumentNote documentNote = noteRepo.createNote(document.getRevision(-1), "10", longText);
+        DocumentNote documentNote2 = noteRepo.createNote(document.getRevision(-1), "11", longText);
+        assertEquals(documentNote.getNote().getId(), documentNote2.getNote().getId());
+    }
+
+    @Test
+    public void find() {
+        Document document = documentRepo.getDocumentForPath(testDocument);
+        noteRepo.createNote(document.getRevision(-1), "lid1234", "foobar");
+        Note note = noteRepo.find("foobar");
+        assertNotNull(note);
+    }
+
+    @Override
+    protected Class<?> getServiceClass() {
+        return NoteRepository.class;
     }
 
     @Test
@@ -71,13 +120,14 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         noteRepo.importNotes(noteTestData);
         GridDataSource gridDataSource = noteRevisionRepo.queryNotes("kereitten");
         gridDataSource.prepare(0, 10000, new ArrayList<SortConstraint>());
-        NoteRevision note = (NoteRevision) gridDataSource.getRowValue(0);
+        DocumentNote note = (DocumentNote) gridDataSource.getRowValue(0);
         assertNotNull(note);
-        assertEquals("kereitten", note.getLemma());
-        assertEquals("'keritte'", note.getLemmaMeaning());
-        assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
-                note.getDescription().toString().replaceAll("\\s+", " ").trim());
-        assertEquals("<bibliograph>v</bibliograph>", note.getSources().toString().replaceAll("\\s+", " ").trim());
+        assertEquals("kereitten", note.getNote().getLemma());
+        assertEquals("'keritte'", note.getNote().getLemmaMeaning());
+        // FIXME
+//        assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
+//                note.getDescription().toString().replaceAll("\\s+", " ").trim());
+        assertEquals("<bibliograph>v</bibliograph>", note.getNote().getSources().toString().replaceAll("\\s+", " ").trim());
     }
 
     @Test
@@ -103,20 +153,6 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    @Ignore
-    public void createNote() {
-        Document document = documentRepo.getDocumentForPath(testDocument);
-        List<RevisionInfo> revisions = documentRepo.getRevisions(document);
-        long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
-
-        String longText = UUID.randomUUID().toString();
-        noteRepo.createNote(document.getRevision(latestRevision), "10", longText);
-        assertTrue(noteRepo.queryDictionary(longText).getAvailableRows() > 0);
-
-        // assertNotNull(noteRevisionRepo.getByLocalId(document, latestRevision, "10"));
-    }
-
-    @Test
     public void remove() {
         Document document = documentRepo.getDocumentForPath(testDocument);
         List<RevisionInfo> revisions = documentRepo.getRevisions(document);
@@ -124,34 +160,6 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
         String longText = UUID.randomUUID().toString();
         noteRepo.createNote(document.getRevision(latestRevision), "10", longText);
-    }
-
-    @Test
-    public void getLemmaForLongText() {
-        assertEquals("word", getLemmaForLongText("word"));
-        assertEquals("word1 word2", getLemmaForLongText("word1 word2"));
-        assertEquals("word1 \u2013 \u2013 word3", getLemmaForLongText("word1 word2 word3"));
-        assertEquals("word1 \u2013 \u2013 word3", getLemmaForLongText("word1\t word2 \nword3"));
-        assertEquals("foo \u2013 \u2013 bar",
-                getLemmaForLongText(" \n      foo \n \t baz    bar    \n\t\t"));
-        assertEquals("foo", getLemmaForLongText(" \n      foo \n \t   \n\t\t"));
-    }
-
-    private String getLemmaForLongText(String longText) {
-        NoteRevision rev = new NoteRevision();
-        rev.setLongText(longText);
-        rev.setLemmaFromLongText();
-        return rev.getLemma();
-    }
-
-    @Test
-    public void createComment() {
-        Note note = new Note();
-        noteRepo.save(note);
-        NoteComment comment = noteRepo.createComment(note, "boomboomboom");
-        Collection<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
-        assertEquals(1, comments.size());
-        assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
     }
 
     @Test
@@ -167,8 +175,8 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertTrue(comments.isEmpty());
     }
 
-    @Override
-    protected Class<?> getServiceClass() {
-        return NoteRepository.class;
+    @Before
+    public void setUp() {
+        adminService.removeNotesAndTerms();
     }
 }

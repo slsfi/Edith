@@ -19,9 +19,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.tapestry.core.Context;
 
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRepository;
-import fi.finlit.edith.domain.NoteRevision;
-import fi.finlit.edith.domain.NoteRevisionRepository;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 /**
@@ -47,16 +48,16 @@ public class NoteSearchPage {
     private GridDataSource notes;
 
     @Property
-    private NoteRevision note;
+    private DocumentNote note;
 
     @Inject
-    private NoteRevisionRepository noteRevisionRepo;
+    private DocumentNoteRepository noteRevisionRepo;
 
     @Inject
     private DocumentRepository documentRepository;
 
     @Property
-    private PrimaryKeyEncoder<NoteRevision> encoder;
+    private PrimaryKeyEncoder<DocumentNote> encoder;
 
     @Inject
     @Path("NoteSearchPage.css")
@@ -65,12 +66,11 @@ public class NoteSearchPage {
     @Environmental
     private RenderSupport support;
 
-    void onPrepare() {
-        encoder = new PrimaryKeyEncoder<NoteRevision>(noteRevisionRepo);
-    }
-
-    void onActionFromToggleEdit() {
-        context = new Context(searchTerm, "edit");
+    @AfterRender
+    void addStylesheet() {
+        // This is needed to have the page specific style sheet after
+        // other css includes
+        support.addStylesheetLink(stylesheet, null);
     }
 
     void onActionFromCancel() {
@@ -79,22 +79,30 @@ public class NoteSearchPage {
 
     void onActionFromDelete(String noteRevisionId) {
 //        noteRevisionRepo.remove(noteRevisionId);
-        NoteRevision noteRevision = noteRevisionRepo.getById(noteRevisionId);
-        documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision.getRevisionOf());
+        DocumentNote noteRevision = noteRevisionRepo.getById(noteRevisionId);
+        documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision);
+    }
+
+    void onActionFromToggleEdit() {
+        context = new Context(searchTerm, "edit");
     }
 
     void onActivate(EventContext ctx) {
         if (ctx.getCount() >= 1) {
-            this.searchTerm = ctx.get(String.class, 0);
+            searchTerm = ctx.get(String.class, 0);
         }
         if (ctx.getCount() >= 2) {
-            this.editMode = ctx.get(String.class, 1);
+            editMode = ctx.get(String.class, 1);
         }
-        this.context = new Context(ctx);
+        context = new Context(ctx);
     }
 
-    void onSuccessFromSearch() {
-        context = new Context(searchTerm);
+    Object onPassivate() {
+        return context == null ? null : context.toArray();
+    }
+
+    void onPrepare() {
+        encoder = new PrimaryKeyEncoder<DocumentNote>(noteRevisionRepo);
     }
 
     void onSuccessFromEdit() {
@@ -103,19 +111,12 @@ public class NoteSearchPage {
         context = new Context(searchTerm);
     }
 
+    void onSuccessFromSearch() {
+        context = new Context(searchTerm);
+    }
+
     void setupRender() {
         notes = noteRevisionRepo.queryNotes(searchTerm == null ? "*" : searchTerm);
-    }
-
-    Object onPassivate() {
-        return context == null ? null : context.toArray();
-    }
-
-    @AfterRender
-    void addStylesheet() {
-        // This is needed to have the page specific style sheet after
-        // other css includes
-        support.addStylesheetLink(stylesheet, null);
     }
 
 }
