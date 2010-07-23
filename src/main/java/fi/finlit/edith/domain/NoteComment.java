@@ -9,7 +9,7 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class NoteComment extends Identifiable {
-    @Predicate
+    @Predicate(ln="note2")
     private Note note;
 
     @Predicate

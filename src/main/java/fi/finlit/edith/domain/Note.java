@@ -36,7 +36,7 @@ public class Note extends Identifiable {
     private Term term;
 
     // FIXME
-    @Predicate(ln = "note", inv = true)
+    @Predicate(ln = "note2", inv = true)
     private Set<NoteComment> comments;
 
     @Predicate
