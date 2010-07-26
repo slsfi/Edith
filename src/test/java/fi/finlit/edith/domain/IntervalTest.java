@@ -10,10 +10,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class IntervalTest {
+    private Interval interval;
+
+    @Before
+    public void setUp() {
+        interval = new Interval(new DateTime(), new DateTime());
+    }
+
     @Test
     public void Start_Equals_End_When_Specific_Date() {
         LocalDate localDate = new LocalDate(2010, 1, 1);
-        Interval interval = Interval.createDate(localDate);
+        interval = Interval.createDate(localDate);
         assertEquals(localDate, interval.getStart().toLocalDate());
         assertEquals(localDate, interval.getEnd().toLocalDate());
         assertEquals(interval.getStart(), interval.getEnd());
@@ -21,7 +28,7 @@ public class IntervalTest {
 
     @Test
     public void Start_Is_First_Of_Given_Year_And_End_Is_Last_When_Specific_Year() {
-        Interval interval = Interval.createYear(2002);
+        interval = Interval.createYear(2002);
         assertEquals(new DateTime(2002, 1, 1, 0, 0, 0, 0), interval.getStart());
         assertEquals(new DateTime(2003, 1, 1, 0, 0, 0, 0), interval.getEnd());
     }
@@ -87,13 +94,6 @@ public class IntervalTest {
     @Test
     public void Year_Interval_From_String() {
         assertEquals(2010,  Interval.fromString("2010").getYear());
-    }
-
-    private Interval interval;
-
-    @Before
-    public void setUp() {
-        interval = new Interval(new DateTime(), new DateTime());
     }
 
     @Test

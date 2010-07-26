@@ -5,9 +5,6 @@
  */
 package fi.finlit.edith.domain;
 
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -22,7 +19,6 @@ import fi.finlit.edith.EDITH;
  * @version $Id$
  */
 @ClassMapping(ns = EDITH.NS)
-// TODO Rename to DocumentNote
 public class DocumentNote extends Identifiable {
     @Predicate
     private Document document;
@@ -33,15 +29,8 @@ public class DocumentNote extends Identifiable {
     @Predicate
     private String localId;
 
-    // @Predicate(ln = "latestRevision", inv = true)
-    // private Note latestRevisionOf;
-
     @Predicate
     private String longText;
-
-    // @Predicate
-    // @QueryInit( { "*", "term.meaning" })
-    // private Note revisionOf;
 
     @Predicate
     private long svnRevision;
@@ -67,15 +56,16 @@ public class DocumentNote extends Identifiable {
     public DocumentNote createCopy() {
         DocumentNote copy = new DocumentNote();
         copy.setLongText(longText);
-        // copy.setRevisionOf(revisionOf);
+        copy.setDocument(document);
         copy.setNote(note);
+        copy.setDocument(document);
         copy.setStatus(status);
         copy.setDocRevision(docRevision);
         copy.setCreatedBy(createdBy);
         copy.setCreatedOn(createdOn);
-//        note.setLatestRevision(copy);
         copy.setSVNRevision(svnRevision);
         copy.setDeleted(deleted);
+        copy.setLocalId(localId);
         return copy;
     }
 
@@ -118,16 +108,11 @@ public class DocumentNote extends Identifiable {
         return note;
     }
 
-//    public Note getRevisionOf() {
-//        // TODO Auto-generated method stub
-//        return note;
-//    }
-
     public NoteStatus getStatus() {
         return status;
     }
 
-    public long getSvnRevision() {
+    public long getSVNRevision() {
         return svnRevision;
     }
 
@@ -167,17 +152,8 @@ public class DocumentNote extends Identifiable {
         this.note = note;
     }
 
-//    public void setRevisionOf(Note note2) {
-//        // TODO Auto-generated method stub
-//        note = note2;
-//    }
-
     public void setStatus(NoteStatus status) {
         this.status = status;
-    }
-
-    public void setSvnRevision(long svnRevision) {
-        this.svnRevision = svnRevision;
     }
 
     public void setSVNRevision(long svnRevision) {

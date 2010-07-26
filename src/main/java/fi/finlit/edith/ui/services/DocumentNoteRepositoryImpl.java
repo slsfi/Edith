@@ -20,7 +20,6 @@ import com.mysema.query.types.path.PEntity;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.BeanSubQuery;
-import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.DocumentNote;
@@ -40,7 +39,6 @@ import fi.finlit.edith.domain.UserRepository;
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
         DocumentNoteRepository {
 
-    // FIXME
     private static final QDocumentNote otherNote = new QDocumentNote("other");
 
     private final TimeService timeService;
@@ -50,8 +48,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     public DocumentNoteRepositoryImpl(@Inject SessionFactory sessionFactory,
             @Inject UserRepository userRepository, @Inject TimeService timeService) {
         super(sessionFactory, documentNote);
-        // FIXME
-        // super(sessionFactory, null);
         this.userRepository = userRepository;
         this.timeService = timeService;
     }
@@ -64,7 +60,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 documentNote.document().eq(docRevision.getDocument()),
                 documentNote.localId.eq(localId),
                 documentNote.svnRevision.loe(docRevision.getRevision()),
-                documentNote.deleted.eq(false), latestFor(docRevision.getRevision())).uniqueResult(
+                documentNote.deleted.eq(false), latestFor(documentNote, docRevision.getRevision())).uniqueResult(
                 documentNote);
     }
 
@@ -74,15 +70,23 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession().from(documentNote).where(
                 documentNote.document().eq(docRevision.getDocument()),
                 documentNote.svnRevision.loe(docRevision.getRevision()),
-                documentNote.deleted.eq(false), latestFor(docRevision.getRevision())).orderBy(
+                documentNote.deleted.eq(false), latestFor(documentNote, docRevision.getRevision())).orderBy(
                 documentNote.createdOn.asc()).list(documentNote);
     }
 
-    private EBoolean latestFor(long svnRevision) {
+    private EBoolean latestFor(QDocumentNote documentNote, long svnRevision) {
         return sub(otherNote).where(
                 otherNote.ne(documentNote),
                 otherNote.note().eq(documentNote.note()),
                 otherNote.svnRevision.loe(svnRevision),
+                otherNote.createdOn.gt(documentNote.createdOn)
+                ).notExists();
+    }
+
+    private EBoolean latest(QDocumentNote documentNote) {
+        return sub(otherNote).where(
+                otherNote.ne(documentNote),
+                otherNote.note().eq(documentNote.note()),
                 otherNote.createdOn.gt(documentNote.createdOn)
                 ).notExists();
     }
@@ -92,7 +96,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         QNote note = documentNote.note();
         Assert.notNull(searchTerm);
         BooleanBuilder builder = new BooleanBuilder();
-        // FIXME
         if (!searchTerm.equals("*")) {
             for (PString path : Arrays.asList(note.lemma, documentNote.longText,
                     note.term().basicForm, note.term().meaning,
@@ -101,9 +104,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 builder.or(path.contains(searchTerm, false));
             }
         }
-        // FIXME
-        // builder.and(documentNote.eq(documentNote.note.latestRevision));
         builder.and(documentNote.deleted.eq(false));
+        builder.and(latest(documentNote));
+
         return createGridDataSource(documentNote, note.term().basicForm.lower().asc(), false,
                 builder.getValue());
     }
@@ -112,15 +115,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     public void remove(DocumentNote note) {
         Assert.notNull(note, "note was null");
         DocumentNote deleted = note.createCopy();
-
         deleted.setDeleted(true);
-        // FIXME
-        // deleted.getRevisionOf().setLatestRevision(deleted);
         deleted.setCreatedBy(userRepository.getCurrentUser());
-
         getSession().save(deleted);
-        // FIXME
-        // getSession().save(deleted.getRevisionOf());
     }
 
     @Override
@@ -134,12 +131,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         UserInfo createdBy = userRepository.getCurrentUser();
         documentNote.setCreatedOn(timeService.currentTimeMillis());
         documentNote.setCreatedBy(createdBy);
-        // FIXME
-        // note.getRevisionOf().setLatestRevision(note);
         getSession().save(documentNote.getNote());
         getSession().save(documentNote);
-        // FIXME
-        // getSession().save(note.getRevisionOf());
         return documentNote;
     }
 

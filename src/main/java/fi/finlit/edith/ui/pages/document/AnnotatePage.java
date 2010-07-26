@@ -357,7 +357,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
 
         // prepare view (with new revision)
-        documentRevision.setRevision(noteRevision.getSvnRevision());
+        documentRevision.setRevision(noteRevision.getSVNRevision());
         docNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision.getNote();
@@ -399,8 +399,8 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
 
         // prepare view (with possibly new revision)
-        if (noteRevision.getSvnRevision() > getDocumentRevision().getRevision()) {
-            getDocumentRevision().setRevision(noteRevision.getSvnRevision());
+        if (noteRevision.getSVNRevision() > getDocumentRevision().getRevision()) {
+            getDocumentRevision().setRevision(noteRevision.getSVNRevision());
         }
         docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
         selectedNotes = Collections.singletonList(noteRevision);

@@ -8,18 +8,21 @@ package fi.finlit.edith.ui.test.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
@@ -27,7 +30,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.NoteAdditionFailedException;
+import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
@@ -41,9 +50,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepo;
-
-    @Inject
-    private NoteRepository noteRepo;
 
     @Inject
     private DocumentNoteRepository documentNoteRepository;
@@ -90,22 +96,23 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         // add
         String element = "play-act-sp4-p";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
-        DocumentNote note = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote documentNote = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
 
         assertEquals(count+1, documentNoteRepository.queryNotes("*").getAvailableRows());
-        int countInDoc = documentNoteRepository.getOfDocument(document.getRevision(note.getSvnRevision())).size();
+        int countInDoc = documentNoteRepository.getOfDocument(document.getRevision(documentNote.getSVNRevision())).size();
         // remove
-        documentRepo.removeNotes(document.getRevision(note.getSvnRevision()), note);
-        Note deletedNote = noteRepo.getById(note.getId());
-//        assertTrue(deletedNote.getLatestRevision().isDeleted()); // FIXME
+        documentRepo.removeNotes(document.getRevision(documentNote.getSVNRevision()), documentNote);
+        DocumentNote deletedDocumentNote = documentNoteRepository.getByLocalId(document.getRevision(documentNote.getSVNRevision() + 1), documentNote.getLocalId());
+        assertNull(deletedDocumentNote);
 
         GridDataSource dataSource = documentNoteRepository.queryNotes("*");
         int available = dataSource.getAvailableRows();
+        dataSource.prepare(0, 1000, new ArrayList<SortConstraint>());
         assertEquals(0, available);
 
-        long svnRevision = 0; // FIXME deletedNote.getLatestRevision().getSvnRevision();
-        assertEquals(countInDoc - 1, documentNoteRepository.getOfDocument(document.getRevision(svnRevision)).size());
-        assertEquals(count, available);
+//        long svnRevision = deletedDocumentNote.getSvnRevision();
+//        assertEquals(countInDoc - 1, documentNoteRepository.getOfDocument(document.getRevision(svnRevision)).size());
+//        assertEquals(count, available);
     }
 
     @Test
