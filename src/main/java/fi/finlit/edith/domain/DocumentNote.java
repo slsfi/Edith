@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.domain;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -158,6 +159,11 @@ public class DocumentNote extends Identifiable {
 
     public void setSVNRevision(long svnRevision) {
         this.svnRevision = svnRevision;
+    }
+
+    @Override
+    public String toString() {
+        return "DocumentNote: " + StringUtils.abbreviate(longText, 30);
     }
 
 }

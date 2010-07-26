@@ -20,12 +20,12 @@
     <p:rightPanel>
         <div class="panel narrow">
             <h3>${message:notes}</h3>
-            <t:if test="docNotes">
+            <t:if test="documentNotes">
                 <ul class="notes">
-                    <t:loop source="docNotes" value="note">
+                    <t:loop source="documentNotes" value="documentNote">
                     <li>
-                        <a href="#start${note.revisionOf.localId}" class="notelink"><em>${note.lemma}</em></a>
-                        <t:note.metadata note="note"/>
+                        <a href="#start${documentNote.localId}" class="notelink"><em>${documentNote.note.lemma}</em></a>
+                        <t:note.metadata documentNote="documentNote"/>
                     </li>
                     </t:loop>
                 </ul>        

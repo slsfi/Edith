@@ -28,13 +28,13 @@ public class ViewPage extends AbstractDocumentPage {
     private DocumentNoteRepository noteRevisionRepo;
 
     @Property
-    private DocumentNote note;
+    private DocumentNote documentNote;
 
     @Property
-    private List<DocumentNote> docNotes;
+    private List<DocumentNote> documentNotes;
 
     void setupRender() {
-        docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
+        documentNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
     }
 
 }

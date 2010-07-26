@@ -86,7 +86,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     private List<DocumentNote> selectedNotes;
 
     @Property
-    private Note noteOnEdit;
+    private DocumentNote noteOnEdit;
 
     @Property
     private Term termOnEdit;
@@ -113,7 +113,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     private TermRepository termRepo;
 
     @Property
-    private List<DocumentNote> docNotes;
+    private List<DocumentNote> documentNotes;
 
     @Property
     private SelectedText createTermSelection;
@@ -170,10 +170,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public String getDescription() {
-        if (noteOnEdit.getDescription() == null) {
+        if (noteOnEdit.getNote().getDescription() == null) {
             return null;
         }
-        return noteOnEdit.getDescription().toString();
+        return noteOnEdit.getNote().getDescription().toString();
     }
 
     public Object[] getEditContext() {
@@ -195,7 +195,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Validate("required")
     public NoteFormat getFormat() {
-        return noteOnEdit.getFormat();
+        return noteOnEdit.getNote().getFormat();
     }
 
     public TermLanguage getLanguage() {
@@ -203,54 +203,60 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public NameForm getNormalizedPerson() {
-        return noteOnEdit.getPerson().getNormalizedForm();
+        if (noteOnEdit.getNote().getPerson() == null) {
+            noteOnEdit.getNote().setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
+        }
+        return noteOnEdit.getNote().getPerson().getNormalizedForm();
     }
 
     public NameForm getNormalizedPlace() {
-        return noteOnEdit.getPlace().getNormalizedForm();
+        if (noteOnEdit.getNote().getPlace() == null) {
+            noteOnEdit.getNote().setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
+        }
+        return noteOnEdit.getNote().getPlace().getNormalizedForm();
     }
 
 
     public Set<NameForm> getPersons() {
-        return noteOnEdit.getPerson().getOtherForms();
+        return noteOnEdit.getNote().getPerson().getOtherForms();
     }
 
     public Set<NameForm> getPlaces() {
-        return noteOnEdit.getPlace().getOtherForms();
+        return noteOnEdit.getNote().getPlace().getOtherForms();
     }
 
     public Set<NoteType> getSelectedTypes() {
-        if (noteOnEdit.getTypes() == null) {
-            noteOnEdit.setTypes(new HashSet<NoteType>());
+        if (noteOnEdit.getNote().getTypes() == null) {
+            noteOnEdit.getNote().setTypes(new HashSet<NoteType>());
         }
-        return noteOnEdit.getTypes();
+        return noteOnEdit.getNote().getTypes();
     }
 
     public String getSources() {
-        if (noteOnEdit.getSources() == null) {
+        if (noteOnEdit.getNote().getSources() == null) {
             return null;
         }
-        return noteOnEdit.getSources().toString();
+        return noteOnEdit.getNote().getSources().toString();
     }
 
     public NoteStatus getStatus() {
-        return documentNote.getStatus();
+        return noteOnEdit.getStatus();
     }
 
     public EnumSelectModel getStatusModel() {
-        NoteStatus[] availableStatuses = documentNote.getStatus().equals(
+        NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(
                 NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
                 NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
         return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
 
     public String getTimeOfBirth() {
-        return noteOnEdit.getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getPerson()
+        return noteOnEdit.getNote().getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getNote().getPerson()
                 .getTimeOfBirth().asString();
     }
 
     public String getTimeOfDeath() {
-        return noteOnEdit.getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getPerson()
+        return noteOnEdit.getNote().getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getNote().getPerson()
                 .getTimeOfDeath().asString();
     }
 
@@ -274,7 +280,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         // prepare view with new revision
         getDocumentRevision().setRevision(documentRevision.getRevision());
-        docNotes = noteRevisionRepo.getOfDocument(documentRevision);
+        documentNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
         return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", emptyBlock);
@@ -283,7 +289,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     Object onDeleteComment(String commentId) {
         NoteComment deletedComment = noteRepo.removeComment(commentId);
         noteId = deletedComment.getNote().getId();
-        noteOnEdit = noteRepo.getById(noteId);
+        noteOnEdit.setNote(noteRepo.getById(noteId));
         return commentZone.getBody();
     }
 
@@ -306,8 +312,8 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
 
         if (selectedNotes.size() > 0) {
-            noteOnEdit = selectedNotes.get(0).getNote();
-            termOnEdit = getEditTerm(noteOnEdit);
+            noteOnEdit = selectedNotes.get(0);
+            termOnEdit = getEditTerm(noteOnEdit.getNote());
         }
 
         // Order on lemma after we have selected the first one as a selection
@@ -325,8 +331,8 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     void onPrepareFromNoteEditForm(String noteRev) {
         note = noteRevisionRepo.getById(noteRev).createCopy();
-        noteOnEdit = note.getNote();
-        termOnEdit = getEditTerm(noteOnEdit);
+        noteOnEdit = note;
+        termOnEdit = getEditTerm(noteOnEdit.getNote());
     }
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
@@ -339,7 +345,7 @@ public class AnnotatePage extends AbstractDocumentPage {
             n.getComments().add(noteRepo.createComment(n, newCommentMessage));
             newCommentMessage = null;
         }
-        noteOnEdit = n;
+        noteOnEdit.setNote(n);
         return commentZone.getBody();
     }
 
@@ -358,10 +364,10 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         // prepare view (with new revision)
         documentRevision.setRevision(noteRevision.getSVNRevision());
-        docNotes = noteRevisionRepo.getOfDocument(documentRevision);
+        documentNotes = noteRevisionRepo.getOfDocument(documentRevision);
         selectedNotes = Collections.singletonList(noteRevision);
-        noteOnEdit = noteRevision.getNote();
-        termOnEdit = getEditTerm(noteOnEdit);
+        noteOnEdit = noteRevision;
+        termOnEdit = getEditTerm(noteOnEdit.getNote());
         noteId = noteOnEdit.getId();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", commentZone.getBody());
@@ -372,12 +378,12 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (note.getStatus().equals(NoteStatus.INITIAL)) {
             note.setStatus(NoteStatus.DRAFT);
         }
-        updateNames(noteOnEdit.getPerson().getOtherForms(), newPersonFirst, newPersonLast,
+        updateNames(noteOnEdit.getNote().getPerson().getOtherForms(), newPersonFirst, newPersonLast,
                 newPersonDescription);
         newPersonFirst = null;
         newPersonLast = null;
         newPersonDescription = null;
-        updateName(noteOnEdit.getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
+        updateName(noteOnEdit.getNote().getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
         newPlaceName = null;
         newPlaceDescription = null;
 
@@ -402,10 +408,10 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (noteRevision.getSVNRevision() > getDocumentRevision().getRevision()) {
             getDocumentRevision().setRevision(noteRevision.getSVNRevision());
         }
-        docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
+        documentNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
         selectedNotes = Collections.singletonList(noteRevision);
-        noteOnEdit = noteRevision.getNote();
-        termOnEdit = getEditTerm(noteOnEdit);
+        noteOnEdit = noteRevision;
+        termOnEdit = getEditTerm(noteOnEdit.getNote());
         noteId = noteOnEdit.getId();
         submitSuccess = true;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
@@ -434,12 +440,12 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public void setDescription(String description) throws XMLStreamException {
         if (description != null) {
-            noteOnEdit.setDescription(ParagraphParser.parseParagraph(description));
+            noteOnEdit.getNote().setDescription(ParagraphParser.parseParagraph(description));
         }
     }
 
     public void setFormat(NoteFormat format) {
-        noteOnEdit.setFormat(format);
+        noteOnEdit.getNote().setFormat(format);
     }
 
     @Validate("required")
@@ -457,7 +463,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public void setSources(String sources) throws XMLStreamException {
         if (sources != null) {
-            noteOnEdit.setSources(ParagraphParser.parseParagraph(sources));
+            noteOnEdit.getNote().setSources(ParagraphParser.parseParagraph(sources));
         }
     }
 
@@ -468,18 +474,18 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public void setTimeOfBirth(String time) {
         if (time != null) {
-            noteOnEdit.getPerson().setTimeOfBirth(Interval.fromString(time));
+            noteOnEdit.getNote().getPerson().setTimeOfBirth(Interval.fromString(time));
         }
     }
 
     public void setTimeOfDeath(String time) {
         if (time != null) {
-            noteOnEdit.getPerson().setTimeOfDeath(Interval.fromString(time));
+            noteOnEdit.getNote().getPerson().setTimeOfDeath(Interval.fromString(time));
         }
     }
 
     void setupRender() {
-        docNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
+        documentNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
     }
 
     private void updateName(Set<NameForm> nameForms, String name, String description) {

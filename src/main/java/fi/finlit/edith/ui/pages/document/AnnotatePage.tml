@@ -44,12 +44,12 @@
 		<t:zone t:id="editZone" update="show" />
 
 		<t:block t:id="notesList">
-			<t:if test="docNotes">
+			<t:if test="documentNotes">
 				<ul class="notes">
-					<t:loop source="docNotes" value="note">
+					<t:loop source="documentNotes" value="note">
 						<li>
-							<a href="#start${note.revisionOf.localId}" class="notelink ${note.revisionOf.status}">
-								<em>${note.lemma}</em>
+							<a href="#start${note.localId}" class="notelink ${note.status}">
+								<em>${note.note.lemma}</em>
 							</a>
 						</li>
 					</t:loop>
@@ -70,7 +70,7 @@
 								<li>
 									<t:eventlink t:event="edit" context="editContext"
 										t:zone="editZone" class="notelink">
-										<em>${note.lemma}</em>
+										<em>${note.note.lemma}</em>
 									</t:eventlink>
 								</li>
 							</t:loop>
@@ -85,7 +85,7 @@
 					<div class="cleaner"></div>
 					<div class="note_edit">
 						<em>
-							<strong>${noteOnEdit.lemma}</strong>
+							<strong>${noteOnEdit.note.lemma}</strong>
 						</em>
 						<!-- This could be externalized? -->
 						<script type="text/javascript">
@@ -164,14 +164,14 @@
 									<strong>${message:lemma-label}</strong>
 								</div>
 								<div>
-									<t:textField value="noteOnEdit.lemma" />
+									<t:textField value="noteOnEdit.note.lemma" />
 								</div>
 							</div>
 
 							<div class="note">
 								<div>- ${message:meaning-label}</div>
 								<div>
-									<t:textField value="noteOnEdit.lemmaMeaning" />
+									<t:textField value="noteOnEdit.note.lemmaMeaning" />
 								</div>
 							</div>
 
@@ -358,7 +358,7 @@
 									<strong>${message:subtextSources-label}</strong>
 								</div>
 								<div>
-									<t:textField t:id="subtextSources" value="noteOnEdit.subtextSources" />
+									<t:textField t:id="subtextSources" value="noteOnEdit.note.subtextSources" />
 								</div>
 							</div>
 
@@ -402,7 +402,7 @@
 			<t:if test="noteId">
 				<div id="comments">
 					<h3>${message:comments}</h3>
-					<t:loop source="noteOnEdit.revisionOf.comments" value="comment"
+					<t:loop source="noteOnEdit.note.comments" value="comment"
 						volatile="true">
 						<div>
 							<div>${comment.message}</div>

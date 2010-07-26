@@ -109,7 +109,9 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         noteRepo.createNote(docRev, "8", "B");
         GridDataSource gds = documentNoteRepository.queryNotes("*");
         int n = gds.getAvailableRows();
-        gds.prepare(0, 100, new ArrayList<SortConstraint>());
+        List<SortConstraint> sortConstraints = new ArrayList<SortConstraint>();
+        sortConstraints.add(new SortConstraint(new PropertyModelMock(), ColumnSort.ASCENDING));
+        gds.prepare(0, 100, sortConstraints);
         String previous = null;
         for (int i = 0; i < n; ++i) {
             String current = gds.getRowValue(i).toString().toLowerCase();
@@ -209,5 +211,69 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(note.getPlace().getNormalizedForm().getDescription(),
                 persistedNote.getPlace().getNormalizedForm().getDescription());
         assertEquals(note.getFormat(), persistedNote.getFormat());
+    }
+
+    private static final class PropertyModelMock implements PropertyModel {
+
+        @Override
+        public PropertyModel dataType(String dataType) {
+            return null;
+        }
+
+        @Override
+        public PropertyConduit getConduit() {
+            return null;
+        }
+
+        @Override
+        public String getDataType() {
+            return null;
+        }
+
+        @Override
+        public String getId() {
+            return null;
+        }
+
+        @Override
+        public String getLabel() {
+            return null;
+        }
+
+        @Override
+        public String getPropertyName() {
+            return "longText";
+        }
+
+        @Override
+        public Class<String> getPropertyType() {
+            return String.class;
+        }
+
+        @Override
+        public boolean isSortable() {
+            return true;
+        }
+
+        @Override
+        public PropertyModel label(String label) {
+            return null;
+        }
+
+        @Override
+        public BeanModel<DocumentNote> model() {
+            return null;
+        }
+
+        @Override
+        public PropertyModel sortable(boolean sortable) {
+            return null;
+        }
+
+        @Override
+        public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+            return null;
+        }
+
     }
 }

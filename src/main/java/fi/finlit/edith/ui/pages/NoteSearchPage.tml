@@ -6,7 +6,7 @@
         <t:errors />
         <t:textfield value="searchTerm" />
         <input type="submit" value="${message:search}" />
-        <t:if test="notes">
+        <t:if test="documentNotes">
             <div id="editcontrols">
                 <t:if test="!editMode">
                     <t:actionlink t:id="toggleEdit">${message:edit}</t:actionlink>
@@ -19,7 +19,7 @@
          </t:if>
     </t:form>
 
-    <t:if test="notes">
+    <t:if test="documentNotes">
         <t:form t:id="edit">
             <div id="formcontrols">
                 <t:if test="editMode">
@@ -27,52 +27,52 @@
                 </t:if>
             </div>
             <div class="cleaner"> </div>
-            <t:grid source="notes" row="note" rowsPerPage="20" t:encoder="encoder"
+            <t:grid source="documentNotes" row="documentNote" rowsPerPage="20" t:encoder="encoder"
                 include="lemma,longText,description,subtextSources" add="documentRevision,basicForm,meaning,status,actions">
                 <p:lemmaCell>
                     <t:if test="editMode">
-                        <t:inlineField t:id="lemma" value="note.lemma" value1="note.lemma"/>
+                        <t:inlineField t:id="lemma" value="documentNote.note.lemma" value1="documentNote.note.lemma"/>
                         <p:else>
-                            <em>${note.lemma}</em>
+                            <em>${documentNote.note.lemma}</em>
                         </p:else>
                     </t:if>
                 </p:lemmaCell>
                 <p:documentRevisionCell>
-                    ${note.documentRevision?.document.title}
+                    ${documentNote.document?.title}
                 </p:documentRevisionCell>
                 <p:basicFormCell>
-                    ${note.revisionOf.term?.basicForm}
+                    ${documentNote.note.term?.basicForm}
                 </p:basicFormCell>
                 <p:longTextCell>
-                    ${note.longText}
+                    ${documentNote.longText}
                 </p:longTextCell>
                 <p:descriptionCell>
                     <t:if test="editMode">
-                        <t:inlineField t:id="description" value="note.description" value1="note.description" />
+                        <t:inlineField t:id="description" value="documentNote.note.description" value1="documentNote.note.description" />
                         <p:else>
-                            <t:markdown value="note.description"/>
+                            <t:markdown value="documentNote.note.description"/>
                         </p:else>
                     </t:if>
                 </p:descriptionCell>                
                 <p:meaningCell>
-                        ${note.revisionOf.term?.meaning}
+                        ${documentNote.note.term?.meaning}
                 </p:meaningCell>
                 <p:subtextSourcesCell>
                 	<t:if test="editMode">
-                        <t:inlineField t:id="subtextSources" value="note.subtextSources" value1="note.subtextSources" />
+                        <t:inlineField t:id="subtextSources" value="documentNote.note.subtextSources" value1="documentNote.note.subtextSources" />
                         <p:else>
-                            <t:markdown value="note.subtextSources"/>
+                            <t:markdown value="documentNote.note.subtextSources"/>
                         </p:else>
                     </t:if>
                 </p:subtextSourcesCell>
                 <p:statusCell>
-					<t:fmt.message key="NoteStatus.${note.revisionOf.status}"/>
+					<t:fmt.message key="NoteStatus.${documentNote.status}"/>
                 </p:statusCell>
                 <p:actionsCell>
                 	<span class="delete_note">
                 		<a href="" class="delete_question">${message:delete}</a>
                 		<span class="delete_dialog">
-                    		${message:delete}? <t:actionlink t:id="delete" context="note.id">${message:yes}</t:actionlink>
+                    		${message:delete}? <t:actionlink t:id="delete" context="documentNote.id">${message:yes}</t:actionlink>
                     		/ <a href="" class="delete_note_decline">${message:no}</a>
                     	</span>
                     </span>

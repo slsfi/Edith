@@ -45,10 +45,10 @@ public class NoteSearchPage {
     private Context context;
 
     @Property
-    private GridDataSource notes;
+    private GridDataSource documentNotes;
 
     @Property
-    private DocumentNote note;
+    private DocumentNote documentNote;
 
     @Inject
     private DocumentNoteRepository noteRevisionRepo;
@@ -116,7 +116,7 @@ public class NoteSearchPage {
     }
 
     void setupRender() {
-        notes = noteRevisionRepo.queryNotes(searchTerm == null ? "*" : searchTerm);
+        documentNotes = noteRevisionRepo.queryNotes(searchTerm == null ? "*" : searchTerm);
     }
 
 }

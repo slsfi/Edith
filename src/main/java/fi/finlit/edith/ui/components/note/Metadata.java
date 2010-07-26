@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.components.note;
 
@@ -15,7 +15,7 @@ public class Metadata {
 
     @Property
     @Parameter(required = true)
-    private DocumentNote note;
+    private DocumentNote documentNote;
 
 
 }
