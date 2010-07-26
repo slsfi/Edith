@@ -23,8 +23,6 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns = EDITH.NS)
 public class Note extends Identifiable {
-    @Predicate
-    private DocumentNote latestRevision;
 
     @Predicate
     private Paragraph description;
