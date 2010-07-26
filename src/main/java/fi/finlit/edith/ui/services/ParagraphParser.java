@@ -1,7 +1,6 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.StringReader;
-import java.util.ArrayList;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -10,13 +9,12 @@ import javax.xml.stream.XMLStreamReader;
 
 import fi.finlit.edith.domain.LinkElement;
 import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.ParagraphElement;
 import fi.finlit.edith.domain.StringElement;
 
 public final class ParagraphParser {
     public static final Paragraph parseParagraph(String s) throws XMLStreamException {
         String document = new StringBuilder("<root>").append(s).append("</root>").toString();
-        Paragraph paragraph = new Paragraph(new ArrayList<ParagraphElement>());
+        Paragraph paragraph = new Paragraph();
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(document));
         boolean inBib = false;

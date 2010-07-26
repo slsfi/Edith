@@ -59,7 +59,7 @@ public class ParagraphParserTest {
 
     @Before
     public void setUp() throws Exception {
-        paragraph = new Paragraph(new ArrayList<ParagraphElement>());
+        paragraph = new Paragraph();
     }
 
     @Test

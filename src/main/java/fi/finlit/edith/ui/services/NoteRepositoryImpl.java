@@ -11,8 +11,6 @@ import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -112,7 +110,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (localName.equals("note")) {
             // FIXME
 //            session.save(data.revision.getRevisionOf());
-            session.save(data.revision.getNote());
+//            session.save(data.revision.getNote());
             session.save(data.revision);
             data.counter++;
         } else if (localName.equals("lemma")) {
@@ -140,7 +138,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 //            data.revision.getRevisionOf().setLatestRevision(data.revision);
             data.revision.setCreatedOn(timeService.currentTimeMillis());
         } else if (localName.equals("source") || localName.equals("description")) {
-            data.paragraphs = new Paragraph(new ArrayList<ParagraphElement>());
+            data.paragraphs = new Paragraph();
         }
         if (localName.equals("bibliograph")) {
             data.inBib = true;

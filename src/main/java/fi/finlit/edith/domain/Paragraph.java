@@ -1,5 +1,6 @@
 package fi.finlit.edith.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,14 +12,12 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class Paragraph extends Identifiable {
+    
     @Predicate
-    private List<ParagraphElement> elements;
+    private List<ParagraphElement> elements = new ArrayList<ParagraphElement>();
 
-    public Paragraph() {
-    }
-
-    public Paragraph(List<ParagraphElement> elements) {
-        this.elements = elements;
+    public List<ParagraphElement> getElements() {
+        return elements;
     }
 
     public void addElement(ParagraphElement e) {
