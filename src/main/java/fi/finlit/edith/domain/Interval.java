@@ -77,10 +77,22 @@ public class Interval {
         return new Interval(new DateTime(year, 1, 1, 0, 0, 0, 0), new DateTime(year + 1, 1, 1, 0, 0, 0, 0));
     }
 
+    /**
+     * This creates an empty interval for the start of the given date
+     * 
+     * @param localDate
+     * @return
+     */
     public static Interval createDate(LocalDate localDate) {
         return Interval.createDate(localDate.toDateTimeAtStartOfDay());
     }
 
+    /**
+     * This creates an empty interval for the given timestamp
+     * 
+     * @param dateTime
+     * @return
+     */
     public static Interval createDate(DateTime dateTime) {
         return new Interval(dateTime, dateTime);
     }
