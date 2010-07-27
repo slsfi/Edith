@@ -45,9 +45,9 @@ import fi.finlit.edith.ui.services.ParagraphParser;
  */
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
-        "TextSelector.js", "AnnotatePage.js" })
-@IncludeStylesheet("context:styles/tei.css")
-public class AnnotatePage extends AbstractDocumentPage {
+    "TextSelector.js", "AnnotatePage.js" })
+    @IncludeStylesheet("context:styles/tei.css")
+    public class AnnotatePage extends AbstractDocumentPage {
 
     private static final String EDIT_ZONE = "editZone";
 
@@ -244,8 +244,8 @@ public class AnnotatePage extends AbstractDocumentPage {
     public EnumSelectModel getStatusModel() {
         NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(
                 NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
-                NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
-        return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
+            NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
+                return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
 
     public String getTimeOfBirth() {
@@ -287,8 +287,8 @@ public class AnnotatePage extends AbstractDocumentPage {
     Object onDeleteComment(String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
         noteId = deletedComment.getNote().getId();
-        Note note = noteRepository.getById(noteId);
-        comments = note.getComments();
+        Note n = noteRepository.getById(noteId);
+        comments = n.getComments();
         return commentZone.getBody();
     }
 
@@ -317,7 +317,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         // Order on lemma after we have selected the first one as a selection
         // FIXME
-//        Collections.sort(selectedNotes, new NoteComparator());
+        //        Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
         noteId = noteOnEdit.getNote().getId();
@@ -340,10 +340,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onSuccessFromCommentForm() throws IOException {
-        Note note = noteRepository.getById(noteId);
-        comments = note.getComments();
+        Note n = noteRepository.getById(noteId);
+        comments = n.getComments();
         if (newCommentMessage != null) {
-            comments.add(noteRepository.createComment(note, newCommentMessage));
+            comments.add(noteRepository.createComment(n, newCommentMessage));
             newCommentMessage = null;
         }
 
