@@ -116,6 +116,18 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
+    public void Add_Note_With_The_Same_Lemma() throws IOException, NoteAdditionFailedException {
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        String element = "play-act-sp2-p";
+        String text = "s";
+
+        DocumentNote note1 = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, 1, 1, text));
+        DocumentNote note2 = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, 2, 2, text));
+        List<DocumentNote> documentNotes = documentNoteRepository.getOfDocument(note2.getDocRevision());
+        assertEquals(2, documentNotes.size());
+    }
+
+    @Test
     public void getAll() {
         assertEquals(6, documentRepo.getAll().size());
     }

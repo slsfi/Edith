@@ -25,6 +25,8 @@ import com.mysema.rdfbean.object.SessionFactory;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
@@ -45,11 +47,14 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     private final UserRepository userRepository;
 
+    private final NoteRepository noteRepository;
+
     public DocumentNoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, @Inject TimeService timeService) {
+            @Inject UserRepository userRepository, @Inject TimeService timeService, @Inject NoteRepository noteRepository) {
         super(sessionFactory, documentNote);
         this.userRepository = userRepository;
         this.timeService = timeService;
+        this.noteRepository = noteRepository;
     }
 
     @Override
@@ -78,6 +83,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return sub(otherNote).where(
                 otherNote.ne(documentNote),
                 otherNote.note().eq(documentNote.note()),
+                otherNote.localId.eq(documentNote.localId),
                 otherNote.svnRevision.loe(svnRevision),
                 otherNote.createdOn.gt(documentNote.createdOn)
                 ).notExists();
@@ -131,6 +137,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         UserInfo createdBy = userRepository.getCurrentUser();
         documentNote.setCreatedOn(timeService.currentTimeMillis());
         documentNote.setCreatedBy(createdBy);
+        Note note = noteRepository.find(documentNote.getNote().getLemma());
+        if (note != null) {
+            documentNote.setNote(note);
+        }
         getSession().save(documentNote.getNote());
         getSession().save(documentNote);
         return documentNote;

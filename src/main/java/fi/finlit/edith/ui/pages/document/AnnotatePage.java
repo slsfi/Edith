@@ -92,9 +92,6 @@ public class AnnotatePage extends AbstractDocumentPage {
     private Term termOnEdit;
 
     @Property
-    private DocumentNote documentNote;
-
-    @Property
     private DocumentNote note;
 
     @Inject
@@ -104,10 +101,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     private ComponentResources resources;
 
     @Inject
-    private DocumentNoteRepository noteRevisionRepo;
+    private DocumentNoteRepository documentNoteRepository;
 
     @Inject
-    private NoteRepository noteRepo;
+    private NoteRepository noteRepository;
 
     @Inject
     private TermRepository termRepo;
@@ -163,6 +160,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Property
     private NoteType type;
 
+    @Property
+    private Set<NoteComment> comments;
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
@@ -178,8 +178,6 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public Object[] getEditContext() {
         List<String> ctx = new ArrayList<String>(selectedNotes.size());
-        // Adding the current note to head
-        ctx.add(documentNote.getLocalId());
         for (DocumentNote r : selectedNotes) {
             if (!r.equals(note)) {
                 ctx.add(r.getLocalId());
@@ -274,22 +272,23 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onDelete(EventContext context) throws IOException {
-        note = noteRevisionRepo.getById(context.get(String.class, 0));
+        note = documentNoteRepository.getById(context.get(String.class, 0));
         DocumentRevision documentRevision = getDocumentRevision();
         documentRevision = getDocumentRepo().removeNotes(documentRevision, note);
 
         // prepare view with new revision
         getDocumentRevision().setRevision(documentRevision.getRevision());
-        documentNotes = noteRevisionRepo.getOfDocument(documentRevision);
+        documentNotes = documentNoteRepository.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
         return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", emptyBlock);
     }
 
     Object onDeleteComment(String commentId) {
-        NoteComment deletedComment = noteRepo.removeComment(commentId);
+        NoteComment deletedComment = noteRepository.removeComment(commentId);
         noteId = deletedComment.getNote().getId();
-        noteOnEdit.setNote(noteRepo.getById(noteId));
+        Note note = noteRepository.getById(noteId);
+        comments = note.getComments();
         return commentZone.getBody();
     }
 
@@ -302,7 +301,7 @@ public class AnnotatePage extends AbstractDocumentPage {
                 localId = localId.substring(1);
             }
 
-            DocumentNote rev = noteRevisionRepo.getByLocalId(getDocumentRevision(), localId);
+            DocumentNote rev = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
             if (rev != null) {
                 selectedNotes.add(rev);
             } else {
@@ -321,7 +320,8 @@ public class AnnotatePage extends AbstractDocumentPage {
 //        Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
-        noteId = noteOnEdit.getId();
+        noteId = noteOnEdit.getNote().getId();
+        comments = noteOnEdit.getNote().getComments();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
 
@@ -330,7 +330,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     void onPrepareFromNoteEditForm(String noteRev) {
-        note = noteRevisionRepo.getById(noteRev).createCopy();
+        note = documentNoteRepository.getById(noteRev).createCopy();
         noteOnEdit = note;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
     }
@@ -340,12 +340,13 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onSuccessFromCommentForm() throws IOException {
-        Note n = noteRepo.getById(noteId);
+        Note note = noteRepository.getById(noteId);
+        comments = note.getComments();
         if (newCommentMessage != null) {
-            n.getComments().add(noteRepo.createComment(n, newCommentMessage));
+            comments.add(noteRepository.createComment(note, newCommentMessage));
             newCommentMessage = null;
         }
-        noteOnEdit.setNote(n);
+
         return commentZone.getBody();
     }
 
@@ -353,9 +354,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         logger.info(createTermSelection.toString());
         DocumentRevision documentRevision = getDocumentRevision();
 
-        DocumentNote noteRevision = null;
+        DocumentNote documentNote = null;
         try {
-            noteRevision = getDocumentRepo().addNote(documentRevision, createTermSelection);
+            documentNote = getDocumentRepo().addNote(documentRevision, createTermSelection);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
@@ -363,12 +364,12 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
 
         // prepare view (with new revision)
-        documentRevision.setRevision(noteRevision.getSVNRevision());
-        documentNotes = noteRevisionRepo.getOfDocument(documentRevision);
-        selectedNotes = Collections.singletonList(noteRevision);
-        noteOnEdit = noteRevision;
+        documentRevision.setRevision(documentNote.getSVNRevision());
+        documentNotes = documentNoteRepository.getOfDocument(documentRevision);
+        selectedNotes = Collections.singletonList(documentNote);
+        noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        noteId = noteOnEdit.getId();
+        noteId = noteOnEdit.getNote().getId();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", commentZone.getBody());
     }
@@ -391,7 +392,7 @@ public class AnnotatePage extends AbstractDocumentPage {
             if (updateLongTextSelection.isValid()) {
                 noteRevision = getDocumentRepo().updateNote(note, updateLongTextSelection);
             } else {
-                noteRevision = noteRevisionRepo.save(note);
+                noteRevision = documentNoteRepository.save(note);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -408,11 +409,11 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (noteRevision.getSVNRevision() > getDocumentRevision().getRevision()) {
             getDocumentRevision().setRevision(noteRevision.getSVNRevision());
         }
-        documentNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
+        documentNotes = documentNoteRepository.getOfDocument(getDocumentRevision());
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        noteId = noteOnEdit.getId();
+        noteId = noteOnEdit.getNote().getId();
         submitSuccess = true;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", commentZone.getBody());
@@ -435,7 +436,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
         termRepo.save(term);
         noteRevision.getNote().setTerm(term);
-        noteRepo.save(noteRevision.getNote());
+        noteRepository.save(noteRevision.getNote());
     }
 
     public void setDescription(String description) throws XMLStreamException {
@@ -485,7 +486,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     void setupRender() {
-        documentNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
+        documentNotes = documentNoteRepository.getOfDocument(getDocumentRevision());
     }
 
     private void updateName(Set<NameForm> nameForms, String name, String description) {

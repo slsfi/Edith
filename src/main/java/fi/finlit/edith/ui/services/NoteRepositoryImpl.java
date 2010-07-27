@@ -94,7 +94,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         documentNote.setLocalId(localId);
         documentNote.setNote(newNote);
         getSession().save(documentNote);
-        getSession().save(newNote);
 
         return documentNote;
     }
@@ -108,9 +107,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String localName = reader.getLocalName();
 
         if (localName.equals("note")) {
-            // FIXME
-//            session.save(data.revision.getRevisionOf());
-//            session.save(data.revision.getNote());
             session.save(data.revision);
             data.counter++;
         } else if (localName.equals("lemma")) {
@@ -133,9 +129,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (localName.equals("note")) {
             data.revision = new DocumentNote();
             data.revision.setNote(new Note());
-            // FIXME
-//            data.revision.setRevisionOf(new Note());
-//            data.revision.getRevisionOf().setLatestRevision(data.revision);
             data.revision.setCreatedOn(timeService.currentTimeMillis());
         } else if (localName.equals("source") || localName.equals("description")) {
             data.paragraphs = new Paragraph();

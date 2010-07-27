@@ -14,7 +14,6 @@ import static org.junit.Assert.fail;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,6 +63,38 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     private DocumentRevision docRev;
 
     private long latestRevision;
+
+    @Test
+    public void Save_Document_Note_With_An_Existing_Lemma_Is_Mapped_To_The_Existing_Note() {
+        final String lemmaMeaning = "a legendary placeholder";
+        final String lemma = "foobar";
+
+        DocumentNote dn1 = new DocumentNote();
+        dn1.setLocalId("1");
+        Note n1 = new Note();
+        n1.setLemma(lemma);
+        n1.setLemmaMeaning(lemmaMeaning);
+        dn1.setNote(n1);
+
+        DocumentNote dn2 = new DocumentNote();
+        dn2.setLocalId("2");
+        Note n2 = new Note();
+        n2.setLemma(lemma);
+        dn2.setNote(n2);
+
+        documentNoteRepository.save(dn1);
+        documentNoteRepository.save(dn2);
+
+        DocumentNote persisted1 = documentNoteRepository.getById(dn1.getId());
+        DocumentNote persisted2 = documentNoteRepository.getById(dn2.getId());
+
+        assertEquals(lemma, persisted1.getNote().getLemma());
+        assertEquals(lemma, persisted2.getNote().getLemma());
+        assertEquals(lemmaMeaning, persisted1.getNote().getLemmaMeaning());
+        assertEquals(lemmaMeaning, persisted2.getNote().getLemmaMeaning());
+        assertEquals("1", persisted1.getLocalId());
+        assertEquals("2", persisted2.getLocalId());
+    }
 
     @Test
     public void getByLocalId() {
@@ -140,18 +171,18 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         docRev = document.getRevision(latestRevision);
         noteRepo.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
         noteRepo.createNote(docRev, "2",
-                "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
+        "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
         noteRepo.createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
         noteRepo
-                .createNote(docRev, "4",
-                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        .createNote(docRev, "4",
+        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
     }
 
     @Test
     public void Store_And_Retrieve_Person_Note() {
         DocumentNote documentNote = noteRepo
-                .createNote(docRev, "3",
-                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        .createNote(docRev, "3",
+        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PERSON);
         NameForm normalizedForm = new NameForm("Aleksis",  "Kivi", "Suomen hienoin kirjailija ikinä.");
@@ -178,8 +209,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Person_With_The_Same_Birth_And_Death_Date() {
         DocumentNote documentNote = noteRepo
-                .createNote(docRev, "3",
-                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        .createNote(docRev, "3",
+        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PERSON);
         Interval timeOfBirth = Interval.createYear(1834);
@@ -196,8 +227,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Place_Note() {
         DocumentNote documentNote = noteRepo
-                .createNote(docRev, "3",
-                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        .createNote(docRev, "3",
+        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PLACE);
         NameForm normalizedForm = new NameForm("Tampere", "Kaupunki Hämeessä.");
