@@ -39,7 +39,7 @@ import fi.finlit.edith.domain.UserRepository;
  * @version $Id$
  */
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
-        DocumentNoteRepository {
+DocumentNoteRepository {
 
     private static final QDocumentNote otherNote = new QDocumentNote("other");
 
@@ -66,7 +66,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 documentNote.localId.eq(localId),
                 documentNote.svnRevision.loe(docRevision.getRevision()),
                 documentNote.deleted.eq(false), latestFor(documentNote, docRevision.getRevision())).uniqueResult(
-                documentNote);
+                        documentNote);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 documentNote.document().eq(docRevision.getDocument()),
                 documentNote.svnRevision.loe(docRevision.getRevision()),
                 documentNote.deleted.eq(false), latestFor(documentNote, docRevision.getRevision())).orderBy(
-                documentNote.createdOn.asc()).list(documentNote);
+                        documentNote.createdOn.asc()).list(documentNote);
     }
 
     private EBoolean latestFor(QDocumentNote documentNote, long svnRevision) {
@@ -86,7 +86,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 otherNote.localId.eq(documentNote.localId),
                 otherNote.svnRevision.loe(svnRevision),
                 otherNote.createdOn.gt(documentNote.createdOn)
-                ).notExists();
+        ).notExists();
     }
 
     private EBoolean latest(QDocumentNote documentNote) {
@@ -94,7 +94,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 otherNote.ne(documentNote),
                 otherNote.note().eq(documentNote.note()),
                 otherNote.createdOn.gt(documentNote.createdOn)
-                ).notExists();
+        ).notExists();
     }
 
     @Override
@@ -138,7 +138,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         documentNote.setCreatedOn(timeService.currentTimeMillis());
         documentNote.setCreatedBy(createdBy);
         Note note = noteRepository.find(documentNote.getNote().getLemma());
-        if (note != null) {
+        if (note != null && !documentNote.getNote().equals(note)) {
             documentNote.setNote(note);
         }
         getSession().save(documentNote.getNote());

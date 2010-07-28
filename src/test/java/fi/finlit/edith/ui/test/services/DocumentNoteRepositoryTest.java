@@ -31,7 +31,18 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Interval;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -68,8 +79,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Save_Document_Note_With_An_Existing_Lemma_Is_Mapped_To_The_Existing_Note() {
         final String lemmaMeaning = "a legendary placeholder";
         final String lemma = "foobar";
+        Document document = new Document();
 
         DocumentNote dn1 = new DocumentNote();
+        dn1.setDocument(document);
         dn1.setLocalId("1");
         Note n1 = new Note();
         n1.setLemma(lemma);
@@ -77,6 +90,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         dn1.setNote(n1);
 
         DocumentNote dn2 = new DocumentNote();
+        dn2.setDocument(document);
         dn2.setLocalId("2");
         Note n2 = new Note();
         n2.setLemma(lemma);
@@ -94,6 +108,51 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(lemmaMeaning, persisted2.getNote().getLemmaMeaning());
         assertEquals("1", persisted1.getLocalId());
         assertEquals("2", persisted2.getLocalId());
+
+        assertEquals(2, documentNoteRepository.getOfDocument(persisted2.getDocumentRevision()).size());
+    }
+
+    @Test
+    public void Change_Backing_Note_To_Another_Note() {
+        final String lemmaMeaning = "a legendary placeholder";
+        final String lemma = "foobar";
+        Document document = new Document();
+
+        DocumentNote dn1 = new DocumentNote();
+        dn1.setDocument(document);
+        dn1.setLocalId("1");
+        Note n1 = new Note();
+        n1.setLemma(lemma);
+        n1.setLemmaMeaning(lemmaMeaning);
+        dn1.setNote(n1);
+
+        DocumentNote dn2 = new DocumentNote();
+        dn2.setDocument(document);
+        dn2.setLocalId("2");
+        Note n2 = new Note();
+        n2.setLemma("barfoo");
+        dn2.setNote(n2);
+
+        documentNoteRepository.save(dn1);
+        documentNoteRepository.save(dn2);
+
+        DocumentNote persisted1 = documentNoteRepository.getById(dn1.getId());
+        DocumentNote persisted2 = documentNoteRepository.getById(dn2.getId());
+
+        persisted2.getNote().setLemma(lemma);
+
+        documentNoteRepository.save(persisted2);
+
+        persisted2 = documentNoteRepository.getById(persisted2.getId());
+
+        assertEquals(lemma, persisted1.getNote().getLemma());
+        assertEquals(lemma, persisted2.getNote().getLemma());
+        assertEquals(lemmaMeaning, persisted1.getNote().getLemmaMeaning());
+        assertEquals(lemmaMeaning, persisted2.getNote().getLemmaMeaning());
+        assertEquals("1", persisted1.getLocalId());
+        assertEquals("2", persisted2.getLocalId());
+
+        assertEquals(2, documentNoteRepository.getOfDocument(persisted2.getDocumentRevision()).size());
     }
 
     @Test

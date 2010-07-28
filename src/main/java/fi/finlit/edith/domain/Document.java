@@ -35,11 +35,6 @@ public class Document extends Identifiable implements Comparable<Document>{
         return svnPath.compareTo(doc.svnPath);
     }
 
-    @Override
-    public boolean equals(Object o){
-        return o instanceof Document && ((Document)o).svnPath.equals(svnPath);
-    }
-
     public String getDescription() {
         return description;
     }
@@ -53,8 +48,33 @@ public class Document extends Identifiable implements Comparable<Document>{
     }
 
     @Override
-    public int hashCode(){
-        return svnPath.hashCode();
+    public int hashCode() {
+        final int prime = 31;
+        int result = 0;
+        result = prime * result + (svnPath == null ? 0 : svnPath.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Document other = (Document) obj;
+        if (svnPath == null) {
+            if (other.svnPath != null) {
+                return false;
+            }
+        } else if (!svnPath.equals(other.svnPath)) {
+            return false;
+        }
+        return true;
     }
 
     public void setDescription(String description) {
