@@ -83,11 +83,7 @@ public class Note extends Identifiable {
     public Paragraph getDescription() {
         return description;
     }
-
-//    public DocumentNote getLatestRevision() {
-//        return latestRevision;
-//    }
-
+    
     public NoteFormat getFormat() {
         return format;
     }
@@ -131,10 +127,6 @@ public class Note extends Identifiable {
     public void setDescription(Paragraph description) {
         this.description = description;
     }
-
-//    public void setLatestRevision(DocumentNote latestRevision) {
-//        this.latestRevision = latestRevision;
-//    }
 
     public void setFormat(NoteFormat format) {
         this.format = format;
