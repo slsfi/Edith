@@ -139,11 +139,10 @@
 							hideBasedOnFormat();
 							});
                     </script>
-						<t:note.NoteForm
-							note="note" 
-							documentNotes="documentNotes"
+						<t:note.NoteForm							
 							noteOnEdit="noteOnEdit" 
-							termOnEdit="termOnEdit" 
+							termOnEdit="termOnEdit"
+							documentNotes="documentNotes" 
 							documentRevision="documentRevision"
 							noteId="noteId"
 							createTermSelection="createTermSelection"

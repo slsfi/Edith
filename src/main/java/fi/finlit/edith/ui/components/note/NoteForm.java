@@ -45,9 +45,6 @@ public class NoteForm {
     @Parameter
     private String noteId;
     
-//    @Property
-//    private String noteId;
-    
     @Property
     @Parameter
     private SelectedText createTermSelection;
@@ -77,9 +74,9 @@ public class NoteForm {
     @Inject
     private Messages messages;
     
-    @Property
-    @Parameter
-    private DocumentNote note;
+//    @Property
+//    @Parameter
+//    private DocumentNote note;
     
     @Parameter
     private Zone commentZone;
@@ -186,8 +183,7 @@ public class NoteForm {
     }
 
     void onPrepareFromNoteEditForm(String noteRev) {
-        note = documentNoteRepository.getById(noteRev).createCopy();
-        noteOnEdit = note;
+        noteOnEdit = documentNoteRepository.getById(noteRev).createCopy();
         termOnEdit = getEditTerm(noteOnEdit.getNote());
     }
     
@@ -232,7 +228,7 @@ public class NoteForm {
     
     @Validate("required")
     public void setStatus(NoteStatus status) {
-        note.setStatus(status);
+        noteOnEdit.setStatus(status);
     }
 
    
@@ -262,29 +258,7 @@ public class NoteForm {
             noteOnEdit.getNote().setSources(ParagraphParser.parseParagraph(sources));
         }
     }
-        
-//    Object onSuccessFromCreateTerm() throws IOException {
-//        logger.info(createTermSelection.toString());
-//        DocumentNote documentNote = null;
-//        try {
-//            documentNote = documentRepository.addNote(documentRevision, createTermSelection);
-//        } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
-//            infoMessage = messages.format("note-addition-failed");
-//            return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
-//        }
-//
-//        // prepare view (with new revision)
-//        documentRevision.setRevision(documentNote.getSVNRevision());
-//        documentNotes = documentNoteRepository.getOfDocument(documentRevision);
-//        selectedNotes = Collections.singletonList(documentNote);
-//        noteOnEdit = documentNote;
-//        termOnEdit = getEditTerm(noteOnEdit.getNote());
-//        noteId = noteOnEdit.getNote().getId();
-//        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
-//                "documentZone", documentView).add("commentZone", commentZone.getBody());
-//    }
-//    
+       
     private Term getEditTerm(Note note) {
         return note.getTerm() != null ? note
                 .getTerm().createCopy() : new Term();
@@ -293,8 +267,8 @@ public class NoteForm {
     
     Object onSuccessFromNoteEditForm() throws IOException {
         DocumentNote noteRevision;
-        if (note.getStatus().equals(NoteStatus.INITIAL)) {
-            note.setStatus(NoteStatus.DRAFT);
+        if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
+            noteOnEdit.setStatus(NoteStatus.DRAFT);
         }
         updateNames(noteOnEdit.getNote().getPerson().getOtherForms(), newPersonFirst, newPersonLast,
                 newPersonDescription);
@@ -307,9 +281,9 @@ public class NoteForm {
 
         try {
             if (updateLongTextSelection.isValid()) {
-                noteRevision = documentRepository.updateNote(note, updateLongTextSelection);
+                noteRevision = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);
             } else {
-                noteRevision = documentNoteRepository.save(note);
+                noteRevision = documentNoteRepository.save(noteOnEdit);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
