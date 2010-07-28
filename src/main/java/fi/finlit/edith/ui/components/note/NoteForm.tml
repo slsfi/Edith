@@ -1,0 +1,259 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<t:content>
+		<t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
+			<t:errors />
+			<div>
+				<div>
+					<strong>${message:format-label}</strong>
+				</div>
+				<div>
+					<t:select t:id="format" />
+				</div>
+			</div>
+
+			<div>
+				<div>
+					<strong>${message:status-label}</strong>
+				</div>
+				<div>
+					<t:select model="statusModel" value="status" />
+				</div>
+			</div>
+
+			<div class="note">
+				<div>
+					<strong>${message:lemma-label}</strong>
+				</div>
+				<div>
+					<t:textField value="noteOnEdit.note.lemma" />
+				</div>
+			</div>
+
+			<div class="note">
+				<div>- ${message:meaning-label}</div>
+				<div>
+					<t:textField value="noteOnEdit.note.lemmaMeaning" />
+				</div>
+			</div>
+
+			<div class="note">
+				<div>
+					<strong>${message:type-label}</strong>
+				</div>
+				<div>
+					<t:loop source="types" value="type">
+						<div>
+							<t:checkbox value="selected" />
+							<t:fmt.message key="${type}" />
+						</div>
+					</t:loop>
+				</div>
+			</div>
+
+			<div class="note">
+				<div>
+					<strong>${message:basicForm-label}</strong>
+				</div>
+				<div>
+					<t:textField t:id="basicForm" value="termOnEdit.basicForm"
+						t:mixins="termAutocomplete" />
+				</div>
+			</div>
+
+			<div class="note">
+				<div>- ${message:meaning-label}</div>
+				<div>
+					<t:textArea t:id="termMeaning" value="termOnEdit.meaning" />
+				</div>
+			</div>
+
+			<div class="note">
+				<div>- ${message:language-label}</div>
+				<div>
+					<t:select t:id="language" />
+				</div>
+			</div>
+
+			<div class="person">
+				<div>
+					<strong>${message:normalizedForm-label}</strong>
+				</div>
+				<div>
+					<t:textField t:id="normalizedFirst" value="normalizedPerson.first" />
+					<t:textField t:id="normalizedLast" value="normalizedPerson.last" />
+				</div>
+			</div>
+
+			<div class="person">
+				<div>- ${message:description-label}</div>
+				<div>
+					<t:textField t:id="normalizedDescription" value="normalizedPerson.description" />
+				</div>
+			</div>
+
+			<t:loop source="persons" value="loopPerson" volatile="true">
+				<div class="person">
+					<div>
+						<strong>${message:nameForm-label}</strong>
+					</div>
+					<div>
+						<t:textField value="loopPerson.first" />
+						<t:textField value="loopPerson.last" />
+					</div>
+				</div>
+
+				<div class="person">
+					<div>- ${message:description-label}</div>
+					<div>
+						<t:textField value="loopPerson.description" />
+					</div>
+				</div>
+
+			</t:loop>
+			<div class="person">
+				<div>
+					<strong>${message:createNameForm-label}</strong>
+				</div>
+				<div>
+					<t:textField value="newPersonFirst" />
+					<t:textField value="newPersonLast" />
+				</div>
+			</div>
+
+			<div class="person">
+				<div>- ${message:description-label}</div>
+				<div>
+					<t:textField value="newPersonDescription" />
+				</div>
+			</div>
+
+			<div class="person">
+				<div>
+					<strong>${message:timeOfBirth-label} (d.M.y)</strong>
+				</div>
+				<div>
+					<t:textField t:id="timeOfBirth" />
+				</div>
+			</div>
+
+			<div class="person">
+				<div>
+					<strong>${message:timeOfDeath-label} (d.M.y)</strong>
+				</div>
+				<div>
+					<t:textField t:id="timeOfDeath" />
+				</div>
+			</div>
+
+			<div class="place">
+				<div>
+					<strong>${message:normalizedForm-label}</strong>
+				</div>
+				<div>
+					<t:textField t:id="normalizedPlaceName" value="normalizedPlace.name" />
+				</div>
+			</div>
+
+			<div class="place">
+				<div>- ${message:description-label}</div>
+				<div>
+					<t:textField t:id="normalizedPlaceDescription"
+						value="normalizedPlace.description" />
+				</div>
+			</div>
+
+			<t:loop source="places" value="loopPlace" volatile="true">
+				<div class="place">
+					<div>
+						<strong>${message:nameForm-label}</strong>
+					</div>
+					<div>
+						<t:textField value="loopPlace.name" />
+					</div>
+				</div>
+
+				<div class="place">
+					<div>- ${message:description-label}</div>
+					<div>
+						<t:textField value="loopPlace.description" />
+					</div>
+				</div>
+
+			</t:loop>
+			<div class="place">
+				<div>
+					<strong>${message:createNameForm-label}</strong>
+				</div>
+				<div>
+					<t:textField value="newPlaceName" />
+				</div>
+			</div>
+
+			<div class="place">
+				<div>- ${message:description-label}</div>
+				<div>
+					<t:textField value="newPlaceDescription" />
+				</div>
+			</div>
+
+			<div class="note person place">
+				<div>
+					<strong>${message:description-label}</strong>
+				</div>
+				<div>
+					<t:textArea value="description" rows="4" />
+				</div>
+			</div>
+
+			<div class="note person place">
+				<div>
+					<strong>${message:sources-label}</strong>
+				</div>
+				<div>
+					<t:textField value="sources" rows="4" />
+				</div>
+			</div>
+
+			<div class="note person place">
+				<div>
+					<strong>${message:subtextSources-label}</strong>
+				</div>
+				<div>
+					<t:textField t:id="subtextSources" value="noteOnEdit.note.subtextSources" />
+				</div>
+			</div>
+
+			<div>
+				<div></div>
+				<div>
+					<a id="longTextEditLink" href="#">${message:update}</a>
+				</div>
+			</div>
+
+			<div>
+				<div>
+					<strong>${message:longText-label}</strong>
+				</div>
+				<div>
+					<div id="longTextEdit">${noteOnEdit.longText}</div>
+				</div>
+			</div>
+
+			<t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection" />
+			<t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId" />
+			<t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId" />
+			<t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
+			<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
+
+			<input type="submit" value="${message:save}" />
+			<t:if test="submitSuccess">
+				<!-- This could be externalized? -->
+				<script type="text/javascript">
+					jQuery(function() {
+					jQuery("#submit_success_info").fadeOut(3000);
+					});</script>
+				<p id="submit_success_info">${message:submit-success}</p>
+			</t:if>
+		</t:form>		
+	</t:content>
+</html>
