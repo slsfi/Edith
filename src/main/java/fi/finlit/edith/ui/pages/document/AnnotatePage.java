@@ -414,6 +414,7 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
         noteId = noteOnEdit.getNote().getId();
+        comments = noteOnEdit.getNote().getComments();
         submitSuccess = true;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
                 "documentZone", documentView).add("commentZone", commentZone.getBody());
