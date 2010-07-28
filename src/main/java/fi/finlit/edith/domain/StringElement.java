@@ -10,6 +10,7 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class StringElement extends Identifiable implements ParagraphElement {
+    
     @Predicate
     private String string;
 

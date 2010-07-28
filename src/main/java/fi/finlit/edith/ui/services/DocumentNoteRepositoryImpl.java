@@ -82,7 +82,7 @@ DocumentNoteRepository {
     private EBoolean latestFor(QDocumentNote documentNote, long svnRevision) {
         return sub(otherNote).where(
                 otherNote.ne(documentNote),
-                otherNote.note().eq(documentNote.note()),
+//                otherNote.note().eq(documentNote.note()),
                 otherNote.localId.eq(documentNote.localId),
                 otherNote.svnRevision.loe(svnRevision),
                 otherNote.createdOn.gt(documentNote.createdOn)

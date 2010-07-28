@@ -10,8 +10,10 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class LinkElement extends Identifiable implements ParagraphElement {
+    
     @Predicate
     private String string;
+    
     @Predicate
     private String reference;
 

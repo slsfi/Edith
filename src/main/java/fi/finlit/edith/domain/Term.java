@@ -18,6 +18,7 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns = EDITH.NS)
 public class Term extends Identifiable {
+    
     @Predicate
     private String basicForm;
 

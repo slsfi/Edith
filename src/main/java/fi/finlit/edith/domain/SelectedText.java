@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class SelectedText {
+    
     private String selection;
 
     private String startId, endId;

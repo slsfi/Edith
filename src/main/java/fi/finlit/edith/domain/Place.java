@@ -9,6 +9,7 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class Place extends Identifiable {
+    
     @Predicate
     private NameForm normalizedForm;
 
