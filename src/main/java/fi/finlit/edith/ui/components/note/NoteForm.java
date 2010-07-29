@@ -40,11 +40,7 @@ public class NoteForm {
     
     @Property
     private boolean submitSuccess;
-    
-    @Property
-    @Parameter
-    private String noteId;
-    
+        
     @Property
     @Parameter
     private SelectedText createTermSelection;
@@ -73,10 +69,6 @@ public class NoteForm {
     
     @Inject
     private Messages messages;
-    
-//    @Property
-//    @Parameter
-//    private DocumentNote note;
     
     @Parameter
     private Zone commentZone;
@@ -304,11 +296,13 @@ public class NoteForm {
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        noteId = noteOnEdit.getNote().getId();
+//        noteId = noteOnEdit.getNote().getId();
         comments = noteOnEdit.getNote().getComments();
         submitSuccess = true;
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
-                "documentZone", documentView).add("commentZone", commentZone.getBody());
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
+            .add("listZone", notesList)
+            .add("documentZone", documentView)
+            .add("commentZone", commentZone.getBody());
     }
 
     private void saveTerm(DocumentNote noteRevision) {

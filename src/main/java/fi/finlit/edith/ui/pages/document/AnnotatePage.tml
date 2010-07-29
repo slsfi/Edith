@@ -88,7 +88,6 @@
 							<strong>${noteOnEdit.note.lemma}</strong>
 						</em>
 						<!-- This could be externalized? -->
-						<script type="text/javascript">
                         <script type="text/javascript">
                         jQuery(".delete_dialog").hide();
 
@@ -146,7 +145,6 @@
 							termOnEdit="termOnEdit"
 							documentNotes="documentNotes" 
 							documentRevision="documentRevision"
-							noteId="noteId"
 							createTermSelection="createTermSelection"
 							updateLongTextSelection="updateLongTextSelection"
 							infoMessage="infoMessage"

@@ -61,10 +61,6 @@ import fi.finlit.edith.ui.services.ParagraphParser;
     @Property
     private Block noteEdit;
 
-    @InjectComponent
-    @Property
-    private Zone commentZone;
-
     @Inject
     private Block emptyBlock;
 
@@ -76,30 +72,34 @@ import fi.finlit.edith.ui.services.ParagraphParser;
     private Block errorBlock;
 
     @Inject
+    @Property
+    private Block documentView;
+
+    @InjectComponent
+    @Property
+    private Zone commentZone;
+    
+    @Inject
     private Messages messages;
 
     @Property
     private String infoMessage;
-
-    @Inject
-    @Property
-    private Block documentView;
-
+    
     @Property
     private List<DocumentNote> selectedNotes;
 
     @Property
-    private DocumentNote noteOnEdit;
-
+    private List<DocumentNote> documentNotes;
+    
     @Property
     private DocumentNote note;
     
     @Property
-    private Term termOnEdit;
+    private DocumentNote noteOnEdit;
     
     @Property
-    private String noteId;
-
+    private Term termOnEdit;
+    
     @Inject
     private RenderSupport renderSupport;
 
@@ -114,9 +114,6 @@ import fi.finlit.edith.ui.services.ParagraphParser;
 
     @Inject
     private TermRepository termRepo;
-
-    @Property
-    private List<DocumentNote> documentNotes;
 
     @Property
     private SelectedText createTermSelection;
@@ -162,6 +159,10 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         return note.getTerm() != null ? note
                 .getTerm().createCopy() : new Term();
     }
+    
+    public String getNoteId(){
+        return noteOnEdit != null ? noteOnEdit.getId() : null;
+    }
 
     void onActivate() {
         createTermSelection = new SelectedText();
@@ -177,8 +178,10 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         getDocumentRevision().setRevision(documentRevision.getRevision());
         documentNotes = documentNoteRepository.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
-        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList).add(
-                "documentZone", documentView).add("commentZone", emptyBlock);
+        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock)
+            .add("listZone", notesList)
+            .add("documentZone", documentView)
+            .add("commentZone", emptyBlock);
     }
 
     Object onEdit(EventContext context) {
@@ -209,21 +212,21 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         //        Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
-        noteId = noteOnEdit.getNote().getId();
+//        noteId = noteOnEdit.getNote().getId();
         comments = noteOnEdit.getNote().getComments();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
     
     Object onDeleteComment(String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
-        noteId = deletedComment.getNote().getId();
+        String noteId = deletedComment.getNote().getId();
         Note n = noteRepository.getById(noteId);
         comments = n.getComments();
         return commentZone.getBody();
     }
 
     void onPrepareFromCommentForm(String id) {
-        noteId = id;
+        noteOnEdit = documentNoteRepository.getById(id);
     }
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
@@ -231,10 +234,10 @@ import fi.finlit.edith.ui.services.ParagraphParser;
     }
 
     Object onSuccessFromCommentForm() throws IOException {
-        Note n = noteRepository.getById(noteId);
-        comments = n.getComments();
+//        Note n = noteRepository.getById(noteId);
+        comments = noteOnEdit.getNote().getComments();
         if (newCommentMessage != null) {
-            comments.add(noteRepository.createComment(n, newCommentMessage));
+            comments.add(noteRepository.createComment(noteOnEdit.getNote(), newCommentMessage));
             newCommentMessage = null;
         }
 
@@ -260,9 +263,11 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        noteId = noteOnEdit.getNote().getId();
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList).add(
-                "documentZone", documentView).add("commentZone", commentZone.getBody());
+//        noteId = noteOnEdit.getNote().getId();
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
+            .add("listZone", notesList)
+            .add("documentZone", documentView)
+            .add("commentZone", commentZone.getBody());
     }
 
     void setupRender() {
