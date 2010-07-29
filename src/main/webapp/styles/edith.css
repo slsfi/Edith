@@ -182,8 +182,8 @@ div.note_edit {
     color: #aa00cc;
 }
 
-.note_edit #delete_note {
-	float: right;
+.delete {
+	/*float: right;*/
 	font-size: 80%;	
 }
 

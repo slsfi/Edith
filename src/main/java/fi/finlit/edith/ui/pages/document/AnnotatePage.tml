@@ -89,28 +89,30 @@
 						</em>
 						<!-- This could be externalized? -->
 						<script type="text/javascript">
-							jQuery("#delete_dialog").hide();
+                        <script type="text/javascript">
+                        jQuery(".delete_dialog").hide();
 
-							jQuery("#delete_question").click(function(event) {
-							jQuery("#delete_dialog").show();
-							jQuery("#delete_question").hide();
-							event.preventDefault();
-							});
+                        jQuery(".delete_question").click(function(event) {
+                            jQuery(this).siblings().show();
+                            jQuery(this).hide();
+                            event.preventDefault();
+                        });
 
-							jQuery("#delete_note_decline").click(function(event) {
-							jQuery("#delete_question").show();
-							jQuery("#delete_dialog").hide();
-							event.preventDefault();
-							});
+                        jQuery(".delete_decline").click(function(event) {
+                            jQuery(this).parent().siblings().show();
+                            jQuery(this).parent().hide();
+                            event.preventDefault();
+                        });
+                </script>
                     </script>
-						<span id="delete_note">
-							<button id="delete_question">${message:delete}</button>
-							<span id="delete_dialog">
+						<span class="delete">
+							<button class="delete_question">${message:delete}</button>
+							<span class="delete_dialog">
 								${message:delete}
 								<t:eventlink t:event="delete" t:zone="editZone"
 									context="noteOnEdit.id">${message:yes}</t:eventlink>
 								/
-								<a href="" id="delete_note_decline">${message:no}</a>
+								<a href="" class="delete_decline">${message:no}</a>
 							</span>
 						</span>
 
@@ -161,6 +163,21 @@
 			</t:if>
 		</t:block>
 		<t:zone t:id="commentZone">
+		                        <script type="text/javascript">
+                            jQuery(".delete_dialog").hide();
+
+                            jQuery(".delete_question").click(function(event) {
+                                jQuery(this).siblings().show();
+                                jQuery(this).hide();
+                                event.preventDefault();
+                            });
+
+                            jQuery(".delete_decline").click(function(event) {
+                                jQuery(this).parent().siblings().show();
+                                jQuery(this).parent().hide();
+                                event.preventDefault();
+                            });
+                    </script>
 			<t:if test="noteId">
 				<div id="comments">
 					<h3>${message:comments}</h3>
@@ -173,14 +190,14 @@
 									format="message:dateformat-compact" />
 								${comment.username}
 							</div>
-						<span id="delete_note">
-                            <button id="delete_question">${message:delete}</button>
-                            <span id="delete_dialog">
+						<span class="delete">
+                            <button class="delete_question">${message:delete}</button>
+                            <span class="delete_dialog">
                                 ${message:delete}
                                 <t:eventlink t:event="deleteComment" t:zone="commentZone" 
                                     context="comment.id">${message:yes}</t:eventlink>
                                 /
-                                <a href="" id="delete_note_decline">${message:no}</a>
+                                <a href="" class="delete_decline">${message:no}</a>
                             </span>
                         </span>
 						</div>
