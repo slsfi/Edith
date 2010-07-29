@@ -158,18 +158,29 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         EBoolean filters = new BooleanBuilder();
         filters.and(documentNote.deleted.eq(false));
         filters.and(latest(documentNote));
+        // document
         if (searchInfo.getDocument() != null) {
-            filters.and(documentNote.document().eq(searchInfo.getDocument()));
+            filters.and(documentNote.document().svnPath.eq(searchInfo.getDocument().getSvnPath()));
         }
+        // creators
         if (!searchInfo.getCreators().isEmpty()) {
-            Collection<String> usernames = new ArrayList<String>();
+            Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
                 usernames.add(userInfo.getUsername());
             }
             filters.and(documentNote.createdBy().username.in(usernames));
         }
+        // formats
+        if (!searchInfo.getNoteFormats().isEmpty()){
+            filters.and(documentNote.note().format().in(searchInfo.getNoteFormats()));
+        }        
+        // types
         if (!searchInfo.getNoteTypes().isEmpty()) {
-            // TODO
+            EBoolean filter = new BooleanBuilder(); 
+            for (NoteType type : searchInfo.getNoteTypes()){
+                filter.or(documentNote.note().types.contains(type));    
+            }
+            filters.and(filter);            
         }
         return getSession().from(documentNote).where(filters).list(documentNote);
     }

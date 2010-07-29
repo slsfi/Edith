@@ -1,0 +1,64 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<t:content>
+		<t:form t:id="noteSearchForm" t:zone="listZone">
+			<t:errors />
+			<div class="left">
+			<div>
+				<div>
+					<strong>${message:document-label}</strong>
+				</div>
+				<div>
+					TODO
+				</div>
+			</div>
+			<div>
+				<div>
+					<strong>${message:type-label}</strong>
+				</div>
+				<div>
+					<t:loop source="types" value="type">
+						<div>
+							<t:checkbox value="typeSelected" />
+							<t:fmt.message key="${type}" />
+						</div>
+					</t:loop>
+				</div>
+			</div>
+			<div>
+				<div>
+					<strong>${message:format-label}</strong>
+				</div>
+				<div>
+					<t:loop source="formats" value="format">
+						<div>
+							<t:checkbox value="formatSelected" />
+							<t:fmt.message key="${format}" />
+						</div>
+					</t:loop>
+				</div>
+			</div>			
+			</div>
+			
+			<div class="left">
+			<div>
+				<div>
+					<strong>${message:creator-label}</strong>
+				</div>
+				<div>
+					<t:loop source="users" value="user">
+						<div>
+							<t:checkbox value="userSelected" />
+							${user.username}
+						</div>
+					</t:loop>
+				</div>
+			</div>		
+			</div>
+			
+			<div style="clear:both;"/>
+			
+			<input type="submit" value="${message:query}" />		
+		</t:form>		
+	</t:content>
+</html>	
+			

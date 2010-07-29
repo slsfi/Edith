@@ -5,9 +5,14 @@
  */
 package fi.finlit.edith.ui.services;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 import nu.localhost.tapestry5.springsecurity.services.RequestInvocationDefinition;
 
+import org.apache.commons.collections15.BeanMap;
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -16,13 +21,23 @@ import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.ComponentClassResolver;
+import org.apache.tapestry5.services.ValueEncoderFactory;
 import org.apache.tapestry5.urlrewriter.URLRewriterRule;
 import org.springframework.security.providers.AuthenticationProvider;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetailsService;
 
+import com.mysema.rdfbean.model.RepositoryException;
+import com.mysema.rdfbean.object.MappedProperty;
+import com.mysema.rdfbean.object.Session;
+import com.mysema.rdfbean.object.SessionFactory;
 import com.mysema.tapestry.PageMappingRule;
+
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.UserInfo;
 
 /**
  * AppModule is the main Tapestry module for the Edith application
@@ -80,5 +95,84 @@ public final class AppModule {
             @InjectService("DaoAuthenticationProvider") AuthenticationProvider daoAuthenticationProvider) {
         configuration.add("daoAuthenticationProvider", daoAuthenticationProvider);
     }
+    
+    // TODO : find a generic solution for this
+//    public static void contributeTypeCoercer(Configuration<CoercionTuple<?,?>> configuration) {
+//        Coercion<String, UserInfo> stringToUserId = new Coercion<String, UserInfo>() {
+//            @Override
+//            public UserInfo coerce(String id) {
+//                return new UserInfo(id);
+//            }
+//        };
+//        Coercion<UserInfo, String> userIdToString = new Coercion<UserInfo, String>() {
+//            @Override
+//            public String coerce(UserInfo id) {
+//                return id.getUsername();
+//            }
+//        };
+//
+//        configuration.add(new CoercionTuple<String, UserInfo>(String.class, UserInfo.class, stringToUserId));
+//        configuration.add(new CoercionTuple<UserInfo, String>(UserInfo.class, String.class, userIdToString));
+//    }
+    
+    public static void contributeValueEncoderSource(
+            MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,
+            final com.mysema.rdfbean.object.Configuration rdfBeanConfiguration,
+            final SessionFactory sessionFactory){
+        
+        // TODO : move to RDFBeanModule
+        for (final Class cl : Arrays.asList(DocumentNote.class, Document.class, Note.class)){
+            configuration.add(cl, new ValueEncoderFactory(){
+                final MappedProperty idProperty = rdfBeanConfiguration.getMappedClass(cl).getIdProperty();
+                @Override
+                public ValueEncoder create(Class type) {                    
+                    return new ValueEncoder(){
+                        @Override
+                        public String toClient(Object value) {                            
+                            return idProperty.getValue(new BeanMap(value)).toString();
+                        }
+                        @Override
+                        public Object toValue(String id) {
+                            Session session = sessionFactory.getCurrentSession();
+                            boolean close = session == null;
+                            if (session == null){
+                                session = sessionFactory.openSession();
+                            }
+                            try{
+                                return session.getById(id, cl);                                
+                            }finally{
+                                if (close){
+                                    try {
+                                        session.close();
+                                    } catch (IOException e) {
+                                        throw new RepositoryException(e);
+                                    }    
+                                }                                
+                            }                            
+                        }                    
+                    };
+                }
+                
+            }); 
+        }
+        
+        configuration.add(UserInfo.class, new ValueEncoderFactory<UserInfo>(){
+            @Override
+            public ValueEncoder<UserInfo> create(Class<UserInfo> type) {
+                return new ValueEncoder<UserInfo>(){
+                    @Override
+                    public String toClient(UserInfo value) {
+                        return value.getUsername();
+                    }
+                    @Override
+                    public UserInfo toValue(String clientValue) {
+                        return new UserInfo(clientValue);
+                    }                    
+                };
+            }
+            
+        });
+    }
 
+    
 }

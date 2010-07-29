@@ -58,3 +58,11 @@ p {
 	list-style: none;
 }
 
+.left {
+	float: left;	
+}
+
+.right {
+	float: right;
+}
+

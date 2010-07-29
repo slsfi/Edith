@@ -24,6 +24,11 @@
 	</p:leftPanel>
 
 	<p:rightPanel>
+		<div class="panel narrow">
+			<h3>${message:query}</h3>
+			<t:note.noteSearchForm documentNotes="documentNotes" notesList="notesList"/>
+		</div>
+		
 		<t:form t:id="createTerm" t:zone="listZone">
 			<t:hidden t:id="selectedText_1" value="createTermSelection.selection" />
 			<t:hidden t:id="selectedStartId_1" value="createTermSelection.startId" />
@@ -138,7 +143,7 @@
 							hideBasedOnFormat();
 							});
                     </script>
-						<t:note.NoteForm							
+						<t:note.noteForm							
 							noteOnEdit="noteOnEdit" 
 							termOnEdit="termOnEdit"
 							documentNotes="documentNotes" 

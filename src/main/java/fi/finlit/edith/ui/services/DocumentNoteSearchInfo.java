@@ -8,15 +8,19 @@ import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.UserInfo;
 
+/**
+ * @author tiwe
+ *
+ */
 public class DocumentNoteSearchInfo {
 
     private Document document;
 
-    private Set<NoteType> noteTypes;
+    private Set<NoteType> noteTypes = new HashSet<NoteType>();
 
-    private Set<NoteFormat> noteFormats;
-
-    private Set<UserInfo> creators;
+    private Set<NoteFormat> noteFormats = new HashSet<NoteFormat>();
+    
+    private Set<UserInfo> creators = new HashSet<UserInfo>();
 
     public DocumentNoteSearchInfo() {
         document = null;

@@ -25,6 +25,13 @@ public class UserInfo {
     @Unique
     private String username;
 
+    public UserInfo() {
+    }
+    
+    public UserInfo(String username) {
+        this.username = username;
+    }
+
     public String getUsername() {
         return username;
     }
