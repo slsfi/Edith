@@ -30,115 +30,115 @@ import fi.finlit.edith.ui.services.ParagraphParser;
 
 @SuppressWarnings("unused")
 public class NoteForm {
-    
+
     private static final String EDIT_ZONE = "editZone";
-    
+
     private static final Logger logger = LoggerFactory.getLogger(NoteForm.class);
-    
+
     @Parameter
     private List<DocumentNote> documentNotes;
-    
+
     @Property
     private boolean submitSuccess;
-        
+
     @Property
     @Parameter
     private SelectedText createTermSelection;
-    
+
     @Parameter
     private List<DocumentNote> selectedNotes;
-    
+
     @Inject
     private DocumentNoteRepository documentNoteRepository;
-    
+
     @Inject
     private DocumentRepository documentRepository;
-    
+
     @Property
     @Parameter
     private DocumentRevision documentRevision;
-    
+
     @Parameter
     private Block errorBlock;
-    
+
     @Parameter
     private String infoMessage;
-    
+
     @Property
     private NameForm loopPerson;
-    
+
     @Inject
     private Messages messages;
-    
+
     @Parameter
     private Zone commentZone;
-    
+
     @Parameter
     private Block documentView;
-    
+
     @Property
     private String newPersonDescription;
-    
+
     @Property
     private String newPersonFirst;
-    
-    
+
+
     @Property
     private String newPersonLast;
-    
+
     @Property
     private String newPlaceDescription;
-    
+
     @Property
     private String newPlaceName;
-    
+
     @Parameter
     private Block noteEdit;
-    
+
     @Property
     @Parameter
     private DocumentNote noteOnEdit;
-    
+
     @Inject
     private NoteRepository noteRepository;
-    
+
     @Parameter
     @Property
     private Block notesList;
-    
+
     @Property
     @Parameter
     private Term termOnEdit;
 
     @Inject
     private TermRepository termRepository;
-    
+
     @Property
     private NoteType type;
-    
+
     @Property
     @Parameter
     private SelectedText updateLongTextSelection;
-    
+
     @Property
     private NameForm loopPlace;
-    
+
     @Parameter
     private Set<NoteComment> comments;
-    
+
     @Validate("required")
     public NoteFormat getFormat() {
         return noteOnEdit.getNote().getFormat();
     }
-    
+
     public void setFormat(NoteFormat format) {
         noteOnEdit.getNote().setFormat(format);
     }
-    
+
     public TermLanguage getLanguage() {
         return termOnEdit.getLanguage();
     }
-    
+
     public String getTimeOfBirth() {
         return noteOnEdit.getNote().getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getNote().getPerson()
                 .getTimeOfBirth().asString();
@@ -148,26 +148,26 @@ public class NoteForm {
         return noteOnEdit.getNote().getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getNote().getPerson()
                 .getTimeOfDeath().asString();
     }
-    
+
     @Validate("required")
     public void setLanguage(TermLanguage language) {
         termOnEdit.setLanguage(language);
     }
-    
+
     public String getDescription() {
         if (noteOnEdit.getNote().getDescription() == null) {
             return null;
         }
         return noteOnEdit.getNote().getDescription().toString();
     }
-    
+
     public String getSources() {
         if (noteOnEdit.getNote().getSources() == null) {
             return null;
         }
         return noteOnEdit.getNote().getSources().toString();
     }
-    
+
     public void setTimeOfBirth(String time) {
         if (time != null) {
             noteOnEdit.getNote().getPerson().setTimeOfBirth(Interval.fromString(time));
@@ -178,59 +178,59 @@ public class NoteForm {
         noteOnEdit = documentNoteRepository.getById(noteRev).createCopy();
         termOnEdit = getEditTerm(noteOnEdit.getNote());
     }
-    
+
     public void setTimeOfDeath(String time) {
         if (time != null) {
             noteOnEdit.getNote().getPerson().setTimeOfDeath(Interval.fromString(time));
         }
     }
-    
+
     public NameForm getNormalizedPlace() {
         if (noteOnEdit.getNote().getPlace() == null) {
             noteOnEdit.getNote().setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
         }
         return noteOnEdit.getNote().getPlace().getNormalizedForm();
     }
-    
+
     public Set<NameForm> getPlaces() {
         return noteOnEdit.getNote().getPlace().getOtherForms();
     }
-    
+
     public NameForm getNormalizedPerson() {
         if (noteOnEdit.getNote().getPerson() == null) {
             noteOnEdit.getNote().setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
         }
         return noteOnEdit.getNote().getPerson().getNormalizedForm();
     }
-    
+
     public Set<NameForm> getPersons() {
         return noteOnEdit.getNote().getPerson().getOtherForms();
     }
-    
+
     public Set<NoteType> getSelectedTypes() {
         if (noteOnEdit.getNote().getTypes() == null) {
             noteOnEdit.getNote().setTypes(new HashSet<NoteType>());
         }
         return noteOnEdit.getNote().getTypes();
     }
-    
+
     public NoteStatus getStatus() {
         return noteOnEdit.getStatus();
     }
-    
+
     @Validate("required")
     public void setStatus(NoteStatus status) {
         noteOnEdit.setStatus(status);
     }
 
-   
+
     public EnumSelectModel getStatusModel() {
         NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(
                 NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
             NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
                 return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
-    
+
     public NoteType[] getTypes() {
         return NoteType.values();
     }
@@ -238,25 +238,25 @@ public class NoteForm {
     public boolean isSelected() {
         return getSelectedTypes().contains(type);
     }
-    
+
     public void setDescription(String description) throws XMLStreamException {
         if (description != null) {
             noteOnEdit.getNote().setDescription(ParagraphParser.parseParagraph(description));
         }
     }
-    
+
     public void setSources(String sources) throws XMLStreamException {
         if (sources != null) {
             noteOnEdit.getNote().setSources(ParagraphParser.parseParagraph(sources));
         }
     }
-       
+
     private Term getEditTerm(Note note) {
         return note.getTerm() != null ? note
                 .getTerm().createCopy() : new Term();
     }
 
-    
+
     Object onSuccessFromNoteEditForm() throws IOException {
         DocumentNote noteRevision;
         if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
@@ -296,13 +296,13 @@ public class NoteForm {
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-//        noteId = noteOnEdit.getNote().getId();
+        //        noteId = noteOnEdit.getNote().getId();
         comments = noteOnEdit.getNote().getComments();
         submitSuccess = true;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
-            .add("listZone", notesList)
-            .add("documentZone", documentView)
-            .add("commentZone", commentZone.getBody());
+        .add("listZone", notesList)
+        .add("documentZone", documentView)
+        .add("commentZone", commentZone.getBody());
     }
 
     private void saveTerm(DocumentNote noteRevision) {
@@ -324,7 +324,7 @@ public class NoteForm {
         noteRevision.getNote().setTerm(term);
         noteRepository.save(noteRevision.getNote());
     }
-    
+
     public void setSelected(boolean selected) {
         if (selected) {
             getSelectedTypes().add(type);
@@ -332,7 +332,11 @@ public class NoteForm {
             getSelectedTypes().remove(type);
         }
     }
-    
+
+    List<Term> onProvideCompletionsFromBasicForm(String partial) {
+        return termRepository.findByStartOfBasicForm(partial, 10);
+    }
+
     private void updateName(Set<NameForm> nameForms, String name, String description) {
         updateNames(nameForms, null, name, description);
     }
@@ -354,5 +358,5 @@ public class NoteForm {
             }
         }
     }
-    
+
 }

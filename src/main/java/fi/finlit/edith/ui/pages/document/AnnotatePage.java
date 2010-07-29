@@ -78,28 +78,28 @@ import fi.finlit.edith.ui.services.ParagraphParser;
     @InjectComponent
     @Property
     private Zone commentZone;
-    
+
     @Inject
     private Messages messages;
 
     @Property
     private String infoMessage;
-    
+
     @Property
     private List<DocumentNote> selectedNotes;
 
     @Property
     private List<DocumentNote> documentNotes;
-    
+
     @Property
     private DocumentNote note;
-    
+
     @Property
     private DocumentNote noteOnEdit;
-    
+
     @Property
     private Term termOnEdit;
-    
+
     @Inject
     private RenderSupport renderSupport;
 
@@ -159,7 +159,7 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         return note.getTerm() != null ? note
                 .getTerm().createCopy() : new Term();
     }
-    
+
     public String getNoteId(){
         return noteOnEdit != null ? noteOnEdit.getId() : null;
     }
@@ -179,9 +179,9 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         documentNotes = documentNoteRepository.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
         return new MultiZoneUpdate(EDIT_ZONE, emptyBlock)
-            .add("listZone", notesList)
-            .add("documentZone", documentView)
-            .add("commentZone", emptyBlock);
+        .add("listZone", notesList)
+        .add("documentZone", documentView)
+        .add("commentZone", emptyBlock);
     }
 
     Object onEdit(EventContext context) {
@@ -212,11 +212,11 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         //        Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
-//        noteId = noteOnEdit.getNote().getId();
+        //        noteId = noteOnEdit.getNote().getId();
         comments = noteOnEdit.getNote().getComments();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
-    
+
     Object onDeleteComment(String noteId, String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
         noteOnEdit = documentNoteRepository.getById(noteId);        
@@ -229,12 +229,8 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         noteOnEdit = documentNoteRepository.getById(id);
     }
 
-    List<Term> onProvideCompletionsFromBasicForm(String partial) {
-        return termRepo.findByStartOfBasicForm(partial, 10);
-    }
-
     Object onSuccessFromCommentForm() throws IOException {
-//        Note n = noteRepository.getById(noteId);
+        //        Note n = noteRepository.getById(noteId);
         comments = noteOnEdit.getNote().getComments();
         if (newCommentMessage != null) {
             comments.add(noteRepository.createComment(noteOnEdit.getNote(), newCommentMessage));
@@ -263,11 +259,11 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-//        noteId = noteOnEdit.getNote().getId();
+        //        noteId = noteOnEdit.getNote().getId();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
-            .add("listZone", notesList)
-            .add("documentZone", documentView)
-            .add("commentZone", commentZone.getBody());
+        .add("listZone", notesList)
+        .add("documentZone", documentView)
+        .add("commentZone", commentZone.getBody());
     }
 
     void setupRender() {
