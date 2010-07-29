@@ -23,7 +23,7 @@ import fi.finlit.edith.domain.DocumentRepository;
 public class DocumentsPage {
 
     @Inject
-    private DocumentRepository documentRepo;
+    private DocumentRepository documentRepository;
 
     @Property
     private Collection<Document> documents;
@@ -32,7 +32,7 @@ public class DocumentsPage {
     private Document document;
 
     void onActivate(){
-        documents = documentRepo.getAll();
+        documents = documentRepository.getAll();
     }
 
 }

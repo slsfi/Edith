@@ -42,7 +42,7 @@ public class DictionarySearchPage {
     private Note note;
 
     @Inject 
-    private NoteRepository noteRepo;
+    private NoteRepository noteRepository;
 
     @Environmental
     private RenderSupport support;
@@ -59,7 +59,7 @@ public class DictionarySearchPage {
     }
 
     void setupRender() {
-        terms = noteRepo.queryDictionary(searchTerm == null ? "*" : searchTerm);
+        terms = noteRepository.queryDictionary(searchTerm == null ? "*" : searchTerm);
     }
 
     Object onPassivate() {

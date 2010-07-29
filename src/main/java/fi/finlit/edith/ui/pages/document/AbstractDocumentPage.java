@@ -32,7 +32,7 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 public class AbstractDocumentPage {
 
     @Inject
-    private DocumentRepository documentRepo;
+    private DocumentRepository documentRepository;
 
     private Document document;
 
@@ -55,8 +55,8 @@ public class AbstractDocumentPage {
             response.sendError(HttpError.PAGE_NOT_FOUND, "No document ID given!");
         }
         try {
-            document = documentRepo.getById(ctx.get(String.class, 0));
-            revisions = documentRepo.getRevisions(document);
+            document = documentRepository.getById(ctx.get(String.class, 0));
+            revisions = documentRepository.getRevisions(document);
         } catch (RuntimeException e) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "Document not found!");
             return;
@@ -93,7 +93,7 @@ public class AbstractDocumentPage {
     }
 
     protected DocumentRepository getDocumentRepo(){
-        return documentRepo;
+        return documentRepository;
     }
 
 

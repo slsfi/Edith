@@ -113,7 +113,7 @@ import fi.finlit.edith.ui.services.ParagraphParser;
     private NoteRepository noteRepository;
 
     @Inject
-    private TermRepository termRepo;
+    private TermRepository termRepository;
 
     @Property
     private SelectedText createTermSelection;

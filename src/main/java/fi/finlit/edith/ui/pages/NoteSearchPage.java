@@ -51,7 +51,7 @@ public class NoteSearchPage {
     private DocumentNote documentNote;
 
     @Inject
-    private DocumentNoteRepository noteRevisionRepo;
+    private DocumentNoteRepository noteRevisionRepository;
 
     @Inject
     private DocumentRepository documentRepository;
@@ -79,7 +79,7 @@ public class NoteSearchPage {
 
     void onActionFromDelete(String noteRevisionId) {
 //        noteRevisionRepo.remove(noteRevisionId);
-        DocumentNote noteRevision = noteRevisionRepo.getById(noteRevisionId);
+        DocumentNote noteRevision = noteRevisionRepository.getById(noteRevisionId);
         documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision);
     }
 
@@ -102,12 +102,12 @@ public class NoteSearchPage {
     }
 
     void onPrepare() {
-        encoder = new PrimaryKeyEncoder<DocumentNote>(noteRevisionRepo);
+        encoder = new PrimaryKeyEncoder<DocumentNote>(noteRevisionRepository);
     }
 
     void onSuccessFromEdit() {
         // TODO Validations
-        noteRevisionRepo.saveAll(encoder.getAllValues());
+        noteRevisionRepository.saveAll(encoder.getAllValues());
         context = new Context(searchTerm);
     }
 
@@ -116,7 +116,7 @@ public class NoteSearchPage {
     }
 
     void setupRender() {
-        documentNotes = noteRevisionRepo.queryNotes(searchTerm == null ? "*" : searchTerm);
+        documentNotes = noteRevisionRepository.queryNotes(searchTerm == null ? "*" : searchTerm);
     }
 
 }

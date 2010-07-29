@@ -31,7 +31,7 @@ public class NoteImportPage {
     private static final Logger logger = LoggerFactory.getLogger(NoteImportPage.class);
 
     @Inject
-    private NoteRepository noteRepo;
+    private NoteRepository noteRepository;
 
     @Property
     private UploadedFile file;
@@ -50,7 +50,7 @@ public class NoteImportPage {
         File tempFile = File.createTempFile("upload", null);
         try {
             file.write(tempFile);
-            int rv = noteRepo.importNotes(tempFile);
+            int rv = noteRepository.importNotes(tempFile);
             message = messages.format("notes-imported-msg", rv);
         } finally {
             if (!tempFile.delete() && !tempFile.delete()) {

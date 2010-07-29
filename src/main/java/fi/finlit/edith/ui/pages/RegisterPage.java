@@ -28,14 +28,14 @@ public class RegisterPage extends BasePage{
     private User user;
     
     @Inject
-    private UserRepository userRepo;
+    private UserRepository userRepository;
     
     @InjectPage
     private LoginPage loginPage;
     
     Object onSuccess(){
         user.setProfile(Profile.User);
-        userRepo.save(user);
+        userRepository.save(user);
         // TODO : check that username is not taken
         return loginPage;
     }
