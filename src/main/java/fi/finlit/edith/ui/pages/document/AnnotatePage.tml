@@ -102,8 +102,7 @@
                             jQuery(this).parent().hide();
                             event.preventDefault();
                         });
-                </script>
-                    </script>
+                		</script>
 						<span class="delete">
 							<button class="delete_question">${message:delete}</button>
 							<span class="delete_dialog">
