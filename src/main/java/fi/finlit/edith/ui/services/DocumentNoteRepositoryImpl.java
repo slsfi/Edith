@@ -7,8 +7,9 @@ package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QDocumentNote.documentNote;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
@@ -28,6 +29,7 @@ import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
@@ -40,7 +42,7 @@ import fi.finlit.edith.domain.UserRepository;
  * @version $Id$
  */
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
-DocumentNoteRepository {
+        DocumentNoteRepository {
 
     private static final QDocumentNote otherNote = new QDocumentNote("other");
 
@@ -51,7 +53,8 @@ DocumentNoteRepository {
     private final NoteRepository noteRepository;
 
     public DocumentNoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, @Inject TimeService timeService, @Inject NoteRepository noteRepository) {
+            @Inject UserRepository userRepository, @Inject TimeService timeService,
+            @Inject NoteRepository noteRepository) {
         super(sessionFactory, documentNote);
         this.userRepository = userRepository;
         this.timeService = timeService;
@@ -62,40 +65,39 @@ DocumentNoteRepository {
     public DocumentNote getByLocalId(DocumentRevision docRevision, String localId) {
         Assert.notNull(docRevision);
         Assert.notNull(localId);
-        return getSession().from(documentNote).where(
-                documentNote.document().eq(docRevision.getDocument()),
-                documentNote.localId.eq(localId),
-                documentNote.svnRevision.loe(docRevision.getRevision()),
-                documentNote.deleted.eq(false), latestFor(documentNote, docRevision.getRevision())).uniqueResult(
-                        documentNote);
+        return getSession()
+                .from(documentNote)
+                .where(documentNote.document().eq(docRevision.getDocument()),
+                        documentNote.localId.eq(localId),
+                        documentNote.svnRevision.loe(docRevision.getRevision()),
+                        documentNote.deleted.eq(false),
+                        latestFor(documentNote, docRevision.getRevision()))
+                .uniqueResult(documentNote);
     }
 
     @Override
     public List<DocumentNote> getOfDocument(DocumentRevision docRevision) {
         Assert.notNull(docRevision);
-        return getSession().from(documentNote).where(
-                documentNote.document().eq(docRevision.getDocument()),
-                documentNote.svnRevision.loe(docRevision.getRevision()),
-                documentNote.deleted.eq(false), latestFor(documentNote, docRevision.getRevision())).orderBy(
-                        documentNote.createdOn.asc()).list(documentNote);
+        return getSession()
+                .from(documentNote)
+                .where(documentNote.document().eq(docRevision.getDocument()),
+                        documentNote.svnRevision.loe(docRevision.getRevision()),
+                        documentNote.deleted.eq(false),
+                        latestFor(documentNote, docRevision.getRevision()))
+                .orderBy(documentNote.createdOn.asc()).list(documentNote);
     }
 
     private EBoolean latestFor(QDocumentNote documentNote, long svnRevision) {
-        return sub(otherNote).where(
-                otherNote.ne(documentNote),
-                //                otherNote.note().eq(documentNote.note()),
-                otherNote.localId.eq(documentNote.localId),
-                otherNote.svnRevision.loe(svnRevision),
-                otherNote.createdOn.gt(documentNote.createdOn)
-        ).notExists();
+        return sub(otherNote).where(otherNote.ne(documentNote),
+                // otherNote.note().eq(documentNote.note()),
+                otherNote.localId.eq(documentNote.localId), otherNote.svnRevision.loe(svnRevision),
+                otherNote.createdOn.gt(documentNote.createdOn)).notExists();
     }
 
     private EBoolean latest(QDocumentNote documentNote) {
-        return sub(otherNote).where(
-                otherNote.ne(documentNote),
+        return sub(otherNote).where(otherNote.ne(documentNote),
                 otherNote.note().eq(documentNote.note()),
-                otherNote.createdOn.gt(documentNote.createdOn)
-        ).notExists();
+                otherNote.createdOn.gt(documentNote.createdOn)).notExists();
     }
 
     @Override
@@ -152,8 +154,24 @@ DocumentNoteRepository {
 
     @Override
     public List<DocumentNote> query(DocumentNoteSearchInfo searchInfo) {
-        // TODO Auto-generated method stub
-        return Collections.emptyList();
+        Assert.notNull(searchInfo);
+        EBoolean filters = new BooleanBuilder();
+        filters.and(documentNote.deleted.eq(false));
+        filters.and(latest(documentNote));
+        if (searchInfo.getDocument() != null) {
+            filters.and(documentNote.document().eq(searchInfo.getDocument()));
+        }
+        if (!searchInfo.getCreators().isEmpty()) {
+            Collection<String> usernames = new ArrayList<String>();
+            for (UserInfo userInfo : searchInfo.getCreators()) {
+                usernames.add(userInfo.getUsername());
+            }
+            filters.and(documentNote.createdBy().username.in(usernames));
+        }
+        if (!searchInfo.getNoteTypes().isEmpty()) {
+            // TODO
+        }
+        return getSession().from(documentNote).where(filters).list(documentNote);
     }
 
 }

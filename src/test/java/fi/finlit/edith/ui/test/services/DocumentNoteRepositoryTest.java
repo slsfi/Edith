@@ -12,6 +12,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,6 +32,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.mysema.rdfbean.object.Session;
+import com.mysema.rdfbean.object.SessionFactory;
+
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
@@ -41,9 +45,13 @@ import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.domain.UserRepository;
 import fi.finlit.edith.ui.services.AdminService;
+import fi.finlit.edith.ui.services.DocumentNoteSearchInfo;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**
@@ -69,11 +77,19 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Inject
     private DocumentRepository documentRepository;
 
+    @Inject
+    private SessionFactory sessionFactory;
+
+    @Inject
+    private UserRepository userRepository;
+
     private Document document;
 
     private DocumentRevision docRev;
 
     private long latestRevision;
+
+    private DocumentNoteSearchInfo searchInfo;
 
     @Test
     public void Save_Document_Note_With_An_Existing_Lemma_Is_Mapped_To_The_Existing_Note() {
@@ -109,7 +125,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals("1", persisted1.getLocalId());
         assertEquals("2", persisted2.getLocalId());
 
-        assertEquals(2, documentNoteRepository.getOfDocument(persisted2.getDocumentRevision()).size());
+        assertEquals(2, documentNoteRepository.getOfDocument(persisted2.getDocumentRevision())
+                .size());
     }
 
     @Test
@@ -152,7 +169,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals("1", persisted1.getLocalId());
         assertEquals("2", persisted2.getLocalId());
 
-        assertEquals(2, documentNoteRepository.getOfDocument(persisted2.getDocumentRevision()).size());
+        assertEquals(2, documentNoteRepository.getOfDocument(persisted2.getDocumentRevision())
+                .size());
     }
 
     @Test
@@ -230,21 +248,24 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         docRev = document.getRevision(latestRevision);
         noteRepo.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
         noteRepo.createNote(docRev, "2",
-        "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
+                "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
         noteRepo.createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
-        noteRepo
-        .createNote(docRev, "4",
-        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        noteRepo.createNote(docRev, "4",
+                "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        searchInfo = new DocumentNoteSearchInfo();
+        addExtraNote("testo");
+        addExtraNote("testo2");
     }
 
     @Test
     public void Store_And_Retrieve_Person_Note() {
         DocumentNote documentNote = noteRepo
-        .createNote(docRev, "3",
-        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+                .createNote(docRev, "3",
+                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PERSON);
-        NameForm normalizedForm = new NameForm("Aleksis",  "Kivi", "Suomen hienoin kirjailija ikinä.");
+        NameForm normalizedForm = new NameForm("Aleksis", "Kivi",
+                "Suomen hienoin kirjailija ikinä.");
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Alexis", "Stenvall", "En jättebra skrivare."));
         note.setPerson(new Person(normalizedForm, otherForms));
@@ -254,22 +275,22 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         note.getPerson().setTimeOfDeath(timeOfDeath);
         noteRepo.save(note);
         Note persistedNote = documentNoteRepository.getById(documentNote.getId()).getNote();
-        assertEquals(note.getPerson().getNormalizedForm().getName(), persistedNote
-                .getPerson().getNormalizedForm().getName());
-        assertEquals(note.getPerson().getNormalizedForm().getDescription(),
-                persistedNote.getPerson().getNormalizedForm().getDescription());
+        assertEquals(note.getPerson().getNormalizedForm().getName(), persistedNote.getPerson()
+                .getNormalizedForm().getName());
+        assertEquals(note.getPerson().getNormalizedForm().getDescription(), persistedNote
+                .getPerson().getNormalizedForm().getDescription());
         assertEquals(note.getFormat(), persistedNote.getFormat());
-        assertEquals(note.getPerson().getTimeOfBirth().getDate(), persistedNote
-                .getPerson().getTimeOfBirth().getDate());
-        assertEquals(note.getPerson().getTimeOfDeath().getDate(), persistedNote
-                .getPerson().getTimeOfDeath().getDate());
+        assertEquals(note.getPerson().getTimeOfBirth().getDate(), persistedNote.getPerson()
+                .getTimeOfBirth().getDate());
+        assertEquals(note.getPerson().getTimeOfDeath().getDate(), persistedNote.getPerson()
+                .getTimeOfDeath().getDate());
     }
 
     @Test
     public void Store_And_Retrieve_Person_With_The_Same_Birth_And_Death_Date() {
         DocumentNote documentNote = noteRepo
-        .createNote(docRev, "3",
-        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+                .createNote(docRev, "3",
+                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PERSON);
         Interval timeOfBirth = Interval.createYear(1834);
@@ -286,8 +307,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Place_Note() {
         DocumentNote documentNote = noteRepo
-        .createNote(docRev, "3",
-        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+                .createNote(docRev, "3",
+                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PLACE);
         NameForm normalizedForm = new NameForm("Tampere", "Kaupunki Hämeessä.");
@@ -296,11 +317,75 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         note.setPlace(new Place(normalizedForm, otherForms));
         noteRepo.save(note);
         Note persistedNote = documentNoteRepository.getById(documentNote.getId()).getNote();
-        assertEquals(note.getPlace().getNormalizedForm().getName(), persistedNote
-                .getPlace().getNormalizedForm().getName());
-        assertEquals(note.getPlace().getNormalizedForm().getDescription(),
-                persistedNote.getPlace().getNormalizedForm().getDescription());
+        assertEquals(note.getPlace().getNormalizedForm().getName(), persistedNote.getPlace()
+                .getNormalizedForm().getName());
+        assertEquals(note.getPlace().getNormalizedForm().getDescription(), persistedNote.getPlace()
+                .getNormalizedForm().getDescription());
         assertEquals(note.getFormat(), persistedNote.getFormat());
+    }
+
+    @Test
+    public void Query_For_All_Notes() {
+        assertEquals(6, documentNoteRepository.query(searchInfo).size());
+    }
+
+    @Test
+    public void Query_For_Notes_Based_On_Document() {
+        searchInfo.setDocument(docRev.getDocument());
+        assertEquals(4, documentNoteRepository.query(searchInfo).size());
+    }
+
+    @Test
+    public void Query_For_Notes_Based_On_Creator() {
+        UserInfo userInfo1 = new UserInfo();
+        userInfo1.setUsername("testo");
+        searchInfo.getCreators().add(userInfo1);
+        assertEquals(1, documentNoteRepository.query(searchInfo).size());
+    }
+
+    @Test
+    public void Query_For_Notes_Based_On_Creators() {
+        UserInfo userInfo1 = new UserInfo();
+        userInfo1.setUsername("testo");
+        UserInfo userInfo2 = new UserInfo();
+        userInfo2.setUsername("testo2");
+        searchInfo.getCreators().add(userInfo1);
+        searchInfo.getCreators().add(userInfo2);
+        assertEquals(2, documentNoteRepository.query(searchInfo).size());
+    }
+
+    @Test
+    @Ignore
+    public void Query_For_Notes_Based_On_Note_Type() {
+        searchInfo.getNoteTypes().add(NoteType.HISTORICAL);
+        assertEquals(2, documentNoteRepository.query(searchInfo).size());
+    }
+
+    private void addExtraNote(String username) {
+        DocumentNote documentNote = new DocumentNote();
+        documentNote.setDocument(new Document());
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername(username);
+        documentNote.setCreatedBy(userInfo);
+        Note note = new Note();
+        note.setLemma("thelemma");
+        note.setTypes(new HashSet<NoteType>());
+        note.getTypes().add(NoteType.HISTORICAL);
+        documentNote.setNote(note);
+        documentNote.setLongText("thelongtext");
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.save(documentNote);
+        } finally {
+            try {
+                if (session != null) {
+                    session.close();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private static final class PropertyModelMock implements PropertyModel {
@@ -364,6 +449,5 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
             return null;
         }
-
     }
 }

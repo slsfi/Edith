@@ -1,24 +1,30 @@
 package fi.finlit.edith.ui.services;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.User;
+import fi.finlit.edith.domain.UserInfo;
 
 public class DocumentNoteSearchInfo {
-    
-    private Document document;
-    
-    private Set<NoteType> noteTypes;
-    
-    private Set<NoteFormat> noteFormats;
-    
-    private Set<User> creators;
 
-    // TODO : sort criteria
-       
+    private Document document;
+
+    private Set<NoteType> noteTypes;
+
+    private Set<NoteFormat> noteFormats;
+
+    private Set<UserInfo> creators;
+
+    public DocumentNoteSearchInfo() {
+        document = null;
+        noteTypes = new HashSet<NoteType>();
+        noteFormats = new HashSet<NoteFormat>();
+        creators = new HashSet<UserInfo>();
+    }
+
     public Document getDocument() {
         return document;
     }
@@ -43,14 +49,14 @@ public class DocumentNoteSearchInfo {
         this.noteFormats = noteFormats;
     }
 
-    public Set<User> getCreators() {
+    public Set<UserInfo> getCreators() {
         return creators;
     }
 
-    public void setCreators(Set<User> creators) {
+    public void setCreators(Set<UserInfo> creators) {
         this.creators = creators;
     }
-    
-    
+
+
 
 }
