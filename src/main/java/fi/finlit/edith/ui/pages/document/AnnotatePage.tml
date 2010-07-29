@@ -107,8 +107,7 @@
 							<button class="delete_question">${message:delete}</button>
 							<span class="delete_dialog">
 								${message:delete}
-								<t:eventlink t:event="delete" t:zone="editZone"
-									context="noteOnEdit.id">${message:yes}</t:eventlink>
+								<t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
 								/
 								<a href="" class="delete_decline">${message:no}</a>
 							</span>
@@ -160,7 +159,7 @@
 			</t:if>
 		</t:block>
 		<t:zone t:id="commentZone">
-		                        <script type="text/javascript">
+		                <script type="text/javascript">
                             jQuery(".delete_dialog").hide();
 
                             jQuery(".delete_question").click(function(event) {
@@ -174,7 +173,7 @@
                                 jQuery(this).parent().hide();
                                 event.preventDefault();
                             });
-                    </script>
+                       </script>
 			<t:if test="noteId">
 				<div id="comments">
 					<h3>${message:comments}</h3>
@@ -192,7 +191,7 @@
                             <span class="delete_dialog">
                                 ${message:delete}
                                 <t:eventlink t:event="deleteComment" t:zone="commentZone" 
-                                    context="comment.id">${message:yes}</t:eventlink>
+                                    context="[noteId,comment.id]">${message:yes}</t:eventlink>
                                 /
                                 <a href="" class="delete_decline">${message:no}</a>
                             </span>

@@ -217,11 +217,11 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
     
-    Object onDeleteComment(String commentId) {
+    Object onDeleteComment(String noteId, String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
-        String noteId = deletedComment.getNote().getId();
-        Note n = noteRepository.getById(noteId);
-        comments = n.getComments();
+        noteOnEdit = documentNoteRepository.getById(noteId);        
+        comments = noteOnEdit.getNote().getComments();
+        comments.remove(deletedComment);
         return commentZone.getBody();
     }
 
