@@ -8,6 +8,7 @@ package fi.finlit.edith.ui.services;
 import static fi.finlit.edith.domain.QDocumentNote.documentNote;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
@@ -147,6 +148,12 @@ DocumentNoteRepository {
 
     private BeanSubQuery sub(PEntity<?> entity) {
         return new BeanSubQuery().from(entity);
+    }
+
+    @Override
+    public List<DocumentNote> query(DocumentNoteSearchInfo searchInfo) {
+        // TODO Auto-generated method stub
+        return Collections.emptyList();
     }
 
 }

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mysema.rdfbean.dao.Repository;
 
+import fi.finlit.edith.ui.services.DocumentNoteSearchInfo;
+
 /**
  * The Interface NoteRevisionRepository.
  */
@@ -47,5 +49,7 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      * @return
      */
     GridDataSource queryNotes(String searchTem);
+    
+    List<DocumentNote> query(DocumentNoteSearchInfo searchInfo);
 
 }
