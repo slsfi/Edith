@@ -158,7 +158,7 @@
 				</div>
 			</t:if>
 		</t:block>
-		<t:zone t:id="commentZone">
+		<t:zone t:id="commentZone" update="show">
 		                <script type="text/javascript">
                             jQuery(".delete_dialog").hide();
 

@@ -205,6 +205,9 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         if (selectedNotes.size() > 0) {
             noteOnEdit = selectedNotes.get(0);
             termOnEdit = getEditTerm(noteOnEdit.getNote());
+            comments = noteOnEdit.getNote().getComments();
+        }else{
+            comments = Collections.<NoteComment>emptySet();
         }
 
         // Order on lemma after we have selected the first one as a selection
@@ -212,8 +215,6 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         //        Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
-        //        noteId = noteOnEdit.getNote().getId();
-        comments = noteOnEdit.getNote().getComments();
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
 
@@ -230,7 +231,6 @@ import fi.finlit.edith.ui.services.ParagraphParser;
     }
 
     Object onSuccessFromCommentForm() throws IOException {
-        //        Note n = noteRepository.getById(noteId);
         comments = noteOnEdit.getNote().getComments();
         if (newCommentMessage != null) {
             comments.add(noteRepository.createComment(noteOnEdit.getNote(), newCommentMessage));
