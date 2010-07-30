@@ -128,7 +128,8 @@ public final class AppModule {
                 public ValueEncoder create(Class type) {                    
                     return new ValueEncoder(){
                         @Override
-                        public String toClient(Object value) {                            
+                        public String toClient(Object value) {
+                            // TODO : handle other id types as well
                             return idProperty.getValue(new BeanMap(value)).toString();
                         }
                         @Override
