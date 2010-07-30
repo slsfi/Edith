@@ -13,13 +13,13 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
-import fi.finlit.edith.ui.services.DocumentNoteSearchInfo;
 
 public class NoteSearchForm {
     

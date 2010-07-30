@@ -38,6 +38,7 @@ import com.mysema.rdfbean.object.SessionFactory;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Interval;
@@ -51,7 +52,6 @@ import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.DocumentNoteSearchInfo;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**

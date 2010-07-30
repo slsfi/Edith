@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mysema.rdfbean.dao.Repository;
 
-import fi.finlit.edith.ui.services.DocumentNoteSearchInfo;
 
 /**
  * The Interface NoteRevisionRepository.
