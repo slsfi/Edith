@@ -157,7 +157,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         Assert.notNull(searchInfo);
         EBoolean filters = new BooleanBuilder();
         filters.and(documentNote.deleted.eq(false));
-        filters.and(latest(documentNote));
         // document
         if (searchInfo.getDocument() != null) {
             filters.and(documentNote.document().svnPath.eq(searchInfo.getDocument().getSvnPath()));
@@ -173,15 +172,16 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         // formats
         if (!searchInfo.getNoteFormats().isEmpty()){
             filters.and(documentNote.note().format().in(searchInfo.getNoteFormats()));
-        }        
+        }
         // types
         if (!searchInfo.getNoteTypes().isEmpty()) {
-            EBoolean filter = new BooleanBuilder(); 
+            EBoolean filter = new BooleanBuilder();
             for (NoteType type : searchInfo.getNoteTypes()){
-                filter.or(documentNote.note().types.contains(type));    
+                filter.or(documentNote.note().types.contains(type));
             }
-            filters.and(filter);            
+            filters.and(filter);
         }
+        filters.and(latest(documentNote));
         return getSession().from(documentNote).where(filters).list(documentNote);
     }
 

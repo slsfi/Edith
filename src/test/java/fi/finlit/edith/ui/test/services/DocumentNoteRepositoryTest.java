@@ -355,9 +355,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    @Ignore
     public void Query_For_Notes_Based_On_Note_Type() {
         searchInfo.getNoteTypes().add(NoteType.HISTORICAL);
+        assertEquals(2, documentNoteRepository.query(searchInfo).size());
+    }
+
+    @Test
+    public void Query_For_Notes_Based_On_Note_Format() {
+        searchInfo.getNoteFormats().add(NoteFormat.PERSON);
         assertEquals(2, documentNoteRepository.query(searchInfo).size());
     }
 
@@ -371,6 +376,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         note.setLemma("thelemma");
         note.setTypes(new HashSet<NoteType>());
         note.getTypes().add(NoteType.HISTORICAL);
+        note.setFormat(NoteFormat.PERSON);
         documentNote.setNote(note);
         documentNote.setLongText("thelongtext");
         Session session = null;
