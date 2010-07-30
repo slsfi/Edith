@@ -58,8 +58,8 @@ public class NoteSearchForm {
     public Collection<UserInfo> getUsers(){
         Collection<User> users = userRepository.getAll(); 
         List<UserInfo> userIds = new ArrayList<UserInfo>(users.size());
-        for (User user : users){
-            userIds.add(new UserInfo(user.getUsername()));
+        for (User u : users){
+            userIds.add(new UserInfo(u.getUsername()));
         }
         return userIds;
     }
