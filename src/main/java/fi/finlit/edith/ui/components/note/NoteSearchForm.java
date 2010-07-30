@@ -22,6 +22,8 @@ import fi.finlit.edith.domain.UserRepository;
 import fi.finlit.edith.ui.services.DocumentNoteSearchInfo;
 
 public class NoteSearchForm {
+    
+    // TODO : default selection of current document
         
     @Property
     private DocumentNoteSearchInfo searchInfo;
