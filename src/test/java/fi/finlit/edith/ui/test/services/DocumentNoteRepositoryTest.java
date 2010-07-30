@@ -331,7 +331,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Query_For_Notes_Based_On_Document() {
-        searchInfo.setDocument(docRev.getDocument());
+        searchInfo.getDocuments().add(docRev.getDocument());
         assertEquals(4, documentNoteRepository.query(searchInfo).size());
     }
 

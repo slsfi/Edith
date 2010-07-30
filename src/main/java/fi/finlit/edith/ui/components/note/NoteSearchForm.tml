@@ -7,8 +7,13 @@
 				<div>
 					<strong>${message:document-label}</strong>
 				</div>
-				<div>
-					TODO
+				<div>					
+					<t:loop source="documents" value="document">
+						<div>
+							<t:checkbox value="documentSelected" />
+							${document.title}
+						</div>
+					</t:loop>
 				</div>
 			</div>
 			<div>

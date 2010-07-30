@@ -10,8 +10,10 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.User;
@@ -40,11 +42,17 @@ public class NoteSearchForm {
     @Property
     private UserInfo user;
     
+    @Property
+    private Document document;
+    
     @Inject
     private UserRepository userRepository;
     
     @Inject
     private DocumentNoteRepository documentNoteRepository;
+    
+    @Inject
+    private DocumentRepository documentRepository;
     
     void onPrepare(){
         searchInfo = new DocumentNoteSearchInfo();
@@ -107,5 +115,22 @@ public class NoteSearchForm {
             searchInfo.getCreators().remove(user);
         }
     }
-
+    
+    public Collection<Document> getDocuments(){
+        return documentRepository.getAll();
+    }
+    
+    public boolean isDocumentSelected(){
+        return searchInfo.getDocuments().contains(document);
+    }
+    
+    public void setDocumentSelected(boolean selected){
+        if (selected) {
+            searchInfo.getDocuments().add(document);
+        } else {
+            searchInfo.getDocuments().remove(document);
+        }
+    }
+    
+    
 }

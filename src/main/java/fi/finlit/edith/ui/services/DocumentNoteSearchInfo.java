@@ -14,7 +14,7 @@ import fi.finlit.edith.domain.UserInfo;
  */
 public class DocumentNoteSearchInfo {
 
-    private Document document;
+    private Set<Document> documents = new HashSet<Document>();
 
     private Set<NoteType> noteTypes = new HashSet<NoteType>();
 
@@ -22,19 +22,12 @@ public class DocumentNoteSearchInfo {
     
     private Set<UserInfo> creators = new HashSet<UserInfo>();
 
-    public DocumentNoteSearchInfo() {
-        document = null;
-        noteTypes = new HashSet<NoteType>();
-        noteFormats = new HashSet<NoteFormat>();
-        creators = new HashSet<UserInfo>();
+    public Set<Document> getDocuments() {
+        return documents;
     }
 
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
     }
 
     public Set<NoteType> getNoteTypes() {

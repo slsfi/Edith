@@ -158,8 +158,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         EBoolean filters = new BooleanBuilder();
         filters.and(documentNote.deleted.eq(false));
         // document
-        if (searchInfo.getDocument() != null) {
-            filters.and(documentNote.document().svnPath.eq(searchInfo.getDocument().getSvnPath()));
+        if (!searchInfo.getDocuments().isEmpty()) {
+            filters.and(documentNote.document().in(searchInfo.getDocuments()));
         }
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
