@@ -26,7 +26,7 @@
 	<p:rightPanel>
 		<div class="panel narrow">
 			<h3>${message:query}</h3>
-			<t:note.noteSearchForm documentNotes="documentNotes" notesList="notesList"/>
+			<t:note.noteSearchForm notesList="notesList" searchInfo="searchInfo"/>
 		</div>
 		
 		<t:form t:id="createTerm" t:zone="listZone">
@@ -146,13 +146,14 @@
 						<t:note.noteForm							
 							noteOnEdit="noteOnEdit" 
 							termOnEdit="termOnEdit"
-							documentNotes="documentNotes" 
 							documentRevision="documentRevision"
 							createTermSelection="createTermSelection"
 							updateLongTextSelection="updateLongTextSelection"
 							infoMessage="infoMessage"
 							selectedNotes="selectedNotes"
 							comments="comments"
+							searchInfo="searchInfo"
+							documentNotes="documentNotes"
 							
 							notesList="notesList"
 							noteEdit="noteEdit"

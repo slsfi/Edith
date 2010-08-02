@@ -25,6 +25,7 @@ import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -44,61 +45,78 @@ import fi.finlit.edith.ui.services.ParagraphParser;
  * @version $Id$
  */
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
-    "TextSelector.js", "AnnotatePage.js" })
-    @IncludeStylesheet("context:styles/tei.css")
-    public class AnnotatePage extends AbstractDocumentPage {
+@IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
+        "TextSelector.js", "AnnotatePage.js" })
+@IncludeStylesheet("context:styles/tei.css")
+public class AnnotatePage extends AbstractDocumentPage {
 
     private static final String EDIT_ZONE = "editZone";
 
     private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
 
-    @Inject
     @Property
-    private Block notesList;
+    private NoteComment comment;
+
+    @Property
+    private Set<NoteComment> comments;
+
+    @InjectComponent
+    @Property
+    private Zone commentZone;
+
+    @Property
+    private SelectedText createTermSelection;
+
+    @Inject
+    private DocumentNoteRepository documentNoteRepository;
+
+    private List<DocumentNote> documentNotes;
 
     @Inject
     @Property
-    private Block noteEdit;
+    private Block documentView;
 
     @Inject
     private Block emptyBlock;
-
-    @Inject
-    private Block infoBlock;
 
     @Inject
     @Property
     private Block errorBlock;
 
     @Inject
-    @Property
-    private Block documentView;
+    private Block infoBlock;
 
-    @InjectComponent
     @Property
-    private Zone commentZone;
+    private String infoMessage;
 
     @Inject
     private Messages messages;
 
     @Property
-    private String infoMessage;
+    private boolean moreThanOneSelectable;
 
     @Property
-    private List<DocumentNote> selectedNotes;
-
-    @Property
-    private List<DocumentNote> documentNotes;
+    private String newCommentMessage;
 
     @Property
     private DocumentNote note;
 
+    @Inject
+    @Property
+    private Block noteEdit;
+
     @Property
     private DocumentNote noteOnEdit;
 
+    @Inject
+    private NoteRepository noteRepository;
+
     @Property
-    private Term termOnEdit;
+    private String noteRevisionId;
+
+    @Inject
+    @Property
+    private Block notesList;
 
     @Inject
     private RenderSupport renderSupport;
@@ -106,43 +124,35 @@ import fi.finlit.edith.ui.services.ParagraphParser;
     @Inject
     private ComponentResources resources;
 
-    @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    @Persist
+    private DocumentNoteSearchInfo searchInfo;
 
-    @Inject
-    private NoteRepository noteRepository;
+    @Property
+    private List<DocumentNote> selectedNotes;
+
+    @Property
+    private Term termOnEdit;
 
     @Inject
     private TermRepository termRepository;
 
     @Property
-    private SelectedText createTermSelection;
-
-    @Property
-    private SelectedText updateLongTextSelection;
-
-    @Property
-    private boolean moreThanOneSelectable;
-
-    @Property
-    private NoteComment comment;
-
-    @Property
-    private String newCommentMessage;
-
-    @Property
-    private String noteRevisionId;
-
-    @Property
     private NoteType type;
 
     @Property
-    private Set<NoteComment> comments;
+    private SelectedText updateLongTextSelection;
 
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
         renderSupport.addScript("editLink = '" + link + "';");
+    }
+
+    public List<DocumentNote> getDocumentNotes() {
+        if ( documentNotes == null ) {
+            documentNotes = documentNoteRepository.query(getSearchInfo());
+        }
+        return documentNotes;
     }
 
     public Object[] getEditContext() {
@@ -155,13 +165,24 @@ import fi.finlit.edith.ui.services.ParagraphParser;
         return ctx.toArray();
     }
 
-    private Term getEditTerm(Note note) {
-        return note.getTerm() != null ? note
-                .getTerm().createCopy() : new Term();
+    private Term getEditTerm(Note n) {
+        return n.getTerm() != null ? n.getTerm().createCopy() : new Term();
     }
 
-    public String getNoteId(){
+    public String getNoteId() {
         return noteOnEdit != null ? noteOnEdit.getId() : null;
+    }
+
+    public DocumentNoteSearchInfo getSearchInfo() {
+        if (searchInfo == null) {
+            searchInfo = new DocumentNoteSearchInfo();
+            searchInfo.getDocuments().add(getDocument());
+        }
+        return searchInfo;
+    }
+
+    void setupRender() {
+        searchInfo = null;
     }
 
     void onActivate() {
@@ -176,12 +197,17 @@ import fi.finlit.edith.ui.services.ParagraphParser;
 
         // prepare view with new revision
         getDocumentRevision().setRevision(documentRevision.getRevision());
-        documentNotes = documentNoteRepository.getOfDocument(documentRevision);
         selectedNotes = Collections.emptyList();
-        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock)
-        .add("listZone", notesList)
-        .add("documentZone", documentView)
-        .add("commentZone", emptyBlock);
+        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList)
+                .add("documentZone", documentView).add("commentZone", emptyBlock);
+    }
+
+    Object onDeleteComment(String noteId, String commentId) {
+        NoteComment deletedComment = noteRepository.removeComment(commentId);
+        noteOnEdit = documentNoteRepository.getById(noteId);
+        comments = noteOnEdit.getNote().getComments();
+        comments.remove(deletedComment);
+        return commentZone.getBody();
     }
 
     Object onEdit(EventContext context) {
@@ -206,24 +232,12 @@ import fi.finlit.edith.ui.services.ParagraphParser;
             noteOnEdit = selectedNotes.get(0);
             termOnEdit = getEditTerm(noteOnEdit.getNote());
             comments = noteOnEdit.getNote().getComments();
-        }else{
-            comments = Collections.<NoteComment>emptySet();
+        } else {
+            comments = Collections.<NoteComment> emptySet();
         }
-
-        // Order on lemma after we have selected the first one as a selection
-        // FIXME
-        //        Collections.sort(selectedNotes, new NoteComparator());
 
         moreThanOneSelectable = selectedNotes.size() > 1;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
-    }
-
-    Object onDeleteComment(String noteId, String commentId) {
-        NoteComment deletedComment = noteRepository.removeComment(commentId);
-        noteOnEdit = documentNoteRepository.getById(noteId);        
-        comments = noteOnEdit.getNote().getComments();
-        comments.remove(deletedComment);
-        return commentZone.getBody();
     }
 
     void onPrepareFromCommentForm(String id) {
@@ -255,19 +269,19 @@ import fi.finlit.edith.ui.services.ParagraphParser;
 
         // prepare view (with new revision)
         documentRevision.setRevision(documentNote.getSVNRevision());
-        documentNotes = documentNoteRepository.getOfDocument(documentRevision);
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        //        noteId = noteOnEdit.getNote().getId();
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
-        .add("listZone", notesList)
-        .add("documentZone", documentView)
-        .add("commentZone", commentZone.getBody());
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
+                .add("documentZone", documentView).add("commentZone", commentZone.getBody());
     }
 
-    void setupRender() {
-        documentNotes = documentNoteRepository.getOfDocument(getDocumentRevision());
+    public void setDocumentNotes(List<DocumentNote> documentNotes) {
+        this.documentNotes = documentNotes;
+    }
+
+    public void setSearchInfo(DocumentNoteSearchInfo searchInfo) {
+        this.searchInfo = searchInfo;
     }
 
 }

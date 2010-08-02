@@ -10,8 +10,6 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteFormat;
@@ -21,15 +19,8 @@ import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
 
 public class NoteSearchForm {
-
-    // TODO : default selection of current document
-
-    @Property
-    private DocumentNoteSearchInfo searchInfo;
-
-    @SuppressWarnings("unused")
     @Parameter
-    private List<DocumentNote> documentNotes;
+    private DocumentNoteSearchInfo searchInfo;
 
     @Parameter
     private Block notesList;
@@ -50,17 +41,9 @@ public class NoteSearchForm {
     private UserRepository userRepository;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
-
-    @Inject
     private DocumentRepository documentRepository;
 
-    void onPrepare(){
-        searchInfo = new DocumentNoteSearchInfo();
-    }
-
     Object onSuccessFromNoteSearchForm() {
-        documentNotes = documentNoteRepository.query(searchInfo);
         return notesList;
     }
 
