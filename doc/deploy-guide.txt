@@ -1,8 +1,3 @@
-TEE DEPLOYMENT MYÖS GLOSSARYSTA
-
-
-
-
 Edithin ip-osoite on 128.214.12.238
 
 mvn -Psks clean package
