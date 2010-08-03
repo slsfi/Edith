@@ -2,15 +2,12 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-
 import javax.xml.stream.XMLStreamException;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.ParagraphElement;
 import fi.finlit.edith.domain.StringElement;
 import fi.finlit.edith.ui.services.ParagraphParser;
 

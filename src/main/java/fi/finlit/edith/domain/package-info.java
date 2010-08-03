@@ -11,6 +11,6 @@
 @QuerydslConfig(entityAccessors = true)
 package fi.finlit.edith.domain;
 
-import com.mysema.rdfbean.annotations.MappedClasses;
 import com.mysema.query.annotations.QuerydslConfig;
+import com.mysema.rdfbean.annotations.MappedClasses;
 

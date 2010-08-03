@@ -7,6 +7,7 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -50,7 +51,6 @@ import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.domain.UserRepository;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -80,9 +80,6 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Inject
     private SessionFactory sessionFactory;
 
-    @Inject
-    private UserRepository userRepository;
-
     private Document document;
 
     private DocumentRevision docRev;
@@ -95,10 +92,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Save_Document_Note_With_An_Existing_Lemma_Is_Mapped_To_The_Existing_Note() {
         final String lemmaMeaning = "a legendary placeholder";
         final String lemma = "foobar";
-        Document document = new Document();
+        Document doc = new Document();
 
         DocumentNote dn1 = new DocumentNote();
-        dn1.setDocument(document);
+        dn1.setDocument(doc);
         dn1.setLocalId("1");
         Note n1 = new Note();
         n1.setLemma(lemma);
@@ -106,7 +103,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         dn1.setNote(n1);
 
         DocumentNote dn2 = new DocumentNote();
-        dn2.setDocument(document);
+        dn2.setDocument(doc);
         dn2.setLocalId("2");
         Note n2 = new Note();
         n2.setLemma(lemma);
@@ -133,10 +130,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Change_Backing_Note_To_Another_Note() {
         final String lemmaMeaning = "a legendary placeholder";
         final String lemma = "foobar";
-        Document document = new Document();
+        Document doc = new Document();
 
         DocumentNote dn1 = new DocumentNote();
-        dn1.setDocument(document);
+        dn1.setDocument(doc);
         dn1.setLocalId("1");
         Note n1 = new Note();
         n1.setLemma(lemma);
@@ -144,7 +141,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         dn1.setNote(n1);
 
         DocumentNote dn2 = new DocumentNote();
-        dn2.setDocument(document);
+        dn2.setDocument(doc);
         dn2.setLocalId("2");
         Note n2 = new Note();
         n2.setLemma("barfoo");
@@ -364,6 +361,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Query_For_Notes_Based_On_Note_Format() {
         searchInfo.getNoteFormats().add(NoteFormat.PERSON);
         assertEquals(2, documentNoteRepository.query(searchInfo).size());
+    }
+
+    @Test
+    public void Get_Document_Notes_Of_Note() {
+        List<DocumentNote> documentNotesOfDocument = documentNoteRepository.getOfDocument(docRev);
+        assertFalse(documentNotesOfDocument.isEmpty());
+        List<DocumentNote> documentNotesOfNote = documentNoteRepository.getOfNote(documentNotesOfDocument.get(0).getNote().getId());
+        assertFalse(documentNotesOfNote.isEmpty());
     }
 
     private void addExtraNote(String username) {

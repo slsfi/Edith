@@ -42,13 +42,20 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
     List<DocumentNote> getOfDocument(DocumentRevision docRevision);
 
     /**
+     * Get the document notes of the given note.
+     * @param noteId
+     * @return
+     */
+    List<DocumentNote> getOfNote(String noteId);
+
+    /**
      * Query for notes matching the given search term
      *
      * @param searchTem
      * @return
      */
     GridDataSource queryNotes(String searchTem);
-    
+
     List<DocumentNote> query(DocumentNoteSearchInfo searchInfo);
 
 }

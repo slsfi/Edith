@@ -12,10 +12,8 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
-import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
@@ -24,8 +22,24 @@ import org.apache.tapestry5.util.EnumSelectModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.*;
-import fi.finlit.edith.ui.pages.document.AnnotatePage;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Interval;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteStatus;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.TermLanguage;
+import fi.finlit.edith.domain.TermRepository;
 import fi.finlit.edith.ui.services.ParagraphParser;
 
 @SuppressWarnings("unused")
@@ -81,7 +95,6 @@ public class NoteForm {
 
     @Property
     private String newPersonFirst;
-
 
     @Property
     private String newPersonLast;
@@ -140,13 +153,13 @@ public class NoteForm {
     }
 
     public String getTimeOfBirth() {
-        return noteOnEdit.getNote().getPerson().getTimeOfBirth() == null ? null : noteOnEdit.getNote().getPerson()
-                .getTimeOfBirth().asString();
+        return noteOnEdit.getNote().getPerson().getTimeOfBirth() == null ? null : noteOnEdit
+                .getNote().getPerson().getTimeOfBirth().asString();
     }
 
     public String getTimeOfDeath() {
-        return noteOnEdit.getNote().getPerson().getTimeOfDeath() == null ? null : noteOnEdit.getNote().getPerson()
-                .getTimeOfDeath().asString();
+        return noteOnEdit.getNote().getPerson().getTimeOfDeath() == null ? null : noteOnEdit
+                .getNote().getPerson().getTimeOfDeath().asString();
     }
 
     @Validate("required")
@@ -223,12 +236,11 @@ public class NoteForm {
         noteOnEdit.setStatus(status);
     }
 
-
     public EnumSelectModel getStatusModel() {
-        NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(
-                NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
-            NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
-                return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
+        NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(NoteStatus.INITIAL) ? new NoteStatus[] {
+                NoteStatus.INITIAL, NoteStatus.DRAFT, NoteStatus.FINISHED }
+                : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
+        return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
 
     public NoteType[] getTypes() {
@@ -252,22 +264,21 @@ public class NoteForm {
     }
 
     private Term getEditTerm(Note note) {
-        return note.getTerm() != null ? note
-                .getTerm().createCopy() : new Term();
+        return note.getTerm() != null ? note.getTerm().createCopy() : new Term();
     }
-
 
     Object onSuccessFromNoteEditForm() throws IOException {
         DocumentNote noteRevision;
         if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
             noteOnEdit.setStatus(NoteStatus.DRAFT);
         }
-        updateNames(noteOnEdit.getNote().getPerson().getOtherForms(), newPersonFirst, newPersonLast,
-                newPersonDescription);
+        updateNames(noteOnEdit.getNote().getPerson().getOtherForms(), newPersonFirst,
+                newPersonLast, newPersonDescription);
         newPersonFirst = null;
         newPersonLast = null;
         newPersonDescription = null;
-        updateName(noteOnEdit.getNote().getPlace().getOtherForms(), newPlaceName, newPlaceDescription);
+        updateName(noteOnEdit.getNote().getPlace().getOtherForms(), newPlaceName,
+                newPlaceDescription);
         newPlaceName = null;
         newPlaceDescription = null;
 
@@ -296,13 +307,11 @@ public class NoteForm {
         selectedNotes = Collections.singletonList(noteRevision);
         noteOnEdit = noteRevision;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        //        noteId = noteOnEdit.getNote().getId();
+        // noteId = noteOnEdit.getNote().getId();
         comments = noteOnEdit.getNote().getComments();
         submitSuccess = true;
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
-        .add("listZone", notesList)
-        .add("documentZone", documentView)
-        .add("commentZone", commentZone.getBody());
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
+                .add("documentZone", documentView).add("commentZone", commentZone.getBody());
     }
 
     private void saveTerm(DocumentNote noteRevision) {
@@ -311,7 +320,8 @@ public class NoteForm {
         List<Term> terms = termRepository.findByBasicForm(termOnEdit.getBasicForm());
         Term term = terms.isEmpty() ? termOnEdit : null;
         for (Term current : terms) {
-            if (termOnEdit.getMeaning().equals(current.getMeaning())) {
+            if (termOnEdit.getMeaning() == null && current.getMeaning() == null
+                    || termOnEdit.getMeaning().equals(current.getMeaning())) {
                 term = current;
                 term.setLanguage(termOnEdit.getLanguage());
                 break;

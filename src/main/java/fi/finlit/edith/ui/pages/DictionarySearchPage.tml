@@ -14,7 +14,7 @@
             <p:appearancesCell>
             	<t:if test="term.undeletedNotes">
                 	<t:loop source="term.undeletedNotes" value="note">
-<!--       FIXME             	<div><em>${note.lemma}</em> (${note.latestRevision.longText})<t:note.metadata note="note.latestRevision"/></div>-->
+                        <div><em>${note.lemma}</em> (${longTexts})<t:note.metadata note="note"/></div>
                 	</t:loop>
                 	<p:else>
                 		<strong>${message:all-revisions-removed}</strong>

@@ -28,7 +28,7 @@
             </div>
             <div class="cleaner"> </div>
             <t:grid source="documentNotes" row="documentNote" rowsPerPage="20" t:encoder="encoder"
-                include="lemma,longText,description,subtextSources" add="documentRevision,basicForm,meaning,status,actions">
+                include="longText" add="lemma,description,subtextSources,documentRevision,basicForm,meaning,actions">
                 <p:lemmaCell>
                     <t:if test="editMode">
                         <t:inlineField t:id="lemma" value="documentNote.note.lemma" value1="documentNote.note.lemma"/>

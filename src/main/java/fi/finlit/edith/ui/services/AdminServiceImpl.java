@@ -11,8 +11,8 @@ import com.mysema.rdfbean.dao.AbstractService;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Term;
 
 /**

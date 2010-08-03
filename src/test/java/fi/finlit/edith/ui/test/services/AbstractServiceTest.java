@@ -5,19 +5,14 @@
  */
 package fi.finlit.edith.ui.test.services;
 
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 
-import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 

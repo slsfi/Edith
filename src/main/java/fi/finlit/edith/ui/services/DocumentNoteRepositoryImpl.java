@@ -21,6 +21,7 @@ import com.mysema.query.types.expr.EBoolean;
 import com.mysema.query.types.path.PEntity;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
+import com.mysema.rdfbean.object.BeanQuery;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
@@ -171,13 +172,13 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             filters.and(documentNote.createdBy().username.in(usernames));
         }
         // formats
-        if (!searchInfo.getNoteFormats().isEmpty()){
+        if (!searchInfo.getNoteFormats().isEmpty()) {
             filters.and(documentNote.note().format().in(searchInfo.getNoteFormats()));
         }
         // types
         if (!searchInfo.getNoteTypes().isEmpty()) {
             EBoolean filter = new BooleanBuilder();
-            for (NoteType type : searchInfo.getNoteTypes()){
+            for (NoteType type : searchInfo.getNoteTypes()) {
                 filter.or(documentNote.note().types.contains(type));
             }
             filters.and(filter);
@@ -186,4 +187,11 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession().from(documentNote).where(filters).list(documentNote);
     }
 
+    @Override
+    public List<DocumentNote> getOfNote(String noteId) {
+        Assert.notNull(noteId);
+        BeanQuery query = getSession().from(documentNote).where(documentNote.note().id.eq(noteId),
+                documentNote.deleted.eq(false), latest(documentNote));
+        return query.list(documentNote);
+    }
 }

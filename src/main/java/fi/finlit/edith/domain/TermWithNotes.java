@@ -19,7 +19,7 @@ import fi.finlit.edith.EDITH;
  * @author tiwe
  * @version $Id$
  */
-@ClassMapping(ns=EDITH.NS, ln="Term")
+@ClassMapping(ns = EDITH.NS, ln = "Term")
 public class TermWithNotes {
 
     @Predicate
@@ -28,7 +28,7 @@ public class TermWithNotes {
     @Predicate
     private String meaning;
 
-    @Predicate(ln="term", inv=true)
+    @Predicate(ln = "term", inv = true)
     private Set<Note> notes;
 
     public String getBasicForm() {
@@ -46,12 +46,7 @@ public class TermWithNotes {
     public Set<Note> getUndeletedNotes() {
         Set<Note> result = new HashSet<Note>();
         for (Note note : notes) {
-            /* The null check is not necessary in a perfect world, but we have corrupted
-             * data in production so lets keep it here until that is fixed. */
-//            if (note.getLatestRevision() != null && !note.getLatestRevision().isDeleted()) {
-                result.add(note);
-//            }
-            // FIXME
+            result.add(note);
         }
         return result;
     }

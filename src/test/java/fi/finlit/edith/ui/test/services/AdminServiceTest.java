@@ -14,8 +14,8 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.ui.services.AdminService;
 
 /**

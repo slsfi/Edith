@@ -1,10 +1,10 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 	<t:content>
 		<span>
-			<t:if test="documentNote.note.description">, <t:markdown value="documentNote.note.description"/></t:if>
-			<t:if test="documentNote.note.subtextSources">, <t:markdown value="documentNote.note.subtextSources"/></t:if>
-			<t:if test="documentNote.note.term">
-				<t:if test="documentNote.note.term.meaning">, ${documentNote.note.term.meaning}</t:if>
+			<t:if test="note.description">, <t:markdown value="note.description"/></t:if>
+			<t:if test="note.subtextSources">, <t:markdown value="note.subtextSources"/></t:if>
+			<t:if test="note.term">
+				<t:if test="note.term.meaning">, ${note.term.meaning}</t:if>
 			</t:if>
 		</span>
     </t:content>

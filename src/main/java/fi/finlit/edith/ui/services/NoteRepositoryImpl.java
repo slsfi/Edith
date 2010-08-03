@@ -26,7 +26,16 @@ import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.LinkElement;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.Paragraph;
+import fi.finlit.edith.domain.StringElement;
+import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.domain.UserRepository;
 
 /**
  * NoteRepositoryImpl provides

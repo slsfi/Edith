@@ -25,7 +25,7 @@
                     <t:loop source="documentNotes" value="documentNote">
                     <li>
                         <a href="#start${documentNote.localId}" class="notelink"><em>${documentNote.note.lemma}</em></a>
-                        <t:note.metadata documentNote="documentNote"/>
+                        <t:note.metadata note="documentNote.note"/>
                     </li>
                     </t:loop>
                 </ul>        

@@ -34,9 +34,9 @@ import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.TermRepository;
 import fi.finlit.edith.domain.UserRepository;
 import fi.finlit.edith.ui.services.svn.SubversionService;
