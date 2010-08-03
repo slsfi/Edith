@@ -89,17 +89,17 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .orderBy(documentNote.createdOn.asc()).list(documentNote);
     }
 
-    private EBoolean latestFor(QDocumentNote documentNote, long svnRevision) {
-        return sub(otherNote).where(otherNote.ne(documentNote),
+    private EBoolean latestFor(QDocumentNote docNote, long svnRevision) {
+        return sub(otherNote).where(otherNote.ne(docNote),
                 // otherNote.note().eq(documentNote.note()),
-                otherNote.localId.eq(documentNote.localId), otherNote.svnRevision.loe(svnRevision),
-                otherNote.createdOn.gt(documentNote.createdOn)).notExists();
+                otherNote.localId.eq(docNote.localId), otherNote.svnRevision.loe(svnRevision),
+                otherNote.createdOn.gt(docNote.createdOn)).notExists();
     }
 
-    private EBoolean latest(QDocumentNote documentNote) {
-        return sub(otherNote).where(otherNote.ne(documentNote),
-                otherNote.note().eq(documentNote.note()),
-                otherNote.createdOn.gt(documentNote.createdOn)).notExists();
+    private EBoolean latest(QDocumentNote docNote) {
+        return sub(otherNote).where(otherNote.ne(docNote),
+                otherNote.note().eq(docNote.note()),
+                otherNote.createdOn.gt(docNote.createdOn)).notExists();
     }
 
     @Override
@@ -138,16 +138,16 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     @Override
-    public DocumentNote save(DocumentNote documentNote) {
+    public DocumentNote save(DocumentNote docNote) {
         UserInfo createdBy = userRepository.getCurrentUser();
-        documentNote.setCreatedOn(timeService.currentTimeMillis());
-        documentNote.setCreatedBy(createdBy);
-        Note note = noteRepository.find(documentNote.getNote().getLemma());
-        if (note != null && !documentNote.getNote().equals(note)) {
-            documentNote.setNote(note);
+        docNote.setCreatedOn(timeService.currentTimeMillis());
+        docNote.setCreatedBy(createdBy);
+        Note note = noteRepository.find(docNote.getNote().getLemma());
+        if (note != null && !docNote.getNote().equals(note)) {
+            docNote.setNote(note);
         }
-        getSession().save(documentNote);
-        return documentNote;
+        getSession().save(docNote);
+        return docNote;
     }
 
     private BeanSubQuery sub(PEntity<?> entity) {

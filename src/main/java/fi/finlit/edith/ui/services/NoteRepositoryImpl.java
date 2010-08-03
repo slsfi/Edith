@@ -76,8 +76,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public NoteComment createComment(Note note, String message) {
-        NoteComment comment = new NoteComment(note, message, authService.getUsername());
+    public NoteComment createComment(Note n, String message) {
+        NoteComment comment = new NoteComment(n, message, authService.getUsername());
         getSession().save(comment);
         return comment;
     }

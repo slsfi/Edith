@@ -74,14 +74,17 @@ public class ServiceTestModule {
         configuration.add(Repository.class, repository);
 
         AuthService authService = new AuthService() {
+            @Override
             public String getUsername() {
                 return "timo";
             }
 
+            @Override
             public boolean isAuthenticated() {
                 return true;
             }
 
+            @Override
             public void logout() {
             }
         };

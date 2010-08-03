@@ -155,6 +155,7 @@ public class SubversionServiceImpl implements SubversionService {
         }
     }
 
+    @Override
     public void destroy() {
         try {
             svnRepository.closeSession();
@@ -273,6 +274,7 @@ public class SubversionServiceImpl implements SubversionService {
 
     }
 
+    @Override
     public void initialize() {
         logger.info("Initializing SVN repository on: " + svnRepo.getAbsolutePath());
         try {

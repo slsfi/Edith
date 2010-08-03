@@ -69,6 +69,7 @@ public class JQueryAutocomplete {
         matchesHolder.put(Collections.<Object> emptyList());
 
         ComponentEventCallback<Object> callback = new ComponentEventCallback<Object>() {
+            @Override
             public boolean handleResult(Object result) {
                 @SuppressWarnings("unchecked")
                 List<Object> matches = coercer.coerce(result, List.class);

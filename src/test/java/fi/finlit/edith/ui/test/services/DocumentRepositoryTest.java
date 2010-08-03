@@ -99,7 +99,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         DocumentNote documentNote = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, text));
 
         assertEquals(count+1, documentNoteRepository.queryNotes("*").getAvailableRows());
-        int countInDoc = documentNoteRepository.getOfDocument(document.getRevision(documentNote.getSVNRevision())).size();
         // remove
         documentRepo.removeNotes(document.getRevision(documentNote.getSVNRevision()), documentNote);
         DocumentNote deletedDocumentNote = documentNoteRepository.getByLocalId(document.getRevision(documentNote.getSVNRevision() + 1), documentNote.getLocalId());
@@ -109,10 +108,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         int available = dataSource.getAvailableRows();
         dataSource.prepare(0, 1000, new ArrayList<SortConstraint>());
         assertEquals(0, available);
-
-//        long svnRevision = deletedDocumentNote.getSvnRevision();
-//        assertEquals(countInDoc - 1, documentNoteRepository.getOfDocument(document.getRevision(svnRevision)).size());
-//        assertEquals(count, available);
     }
 
     @Test
@@ -121,7 +116,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "s";
 
-        DocumentNote note1 = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, 1, 1, text));
+        documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, 1, 1, text));
         DocumentNote note2 = documentRepo.addNote(document.getRevision(-1), new SelectedText(element, element, 2, 2, text));
         List<DocumentNote> documentNotes = documentNoteRepository.getOfDocument(note2.getDocRevision());
         assertEquals(2, documentNotes.size());

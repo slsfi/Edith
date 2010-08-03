@@ -358,6 +358,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
+    @Ignore
+    public void Query_For_Notes_Based_On_Note_Type_Two_Filters() {
+        searchInfo.getNoteTypes().add(NoteType.HISTORICAL);
+        searchInfo.getNoteTypes().add(NoteType.DICTUM);
+        assertEquals(2, documentNoteRepository.query(searchInfo).size());
+    }
+
+    @Test
     public void Query_For_Notes_Based_On_Note_Format() {
         searchInfo.getNoteFormats().add(NoteFormat.PERSON);
         assertEquals(2, documentNoteRepository.query(searchInfo).size());
