@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -40,10 +40,12 @@ public class PrimaryKeyEncoder<T extends Identifiable> implements ValueEncoder<T
         return result;
     }
 
+    @Override
     public String toClient(T value) {
         return value.getId();
     }
 
+    @Override
     public T toValue(String id) {
         T rv = repository.getById(id);
         keyToValue.put(id, rv);
