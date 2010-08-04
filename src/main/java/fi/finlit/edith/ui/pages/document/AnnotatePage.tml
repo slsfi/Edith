@@ -122,7 +122,7 @@
 							var hideBasedOnFormat = function() {
 							var type
 							=jQuery("select[name='format']").val();
-							jQuery("#editZone.note").hide();
+							jQuery("#editZone .note").hide();
 							jQuery("#editZone .place").hide();
 							jQuery("#editZone .person").hide();
 							if (type ==
