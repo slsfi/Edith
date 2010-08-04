@@ -8,6 +8,7 @@ package fi.finlit.edith.ui.pages.document;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,7 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.OrderBy;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermRepository;
@@ -151,8 +153,37 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public List<DocumentNote> getDocumentNotes() {
-        if ( documentNotes == null ) {
+        if (documentNotes == null) {
             documentNotes = documentNoteRepository.query(getSearchInfo());
+        }
+        if (getSearchInfo().getOrderBy() == OrderBy.LEMMA) {
+            Collections.sort(documentNotes, new Comparator<DocumentNote>() {
+                @Override
+                public int compare(DocumentNote o1, DocumentNote o2) {
+                    return o1.getNote().getLemma().compareTo(o2.getNote().getLemma());
+                }
+            });
+        } else if (getSearchInfo().getOrderBy() == OrderBy.DATE) {
+            Collections.sort(documentNotes, new Comparator<DocumentNote>() {
+                @Override
+                public int compare(DocumentNote o1, DocumentNote o2) {
+                    return Long.valueOf(o1.getCreatedOn()).compareTo(o2.getCreatedOn());
+                }
+            });
+        } else if (getSearchInfo().getOrderBy() == OrderBy.STATUS) {
+            Collections.sort(documentNotes, new Comparator<DocumentNote>() {
+                @Override
+                public int compare(DocumentNote o1, DocumentNote o2) {
+                    return o1.getStatus().compareTo(o2.getStatus());
+                }
+            });
+        } else if (getSearchInfo().getOrderBy() == OrderBy.USER) {
+            Collections.sort(documentNotes, new Comparator<DocumentNote>() {
+                @Override
+                public int compare(DocumentNote o1, DocumentNote o2) {
+                    return o1.getCreatedBy().getUsername().compareTo(o2.getCreatedBy().getUsername());
+                }
+            });
         }
         return documentNotes;
     }

@@ -14,6 +14,7 @@ import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.OrderBy;
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
@@ -42,6 +43,9 @@ public class NoteSearchForm {
 
     @Inject
     private DocumentRepository documentRepository;
+
+    @Property
+    private OrderBy loopedOrderBy;
 
     Object onSuccessFromNoteSearchForm() {
         return notesList;
@@ -114,6 +118,18 @@ public class NoteSearchForm {
         } else {
             searchInfo.getDocuments().remove(document);
         }
+    }
+
+    public void setOrderBy(OrderBy orderBy) {
+        searchInfo.setOrderBy(orderBy);
+    }
+
+    public OrderBy getOrderBy() {
+        return searchInfo.getOrderBy();
+    }
+
+    public OrderBy[] getOrderBys() {
+        return OrderBy.values();
     }
 
 

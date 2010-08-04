@@ -29,6 +29,21 @@
 					</t:loop>
 				</div>
 			</div>		
+			<div>
+                <div>
+                    <strong>${message:orderBy-label}</strong>
+                </div>
+                <div>
+                    <t:radiogroup t:id="orderBy">
+                        <t:loop source="orderBys" value="loopedOrderBy">
+                        <div>
+                            <t:radio t:id="loopedOrderBy" value="loopedOrderBy"></t:radio>
+                            <t:label for="loopedOrderBy"><t:fmt.message key="${loopedOrderBy}" /></t:label>
+                        </div>
+                        </t:loop>
+                    </t:radiogroup>
+                </div>
+            </div>  
 			</div>
 			
 			<div class="left">

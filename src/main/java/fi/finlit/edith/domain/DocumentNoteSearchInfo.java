@@ -3,20 +3,20 @@ package fi.finlit.edith.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /**
  * @author tiwe
  *
  */
 public class DocumentNoteSearchInfo {
-
     private Set<Document> documents = new HashSet<Document>();
 
     private Set<NoteType> noteTypes = new HashSet<NoteType>();
 
     private Set<NoteFormat> noteFormats = new HashSet<NoteFormat>();
-    
+
     private Set<UserInfo> creators = new HashSet<UserInfo>();
+
+    private OrderBy orderBy = OrderBy.LEMMA;
 
     public Set<Document> getDocuments() {
         return documents;
@@ -50,6 +50,11 @@ public class DocumentNoteSearchInfo {
         this.creators = creators;
     }
 
+    public OrderBy getOrderBy() {
+        return orderBy;
+    }
 
-
+    public void setOrderBy(OrderBy orderBy) {
+        this.orderBy = orderBy;
+    }
 }
