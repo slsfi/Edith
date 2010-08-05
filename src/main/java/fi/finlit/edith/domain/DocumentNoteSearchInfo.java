@@ -57,4 +57,13 @@ public class DocumentNoteSearchInfo {
     public void setOrderBy(OrderBy orderBy) {
         this.orderBy = orderBy;
     }
+
+    @Override
+    public String toString() {
+        return "DocumentNoteSearchInfo [documents=" + documents + ", noteTypes=" + noteTypes
+                + ", noteFormats=" + noteFormats + ", creators=" + creators + ", orderBy="
+                + orderBy + "]";
+    }
+
+
 }
