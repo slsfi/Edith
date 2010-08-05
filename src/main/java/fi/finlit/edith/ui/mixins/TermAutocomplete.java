@@ -11,7 +11,7 @@ import org.apache.tapestry5.json.JSONObject;
 import fi.finlit.edith.domain.Term;
 
 // TODO : use common superclass for TermAutocomplete and JQueryAutocomplete
-@IncludeJavaScriptLibrary( { "term-autocomplete.js" })
+@IncludeJavaScriptLibrary({ "term-autocomplete.js" })
 public class TermAutocomplete extends JQueryAutocomplete {
 
     @Override
@@ -28,10 +28,16 @@ public class TermAutocomplete extends JQueryAutocomplete {
         for (Object o : matches) {
             Term term = (Term) o;
             /* "value" is the item used by the autocompletion to visualize the list element. */
-            a.put(new JSONObject().put("basicForm", term.getBasicForm()).put("meaning",
-                    term.getMeaning())
-                    .put("value", term.getBasicForm() + " - " + StringUtils.abbreviate(term.getMeaning(), 32)).put("language",
-                            String.valueOf(term.getLanguage())));
+            JSONObject json = new JSONObject().put("basicForm", term.getBasicForm());
+            json.put("language", String.valueOf(term.getLanguage()));
+            json.put("meaning", term.getMeaning());
+            if (term.getMeaning() != null) {
+                json.put("value",
+                        term.getBasicForm() + " - " + StringUtils.abbreviate(term.getMeaning(), 32));
+            } else {
+                json.put("value", term.getBasicForm());
+            }
+            a.put(json);
         }
 
         return a;
