@@ -9,12 +9,14 @@
     </div>
         
     <p:leftPanel>
-        <p>
+    <div id="document_links">
+        <span>
         	<a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:to-annotate-document}</a>
-        </p>
-        <p>
+        </span>
+        <span>
             <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
-        </p>
+        </span>
+        </div>
     </p:leftPanel>
 
     <p:rightPanel>

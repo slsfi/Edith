@@ -13,14 +13,15 @@
 	</div>
 
 	<p:leftPanel>
-		<p>
-			<a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a>
-		</p>
-		<p>
-			<t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}
-			</t:pagelink>
-		</p>
-
+	   <div id="document_links">
+		  <span>
+			 <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a>
+		  </span>
+		  <span>
+			 <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}
+		     </t:pagelink>
+		  </span>
+	   </div>
 	</p:leftPanel>
 
 	<p:rightPanel>
