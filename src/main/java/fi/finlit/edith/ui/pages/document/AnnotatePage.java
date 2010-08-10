@@ -156,35 +156,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (documentNotes == null) {
             documentNotes = documentNoteRepository.query(getSearchInfo());
         }
-        if (getSearchInfo().getOrderBy() == OrderBy.LEMMA) {
-            Collections.sort(documentNotes, new Comparator<DocumentNote>() {
-                @Override
-                public int compare(DocumentNote o1, DocumentNote o2) {
-                    return o1.getNote().getLemma().compareTo(o2.getNote().getLemma());
-                }
-            });
-        } else if (getSearchInfo().getOrderBy() == OrderBy.DATE) {
-            Collections.sort(documentNotes, new Comparator<DocumentNote>() {
-                @Override
-                public int compare(DocumentNote o1, DocumentNote o2) {
-                    return Long.valueOf(o1.getCreatedOn()).compareTo(o2.getCreatedOn());
-                }
-            });
-        } else if (getSearchInfo().getOrderBy() == OrderBy.STATUS) {
-            Collections.sort(documentNotes, new Comparator<DocumentNote>() {
-                @Override
-                public int compare(DocumentNote o1, DocumentNote o2) {
-                    return o1.getStatus().compareTo(o2.getStatus());
-                }
-            });
-        } else if (getSearchInfo().getOrderBy() == OrderBy.USER) {
-            Collections.sort(documentNotes, new Comparator<DocumentNote>() {
-                @Override
-                public int compare(DocumentNote o1, DocumentNote o2) {
-                    return o1.getCreatedBy().getUsername().compareTo(o2.getCreatedBy().getUsername());
-                }
-            });
-        }
         return documentNotes;
     }
 

@@ -17,7 +17,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.EBoolean;
+import com.mysema.query.types.expr.EComparableBase;
 import com.mysema.query.types.path.PEntity;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
@@ -97,8 +99,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     private EBoolean latest(QDocumentNote docNote) {
-        return sub(otherNote).where(otherNote.ne(docNote),
-                otherNote.note().eq(docNote.note()),
+        return sub(otherNote).where(otherNote.ne(docNote), otherNote.note().eq(docNote.note()),
                 otherNote.createdOn.gt(docNote.createdOn)).notExists();
     }
 
@@ -159,10 +160,21 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         Assert.notNull(searchInfo);
         EBoolean filters = new BooleanBuilder();
         filters.and(documentNote.deleted.eq(false));
-        // document
-        if (!searchInfo.getDocuments().isEmpty()) {
-            filters.and(documentNote.document().in(searchInfo.getDocuments()));
+        // document & orphans
+        EBoolean documentAndOrphanFilter = null;
+        if (!searchInfo.getDocuments().isEmpty() || searchInfo.isOrphans()) {
+            documentAndOrphanFilter = new BooleanBuilder();
+            if (!searchInfo.getDocuments().isEmpty()) {
+                documentAndOrphanFilter.or(documentNote.document().in(searchInfo.getDocuments()));
+            }
+            if (searchInfo.isOrphans()) {
+                documentAndOrphanFilter.or(documentNote.document().isNull());
+            }
+            filters.and(documentAndOrphanFilter);
         }
+//        if (!searchInfo.getDocuments().isEmpty()) {
+//            filters.and(documentNote.document().in(searchInfo.getDocuments()));
+//        }
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
@@ -184,7 +196,27 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             filters.and(filter);
         }
         filters.and(latest(documentNote));
-        return getSession().from(documentNote).where(filters).list(documentNote);
+
+        BeanQuery query = getSession().from(documentNote)
+                .where(documentNote.note().isNotNull(), filters).orderBy(getOrderBy(searchInfo));
+        // TODO Status
+        return query.list(documentNote);
+    }
+
+    private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {
+        EComparableBase<?> comparable = null;
+        switch (searchInfo.getOrderBy()) {
+        case DATE:
+            comparable = documentNote.createdOn;
+            break;
+        case USER:
+            comparable = documentNote.createdBy().username;
+            break;
+        default:
+            comparable = documentNote.note().lemma;
+            break;
+        }
+        return searchInfo.isAscending() ? comparable.asc() : comparable.desc();
     }
 
     @Override

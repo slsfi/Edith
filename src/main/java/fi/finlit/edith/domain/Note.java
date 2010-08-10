@@ -83,7 +83,7 @@ public class Note extends Identifiable {
     public Paragraph getDescription() {
         return description;
     }
-    
+
     public NoteFormat getFormat() {
         return format;
     }

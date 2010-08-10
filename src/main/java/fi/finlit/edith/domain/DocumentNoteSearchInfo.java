@@ -18,6 +18,10 @@ public class DocumentNoteSearchInfo {
 
     private OrderBy orderBy = OrderBy.LEMMA;
 
+    private boolean ascending = true;
+
+    private boolean orphans = false;
+
     public Set<Document> getDocuments() {
         return documents;
     }
@@ -58,12 +62,19 @@ public class DocumentNoteSearchInfo {
         this.orderBy = orderBy;
     }
 
-    @Override
-    public String toString() {
-        return "DocumentNoteSearchInfo [documents=" + documents + ", noteTypes=" + noteTypes
-                + ", noteFormats=" + noteFormats + ", creators=" + creators + ", orderBy="
-                + orderBy + "]";
+    public boolean isAscending() {
+        return ascending;
     }
 
+    public void setAscending(boolean ascending) {
+        this.ascending = ascending;
+    }
 
+    public boolean isOrphans() {
+        return orphans;
+    }
+
+    public void setOrphans(boolean orphans) {
+        this.orphans = orphans;
+    }
 }

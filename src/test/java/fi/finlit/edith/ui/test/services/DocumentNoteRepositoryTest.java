@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.test.services;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,6 +29,8 @@ import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.hamcrest.core.Is;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -47,7 +50,9 @@ import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.OrderBy;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.UserInfo;
@@ -327,6 +332,19 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
+    public void Query_For_All_Notes_Ordered_By_Lemma_Ascending_By_Default() {
+        List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
+        DocumentNote previous = null;
+        for (DocumentNote documentNote : documentNotes) {
+            if (previous != null) {
+                assertThat(previous.getNote().getLemma(), lessThanOrEqualTo(documentNote.getNote()
+                        .getLemma()));
+            }
+            previous = documentNote;
+        }
+    }
+
+    @Test
     public void Query_For_Notes_Based_On_Document() {
         searchInfo.getDocuments().add(docRev.getDocument());
         assertEquals(4, documentNoteRepository.query(searchInfo).size());
@@ -371,16 +389,83 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
+    public void Query_For_All_Notes_Order_By_Creator_Ascending() {
+        searchInfo.setOrderBy(OrderBy.USER);
+        List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
+        DocumentNote previous = null;
+        for (DocumentNote documentNote : documentNotes) {
+            if (previous != null) {
+                assertThat(previous.getCreatedBy().getUsername(), lessThanOrEqualTo(documentNote
+                        .getCreatedBy().getUsername()));
+            }
+            previous = documentNote;
+        }
+    }
+
+    @Test
+    public void Query_For_All_Notes_Order_By_Creator_Descending() {
+        searchInfo.setOrderBy(OrderBy.USER);
+        searchInfo.setAscending(false);
+        List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
+        DocumentNote previous = null;
+        for (DocumentNote documentNote : documentNotes) {
+            if (previous != null) {
+                assertThat(previous.getCreatedBy().getUsername(), greaterThanOrEqualTo(documentNote
+                        .getCreatedBy().getUsername()));
+            }
+            previous = documentNote;
+        }
+    }
+
+    @Test
+    public void Query_For_All_Notes_Order_By_Date_Of_Creation_Ascending() {
+        searchInfo.setOrderBy(OrderBy.DATE);
+        List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
+        DocumentNote previous = null;
+        for (DocumentNote documentNote : documentNotes) {
+            if (previous != null) {
+                assertThat(previous.getCreatedOn(), lessThanOrEqualTo(documentNote.getCreatedOn()));
+            }
+            previous = documentNote;
+        }
+    }
+
+    @Test
+    public void Query_For_Orphans() {
+        searchInfo.setOrphans(true);
+        assertEquals(2, documentNoteRepository.query(searchInfo).size());
+    }
+
+    // FIXME
+    @Test
+    @Ignore
+    public void Query_For_All_Notes_Group_By_Status() {
+        searchInfo.setOrderBy(OrderBy.STATUS);
+        List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
+        DocumentNote edited = documentNotes.get(2);
+        edited.setStatus(NoteStatus.PUBLISHABLE);
+        documentNoteRepository.save(edited);
+        List<DocumentNote> documentNotes2 = documentNoteRepository.query(searchInfo);
+        boolean allElementsWereSame = true;
+        for (int i = 0; i < documentNotes.size(); ++i) {
+            if (!documentNotes.get(i).getLongText().equals(documentNotes2.get(i).getLongText())) {
+                allElementsWereSame = false;
+            }
+        }
+        assertFalse(allElementsWereSame);
+    }
+
+    @Test
     public void Get_Document_Notes_Of_Note() {
         List<DocumentNote> documentNotesOfDocument = documentNoteRepository.getOfDocument(docRev);
         assertFalse(documentNotesOfDocument.isEmpty());
-        List<DocumentNote> documentNotesOfNote = documentNoteRepository.getOfNote(documentNotesOfDocument.get(0).getNote().getId());
+        List<DocumentNote> documentNotesOfNote = documentNoteRepository
+                .getOfNote(documentNotesOfDocument.get(0).getNote().getId());
         assertFalse(documentNotesOfNote.isEmpty());
     }
 
     private void addExtraNote(String username) {
         DocumentNote documentNote = new DocumentNote();
-        documentNote.setDocument(new Document());
         UserInfo userInfo = new UserInfo();
         userInfo.setUsername(username);
         documentNote.setCreatedBy(userInfo);
@@ -391,6 +476,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         note.setFormat(NoteFormat.PERSON);
         documentNote.setNote(note);
         documentNote.setLongText("thelongtext");
+        documentNote.setCreatedOn(new DateTime().getMillis());
         Session session = null;
         try {
             session = sessionFactory.openSession();

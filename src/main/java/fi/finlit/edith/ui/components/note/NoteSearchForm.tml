@@ -42,6 +42,7 @@
                         </div>
                         </t:loop>
                     </t:radiogroup>
+                    <t:checkbox value="reversed"></t:checkbox>${message:reversed}
                 </div>
             </div>  
 			</div>

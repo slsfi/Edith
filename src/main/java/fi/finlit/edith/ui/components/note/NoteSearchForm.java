@@ -132,5 +132,12 @@ public class NoteSearchForm {
         return OrderBy.values();
     }
 
+    public boolean isReversed() {
+        return !searchInfo.isAscending();
+    }
+
+    public void setReversed(boolean reversed) {
+        searchInfo.setAscending(!reversed);
+    }
 
 }
