@@ -30,7 +30,6 @@ import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
  * @author tiwe
  * @version $Id$
  */
-//FIXME Use dto instead of NoteRevision to get the editing ability right
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "NoteSearchPage.js" })
 public class NoteSearchPage {
