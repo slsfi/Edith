@@ -75,7 +75,8 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals("word", Note.createLemmaFromLongText("word"));
         assertEquals("word1 word2", Note.createLemmaFromLongText("word1 word2"));
         assertEquals("word1 \u2013 \u2013 word3", Note.createLemmaFromLongText("word1 word2 word3"));
-        assertEquals("word1 \u2013 \u2013 word3", Note.createLemmaFromLongText("word1\t word2 \nword3"));
+        assertEquals("word1 \u2013 \u2013 word3",
+                Note.createLemmaFromLongText("word1\t word2 \nword3"));
         assertEquals("foo \u2013 \u2013 bar",
                 Note.createLemmaFromLongText(" \n      foo \n \t baz    bar    \n\t\t"));
         assertEquals("foo", Note.createLemmaFromLongText(" \n      foo \n \t   \n\t\t"));
@@ -123,10 +124,10 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(note);
         assertEquals("kereitten", note.getNote().getLemma());
         assertEquals("'keritte'", note.getNote().getLemmaMeaning());
-        // FIXME
-//        assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
-//                note.getDescription().toString().replaceAll("\\s+", " ").trim());
-        assertEquals("<bibliograph>v</bibliograph>", note.getNote().getSources().toString().replaceAll("\\s+", " ").trim());
+        assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
+                note.getNote().getDescription().toString().replaceAll("\\s+", " ").trim());
+        assertEquals("<bibliograph>v</bibliograph>", note.getNote().getSources().toString()
+                .replaceAll("\\s+", " ").trim());
     }
 
     @Test
