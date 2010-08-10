@@ -140,4 +140,12 @@ public class NoteSearchForm {
         searchInfo.setAscending(!reversed);
     }
 
+    public boolean isOrphans() {
+        return searchInfo.isOrphans();
+    }
+
+    public void setOrphans(boolean orphans) {
+        searchInfo.setOrphans(orphans);
+    }
+
 }

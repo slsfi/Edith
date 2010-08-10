@@ -7,7 +7,8 @@
 				<div>
 					<strong>${message:document-label}</strong>
 				</div>
-				<div>					
+				<div>
+				    <t:checkbox value="orphans"/>${message:orphans}		
 					<t:loop source="documents" value="document">
 						<div>
 							<t:checkbox value="documentSelected" />
