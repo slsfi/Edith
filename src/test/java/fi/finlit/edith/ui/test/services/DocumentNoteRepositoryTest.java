@@ -29,7 +29,6 @@ import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.hamcrest.core.Is;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
