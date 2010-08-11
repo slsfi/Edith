@@ -62,7 +62,7 @@ public class AbstractDocumentPage {
             return;
         }
         long rev = -1;
-        if (ctx.getCount() > 1){
+        if (ctx.getCount() > 1) {
             // TODO : block this for AnnotatePage
             try {
                 rev = ctx.get(Long.class, 1);
@@ -72,7 +72,7 @@ public class AbstractDocumentPage {
             if (!revisions.contains(new RevisionInfo(rev))) {
                 response.sendError(HttpError.PAGE_NOT_FOUND, "Document revision not found!");
             }
-        }else{
+        } else {
             // get latest
             rev = revisions.get(revisions.size() - 1).getSvnRevision();
         }
@@ -80,11 +80,11 @@ public class AbstractDocumentPage {
         documentRevision = new DocumentRevision(document, rev);
     }
 
-    Object[] onPassivate(){
+    Object[] onPassivate() {
         return context.toArray();
     }
 
-    public Document getDocument(){
+    public Document getDocument() {
         return document;
     }
 
@@ -92,9 +92,8 @@ public class AbstractDocumentPage {
         return documentRevision;
     }
 
-    protected DocumentRepository getDocumentRepo(){
+    protected DocumentRepository getDocumentRepository() {
         return documentRepository;
     }
-
 
 }

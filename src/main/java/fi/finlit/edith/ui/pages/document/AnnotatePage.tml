@@ -209,7 +209,7 @@
 						<strong>${message:createNewComment-label}</strong>
 					</div>
 					<div>
-						<t:form t:id="commentForm" t:zone="commentZone" t:context="noteId">
+						<t:form t:id="commentForm" t:zone="commentZone" t:context="noteId" autofocus="false">
 							<t:textField value="newCommentMessage" />
 							<input type="submit" value="${message:save}" />
 						</t:form>

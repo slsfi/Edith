@@ -197,7 +197,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     Object onDelete(EventContext context) throws IOException {
         noteOnEdit = documentNoteRepository.getById(context.get(String.class, 0));
         DocumentRevision documentRevision = getDocumentRevision();
-        documentRevision = getDocumentRepo().removeNotes(documentRevision, noteOnEdit);
+        documentRevision = getDocumentRepository().removeNotes(documentRevision, noteOnEdit);
 
         // prepare view with new revision
         getDocumentRevision().setRevision(documentRevision.getRevision());
@@ -264,7 +264,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
         DocumentNote documentNote = null;
         try {
-            documentNote = getDocumentRepo().addNote(documentRevision, createTermSelection);
+            documentNote = getDocumentRepository().addNote(documentRevision, createTermSelection);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
