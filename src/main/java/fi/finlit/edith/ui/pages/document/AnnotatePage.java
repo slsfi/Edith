@@ -7,11 +7,12 @@ package fi.finlit.edith.ui.pages.document;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventContext;
@@ -37,7 +38,6 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.OrderBy;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermRepository;
@@ -286,6 +286,14 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public void setSearchInfo(DocumentNoteSearchInfo searchInfo) {
         this.searchInfo = searchInfo;
+    }
+
+    public String getTypesString() {
+        Collection<String> translated = new ArrayList<String>();
+        for (NoteType t : note.getNote().getTypes()) {
+            translated.add(messages.get(t.toString()));
+        }
+        return StringUtils.join(translated, ", ");
     }
 
 }

@@ -44,6 +44,17 @@
 
 		<div class="panel narrow">
 			<h3>${message:notes}</h3>
+            <form id="note_filters">
+                <input name="basicForm" type="checkbox" value="false"/>${message:basicForm-label}
+                <input name="meaning" type="checkbox" value="false"/>${message:meaning-label}
+                <input name="description" type="checkbox" value="false"/>${message:description-label}
+                <input name="document" type="checkbox" value="false"/>${message:document-label}
+                <input name="type" type="checkbox" value="false"/>${message:type-label}
+                <input name="format" type="checkbox" value="false"/>${message:format-label}
+                <input name="creator" type="checkbox" value="false"/>${message:creator-label}
+                <input name="created" type="checkbox" value="false"/>${message:created-label}
+                <input name="status" type="checkbox" value="false"/>${message:status-label}
+            </form>
 			<t:zone t:id="listZone" update="show">
 				<t:delegate to="notesList" />
 			</t:zone>
@@ -58,8 +69,17 @@
 					<t:loop source="documentNotes" value="note">
 						<li>
 							<a href="#start${note.localId}" class="notelink ${note.status}">
-								<em>${note.note.lemma}</em>
-							</a>
+								<em>${note.note.lemma}</em></a>;
+								<span class="basicForm">${note.note.term?.basicForm}; </span>
+								<span class="meaning">${note.note.term?.meaning}; </span>
+								<span class="description">${note.note.description}; </span>
+								<span class="document">${note.document.title}; </span>
+								<span class="type">${typesString}; </span>
+								<span class="format"><t:if test="note.note.format"><t:fmt.message key="${note.note.format}"/></t:if>; </span>
+								<span class="creator">${note.createdBy.username}; </span>
+								<span class="created"><t:dateTimeFormat date="note.createdOnDate" format="message:dateformat-compact" />; </span>
+								<span class="status"><t:fmt.message key="NoteStatus.${note.status}"/></span>
+							
 						</li>
 					</t:loop>
 				</ul>

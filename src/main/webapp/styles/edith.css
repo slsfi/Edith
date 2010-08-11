@@ -215,3 +215,11 @@ div.note_edit {
 #document_links {
 	margin: 5px;
 }
+
+.notes span {
+	display: none;
+}
+
+#note_filters {
+	border-bottom: solid 1px #D0D0D0;
+}

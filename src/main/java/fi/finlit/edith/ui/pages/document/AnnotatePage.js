@@ -90,6 +90,10 @@ jQuery(document).ready(function() {
     jQuery('body').live('mousemove', updateSelectionLink);
     
     jQuery('body').live('mousemove', updateUpdateLink);
+    
+    jQuery(":input").click(function() {
+    	jQuery(".notes ." + jQuery(this).attr("name")).toggle();
+    });
 });
 
 var Editor = {		
