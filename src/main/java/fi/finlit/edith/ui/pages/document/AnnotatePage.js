@@ -47,11 +47,23 @@ var updateUpdateLink = function() {
 	}
 }
 
-jQuery(document).ready(function(){
+jQuery(document).ready(function() {
+	var disableLink = false;
+	
+	jQuery("#mode_switcher").toggle(function() {
+		disableLink = true;
+		jQuery("#state").text("ANNOTOINTI");
+	}, function() {
+		disableLink = false;
+		jQuery("#state").text("MUOKKAUS");
+	});
+	
     jQuery('.notecontent').live('click',
         function(event) {
-            var classes = jQuery(this).attr('class').replace(/notecontent\ /g,'').replace(/\ /g, '/');
-            Editor.updateEditZone(classes);
+            if (!disableLink) {
+            	var classes = jQuery(this).attr('class').replace(/notecontent\ /g,'').replace(/\ /g, '/');
+            	Editor.updateEditZone(classes);
+            }
         }    
     );
     

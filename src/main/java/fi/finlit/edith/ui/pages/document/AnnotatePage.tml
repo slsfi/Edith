@@ -21,6 +21,9 @@
 			 <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}
 		     </t:pagelink>
 		  </span>
+		  <span id="mode_switcher">
+		      <a href="#">Editiotila: <span id="state">MUOKKAUS</span></a>
+		  </span>
 	   </div>
 	</p:leftPanel>
 
