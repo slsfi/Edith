@@ -82,7 +82,7 @@
 								<span class="basicForm">${note.note.term?.basicForm}; </span>
 								<span class="meaning">${note.note.term?.meaning}; </span>
 								<span class="description">${note.note.description}; </span>
-								<span class="document">${note.document.title}; </span>
+								<span class="document">${note.document?.title}; </span>
 								<span class="type">${typesString}; </span>
 								<span class="format"><t:if test="note.note.format"><t:fmt.message key="${note.note.format}"/></t:if>; </span>
 								<span class="creator">${note.createdBy.username}; </span>
