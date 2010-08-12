@@ -45,15 +45,15 @@
 		<div class="panel narrow">
 			<h3>${message:notes}</h3>
             <form id="note_filters">
-                <input name="basicForm" type="checkbox" value="false"/>${message:basicForm-label}
-                <input name="meaning" type="checkbox" value="false"/>${message:meaning-label}
-                <input name="description" type="checkbox" value="false"/>${message:description-label}
-                <input name="document" type="checkbox" value="false"/>${message:document-label}
-                <input name="type" type="checkbox" value="false"/>${message:type-label}
-                <input name="format" type="checkbox" value="false"/>${message:format-label}
-                <input name="creator" type="checkbox" value="false"/>${message:creator-label}
-                <input name="created" type="checkbox" value="false"/>${message:created-label}
-                <input name="status" type="checkbox" value="false"/>${message:status-label}
+                <input name="basicForm" type="checkbox"/>${message:basicForm-label}
+                <input name="meaning" type="checkbox"/>${message:meaning-label}
+                <input name="description" type="checkbox"/>${message:description-label}
+                <input name="document" type="checkbox"/>${message:document-label}
+                <input name="type" type="checkbox"/>${message:type-label}
+                <input name="format" type="checkbox"/>${message:format-label}
+                <input name="creator" type="checkbox"/>${message:creator-label}
+                <input name="created" type="checkbox"/>${message:created-label}
+                <input name="status" type="checkbox"/>${message:status-label}
             </form>
 			<t:zone t:id="listZone" update="show">
 				<t:delegate to="notesList" />
@@ -64,6 +64,15 @@
 		<t:zone t:id="editZone" update="show" />
 
 		<t:block t:id="notesList">
+		  <script type="text/javascript">
+
+		    jQuery(function() {
+		    	  jQuery("#note_filters input").each(function() {
+		    	toggleNoteListElements(jQuery(this));
+		        });
+		    });
+		  </script>
+		
 			<t:if test="documentNotes">
 				<ul class="notes">
 					<t:loop source="documentNotes" value="note">
@@ -79,7 +88,6 @@
 								<span class="creator">${note.createdBy.username}; </span>
 								<span class="created"><t:dateTimeFormat date="note.createdOnDate" format="message:dateformat-compact" />; </span>
 								<span class="status"><t:fmt.message key="NoteStatus.${note.status}"/></span>
-							
 						</li>
 					</t:loop>
 				</ul>

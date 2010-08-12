@@ -74,11 +74,6 @@ a {
 	text-decoration: none;
 }
 
-.created {
-	display: block;
-	float: right;
-}
-
 .label {
 	width: 5em;
 }
@@ -214,10 +209,6 @@ div.note_edit {
 
 #document_links {
 	margin: 5px;
-}
-
-.notes span {
-	display: none;
 }
 
 #note_filters {

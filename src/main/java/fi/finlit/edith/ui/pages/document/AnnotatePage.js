@@ -47,6 +47,16 @@ var updateUpdateLink = function() {
 	}
 }
 
+var toggleNoteListElements = function(checkbox) {
+	var checkbox = checkbox;
+	var isChecked = checkbox.attr("checked");
+	if (isChecked) {
+		jQuery(".notes ." + checkbox.attr("name")).show();
+	} else {
+		jQuery(".notes ." + checkbox.attr("name")).hide();
+	}
+}
+
 jQuery(document).ready(function() {
 	var disableLink = false;
 	
@@ -91,8 +101,8 @@ jQuery(document).ready(function() {
     
     jQuery('body').live('mousemove', updateUpdateLink);
     
-    jQuery(":input").click(function() {
-    	jQuery(".notes ." + jQuery(this).attr("name")).toggle();
+    jQuery("#note_filters input").click(function() {
+    	toggleNoteListElements(jQuery(this));
     });
 });
 
