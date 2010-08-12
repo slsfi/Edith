@@ -27,6 +27,7 @@ import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.LinkElement;
 import fi.finlit.edith.domain.Note;
@@ -46,7 +47,7 @@ import fi.finlit.edith.domain.UserRepository;
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
 
     private static final class LoopContext {
-        private DocumentNote revision;
+        private DocumentNote documentNote;
         private String text;
         private Paragraph paragraphs;
         private int counter;
@@ -54,7 +55,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         private String attr;
 
         private LoopContext() {
-            revision = null;
+            documentNote = null;
             text = null;
             counter = 0;
         }
@@ -66,13 +67,16 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private final AuthService authService;
 
+    private final DocumentNoteRepository documentNoteRepository;
+
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
             @Inject UserRepository userRepository, @Inject TimeService timeService,
-            @Inject AuthService authService) {
+            @Inject AuthService authService, @Inject DocumentNoteRepository documentNoteRepository) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
         this.timeService = timeService;
         this.authService = authService;
+        this.documentNoteRepository = documentNoteRepository;
     }
 
     @Override
@@ -116,17 +120,17 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String localName = reader.getLocalName();
 
         if (localName.equals("note")) {
-            session.save(data.revision);
+            documentNoteRepository.save(data.documentNote);
             data.counter++;
         } else if (localName.equals("lemma")) {
-            data.revision.getNote().setLemma(data.text);
+            data.documentNote.getNote().setLemma(data.text);
         } else if (localName.equals("lemma-meaning")) {
-            data.revision.getNote().setLemmaMeaning(data.text);
+            data.documentNote.getNote().setLemmaMeaning(data.text);
         } else if (localName.equals("source")) {
-            data.revision.getNote().setSources(data.paragraphs);
+            data.documentNote.getNote().setSources(data.paragraphs);
             data.paragraphs = null;
         } else if (localName.equals("description")) {
-            data.revision.getNote().setDescription(data.paragraphs);
+            data.documentNote.getNote().setDescription(data.paragraphs);
             data.paragraphs = null;
         } else if (localName.equals("bibliograph")) {
             data.inBib = false;
@@ -136,9 +140,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     private void handleStartElement(XMLStreamReader reader, LoopContext data) {
         String localName = reader.getLocalName();
         if (localName.equals("note")) {
-            data.revision = new DocumentNote();
-            data.revision.setNote(new Note());
-            data.revision.setCreatedOn(timeService.currentTimeMillis());
+            data.documentNote = new DocumentNote();
+            data.documentNote.setNote(new Note());
+            data.documentNote.setCreatedOn(timeService.currentTimeMillis());
         } else if (localName.equals("source") || localName.equals("description")) {
             data.paragraphs = new Paragraph();
         }
