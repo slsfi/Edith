@@ -99,8 +99,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     private EBoolean latest(QDocumentNote docNote) {
-        return sub(otherNote).where(otherNote.ne(docNote), otherNote.note().eq(docNote.note()),
-                otherNote.createdOn.gt(docNote.createdOn)).notExists();
+        return sub(otherNote).where(otherNote.ne(docNote), otherNote.localId.eq(docNote.localId),
+                otherNote.note().eq(docNote.note()), otherNote.createdOn.gt(docNote.createdOn))
+                .notExists();
     }
 
     @Override
@@ -172,9 +173,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             }
             filters.and(documentAndOrphanFilter);
         }
-//        if (!searchInfo.getDocuments().isEmpty()) {
-//            filters.and(documentNote.document().in(searchInfo.getDocuments()));
-//        }
+        // if (!searchInfo.getDocuments().isEmpty()) {
+        // filters.and(documentNote.document().in(searchInfo.getDocuments()));
+        // }
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
@@ -200,7 +201,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         BeanQuery query = getSession().from(documentNote)
                 .where(documentNote.note().isNotNull(), filters).orderBy(getOrderBy(searchInfo));
         // TODO Status
-        return query.list(documentNote);
+        List<DocumentNote> result = query.list(documentNote);
+        return result;
     }
 
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {

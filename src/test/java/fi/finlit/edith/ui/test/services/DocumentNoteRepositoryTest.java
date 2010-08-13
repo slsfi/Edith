@@ -70,7 +70,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     private String testDocument;
 
     @Inject
-    private NoteRepository noteRepo;
+    private NoteRepository noteRepository;
 
     @Inject
     private AdminService adminService;
@@ -212,10 +212,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void queryNotes_sorting_is_case_insensitive() {
-        noteRepo.createNote(docRev, "5", "a");
-        noteRepo.createNote(docRev, "6", "b");
-        noteRepo.createNote(docRev, "7", "A");
-        noteRepo.createNote(docRev, "8", "B");
+        noteRepository.createNote(docRev, "5", "a");
+        noteRepository.createNote(docRev, "6", "b");
+        noteRepository.createNote(docRev, "7", "A");
+        noteRepository.createNote(docRev, "8", "B");
         GridDataSource gds = documentNoteRepository.queryNotes("*");
         int n = gds.getAvailableRows();
         List<SortConstraint> sortConstraints = new ArrayList<SortConstraint>();
@@ -247,11 +247,11 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         docRev = document.getRevision(latestRevision);
-        noteRepo.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
-        noteRepo.createNote(docRev, "2",
+        noteRepository.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
+        noteRepository.createNote(docRev, "2",
                 "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
-        noteRepo.createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
-        noteRepo.createNote(docRev, "4",
+        noteRepository.createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
+        noteRepository.createNote(docRev, "4",
                 "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         searchInfo = new DocumentNoteSearchInfo();
         addExtraNote("testo");
@@ -260,7 +260,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Store_And_Retrieve_Person_Note() {
-        DocumentNote documentNote = noteRepo
+        DocumentNote documentNote = noteRepository
                 .createNote(docRev, "3",
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
@@ -274,7 +274,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         Interval timeOfDeath = Interval.createDate(new LocalDate(1872, 12, 31));
         note.getPerson().setTimeOfBirth(timeOfBirth);
         note.getPerson().setTimeOfDeath(timeOfDeath);
-        noteRepo.save(note);
+        noteRepository.save(note);
         Note persistedNote = documentNoteRepository.getById(documentNote.getId()).getNote();
         assertEquals(note.getPerson().getNormalizedForm().getName(), persistedNote.getPerson()
                 .getNormalizedForm().getName());
@@ -289,7 +289,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Store_And_Retrieve_Person_With_The_Same_Birth_And_Death_Date() {
-        DocumentNote documentNote = noteRepo
+        DocumentNote documentNote = noteRepository
                 .createNote(docRev, "3",
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
@@ -299,7 +299,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         note.setPerson(new Person());
         note.getPerson().setTimeOfBirth(timeOfBirth);
         note.getPerson().setTimeOfDeath(timeOfDeath);
-        noteRepo.save(note);
+        noteRepository.save(note);
         Note persistedNote = documentNoteRepository.getById(documentNote.getId()).getNote();
         assertNotNull(persistedNote.getPerson().getTimeOfBirth());
         assertNotNull(persistedNote.getPerson().getTimeOfDeath());
@@ -307,7 +307,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Store_And_Retrieve_Place_Note() {
-        DocumentNote documentNote = noteRepo
+        DocumentNote documentNote = noteRepository
                 .createNote(docRev, "3",
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
@@ -316,7 +316,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         Set<NameForm> otherForms = new HashSet<NameForm>();
         otherForms.add(new NameForm("Tammerfors", "Ruotsinkielinen nimitys."));
         note.setPlace(new Place(normalizedForm, otherForms));
-        noteRepo.save(note);
+        noteRepository.save(note);
         Note persistedNote = documentNoteRepository.getById(documentNote.getId()).getNote();
         assertEquals(note.getPlace().getNormalizedForm().getName(), persistedNote.getPlace()
                 .getNormalizedForm().getName());
@@ -461,6 +461,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         List<DocumentNote> documentNotesOfNote = documentNoteRepository
                 .getOfNote(documentNotesOfDocument.get(0).getNote().getId());
         assertFalse(documentNotesOfNote.isEmpty());
+    }
+
+    @Test
+    public void Add_The_Same_Word_Twice() {
+        String text = "l\u00E4htee";
+        noteRepository.createNote(docRev, "1", text);
+        noteRepository.createNote(docRev, "2", text);
+        assertEquals(8, documentNoteRepository.query(searchInfo).size());
     }
 
     private void addExtraNote(String username) {
