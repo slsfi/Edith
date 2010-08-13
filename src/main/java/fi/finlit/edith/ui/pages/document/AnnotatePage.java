@@ -159,16 +159,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         return documentNotes;
     }
 
-    public Object[] getEditContext() {
-        List<String> ctx = new ArrayList<String>(selectedNotes.size());
-        for (DocumentNote r : selectedNotes) {
-            if (!r.equals(note)) {
-                ctx.add(r.getLocalId());
-            }
-        }
-        return ctx.toArray();
-    }
-
     private Term getEditTerm(Note n) {
         return n.getTerm() != null ? n.getTerm().createCopy() : new Term();
     }
@@ -224,6 +214,7 @@ public class AnnotatePage extends AbstractDocumentPage {
             }
 
             DocumentNote rev = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
+            System.err.println(rev.getNote().getLemma() + " " + rev.getLocalId());
             if (rev != null) {
                 selectedNotes.add(rev);
             } else {
@@ -239,7 +230,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         } else {
             comments = Collections.<NoteComment> emptySet();
         }
-
         moreThanOneSelectable = selectedNotes.size() > 1;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
