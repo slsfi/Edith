@@ -23,7 +23,6 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.rdfbean.dao.AbstractRepository;
-import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.DocumentNote;
@@ -116,7 +115,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return getSession().from(note).where(note.lemma.eq(lemma)).uniqueResult(note);
     }
 
-    private void handleEndElement(XMLStreamReader reader, Session session, LoopContext data) {
+    private void handleEndElement(XMLStreamReader reader, LoopContext data) {
         String localName = reader.getLocalName();
 
         if (localName.equals("note")) {
@@ -171,8 +170,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
         LoopContext data = new LoopContext();
 
-        Session session = getSession();
-
         while (true) {
             int event = -1;
             try {
@@ -183,7 +180,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             if (event == XMLStreamConstants.START_ELEMENT) {
                 handleStartElement(reader, data);
             } else if (event == XMLStreamConstants.END_ELEMENT) {
-                handleEndElement(reader, session, data);
+                handleEndElement(reader, data);
             } else if (event == XMLStreamConstants.CHARACTERS) {
                 if (data.paragraphs == null) {
                     data.text = reader.getText();
