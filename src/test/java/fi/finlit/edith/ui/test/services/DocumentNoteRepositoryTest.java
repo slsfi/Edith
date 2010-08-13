@@ -336,8 +336,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         DocumentNote previous = null;
         for (DocumentNote documentNote : documentNotes) {
             if (previous != null) {
-                assertThat(previous.getNote().getLemma(), lessThanOrEqualTo(documentNote.getNote()
-                        .getLemma()));
+                assertThat(previous.getNote().getLemma().toLowerCase(), lessThanOrEqualTo(documentNote.getNote()
+                        .getLemma().toLowerCase()));
             }
             previous = documentNote;
         }
@@ -469,7 +469,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         userInfo.setUsername(username);
         documentNote.setCreatedBy(userInfo);
         Note note = new Note();
-        note.setLemma("thelemma");
+        note.setLemma("TheLemma");
         note.setTypes(new HashSet<NoteType>());
         note.getTypes().add(NoteType.HISTORICAL);
         note.setFormat(NoteFormat.PERSON);

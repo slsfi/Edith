@@ -210,10 +210,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             comparable = documentNote.createdOn;
             break;
         case USER:
-            comparable = documentNote.createdBy().username;
+            comparable = documentNote.createdBy().username.toLowerCase();
             break;
         default:
-            comparable = documentNote.note().lemma;
+            comparable = documentNote.note().lemma.toLowerCase();
             break;
         }
         return searchInfo.isAscending() ? comparable.asc() : comparable.desc();

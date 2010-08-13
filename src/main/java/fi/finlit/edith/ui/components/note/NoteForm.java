@@ -363,10 +363,9 @@ public class NoteForm {
         Iterator<NameForm> iter = nameForms.iterator();
         while (iter.hasNext()) {
             NameForm current = iter.next();
-            if (current.getLast() == null) {
+            if (current.getFirst() == null && current.getLast() == null) {
                 iter.remove();
             }
         }
     }
-
 }
