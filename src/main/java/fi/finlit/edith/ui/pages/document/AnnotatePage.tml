@@ -77,8 +77,8 @@
 				<ul class="notes">
 					<t:loop source="documentNotes" value="note">
 						<li>
-							<a href="#start${note.localId}" class="notelink ${note.status}">
-								<em>${note.note.lemma}</em></a>;
+							<t:if test="inCurrentDocument"><a href="#start${note.localId}" class="notelink ${note.status}"><em>${note.note.lemma}</em></a>;
+							<p:else><em>${note.note.lemma}</em></p:else></t:if>
 								<span class="basicForm">${note.note.term?.basicForm}; </span>
 								<span class="meaning">${note.note.term?.meaning}; </span>
 								<span class="description">${note.note.description}; </span>

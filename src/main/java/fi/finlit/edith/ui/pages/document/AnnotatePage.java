@@ -296,4 +296,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         return StringUtils.join(translated, ", ");
     }
 
+    public boolean isInCurrentDocument() {
+        return getDocument().equals(note.getDocument());
+    }
 }
