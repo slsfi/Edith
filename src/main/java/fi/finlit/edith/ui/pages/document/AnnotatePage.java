@@ -214,7 +214,6 @@ public class AnnotatePage extends AbstractDocumentPage {
             }
 
             DocumentNote rev = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
-            System.err.println(rev.getNote().getLemma() + " " + rev.getLocalId());
             if (rev != null) {
                 selectedNotes.add(rev);
             } else {
