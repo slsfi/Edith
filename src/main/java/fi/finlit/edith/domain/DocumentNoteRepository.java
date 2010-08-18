@@ -58,4 +58,18 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
 
     List<DocumentNote> query(DocumentNoteSearchInfo searchInfo);
 
+    /**
+     * Returns all the document notes attached to the term.
+     * @param termId
+     * @return
+     */
+    List<DocumentNote> getOfTerm(String termId);
+
+    /**
+     * Saves the document note with the backing note copied as a new one.
+     * @param docNote
+     * @return
+     */
+    DocumentNote saveAsCopy(DocumentNote docNote);
+
 }

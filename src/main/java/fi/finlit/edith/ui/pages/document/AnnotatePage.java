@@ -288,4 +288,8 @@ public class AnnotatePage extends AbstractDocumentPage {
     public boolean isInCurrentDocument() {
         return getDocument().equals(note.getDocument());
     }
+
+    public int getLemmaInstances() {
+        return documentNoteRepository.getOfNote(noteOnEdit.getNote().getId()).size();
+    }
 }

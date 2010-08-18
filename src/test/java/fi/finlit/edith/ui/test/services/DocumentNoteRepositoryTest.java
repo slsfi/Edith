@@ -7,13 +7,14 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -47,13 +48,17 @@ import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Interval;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.OrderBy;
+import fi.finlit.edith.domain.Paragraph;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.StringElement;
+import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
@@ -91,6 +96,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     private long latestRevision;
 
     private DocumentNoteSearchInfo searchInfo;
+
+    @Inject
+    @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
+    private File noteTestData;
 
     @Test
     public void Save_Document_Note_With_An_Existing_Lemma_Is_Mapped_To_The_Existing_Note() {
@@ -233,9 +242,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    @Ignore
     public void remove() {
-        fail("Not yet implemented");
+        DocumentNote documentNote = documentNoteRepository.getByLocalId(docRev, "1");
+        documentNoteRepository.remove(documentNote);
+        assertTrue(documentNoteRepository.getById(documentNote.getId()).isDeleted());
     }
 
     @Before
@@ -250,9 +260,11 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         noteRepository.createNote(docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
         noteRepository.createNote(docRev, "2",
                 "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
-        noteRepository.createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
-        noteRepository.createNote(docRev, "4",
-                "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        noteRepository
+                .createNote(docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
+        noteRepository
+                .createNote(docRev, "4",
+                        "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         searchInfo = new DocumentNoteSearchInfo();
         addExtraNote("testo");
         addExtraNote("testo2");
@@ -336,8 +348,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         DocumentNote previous = null;
         for (DocumentNote documentNote : documentNotes) {
             if (previous != null) {
-                assertThat(previous.getNote().getLemma().toLowerCase(), lessThanOrEqualTo(documentNote.getNote()
-                        .getLemma().toLowerCase()));
+                assertThat(previous.getNote().getLemma().toLowerCase(),
+                        lessThanOrEqualTo(documentNote.getNote().getLemma().toLowerCase()));
             }
             previous = documentNote;
         }
@@ -431,8 +443,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Query_For_Orphans() {
+        noteRepository.importNotes(noteTestData);
+        assertEquals(15, noteRepository.getAll().size());
         searchInfo.setOrphans(true);
-        assertEquals(2, documentNoteRepository.query(searchInfo).size());
+        assertEquals(11, documentNoteRepository.query(searchInfo).size());
     }
 
     // FIXME
@@ -455,12 +469,70 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
+    public void Save_As_Copy() {
+        DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).get(0);
+        Note initialNote = noteRepository.getById(documentNote.getNote().getId());
+        initialNote.setDescription(new Paragraph());
+        initialNote.setFormat(NoteFormat.PLACE);
+        initialNote.setLemmaMeaning("fajflkjsalj");
+        initialNote.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
+        initialNote.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
+        initialNote.setSources(new Paragraph());
+        initialNote.setSubtextSources("wqeqwiwqoiwqoei");
+        initialNote.setTerm(new Term());
+        initialNote.getTerm().setBasicForm("foobar");
+        initialNote.getTypes().add(NoteType.HISTORICAL);
+        noteRepository.save(initialNote);
+
+        documentNote = documentNoteRepository.getById(documentNote.getId());
+        documentNote.getNote().setDescription(new Paragraph());
+        documentNote.getNote().getDescription().addElement(new StringElement("foo"));
+        documentNote.getNote().setFormat(NoteFormat.PERSON);
+        documentNote.getNote().setLemmaMeaning("totally different");
+        documentNote.getNote().getPerson().getNormalizedForm().setFirst("something else");
+        documentNote.getNote().getPlace().getNormalizedForm().setName("barfo");
+        documentNote.getNote().getSources().addElement(new StringElement("bar"));
+        documentNote.getNote().setSubtextSources("foooooo");
+        documentNote.getNote().getTerm().setBasicForm("baaaaar");
+        documentNote.getNote().getTypes().add(NoteType.WORD_EXPLANATION);
+        documentNote.getNote().getComments().add(new NoteComment(documentNote.getNote(), "jeejee", "vesa"));
+        Note note = documentNoteRepository.getById(documentNote.getId()).getNote();
+        documentNoteRepository.saveAsCopy(documentNote);
+        DocumentNote copyOfDocumentNote = documentNoteRepository.getById(documentNote.getId());
+        Note copyOfNote = copyOfDocumentNote.getNote();
+        assertThat(copyOfNote, not(note));
+        assertThat(copyOfNote.getDescription(), not(note.getDescription()));
+        assertThat(copyOfNote.getFormat(), not(note.getFormat()));
+        assertThat(copyOfNote.getLemmaMeaning(), not(note.getLemmaMeaning()));
+        assertEquals(copyOfNote.getPerson(), note.getPerson());
+        assertEquals(copyOfNote.getPlace(), note.getPlace());
+        assertThat(copyOfNote.getSources(), not(note.getSources()));
+        assertThat(copyOfNote.getSubtextSources(), not(note.getSubtextSources()));
+        assertEquals(copyOfNote.getTerm(), note.getTerm());
+        assertThat(copyOfNote.getTypes(), not(note.getTypes()));
+        assertThat(copyOfNote.getComments(), not(note.getComments()));
+    }
+
+    @Test
     public void Get_Document_Notes_Of_Note() {
         List<DocumentNote> documentNotesOfDocument = documentNoteRepository.getOfDocument(docRev);
         assertFalse(documentNotesOfDocument.isEmpty());
         List<DocumentNote> documentNotesOfNote = documentNoteRepository
                 .getOfNote(documentNotesOfDocument.get(0).getNote().getId());
         assertFalse(documentNotesOfNote.isEmpty());
+    }
+
+    @Test
+    public void Get_Document_Notes_Of_Term() {
+        List<DocumentNote> documentNotesOfDocument = documentNoteRepository.getOfDocument(docRev);
+        Term term = new Term();
+        term.setBasicForm("foobar");
+        term.setMeaning("a placeholder");
+        DocumentNote documentNote = documentNotesOfDocument.get(0);
+        documentNote.getNote().setTerm(term);
+        documentNoteRepository.save(documentNote);
+        List<DocumentNote> documentNotesOfTerm = documentNoteRepository.getOfTerm(term.getId());
+        assertEquals(documentNote, documentNotesOfTerm.get(0));
     }
 
     @Test

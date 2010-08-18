@@ -10,7 +10,9 @@ import static fi.finlit.edith.domain.QDocumentNote.documentNote;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -32,6 +34,7 @@ import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.QDocumentNote;
@@ -125,9 +128,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     @Override
-    public void remove(DocumentNote note) {
-        Assert.notNull(note, "note was null");
-        DocumentNote deleted = note.createCopy();
+    public void remove(DocumentNote docNote) {
+        Assert.notNull(docNote, "note was null");
+        // XXX What was the point in having .createCopy?
+        DocumentNote deleted = docNote;
         deleted.setDeleted(true);
         deleted.setCreatedBy(userRepository.getCurrentUser());
         getSession().save(deleted);
@@ -145,11 +149,51 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         docNote.setCreatedOn(timeService.currentTimeMillis());
         docNote.setCreatedBy(createdBy);
         Note note = noteRepository.find(docNote.getNote().getLemma());
+        // FIXME
+        boolean dontSaveBecauseIsAlreadyInTheDBAsAnOrphan = false;
         if (note != null && !docNote.getNote().equals(note)) {
+            if (noteRepository.isOrphan(note.getId()) && docNote.getDocument() == null) {
+                dontSaveBecauseIsAlreadyInTheDBAsAnOrphan = true;
+            }
             docNote.setNote(note);
         }
+        if (!dontSaveBecauseIsAlreadyInTheDBAsAnOrphan) {
+            getSession().save(docNote);
+        }
+        return docNote;
+    }
+
+    @Override
+    public DocumentNote saveAsCopy(DocumentNote docNote) {
+        docNote.setNote(copy(docNote.getNote()));
+        docNote.setCreatedOn(timeService.currentTimeMillis());
+        docNote.setCreatedBy(userRepository.getCurrentUser());
         getSession().save(docNote);
         return docNote;
+    }
+
+    // TODO This doesn't belong here. Though getSession() does :/
+    private Note copy(Note note) {
+        Note copy = new Note();
+        Set<NoteComment> comments = new HashSet<NoteComment>();
+        for (NoteComment comment : note.getComments()) {
+            NoteComment copyOfComment = comment.copy();
+            copyOfComment.setNote(copy);
+            comments.add(copyOfComment);
+            getSession().save(copyOfComment);
+        }
+        copy.setComments(comments);
+        copy.setDescription(note.getDescription().copy());
+        copy.setFormat(note.getFormat());
+        copy.setLemma(note.getLemma());
+        copy.setLemmaMeaning(note.getLemmaMeaning());
+        copy.setPerson(note.getPerson());
+        copy.setPlace(note.getPlace());
+        copy.setSources(note.getSources().copy());
+        copy.setSubtextSources(note.getSubtextSources());
+        copy.setTerm(note.getTerm());
+        copy.setTypes(note.getTypes());
+        return copy;
     }
 
     private BeanSubQuery sub(PEntity<?> entity) {
@@ -173,9 +217,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             }
             filters.and(documentAndOrphanFilter);
         }
-        // if (!searchInfo.getDocuments().isEmpty()) {
-        // filters.and(documentNote.document().in(searchInfo.getDocuments()));
-        // }
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
@@ -198,11 +239,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         }
         filters.and(latest(documentNote));
 
-        BeanQuery query = getSession().from(documentNote)
-                .where(documentNote.note().isNotNull(), filters).orderBy(getOrderBy(searchInfo));
+        return getSession().from(documentNote)
+                .where(documentNote.note().isNotNull(), filters).orderBy(getOrderBy(searchInfo)).list(documentNote);
         // TODO Status
-        List<DocumentNote> result = query.list(documentNote);
-        return result;
     }
 
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {
@@ -225,6 +264,14 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     public List<DocumentNote> getOfNote(String noteId) {
         Assert.notNull(noteId);
         BeanQuery query = getSession().from(documentNote).where(documentNote.note().id.eq(noteId),
+                documentNote.deleted.eq(false), latest(documentNote));
+        return query.list(documentNote);
+    }
+
+    @Override
+    public List<DocumentNote> getOfTerm(String termId) {
+        Assert.notNull(termId);
+        BeanQuery query = getSession().from(documentNote).where(documentNote.note().term().id.eq(termId),
                 documentNote.deleted.eq(false), latest(documentNote));
         return query.list(documentNote);
     }

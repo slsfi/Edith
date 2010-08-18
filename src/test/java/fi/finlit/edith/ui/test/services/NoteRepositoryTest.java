@@ -10,13 +10,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.tapestry5.grid.GridDataSource;
-import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
@@ -44,13 +42,13 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     private AdminService adminService;
 
     @Inject
-    private NoteRepository noteRepo;
+    private NoteRepository noteRepository;
 
     @Inject
-    private DocumentRepository documentRepo;
+    private DocumentRepository documentRepository;
 
     @Inject
-    private DocumentNoteRepository noteRevisionRepo;
+    private DocumentNoteRepository documentNoteRepository;
 
     @Inject
     @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
@@ -63,9 +61,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void createComment() {
         Note note = new Note();
-        noteRepo.save(note);
-        NoteComment comment = noteRepo.createComment(note, "boomboomboom");
-        Collection<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
+        noteRepository.save(note);
+        NoteComment comment = noteRepository.createComment(note, "boomboomboom");
+        Collection<NoteComment> comments = noteRepository.getById(note.getId()).getComments();
         assertEquals(1, comments.size());
         assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
     }
@@ -84,29 +82,32 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void createNote() {
-        Document document = documentRepo.getDocumentForPath(testDocument);
+        Document document = documentRepository.getDocumentForPath(testDocument);
 
         String longText = "two words";
-        DocumentNote documentNote = noteRepo.createNote(document.getRevision(-1), "10", longText);
+        DocumentNote documentNote = noteRepository.createNote(document.getRevision(-1), "10",
+                longText);
 
         assertNotNull(documentNote);
     }
 
     @Test
     public void createNote_Note_With_The_Lemma_Already_Exists_Notes_Are_Same() {
-        Document document = documentRepo.getDocumentForPath(testDocument);
+        Document document = documentRepository.getDocumentForPath(testDocument);
 
         String longText = "two words";
-        DocumentNote documentNote = noteRepo.createNote(document.getRevision(-1), "10", longText);
-        DocumentNote documentNote2 = noteRepo.createNote(document.getRevision(-1), "11", longText);
+        DocumentNote documentNote = noteRepository.createNote(document.getRevision(-1), "10",
+                longText);
+        DocumentNote documentNote2 = noteRepository.createNote(document.getRevision(-1), "11",
+                longText);
         assertEquals(documentNote.getNote().getId(), documentNote2.getNote().getId());
     }
 
     @Test
     public void find() {
-        Document document = documentRepo.getDocumentForPath(testDocument);
-        noteRepo.createNote(document.getRevision(-1), "lid1234", "foobar");
-        Note note = noteRepo.find("foobar");
+        Document document = documentRepository.getDocumentForPath(testDocument);
+        noteRepository.createNote(document.getRevision(-1), "lid1234", "foobar");
+        Note note = noteRepository.find("foobar");
         assertNotNull(note);
     }
 
@@ -117,36 +118,84 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void importNote() throws Exception {
-        noteRepo.importNotes(noteTestData);
-        GridDataSource gridDataSource = noteRevisionRepo.queryNotes("kereitten");
-        gridDataSource.prepare(0, 10000, new ArrayList<SortConstraint>());
-        DocumentNote note = (DocumentNote) gridDataSource.getRowValue(0);
+        noteRepository.importNotes(noteTestData);
+        Note note = noteRepository.find("kereitten");
         assertNotNull(note);
-        assertEquals("kereitten", note.getNote().getLemma());
-        assertEquals("'keritte'", note.getNote().getLemmaMeaning());
-        assertEquals("(murt. kerii ’keriä’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
-                note.getNote().getDescription().toString().replaceAll("\\s+", " ").trim());
-        assertEquals("<bibliograph>v</bibliograph>", note.getNote().getSources().toString()
-                .replaceAll("\\s+", " ").trim());
+        assertEquals("kereitten", note.getLemma());
+        assertEquals("'keritte'", note.getLemmaMeaning());
+        assertEquals(
+                "(murt. kerii ’keri\u00E4’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
+                note.getDescription().toString().replaceAll("\\s+", " ").trim());
+        assertEquals("<bibliograph>v</bibliograph>",
+                note.getSources().toString().replaceAll("\\s+", " ").trim());
+    }
+
+    @Test
+    public void Add_Note_With_Existing_Orphan() {
+        noteRepository.importNotes(noteTestData);
+        String lemma = "riksi\u00E4";
+        Note note = noteRepository.find(lemma);
+        assertNotNull(note);
+        Document document = documentRepository.getDocumentForPath(testDocument);
+        DocumentNote documentNote = noteRepository.createNote(document.getRevision(-1), "123456",
+                lemma);
+        assertNotNull(documentNote);
+        assertEquals(note.getId(), documentNote.getNote().getId());
+        assertNotNull(documentNoteRepository.getByLocalId(document.getRevision(-1), "123456")
+                .getNote());
+        assertEquals(1, documentNoteRepository.queryNotes(lemma).getAvailableRows());
+    }
+
+    @Test
+    public void Add_Note_With_Existing_Orphan_Verify_Sources_And_Description_Correct() {
+        noteRepository.importNotes(noteTestData);
+        String lemma = "riksi\u00E4";
+        Note note = noteRepository.find(lemma);
+        assertNotNull(note);
+        Document document = documentRepository.getDocumentForPath(testDocument);
+        DocumentNote documentNote = noteRepository.createNote(document.getRevision(-1), "123456",
+                lemma);
+        assertNotNull(documentNote);
+        assertEquals(note.getId(), documentNote.getNote().getId());
+        assertEquals(note.getDescription().getElements(),
+                documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getNote()
+                        .getDescription().getElements());
+        assertEquals(note.getSources().getElements(),
+                documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getNote()
+                        .getSources().getElements());
+    }
+
+    @Test
+    public void Is_Orphan() {
+        noteRepository.importNotes(noteTestData);
+        Collection<Note> notes = noteRepository.getAll();
+        assertTrue(noteRepository.isOrphan(notes.iterator().next().getId()));
+    }
+
+    @Test
+    public void Import_The_Same_Notes_Twice() {
+        assertEquals(9, noteRepository.importNotes(noteTestData));
+        assertEquals(9, noteRepository.importNotes(noteTestData));
+        assertEquals(9, documentNoteRepository.getAll().size());
     }
 
     @Test
     public void importNotes() throws Exception {
-        assertEquals(9, noteRepo.importNotes(noteTestData));
-        assertEquals(9, noteRevisionRepo.queryNotes("*").getAvailableRows());
-        assertEquals(1, noteRevisionRepo.queryNotes("kereitten").getAvailableRows());
+        assertEquals(9, noteRepository.importNotes(noteTestData));
+        assertEquals(9, noteRepository.getAll().size());
+        assertNotNull(noteRepository.find("kereitten"));
     }
 
     @Test
     public void queryDictionary() throws Exception {
-        assertEquals(9, noteRepo.importNotes(noteTestData));
-        assertEquals(0, noteRepo.queryDictionary("*").getAvailableRows());
+        assertEquals(9, noteRepository.importNotes(noteTestData));
+        assertEquals(0, noteRepository.queryDictionary("*").getAvailableRows());
     }
 
     @Test
     public void queryDictionary2() throws Exception {
-        assertEquals(9, noteRepo.importNotes(noteTestData));
-        GridDataSource dataSource = noteRepo.queryDictionary("a");
+        assertEquals(9, noteRepository.importNotes(noteTestData));
+        GridDataSource dataSource = noteRepository.queryDictionary("a");
         int count1 = dataSource.getAvailableRows();
         int count2 = dataSource.getAvailableRows();
         assertEquals(count1, count2);
@@ -154,24 +203,24 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void remove() {
-        Document document = documentRepo.getDocumentForPath(testDocument);
-        List<RevisionInfo> revisions = documentRepo.getRevisions(document);
+        Document document = documentRepository.getDocumentForPath(testDocument);
+        List<RevisionInfo> revisions = documentRepository.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         String longText = UUID.randomUUID().toString();
-        noteRepo.createNote(document.getRevision(latestRevision), "10", longText);
+        noteRepository.createNote(document.getRevision(latestRevision), "10", longText);
     }
 
     @Test
     public void removeComment() {
         Note note = new Note();
-        noteRepo.save(note);
-        NoteComment comment = noteRepo.createComment(note, "boomboomboom");
-        Collection<NoteComment> comments = noteRepo.getById(note.getId()).getComments();
+        noteRepository.save(note);
+        NoteComment comment = noteRepository.createComment(note, "boomboomboom");
+        Collection<NoteComment> comments = noteRepository.getById(note.getId()).getComments();
         assertEquals(1, comments.size());
         assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
-        noteRepo.removeComment(comment.getId());
-        comments = noteRepo.getById(note.getId()).getComments();
+        noteRepository.removeComment(comment.getId());
+        comments = noteRepository.getById(note.getId()).getComments();
         assertTrue(comments.isEmpty());
     }
 

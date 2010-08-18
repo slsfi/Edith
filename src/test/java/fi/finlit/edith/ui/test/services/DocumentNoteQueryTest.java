@@ -9,19 +9,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.io.File;
 import java.util.Collections;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.ui.services.AdminService;
 
 /**
@@ -30,24 +29,22 @@ import fi.finlit.edith.ui.services.AdminService;
  * @author tiwe
  * @version $Id$
  */
-public class NoteRevisionQueryTest extends AbstractServiceTest{
-
-    @Inject
-    private NoteRepository noteRepo;
+public class DocumentNoteQueryTest extends AbstractServiceTest{
 
     @Inject
     private AdminService adminService;
 
     @Inject
-    private DocumentNoteRepository noteRevisionRepo;
-
-    @Inject @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
-    private File noteTestData;
+    private DocumentNoteRepository documentNoteRepository;
 
     @Before
     public void setUp() throws Exception {
         adminService.removeNotesAndTerms();
-        assertEquals(9, noteRepo.importNotes(noteTestData));
+        DocumentNote documentNote = new DocumentNote();
+        Note note = new Note();
+        note.setLemma("kaikki");
+        documentNote.setNote(note);
+        documentNoteRepository.save(documentNote);
     }
 
     @After
@@ -57,18 +54,18 @@ public class NoteRevisionQueryTest extends AbstractServiceTest{
 
     @Test
     public void queryNotes(){
-        assertEquals(9, noteRevisionRepo.queryNotes("*").getAvailableRows());
+        assertEquals(1, documentNoteRepository.queryNotes("*").getAvailableRows());
     }
 
     @Test
     public void queryNotes_kaikki() throws Exception{
-        GridDataSource dataSource = noteRevisionRepo.queryNotes("*");
-        assertEquals(9, dataSource.getAvailableRows());
-        dataSource.prepare(0, 2, Collections.<SortConstraint>emptyList());
-        for (int i = 0; i < 3; i++){
+        GridDataSource dataSource = documentNoteRepository.queryNotes("*");
+        assertEquals(1, dataSource.getAvailableRows());
+        dataSource.prepare(0, 1, Collections.<SortConstraint>emptyList());
+        for (int i = 0; i < 1; i++){
             assertNotNull("Value at index " + i + " was null", dataSource.getRowValue(i));
         }
-        assertNull(dataSource.getRowValue(3));
+        assertNull(dataSource.getRowValue(1));
     }
 
     @Override

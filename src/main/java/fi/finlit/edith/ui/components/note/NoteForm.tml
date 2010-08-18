@@ -52,7 +52,7 @@
 
 			<div class="note">
 				<div>
-					<strong>${message:basicForm-label}</strong>
+					<strong>${message:basicForm-label}</strong> (${termInstances} ${message:amountOfInstances})
 				</div>
 				<div>
 					<t:textField t:id="basicForm" value="termOnEdit.basicForm"
@@ -63,7 +63,7 @@
 			<div class="note">
 				<div>- ${message:meaning-label}</div>
 				<div>
-					<t:textArea t:id="termMeaning" value="termOnEdit.meaning" />
+					<t:textArea rows="8" t:id="termMeaning" value="termOnEdit.meaning" />
 				</div>
 			</div>
 
@@ -207,7 +207,7 @@
 					<strong>${message:description-label}</strong>
 				</div>
 				<div>
-					<t:textArea value="description" rows="4" />
+					<t:textArea value="description" rows="8" />
 				</div>
 			</div>
 
@@ -216,7 +216,7 @@
 					<strong>${message:sources-label}</strong>
 				</div>
 				<div>
-					<t:textField value="sources" rows="4" />
+					<t:textField value="sources" rows="8" />
 				</div>
 			</div>
 
@@ -252,6 +252,7 @@
 			<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
 
 			<input type="submit" value="${message:save}" />
+            <t:checkbox value="saveAsNew" />${message:saveAsNew}
 			<t:if test="submitSuccess">
 				<!-- This could be externalized? -->
 				<script type="text/javascript">

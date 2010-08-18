@@ -9,7 +9,7 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class NoteComment extends Identifiable {
-    
+
     @Predicate(ln="commentOf")
     private Note note;
 
@@ -67,6 +67,15 @@ public class NoteComment extends Identifiable {
     @Override
     public String toString() {
         return "Comment [message=" + message + "]";
+    }
+
+    public NoteComment copy() {
+        NoteComment comment = new NoteComment();
+        comment.setCreatedAt(createdAt);
+        comment.setMessage(message);
+        comment.setNote(note);
+        comment.setUsername(username);
+        return comment;
     }
 
     @Override

@@ -163,4 +163,11 @@ public class Note extends Identifiable {
     public void setTypes(Set<NoteType> types) {
         this.types = types;
     }
+
+    @Override
+    public String toString() {
+        return "Note [lemma=" + lemma + "]";
+    }
+
+
 }

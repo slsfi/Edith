@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.test.services;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -14,8 +15,10 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.TermLanguage;
+import fi.finlit.edith.domain.TermRepository;
 import fi.finlit.edith.ui.services.AdminService;
 
 /**
@@ -27,10 +30,10 @@ import fi.finlit.edith.ui.services.AdminService;
 public class AdminServiceTest extends AbstractServiceTest{
 
     @Inject
-    private NoteRepository noteRepo;
+    private NoteRepository noteRepository;
 
     @Inject
-    private DocumentNoteRepository noteRevisionRepo;
+    private TermRepository termRepository;
 
     @Inject
     private AdminService adminService;
@@ -45,20 +48,27 @@ public class AdminServiceTest extends AbstractServiceTest{
 
     @Test
     public void removeNotes() throws Exception {
-        noteRepo.importNotes(noteTestData);
-        assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() > 0);
+        noteRepository.importNotes(noteTestData);
+        assertFalse(noteRepository.getAll().isEmpty());
 
         adminService.removeNotes();
-        assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() == 0);
+        assertTrue(noteRepository.getAll().isEmpty());
     }
 
     @Test
     public void removeNotesAndTerms() throws Exception {
-        noteRepo.importNotes(noteTestData);
-        assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() > 0);
+        noteRepository.importNotes(noteTestData);
+        Term term = new Term();
+        term.setBasicForm("mutta");
+        term.setMeaning("joku konjunktio");
+        term.setLanguage(TermLanguage.FINNISH);
+        termRepository.save(term);
+        assertFalse(noteRepository.getAll().isEmpty());
+        assertFalse(termRepository.getAll().isEmpty());
 
         adminService.removeNotesAndTerms();
-        assertTrue(noteRevisionRepo.queryNotes("*").getAvailableRows() == 0);
+        assertTrue(noteRepository.getAll().isEmpty());
+        assertTrue(termRepository.getAll().isEmpty());
     }
 
     @Override

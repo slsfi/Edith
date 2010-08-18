@@ -11,6 +11,7 @@ import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -106,6 +107,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         documentNote.setLocalId(localId);
         documentNote.setNote(newNote);
         getSession().save(documentNote);
+        getSession().flush();
+
+        List<DocumentNote> documentNotes = documentNoteRepository.getOfNote(newNote.getId());
+        for (DocumentNote current : documentNotes) {
+            if (current.getDocument() == null) {
+                documentNoteRepository.remove(current);
+            }
+        }
 
         return documentNote;
     }
@@ -141,7 +150,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (localName.equals("note")) {
             data.documentNote = new DocumentNote();
             data.documentNote.setNote(new Note());
-            data.documentNote.setCreatedOn(timeService.currentTimeMillis());
         } else if (localName.equals("source") || localName.equals("description")) {
             data.paragraphs = new Paragraph();
         }
@@ -241,5 +249,16 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         NoteComment comment = getSession().getById(commentId, NoteComment.class);
         getSession().delete(comment);
         return comment;
+    }
+
+    @Override
+    public boolean isOrphan(String noteId) {
+        List<DocumentNote> documentNotes = documentNoteRepository.getOfNote(noteId);
+        for (DocumentNote documentNote : documentNotes) {
+            if (documentNote.getDocument() != null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

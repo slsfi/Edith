@@ -510,7 +510,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             }
         });
 
-
+        // FIXME This logic might be broken.
         DocumentNote copy = note.createCopy();
         copy.setLongText(selection.getSelection());
         copy.setSVNRevision(newRevision);

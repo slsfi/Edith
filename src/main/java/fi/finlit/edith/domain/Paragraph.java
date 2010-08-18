@@ -14,10 +14,10 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class Paragraph extends Identifiable {
-    
+
     @Container(ContainerType.LIST)
     @Predicate
-    private List<ParagraphElement> elements = new ArrayList<ParagraphElement>();
+    private final List<ParagraphElement> elements = new ArrayList<ParagraphElement>();
 
     public List<ParagraphElement> getElements() {
         return elements;
@@ -25,6 +25,14 @@ public class Paragraph extends Identifiable {
 
     public void addElement(ParagraphElement e) {
         elements.add(e);
+    }
+
+    public Paragraph copy() {
+        Paragraph paragraph = new Paragraph();
+        for (ParagraphElement element : elements) {
+            paragraph.addElement(element.copy());
+        }
+        return paragraph;
     }
 
     @Override

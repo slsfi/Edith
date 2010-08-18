@@ -10,10 +10,10 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class LinkElement extends Identifiable implements ParagraphElement {
-    
+
     @Predicate
     private String string;
-    
+
     @Predicate
     private String reference;
 
@@ -22,6 +22,13 @@ public class LinkElement extends Identifiable implements ParagraphElement {
 
     public LinkElement(String string) {
         this.string = string;
+    }
+
+    @Override
+    public ParagraphElement copy() {
+        LinkElement element = new LinkElement(string);
+        element.setReference(reference);
+        return element;
     }
 
     @Override

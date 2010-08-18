@@ -139,6 +139,9 @@ public class NoteForm {
     @Parameter
     private Set<NoteComment> comments;
 
+    @Property
+    private boolean saveAsNew;
+
     @Validate("required")
     public NoteFormat getFormat() {
         return noteOnEdit.getNote().getFormat();
@@ -188,7 +191,7 @@ public class NoteForm {
     }
 
     void onPrepareFromNoteEditForm(String noteRev) {
-        noteOnEdit = documentNoteRepository.getById(noteRev).createCopy();
+        noteOnEdit = documentNoteRepository.getById(noteRev); // .createCopy();
         termOnEdit = getEditTerm(noteOnEdit.getNote());
     }
 
@@ -268,7 +271,7 @@ public class NoteForm {
     }
 
     Object onSuccessFromNoteEditForm() throws IOException {
-        DocumentNote noteRevision;
+        DocumentNote documentNote;
         if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
             noteOnEdit.setStatus(NoteStatus.DRAFT);
         }
@@ -284,9 +287,14 @@ public class NoteForm {
 
         try {
             if (updateLongTextSelection.isValid()) {
-                noteRevision = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);
+                documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);
             } else {
-                noteRevision = documentNoteRepository.save(noteOnEdit);
+                if (saveAsNew) {
+                    documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
+                    saveAsNew = false;
+                } else {
+                    documentNote = documentNoteRepository.save(noteOnEdit);
+                }
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -296,16 +304,16 @@ public class NoteForm {
 
         // Handling the embedded term edit
         if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
-            saveTerm(noteRevision);
+            saveTerm(documentNote);
         }
 
         // prepare view (with possibly new revision)
-        if (noteRevision.getSVNRevision() > documentRevision.getRevision()) {
-            documentRevision.setRevision(noteRevision.getSVNRevision());
+        if (documentNote.getSVNRevision() > documentRevision.getRevision()) {
+            documentRevision.setRevision(documentNote.getSVNRevision());
         }
         documentNotes = documentNoteRepository.getOfDocument(documentRevision);
-        selectedNotes = Collections.singletonList(noteRevision);
-        noteOnEdit = noteRevision;
+        selectedNotes = Collections.singletonList(documentNote);
+        noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
         // noteId = noteOnEdit.getNote().getId();
         comments = noteOnEdit.getNote().getComments();
@@ -352,7 +360,7 @@ public class NoteForm {
     }
 
     private void updateNames(Set<NameForm> nameForms, String first, String last, String description) {
-        if (last != null) {
+        if (first != null || last != null) {
             if (first == null) {
                 nameForms.add(new NameForm(last, description));
             } else {
@@ -368,4 +376,12 @@ public class NoteForm {
             }
         }
     }
+
+    public int getTermInstances() {
+        if (noteOnEdit.getNote().getTerm() != null) {
+            return documentNoteRepository.getOfTerm(noteOnEdit.getNote().getTerm().getId()).size();
+        }
+        return 0;
+    }
+
 }

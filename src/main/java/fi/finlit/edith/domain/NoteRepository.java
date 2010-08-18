@@ -73,4 +73,12 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     NoteComment removeComment(String commentId);
+
+
+    /**
+     * Checks if the given Note has no DocumentNotes tied to a Document.
+     * @param noteId
+     * @return
+     */
+    boolean isOrphan(String noteId);
 }

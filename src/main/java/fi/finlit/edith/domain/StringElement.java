@@ -10,7 +10,7 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class StringElement extends Identifiable implements ParagraphElement {
-    
+
     @Predicate
     private String string;
 
@@ -19,6 +19,11 @@ public class StringElement extends Identifiable implements ParagraphElement {
 
     public StringElement(String string) {
         this.string = string;
+    }
+
+    @Override
+    public ParagraphElement copy() {
+        return new StringElement(string);
     }
 
     @Override

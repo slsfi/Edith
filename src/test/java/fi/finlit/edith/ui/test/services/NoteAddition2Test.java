@@ -37,7 +37,6 @@ public class NoteAddition2Test extends AbstractServiceTest {
     @Autobuild
     private DocumentRepositoryImpl documentRepo;
 
-    //private InputStream source;
     private Reader source;
 
     private StringWriter target;
@@ -46,7 +45,6 @@ public class NoteAddition2Test extends AbstractServiceTest {
 
     @Before
     public void setUp() {
-        //source = new ByteArrayInputStream(testDocumentContent.getBytes());
         source = new StringReader(testDocumentContent);
         target = new StringWriter();
         localId = UUID.randomUUID().toString();
@@ -79,7 +77,6 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(element, element, text));
 
         String content = getContent();
-        // System.out.println(content);
         assertTrue(content.contains("k\u00E4ski " + start(localId) + text + end(localId)
                 + " p\u00E4\u00E4lles"));
     }
@@ -103,7 +100,6 @@ public class NoteAddition2Test extends AbstractServiceTest {
         addNote(new SelectedText(start, end, text));
 
         String content = getContent();
-//        System.out.println(content);
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
         assertTrue(content.contains("Esko." + end(localId)));
     }

@@ -15,14 +15,17 @@
 	<p:leftPanel>
 	   <div id="document_links">
 		  <span>
-			 <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a>
+			 <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a> 
 		  </span>
 		  <span>
-			 <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}
+			 <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion} 
 		     </t:pagelink>
 		  </span>
 		  <span id="mode_switcher">
-		      <a href="#">Editiotila: <span id="state">MUOKKAUS</span></a>
+		      <a href="#">Editiotila: <span id="state">MUOKKAUS</span></a> 
+		  </span>
+		  <span>
+		      <a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a> 
 		  </span>
 	   </div>
 	</p:leftPanel>
@@ -39,7 +42,6 @@
 			<t:hidden t:id="selectedEndId_1" value="createTermSelection.endId" />
 			<t:hidden t:id="selectedStartIndex_1" value="createTermSelection.startIndex" />
 			<t:hidden t:id="selectedEndIndex_1" value="createTermSelection.endIndex" />
-			<a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a>
 		</t:form>
 
 		<div class="panel narrow">
@@ -121,9 +123,8 @@
 					</div>
 					<div class="cleaner"></div>
 					<div class="note_edit">
-						<em>
-							<strong>${noteOnEdit.note.lemma}</strong>
-						</em>
+						<em><strong>${noteOnEdit.note.lemma}</strong></em>  (${lemmaInstances} ${message:amountOfInstances})
+						
 						<!-- This could be externalized? -->
                         <script type="text/javascript">
                         jQuery(".delete_dialog").hide();
