@@ -1,0 +1,86 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<t:content>
+		<t:form t:id="personForm" t:zone="editZone" t:context="person.id">
+			<t:errors />
+			
+			<div>
+				<div>
+					<strong>${message:normalizedForm-label}</strong>
+				</div>
+				<div>
+				    <div>- ${message:firstName-label}</div>
+					<div><t:textField t:id="normalizedFirst" value="normalizedPerson.first" /></div>
+					<div>- ${message:lastName-label}</div>
+					<div><t:textField t:id="normalizedLast" value="normalizedPerson.last" /></div>
+				</div>
+			</div>
+
+			<div>
+				<div>- ${message:description-label}</div>
+				<div>
+					<t:textField t:id="normalizedDescription" value="normalizedPerson.description" />
+				</div>
+			</div>
+
+			<t:loop source="persons" value="loopPerson" volatile="true">
+				<div class="person">
+					<div>
+						<strong>${message:nameForm-label}</strong>
+					</div>
+					<div>
+					    <div>- ${message:firstName-label}</div> 
+						<div><t:textField value="loopPerson.first" /></div>
+						<div>- ${message:lastName-label}</div>
+						<div><t:textField value="loopPerson.last" /></div>
+					</div>
+				</div>
+
+				<div class="person">
+					<div>- ${message:description-label}</div>
+					<div>
+						<t:textField value="loopPerson.description" />
+					</div>
+				</div>
+
+			</t:loop>
+			<div class="person">
+				<div>
+					<strong>${message:createNameForm-label}</strong>
+				</div>
+				<div>
+				    <div>- ${message:firstName-label}</div> 
+					<div><t:textField value="newPersonFirst" /></div>
+					<div>- ${message:lastName-label}</div>
+					<div><t:textField value="newPersonLast" /></div>
+				</div>
+			</div>
+
+			<div class="person">
+				<div>- ${message:description-label}</div>
+				<div>
+					<t:textField value="newPersonDescription" />
+				</div>
+			</div>
+
+			<div class="person">
+				<div>
+					<strong>${message:timeOfBirth-label} (d.M.y)</strong>
+				</div>
+				<div>
+					<t:textField t:id="timeOfBirth" />
+				</div>
+			</div>
+
+			<div class="person">
+				<div>
+					<strong>${message:timeOfDeath-label} (d.M.y)</strong>
+				</div>
+				<div>
+					<t:textField t:id="timeOfDeath" />
+				</div>
+			</div>
+
+			<input type="submit" value="${message:save}" />
+		</t:form>		
+	</t:content>
+</html>

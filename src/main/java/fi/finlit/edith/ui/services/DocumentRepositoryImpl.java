@@ -45,6 +45,7 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteAdditionFailedException;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.SelectedText;
@@ -184,7 +185,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public DocumentNote addNote(DocumentRevision docRevision, final SelectedText selection) throws IOException, NoteAdditionFailedException{
+    public DocumentNote addNote(Note note, DocumentRevision docRevision, final SelectedText selection) throws IOException, NoteAdditionFailedException{
         final String localId = String.valueOf(timeService.currentTimeMillis());
         long newRevision;
         newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
@@ -203,7 +204,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 });
 
         // persisted noteRevision has svnRevision of newly created commit
-        return noteRepository.createNote(new DocumentRevision(docRevision, newRevision), localId,selection.getSelection());
+        return noteRepository.createDocumentNote(note, new DocumentRevision(docRevision, newRevision), localId,selection.getSelection());
     }
 
     public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws NoteAdditionFailedException {

@@ -85,7 +85,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Document document = documentRepository.getDocumentForPath(testDocument);
 
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createNote(document.getRevision(-1), "10",
+        DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10",
                 longText);
 
         assertNotNull(documentNote);
@@ -96,9 +96,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Document document = documentRepository.getDocumentForPath(testDocument);
 
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createNote(document.getRevision(-1), "10",
+        DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10",
                 longText);
-        DocumentNote documentNote2 = noteRepository.createNote(document.getRevision(-1), "11",
+        DocumentNote documentNote2 = noteRepository.createDocumentNote(documentNote.getNote(), document.getRevision(-1), "11",
                 longText);
         assertEquals(documentNote.getNote().getId(), documentNote2.getNote().getId());
     }
@@ -106,7 +106,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void find() {
         Document document = documentRepository.getDocumentForPath(testDocument);
-        noteRepository.createNote(document.getRevision(-1), "lid1234", "foobar");
+        noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "lid1234", "foobar");
         Note note = noteRepository.find("foobar");
         assertNotNull(note);
     }
@@ -137,7 +137,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Note note = noteRepository.find(lemma);
         assertNotNull(note);
         Document document = documentRepository.getDocumentForPath(testDocument);
-        DocumentNote documentNote = noteRepository.createNote(document.getRevision(-1), "123456",
+        DocumentNote documentNote = noteRepository.createDocumentNote(note, document.getRevision(-1), "123456",
                 lemma);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
@@ -153,7 +153,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Note note = noteRepository.find(lemma);
         assertNotNull(note);
         Document document = documentRepository.getDocumentForPath(testDocument);
-        DocumentNote documentNote = noteRepository.createNote(document.getRevision(-1), "123456",
+        DocumentNote documentNote = noteRepository.createDocumentNote(note, document.getRevision(-1), "123456",
                 lemma);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
@@ -166,17 +166,10 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void Is_Orphan() {
-        noteRepository.importNotes(noteTestData);
-        Collection<Note> notes = noteRepository.getAll();
-        assertTrue(noteRepository.isOrphan(notes.iterator().next().getId()));
-    }
-
-    @Test
     public void Import_The_Same_Notes_Twice() {
         assertEquals(9, noteRepository.importNotes(noteTestData));
         assertEquals(9, noteRepository.importNotes(noteTestData));
-        assertEquals(9, documentNoteRepository.getAll().size());
+        assertEquals(18, documentNoteRepository.getAll().size());
     }
 
     @Test
@@ -208,7 +201,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         String longText = UUID.randomUUID().toString();
-        noteRepository.createNote(document.getRevision(latestRevision), "10", longText);
+        noteRepository.createDocumentNote(new Note(), document.getRevision(latestRevision), "10", longText);
     }
 
     @Test

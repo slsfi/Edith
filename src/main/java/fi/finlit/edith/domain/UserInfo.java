@@ -19,7 +19,7 @@ import fi.finlit.edith.EDITH;
  */
 //TODO : use "user:"<username> as URL schema ?!?
 @ClassMapping(ns=EDITH.NS, ln="User")
-public class UserInfo {
+public class UserInfo extends Identifiable {
 
     @Predicate
     @Unique
@@ -38,6 +38,11 @@ public class UserInfo {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo [username=" + username + "]";
     }
 
     @Override

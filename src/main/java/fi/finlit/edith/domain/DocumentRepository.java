@@ -42,7 +42,7 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @throws IOException
      * @throws NoteAdditionFailedException
      */
-    DocumentNote addNote(DocumentRevision docRevision, SelectedText selection) throws IOException, NoteAdditionFailedException;
+    DocumentNote addNote(Note note, DocumentRevision docRevision, SelectedText selection) throws IOException, NoteAdditionFailedException;
 
     /**
      * Get a Document handle for the given path

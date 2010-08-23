@@ -284,7 +284,6 @@ public class NoteForm {
                 newPlaceDescription);
         newPlaceName = null;
         newPlaceDescription = null;
-
         try {
             if (updateLongTextSelection.isValid()) {
                 documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);
@@ -311,7 +310,6 @@ public class NoteForm {
         if (documentNote.getSVNRevision() > documentRevision.getRevision()) {
             documentRevision.setRevision(documentNote.getSVNRevision());
         }
-        documentNotes = documentNoteRepository.getOfDocument(documentRevision);
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());

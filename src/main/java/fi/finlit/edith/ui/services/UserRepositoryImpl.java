@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -25,23 +25,20 @@ import fi.finlit.edith.domain.UserRepository;
  * @author tiwe
  * @version $Id$
  */
-public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository{
-    
+public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository {
+
     private final AuthService authService;
-    
-    public UserRepositoryImpl(
-            @Inject SessionFactory sessionFactory,
-            @Inject AuthService authService) {
+
+    public UserRepositoryImpl(@Inject SessionFactory sessionFactory, @Inject AuthService authService) {
         super(sessionFactory, user);
         this.authService = authService;
     }
 
     @Override
-    public User getByUsername(String username){
-        return getSession().from(user)
-            .where(user.username.eq(username)).uniqueResult(user);
+    public User getByUsername(String username) {
+        return getSession().from(user).where(user.username.eq(username)).uniqueResult(user);
     }
-    
+
     @Override
     public List<User> getOrderedByName() {
         return getSession().from(user).orderBy(user.username.asc()).list(user);
@@ -50,8 +47,14 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     @Override
     public UserInfo getCurrentUser() {
         String username = authService.getUsername();
-        return getSession().from(userInfo)
-            .where(userInfo.username.eq(username)).uniqueResult(userInfo);
+        return getSession().from(userInfo).where(userInfo.username.eq(username))
+                .uniqueResult(userInfo);
+    }
+
+    @Override
+    public UserInfo getUserInfoByUsername(String username) {
+        return getSession().from(userInfo).where(userInfo.username.eq(username))
+                .uniqueResult(userInfo);
     }
 
 }

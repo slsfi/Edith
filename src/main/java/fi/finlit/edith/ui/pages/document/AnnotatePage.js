@@ -104,6 +104,8 @@ jQuery(document).ready(function() {
     jQuery("#note_filters input").click(function() {
     	toggleNoteListElements(jQuery(this));
     });
+    
+    jQuery("#dialog").jqm();
 });
 
 var Editor = {		

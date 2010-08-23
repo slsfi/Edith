@@ -5,6 +5,8 @@
  */
 package fi.finlit.edith.domain;
 
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
@@ -54,6 +56,9 @@ public class DocumentNote extends Identifiable {
     @Predicate
     private Note note;
 
+    @Predicate
+    private Set<UserInfo> editors;
+
     public DocumentNote createCopy() {
         DocumentNote copy = new DocumentNote();
         copy.setLongText(longText);
@@ -67,6 +72,7 @@ public class DocumentNote extends Identifiable {
         copy.setSVNRevision(svnRevision);
         copy.setDeleted(deleted);
         copy.setLocalId(localId);
+        copy.setEditors(editors);
         return copy;
     }
 
@@ -159,6 +165,14 @@ public class DocumentNote extends Identifiable {
 
     public void setSVNRevision(long svnRevision) {
         this.svnRevision = svnRevision;
+    }
+
+    public void setEditors(Set<UserInfo> editors) {
+        this.editors = editors;
+    }
+
+    public Set<UserInfo> getEditors() {
+        return editors;
     }
 
     @Override

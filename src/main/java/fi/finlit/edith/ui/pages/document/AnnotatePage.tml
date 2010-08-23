@@ -25,8 +25,11 @@
 		      <a href="#">Editiotila: <span id="state">MUOKKAUS</span></a> 
 		  </span>
 		  <span>
-		      <a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a> 
+		      <a id="createTermLink" class="disabled selection-link jqModal" href="#">${message:createTerm}</a> 
 		  </span>
+		  <span>
+              <a id="createPersonLink" class="jqModal" href="#">${message:createPerson}</a> 
+          </span>
 	   </div>
 	</p:leftPanel>
 
@@ -47,6 +50,7 @@
 		<div class="panel narrow">
 			<h3>${message:notes}</h3>
             <form id="note_filters">
+                <input name="numberOfInstancesInDocument" type="checkbox"/>${message:numberOfInstancesInDocument-label}
                 <input name="basicForm" type="checkbox"/>${message:basicForm-label}
                 <input name="meaning" type="checkbox"/>${message:meaning-label}
                 <input name="description" type="checkbox"/>${message:description-label}
@@ -79,15 +83,16 @@
 				<ul class="notes">
 					<t:loop source="documentNotes" value="note">
 						<li>
-							<t:if test="inCurrentDocument"><a href="#start${note.localId}" class="notelink ${note.status}"><em>${note.note.lemma}</em></a>;
-							<p:else><em>${note.note.lemma}</em></p:else></t:if>
+							<span><t:if test="inCurrentDocument"><a href="#start${note.localId}" class="notelink ${note.status}"><em>${note.note.lemma}</em></a>
+							<p:else><em>${note.note.lemma}</em></p:else></t:if>; </span>
+							    <span class="numberOfInstancesInDocument"> ${numberOfInstancesInDocument} ${message:amountOfInstances}; </span>
 								<span class="basicForm">${note.note.term?.basicForm}; </span>
 								<span class="meaning">${note.note.term?.meaning}; </span>
 								<span class="description">${note.note.description}; </span>
 								<span class="document">${note.document?.title}; </span>
 								<span class="type">${typesString}; </span>
 								<span class="format"><t:if test="note.note.format"><t:fmt.message key="${note.note.format}"/></t:if>; </span>
-								<span class="creator">${note.createdBy?.username}; </span>
+								<span class="creator">${note.createdBy?.username} (${editorsForNote}); </span>
 								<span class="created"><t:dateTimeFormat date="note.createdOnDate" format="message:dateformat-compact" />; </span>
 								<span class="status"><t:fmt.message key="NoteStatus.${note.status}"/></span>
 						</li>
@@ -119,7 +124,7 @@
 					<div class="metadata">
 						<t:dateTimeFormat date="noteOnEdit.createdOnDate"
 							format="message:dateformat-compact" />
-						${noteOnEdit.createdBy.username}
+						${noteOnEdit.createdBy.username} (${editorsForNoteOnEdit})
 					</div>
 					<div class="cleaner"></div>
 					<div class="note_edit">
@@ -263,6 +268,46 @@
 		</t:block>
 
 	</p:rightPanel>
+
+<style>
+.jqmWindow {
+    display: none;
+    
+    position: fixed;
+    top: 17%;
+    left: 50%;
+    
+    margin-left: -300px;
+    width: 600px;
+    
+    background-color: #EEE;
+    color: #333;
+    border: 1px solid black;
+    padding: 12px;
+}
+
+.jqmOverlay { background-color: #000; }
+</style>
+    <div class="jqmWindow" id="dialog">
+    <t:zone t:id="dialogZone">${message:creatingNote}...</t:zone>
+    
+    <a href="#" class="jqmClose">${message:close}</a>
+    </div>
+    
+    <t:block t:id="notesForLemma">
+        <t:eventlink t:event="chooseBackingNote" t:zone="editZone">${message:createNewNote-label}</t:eventlink>
+    <t:loop source="notes" value="loopNote">
+        <div>
+        <t:eventlink t:event="chooseBackingNote" context="loopNote.id" t:zone="editZone">${loopNote.lemma}</t:eventlink>
+        ${loopNote.lemmaMeaning}
+        ${loopNote.description}
+        </div>
+    </t:loop>
+    </t:block>
+    
+    <t:block t:id="closeDialog">
+        ${message:noteCreated}
+    </t:block>
 
 	<script type="text/javascript">
 		var l10n = new Array();

@@ -11,6 +11,7 @@ import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
@@ -87,34 +88,30 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public DocumentNote createNote(DocumentRevision docRevision, String localId, String longText) {
+    public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String localId, String longText) {
         UserInfo createdBy = userRepository.getCurrentUser();
 
         DocumentNote documentNote = new DocumentNote();
         documentNote.setCreatedOn(timeService.currentTimeMillis());
         documentNote.setCreatedBy(createdBy);
+        if (documentNote.getEditors() == null) {
+            documentNote.setEditors(new HashSet<UserInfo>());
+        }
+        documentNote.getEditors().add(createdBy);
         documentNote.setSVNRevision(docRevision.getRevision());
         documentNote.setLongText(longText);
 
-        String lemma = Note.createLemmaFromLongText(longText);
-        Note newNote = find(lemma);
-        if (newNote == null) {
-            newNote = new Note();
-            newNote.setLemma(lemma);
+        if (n.getLemma() == null) {
+            n.setLemma(Note.createLemmaFromLongText(longText));
         }
         documentNote.setDocument(docRevision.getDocument());
         documentNote.setDocRevision(docRevision);
         documentNote.setLocalId(localId);
-        documentNote.setNote(newNote);
+        documentNote.setNote(n);
         getSession().save(documentNote);
         getSession().flush();
 
-        List<DocumentNote> documentNotes = documentNoteRepository.getOfNote(newNote.getId());
-        for (DocumentNote current : documentNotes) {
-            if (current.getDocument() == null) {
-                documentNoteRepository.remove(current);
-            }
-        }
+        documentNoteRepository.removeOrphans(documentNote.getNote().getId());
 
         return documentNote;
     }
@@ -252,13 +249,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public boolean isOrphan(String noteId) {
-        List<DocumentNote> documentNotes = documentNoteRepository.getOfNote(noteId);
-        for (DocumentNote documentNote : documentNotes) {
-            if (documentNote.getDocument() != null) {
-                return false;
-            }
-        }
-        return true;
+    public List<Note> findNotes(String lemma) {
+        return getSession().from(note).where(note.lemma.eq(lemma)).list(note);
     }
 }

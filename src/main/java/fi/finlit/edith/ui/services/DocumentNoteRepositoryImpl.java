@@ -25,7 +25,6 @@ import com.mysema.query.types.expr.EBoolean;
 import com.mysema.query.types.expr.EComparableBase;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
-import com.mysema.rdfbean.object.BeanQuery;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
@@ -46,15 +45,11 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     private final UserRepository userRepository;
 
-    private final NoteRepository noteRepository;
-
     public DocumentNoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, @Inject TimeService timeService,
-            @Inject NoteRepository noteRepository) {
+            @Inject UserRepository userRepository, @Inject TimeService timeService) {
         super(sessionFactory, documentNote);
         this.userRepository = userRepository;
         this.timeService = timeService;
-        this.noteRepository = noteRepository;
     }
 
     @Override
@@ -137,28 +132,23 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         UserInfo createdBy = userRepository.getCurrentUser();
         docNote.setCreatedOn(timeService.currentTimeMillis());
         docNote.setCreatedBy(createdBy);
-        Note note = noteRepository.find(docNote.getNote().getLemma());
-        // FIXME
-        boolean dontSaveBecauseIsAlreadyInTheDBAsAnOrphan = false;
-        if (note != null && !docNote.getNote().equals(note)) {
-            if (noteRepository.isOrphan(note.getId()) && docNote.getDocument() == null) {
-                dontSaveBecauseIsAlreadyInTheDBAsAnOrphan = true;
-            }
-            docNote.setNote(note);
+        if (docNote.getEditors() == null) {
+            docNote.setEditors(new HashSet<UserInfo>());
         }
-        if (!dontSaveBecauseIsAlreadyInTheDBAsAnOrphan) {
-            getSession().save(docNote);
+        docNote.getEditors().add(createdBy);
+        getSession().save(docNote);
+        if (docNote.getDocument() != null) {
+            getSession().flush();
+            removeOrphans(docNote.getNote().getId());
         }
+
         return docNote;
     }
 
     @Override
     public DocumentNote saveAsCopy(DocumentNote docNote) {
         docNote.setNote(copy(docNote.getNote()));
-        docNote.setCreatedOn(timeService.currentTimeMillis());
-        docNote.setCreatedBy(userRepository.getCurrentUser());
-        getSession().save(docNote);
-        return docNote;
+        return save(docNote);
     }
 
     // TODO This doesn't belong here. Though getSession() does :/
@@ -172,13 +162,17 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             getSession().save(copyOfComment);
         }
         copy.setComments(comments);
-        copy.setDescription(note.getDescription().copy());
+        if (note.getDescription() != null) {
+            copy.setDescription(note.getDescription().copy());
+        }
         copy.setFormat(note.getFormat());
         copy.setLemma(note.getLemma());
         copy.setLemmaMeaning(note.getLemmaMeaning());
         copy.setPerson(note.getPerson());
         copy.setPlace(note.getPlace());
-        copy.setSources(note.getSources().copy());
+        if (note.getSources() != null) {
+            copy.setSources(note.getSources().copy());
+        }
         copy.setSubtextSources(note.getSubtextSources());
         copy.setTerm(note.getTerm());
         copy.setTypes(note.getTypes());
@@ -208,11 +202,15 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         }
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
+            EBoolean filter = new BooleanBuilder();
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
+                filter.or(documentNote.editors.contains(userInfo));
                 usernames.add(userInfo.getUsername());
             }
-            filters.and(documentNote.createdBy().username.in(usernames));
+            // FIXME This is kind of useless except that we have broken data in production.
+            filter.or(documentNote.createdBy().username.in(usernames));
+            filters.and(filter);
         }
         // formats
         if (!searchInfo.getNoteFormats().isEmpty()) {
@@ -226,10 +224,12 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             }
             filters.and(filter);
         }
-        filters.and(latest(documentNote));
+        filters.and(sub(otherNote).where(otherNote.ne(documentNote),
+                otherNote.note().eq(documentNote.note()),
+                otherNote.createdOn.gt(documentNote.createdOn)).notExists());
 
-        return getSession().from(documentNote)
-                .where(documentNote.note().isNotNull(), filters).orderBy(getOrderBy(searchInfo)).list(documentNote);
+        return getSession().from(documentNote).where(documentNote.note().isNotNull(), filters)
+                .orderBy(getOrderBy(searchInfo)).list(documentNote);
         // TODO Status
     }
 
@@ -252,16 +252,38 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     @Override
     public List<DocumentNote> getOfNote(String noteId) {
         Assert.notNull(noteId);
-        BeanQuery query = getSession().from(documentNote).where(documentNote.note().id.eq(noteId),
-                documentNote.deleted.eq(false), latest(documentNote));
-        return query.list(documentNote);
+        return getSession()
+                .from(documentNote)
+                .where(documentNote.note().id.eq(noteId), documentNote.deleted.eq(false),
+                        latest(documentNote)).list(documentNote);
+    }
+
+    @Override
+    public List<DocumentNote> getOfNoteInDocument(String noteId, String documentId) {
+        Assert.notNull(noteId);
+        Assert.notNull(documentId);
+        return getSession()
+                .from(documentNote)
+                .where(documentNote.note().id.eq(noteId),
+                        documentNote.document().id.eq(documentId), documentNote.deleted.eq(false),
+                        latest(documentNote)).list(documentNote);
     }
 
     @Override
     public List<DocumentNote> getOfTerm(String termId) {
         Assert.notNull(termId);
-        BeanQuery query = getSession().from(documentNote).where(documentNote.note().term().id.eq(termId),
-                documentNote.deleted.eq(false), latest(documentNote));
-        return query.list(documentNote);
+        return getSession()
+                .from(documentNote)
+                .where(documentNote.note().term().id.eq(termId), documentNote.deleted.eq(false),
+                        latest(documentNote)).list(documentNote);
+    }
+
+    @Override
+    public void removeOrphans(String noteId) {
+        for (DocumentNote current : getOfNote(noteId)) {
+            if (current.getDocument() == null) {
+                remove(current);
+            }
+        }
     }
 }

@@ -22,6 +22,8 @@ public class DocumentNoteSearchInfo {
 
     private boolean orphans = false;
 
+    private Document currentDocument;
+
     public Set<Document> getDocuments() {
         return documents;
     }
@@ -76,5 +78,13 @@ public class DocumentNoteSearchInfo {
 
     public void setOrphans(boolean orphans) {
         this.orphans = orphans;
+    }
+
+    public void setCurrentDocument(Document currentDocument) {
+        this.currentDocument = currentDocument;
+    }
+
+    public Document getCurrentDocument() {
+        return currentDocument;
     }
 }

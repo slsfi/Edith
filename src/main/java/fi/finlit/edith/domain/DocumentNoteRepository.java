@@ -72,4 +72,19 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      */
     DocumentNote saveAsCopy(DocumentNote docNote);
 
+    /**
+     * FIXME TEST + DOCUMENT
+     * @param noteId
+     * @param documentId
+     * @return
+     */
+    List<DocumentNote> getOfNoteInDocument(String noteId, String documentId);
+
+    /**
+     * FIXME TEST + DOCUMENT
+     * Removes the orphan DocumentNotes of the given Note.
+     * @param noteId
+     */
+    void removeOrphans(String noteId);
+
 }

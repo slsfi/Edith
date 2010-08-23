@@ -6,6 +6,7 @@
 package fi.finlit.edith.domain;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param longText
      * @return
      */
-    DocumentNote createNote(DocumentRevision docRevision, String localId, String longText);
+    DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String localId, String longText);
 
     Note find(String lemma);
 
@@ -74,11 +75,10 @@ public interface NoteRepository extends Repository<Note, String> {
      */
     NoteComment removeComment(String commentId);
 
-
     /**
-     * Checks if the given Note has no DocumentNotes tied to a Document.
-     * @param noteId
+     * TODO TEST + DOCUMENT
+     * @param lemma
      * @return
      */
-    boolean isOrphan(String noteId);
+    List<Note> findNotes(String lemma);
 }
