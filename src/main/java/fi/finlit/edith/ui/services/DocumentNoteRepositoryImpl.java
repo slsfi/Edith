@@ -19,28 +19,17 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.EBoolean;
 import com.mysema.query.types.expr.EComparableBase;
-import com.mysema.query.types.path.PEntity;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.BeanQuery;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.QDocumentNote;
-import fi.finlit.edith.domain.QNote;
-import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.domain.*;
 
 /**
  * NoteRepositoryImpl provides
@@ -196,7 +185,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return copy;
     }
 
-    private BeanSubQuery sub(PEntity<?> entity) {
+    private BeanSubQuery sub(EntityPath<?> entity) {
         return new BeanSubQuery().from(entity);
     }
 
