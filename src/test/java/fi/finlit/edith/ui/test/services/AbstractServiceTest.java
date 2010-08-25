@@ -30,18 +30,12 @@ import fi.finlit.edith.ui.services.ServiceModule;
  * @version $Id$
  */
 @RunWith(TapestryTestRunner.class)
-@Modules({
-    ServiceTestModule.class,
-    ServiceModule.class,
-    DataModule.class,
-    RDFBeanModule.class})
+@Modules({ ServiceTestModule.class, ServiceModule.class, DataModule.class, RDFBeanModule.class })
 public abstract class AbstractServiceTest {
 
-    static{
+    static {
         FSRepositoryFactory.setup();
     }
-
-    protected abstract Class<?> getServiceClass();
 
     private final List<InputStream> openStreams = new ArrayList<InputStream>();
 
@@ -49,52 +43,51 @@ public abstract class AbstractServiceTest {
 
     protected static final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
-    protected InputStream register(InputStream is){
+    protected InputStream register(InputStream is) {
         openStreams.add(is);
         return is;
     }
 
-    protected void closeStreams(){
-        for (InputStream is : openStreams){
-            try{
+    protected void closeStreams() {
+        for (InputStream is : openStreams) {
+            try {
                 is.close();
-            }catch(IOException io){
+            } catch (IOException io) {
                 io.printStackTrace();
             }
         }
     }
 
+    // @Test
+    // public void allCovered(){
+    // Class<?> serviceClass = getServiceClass();
+    // List<String> missing = CollectionFactory.newList();
+    // if (serviceClass != null){
+    // for (Method m : serviceClass.getMethods()){
+    // if (!m.getDeclaringClass().equals(serviceClass)){
+    // continue;
+    // }
+    // try {
+    // getClass().getMethod(m.getName());
+    // } catch (SecurityException e) {
+    // String error = "Caught " + e.getClass().getName();
+    // throw new RuntimeException(error, e);
+    // } catch (NoSuchMethodException e) {
+    // missing.add(m.getName());
+    // }
+    // }
+    // }
+    // if (!missing.isEmpty()){
+    // fail("Missing tests : " + missing);
+    // }
+    // }
 
-//    @Test
-//    public void allCovered(){
-//        Class<?> serviceClass = getServiceClass();
-//        List<String> missing = CollectionFactory.newList();
-//        if (serviceClass != null){
-//            for (Method m : serviceClass.getMethods()){
-//                if (!m.getDeclaringClass().equals(serviceClass)){
-//                    continue;
-//                }
-//                try {
-//                    getClass().getMethod(m.getName());
-//                } catch (SecurityException e) {
-//                    String error = "Caught " + e.getClass().getName();
-//                    throw new RuntimeException(error, e);
-//                } catch (NoSuchMethodException e) {
-//                    missing.add(m.getName());
-//                }
-//            }
-//        }
-//        if (!missing.isEmpty()){
-//            fail("Missing tests : " + missing);
-//        }
-//    }
-
-    protected static final String start(String localId){
-        return "<anchor xml:id=\"start" + localId+"\"/>";
+    protected static final String start(String localId) {
+        return "<anchor xml:id=\"start" + localId + "\"/>";
     }
 
-    protected static final String end(String localId){
-        return "<anchor xml:id=\"end" + localId+"\"/>";
+    protected static final String end(String localId) {
+        return "<anchor xml:id=\"end" + localId + "\"/>";
     }
 
 }

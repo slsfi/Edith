@@ -43,9 +43,4 @@ public class UserDetailsServiceImplTest extends AbstractServiceTest {
         assertArrayEquals(new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_USER"),
                 new GrantedAuthorityImpl("ROLE_ADMIN") }, userDetails.getAuthorities());
     }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return null;
-    }
 }

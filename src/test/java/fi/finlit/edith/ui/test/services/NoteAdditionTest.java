@@ -233,16 +233,10 @@ public class NoteAdditionTest extends AbstractServiceTest{
     }
 
     private int findStartIndex(String string, String word, int offset) {
-        return StringUtils.countMatches(string.substring(0, (offset + word.length()) + 1 > string.length() ? (offset + word.length()) : (offset + word.length()) + 1), word);
+        return StringUtils.countMatches(string.substring(0, offset + word.length() + 1 > string.length() ? offset + word.length() : offset + word.length() + 1), word);
     }
 
     private int findEndIndex(String string, String word, int offset) {
         return StringUtils.countMatches(string.substring(0, offset), word);
     }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return null;
-    }
-
 }

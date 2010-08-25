@@ -16,7 +16,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.User;
-import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
 import fi.finlit.edith.ui.services.AuthService;
 
@@ -63,10 +62,5 @@ public class UserRepositoryTest extends AbstractServiceTest {
         for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")) {
             assertNotNull(userRepo.getUserInfoByUsername(username));
         }
-    }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return UserRepository.class;
     }
 }

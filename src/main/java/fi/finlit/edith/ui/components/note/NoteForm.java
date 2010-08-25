@@ -1,9 +1,8 @@
 package fi.finlit.edith.ui.components.note;
 
-import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -12,6 +11,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
@@ -26,7 +26,6 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Interval;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
@@ -35,14 +34,13 @@ import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.PersonRepository;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.domain.TermRepository;
 import fi.finlit.edith.ui.services.ParagraphParser;
 
-@SuppressWarnings("unused")
 public class NoteForm {
 
     private static final String EDIT_ZONE = "editZone";
@@ -50,20 +48,20 @@ public class NoteForm {
     private static final Logger logger = LoggerFactory.getLogger(NoteForm.class);
 
     @Parameter
-    private List<DocumentNote> documentNotes;
+    private Set<NoteComment> comments;
 
-    @Property
-    private boolean submitSuccess;
+    @Parameter
+    private Zone commentZone;
 
     @Property
     @Parameter
     private SelectedText createTermSelection;
 
-    @Parameter
-    private List<DocumentNote> selectedNotes;
-
     @Inject
     private DocumentNoteRepository documentNoteRepository;
+
+    @Parameter
+    private List<DocumentNote> documentNotes;
 
     @Inject
     private DocumentRepository documentRepository;
@@ -71,6 +69,9 @@ public class NoteForm {
     @Property
     @Parameter
     private DocumentRevision documentRevision;
+
+    @Parameter
+    private Block documentView;
 
     @Parameter
     private Block errorBlock;
@@ -81,29 +82,11 @@ public class NoteForm {
     @Property
     private NameForm loopPerson;
 
+    @Property
+    private NameForm loopPlace;
+
     @Inject
     private Messages messages;
-
-    @Parameter
-    private Zone commentZone;
-
-    @Parameter
-    private Block documentView;
-
-    @Property
-    private String newPersonDescription;
-
-    @Property
-    private String newPersonFirst;
-
-    @Property
-    private String newPersonLast;
-
-    @Property
-    private String newPlaceDescription;
-
-    @Property
-    private String newPlaceName;
 
     @Parameter
     private Block noteEdit;
@@ -119,6 +102,24 @@ public class NoteForm {
     @Property
     private Block notesList;
 
+    private Person person;
+
+    @Inject
+    private PersonRepository personRepository;
+
+    @InjectComponent
+    @Property
+    private Zone personZone;
+
+    @Property
+    private boolean saveAsNew;
+
+    @Parameter
+    private List<DocumentNote> selectedNotes;
+
+    @Property
+    private boolean submitSuccess;
+
     @Property
     @Parameter
     private Term termOnEdit;
@@ -133,43 +134,6 @@ public class NoteForm {
     @Parameter
     private SelectedText updateLongTextSelection;
 
-    @Property
-    private NameForm loopPlace;
-
-    @Parameter
-    private Set<NoteComment> comments;
-
-    @Property
-    private boolean saveAsNew;
-
-    @Validate("required")
-    public NoteFormat getFormat() {
-        return noteOnEdit.getNote().getFormat();
-    }
-
-    public void setFormat(NoteFormat format) {
-        noteOnEdit.getNote().setFormat(format);
-    }
-
-    public TermLanguage getLanguage() {
-        return termOnEdit.getLanguage();
-    }
-
-    public String getTimeOfBirth() {
-        return noteOnEdit.getNote().getPerson().getTimeOfBirth() == null ? null : noteOnEdit
-                .getNote().getPerson().getTimeOfBirth().asString();
-    }
-
-    public String getTimeOfDeath() {
-        return noteOnEdit.getNote().getPerson().getTimeOfDeath() == null ? null : noteOnEdit
-                .getNote().getPerson().getTimeOfDeath().asString();
-    }
-
-    @Validate("required")
-    public void setLanguage(TermLanguage language) {
-        termOnEdit.setLanguage(language);
-    }
-
     public String getDescription() {
         if (noteOnEdit.getNote().getDescription() == null) {
             return null;
@@ -177,50 +141,60 @@ public class NoteForm {
         return noteOnEdit.getNote().getDescription().toString();
     }
 
-    public String getSources() {
-        if (noteOnEdit.getNote().getSources() == null) {
-            return null;
+    private Term getEditTerm(Note note) {
+        return note.getTerm() != null ? note.getTerm().createCopy() : new Term();
+    }
+
+    @Validate("required")
+    public NoteFormat getFormat() {
+        return noteOnEdit.getNote().getFormat();
+    }
+
+    public TermLanguage getLanguage() {
+        return termOnEdit.getLanguage();
+    }
+
+    public String getNormalizedDescription() {
+        if (isPerson()) {
+            return getPerson().getNormalizedForm().getDescription();
         }
-        return noteOnEdit.getNote().getSources().toString();
+        return null;
     }
 
-    public void setTimeOfBirth(String time) {
-        if (time != null) {
-            noteOnEdit.getNote().getPerson().setTimeOfBirth(Interval.fromString(time));
+    public String getNormalizedFirst() {
+        if (isPerson()) {
+            return getPerson().getNormalizedForm().getFirst();
         }
+        return null;
     }
 
-    void onPrepareFromNoteEditForm(String noteRev) {
-        noteOnEdit = documentNoteRepository.getById(noteRev); // .createCopy();
-        termOnEdit = getEditTerm(noteOnEdit.getNote());
-    }
-
-    public void setTimeOfDeath(String time) {
-        if (time != null) {
-            noteOnEdit.getNote().getPerson().setTimeOfDeath(Interval.fromString(time));
+    public String getNormalizedLast() {
+        if (isPerson()) {
+            return getPerson().getNormalizedForm().getLast();
         }
+        return null;
     }
 
-    public NameForm getNormalizedPlace() {
-        if (noteOnEdit.getNote().getPlace() == null) {
-            noteOnEdit.getNote().setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
+    private Person getPerson() {
+        return person;
+    }
+
+    public String getPersonId() {
+        if (isPerson()) {
+            return getPerson().getId();
         }
-        return noteOnEdit.getNote().getPlace().getNormalizedForm();
-    }
-
-    public Set<NameForm> getPlaces() {
-        return noteOnEdit.getNote().getPlace().getOtherForms();
-    }
-
-    public NameForm getNormalizedPerson() {
-        if (noteOnEdit.getNote().getPerson() == null) {
-            noteOnEdit.getNote().setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
-        }
-        return noteOnEdit.getNote().getPerson().getNormalizedForm();
+        return null;
     }
 
     public Set<NameForm> getPersons() {
-        return noteOnEdit.getNote().getPerson().getOtherForms();
+        if (isPerson()) {
+            return getPerson().getOtherForms();
+        }
+        return new HashSet<NameForm>();
+    }
+
+    public String getSearch() {
+        return "";
     }
 
     public Set<NoteType> getSelectedTypes() {
@@ -230,60 +204,87 @@ public class NoteForm {
         return noteOnEdit.getNote().getTypes();
     }
 
+    public String getSources() {
+        if (noteOnEdit.getNote().getSources() == null) {
+            return null;
+        }
+        return noteOnEdit.getNote().getSources().toString();
+    }
+
     public NoteStatus getStatus() {
         return noteOnEdit.getStatus();
     }
 
-    @Validate("required")
-    public void setStatus(NoteStatus status) {
-        noteOnEdit.setStatus(status);
-    }
-
     public EnumSelectModel getStatusModel() {
-        NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(NoteStatus.INITIAL) ? new NoteStatus[] {
+        final NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(NoteStatus.INITIAL) ? new NoteStatus[] {
                 NoteStatus.INITIAL, NoteStatus.DRAFT, NoteStatus.FINISHED }
                 : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
         return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
+    }
+
+    public int getTermInstances() {
+        if (noteOnEdit.getNote().getTerm() != null) {
+            return documentNoteRepository.getOfTerm(noteOnEdit.getNote().getTerm().getId()).size();
+        }
+        return 0;
+    }
+
+    public String getTimeOfBirth() {
+        if (isPerson() && getPerson().getTimeOfBirth() != null) {
+            return getPerson().getTimeOfBirth().asString();
+        }
+        return null;
+    }
+
+    public String getTimeOfDeath() {
+        if (isPerson() && getPerson().getTimeOfDeath() != null) {
+            return getPerson().getTimeOfDeath().asString();
+        }
+        return null;
     }
 
     public NoteType[] getTypes() {
         return NoteType.values();
     }
 
+    private boolean isPerson() {
+        return person != null;
+    }
+
     public boolean isSelected() {
         return getSelectedTypes().contains(type);
     }
 
-    public void setDescription(String description) throws XMLStreamException {
-        if (description != null) {
-            noteOnEdit.getNote().setDescription(ParagraphParser.parseParagraph(description));
+    Object onPerson(String id) {
+        if (!isPerson()) {
+            setPerson(personRepository.getById(id));
         }
+        // TODO Remove multizoneupdate
+        return personZone.getBody();
     }
 
-    public void setSources(String sources) throws XMLStreamException {
-        if (sources != null) {
-            noteOnEdit.getNote().setSources(ParagraphParser.parseParagraph(sources));
+    void onPrepareFromNoteEditForm(String noteRev) {
+        noteOnEdit = documentNoteRepository.getById(noteRev); // .createCopy();
+        if (!isPerson()) {
+            setPerson(noteOnEdit.getNote().getPerson());
         }
+        termOnEdit = getEditTerm(noteOnEdit.getNote());
     }
 
-    private Term getEditTerm(Note note) {
-        return note.getTerm() != null ? note.getTerm().createCopy() : new Term();
+    List<Term> onProvideCompletionsFromBasicForm(String partial) {
+        return termRepository.findByStartOfBasicForm(partial, 10);
     }
 
-    Object onSuccessFromNoteEditForm() throws IOException {
+    Collection<Person> onProvideCompletionsFromPerson(String partial) {
+        return personRepository.findByStartOfFirstAndLastName(partial, 10);
+    }
+
+    Object onSuccessFromNoteEditForm() {
         DocumentNote documentNote;
+        noteOnEdit.getNote().setPerson(getPerson());
         if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
             noteOnEdit.setStatus(NoteStatus.DRAFT);
         }
-        updateNames(noteOnEdit.getNote().getPerson().getOtherForms(), newPersonFirst,
-                newPersonLast, newPersonDescription);
-        newPersonFirst = null;
-        newPersonLast = null;
-        newPersonDescription = null;
-        updateName(noteOnEdit.getNote().getPlace().getOtherForms(), newPlaceName,
-                newPlaceDescription);
-        newPlaceName = null;
-        newPlaceDescription = null;
         try {
             if (updateLongTextSelection.isValid()) {
                 documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);
@@ -295,7 +296,7 @@ public class NoteForm {
                     documentNote = documentNoteRepository.save(noteOnEdit);
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e.getMessage(), e);
             infoMessage = messages.format("note-addition-failed");
             return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
@@ -323,9 +324,9 @@ public class NoteForm {
     private void saveTerm(DocumentNote noteRevision) {
         // The idea is that language can be changed without a new term being created. It is a
         // bit hard to follow I admit. -vema
-        List<Term> terms = termRepository.findByBasicForm(termOnEdit.getBasicForm());
+        final List<Term> terms = termRepository.findByBasicForm(termOnEdit.getBasicForm());
         Term term = terms.isEmpty() ? termOnEdit : null;
-        for (Term current : terms) {
+        for (final Term current : terms) {
             if (termOnEdit.getMeaning() == null && current.getMeaning() == null
                     || termOnEdit.getMeaning().equals(current.getMeaning())) {
                 term = current;
@@ -341,6 +342,37 @@ public class NoteForm {
         noteRepository.save(noteRevision.getNote());
     }
 
+    public void setDescription(String description) throws XMLStreamException {
+        if (description != null) {
+            noteOnEdit.getNote().setDescription(ParagraphParser.parseParagraph(description));
+        }
+    }
+
+    public void setFormat(NoteFormat format) {
+        noteOnEdit.getNote().setFormat(format);
+    }
+
+    @Validate("required")
+    public void setLanguage(TermLanguage language) {
+        termOnEdit.setLanguage(language);
+    }
+
+    private void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public void setPersonId(String id) {
+        if (id != null) {
+            setPerson(personRepository.getById(id));
+        } else {
+            setPerson(null);
+        }
+    }
+
+    public void setSearch(String s) {
+        // Do nothing
+    }
+
     public void setSelected(boolean selected) {
         if (selected) {
             getSelectedTypes().add(type);
@@ -349,37 +381,21 @@ public class NoteForm {
         }
     }
 
-    List<Term> onProvideCompletionsFromBasicForm(String partial) {
-        return termRepository.findByStartOfBasicForm(partial, 10);
-    }
-
-    private void updateName(Set<NameForm> nameForms, String name, String description) {
-        updateNames(nameForms, null, name, description);
-    }
-
-    private void updateNames(Set<NameForm> nameForms, String first, String last, String description) {
-        if (first != null || last != null) {
-            if (first == null) {
-                nameForms.add(new NameForm(last, description));
-            } else {
-                nameForms.add(new NameForm(first, last, description));
-            }
-        }
-        // Removes name forms that don't have a name entered.
-        Iterator<NameForm> iter = nameForms.iterator();
-        while (iter.hasNext()) {
-            NameForm current = iter.next();
-            if (current.getFirst() == null && current.getLast() == null) {
-                iter.remove();
-            }
+    public void setSources(String sources) throws XMLStreamException {
+        if (sources != null) {
+            noteOnEdit.getNote().setSources(ParagraphParser.parseParagraph(sources));
         }
     }
 
-    public int getTermInstances() {
-        if (noteOnEdit.getNote().getTerm() != null) {
-            return documentNoteRepository.getOfTerm(noteOnEdit.getNote().getTerm().getId()).size();
+    @Validate("required")
+    public void setStatus(NoteStatus status) {
+        noteOnEdit.setStatus(status);
+    }
+
+    public int getPersonInstances() {
+        if (isPerson()) {
+            return documentNoteRepository.getOfPerson(getPerson().getId()).size();
         }
         return 0;
     }
-
 }

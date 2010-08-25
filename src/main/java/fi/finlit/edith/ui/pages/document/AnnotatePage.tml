@@ -28,7 +28,7 @@
 		      <a id="createTermLink" class="disabled selection-link jqModal" href="#">${message:createTerm}</a> 
 		  </span>
 		  <span>
-              <a id="createPersonLink" class="jqModal" href="#">${message:createPerson}</a> 
+              <t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqModal">${message:createPerson}</t:eventlink>
           </span>
 	   </div>
 	</p:leftPanel>
@@ -192,7 +192,6 @@
 							comments="comments"
 							searchInfo="searchInfo"
 							documentNotes="documentNotes"
-							
 							notesList="notesList"
 							noteEdit="noteEdit"
 							errorBlock="errorBlock"
@@ -306,7 +305,11 @@
     </t:block>
     
     <t:block t:id="closeDialog">
-        ${message:noteCreated}
+        ${message:create-success}
+    </t:block>
+    
+    <t:block t:id="personForm">
+        <t:note.personForm closeDialog="closeDialog"/>
     </t:block>
 
 	<script type="text/javascript">

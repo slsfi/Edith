@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 
@@ -22,17 +22,11 @@ public class TimeServiceTest extends AbstractServiceTest{
 
     @Inject
     private TimeService timeService;
-    
+
     @Test
     public void currentTimeMillis(){
         long t1 = timeService.currentTimeMillis();
         long t2 = timeService.currentTimeMillis();
         assertTrue(t2 > t1);
     }
-    
-    @Override
-    protected Class<?> getServiceClass() {
-        return TimeService.class;
-    }
-
 }

@@ -70,10 +70,4 @@ public class AdminServiceTest extends AbstractServiceTest{
         assertTrue(noteRepository.getAll().isEmpty());
         assertTrue(termRepository.getAll().isEmpty());
     }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return AdminService.class;
-    }
-
 }

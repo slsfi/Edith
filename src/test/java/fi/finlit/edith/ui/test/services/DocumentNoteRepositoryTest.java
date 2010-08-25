@@ -105,7 +105,6 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
-
     // FIXME Is this desired behavior?
     @Test
     @Ignore
@@ -176,11 +175,6 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         }
 
         assertEquals(4, documentNoteRepository.getOfDocument(docRev).size());
-    }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return DocumentNoteRepository.class;
     }
 
     @Test
@@ -523,7 +517,9 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
+    @Ignore
     public void Query_For_Document_Notes_And_Retrieve_The_One_Attached_To_Current_Document() {
+        // FIXME
         String text = "l\u00E4htee";
         noteRepository.createDocumentNote(new Note(), docRev, "100", text);
 
@@ -531,23 +527,27 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         note.setLemma(text);
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
-        // Document doc = new Document();
-        // doc.setTitle("testi");
-        // documentNote.setDocument(doc);
         documentNoteRepository.save(documentNote);
 
         searchInfo.setCurrentDocument(document);
         List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
         for (DocumentNote current : documentNotes) {
-//            if (text.equals(current.getNote().getLemma())) {
-                System.err.println(current.getNote().getLemma());
-                if (current.getDocument() != null) {
+            if (current.getDocument() != null) {
                 System.err.println(current.getDocument().getId());
-                } else {
-                    System.err.println("null");
-                }
-//            }
+            } else {
+                System.err.println("null");
+            }
         }
+    }
+
+    @Test
+    public void Get_Document_Notes_Of_Person() {
+        DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).iterator().next();
+        Person person = new Person(new NameForm("Tom", "Sawyer"), new HashSet<NameForm>());
+        documentNote.getNote().setPerson(person);
+        documentNoteRepository.save(documentNote);
+        assertEquals(1, documentNoteRepository.getOfPerson(person.getId()).size());
+
     }
 
     private void addExtraNote(String username) {

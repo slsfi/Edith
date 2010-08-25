@@ -46,7 +46,6 @@ import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.svn.SubversionException;
-import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
 import fi.finlit.edith.ui.services.svn.UpdateCallback;
 
@@ -358,10 +357,4 @@ public class SubversionServiceTest extends AbstractServiceTest {
     @Ignore
     public void destroy() {
     }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return SubversionService.class;
-    }
-
 }

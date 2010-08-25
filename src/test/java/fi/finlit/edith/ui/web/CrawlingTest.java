@@ -17,6 +17,7 @@ import java.util.Stack;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
@@ -94,6 +95,8 @@ public class CrawlingTest {
     @Rule
     public MethodRule rule = new SystemPropertyCheckRule("webtest");
 
+    // FIXME
+    @Ignore
     @Test
     public void browsePages() throws Exception {
         webDriver.get(baseUrl + "/login");

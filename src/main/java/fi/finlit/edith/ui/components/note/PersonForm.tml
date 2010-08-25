@@ -1,68 +1,41 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 	<t:content>
-		<t:form t:id="personForm" t:zone="editZone" t:context="person.id">
+		<t:form t:id="personForm" t:zone="dialogZone" t:context="person">
 			<t:errors />
 			
 			<div>
-				<div>
-					<strong>${message:normalizedForm-label}</strong>
-				</div>
-				<div>
-				    <div>- ${message:firstName-label}</div>
-					<div><t:textField t:id="normalizedFirst" value="normalizedPerson.first" /></div>
-					<div>- ${message:lastName-label}</div>
-					<div><t:textField t:id="normalizedLast" value="normalizedPerson.last" /></div>
-				</div>
+				<div><strong>${message:normalizedForm-label}</strong></div>
+				<div>- ${message:firstName-label}</div>
+				<div><t:textField t:id="normalizedFirst" value="person.normalizedForm.first" /></div>
+				<div>- ${message:lastName-label}</div>
+				<div><t:textField t:id="normalizedLast" value="person.normalizedForm.last" /></div>
+    			<div>- ${message:description-label}</div>
+				<div><t:textField t:id="normalizedDescription" value="person.normalizedForm.description" /></div>
 			</div>
-
+			
 			<div>
-				<div>- ${message:description-label}</div>
-				<div>
-					<t:textField t:id="normalizedDescription" value="normalizedPerson.description" />
-				</div>
-			</div>
+                <div><strong>${message:createNameForm-label}</strong></div>
+                <div>- ${message:firstName-label}</div>
+                <div><t:textField t:id="newFirst" value="newFirst" /></div>
+                <div>- ${message:lastName-label}</div>
+                <div><t:textField t:id="newLast" value="newLast" /></div>
+                <div>- ${message:description-label}</div>
+                <div><t:textField t:id="newDescription" value="newDescription" /></div>
+            </div>
 
 			<t:loop source="persons" value="loopPerson" volatile="true">
-				<div class="person">
-					<div>
-						<strong>${message:nameForm-label}</strong>
-					</div>
-					<div>
-					    <div>- ${message:firstName-label}</div> 
-						<div><t:textField value="loopPerson.first" /></div>
-						<div>- ${message:lastName-label}</div>
-						<div><t:textField value="loopPerson.last" /></div>
-					</div>
-				</div>
-
-				<div class="person">
-					<div>- ${message:description-label}</div>
-					<div>
-						<t:textField value="loopPerson.description" />
-					</div>
-				</div>
-
-			</t:loop>
-			<div class="person">
 				<div>
-					<strong>${message:createNameForm-label}</strong>
-				</div>
-				<div>
-				    <div>- ${message:firstName-label}</div> 
-					<div><t:textField value="newPersonFirst" /></div>
+					<div><strong>${message:nameForm-label}</strong></div>
+					<div>- ${message:firstName-label}</div> 
+					<div><t:textField value="loopPerson.first" /></div>
 					<div>- ${message:lastName-label}</div>
-					<div><t:textField value="newPersonLast" /></div>
+					<div><t:textField value="loopPerson.last" /></div>
+    				<div>- ${message:description-label}</div>
+					<div><t:textField value="loopPerson.description" /></div>
 				</div>
-			</div>
+			</t:loop>
 
-			<div class="person">
-				<div>- ${message:description-label}</div>
-				<div>
-					<t:textField value="newPersonDescription" />
-				</div>
-			</div>
-
-			<div class="person">
+			<div>
 				<div>
 					<strong>${message:timeOfBirth-label} (d.M.y)</strong>
 				</div>
@@ -71,7 +44,7 @@
 				</div>
 			</div>
 
-			<div class="person">
+			<div>
 				<div>
 					<strong>${message:timeOfDeath-label} (d.M.y)</strong>
 				</div>

@@ -5,7 +5,6 @@
  */
 package fi.finlit.edith.ui.pages.document;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,7 +48,6 @@ import fi.finlit.edith.domain.UserInfo;
  * @author tiwe
  * @version $Id$
  */
-@SuppressWarnings("unused")
 @IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
         "TextSelector.js", "AnnotatePage.js", "classpath:jqModal.js" })
 @IncludeStylesheet("context:styles/tei.css")
@@ -92,6 +90,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Inject
     @Property
     private Block closeDialog;
+
+    @Inject
+    @Property
+    private Block personForm;
 
     @Inject
     private Block infoBlock;
@@ -204,7 +206,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         }
     }
 
-    Object onDelete(EventContext context) throws IOException {
+    Object onDelete(EventContext context) {
         noteOnEdit = documentNoteRepository.getById(context.get(String.class, 0));
         DocumentRevision documentRevision = getDocumentRevision();
         documentRevision = getDocumentRepository().removeNotes(documentRevision, noteOnEdit);
@@ -257,7 +259,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         noteOnEdit = documentNoteRepository.getById(id);
     }
 
-    Object onSuccessFromCommentForm() throws IOException {
+    Object onSuccessFromCommentForm() {
         comments = noteOnEdit.getNote().getComments();
         if (newCommentMessage != null) {
             comments.add(noteRepository.createComment(noteOnEdit.getNote(), newCommentMessage));
@@ -267,7 +269,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         return commentZone.getBody();
     }
 
-    Object onSuccessFromCreateTerm() throws IOException {
+    Object onSuccessFromCreateTerm() {
         logger.info(createTermSelection.toString());
         DocumentRevision documentRevision = getDocumentRevision();
 
@@ -276,8 +278,8 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (notes.isEmpty()) {
             DocumentNote documentNote = null;
             try {
-                Note note = new Note();
-                documentNote = getDocumentRepository().addNote(note, documentRevision,
+                Note n = new Note();
+                documentNote = getDocumentRepository().addNote(n, documentRevision,
                         createTermSelection);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -350,7 +352,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         logger.info(createTermSelection.toString());
         DocumentNote documentNote;
         DocumentRevision documentRevision = getDocumentRevision();
-        Note note;
         try {
             if (noteId == null) {
                 documentNote = getDocumentRepository().addNote(new Note(), documentRevision,
@@ -370,5 +371,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
                 .add("documentZone", documentView).add("commentZone", commentZone.getBody())
                 .add("dialogZone", closeDialog);
+    }
+
+    Object onCreatePerson() {
+        return personForm;
     }
 }

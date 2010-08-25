@@ -111,11 +111,6 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(note);
     }
 
-    @Override
-    protected Class<?> getServiceClass() {
-        return NoteRepository.class;
-    }
-
     @Test
     public void importNote() throws Exception {
         noteRepository.importNotes(noteTestData);

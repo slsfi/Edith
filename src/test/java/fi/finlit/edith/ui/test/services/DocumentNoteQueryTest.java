@@ -67,10 +67,4 @@ public class DocumentNoteQueryTest extends AbstractServiceTest{
         }
         assertNull(dataSource.getRowValue(1));
     }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return null;
-    }
-
 }

@@ -22,16 +22,16 @@ import fi.finlit.edith.ui.services.DocumentRenderer;
 public class DocumentRendererTest extends AbstractServiceTest {
 
     private static final String doc1 = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
-    
+
     private static final String doc2 = "/documents/trunk/Nummisuutarit rakenteistettuna-annotoituna.xml";
-        
+
     @Inject
     private DocumentRenderer renderer;
-    
+
     @Inject
     private DocumentRepository docRepo;
-    
-    private MarkupWriter writer = new MarkupWriterImpl();
+
+    private final MarkupWriter writer = new MarkupWriterImpl();
 
     @Test
     public void renderDocument() throws Exception {
@@ -47,10 +47,4 @@ public class DocumentRendererTest extends AbstractServiceTest {
     public void renderDocumentWithNotes() throws Exception {
         renderer.renderDocument(docRepo.getDocumentForPath(doc2).getRevision(-1), writer);
     }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return DocumentRenderer.class;
-    }
-
 }

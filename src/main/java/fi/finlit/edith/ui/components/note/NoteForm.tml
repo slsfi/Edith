@@ -49,7 +49,7 @@
 					</t:loop>
 				</div>
 			</div>
-
+            
 			<div class="note">
 				<div>
 					<strong>${message:basicForm-label}</strong> (${termInstances} ${message:amountOfInstances})
@@ -73,134 +73,79 @@
 					<t:select t:id="language" />
 				</div>
 			</div>
-
+			
 			<div class="person">
-				<div>
-					<strong>${message:normalizedForm-label}</strong>
-				</div>
-				<div>
-				    <div>- ${message:firstName-label}</div>
-					<div><t:textField t:id="normalizedFirst" value="normalizedPerson.first" /></div>
-					<div>- ${message:lastName-label}</div>
-					<div><t:textField t:id="normalizedLast" value="normalizedPerson.last" /></div>
-				</div>
-			</div>
+			         <strong>${message:personSearch}</strong>
+            <t:textField t:id="person" value="search" t:mixins="personAutocomplete" />
+			         <t:textfield t:id="personId" value="personId" style="display: none;"/>
+                
+            </div>
+			<t:zone id="personZone" t:id="personZone" t:zone="personZone" update="show">
+			<script type="text/javascript">
+			jQuery(function() {
+			    jQuery("input[name='personId']").attr("value", jQuery("#personId").attr("name"));
+			});
+			</script>
+			
+			<div id="personId" name="${personId}" style="display: none;"/>
+            <div class="person">
+                <div><strong>${message:normalizedForm-label}</strong> (${personInstances} ${message:amountOfInstances})</div>
+                <t:if test="normalizedFirst">
+                    <div>- ${message:firstName-label}</div>
+                    <div>${normalizedFirst}</div>
+                </t:if>
+                <t:if test="normalizedLast">
+                    <div>- ${message:lastName-label}</div>
+                    <div>${normalizedLast}</div>
+                </t:if>
+                <t:if test="normalizedDescription">
+                    <div>- ${message:description-label}</div>
+                    <div>${normalizedDescription}</div>
+                </t:if>
+            </div>
 
-			<div class="person">
-				<div>- ${message:description-label}</div>
-				<div>
-					<t:textField t:id="normalizedDescription" value="normalizedPerson.description" />
-				</div>
-			</div>
+            <div class="person">
+            <t:loop source="persons" value="loopPerson" volatile="true">
+                <div>
+                    <div><strong>${message:nameForm-label}</strong></div>
+                    <t:if test="loopPerson.first">
+                        <div>- ${message:firstName-label}</div>
+                        <div>${loopPerson.first}</div>
+                    </t:if> 
+                    <t:if test="loopPerson.last">
+                        <div>- ${message:lastName-label}</div>
+                        <div>${loopPerson.last}</div>
+                    </t:if>
+                    <t:if test="loopPerson.description">
+                        <div>- ${message:description-label}</div>
+                        <div>${loopPerson.description}</div>
+                    </t:if>
+                </div>
+            </t:loop>
+            </div>
 
-			<t:loop source="persons" value="loopPerson" volatile="true">
-				<div class="person">
-					<div>
-						<strong>${message:nameForm-label}</strong>
-					</div>
-					<div>
-					    <div>- ${message:firstName-label}</div> 
-						<div><t:textField value="loopPerson.first" /></div>
-						<div>- ${message:lastName-label}</div>
-						<div><t:textField value="loopPerson.last" /></div>
-					</div>
-				</div>
+            <t:if test="timeOfBirth">
+            <div class="person">
+                <div>
+                    <strong>${message:timeOfBirth-label} (d.M.y)</strong>
+                </div>
+                <div>
+                    ${timeOfBirth}
+                </div>
+            </div>
+            </t:if>
 
-				<div class="person">
-					<div>- ${message:description-label}</div>
-					<div>
-						<t:textField value="loopPerson.description" />
-					</div>
-				</div>
-
-			</t:loop>
-			<div class="person">
-				<div>
-					<strong>${message:createNameForm-label}</strong>
-				</div>
-				<div>
-				    <div>- ${message:firstName-label}</div> 
-					<div><t:textField value="newPersonFirst" /></div>
-					<div>- ${message:lastName-label}</div>
-					<div><t:textField value="newPersonLast" /></div>
-				</div>
-			</div>
-
-			<div class="person">
-				<div>- ${message:description-label}</div>
-				<div>
-					<t:textField value="newPersonDescription" />
-				</div>
-			</div>
-
-			<div class="person">
-				<div>
-					<strong>${message:timeOfBirth-label} (d.M.y)</strong>
-				</div>
-				<div>
-					<t:textField t:id="timeOfBirth" />
-				</div>
-			</div>
-
-			<div class="person">
-				<div>
-					<strong>${message:timeOfDeath-label} (d.M.y)</strong>
-				</div>
-				<div>
-					<t:textField t:id="timeOfDeath" />
-				</div>
-			</div>
-
-			<div class="place">
-				<div>
-					<strong>${message:normalizedForm-label}</strong>
-				</div>
-				<div>
-					<t:textField t:id="normalizedPlaceName" value="normalizedPlace.name" />
-				</div>
-			</div>
-
-			<div class="place">
-				<div>- ${message:description-label}</div>
-				<div>
-					<t:textField t:id="normalizedPlaceDescription"
-						value="normalizedPlace.description" />
-				</div>
-			</div>
-
-			<t:loop source="places" value="loopPlace" volatile="true">
-				<div class="place">
-					<div>
-						<strong>${message:nameForm-label}</strong>
-					</div>
-					<div>
-						<t:textField value="loopPlace.name" />
-					</div>
-				</div>
-
-				<div class="place">
-					<div>- ${message:description-label}</div>
-					<div>
-						<t:textField value="loopPlace.description" />
-					</div>
-				</div>
-
-			</t:loop>
-			<div class="place">
-				<div>
-					<strong>${message:createNameForm-label}</strong>
-				</div>
-				<div>
-					<t:textField value="newPlaceName" />
-				</div>
-			</div>
-
-			<div class="place">
-				<div>- ${message:description-label}</div>
-				<div>
-					<t:textField value="newPlaceDescription" />
-				</div>
-			</div>
+            <t:if test="timeOfDeath">
+            <div class="person">
+                <div>
+                    <strong>${message:timeOfDeath-label} (d.M.y)</strong>
+                </div>
+                <div>
+                    ${timeOfDeath}
+                </div>
+            </div>
+            </t:if>
+            </t:zone>
 
 			<div class="note person place">
 				<div>

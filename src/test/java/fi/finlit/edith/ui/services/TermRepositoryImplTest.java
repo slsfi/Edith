@@ -52,9 +52,4 @@ public class TermRepositoryImplTest extends AbstractServiceTest {
         assertEquals(2, results.size());
     }
 
-    @Override
-    protected Class<?> getServiceClass() {
-        return null;
-    }
-
 }

@@ -392,11 +392,4 @@ public class NoteAddition2Test extends AbstractServiceTest {
         assertTrue(content.contains("Jaa" + start(localId) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
         assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId) + "epp\u00E4</roleDesc>.</castItem>"));
     }
-
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return null;
-    }
-
 }

@@ -35,7 +35,17 @@ public class NameForm extends Identifiable {
     }
 
     public String getName() {
-        return first == null ? last : first + " " + last;
+        StringBuilder builder = new StringBuilder();
+        if (first != null) {
+            builder.append(first);
+        }
+        if (first != null && last != null) {
+            builder.append(" ");
+        }
+        if (last != null) {
+            builder.append(last);
+        }
+        return builder.toString();
     }
 
     public void setName(String name) {

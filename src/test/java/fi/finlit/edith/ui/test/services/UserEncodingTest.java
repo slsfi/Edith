@@ -43,10 +43,4 @@ public class UserEncodingTest extends AbstractServiceTest {
             passwordEncoder.encodePassword(user.getUsername(), saltSource.getSalt(userDetails));
         }
     }
-
-    @Override
-    protected Class<?> getServiceClass() {
-        return null;
-    }
-
 }

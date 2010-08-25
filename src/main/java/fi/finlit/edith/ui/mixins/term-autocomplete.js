@@ -1,4 +1,3 @@
-
 jQuery.noConflict();
 
 Tapestry.Initializer.termAutocompleter = function(elementId) {

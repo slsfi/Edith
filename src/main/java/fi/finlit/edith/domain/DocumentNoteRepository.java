@@ -49,6 +49,13 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
     List<DocumentNote> getOfNote(String noteId);
 
     /**
+     * Get the DocumentNotes of the given Person.
+     * @param personId
+     * @return
+     */
+    List<DocumentNote> getOfPerson(String personId);
+
+    /**
      * Query for notes matching the given search term
      *
      * @param searchTem

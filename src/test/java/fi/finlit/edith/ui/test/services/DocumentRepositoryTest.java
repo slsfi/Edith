@@ -165,11 +165,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         }
     }
 
-    @Override
-    protected Class<?> getServiceClass() {
-        return DocumentRepository.class;
-    }
-
     @Test
     public void removeAllNotes() throws Exception{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");

@@ -28,7 +28,17 @@ import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.DocumentNoteSearchInfo;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.QDocumentNote;
+import fi.finlit.edith.domain.QNote;
+import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.domain.UserRepository;
 
 /**
  * NoteRepositoryImpl provides
@@ -276,6 +286,16 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.note().term().id.eq(termId), documentNote.deleted.eq(false),
                         latest(documentNote)).list(documentNote);
+    }
+
+    @Override
+    public List<DocumentNote> getOfPerson(String personId) {
+        Assert.notNull(personId);
+        return getSession()
+                .from(documentNote)
+                .where(documentNote.note().person().id.eq(personId),
+                        documentNote.deleted.eq(false), latest(documentNote)).list(documentNote);
+
     }
 
     @Override

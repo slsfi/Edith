@@ -20,35 +20,30 @@ import fi.finlit.edith.domain.Paragraph;
 import fi.finlit.edith.domain.StringElement;
 
 public class ParagraphPersistenceTest extends AbstractServiceTest{
-    
+
     @Inject
     private SessionFactory sessionFactory;
 
     private Session session;
-    
-    @Override
-    protected Class<?> getServiceClass() {
-        return null;
-    }
-    
+
     @Before
     public void setUp(){
         session = sessionFactory.openSession();
     }
-    
+
     @After
     public void tearDown() throws IOException{
         if (session != null){
-            session.close();    
-        }        
+            session.close();
+        }
     }
-    
+
     @Test
     public void test_same_Session(){
         Paragraph paragraph = newParagraph();
         session.save(paragraph);
         session.clear();
-        
+
         Paragraph paragraph2 = session.getById(paragraph.getId(), Paragraph.class);
         assertEquals(3, paragraph2.getElements().size());
         assertEquals(paragraph.getElements(), paragraph2.getElements());
@@ -60,14 +55,14 @@ public class ParagraphPersistenceTest extends AbstractServiceTest{
         Paragraph paragraph = newParagraph();
         session.save(paragraph);
         session.close();
-        
+
         session = sessionFactory.openSession();
         Paragraph paragraph2 = session.getById(paragraph.getId(), Paragraph.class);
         assertEquals(3, paragraph2.getElements().size());
         assertEquals(paragraph.getElements(), paragraph2.getElements());
         assertNotNull(paragraph2.getElements().get(0));
     }
-    
+
     @Test
     public void test_in_deep_path() throws IOException{
         Note note = new Note();
@@ -78,7 +73,7 @@ public class ParagraphPersistenceTest extends AbstractServiceTest{
         session.save(note);
         session.save(documentNote);
         session.close();
-        
+
         session = sessionFactory.openSession();
         DocumentNote documentNote2 = session.getById(documentNote.getId(), DocumentNote.class);
         Paragraph paragraph2 = documentNote2.getNote().getDescription();
@@ -87,7 +82,7 @@ public class ParagraphPersistenceTest extends AbstractServiceTest{
         assertNotNull(paragraph2.getElements().get(0));
     }
 
-    
+
     private Paragraph newParagraph() {
         Paragraph paragraph = new Paragraph();
         paragraph.addElement(new StringElement("a"));
