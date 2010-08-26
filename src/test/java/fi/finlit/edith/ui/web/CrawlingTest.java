@@ -17,7 +17,6 @@ import java.util.Stack;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
@@ -95,8 +94,6 @@ public class CrawlingTest {
     @Rule
     public MethodRule rule = new SystemPropertyCheckRule("webtest");
 
-    // FIXME
-    @Ignore
     @Test
     public void browsePages() throws Exception {
         webDriver.get(baseUrl + "/login");
@@ -123,7 +120,9 @@ public class CrawlingTest {
         while (!links.isEmpty()) {
             String current = links.pop();
             current = current.startsWith("/") ? current : "/" + current;
-            if (visited.contains(current)) {
+            // FIXME We are skipping URLs that contain ".." because they break in HtmlUnit.
+            // Find out why such URLs are constructed.
+            if (visited.contains(current) || current.contains("..")) {
                 continue;
             }
             result.add(current);
