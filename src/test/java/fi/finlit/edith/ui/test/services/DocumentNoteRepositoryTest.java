@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -66,7 +67,7 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**
  * NoteRevisionRepositoryTest provides
- *
+ * 
  * @author tiwe
  * @version $Id$
  */
@@ -205,10 +206,35 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void remove() {
+    public void Remove() {
         DocumentNote documentNote = documentNoteRepository.getByLocalId(docRev, "1");
         documentNoteRepository.remove(documentNote);
         assertTrue(documentNoteRepository.getById(documentNote.getId()).isDeleted());
+    }
+
+    @Test
+    public void Remove_By_Id() {
+        DocumentNote documentNote = documentNoteRepository.getByLocalId(docRev, "1");
+        documentNoteRepository.remove(documentNote.getId());
+        assertTrue(documentNoteRepository.getById(documentNote.getId()).isDeleted());
+    }
+
+    @Test
+    public void Remove_Orphans() {
+        noteRepository.importNotes(noteTestData);
+        Collection<DocumentNote> documentNotes = documentNoteRepository.getAll();
+        assertEquals(15, documentNotes.size());
+        DocumentNote orphan = null;
+        for (DocumentNote documentNote : documentNotes) {
+            if (documentNote.getDocument() == null) {
+                orphan = documentNote;
+                break;
+            }
+        }
+        // If we didn't find an orphan this test will fail in an exception.
+        assertFalse(documentNoteRepository.getById(orphan.getId()).isDeleted());
+        documentNoteRepository.removeOrphans(orphan.getNote().getId());
+        assertTrue(documentNoteRepository.getById(orphan.getId()).isDeleted());
     }
 
     @Before
@@ -547,7 +573,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         documentNote.getNote().setPerson(person);
         documentNoteRepository.save(documentNote);
         assertEquals(1, documentNoteRepository.getOfPerson(person.getId()).size());
+    }
 
+    @Test
+    public void Get_Document_Notes_Of_Note_In_Document() {
+        DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).iterator().next();
+        List<DocumentNote> documentNotes = documentNoteRepository.getOfNoteInDocument(documentNote
+                .getNote().getId(), documentNote.getDocument().getId());
+        assertEquals(1, documentNotes.size());
     }
 
     private void addExtraNote(String username) {

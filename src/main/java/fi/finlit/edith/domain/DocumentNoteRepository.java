@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mysema.rdfbean.dao.Repository;
 
-
 /**
  * The Interface NoteRevisionRepository.
  */
@@ -43,6 +42,7 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
 
     /**
      * Get the document notes of the given note.
+     *
      * @param noteId
      * @return
      */
@@ -50,6 +50,7 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
 
     /**
      * Get the DocumentNotes of the given Person.
+     *
      * @param personId
      * @return
      */
@@ -67,6 +68,7 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
 
     /**
      * Returns all the document notes attached to the term.
+     *
      * @param termId
      * @return
      */
@@ -74,13 +76,15 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
 
     /**
      * Saves the document note with the backing note copied as a new one.
+     *
      * @param docNote
      * @return
      */
     DocumentNote saveAsCopy(DocumentNote docNote);
 
     /**
-     * FIXME TEST + DOCUMENT
+     * Returns the DocumentNotes with the same given Note in the given Document.
+     *
      * @param noteId
      * @param documentId
      * @return
@@ -88,8 +92,8 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
     List<DocumentNote> getOfNoteInDocument(String noteId, String documentId);
 
     /**
-     * FIXME TEST + DOCUMENT
      * Removes the orphan DocumentNotes of the given Note.
+     *
      * @param noteId
      */
     void removeOrphans(String noteId);

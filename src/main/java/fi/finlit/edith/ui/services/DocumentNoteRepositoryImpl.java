@@ -132,8 +132,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     @Override
-    public void remove(String noteRevisionId) {
-        DocumentNote note = super.getById(noteRevisionId);
+    public void remove(String documentNoteId) {
+        DocumentNote note = super.getById(documentNoteId);
         remove(note);
     }
 
