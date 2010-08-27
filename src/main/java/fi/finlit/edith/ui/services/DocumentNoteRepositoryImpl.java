@@ -238,7 +238,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 otherNote.note().eq(documentNote.note()),
                 otherNote.createdOn.gt(documentNote.createdOn)).notExists());
 
-        return getSession().from(documentNote).where(documentNote.note().isNotNull(), filters)
+        return getSession().from(documentNote).where(filters)
                 .orderBy(getOrderBy(searchInfo)).list(documentNote);
         // TODO Status
     }
