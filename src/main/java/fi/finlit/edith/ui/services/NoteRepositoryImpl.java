@@ -188,9 +188,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 handleEndElement(reader, data);
             } else if (event == XMLStreamConstants.CHARACTERS) {
                 if (data.paragraphs == null) {
-                    data.text = reader.getText();
+                    data.text = reader.getText().replaceAll("\\s+", " ");
                 } else {
-                    String text = reader.getText();
+                    String text = reader.getText().replaceAll("\\s+", " ");
                     if (data.inBib) {
                         LinkElement el = new LinkElement(text);
                         if (data.attr != null) {

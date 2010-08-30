@@ -164,6 +164,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Property
     private Note loopNote;
 
+    @Property
+    private String personId;
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();

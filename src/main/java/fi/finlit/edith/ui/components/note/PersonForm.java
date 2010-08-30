@@ -15,9 +15,6 @@ import fi.finlit.edith.domain.PersonRepository;
 
 public class PersonForm {
     @Property
-    private Person person;
-
-    @Property
     private NameForm loopPerson;
 
     @Parameter
@@ -36,37 +33,76 @@ public class PersonForm {
     @Property
     private String newDescription;
 
-    void onPrepare() {
-        person = new Person(new NameForm(), new HashSet<NameForm>());
+    @Property
+    @Parameter
+    private String personId;
+
+    private Person person;
+
+    public void beginRender() {
+        if (personId == null) {
+            person = new Person(new NameForm(), new HashSet<NameForm>());
+        } else {
+            person = personRepository.getById(personId);
+        }
+    }
+
+    public Person getPerson() {
+        return person;
     }
 
     public Set<NameForm> getPersons() {
-        return person.getOtherForms();
+        return getPerson().getOtherForms();
     }
 
     public String getTimeOfBirth() {
-        return person.getTimeOfBirth() == null ? null : person.getTimeOfBirth().asString();
+        return getPerson().getTimeOfBirth() == null ? null : getPerson().getTimeOfBirth().asString();
     }
 
     public String getTimeOfDeath() {
-        return person.getTimeOfDeath() == null ? null : person.getTimeOfDeath().asString();
+        return getPerson().getTimeOfDeath() == null ? null : getPerson().getTimeOfDeath().asString();
     }
 
     public void setTimeOfBirth(String time) {
         if (time != null) {
-            person.setTimeOfBirth(Interval.fromString(time));
+            getPerson().setTimeOfBirth(Interval.fromString(time));
         }
     }
 
     public void setTimeOfDeath(String time) {
         if (time != null) {
-            person.setTimeOfDeath(Interval.fromString(time));
+            getPerson().setTimeOfDeath(Interval.fromString(time));
+        }
+    }
+
+    void onPrepareFromPersonForm() {
+        if (person == null) {
+            person = new Person(new NameForm(), new HashSet<NameForm>());
+        }
+    }
+
+    void onPrepareFromPersonForm(String id) {
+        if (person == null) {
+            person = personRepository.getById(id);
         }
     }
 
     public Object onSuccessFromPersonForm() {
-        person.getOtherForms().add(new NameForm(newFirst, newLast, newDescription));
-        personRepository.save(person);
+        if (newFirst != null || newLast != null) {
+            getPerson().getOtherForms().add(new NameForm(newFirst, newLast, newDescription));
+        }
+        getPerson().setOtherForms(copyAndRemoveEmptyNameForms(getPerson().getOtherForms()));
+        personRepository.save(getPerson());
         return closeDialog;
+    }
+
+    private Set<NameForm> copyAndRemoveEmptyNameForms(Set<NameForm> nameForms) {
+        Set<NameForm> result = new HashSet<NameForm>();
+        for (NameForm nameForm : nameForms) {
+            if (nameForm.getFirst() != null || nameForm.getLast() != null) {
+                result.add(nameForm);
+            }
+        }
+        return result;
     }
 }

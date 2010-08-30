@@ -196,7 +196,9 @@
 							noteEdit="noteEdit"
 							errorBlock="errorBlock"
 							documentView="documentView"
-							commentZone="commentZone"/> 
+							commentZone="commentZone"
+							personForm="personForm"
+							closeDialog="closeDialog"/> 
 					</div>
 				</div>
 			</t:if>

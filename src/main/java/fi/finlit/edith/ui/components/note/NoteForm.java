@@ -11,6 +11,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
+import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -176,14 +177,10 @@ public class NoteForm {
     }
 
     private Person getPerson() {
-        return person;
-    }
-
-    public String getPersonId() {
-        if (isPerson()) {
-            return getPerson().getId();
+        if (personId != null) {
+            return personRepository.getById(personId);
         }
-        return null;
+        return person;
     }
 
     public Set<NameForm> getPersons() {
@@ -247,7 +244,7 @@ public class NoteForm {
         return NoteType.values();
     }
 
-    private boolean isPerson() {
+    public boolean isPerson() {
         return person != null;
     }
 
@@ -359,13 +356,8 @@ public class NoteForm {
 
     private void setPerson(Person person) {
         this.person = person;
-    }
-
-    public void setPersonId(String id) {
-        if (id != null) {
-            setPerson(personRepository.getById(id));
-        } else {
-            setPerson(null);
+        if (isPerson()) {
+            personId = person.getId();
         }
     }
 
@@ -398,4 +390,20 @@ public class NoteForm {
         }
         return 0;
     }
+
+    Object onEditPerson(String id) {
+        personId = id;
+        return editPersonForm;
+    }
+
+    @Inject
+    @Property
+    private Block editPersonForm;
+
+    @Property
+    private String personId;
+
+    @Parameter
+    @Property
+    private Block closeDialog;
 }

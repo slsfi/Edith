@@ -240,7 +240,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
         return getSession().from(documentNote).where(filters)
                 .orderBy(getOrderBy(searchInfo)).list(documentNote);
-        // TODO Status
     }
 
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {
@@ -252,6 +251,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         case USER:
             comparable = documentNote.createdBy().username.toLowerCase();
             break;
+            // FIXME
+//        case STATUS:
+//            comparable = documentNote.status();
+//            break;
         default:
             comparable = documentNote.note().lemma.toLowerCase();
             break;

@@ -81,13 +81,24 @@
                 
             </div>
 			<t:zone id="personZone" t:id="personZone" t:zone="personZone" update="show">
+			    <t:block t:id="personForm">
+        <t:block t:id="editPersonForm">
+            <t:note.personForm closeDialog="closeDialog" personId="personId"/>
+        </t:block>
+    </t:block>
 			<script type="text/javascript">
 			jQuery(function() {
 			    jQuery("input[name='personId']").attr("value", jQuery("#personId").attr("name"));
 			});
+			jQuery(function() {
+			    jQuery(".editPerson").click(function() {
+				    jQuery("#dialog").jqmShow();
+			    });
+			});
 			</script>
 			
 			<div id="personId" name="${personId}" style="display: none;"/>
+            <t:if test="person">
             <div class="person">
                 <div><strong>${message:normalizedForm-label}</strong> (${personInstances} ${message:amountOfInstances})</div>
                 <t:if test="normalizedFirst">
@@ -145,8 +156,10 @@
                 </div>
             </div>
             </t:if>
+            
+            <t:eventlink t:event="editPerson" t:zone="dialogZone" class="jqModal person editPerson" t:context="personId">${message:editPerson}</t:eventlink>
+            </t:if>
             </t:zone>
-
 			<div class="note person place">
 				<div>
 					<strong>${message:description-label}</strong>
@@ -206,6 +219,6 @@
 					});</script>
 				<p id="submit_success_info">${message:submit-success}</p>
 			</t:if>
-		</t:form>		
+		</t:form>
 	</t:content>
 </html>
