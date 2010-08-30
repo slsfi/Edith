@@ -1,0 +1,9 @@
+Edith sovelluksen datojen backup onnistuu seuraavasti.
+
+* Kopioi seuraavien kansioiden sisällöt backup-kohteeseen :
+/opt/svn
+/opt/rdfbean
+
+Palautus onnistuu palauttamalla näiden kansioiden sisällöt alkuperäisiin kohteisiin.
+
+Palautuksen yhteydessä on myös varmistettava että kohteiden omistaja on wwwrun (käyttäjä)
