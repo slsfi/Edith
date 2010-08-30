@@ -24,7 +24,7 @@ import fi.finlit.edith.EDITH;
 @ClassMapping(ns = EDITH.NS)
 public class Note extends Identifiable {
 
-    @Predicate
+    @Predicate(ln = "desc")
     private Paragraph description;
 
     @Predicate
