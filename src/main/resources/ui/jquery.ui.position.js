@@ -1,13 +1,13 @@
 /*
- * jQuery UI Position 1.8rc2
+ * jQuery UI Position 1.8.4
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Position
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 $.ui = $.ui || {};
 
@@ -15,7 +15,8 @@ var horizontalPositions = /left|center|right/,
 	horizontalDefault = "center",
 	verticalPositions = /top|center|bottom/,
 	verticalDefault = "center",
-	_position = $.fn.position;
+	_position = $.fn.position,
+	_offset = $.fn.offset;
 
 $.fn.position = function( options ) {
 	if ( !options || !options.of ) {
@@ -98,10 +99,7 @@ $.fn.position = function( options ) {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
-			position = $.extend( {}, basePosition ),
-			over,
-			myOffset,
-			atOffset;
+			position = $.extend( {}, basePosition );
 
 		if ( options.my[0] === "right" ) {
 			position.left -= elemWidth;
@@ -114,6 +112,10 @@ $.fn.position = function( options ) {
 		} else if ( options.my[1] === verticalDefault ) {
 			position.top -= elemHeight / 2;
 		}
+
+		// prevent fractions (see #5280)
+		position.left = parseInt( position.left );
+		position.top = parseInt( position.top );
 
 		$.each( [ "left", "top" ], function( i, dir ) {
 			if ( $.ui.position[ collision[i] ] ) {
@@ -197,13 +199,13 @@ $.ui.position = {
 if ( !$.offset.setOffset ) {
 	$.offset.setOffset = function( elem, options ) {
 		// set position first, in-case top/left are set even on static elem
-		if ( /static/.test( jQuery.curCSS( elem, "position" ) ) ) {
+		if ( /static/.test( $.curCSS( elem, "position" ) ) ) {
 			elem.style.position = "relative";
 		}
-		var curElem   = jQuery( elem ),
+		var curElem   = $( elem ),
 			curOffset = curElem.offset(),
-			curTop    = parseInt( jQuery.curCSS( elem, "top",  true ), 10 ) || 0,
-			curLeft   = parseInt( jQuery.curCSS( elem, "left", true ), 10)  || 0,
+			curTop    = parseInt( $.curCSS( elem, "top",  true ), 10 ) || 0,
+			curLeft   = parseInt( $.curCSS( elem, "left", true ), 10)  || 0,
 			props     = {
 				top:  (options.top  - curOffset.top)  + curTop,
 				left: (options.left - curOffset.left) + curLeft
@@ -216,7 +218,6 @@ if ( !$.offset.setOffset ) {
 		}
 	};
 
-	var _offset = $.fn.offset;
 	$.fn.offset = function( options ) {
 		var elem = this[ 0 ];
 		if ( !elem || !elem.ownerDocument ) { return null; }
@@ -229,4 +230,4 @@ if ( !$.offset.setOffset ) {
 	};
 }
 
-})( jQuery );
+}( jQuery ));
