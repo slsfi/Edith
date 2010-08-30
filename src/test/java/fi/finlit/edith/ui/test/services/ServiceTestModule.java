@@ -12,19 +12,25 @@ import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 
+import com.mysema.query.sql.H2Templates;
+import com.mysema.query.sql.SQLTemplates;
 import com.mysema.rdfbean.Namespaces;
+import com.mysema.rdfbean.model.IdSequence;
+import com.mysema.rdfbean.model.MemoryIdSequence;
 import com.mysema.rdfbean.model.Repository;
-import com.mysema.rdfbean.model.io.Format;
-import com.mysema.rdfbean.model.io.RDFSource;
-import com.mysema.rdfbean.sesame.MemoryRepository;
+import com.mysema.rdfbean.object.Configuration;
+import com.mysema.rdfbean.object.DefaultConfiguration;
+import com.mysema.rdfbean.rdb.RDBRepository;
 
 import fi.finlit.edith.EDITH;
+import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.services.AuthService;
 
 /**
@@ -69,8 +75,14 @@ public class ServiceTestModule {
     public static void contributeServiceOverride(
             MappedConfiguration<Class<?>, Object> configuration) {
         Namespaces.register("edith", EDITH.NS);
-        MemoryRepository repository = new MemoryRepository();
-        repository.setSources(new RDFSource("classpath:/edith.ttl",Format.TURTLE, EDITH.NS));
+        JdbcConnectionPool dataSource = JdbcConnectionPool.create("jdbc:h2:mem:test", "sa", "");   
+        dataSource.setMaxConnections(30);
+        IdSequence idSequence = new MemoryIdSequence();
+        SQLTemplates templates = new H2Templates();
+        Configuration conf = new DefaultConfiguration(Document.class.getPackage());
+        RDBRepository repository = new RDBRepository(conf, dataSource, templates, idSequence);
+//        MemoryRepository repository = new MemoryRepository();
+//        repository.setSources(new RDFSource("classpath:/edith.ttl",Format.TURTLE, EDITH.NS));
         configuration.add(Repository.class, repository);
 
         AuthService authService = new AuthService() {
