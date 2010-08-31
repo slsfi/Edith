@@ -7,6 +7,7 @@ package fi.finlit.edith.ui.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Map;
@@ -85,15 +86,16 @@ public final class ServiceModule {
         return configuration;
     }
 
-    public static Repository buildRepository(
-            Configuration configuration,
+    public static Repository buildRepository(Configuration configuration,
             @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
         Namespaces.register("edith", EDITH.NS);
-        JdbcConnectionPool dataSource = JdbcConnectionPool.create("jdbc:h2:"+rdfbeanDataDir+"/h2", "sa", "");   
+        JdbcConnectionPool dataSource = JdbcConnectionPool.create("jdbc:h2:" + rdfbeanDataDir
+                + "/h2", "sa", "");
         dataSource.setMaxConnections(30);
         IdSequence idSequence = new FileIdSequence(new File(rdfbeanDataDir, "ids"));
         SQLTemplates templates = new H2Templates();
-        final RDBRepository repository = new RDBRepository(configuration, dataSource, templates, idSequence);
+        final RDBRepository repository = new RDBRepository(configuration, dataSource, templates,
+                idSequence);
         // TODO : add schema as source
         hub.addRegistryShutdownListener(new RegistryShutdownListener() {
             @Override
@@ -103,34 +105,43 @@ public final class ServiceModule {
         });
         return repository;
     }
-    
-//    public static Repository buildRepository(
-//            @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
-//        Namespaces.register("edith", EDITH.NS);
-//        final MemoryRepository repository = new MemoryRepository();
-//        repository.setDataDirName(rdfbeanDataDir);
-//        repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
-//        hub.addRegistryShutdownListener(new RegistryShutdownListener() {
-//            @Override
-//            public void registryDidShutdown() {
-//                repository.close();
-//            }
-//        });
-//        return repository;
-//    }
+
+    // public static Repository buildRepository(
+    // @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
+    // Namespaces.register("edith", EDITH.NS);
+    // final MemoryRepository repository = new MemoryRepository();
+    // repository.setDataDirName(rdfbeanDataDir);
+    // repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
+    // hub.addRegistryShutdownListener(new RegistryShutdownListener() {
+    // @Override
+    // public void registryDidShutdown() {
+    // repository.close();
+    // }
+    // });
+    // return repository;
+    // }
 
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
         // app config
         // configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
         Properties properties = new Properties();
-        properties.load(AppModule.class.getResourceAsStream("/edith.properties"));
-        if (properties.getProperty(SymbolConstants.APPLICATION_VERSION) == null) {
-            configuration.add(SymbolConstants.APPLICATION_VERSION,
-                    String.valueOf(Calendar.getInstance().getTimeInMillis()));
-        }
-        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-            configuration.add(entry.getKey().toString(), entry.getValue().toString());
+
+        InputStream stream = null;
+        try {
+            stream = AppModule.class.getResourceAsStream("/edith.properties");
+            properties.load(stream);
+            if (properties.getProperty(SymbolConstants.APPLICATION_VERSION) == null) {
+                configuration.add(SymbolConstants.APPLICATION_VERSION,
+                        String.valueOf(Calendar.getInstance().getTimeInMillis()));
+            }
+            for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+                configuration.add(entry.getKey().toString(), entry.getValue().toString());
+            }
+        } finally {
+            if (stream != null) {
+                stream.close();
+            }
         }
     }
 
