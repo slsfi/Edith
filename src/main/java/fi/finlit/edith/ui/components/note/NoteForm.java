@@ -245,6 +245,9 @@ public class NoteForm {
     }
 
     public boolean isPerson() {
+        if (person == null && personId != null) {
+            person = personRepository.getById(personId);
+        }
         return person != null;
     }
 
@@ -256,7 +259,6 @@ public class NoteForm {
         if (!isPerson()) {
             setPerson(personRepository.getById(id));
         }
-        // TODO Remove multizoneupdate
         return personZone.getBody();
     }
 
@@ -406,4 +408,5 @@ public class NoteForm {
     @Parameter
     @Property
     private Block closeDialog;
+
 }

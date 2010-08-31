@@ -4,9 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.tapestry5.Block;
+import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Response;
 
 import fi.finlit.edith.domain.Interval;
 import fi.finlit.edith.domain.NameForm;
@@ -38,6 +41,10 @@ public class PersonForm {
     private String personId;
 
     private Person person;
+
+    @Parameter
+    @Property
+    private Zone personZone;
 
     public void beginRender() {
         if (personId == null) {
@@ -93,6 +100,10 @@ public class PersonForm {
         }
         getPerson().setOtherForms(copyAndRemoveEmptyNameForms(getPerson().getOtherForms()));
         personRepository.save(getPerson());
+        personId = getPerson().getId();
+        if (personZone != null) {
+            return new MultiZoneUpdate("dialogZone", closeDialog).add("personZone", personZone.getBody());
+        }
         return closeDialog;
     }
 

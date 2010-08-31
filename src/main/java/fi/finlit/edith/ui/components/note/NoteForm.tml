@@ -80,11 +80,9 @@
 			         <t:textfield t:id="personId" value="personId" style="display: none;"/>
                 
             </div>
-			<t:zone id="personZone" t:id="personZone" t:zone="personZone" update="show">
-			    <t:block t:id="personForm">
-        <t:block t:id="editPersonForm">
-            <t:note.personForm closeDialog="closeDialog" personId="personId"/>
-        </t:block>
+			<t:zone id="personZone" t:id="personZone" t:zone="personZone">
+                 <t:block t:id="editPersonForm">
+            <t:note.personForm closeDialog="closeDialog" personId="personId" personZone="personZone"/>
     </t:block>
 			<script type="text/javascript">
 			jQuery(function() {
@@ -96,7 +94,6 @@
 			    });
 			});
 			</script>
-			
 			<div id="personId" name="${personId}" style="display: none;"/>
             <t:if test="person">
             <div class="person">
@@ -116,7 +113,7 @@
             </div>
 
             <div class="person">
-            <t:loop source="persons" value="loopPerson" volatile="true">
+            <t:loop source="persons" value="loopPerson" formState="none">
                 <div>
                     <div><strong>${message:nameForm-label}</strong></div>
                     <t:if test="loopPerson.first">
