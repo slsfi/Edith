@@ -76,7 +76,7 @@ public interface NoteRepository extends Repository<Note, String> {
     NoteComment removeComment(String commentId);
 
     /**
-     * TODO TEST + DOCUMENT
+     * Finds all the Notes based on a lemma.
      * @param lemma
      * @return
      */

@@ -219,8 +219,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         Assert.notNull(searchTerm);
         if (!searchTerm.equals("*")) {
             BooleanBuilder builder = new BooleanBuilder();
-            builder.or(termWithNotes.basicForm.contains(searchTerm, false));
-            builder.or(termWithNotes.meaning.contains(searchTerm, false));
+            builder.or(termWithNotes.basicForm.containsIgnoreCase(searchTerm));
+            builder.or(termWithNotes.meaning.containsIgnoreCase(searchTerm));
             return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(),
                     false, builder.getValue());
         }

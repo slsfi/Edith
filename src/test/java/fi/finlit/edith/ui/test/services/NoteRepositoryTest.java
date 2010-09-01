@@ -6,6 +6,7 @@
 package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -23,6 +24,7 @@ import org.junit.Test;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
@@ -215,5 +217,22 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Before
     public void setUp() {
         adminService.removeNotesAndTerms();
+    }
+
+    @Test
+    public void Find_Notes() {
+        noteRepository.importNotes(noteTestData);
+        assertEquals(1, noteRepository.findNotes("kereitten").size());
+    }
+
+    @Test
+    public void Remove_Based_On_Revision() {
+        noteRepository.importNotes(noteTestData);
+        Collection<DocumentNote> documentNotes = documentNoteRepository.getAll();
+        assertFalse(documentNotes.isEmpty());
+        for (DocumentNote documentNote : documentNotes) {
+            noteRepository.remove(documentNote, documentNote.getSVNRevision());
+        }
+        assertTrue(documentNoteRepository.query(new DocumentNoteSearchInfo()).isEmpty());
     }
 }
