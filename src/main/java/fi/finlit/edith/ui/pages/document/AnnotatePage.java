@@ -368,6 +368,7 @@ public class AnnotatePage extends AbstractDocumentPage {
             infoMessage = messages.format("note-addition-failed");
             return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
         }
+        documentRevision.setRevision(documentNote.getSVNRevision());
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
