@@ -26,8 +26,8 @@ public class PersonRepositoryImpl extends AbstractRepository<Person> implements 
     public Collection<Person> findByStartOfFirstAndLastName(String partial, int limit) {
         return getSession()
                 .from(person)
-                .where(person.normalizedForm().first.startsWith(partial, false).or(
-                        person.normalizedForm().last.startsWith(partial, false))).limit(limit)
+                .where(person.normalizedForm().first.startsWithIgnoreCase(partial).or(
+                        person.normalizedForm().last.startsWithIgnoreCase(partial))).limit(limit)
                 .list(person);
     }
 }

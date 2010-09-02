@@ -1,0 +1,34 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<t:content>
+		<t:form t:id="placeForm" t:zone="dialogZone" t:context="place.id">
+			<t:errors />
+			<div>
+				<div><strong>${message:normalizedForm-label}</strong></div>
+				<div>- ${message:name-label}</div>
+				<div><t:textField t:id="normalizedFirst" value="place.normalizedForm.name" /></div>
+    			<div>- ${message:description-label}</div>
+				<div><t:textField t:id="normalizedDescription" value="place.normalizedForm.description" /></div>
+			</div>
+			
+			<div>
+                <div><strong>${message:createNameForm-label}</strong></div>
+                <div>- ${message:name-label}</div>
+                <div><t:textField t:id="newName" value="newName" /></div>
+                <div>- ${message:description-label}</div>
+                <div><t:textField t:id="newDescription" value="newDescription" /></div>
+            </div>
+
+			<t:loop source="places" value="loopPlace" volatile="true">
+				<div>
+					<div><strong>${message:nameForm-label}</strong></div>
+					<div>- ${message:name-label}</div> 
+					<div><t:textField value="loopPlace.name" /></div>
+    				<div>- ${message:description-label}</div>
+					<div><t:textField value="loopPlace.description" /></div>
+				</div>
+			</t:loop>
+
+			<input type="submit" value="${message:save}" />
+		</t:form>		
+	</t:content>
+</html>

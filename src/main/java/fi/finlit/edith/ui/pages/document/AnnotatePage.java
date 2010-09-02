@@ -96,6 +96,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     private Block personForm;
 
     @Inject
+    @Property
+    private Block placeForm;
+
+    @Inject
     private Block infoBlock;
 
     @Property
@@ -379,5 +383,9 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     Object onCreatePerson() {
         return personForm;
+    }
+
+    Object onCreatePlace() {
+        return placeForm;
     }
 }

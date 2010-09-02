@@ -11,7 +11,6 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -36,6 +35,8 @@ import fi.finlit.edith.domain.NoteStatus;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.PersonRepository;
+import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.PlaceRepository;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
@@ -105,12 +106,21 @@ public class NoteForm {
 
     private Person person;
 
+    private Place place;
+
     @Inject
     private PersonRepository personRepository;
+
+    @Inject
+    private PlaceRepository placeRepository;
 
     @InjectComponent
     @Property
     private Zone personZone;
+
+    @InjectComponent
+    @Property
+    private Zone placeZone;
 
     @Property
     private boolean saveAsNew;
@@ -162,6 +172,20 @@ public class NoteForm {
         return null;
     }
 
+    public String getNormalizedPlaceDescription() {
+        if (isPlace()) {
+            return getPlace().getNormalizedForm().getDescription();
+        }
+        return null;
+    }
+
+    public String getNormalizedPlaceName() {
+        if (isPlace()) {
+            return getPlace().getNormalizedForm().getName();
+        }
+        return null;
+    }
+
     public String getNormalizedFirst() {
         if (isPerson()) {
             return getPerson().getNormalizedForm().getFirst();
@@ -183,9 +207,23 @@ public class NoteForm {
         return person;
     }
 
+    private Place getPlace() {
+        if (placeId != null) {
+            return placeRepository.getById(placeId);
+        }
+        return place;
+    }
+
     public Set<NameForm> getPersons() {
         if (isPerson()) {
             return getPerson().getOtherForms();
+        }
+        return new HashSet<NameForm>();
+    }
+
+    public Set<NameForm> getPlaces() {
+        if (isPlace()) {
+            return getPlace().getOtherForms();
         }
         return new HashSet<NameForm>();
     }
@@ -251,6 +289,13 @@ public class NoteForm {
         return person != null;
     }
 
+    public boolean isPlace() {
+        if (place == null && placeId != null) {
+            place = placeRepository.getById(placeId);
+        }
+        return place != null;
+    }
+
     public boolean isSelected() {
         return getSelectedTypes().contains(type);
     }
@@ -262,10 +307,20 @@ public class NoteForm {
         return personZone.getBody();
     }
 
+    Object onPlace(String id) {
+        if (!isPlace()) {
+            setPlace(placeRepository.getById(id));
+        }
+        return placeZone.getBody();
+    }
+
     void onPrepareFromNoteEditForm(String noteRev) {
         noteOnEdit = documentNoteRepository.getById(noteRev); // .createCopy();
         if (!isPerson()) {
             setPerson(noteOnEdit.getNote().getPerson());
+        }
+        if (!isPlace()) {
+            setPlace(noteOnEdit.getNote().getPlace());
         }
         termOnEdit = getEditTerm(noteOnEdit.getNote());
     }
@@ -278,9 +333,14 @@ public class NoteForm {
         return personRepository.findByStartOfFirstAndLastName(partial, 10);
     }
 
+    Collection<Place> onProvideCompletionsFromPlace(String partial) {
+        return placeRepository.findByStartOfName(partial, 10);
+    }
+
     Object onSuccessFromNoteEditForm() {
         DocumentNote documentNote;
         noteOnEdit.getNote().setPerson(getPerson());
+        noteOnEdit.getNote().setPlace(getPlace());
         if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
             noteOnEdit.setStatus(NoteStatus.DRAFT);
         }
@@ -363,6 +423,13 @@ public class NoteForm {
         }
     }
 
+    private void setPlace(Place place) {
+        this.place = place;
+        if (isPlace()) {
+            placeId = place.getId();
+        }
+    }
+
     public void setSearch(String s) {
         // Do nothing
     }
@@ -393,10 +460,26 @@ public class NoteForm {
         return 0;
     }
 
+    public int getPlaceInstances() {
+        if (isPlace()) {
+            return documentNoteRepository.getOfPlace(getPlace().getId()).size();
+        }
+        return 0;
+    }
+
     Object onEditPerson(String id) {
         personId = id;
         return editPersonForm;
     }
+
+    Object onEditPlace(String id) {
+        placeId = id;
+        return editPlaceForm;
+    }
+
+    @Inject
+    @Property
+    private Block editPlaceForm;
 
     @Inject
     @Property
@@ -405,8 +488,10 @@ public class NoteForm {
     @Property
     private String personId;
 
+    @Property
+    private String placeId;
+
     @Parameter
     @Property
     private Block closeDialog;
-
 }

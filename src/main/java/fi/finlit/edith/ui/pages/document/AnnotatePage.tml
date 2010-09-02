@@ -30,6 +30,9 @@
 		  <span>
               <t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqModal">${message:createPerson}</t:eventlink>
           </span>
+          <span>
+              <t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqModal">${message:createPlace}</t:eventlink>
+          </span>
 	   </div>
 	</p:leftPanel>
 
@@ -198,6 +201,7 @@
 							documentView="documentView"
 							commentZone="commentZone"
 							personForm="personForm"
+							placeForm="placeForm"
 							closeDialog="closeDialog"/> 
 					</div>
 				</div>
@@ -312,6 +316,10 @@
     
     <t:block t:id="personForm">
         <t:note.personForm closeDialog="closeDialog"/>
+    </t:block>
+    
+    <t:block t:id="placeForm">
+        <t:note.placeForm closeDialog="closeDialog"/>
     </t:block>
 
 	<script type="text/javascript">

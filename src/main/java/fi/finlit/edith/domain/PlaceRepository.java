@@ -7,6 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mysema.rdfbean.dao.Repository;
 
 @Transactional
-public interface PersonRepository extends Repository<Person, String> {
-    Collection<Person> findByStartOfFirstAndLastName(String partial, int limit);
+public interface PlaceRepository extends Repository<Place, String> {
+    Collection<Place> findByStartOfName(String partial, int limit);
 }

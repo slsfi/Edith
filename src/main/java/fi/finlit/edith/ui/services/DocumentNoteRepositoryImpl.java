@@ -298,7 +298,15 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.note().person().id.eq(personId),
                         documentNote.deleted.eq(false), latest(documentNote)).list(documentNote);
+    }
 
+    @Override
+    public List<DocumentNote> getOfPlace(String placeId) {
+        Assert.notNull(placeId);
+        return getSession()
+                .from(documentNote)
+                .where(documentNote.note().place().id.eq(placeId),
+                        documentNote.deleted.eq(false), latest(documentNote)).list(documentNote);
     }
 
     @Override

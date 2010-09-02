@@ -67,7 +67,7 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**
  * NoteRevisionRepositoryTest provides
- * 
+ *
  * @author tiwe
  * @version $Id$
  */
@@ -573,6 +573,15 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         documentNote.getNote().setPerson(person);
         documentNoteRepository.save(documentNote);
         assertEquals(1, documentNoteRepository.getOfPerson(person.getId()).size());
+    }
+
+    @Test
+    public void Get_Document_Notes_Of_Place() {
+        DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).iterator().next();
+        Place place = new Place(new NameForm("Helsinki", "Capital of Finland"), new HashSet<NameForm>());
+        documentNote.getNote().setPlace(place);
+        documentNoteRepository.save(documentNote);
+        assertEquals(1, documentNoteRepository.getOfPlace(place.getId()).size());
     }
 
     @Test
