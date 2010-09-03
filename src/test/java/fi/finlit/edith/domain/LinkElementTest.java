@@ -2,6 +2,7 @@ package fi.finlit.edith.domain;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -16,5 +17,13 @@ public class LinkElementTest {
         LinkElement element = new LinkElement("foo");
         element.setReference("bar");
         assertEquals("<bibliograph ref=\"bar\">foo</bibliograph>", element.toString());
+    }
+
+    @Test
+    public void Copy() {
+        LinkElement element = new LinkElement("foo");
+        ParagraphElement copy = element.copy();
+        assertTrue(element != copy);
+        assertEquals(element.toString(), copy.toString());
     }
 }
