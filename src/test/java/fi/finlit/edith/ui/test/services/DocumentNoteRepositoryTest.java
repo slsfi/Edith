@@ -448,23 +448,22 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(11, documentNoteRepository.query(searchInfo).size());
     }
 
-    // FIXME
     @Test
-    @Ignore
-    public void Query_For_All_Notes_Group_By_Status() {
+    public void Query_For_All_Notes_Order_By_Status() {
         searchInfo.setOrderBy(OrderBy.STATUS);
         List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
         DocumentNote edited = documentNotes.get(2);
         edited.setStatus(NoteStatus.PUBLISHABLE);
         documentNoteRepository.save(edited);
-        List<DocumentNote> documentNotes2 = documentNoteRepository.query(searchInfo);
-        boolean allElementsWereSame = true;
-        for (int i = 0; i < documentNotes.size(); ++i) {
-            if (!documentNotes.get(i).getLongText().equals(documentNotes2.get(i).getLongText())) {
-                allElementsWereSame = false;
+        documentNotes = documentNoteRepository.query(searchInfo);
+        DocumentNote previous = null;
+        for (DocumentNote documentNote : documentNotes) {
+            if (previous != null) {
+                assertTrue(previous.getStatus() + " " + documentNote.getStatus(), previous
+                        .getStatus().compareTo(documentNote.getStatus()) <= 0);
             }
+            previous = documentNote;
         }
-        assertFalse(allElementsWereSame);
     }
 
     @Test
@@ -547,10 +546,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Query_For_Document_Notes_And_Retrieve_The_One_Attached_To_Current_Document() {
         // FIXME
         String text = "l\u00E4htee";
-        noteRepository.createDocumentNote(new Note(), docRev, "100", text);
-
-        Note note = new Note();
-        note.setLemma(text);
+        Note note = noteRepository.createDocumentNote(new Note(), docRev, "100", text).getNote();
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
         documentNoteRepository.save(documentNote);
@@ -558,10 +554,12 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         searchInfo.setCurrentDocument(document);
         List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
         for (DocumentNote current : documentNotes) {
-            if (current.getDocument() != null) {
-                System.err.println(current.getDocument().getId());
-            } else {
-                System.err.println("null");
+            if (current.getNote().getLemma().equals(text)) {
+                if (current.getDocument() != null) {
+                    System.err.println(current.getDocument().getId());
+                } else {
+                    System.err.println("null");
+                }
             }
         }
     }
@@ -578,7 +576,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Get_Document_Notes_Of_Place() {
         DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).iterator().next();
-        Place place = new Place(new NameForm("Helsinki", "Capital of Finland"), new HashSet<NameForm>());
+        Place place = new Place(new NameForm("Helsinki", "Capital of Finland"),
+                new HashSet<NameForm>());
         documentNote.getNote().setPlace(place);
         documentNoteRepository.save(documentNote);
         assertEquals(1, documentNoteRepository.getOfPlace(place.getId()).size());

@@ -111,7 +111,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                     note.term().basicForm, note.term().meaning,
                     // documentNote.description, FIXME
                     note.subtextSources)) {
-                builder.or(path.contains(searchTerm, false));
+                builder.or(path.containsIgnoreCase(searchTerm));
             }
         }
         builder.and(documentNote.deleted.eq(false));
@@ -224,7 +224,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         }
         // formats
         if (!searchInfo.getNoteFormats().isEmpty()) {
-            filters.and(documentNote.note().format().in(searchInfo.getNoteFormats()));
+            filters.and(documentNote.note().format.in(searchInfo.getNoteFormats()));
         }
         // types
         if (!searchInfo.getNoteTypes().isEmpty()) {
@@ -251,10 +251,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         case USER:
             comparable = documentNote.createdBy().username.toLowerCase();
             break;
-            // FIXME
-//        case STATUS:
-//            comparable = documentNote.status();
-//            break;
+        case STATUS:
+            comparable = documentNote.status.ordinal();
+            break;
         default:
             comparable = documentNote.note().lemma.toLowerCase();
             break;
