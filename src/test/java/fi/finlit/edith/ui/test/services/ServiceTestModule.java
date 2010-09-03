@@ -25,6 +25,8 @@ import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.IdSequence;
 import com.mysema.rdfbean.model.MemoryIdSequence;
 import com.mysema.rdfbean.model.Repository;
+import com.mysema.rdfbean.model.io.Format;
+import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
 import com.mysema.rdfbean.rdb.RDBRepository;
@@ -80,7 +82,8 @@ public class ServiceTestModule {
         IdSequence idSequence = new MemoryIdSequence();
         SQLTemplates templates = new H2Templates();
         Configuration conf = new DefaultConfiguration(Document.class.getPackage());
-        RDBRepository repository = new RDBRepository(conf, dataSource, templates, idSequence);
+        RDFSource source = new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS);
+        RDBRepository repository = new RDBRepository(conf, dataSource, templates, idSequence, source);
 //        MemoryRepository repository = new MemoryRepository();
 //        repository.setSources(new RDFSource("classpath:/edith.ttl",Format.TURTLE, EDITH.NS));
         configuration.add(Repository.class, repository);

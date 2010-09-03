@@ -32,6 +32,8 @@ import com.mysema.rdfbean.model.FileIdSequence;
 import com.mysema.rdfbean.model.IdSequence;
 import com.mysema.rdfbean.model.PredicateWildcardFetch;
 import com.mysema.rdfbean.model.Repository;
+import com.mysema.rdfbean.model.io.Format;
+import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
 import com.mysema.rdfbean.rdb.RDBRepository;
@@ -91,14 +93,12 @@ public final class ServiceModule {
     public static Repository buildRepository(Configuration configuration,
             @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
         Namespaces.register("edith", EDITH.NS);
-        JdbcConnectionPool dataSource = JdbcConnectionPool.create("jdbc:h2:" + rdfbeanDataDir
-                + "/h2", "sa", "");
+        JdbcConnectionPool dataSource = JdbcConnectionPool.create("jdbc:h2:" + rdfbeanDataDir + "/h2", "sa", "");
         dataSource.setMaxConnections(30);
         IdSequence idSequence = new FileIdSequence(new File(rdfbeanDataDir, "ids"));
         SQLTemplates templates = new H2Templates();
-        final RDBRepository repository = new RDBRepository(configuration, dataSource, templates,
-                idSequence);
-        // TODO : add schema as source
+        RDFSource source = new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS);
+        final RDBRepository repository = new RDBRepository(configuration, dataSource, templates, idSequence, source);
         hub.addRegistryShutdownListener(new RegistryShutdownListener() {
             @Override
             public void registryDidShutdown() {
@@ -107,21 +107,6 @@ public final class ServiceModule {
         });
         return repository;
     }
-
-    // public static Repository buildRepository(
-    // @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
-    // Namespaces.register("edith", EDITH.NS);
-    // final MemoryRepository repository = new MemoryRepository();
-    // repository.setDataDirName(rdfbeanDataDir);
-    // repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
-    // hub.addRegistryShutdownListener(new RegistryShutdownListener() {
-    // @Override
-    // public void registryDidShutdown() {
-    // repository.close();
-    // }
-    // });
-    // return repository;
-    // }
 
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
