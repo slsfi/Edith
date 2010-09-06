@@ -1,4 +1,4 @@
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -13,7 +13,7 @@ import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 
 import fi.finlit.edith.domain.UserRepository;
-import fi.finlit.edith.ui.test.services.AbstractServiceTest;
+import fi.finlit.edith.ui.services.UserDetailsServiceImpl;
 
 public class UserDetailsServiceImplTest extends AbstractServiceTest {
     private UserDetailsServiceImpl service;

@@ -3,7 +3,7 @@
  * All rights reserved.
  * 
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

@@ -1,4 +1,4 @@
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,7 +12,6 @@ import org.junit.Test;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.domain.TermRepository;
-import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
 public class TermRepositoryImplTest extends AbstractServiceTest {
     @Inject
