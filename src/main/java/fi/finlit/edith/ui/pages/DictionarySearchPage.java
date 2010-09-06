@@ -67,7 +67,7 @@ public class DictionarySearchPage {
         context = new Context(searchTerm);
     }
 
-    void setupRender() {
+    public void setupRender() {
         terms = noteRepository.queryDictionary(searchTerm == null ? "*" : searchTerm);
     }
 
