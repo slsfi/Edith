@@ -44,11 +44,7 @@ public class TermWithNotes {
     }
 
     public Set<Note> getUndeletedNotes() {
-        Set<Note> result = new HashSet<Note>();
-        for (Note note : notes) {
-            result.add(note);
-        }
-        return result;
+        return new HashSet<Note>(notes);
     }
 
     public void setBasicForm(String basicForm) {

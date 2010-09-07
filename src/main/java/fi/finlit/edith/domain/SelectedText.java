@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class SelectedText {
-    
+
     private String selection;
 
     private String startId, endId;
@@ -73,26 +73,6 @@ public class SelectedText {
         return endId != null && endId.trim().length() > 0;
     }
 
-    public void setEndId(String endId) {
-        this.endId = endId;
-    }
-
-    public void setEndIndex(int endIndex) {
-        this.endIndex = endIndex;
-    }
-
-    public void setSelection(String selection) {
-        this.selection = selection;
-    }
-
-    public void setStartId(String startId) {
-        this.startId = startId;
-    }
-
-    public void setStartIndex(int startIndex) {
-        this.startIndex = startIndex;
-    }
-
     public String getFirstWord(){
         String[] words = StringUtils.split(selection);
         return words[0];
@@ -103,33 +83,25 @@ public class SelectedText {
         return words[words.length-1];
     }
 
-    public boolean startIsChildOfEnd() {
+    public boolean isStartChildOfEnd() {
         return startId.startsWith(endId) && endId.length() < startId.length();
     }
 
     public int howDeepIsStartInEnd() {
-        int n = 0;
-        String start[] = HYPHEN.split(startId);
-        String end[] = HYPHEN.split(endId);
-        for (int i = 0; i < start.length; ++i) {
-            if (i < end.length) {
-                if (!start[i].equals(end[i])) {
-                    return -1;
-                }
-            } else {
-                ++n;
-            }
-        }
-        return n;
+        return howDeepIsElementInElement(startId, endId);
     }
 
     public int howDeepIsEndInStart() {
+        return howDeepIsElementInElement(endId, startId);
+    }
+
+    private int howDeepIsElementInElement(String el1, String el2) {
         int n = 0;
-        String start[] = HYPHEN.split(startId);
-        String end[] = HYPHEN.split(endId);
-        for (int i = 0; i < end.length; ++i) {
-            if (i < start.length) {
-                if (!end[i].equals(start[i])) {
+        String el1s[] = HYPHEN.split(el1);
+        String el2s[] = HYPHEN.split(el2);
+        for (int i = 0; i < el1s.length; ++i) {
+            if (i < el2s.length) {
+                if (!el1s[i].equals(el2s[i])) {
                     return -1;
                 }
             } else {
@@ -139,7 +111,7 @@ public class SelectedText {
         return n;
     }
 
-    public boolean endIsChildOfStart() {
+    public boolean isEndChildOfStart() {
         return endId.startsWith(startId) && endId.length() > startId.length();
     }
 

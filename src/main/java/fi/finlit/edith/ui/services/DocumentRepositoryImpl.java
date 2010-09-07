@@ -241,7 +241,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                             /* tempContext is used so that we can send the actual context in most of these use cases.
                              * The first pop is always mandatory, the following ones only if we are even deeper in. */
                             tempContext.pop();
-                            if (sel.startIsChildOfEnd()) {
+                            if (sel.isStartChildOfEnd()) {
                                 for (int i = 1; i < sel.howDeepIsStartInEnd(); ++i) {
                                     tempContext.pop();
                                 }
@@ -255,7 +255,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                              * reaching the element containing the end anchor. */
                             ElementContext tempContext = (ElementContext) context.clone();
                             tempContext.pop();
-                            if (sel.endIsChildOfStart()) {
+                            if (sel.isEndChildOfStart()) {
                                 for (int i = 1; i < sel.howDeepIsEndInStart(); ++i) {
                                     tempContext.pop();
                                 }
@@ -298,7 +298,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                     /* The second comparison is to verify that we only start buffering if we are not going to have the chance
                      * to pass the start element of the start/end block and restart the buffering then. */
-                    if (startedBuffering && (sel.startIsChildOfEnd() || sel.endIsChildOfStart())) {
+                    if (startedBuffering && (sel.isStartChildOfEnd() || sel.isEndChildOfStart())) {
                         buffering = !matched.areBothMatched();
                     }
                 }
@@ -347,10 +347,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             } else if (e.isCharacters() && context.equalsAny(sel.getStartId(), sel.getEndId())) {
                 String eventString = e.asCharacters().getData();
                 int relativeStart = startIndex - offset;
-                int relativeEnd = endIndex - (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd() ? endOffset.intValue() : offset);
+                int relativeEnd = endIndex - (context.equalsAny(sel.getEndId()) && sel.isStartChildOfEnd() ? endOffset.intValue() : offset);
                 int index = -1;
                 offset += eventString.length();
-                if (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd()) {
+                if (context.equalsAny(sel.getEndId()) && sel.isStartChildOfEnd()) {
                     endOffset.add(eventString.length());
                 }
                 if (context.equalsAny(sel.getStartId()) && !matched.isStartMatched() && startIndex <= offset) {
@@ -361,7 +361,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     index = relativeStart;
                 }
                 if (context.equalsAny(sel.getEndId()) && matched.isStartMatched()
-                        && !matched.isEndMatched() && endIndex <= (context.equalsAny(sel.getEndId()) && sel.startIsChildOfEnd() ? endOffset.intValue() : offset)) {
+                        && !matched.isEndMatched() && endIndex <= (context.equalsAny(sel.getEndId()) && sel.isStartChildOfEnd() ? endOffset.intValue() : offset)) {
                     if (!startAndEndInSameElement) {
                         writer.add(eventFactory.createCharacters(eventString.substring(0,relativeEnd)));
                     } else {
