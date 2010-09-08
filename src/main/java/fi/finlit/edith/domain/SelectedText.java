@@ -57,6 +57,26 @@ public class SelectedText {
         return startIndex;
     }
 
+    public void setSelection(String selection) {
+        this.selection = selection;
+    }
+
+    public void setEndId(String endId) {
+        this.endId = endId;
+    }
+
+    public void setEndIndex(int endIndex) {
+        this.endIndex = endIndex;
+    }
+
+    public void setStartId(String startId) {
+        this.startId = startId;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
     public boolean isValid() {
         return hasSelection() && hasStart() && hasEnd();
     }
@@ -123,10 +143,4 @@ public class SelectedText {
         buffer.append(selection);
         return buffer.toString();
     }
-
-
-
-
-
-
 }
