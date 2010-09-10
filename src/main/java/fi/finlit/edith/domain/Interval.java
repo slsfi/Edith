@@ -1,6 +1,7 @@
 package fi.finlit.edith.domain;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -14,7 +15,8 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class Interval {
-    private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("d.M.y");
+    private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("d.M.y").withZone(
+            DateTimeZone.UTC);
 
     @Id(IDType.LOCAL)
     private String id;
@@ -29,15 +31,16 @@ public class Interval {
         return id;
     }
 
-    public void setId(String id){
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Interval() {}
+    public Interval() {
+    }
 
     public Interval(DateTime start, DateTime end) {
-        this.start = start;
-        this.end = end;
+        this.start = start.withZoneRetainFields(DateTimeZone.UTC);
+        this.end = end.withZoneRetainFields(DateTimeZone.UTC);
     }
 
     public DateTime getStart() {
@@ -74,12 +77,13 @@ public class Interval {
     }
 
     public static Interval createYear(int year) {
-        return new Interval(new DateTime(year, 1, 1, 0, 0, 0, 0), new DateTime(year + 1, 1, 1, 0, 0, 0, 0));
+        return new Interval(new DateTime(year, 1, 1, 0, 0, 0, 0), new DateTime(year + 1, 1, 1, 0,
+                0, 0, 0));
     }
 
     /**
      * This creates an empty interval for the start of the given date
-     * 
+     *
      * @param localDate
      * @return
      */
@@ -89,7 +93,7 @@ public class Interval {
 
     /**
      * This creates an empty interval for the given timestamp
-     * 
+     *
      * @param dateTime
      * @return
      */
@@ -141,7 +145,5 @@ public class Interval {
         }
         return true;
     }
-
-
 
 }

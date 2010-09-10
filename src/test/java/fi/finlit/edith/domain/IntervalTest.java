@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,8 +30,8 @@ public class IntervalTest {
     @Test
     public void Start_Is_First_Of_Given_Year_And_End_Is_Last_When_Specific_Year() {
         interval = Interval.createYear(2002);
-        assertEquals(new DateTime(2002, 1, 1, 0, 0, 0, 0), interval.getStart());
-        assertEquals(new DateTime(2003, 1, 1, 0, 0, 0, 0), interval.getEnd());
+        assertEquals(new DateTime(2002, 1, 1, 0, 0, 0, 0).withZoneRetainFields(DateTimeZone.UTC), interval.getStart());
+        assertEquals(new DateTime(2003, 1, 1, 0, 0, 0, 0).withZoneRetainFields(DateTimeZone.UTC), interval.getEnd());
     }
 
     @Test
