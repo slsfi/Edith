@@ -18,7 +18,7 @@
 	<properties>
 		<tapestry.version>5.1.0.5</tapestry.version>
 		<jetty.version>6.1.0-SNAPSHOT</jetty.version>
-		<rdfbean.version>1.3.7</rdfbean.version>
+		<rdfbean.version>1.3.7-SNAPSHOT</rdfbean.version>
 		<commons.tapestry.version>0.1.8</commons.tapestry.version>
 	</properties>
 
@@ -95,17 +95,17 @@
 			<artifactId>rdfbean-tapestry</artifactId>
 			<version>${rdfbean.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.mysema.rdf</groupId>
 			<artifactId>rdfbean-rdb</artifactId>
 			<version>${rdfbean.version}</version>
 		</dependency>
 		<dependency>
-	      <groupId>com.h2database</groupId>
-	      <artifactId>h2</artifactId>
-	      <version>1.2.140</version>
-	    </dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.2.140</version>
+		</dependency>
 
 		<!-- TEST dependencies -->
 
@@ -140,18 +140,18 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>2.5.2</version>
-            <scope>test</scope>
-        </dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>2.5.2</version>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymockclassextension</artifactId>
-            <version>2.4</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymockclassextension</artifactId>
+			<version>2.4</version>
+			<scope>test</scope>
+		</dependency>
 
 
 	</dependencies>
@@ -166,32 +166,32 @@
 	<profiles>
 		<profile>
 			<id>sks</id>
-            <build>
-              <resources>
-                <resource>
-                  <filtering>true</filtering>
-                  <directory>profiles/sks/res</directory>
-                </resource>
-                <resource>
-                  <filtering>false</filtering>
-                  <directory>src/main/resources</directory>
-                </resource>
-                <resource>
-                  <filtering>false</filtering>
-                  <directory>src/main/rdf</directory>
-                </resource>
-                <resource>
-                  <filtering>false</filtering>
-                  <directory>src/main/java</directory>
-                  <includes>
-                    <include>**</include>
-                  </includes>
-                  <excludes>
-                    <exclude>**/*.java</exclude>
-                  </excludes>
-                </resource>              
-              </resources>
-            </build>
+			<build>
+				<resources>
+					<resource>
+						<filtering>true</filtering>
+						<directory>profiles/sks/res</directory>
+					</resource>
+					<resource>
+						<filtering>false</filtering>
+						<directory>src/main/resources</directory>
+					</resource>
+					<resource>
+						<filtering>false</filtering>
+						<directory>src/main/rdf</directory>
+					</resource>
+					<resource>
+						<filtering>false</filtering>
+						<directory>src/main/java</directory>
+						<includes>
+							<include>**</include>
+						</includes>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
 		</profile>
 	</profiles>
 
@@ -282,8 +282,8 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                    <argLine>-Xms256m -Xmx512m</argLine>
+					<useSystemClassLoader>false</useSystemClassLoader>
+					<argLine>-Xms256m -Xmx512m</argLine>
 					<systemProperties>
 						<property>
 							<name>webtest</name>
