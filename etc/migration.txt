@@ -1,0 +1,26 @@
+1) Dump the source repository contents like this :
+
+      repository = new MemoryRepository(new File("edith"), false);
+      repository.initialize();
+      Format format = Format.TURTLE;
+      OutputStream os = null;
+      try {
+          os = new FileOutputStream("target/dump.ttl");
+          repository.export(format, os);
+      } finally {
+          if (os != null) {
+              IOUtils.closeQuietly(os);
+          }
+      }
+      
+2) Copy the ids file to the target database target folder
+
+3) Load the data from the dump file into the target repository
+
+      try {
+          repository.load(Format.TURTLE, new FileInputStream("etc/10092010_production_database_dump.ttl"), null, false);
+      } catch (Exception e) {
+          throw new RuntimeException(e);
+      }
+      
+4) Edith specific : Copy also the SVN contents from source to target      
