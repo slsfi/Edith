@@ -300,10 +300,11 @@
     </div>
     
     <t:block t:id="notesForLemma">
+        <div><strong>${message:createNewNoteOrChooseExistingOne}</strong></div>
         <t:eventlink t:event="chooseBackingNote" t:zone="editZone">${message:createNewNote-label}</t:eventlink>
     <t:loop source="notes" value="loopNote">
         <div>
-        <t:eventlink t:event="chooseBackingNote" context="loopNote.id" t:zone="editZone">${loopNote.lemma}</t:eventlink>
+        <t:eventlink t:event="chooseBackingNote" context="loopNote.id" t:zone="editZone"><em>${loopNote.lemma}</em></t:eventlink>
         ${loopNote.lemmaMeaning}
         ${loopNote.description}
         </div>
