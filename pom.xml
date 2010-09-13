@@ -18,7 +18,7 @@
 	<properties>
 		<tapestry.version>5.1.0.5</tapestry.version>
 		<jetty.version>6.1.0-SNAPSHOT</jetty.version>
-		<rdfbean.version>1.3.8</rdfbean.version>
+		<rdfbean.version>1.3.9</rdfbean.version>
 		<commons.tapestry.version>0.1.8</commons.tapestry.version>
 	</properties>
 
@@ -94,17 +94,6 @@
 			<groupId>com.mysema.rdf</groupId>
 			<artifactId>rdfbean-tapestry</artifactId>
 			<version>${rdfbean.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mysema.rdf</groupId>
-			<artifactId>rdfbean-rdb</artifactId>
-			<version>${rdfbean.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.2.140</version>
 		</dependency>
 
 		<!-- TEST dependencies -->
