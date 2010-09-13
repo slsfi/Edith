@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.mixins;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.json.JSONArray;
@@ -25,7 +26,13 @@ public class PlaceAutocomplete extends JQueryAutocomplete {
 
         for (Object o : matches) {
             Place place = (Place) o;
-            JSONObject json = new JSONObject().put("value", place.getNormalizedForm().getName());
+            JSONObject json = new JSONObject();
+            StringBuilder builder = new StringBuilder(place.getNormalizedForm().getName());
+            if (place.getNormalizedForm().getDescription() != null) {
+                builder.append(" - "
+                        + StringUtils.abbreviate(place.getNormalizedForm().getDescription(), 32));
+            }
+            json.put("value", builder.toString());
             json.put("id", place.getId());
             a.put(json);
         }

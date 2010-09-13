@@ -23,12 +23,30 @@ public class PersonAutocompleteTest {
     }
 
     @Test
-    public void Generate_Response() {
+    public void Generate_Response_When_No_Description() {
         List<Object> persons = new ArrayList<Object>();
-        persons.add(new Person(new NameForm("Foo", "Bar", "The strangest name ever."),
+        persons.add(new Person(new NameForm("Foo", "Bar", null),
                 new HashSet<NameForm>()));
         JSONArray response = autocomplete.generateResponse(persons);
         assertEquals("Foo Bar", ((JSONObject) response.get(0)).get("value"));
+    }
+
+    @Test
+    public void Generate_Response_When_Short_Description() {
+        List<Object> persons = new ArrayList<Object>();
+        persons.add(new Person(new NameForm("Foo", "Bar", "I am short."),
+                new HashSet<NameForm>()));
+        JSONArray response = autocomplete.generateResponse(persons);
+        assertEquals("Foo Bar - I am short.", ((JSONObject) response.get(0)).get("value"));
+    }
+
+    @Test
+    public void Generate_Response_When_Long_Description() {
+        List<Object> persons = new ArrayList<Object>();
+        persons.add(new Person(new NameForm("Foo", "Bar", "I am not short, I am very very very very long."),
+                new HashSet<NameForm>()));
+        JSONArray response = autocomplete.generateResponse(persons);
+        assertEquals("Foo Bar - I am not short, I am very ver...", ((JSONObject) response.get(0)).get("value"));
     }
 
 }

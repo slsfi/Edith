@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.mixins;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.json.JSONArray;
@@ -25,7 +26,12 @@ public class PersonAutocomplete extends JQueryAutocomplete {
 
         for (Object o : matches) {
             Person person = (Person) o;
-            JSONObject json = new JSONObject().put("value", person.getNormalizedForm().getName());
+            JSONObject json = new JSONObject();
+            StringBuilder builder = new StringBuilder(person.getNormalizedForm().getName());
+            if (person.getNormalizedForm().getDescription() != null) {
+                builder.append(" - " + StringUtils.abbreviate(person.getNormalizedForm().getDescription(), 32));
+            }
+            json.put("value", builder.toString());
             json.put("id", person.getId());
             a.put(json);
         }
