@@ -5,7 +5,6 @@
  */
 package fi.finlit.edith.ui.services;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -22,21 +21,16 @@ import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
 import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
-import org.h2.jdbcx.JdbcConnectionPool;
 
-import com.mysema.query.sql.H2Templates;
-import com.mysema.query.sql.SQLTemplates;
 import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.FetchStrategy;
-import com.mysema.rdfbean.model.FileIdSequence;
-import com.mysema.rdfbean.model.IdSequence;
 import com.mysema.rdfbean.model.PredicateWildcardFetch;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
-import com.mysema.rdfbean.rdb.RDBRepository;
+import com.mysema.rdfbean.sesame.MemoryRepository;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
 
 import fi.finlit.edith.EDITH;
@@ -90,15 +84,12 @@ public final class ServiceModule {
         return configuration;
     }
 
-    public static Repository buildRepository(Configuration configuration,
+    public static Repository buildRepository(
             @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
         Namespaces.register("edith", EDITH.NS);
-        JdbcConnectionPool dataSource = JdbcConnectionPool.create("jdbc:h2:" + rdfbeanDataDir + "/h2", "sa", "");
-        dataSource.setMaxConnections(30);
-        IdSequence idSequence = new FileIdSequence(new File(rdfbeanDataDir, "ids"));
-        SQLTemplates templates = new H2Templates();
-        RDFSource source = new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS);
-        final RDBRepository repository = new RDBRepository(configuration, dataSource, templates, idSequence, source);
+        final MemoryRepository repository = new MemoryRepository();
+        repository.setDataDirName(rdfbeanDataDir);
+        repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
         hub.addRegistryShutdownListener(new RegistryShutdownListener() {
             @Override
             public void registryDidShutdown() {
