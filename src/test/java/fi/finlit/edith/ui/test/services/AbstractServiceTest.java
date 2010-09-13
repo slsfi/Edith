@@ -58,30 +58,6 @@ public abstract class AbstractServiceTest {
         }
     }
 
-    // @Test
-    // public void allCovered(){
-    // Class<?> serviceClass = getServiceClass();
-    // List<String> missing = CollectionFactory.newList();
-    // if (serviceClass != null){
-    // for (Method m : serviceClass.getMethods()){
-    // if (!m.getDeclaringClass().equals(serviceClass)){
-    // continue;
-    // }
-    // try {
-    // getClass().getMethod(m.getName());
-    // } catch (SecurityException e) {
-    // String error = "Caught " + e.getClass().getName();
-    // throw new RuntimeException(error, e);
-    // } catch (NoSuchMethodException e) {
-    // missing.add(m.getName());
-    // }
-    // }
-    // }
-    // if (!missing.isEmpty()){
-    // fail("Missing tests : " + missing);
-    // }
-    // }
-
     protected static final String start(String localId) {
         return "<anchor xml:id=\"start" + localId + "\"/>";
     }
