@@ -68,6 +68,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private final AuthService authService;
 
+    // TODO Move methods using documentNoteRepository to documentNoteRepository?
     private final DocumentNoteRepository documentNoteRepository;
 
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,

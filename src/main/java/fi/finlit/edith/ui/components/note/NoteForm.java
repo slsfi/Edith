@@ -387,7 +387,7 @@ public class NoteForm {
         Term term = terms.isEmpty() ? termOnEdit : null;
         for (final Term current : terms) {
             if (termOnEdit.getMeaning() == null && current.getMeaning() == null
-                    || termOnEdit.getMeaning().equals(current.getMeaning())) {
+                    || termOnEdit.getMeaning() != null && termOnEdit.getMeaning().equals(current.getMeaning())) {
                 term = current;
                 term.setLanguage(termOnEdit.getLanguage());
                 break;
