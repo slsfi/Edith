@@ -106,7 +106,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
-    // FIXME Is this desired behavior?
+    // TODO Is this desired behavior?
     @Test
     @Ignore
     public void Change_Backing_Note_To_Another_Note() {
