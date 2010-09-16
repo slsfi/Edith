@@ -85,7 +85,12 @@ jQuery(document).ready(function() {
     	}
     );
   
-    jQuery('#createTermLink').bind('click', createNote);
+    jQuery('#createTermLink').bind('click', function() {
+    	/* FIXME */
+    	jQuery("#dialogZone").text("Viitettä luodaan...");
+    	createNote();
+    	jQuery("#dialog").jqm().jqmShow();
+    });
     
     /* TODO disable for note editing!
     jQuery(document).keydown(function(event) {
@@ -105,7 +110,13 @@ jQuery(document).ready(function() {
     	toggleNoteListElements(jQuery(this));
     });
     
-    jQuery("#dialog").jqm();
+    jQuery(".jqmOpen").click(function() {
+    	jQuery("#dialog").jqm().jqmShow();
+    });
+
+    jQuery(".jqmClose").click(function() {
+    	jQuery("#dialog").jqmHide();
+    })
 });
 
 var Editor = {		

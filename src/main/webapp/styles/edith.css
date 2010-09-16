@@ -215,6 +215,26 @@ div.note_edit {
 	border-bottom: solid 1px #D0D0D0;
 }
 
-.note_edit input[type="text"], .note_edit textarea {
+.note_edit input[type="text"], .note_edit textarea, #commentZone textArea {
 	width: 95%;
 }
+
+.jqmWindow {
+    display: none;
+    
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    bottom: 5%;
+    overflow: auto;
+    
+    margin-left: -300px;
+    width: 600px;
+    
+    background-color: #EEE;
+    color: #333;
+    border: 1px solid black;
+    padding: 12px;
+}
+
+.jqmOverlay { background-color: #000; }

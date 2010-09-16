@@ -51,10 +51,10 @@ public class NoteSearchForm {
         return notesList;
     }
 
-    public Collection<UserInfo> getUsers(){
+    public Collection<UserInfo> getUsers() {
         Collection<User> users = userRepository.getAll();
         List<UserInfo> userIds = new ArrayList<UserInfo>(users.size());
-        for (User u : users){
+        for (User u : users) {
             userIds.add(new UserInfo(u.getUsername()));
         }
         return userIds;
@@ -64,7 +64,7 @@ public class NoteSearchForm {
         return NoteType.values();
     }
 
-    public NoteFormat[] getFormats(){
+    public NoteFormat[] getFormats() {
         return NoteFormat.values();
     }
 
@@ -80,11 +80,11 @@ public class NoteSearchForm {
         }
     }
 
-    public boolean isFormatSelected(){
+    public boolean isFormatSelected() {
         return searchInfo.getNoteFormats().contains(format);
     }
 
-    public void setFormatSelected(boolean selected){
+    public void setFormatSelected(boolean selected) {
         if (selected) {
             searchInfo.getNoteFormats().add(format);
         } else {
@@ -92,11 +92,11 @@ public class NoteSearchForm {
         }
     }
 
-    public boolean isUserSelected(){
+    public boolean isUserSelected() {
         return searchInfo.getCreators().contains(user);
     }
 
-    public void setUserSelected(boolean selected){
+    public void setUserSelected(boolean selected) {
         if (selected) {
             searchInfo.getCreators().add(user);
         } else {
@@ -104,15 +104,15 @@ public class NoteSearchForm {
         }
     }
 
-    public Collection<Document> getDocuments(){
+    public Collection<Document> getDocuments() {
         return documentRepository.getAll();
     }
 
-    public boolean isDocumentSelected(){
+    public boolean isDocumentSelected() {
         return searchInfo.getDocuments().contains(document);
     }
 
-    public void setDocumentSelected(boolean selected){
+    public void setDocumentSelected(boolean selected) {
         if (selected) {
             searchInfo.getDocuments().add(document);
         } else {

@@ -215,7 +215,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             EBoolean filter = new BooleanBuilder();
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
-                filter.or(documentNote.editors.contains(userInfo));
+                // FIXME A quick stupid hack.
+                filter.or(documentNote.editors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
             }
             // FIXME This is kind of useless except that we have broken data in production.

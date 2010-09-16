@@ -25,13 +25,13 @@
 		      <a href="#">Editiotila: <span id="state">MUOKKAUS</span></a> 
 		  </span>
 		  <span>
-		      <a id="createTermLink" class="disabled selection-link jqModal" href="#">${message:createTerm}</a> 
+		      <a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a> 
 		  </span>
 		  <span>
-              <t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqModal">${message:createPerson}</t:eventlink>
+              <t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink>
           </span>
           <span>
-              <t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqModal">${message:createPlace}</t:eventlink>
+              <t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink>
           </span>
 	   </div>
 	</p:leftPanel>
@@ -252,7 +252,7 @@
 					</div>
 					<div>
 						<t:form t:id="commentForm" t:zone="commentZone" t:context="noteId" autofocus="false">
-							<t:textField value="newCommentMessage" />
+							<t:textArea value="newCommentMessage" />
 							<input type="submit" value="${message:save}" />
 						</t:form>
 					</div>
@@ -274,29 +274,10 @@
 
 	</p:rightPanel>
 
-<style>
-.jqmWindow {
-    display: none;
-    
-    position: fixed;
-    top: 17%;
-    left: 50%;
-    
-    margin-left: -300px;
-    width: 600px;
-    
-    background-color: #EEE;
-    color: #333;
-    border: 1px solid black;
-    padding: 12px;
-}
-
-.jqmOverlay { background-color: #000; }
-</style>
     <div class="jqmWindow" id="dialog">
-    <t:zone t:id="dialogZone">${message:creatingNote}...</t:zone>
+        <t:zone t:id="dialogZone">${message:creatingNote}...</t:zone>
     
-    <a href="#" class="jqmClose">${message:close}</a>
+        <a href="#" class="jqmClose">${message:close}</a>
     </div>
     
     <t:block t:id="notesForLemma">
