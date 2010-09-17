@@ -3,7 +3,7 @@ jQuery.noConflict();
 var createNote = function() {
 	if (!TextSelector.updateIndices(TextSelector.getSelection())) {
 			alert(l10n.invalidSelection);
-			return;
+			return false;
 	}
 	jQuery(":input[name='selectedStartId_1']").val(TextSelector.startId);
 	jQuery(":input[name='selectedEndId_1']").val(TextSelector.endId);
@@ -13,7 +13,7 @@ var createNote = function() {
 
 	//Submit form
 	TapestryExt.submitZoneForm(jQuery("#createTerm").get(0));
-	return false;
+	return true;
 }
 
 var updateNote = function() {
@@ -86,10 +86,10 @@ jQuery(document).ready(function() {
     );
   
     jQuery('#createTermLink').bind('click', function() {
-    	/* FIXME */
-    	jQuery("#dialogZone").text("Viitettä luodaan...");
-    	createNote();
-    	jQuery("#dialog").jqm().jqmShow();
+    	jQuery("#dialogZone").text("Hetki...");
+    	if (createNote()) {
+    		jQuery("#dialog").jqm().jqmShow();
+    	}
     });
     
     /* TODO disable for note editing!
@@ -111,6 +111,7 @@ jQuery(document).ready(function() {
     });
     
     jQuery(".jqmOpen").click(function() {
+    	jQuery("#dialogZone").text("Hetki...");
     	jQuery("#dialog").jqm().jqmShow();
     });
 
