@@ -37,7 +37,7 @@ import fi.finlit.edith.EDITH;
 
 /**
  * SubversionServiceImpl is the default implementation of the SubversionService interface
- *
+ * 
  * @author tiwe
  * @version $Id$
  */
@@ -104,8 +104,10 @@ public class SubversionServiceImpl implements SubversionService {
     @SuppressWarnings("deprecation")
     public long commit(File file) {
         try {
-            return clientManager.getCommitClient().doCommit(new File[] { file }, true,
-                    file.getName() + " committed", false, false).getNewRevision();
+            return clientManager
+                    .getCommitClient()
+                    .doCommit(new File[] { file }, true, file.getName() + " committed", false,
+                            false).getNewRevision();
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
@@ -116,9 +118,15 @@ public class SubversionServiceImpl implements SubversionService {
         File userCheckout = new File(workingCopies + "/" + username);
         String path = svnPath.substring(documentRoot.length());
         if (userCheckout.exists()) {
+            // long updateStart = System.currentTimeMillis();
             update(userCheckout);
+            // System.err.println("Update finished in: " + (System.currentTimeMillis() -
+            // updateStart));
         } else {
+            // long checkoutStart = System.currentTimeMillis();
             checkout(userCheckout, revision);
+            // System.err.println("Checkout finished in: " + (System.currentTimeMillis() -
+            // checkoutStart));
         }
         File file = new File(userCheckout + "/" + path);
         File tmp = null;
@@ -140,7 +148,9 @@ public class SubversionServiceImpl implements SubversionService {
                 logger.error("Delete of " + tmp.getAbsolutePath() + " failed");
             }
         }
+        // long commitStart = System.currentTimeMillis();
         long newRevision = commit(file);
+        // System.err.println("Commit finished in: " + (System.currentTimeMillis() - commitStart));
         return newRevision != -1 ? newRevision : getLatestRevision();
     }
 
@@ -148,8 +158,8 @@ public class SubversionServiceImpl implements SubversionService {
     public void delete(String svnPath) {
         try {
             SVNURL targetURL = repoSvnURL.appendPath(svnPath, false);
-            logger.info(clientManager.getCommitClient().doDelete(new SVNURL[] { targetURL },
-                    "removed " + svnPath).toString());
+            logger.info(clientManager.getCommitClient()
+                    .doDelete(new SVNURL[] { targetURL }, "removed " + svnPath).toString());
         } catch (SVNException e) {
             throw new SubversionException(e.getMessage(), e);
         }
@@ -265,9 +275,10 @@ public class SubversionServiceImpl implements SubversionService {
     @Override
     public long importFile(String svnPath, File file) {
         try {
-            return clientManager.getCommitClient().doImport(file,
-                    repoSvnURL.appendPath(svnPath, false), svnPath + " added", false)
-                    .getNewRevision();
+            return clientManager
+                    .getCommitClient()
+                    .doImport(file, repoSvnURL.appendPath(svnPath, false), svnPath + " added",
+                            false).getNewRevision();
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
