@@ -367,7 +367,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         documentNoteRepository.save(documentNotes.get(0));
         documentNotes = documentNoteRepository.query(searchInfo);
         assertEquals(1, documentNotes.size());
-        assertEquals("timo", documentNotes.get(0).getCreatedBy().getUsername());
+        assertEquals("timo", documentNotes.get(0).getNote().getLastEditedBy().getUsername());
     }
 
     @Test
@@ -405,8 +405,9 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         DocumentNote previous = null;
         for (DocumentNote documentNote : documentNotes) {
             if (previous != null) {
-                assertThat(previous.getCreatedBy().getUsername(), lessThanOrEqualTo(documentNote
-                        .getCreatedBy().getUsername()));
+                String previousUsername = previous.getNote().getLastEditedBy().getUsername();
+                String currentUsername = documentNote.getNote().getLastEditedBy().getUsername();
+                assertThat(previousUsername, lessThanOrEqualTo(currentUsername));
             }
             previous = documentNote;
         }
@@ -420,8 +421,9 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         DocumentNote previous = null;
         for (DocumentNote documentNote : documentNotes) {
             if (previous != null) {
-                assertThat(previous.getCreatedBy().getUsername(), greaterThanOrEqualTo(documentNote
-                        .getCreatedBy().getUsername()));
+                String previousUsername = previous.getNote().getLastEditedBy().getUsername();
+                String currentUsername = documentNote.getNote().getLastEditedBy().getUsername();
+                assertThat(previousUsername, greaterThanOrEqualTo(currentUsername));
             }
             previous = documentNote;
         }
@@ -600,14 +602,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
             userInfo = new UserInfo();
             userInfo.setUsername(username);
         }
-        documentNote.setCreatedBy(userInfo);
-        documentNote.setEditors(new HashSet<UserInfo>());
-        documentNote.getEditors().add(userInfo);
         Note note = new Note();
         note.setLemma("TheLemma");
         note.setTypes(new HashSet<NoteType>());
         note.getTypes().add(NoteType.HISTORICAL);
         note.setFormat(NoteFormat.PERSON);
+        note.setLastEditedBy(userInfo);
+        note.setAllEditors(new HashSet<UserInfo>());
+        note.getAllEditors().add(userInfo);
         documentNote.setNote(note);
         documentNote.setLongText("thelongtext");
         documentNote.setCreatedOn(new DateTime().getMillis());

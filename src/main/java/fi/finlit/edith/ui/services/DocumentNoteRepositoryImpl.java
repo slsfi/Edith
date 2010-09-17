@@ -127,7 +127,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         // XXX What was the point in having .createCopy?
         DocumentNote deleted = docNote;
         deleted.setDeleted(true);
-        deleted.setCreatedBy(userRepository.getCurrentUser());
+//        deleted.setCreatedBy(userRepository.getCurrentUser());
         getSession().save(deleted);
     }
 
@@ -141,11 +141,11 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     public DocumentNote save(DocumentNote docNote) {
         UserInfo createdBy = userRepository.getCurrentUser();
         docNote.setCreatedOn(timeService.currentTimeMillis());
-        docNote.setCreatedBy(createdBy);
-        if (docNote.getEditors() == null) {
-            docNote.setEditors(new HashSet<UserInfo>());
+        docNote.getNote().setLastEditedBy(createdBy);
+        if (docNote.getNote().getAllEditors() == null) {
+            docNote.getNote().setAllEditors(new HashSet<UserInfo>());
         }
-        docNote.getEditors().add(createdBy);
+        docNote.getNote().getAllEditors().add(createdBy);
         getSession().save(docNote);
         if (docNote.getDocument() != null) {
             getSession().flush();
@@ -216,11 +216,11 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
                 // FIXME A quick stupid hack.
-                filter.or(documentNote.editors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
+                filter.or(documentNote.note().allEditors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
             }
             // FIXME This is kind of useless except that we have broken data in production.
-            filter.or(documentNote.createdBy().username.in(usernames));
+            filter.or(documentNote.note().lastEditedBy().username.in(usernames));
             filters.and(filter);
         }
         // formats
@@ -250,7 +250,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             comparable = documentNote.createdOn;
             break;
         case USER:
-            comparable = documentNote.createdBy().username.toLowerCase();
+            comparable = documentNote.note().lastEditedBy().username.toLowerCase();
             break;
         case STATUS:
             comparable = documentNote.note().status.ordinal();

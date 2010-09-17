@@ -11,7 +11,7 @@ public class DocumentNoteTest {
     @Before
     public void setUp() throws Exception {
         documentNote = new DocumentNote();
-        documentNote.setCreatedBy(new UserInfo());
+//        documentNote.setCreatedBy(new UserInfo());
         documentNote.setCreatedOn(100000);
         documentNote.setDeleted(true);
         Document document = new Document();
@@ -27,7 +27,7 @@ public class DocumentNoteTest {
     @Test
     public void createCopy() {
         DocumentNote copy = documentNote.createCopy();
-        assertEquals(documentNote.getCreatedBy(), copy.getCreatedBy());
+//        assertEquals(documentNote.getCreatedBy(), copy.getCreatedBy());
         assertEquals(documentNote.getCreatedOn(), copy.getCreatedOn());
         assertEquals(documentNote.getDocRevision(), copy.getDocRevision());
         assertEquals(documentNote.isDeleted(), copy.isDeleted());

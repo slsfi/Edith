@@ -24,42 +24,6 @@ import fi.finlit.edith.EDITH;
 @ClassMapping(ns = EDITH.NS)
 public class Note extends Identifiable {
 
-    @Predicate(ln = "desc")
-    private Paragraph description;
-
-    @Predicate
-    private Set<NoteType> types;
-
-    @Predicate
-    private Term term;
-
-    @Predicate(ln = "commentOf", inv = true)
-    private Set<NoteComment> comments;
-
-    @Predicate
-    private String subtextSources;
-
-    @Predicate
-    private Paragraph sources;
-
-    @Predicate
-    private NoteFormat format;
-
-    @Predicate
-    private Place place;
-
-    @Predicate
-    private Person person;
-
-    @Predicate
-    private String lemma;
-
-    @Predicate
-    private String lemmaMeaning;
-
-    @Predicate
-    private NoteStatus status = NoteStatus.INITIAL;
-
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
     public static String createLemmaFromLongText(String text) {
@@ -79,6 +43,52 @@ public class Note extends Identifiable {
         return result;
     }
 
+    @Predicate
+    private Set<UserInfo> allEditors;
+
+    @Predicate(ln = "commentOf", inv = true)
+    private Set<NoteComment> comments;
+
+    @Predicate(ln = "desc")
+    private Paragraph description;
+
+    @Predicate
+    private NoteFormat format;
+
+    @Predicate
+    private UserInfo lastEditedBy;
+
+    @Predicate
+    private String lemma;
+
+    @Predicate
+    private String lemmaMeaning;
+
+    @Predicate
+    private Person person;
+
+    @Predicate
+    private Place place;
+
+    @Predicate
+    private Paragraph sources;
+
+    @Predicate
+    private NoteStatus status = NoteStatus.INITIAL;
+
+    @Predicate
+    private String subtextSources;
+
+    @Predicate
+    private Term term;
+
+    @Predicate
+    private Set<NoteType> types;
+
+    public Set<UserInfo> getAllEditors() {
+        return allEditors;
+    }
+
     public Set<NoteComment> getComments() {
         return comments;
     }
@@ -89,6 +99,10 @@ public class Note extends Identifiable {
 
     public NoteFormat getFormat() {
         return format;
+    }
+
+    public UserInfo getLastEditedBy() {
+        return lastEditedBy;
     }
 
     public String getLemma() {
@@ -111,6 +125,10 @@ public class Note extends Identifiable {
         return sources;
     }
 
+    public NoteStatus getStatus() {
+        return status;
+    }
+
     public String getSubtextSources() {
         return subtextSources;
     }
@@ -123,6 +141,10 @@ public class Note extends Identifiable {
         return types;
     }
 
+    public void setAllEditors(Set<UserInfo> allEditors) {
+        this.allEditors = allEditors;
+    }
+
     public void setComments(Set<NoteComment> comments) {
         this.comments = comments;
     }
@@ -133,6 +155,10 @@ public class Note extends Identifiable {
 
     public void setFormat(NoteFormat format) {
         this.format = format;
+    }
+
+    public void setLastEditedBy(UserInfo lastEditedBy) {
+        this.lastEditedBy = lastEditedBy;
     }
 
     public void setLemma(String lemma) {
@@ -155,6 +181,10 @@ public class Note extends Identifiable {
         this.sources = sources;
     }
 
+    public void setStatus(NoteStatus status) {
+        this.status = status;
+    }
+
     public void setSubtextSources(String subtextSources) {
         this.subtextSources = subtextSources;
     }
@@ -167,18 +197,9 @@ public class Note extends Identifiable {
         this.types = types;
     }
 
-    public NoteStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(NoteStatus status) {
-        this.status = status;
-    }
-
     @Override
     public String toString() {
         return "Note [lemma=" + lemma + "]";
     }
-
 
 }

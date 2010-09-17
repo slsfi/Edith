@@ -326,8 +326,8 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     private String getEditors(DocumentNote documentNote) {
         Collection<String> result = new ArrayList<String>();
-        for (UserInfo user : documentNote.getEditors()) {
-            if (!documentNote.getCreatedBy().equals(user)) {
+        for (UserInfo user : documentNote.getNote().getAllEditors()) {
+            if (!documentNote.getNote().getLastEditedBy().equals(user)) {
                 result.add(user.getUsername());
             }
         }
