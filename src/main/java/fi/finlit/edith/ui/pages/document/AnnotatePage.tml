@@ -86,7 +86,7 @@
 				<ul class="notes">
 					<t:loop source="documentNotes" value="note">
 						<li>
-							<span><t:if test="inCurrentDocument"><a href="#start${note.localId}" class="notelink ${note.status}"><em>${note.note.lemma}</em></a>
+							<span><t:if test="inCurrentDocument"><a href="#start${note.localId}" class="notelink ${note.note.status}"><em>${note.note.lemma}</em></a>
 							<p:else><em>${note.note.lemma}</em></p:else></t:if>; </span>
 							    <span class="numberOfInstancesInDocument"> ${numberOfInstancesInDocument} ${message:amountOfInstances}; </span>
 								<span class="basicForm">${note.note.term?.basicForm}; </span>
@@ -97,7 +97,7 @@
 								<span class="format"><t:if test="note.note.format"><t:fmt.message key="${note.note.format}"/></t:if>; </span>
 								<span class="creator">${note.createdBy?.username} (${editorsForNote}); </span>
 								<span class="created"><t:dateTimeFormat date="note.createdOnDate" format="message:dateformat-compact" />; </span>
-								<span class="status"><t:fmt.message key="NoteStatus.${note.status}"/></span>
+								<span class="status"><t:fmt.message key="NoteStatus.${note.note.status}"/></span>
 						</li>
 					</t:loop>
 				</ul>

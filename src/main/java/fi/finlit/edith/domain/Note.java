@@ -57,6 +57,9 @@ public class Note extends Identifiable {
     @Predicate
     private String lemmaMeaning;
 
+    @Predicate
+    private NoteStatus status = NoteStatus.INITIAL;
+
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
     public static String createLemmaFromLongText(String text) {
@@ -162,6 +165,14 @@ public class Note extends Identifiable {
 
     public void setTypes(Set<NoteType> types) {
         this.types = types;
+    }
+
+    public NoteStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(NoteStatus status) {
+        this.status = status;
     }
 
     @Override

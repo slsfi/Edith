@@ -21,7 +21,6 @@ public class DocumentNoteTest {
         documentNote.setLocalId("foobar");
         documentNote.setLongText("foobar is bar");
         documentNote.setNote(new Note());
-        documentNote.setStatus(NoteStatus.INITIAL);
         documentNote.setSVNRevision(10);
     }
 
@@ -36,7 +35,6 @@ public class DocumentNoteTest {
         assertEquals(documentNote.getLocalId(), copy.getLocalId());
         assertEquals(documentNote.getLongText(), copy.getLongText());
         assertEquals(documentNote.getNote(), copy.getNote());
-        assertEquals(documentNote.getStatus(), copy.getStatus());
         assertEquals(documentNote.getSVNRevision(), copy.getSVNRevision());
     }
 

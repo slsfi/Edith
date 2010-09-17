@@ -453,14 +453,16 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         searchInfo.setOrderBy(OrderBy.STATUS);
         List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
         DocumentNote edited = documentNotes.get(2);
-        edited.setStatus(NoteStatus.PUBLISHABLE);
+        edited.getNote().setStatus(NoteStatus.PUBLISHABLE);
         documentNoteRepository.save(edited);
         documentNotes = documentNoteRepository.query(searchInfo);
         DocumentNote previous = null;
         for (DocumentNote documentNote : documentNotes) {
             if (previous != null) {
-                assertTrue(previous.getStatus() + " " + documentNote.getStatus(), previous
-                        .getStatus().compareTo(documentNote.getStatus()) <= 0);
+                NoteStatus previousStatus = previous.getNote().getStatus();
+                NoteStatus currentStatus = documentNote.getNote().getStatus();
+                assertTrue(previousStatus + " " + currentStatus,
+                        previousStatus.compareTo(currentStatus) <= 0);
             }
             previous = documentNote;
         }

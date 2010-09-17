@@ -66,7 +66,7 @@
                     </t:if>
                 </p:subtextSourcesCell>
                 <p:statusCell>
-					<t:fmt.message key="NoteStatus.${documentNote.status}"/>
+					<t:fmt.message key="NoteStatus.${documentNote.note.status}"/>
                 </p:statusCell>
                 <p:actionsCell>
                 	<span class="delete_note">

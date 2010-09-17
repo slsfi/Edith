@@ -247,11 +247,11 @@ public class NoteForm {
     }
 
     public NoteStatus getStatus() {
-        return noteOnEdit.getStatus();
+        return noteOnEdit.getNote().getStatus();
     }
 
     public EnumSelectModel getStatusModel() {
-        final NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(NoteStatus.INITIAL) ? new NoteStatus[] {
+        final NoteStatus[] availableStatuses = noteOnEdit.getNote().getStatus().equals(NoteStatus.INITIAL) ? new NoteStatus[] {
                 NoteStatus.INITIAL, NoteStatus.DRAFT, NoteStatus.FINISHED }
                 : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
         return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
@@ -341,8 +341,8 @@ public class NoteForm {
         DocumentNote documentNote;
         noteOnEdit.getNote().setPerson(getPerson());
         noteOnEdit.getNote().setPlace(getPlace());
-        if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
-            noteOnEdit.setStatus(NoteStatus.DRAFT);
+        if (noteOnEdit.getNote().getStatus().equals(NoteStatus.INITIAL)) {
+            noteOnEdit.getNote().setStatus(NoteStatus.DRAFT);
         }
         try {
             if (updateLongTextSelection.isValid()) {
@@ -450,7 +450,7 @@ public class NoteForm {
 
     @Validate("required")
     public void setStatus(NoteStatus status) {
-        noteOnEdit.setStatus(status);
+        noteOnEdit.getNote().setStatus(status);
     }
 
     public int getPersonInstances() {

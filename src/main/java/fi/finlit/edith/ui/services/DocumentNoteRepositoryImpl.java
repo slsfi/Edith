@@ -253,7 +253,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             comparable = documentNote.createdBy().username.toLowerCase();
             break;
         case STATUS:
-            comparable = documentNote.status.ordinal();
+            comparable = documentNote.note().status.ordinal();
             break;
         default:
             comparable = documentNote.note().lemma.toLowerCase();

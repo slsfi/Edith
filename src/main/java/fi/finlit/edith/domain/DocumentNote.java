@@ -47,9 +47,6 @@ public class DocumentNote extends Identifiable {
     @Predicate
     private long createdOn;
 
-    @Predicate
-    private NoteStatus status = NoteStatus.INITIAL;
-
     // NOTE : not persisted
     private DocumentRevision docRevision;
 
@@ -65,7 +62,6 @@ public class DocumentNote extends Identifiable {
         copy.setDocument(document);
         copy.setNote(note);
         copy.setDocument(document);
-        copy.setStatus(status);
         copy.setDocRevision(docRevision);
         copy.setCreatedBy(createdBy);
         copy.setCreatedOn(createdOn);
@@ -115,10 +111,6 @@ public class DocumentNote extends Identifiable {
         return note;
     }
 
-    public NoteStatus getStatus() {
-        return status;
-    }
-
     public long getSVNRevision() {
         return svnRevision;
     }
@@ -157,10 +149,6 @@ public class DocumentNote extends Identifiable {
 
     public void setNote(Note note) {
         this.note = note;
-    }
-
-    public void setStatus(NoteStatus status) {
-        this.status = status;
     }
 
     public void setSVNRevision(long svnRevision) {
