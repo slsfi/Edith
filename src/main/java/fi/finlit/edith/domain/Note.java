@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
@@ -84,6 +85,9 @@ public class Note extends Identifiable {
 
     @Predicate
     private Set<NoteType> types;
+
+    @Predicate
+    private long editedOn;
 
     public Set<UserInfo> getAllEditors() {
         return allEditors;
@@ -195,6 +199,18 @@ public class Note extends Identifiable {
 
     public void setTypes(Set<NoteType> types) {
         this.types = types;
+    }
+
+    public long getEditedOn() {
+        return editedOn;
+    }
+
+    public void setEditedOn(long editedOn) {
+        this.editedOn = editedOn;
+    }
+
+    public DateTime getEditedOnDate() {
+        return new DateTime(editedOn);
     }
 
     @Override

@@ -93,7 +93,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         UserInfo createdBy = userRepository.getCurrentUser();
 
         DocumentNote documentNote = new DocumentNote();
-        documentNote.setCreatedOn(timeService.currentTimeMillis());
+        long currentTime = timeService.currentTimeMillis();
+        documentNote.setCreatedOn(currentTime);
+        n.setEditedOn(currentTime);
         n.setLastEditedBy(createdBy);
         if (n.getAllEditors() == null) {
             n.setAllEditors(new HashSet<UserInfo>());
@@ -232,10 +234,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     public void remove(DocumentNote documentNoteToBeRemoved, long revision) {
         Assert.notNull(documentNoteToBeRemoved, "note was null");
 
-//        UserInfo createdBy = userRepository.getCurrentUser();
         DocumentNote documentNote = documentNoteToBeRemoved.createCopy();
         documentNote.setCreatedOn(timeService.currentTimeMillis());
-//        documentNote.setCreatedBy(createdBy);
         documentNote.setSVNRevision(revision);
         documentNote.setDeleted(true);
 

@@ -127,7 +127,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         // XXX What was the point in having .createCopy?
         DocumentNote deleted = docNote;
         deleted.setDeleted(true);
-//        deleted.setCreatedBy(userRepository.getCurrentUser());
+        // deleted.setCreatedBy(userRepository.getCurrentUser());
         getSession().save(deleted);
     }
 
@@ -140,13 +140,20 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     @Override
     public DocumentNote save(DocumentNote docNote) {
         UserInfo createdBy = userRepository.getCurrentUser();
-        docNote.setCreatedOn(timeService.currentTimeMillis());
+        long currentTime = timeService.currentTimeMillis();
+        docNote.setCreatedOn(currentTime);
+        docNote.getNote().setEditedOn(currentTime);
         docNote.getNote().setLastEditedBy(createdBy);
         if (docNote.getNote().getAllEditors() == null) {
             docNote.getNote().setAllEditors(new HashSet<UserInfo>());
         }
         docNote.getNote().getAllEditors().add(createdBy);
         getSession().save(docNote);
+        if (docNote.getNote().getComments() != null) {
+            for (NoteComment comment : docNote.getNote().getComments()) {
+                getSession().save(comment);
+            }
+        }
         if (docNote.getDocument() != null) {
             getSession().flush();
             removeOrphans(docNote.getNote().getId());
@@ -169,7 +176,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             NoteComment copyOfComment = comment.copy();
             copyOfComment.setNote(copy);
             comments.add(copyOfComment);
-            getSession().save(copyOfComment);
+            // getSession().save(copyOfComment);
         }
         copy.setComments(comments);
         if (note.getDescription() != null) {
@@ -216,7 +223,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
                 // FIXME A quick stupid hack.
-                filter.or(documentNote.note().allEditors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
+                filter.or(documentNote.note().allEditors.contains(userRepository
+                        .getUserInfoByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
             }
             // FIXME This is kind of useless except that we have broken data in production.
@@ -239,8 +247,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 otherNote.note().eq(documentNote.note()),
                 otherNote.createdOn.gt(documentNote.createdOn)).notExists());
 
-        return getSession().from(documentNote).where(filters)
-                .orderBy(getOrderBy(searchInfo)).list(documentNote);
+        return getSession().from(documentNote).where(filters).orderBy(getOrderBy(searchInfo))
+                .list(documentNote);
     }
 
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {
@@ -305,8 +313,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         Assert.notNull(placeId);
         return getSession()
                 .from(documentNote)
-                .where(documentNote.note().place().id.eq(placeId),
-                        documentNote.deleted.eq(false), latest(documentNote)).list(documentNote);
+                .where(documentNote.note().place().id.eq(placeId), documentNote.deleted.eq(false),
+                        latest(documentNote)).list(documentNote);
     }
 
     @Override
