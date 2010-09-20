@@ -185,7 +185,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     private Term getEditTerm(Note n) {
-        return n.getTerm() != null ? n.getTerm().createCopy() : new Term();
+        return n.getTerm() != null ? n.getTerm() : new Term();
     }
 
     public String getNoteId() {

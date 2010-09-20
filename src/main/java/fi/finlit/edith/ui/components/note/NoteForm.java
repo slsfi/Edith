@@ -50,6 +50,10 @@ public class NoteForm {
     private static final Logger logger = LoggerFactory.getLogger(NoteForm.class);
 
     @Parameter
+    @Property
+    private Block closeDialog;
+
+    @Parameter
     private Set<NoteComment> comments;
 
     @Parameter
@@ -74,6 +78,14 @@ public class NoteForm {
 
     @Parameter
     private Block documentView;
+
+    @Inject
+    @Property
+    private Block editPersonForm;
+
+    @Inject
+    @Property
+    private Block editPlaceForm;
 
     @Parameter
     private Block errorBlock;
@@ -106,17 +118,23 @@ public class NoteForm {
 
     private Person person;
 
-    private Place place;
+    @Property
+    private String personId;
 
     @Inject
     private PersonRepository personRepository;
 
-    @Inject
-    private PlaceRepository placeRepository;
-
     @InjectComponent
     @Property
     private Zone personZone;
+
+    private Place place;
+
+    @Property
+    private String placeId;
+
+    @Inject
+    private PlaceRepository placeRepository;
 
     @InjectComponent
     @Property
@@ -124,6 +142,9 @@ public class NoteForm {
 
     @Property
     private boolean saveAsNew;
+
+    @Property
+    private boolean saveTermAsNew;
 
     @Parameter
     private List<DocumentNote> selectedNotes;
@@ -153,7 +174,7 @@ public class NoteForm {
     }
 
     private Term getEditTerm(Note note) {
-        return note.getTerm() != null ? note.getTerm().createCopy() : new Term();
+        return note.getTerm() != null ? note.getTerm() : new Term();
     }
 
     @Validate("required")
@@ -172,20 +193,6 @@ public class NoteForm {
         return null;
     }
 
-    public String getNormalizedPlaceDescription() {
-        if (isPlace()) {
-            return getPlace().getNormalizedForm().getDescription();
-        }
-        return null;
-    }
-
-    public String getNormalizedPlaceName() {
-        if (isPlace()) {
-            return getPlace().getNormalizedForm().getName();
-        }
-        return null;
-    }
-
     public String getNormalizedFirst() {
         if (isPerson()) {
             return getPerson().getNormalizedForm().getFirst();
@@ -200,11 +207,39 @@ public class NoteForm {
         return null;
     }
 
+    public String getNormalizedPlaceDescription() {
+        if (isPlace()) {
+            return getPlace().getNormalizedForm().getDescription();
+        }
+        return null;
+    }
+
+    public String getNormalizedPlaceName() {
+        if (isPlace()) {
+            return getPlace().getNormalizedForm().getName();
+        }
+        return null;
+    }
+
     private Person getPerson() {
         if (personId != null) {
             return personRepository.getById(personId);
         }
         return person;
+    }
+
+    public int getPersonInstances() {
+        if (isPerson()) {
+            return documentNoteRepository.getOfPerson(getPerson().getId()).size();
+        }
+        return 0;
+    }
+
+    public Set<NameForm> getPersons() {
+        if (isPerson()) {
+            return getPerson().getOtherForms();
+        }
+        return new HashSet<NameForm>();
     }
 
     private Place getPlace() {
@@ -214,11 +249,11 @@ public class NoteForm {
         return place;
     }
 
-    public Set<NameForm> getPersons() {
-        if (isPerson()) {
-            return getPerson().getOtherForms();
+    public int getPlaceInstances() {
+        if (isPlace()) {
+            return documentNoteRepository.getOfPlace(getPlace().getId()).size();
         }
-        return new HashSet<NameForm>();
+        return 0;
     }
 
     public Set<NameForm> getPlaces() {
@@ -251,9 +286,10 @@ public class NoteForm {
     }
 
     public EnumSelectModel getStatusModel() {
-        final NoteStatus[] availableStatuses = noteOnEdit.getNote().getStatus().equals(NoteStatus.INITIAL) ? new NoteStatus[] {
-                NoteStatus.INITIAL, NoteStatus.DRAFT, NoteStatus.FINISHED }
-                : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
+        final NoteStatus[] availableStatuses = noteOnEdit.getNote().getStatus()
+                .equals(NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL,
+                NoteStatus.DRAFT, NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT,
+                NoteStatus.FINISHED };
         return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
 
@@ -300,6 +336,16 @@ public class NoteForm {
         return getSelectedTypes().contains(type);
     }
 
+    Object onEditPerson(String id) {
+        personId = id;
+        return editPersonForm;
+    }
+
+    Object onEditPlace(String id) {
+        placeId = id;
+        return editPlaceForm;
+    }
+
     Object onPerson(String id) {
         if (!isPerson()) {
             setPerson(personRepository.getById(id));
@@ -341,6 +387,12 @@ public class NoteForm {
         DocumentNote documentNote;
         noteOnEdit.getNote().setPerson(getPerson());
         noteOnEdit.getNote().setPlace(getPlace());
+
+        // Handling the embedded term edit
+        if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
+            setTerm(noteOnEdit);
+        }
+
         if (noteOnEdit.getNote().getStatus().equals(NoteStatus.INITIAL)) {
             noteOnEdit.getNote().setStatus(NoteStatus.DRAFT);
         }
@@ -361,11 +413,6 @@ public class NoteForm {
             return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
         }
 
-        // Handling the embedded term edit
-        if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
-            saveTerm(documentNote);
-        }
-
         // prepare view (with possibly new revision)
         if (documentNote.getSVNRevision() > documentRevision.getRevision()) {
             documentRevision.setRevision(documentNote.getSVNRevision());
@@ -378,27 +425,6 @@ public class NoteForm {
         submitSuccess = true;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
                 .add("documentZone", documentView).add("commentZone", commentZone.getBody());
-    }
-
-    private void saveTerm(DocumentNote noteRevision) {
-        // The idea is that language can be changed without a new term being created. It is a
-        // bit hard to follow I admit. -vema
-        final List<Term> terms = termRepository.findByBasicForm(termOnEdit.getBasicForm());
-        Term term = terms.isEmpty() ? termOnEdit : null;
-        for (final Term current : terms) {
-            if (termOnEdit.getMeaning() == null && current.getMeaning() == null
-                    || termOnEdit.getMeaning() != null && termOnEdit.getMeaning().equals(current.getMeaning())) {
-                term = current;
-                term.setLanguage(termOnEdit.getLanguage());
-                break;
-            }
-        }
-        if (term == null) {
-            term = termOnEdit.createCopy();
-        }
-        termRepository.save(term);
-        noteRevision.getNote().setTerm(term);
-        noteRepository.save(noteRevision.getNote());
     }
 
     public void setDescription(String description) throws XMLStreamException {
@@ -453,45 +479,17 @@ public class NoteForm {
         noteOnEdit.getNote().setStatus(status);
     }
 
-    public int getPersonInstances() {
-        if (isPerson()) {
-            return documentNoteRepository.getOfPerson(getPerson().getId()).size();
+    private void setTerm(DocumentNote documentNote) {
+        Term term = null;
+        Term oldTerm = termOnEdit;
+        if (saveTermAsNew) {
+            term = new Term();
+            term.setBasicForm(oldTerm.getBasicForm());
+            term.setMeaning(oldTerm.getMeaning());
+            term.setLanguage(oldTerm.getLanguage());
+        } else {
+            term = oldTerm;
         }
-        return 0;
+        documentNote.getNote().setTerm(term);
     }
-
-    public int getPlaceInstances() {
-        if (isPlace()) {
-            return documentNoteRepository.getOfPlace(getPlace().getId()).size();
-        }
-        return 0;
-    }
-
-    Object onEditPerson(String id) {
-        personId = id;
-        return editPersonForm;
-    }
-
-    Object onEditPlace(String id) {
-        placeId = id;
-        return editPlaceForm;
-    }
-
-    @Inject
-    @Property
-    private Block editPlaceForm;
-
-    @Inject
-    @Property
-    private Block editPersonForm;
-
-    @Property
-    private String personId;
-
-    @Property
-    private String placeId;
-
-    @Parameter
-    @Property
-    private Block closeDialog;
 }

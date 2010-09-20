@@ -61,7 +61,7 @@
                 <input name="type" type="checkbox"/>${message:type-label}
                 <input name="format" type="checkbox"/>${message:format-label}
                 <input name="creator" type="checkbox"/>${message:creator-label}
-                <input name="created" type="checkbox"/>${message:created-label}
+                <input name="edited" type="checkbox"/>${message:edited-label}
                 <input name="status" type="checkbox"/>${message:status-label}
             </form>
 			<t:zone t:id="listZone" update="show">
@@ -96,7 +96,7 @@
 								<span class="type">${typesString}; </span>
 								<span class="format"><t:if test="note.note.format"><t:fmt.message key="${note.note.format}"/></t:if>; </span>
 								<span class="creator">${note.note.lastEditedBy?.username} (${editorsForNote}); </span>
-								<span class="created"><t:dateTimeFormat date="note.createdOnDate" format="message:dateformat-compact" />; </span>
+								<span class="edited"><t:dateTimeFormat date="note.note.editedOnDate" format="message:dateformat-compact" />; </span>
 								<span class="status"><t:fmt.message key="NoteStatus.${note.note.status}"/></span>
 						</li>
 					</t:loop>
@@ -125,7 +125,7 @@
 					</t:if>
 					<h3>${message:noteEdit}</h3>
 					<div class="metadata">
-						<t:dateTimeFormat date="noteOnEdit.createdOnDate"
+						<t:dateTimeFormat date="noteOnEdit.note.editedOnDate"
 							format="message:dateformat-compact" />
 						${noteOnEdit.note.lastEditedBy.username} (${editorsForNoteOnEdit})
 					</div>

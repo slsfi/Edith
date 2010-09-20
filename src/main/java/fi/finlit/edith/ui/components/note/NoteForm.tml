@@ -55,6 +55,9 @@
 					<strong>${message:basicForm-label}</strong> (${termInstances} ${message:amountOfInstances})
 				</div>
 				<div>
+				    <t:textField t:id="termId" value="termOnEdit.id" style="display: none;"/>
+				</div>
+				<div>
 					<t:textField t:id="basicForm" value="termOnEdit.basicForm"
 						t:mixins="termAutocomplete" />
 				</div>
@@ -72,6 +75,10 @@
 				<div>
 					<t:select t:id="language" />
 				</div>
+			</div>
+			
+			<div class="note">
+			    <div><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</div>
 			</div>
 			
 			<div class="person">

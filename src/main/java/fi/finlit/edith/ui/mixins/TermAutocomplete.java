@@ -31,6 +31,7 @@ public class TermAutocomplete extends JQueryAutocomplete {
             JSONObject json = new JSONObject().put("basicForm", term.getBasicForm());
             json.put("language", String.valueOf(term.getLanguage()));
             json.put("meaning", term.getMeaning());
+            json.put("id", term.getId());
             if (term.getMeaning() != null) {
                 json.put("value",
                         term.getBasicForm() + " - " + StringUtils.abbreviate(term.getMeaning(), 32));

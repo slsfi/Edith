@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.mixins;
 
 import static org.junit.Assert.assertEquals;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +24,13 @@ public class TermAutocompleteTest {
     }
 
     @Test
-    public void Generate_Response_One_Element_Found_And_Meaning_Is_Set() {
+    public void Generate_Response_One_Element_Found_And_Meaning_Is_Set() throws SecurityException,
+            NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         List<Object> terms = new ArrayList<Object>();
+        Field field = Term.class.getSuperclass().getDeclaredField("id");
+        field.setAccessible(true);
         Term term = new Term();
+        field.set(term, "111");
         term.setBasicForm("kuusi");
         term.setLanguage(TermLanguage.FINNISH);
         term.setMeaning("Tarkoittaa puuta. Eli ei numeroa, vaan puuta.");
@@ -35,6 +40,7 @@ public class TermAutocompleteTest {
         assertEquals(term.getBasicForm(), o.get("basicForm"));
         assertEquals(term.getMeaning(), o.get("meaning"));
         assertEquals(String.valueOf(term.getLanguage()), o.get("language"));
+        assertEquals(term.getId(), o.get("id"));
         assertEquals(term.getBasicForm() + " - " + StringUtils.abbreviate(term.getMeaning(), 32),
                 o.get("value"));
     }
