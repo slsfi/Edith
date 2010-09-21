@@ -48,6 +48,9 @@ public class DocumentNote extends Identifiable {
     @Predicate
     private Note note;
 
+    @Predicate
+    private boolean publishable;
+
     public DocumentNote createCopy() {
         DocumentNote copy = new DocumentNote();
         copy.setLongText(longText);
@@ -135,6 +138,14 @@ public class DocumentNote extends Identifiable {
 
     public void setSVNRevision(long svnRevision) {
         this.svnRevision = svnRevision;
+    }
+
+    public void setPublishable(boolean publishable) {
+        this.publishable = publishable;
+    }
+
+    public boolean isPublishable() {
+        return publishable;
     }
 
     @Override

@@ -455,7 +455,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         searchInfo.setOrderBy(OrderBy.STATUS);
         List<DocumentNote> documentNotes = documentNoteRepository.query(searchInfo);
         DocumentNote edited = documentNotes.get(2);
-        edited.getNote().setStatus(NoteStatus.PUBLISHABLE);
+        edited.getNote().setStatus(NoteStatus.FINISHED);
         documentNoteRepository.save(edited);
         documentNotes = documentNoteRepository.query(searchInfo);
         DocumentNote previous = null;
