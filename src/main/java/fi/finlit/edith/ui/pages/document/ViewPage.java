@@ -25,7 +25,7 @@ import fi.finlit.edith.domain.DocumentNoteRepository;
 public class ViewPage extends AbstractDocumentPage {
 
     @Inject
-    private DocumentNoteRepository noteRevisionRepo;
+    private DocumentNoteRepository documentNoteRepository;
 
     @Property
     private DocumentNote documentNote;
@@ -34,7 +34,7 @@ public class ViewPage extends AbstractDocumentPage {
     private List<DocumentNote> documentNotes;
 
     void setupRender() {
-        documentNotes = noteRevisionRepo.getOfDocument(getDocumentRevision());
+        documentNotes = documentNoteRepository.getOfDocument(getDocumentRevision());
     }
 
 }

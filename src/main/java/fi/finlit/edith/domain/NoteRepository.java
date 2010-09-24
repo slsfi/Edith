@@ -81,4 +81,8 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     List<Note> findNotes(String lemma);
+
+    GridDataSource queryPersons(String searchTerm);
+
+    GridDataSource queryPlaces(String searchTerm);
 }

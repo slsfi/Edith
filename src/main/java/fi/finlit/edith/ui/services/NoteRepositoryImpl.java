@@ -35,6 +35,8 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.Paragraph;
+import fi.finlit.edith.domain.QPerson;
+import fi.finlit.edith.domain.QPlace;
 import fi.finlit.edith.domain.StringElement;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
@@ -228,6 +230,33 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     false, builder.getValue());
         }
         return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(), false);
+    }
+
+    @Override
+    public GridDataSource queryPersons(String searchTerm) {
+        Assert.notNull(searchTerm);
+        QPerson person = QPerson.person;
+        if (!searchTerm.equals("*")) {
+            BooleanBuilder builder = new BooleanBuilder();
+            builder.or(person.normalizedForm().first.containsIgnoreCase(searchTerm));
+            builder.or(person.normalizedForm().last.containsIgnoreCase(searchTerm));
+            return createGridDataSource(person, person.normalizedForm().last.lower().asc(),
+                    false, builder.getValue());
+        }
+        return createGridDataSource(person, person.normalizedForm().last.asc(), false);
+    }
+
+    @Override
+    public GridDataSource queryPlaces(String searchTerm) {
+        Assert.notNull(searchTerm);
+        QPlace place = QPlace.place;
+        if (!searchTerm.equals("*")) {
+            BooleanBuilder builder = new BooleanBuilder();
+            builder.or(place.normalizedForm().last.containsIgnoreCase(searchTerm));
+            return createGridDataSource(place, place.normalizedForm().last.lower().asc(),
+                    false, builder.getValue());
+        }
+        return createGridDataSource(place, place.normalizedForm().last.asc(), false);
     }
 
     @Override

@@ -1,0 +1,40 @@
+<html t:type="layout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+<p:title>${message:personsearch}</p:title>
+
+<t:form t:id="search">
+	<t:errors />
+	<t:textfield value="searchTerm" />
+	<input type="submit" value="${message:search}" />
+</t:form>
+
+<t:if test="persons">
+	<t:grid source="persons" row="person" rowsPerPage="20"
+		add="normalizedName,timeOfBirth,timeOfDeath,actions" exclude="id">
+		<p:normalizedNameCell>
+                ${person.normalizedForm.name}
+            </p:normalizedNameCell>
+		<p:timeOfBirthCell>
+                ${timeOfBirth}
+            </p:timeOfBirthCell>
+		<p:timeOfDeath>
+                ${timeOfDeath}
+            </p:timeOfDeath>
+		<p:actionsCell>
+			<span class="delete_note"> <a href="" class="delete_question">${message:delete}</a>
+			<span class="delete_dialog"> ${message:delete}? <t:actionlink
+				t:id="delete" context="person.id">${message:yes}</t:actionlink> / <a
+				href="" class="delete_decline">${message:no}</a> </span> </span>
+		</p:actionsCell>
+		<p:empty>
+			<p>${message:no-results}</p>
+		</p:empty>
+	</t:grid>
+</t:if>
+<p:rightPanel>
+
+</p:rightPanel>
+
+</html>

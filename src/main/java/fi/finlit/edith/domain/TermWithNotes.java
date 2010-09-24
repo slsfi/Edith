@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
+import com.mysema.rdfbean.annotations.Id;
 import com.mysema.rdfbean.annotations.Predicate;
+import com.mysema.rdfbean.model.IDType;
 
 import fi.finlit.edith.EDITH;
 
@@ -21,6 +23,8 @@ import fi.finlit.edith.EDITH;
  */
 @ClassMapping(ns = EDITH.NS, ln = "Term")
 public class TermWithNotes {
+    @Id(IDType.LOCAL)
+    private String id;
 
     @Predicate
     private String basicForm;
@@ -41,6 +45,10 @@ public class TermWithNotes {
 
     public Set<Note> getNotes() {
         return notes;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Set<Note> getUndeletedNotes() {

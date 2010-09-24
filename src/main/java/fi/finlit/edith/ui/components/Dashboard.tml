@@ -14,7 +14,13 @@
                 </li>
                 <li>
                     <a t:type="pageLink" t:page="dictionarySearchPage" t:disabled="isOnPage('dictionarySearchPage')">${message:dictionarysearch}</a>
-                </li>                
+                </li>
+                <li>
+                    <a t:type="pageLink" t:page="personSearchPage" t:disabled="isOnPage('personSearchPage')">${message:personsearch}</a>
+                </li>
+                <li>
+                    <a t:type="pageLink" t:page="placeSearchPage" t:disabled="isOnPage('placeSearchPage')">${message:placesearch}</a>
+                </li>           
                 <li>
                     <a t:type="pageLink" t:page="noteImportPage" t:disabled="isOnPage('noteImportPage')">${message:noteimport}</a>
                 </li>

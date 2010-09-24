@@ -1,0 +1,34 @@
+<html t:type="layout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+<p:title>${message:placeSearch}</p:title>
+
+<t:form t:id="search">
+	<t:errors />
+	<t:textfield value="searchTerm" />
+	<input type="submit" value="${message:search}" />
+</t:form>
+
+<t:if test="places">
+	<t:grid source="places" row="place" rowsPerPage="20"
+		add="normalizedName,actions" exclude="id">
+		<p:normalizedNameCell>
+                ${place.normalizedForm.name}
+            </p:normalizedNameCell>
+		<p:actionsCell>
+			<span class="delete_note"> <a href="" class="delete_question">${message:delete}</a>
+			<span class="delete_dialog"> ${message:delete}? <t:actionlink
+				t:id="delete" context="place.id">${message:yes}</t:actionlink>
+			/ <a href="" class="delete_decline">${message:no}</a> </span> </span>
+		</p:actionsCell>
+		<p:empty>
+			<p>${message:no-results}</p>
+		</p:empty>
+	</t:grid>
+</t:if>
+<p:rightPanel>
+
+</p:rightPanel>
+
+</html>

@@ -5,10 +5,6 @@
  */
 package fi.finlit.edith.ui.pages;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.Environmental;
@@ -19,22 +15,18 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.tapestry.core.Context;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.TermRepository;
-import fi.finlit.edith.domain.TermWithNotes;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.PersonRepository;
 
 /**
  * DictionarySearchPage provides
  *
- * @author tiwe
  * @version $Id$
  */
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
-public class DictionarySearchPage {
+public class PersonSearchPage {
 
     @Property
     private String searchTerm;
@@ -42,22 +34,16 @@ public class DictionarySearchPage {
     private Context context;
 
     @Property
-    private GridDataSource terms;
+    private GridDataSource persons;
 
     @Property
-    private TermWithNotes term;
-
-    @Property
-    private Note note;
+    private Person person;
 
     @Inject
     private NoteRepository noteRepository;
 
     @Inject
-    private TermRepository termRepository;
-
-    @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private PersonRepository personRepository;
 
     @Environmental
     private RenderSupport support;
@@ -74,22 +60,28 @@ public class DictionarySearchPage {
     }
 
     public void setupRender() {
-        terms = noteRepository.queryDictionary(searchTerm == null ? "*" : searchTerm);
+        persons = noteRepository.queryPersons(searchTerm == null ? "*" : searchTerm);
     }
 
     Object onPassivate() {
         return context == null ? null : context.toArray();
     }
 
-    void onActionFromDelete(String termId) {
-        termRepository.remove(termId);
+    void onActionFromDelete(String personId) {
+        personRepository.remove(personId);
     }
 
-    public String getLongTexts() {
-        Collection<String> longTexts = new ArrayList<String>();
-        for (DocumentNote documentNote : documentNoteRepository.getOfNote(note.getId())) {
-            longTexts.add(documentNote.getLongText());
+    public String getTimeOfBirth() {
+        if (person.getTimeOfBirth() != null) {
+            return person.getTimeOfBirth().asString();
         }
-        return StringUtils.join(longTexts, ", ");
+        return null;
+    }
+
+    public String getTimeOfDeath() {
+        if (person.getTimeOfDeath() != null) {
+            return person.getTimeOfDeath().asString();
+        }
+        return null;
     }
 }

@@ -26,9 +26,14 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.PersonRepository;
+import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.PlaceRepository;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -51,6 +56,12 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private DocumentNoteRepository documentNoteRepository;
+
+    @Inject
+    private PersonRepository personRepository;
+
+    @Inject
+    private PlaceRepository placeRepository;
 
     @Inject
     @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
@@ -217,6 +228,13 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Before
     public void setUp() {
         adminService.removeNotesAndTerms();
+        for (Person person : personRepository.getAll()) {
+            personRepository.remove(person);
+        }
+        for (Place place : placeRepository.getAll()) {
+            placeRepository.remove(place);
+        }
+
     }
 
     @Test
@@ -234,5 +252,35 @@ public class NoteRepositoryTest extends AbstractServiceTest {
             noteRepository.remove(documentNote, documentNote.getSVNRevision());
         }
         assertTrue(documentNoteRepository.query(new DocumentNoteSearchInfo()).isEmpty());
+    }
+
+    @Test
+    public void Query_All_Persons() throws Exception {
+        assertEquals(0, noteRepository.queryPersons("*").getAvailableRows());
+        personRepository.save(new Person());
+        assertEquals(1, noteRepository.queryPersons("*").getAvailableRows());
+    }
+
+    @Test
+    public void Query_Persons() throws Exception {
+        assertEquals(0, noteRepository.queryPersons("Aapel").getAvailableRows());
+        personRepository.save(new Person(new NameForm("Aapeli", "Aapelsson", null), null));
+        assertEquals(0, noteRepository.queryPersons("Aabel").getAvailableRows());
+        assertEquals(1, noteRepository.queryPersons("Aapel").getAvailableRows());
+    }
+
+    @Test
+    public void Query_All_Places() throws Exception {
+        assertEquals(0, noteRepository.queryPlaces("*").getAvailableRows());
+        placeRepository.save(new Place());
+        assertEquals(1, noteRepository.queryPlaces("*").getAvailableRows());
+    }
+
+    @Test
+    public void Query_Places_Based_On_Name() throws Exception {
+        assertEquals(0, noteRepository.queryPlaces("Helsin").getAvailableRows());
+        placeRepository.save(new Place(new NameForm("Helsinki", null), null));
+        assertEquals(0, noteRepository.queryPlaces("Helssin").getAvailableRows());
+        assertEquals(1, noteRepository.queryPlaces("Helsin").getAvailableRows());
     }
 }

@@ -9,7 +9,7 @@ jQuery(function() {
 		event.preventDefault();
 	});
 	
-	jQuery(".delete_note_decline").click(function(event) {
+	jQuery(".delete_decline").click(function(event) {
 		jQuery(this).parent().siblings(".delete_question").show();
 		jQuery(this).parent().hide();
 		event.preventDefault();

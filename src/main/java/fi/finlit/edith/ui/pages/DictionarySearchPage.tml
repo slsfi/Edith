@@ -10,7 +10,7 @@
 
     <t:if test="terms">
         <t:grid source="terms" row="term" rowsPerPage="20" 
-            include="basicForm,meaning" add="appearances">
+            include="basicForm,meaning" add="appearances,actions">
             <p:appearancesCell>
             	<t:if test="term.undeletedNotes">
                 	<t:loop source="term.undeletedNotes" value="note">
@@ -21,6 +21,12 @@
                 	</p:else>
                 </t:if>
             </p:appearancesCell>
+            <p:actionsCell>
+            <span class="delete_note"> <a href="" class="delete_question">${message:delete}</a>
+            <span class="delete_dialog"> ${message:delete}? <t:actionlink
+                t:id="delete" context="term.id">${message:yes}</t:actionlink> / <a
+                href="" class="delete_decline">${message:no}</a> </span> </span>
+            </p:actionsCell>
             <p:empty>
                 <p>${message:no-results}</p>
             </p:empty>

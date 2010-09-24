@@ -40,4 +40,12 @@ public class LinkElement extends Identifiable implements ParagraphElement {
     public void setReference(String reference) {
         this.reference = reference;
     }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public String getString() {
+        return string;
+    }
 }

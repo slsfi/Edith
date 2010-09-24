@@ -31,7 +31,7 @@ import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
  * @version $Id$
  */
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "NoteSearchPage.js" })
+@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
 public class NoteSearchPage {
 
     @Property

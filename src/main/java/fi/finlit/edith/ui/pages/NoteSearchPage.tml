@@ -73,7 +73,7 @@
                 		<a href="" class="delete_question">${message:delete}</a>
                 		<span class="delete_dialog">
                     		${message:delete}? <t:actionlink t:id="delete" context="documentNote.id">${message:yes}</t:actionlink>
-                    		/ <a href="" class="delete_note_decline">${message:no}</a>
+                    		/ <a href="" class="delete_decline">${message:no}</a>
                     	</span>
                     </span>
                 </p:actionsCell>
