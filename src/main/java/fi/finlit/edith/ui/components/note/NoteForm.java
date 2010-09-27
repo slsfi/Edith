@@ -420,11 +420,23 @@ public class NoteForm {
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        // noteId = noteOnEdit.getNote().getId();
         comments = noteOnEdit.getNote().getComments();
         submitSuccess = true;
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
                 .add("documentZone", documentView).add("commentZone", commentZone.getBody());
+    }
+
+    public String getSubtextSources() {
+        if (noteOnEdit.getNote().getSubtextSources() == null) {
+            return null;
+        }
+        return noteOnEdit.getNote().getSubtextSources().toString();
+    }
+
+    public void setSubtextSources(String subtextSources) throws XMLStreamException {
+        if (subtextSources != null) {
+            noteOnEdit.getNote().setSubtextSources(ParagraphParser.parseParagraph(subtextSources));
+        }
     }
 
     public void setDescription(String description) throws XMLStreamException {

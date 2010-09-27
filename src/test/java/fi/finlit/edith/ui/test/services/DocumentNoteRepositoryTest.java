@@ -480,7 +480,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         initialNote.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
         initialNote.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
         initialNote.setSources(new Paragraph());
-        initialNote.setSubtextSources("wqeqwiwqoiwqoei");
+        initialNote.setSubtextSources(new Paragraph());
         initialNote.setTerm(new Term());
         initialNote.getTerm().setBasicForm("foobar");
         initialNote.getTypes().add(NoteType.HISTORICAL);
@@ -492,8 +492,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         documentNote.getNote().setLemmaMeaning("totally different");
         documentNote.getNote().getPerson().getNormalizedForm().setFirst("something else");
         documentNote.getNote().getPlace().getNormalizedForm().setName("barfo");
+        documentNote.getNote().setSources(new Paragraph());
         documentNote.getNote().getSources().addElement(new StringElement("bar"));
-        documentNote.getNote().setSubtextSources("foooooo");
+        documentNote.getNote().setSubtextSources(new Paragraph());
+        documentNote.getNote().getSubtextSources().addElement(new StringElement("foooo"));
         documentNote.getNote().getTerm().setBasicForm("baaaaar");
         documentNote.getNote().getTypes().add(NoteType.WORD_EXPLANATION);
         documentNote.getNote().getComments()

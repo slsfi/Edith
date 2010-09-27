@@ -78,7 +78,7 @@ public class Note extends Identifiable {
     private NoteStatus status = NoteStatus.INITIAL;
 
     @Predicate
-    private String subtextSources;
+    private Paragraph subtextSources;
 
     @Predicate
     private Term term;
@@ -133,7 +133,7 @@ public class Note extends Identifiable {
         return status;
     }
 
-    public String getSubtextSources() {
+    public Paragraph getSubtextSources() {
         return subtextSources;
     }
 
@@ -189,7 +189,7 @@ public class Note extends Identifiable {
         this.status = status;
     }
 
-    public void setSubtextSources(String subtextSources) {
+    public void setSubtextSources(Paragraph subtextSources) {
         this.subtextSources = subtextSources;
     }
 

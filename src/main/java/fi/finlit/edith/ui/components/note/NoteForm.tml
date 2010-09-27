@@ -241,7 +241,7 @@
 					<strong>${message:subtextSources-label}</strong>
 				</div>
 				<div>
-					<t:textField t:id="subtextSources" value="noteOnEdit.note.subtextSources" />
+					<t:textField value="subtextSources" />
 				</div>
 			</div>
 

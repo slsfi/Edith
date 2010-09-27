@@ -108,9 +108,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         BooleanBuilder builder = new BooleanBuilder();
         if (!searchTerm.equals("*")) {
             for (PString path : Arrays.asList(note.lemma, documentNote.longText,
-                    note.term().basicForm, note.term().meaning,
-                    // documentNote.description, FIXME
-                    note.subtextSources)) {
+                    note.term().basicForm, note.term().meaning)) {
+            // ,
+            // documentNote.description, FIXME
+            // note.subtextSources)
                 builder.or(path.containsIgnoreCase(searchTerm));
             }
         }

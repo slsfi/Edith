@@ -4,7 +4,7 @@
 		    <!-- <t:if test="note.lemma">${note.lemma}</t:if>-->
 		    <t:if test="normalNote">
 		         <t:if test="note.lemmaMeaning">, '${note.lemmaMeaning}'</t:if>
-			     <t:if test="note.subtextSources">, ${message:compareSnippet} <t:markdown value="note.subtextSources"/></t:if>
+			     <t:if test="note.subtextSources">, ${message:compareSnippet} <t:paragraphFormatter value="note.subtextSources"/></t:if>
 			</t:if>
 			<t:if test="personNote">
 			     <t:if test="person">
@@ -19,7 +19,7 @@
                  </t:if>
             </t:if>
             <t:if test="note.description">, <t:paragraphFormatter value="note.description"/></t:if>
-            <t:if test="note.sources">, (${note.sources})</t:if>
+            <t:if test="note.sources">, (<t:paragraphFormatter value="note.sources"/>)</t:if>
 		</span>
     </t:content>
 </html>
