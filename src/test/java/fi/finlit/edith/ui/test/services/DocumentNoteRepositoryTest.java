@@ -58,12 +58,14 @@ import fi.finlit.edith.domain.OrderBy;
 import fi.finlit.edith.domain.Paragraph;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.StringElement;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
+import fi.finlit.edith.ui.services.svn.SubversionService;
 
 /**
  * NoteRevisionRepositoryTest provides
@@ -90,6 +92,9 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepository;
+
+    @Inject
+    private SubversionService subversionService;
 
     @Inject
     private SessionFactory sessionFactory;
@@ -598,11 +603,15 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void Get_Publishable_Notes_Of_Document() {
-        assertTrue(documentNoteRepository.getPublishableNotesOfDocument(docRev).isEmpty());
-        DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).iterator().next();
+    public void Get_Publishable_Notes_Of_Document() throws Exception {
+        String element = "play-act-sp2-p";
+        String text = "sun ullakosta ottaa";
+        DocumentNote documentNote = documentRepository.addNote(new Note(), docRev, new SelectedText(element, element, text));
+        docRev = documentNote.getDocRevision();
         documentNote.setPublishable(true);
+        assertTrue(documentNoteRepository.getPublishableNotesOfDocument(docRev).isEmpty());
         documentNoteRepository.save(documentNote);
+        assertEquals(5, documentNoteRepository.getOfDocument(docRev).size());
         assertEquals(1, documentNoteRepository.getPublishableNotesOfDocument(docRev).size());
     }
 

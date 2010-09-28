@@ -7,12 +7,19 @@ package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QDocumentNote.documentNote;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -25,7 +32,6 @@ import com.mysema.query.types.expr.EBoolean;
 import com.mysema.query.types.expr.EComparableBase;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
-import com.mysema.rdfbean.object.BeanQuery;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
@@ -40,6 +46,7 @@ import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.ui.services.svn.SubversionService;
 
 /**
  * NoteRepositoryImpl provides
@@ -56,11 +63,15 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     private final UserRepository userRepository;
 
+    private final SubversionService subversionService;
+
     public DocumentNoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, @Inject TimeService timeService) {
+            @Inject UserRepository userRepository, @Inject TimeService timeService,
+            @Inject SubversionService subversionService) {
         super(sessionFactory, documentNote);
         this.userRepository = userRepository;
         this.timeService = timeService;
+        this.subversionService = subversionService;
     }
 
     @Override
@@ -79,27 +90,59 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     @Override
     public List<DocumentNote> getOfDocument(DocumentRevision docRevision) {
-        return getOfDocument(docRevision, null);
-    }
-
-    @Override
-    public List<DocumentNote> getPublishableNotesOfDocument(DocumentRevision docRevision) {
-        return getOfDocument(docRevision, documentNote.publishable);
-    }
-
-    private List<DocumentNote> getOfDocument(DocumentRevision docRevision, EBoolean filters) {
         Assert.notNull(docRevision);
-        BeanQuery query = getSession()
+        return getSession()
                 .from(documentNote)
                 .where(documentNote.document().eq(docRevision.getDocument()),
                         documentNote.svnRevision.loe(docRevision.getRevision()),
                         documentNote.deleted.not(),
                         latestFor(documentNote, docRevision.getRevision()))
-                .orderBy(documentNote.createdOn.asc());
-        if (filters != null) {
-            query.where(filters);
+                .orderBy(documentNote.createdOn.asc()).list(documentNote);
+    }
+
+    @Override
+    public List<DocumentNote> getPublishableNotesOfDocument(DocumentRevision docRevision) {
+        List<DocumentNote> result = new ArrayList<DocumentNote>();
+
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        XMLStreamReader reader = null;
+        try {
+            reader = factory.createXMLStreamReader(subversionService.getStream(
+                    docRevision.getSvnPath(), docRevision.getRevision()));
+        } catch (XMLStreamException e) {
+            throw new ServiceException(e);
+        } catch (FileNotFoundException e) {
+            throw new ServiceException(e);
+        } catch (IOException e) {
+            throw new ServiceException(e);
         }
-        return query.list(documentNote);
+
+        while (true) {
+            int event = -1;
+            try {
+                event = reader.next();
+            } catch (XMLStreamException e) {
+                throw new ServiceException(e);
+            }
+            if (event == XMLStreamConstants.START_ELEMENT) {
+                if (reader.getLocalName().equals("anchor") && reader.getAttributeValue(0).startsWith("start")) {
+                    String attr = reader.getAttributeValue(0).replace("start", "");
+                    DocumentNote current = getByLocalId(docRevision, attr);
+                    if (current != null && current.isPublishable()) {
+                        result.add(current);
+                    }
+                }
+            } else if (event == XMLStreamConstants.END_DOCUMENT) {
+                try {
+                    reader.close();
+                } catch (XMLStreamException e) {
+                    throw new ServiceException(e);
+                }
+                break;
+            }
+        }
+
+        return result;
     }
 
     private EBoolean latestFor(QDocumentNote docNote, long svnRevision) {
