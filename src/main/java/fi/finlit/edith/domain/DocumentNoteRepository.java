@@ -106,4 +106,6 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      */
     void removeOrphans(String noteId);
 
+    List<DocumentNote> getPublishableNotesOfDocument(DocumentRevision documentRevision);
+
 }

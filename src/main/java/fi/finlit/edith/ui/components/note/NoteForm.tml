@@ -19,6 +19,15 @@
 					<t:select model="statusModel" value="status" />
 				</div>
 			</div>
+			
+			<div>
+                <div>
+                    <strong>${message:publishable-label}</strong>
+                </div>
+                <div>
+                    <t:checkbox value="noteOnEdit.publishable" />
+                </div>
+            </div>
 
 			<div class="note">
 				<div>

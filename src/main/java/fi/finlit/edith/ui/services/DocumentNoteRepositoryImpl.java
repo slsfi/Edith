@@ -25,6 +25,7 @@ import com.mysema.query.types.expr.EBoolean;
 import com.mysema.query.types.expr.EComparableBase;
 import com.mysema.query.types.path.PString;
 import com.mysema.rdfbean.dao.AbstractRepository;
+import com.mysema.rdfbean.object.BeanQuery;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
@@ -78,14 +79,27 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     @Override
     public List<DocumentNote> getOfDocument(DocumentRevision docRevision) {
+        return getOfDocument(docRevision, null);
+    }
+
+    @Override
+    public List<DocumentNote> getPublishableNotesOfDocument(DocumentRevision docRevision) {
+        return getOfDocument(docRevision, documentNote.publishable);
+    }
+
+    private List<DocumentNote> getOfDocument(DocumentRevision docRevision, EBoolean filters) {
         Assert.notNull(docRevision);
-        return getSession()
+        BeanQuery query = getSession()
                 .from(documentNote)
                 .where(documentNote.document().eq(docRevision.getDocument()),
                         documentNote.svnRevision.loe(docRevision.getRevision()),
-                        documentNote.deleted.eq(false),
+                        documentNote.deleted.not(),
                         latestFor(documentNote, docRevision.getRevision()))
-                .orderBy(documentNote.createdOn.asc()).list(documentNote);
+                .orderBy(documentNote.createdOn.asc());
+        if (filters != null) {
+            query.where(filters);
+        }
+        return query.list(documentNote);
     }
 
     private EBoolean latestFor(QDocumentNote docNote, long svnRevision) {
@@ -109,9 +123,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         if (!searchTerm.equals("*")) {
             for (PString path : Arrays.asList(note.lemma, documentNote.longText,
                     note.term().basicForm, note.term().meaning)) {
-            // ,
-            // documentNote.description, FIXME
-            // note.subtextSources)
+                // ,
+                // documentNote.description, FIXME
+                // note.subtextSources)
                 builder.or(path.containsIgnoreCase(searchTerm));
             }
         }

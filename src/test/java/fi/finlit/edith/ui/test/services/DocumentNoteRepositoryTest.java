@@ -597,6 +597,15 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(1, documentNotes.size());
     }
 
+    @Test
+    public void Get_Publishable_Notes_Of_Document() {
+        assertTrue(documentNoteRepository.getPublishableNotesOfDocument(docRev).isEmpty());
+        DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).iterator().next();
+        documentNote.setPublishable(true);
+        documentNoteRepository.save(documentNote);
+        assertEquals(1, documentNoteRepository.getPublishableNotesOfDocument(docRev).size());
+    }
+
     private void addExtraNote(String username) {
         DocumentNote documentNote = new DocumentNote();
         UserInfo userInfo = userRepository.getUserInfoByUsername(username);
