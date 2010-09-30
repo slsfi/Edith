@@ -28,9 +28,9 @@ import org.springframework.util.Assert;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.expr.EBoolean;
-import com.mysema.query.types.expr.EComparableBase;
-import com.mysema.query.types.path.PString;
+import com.mysema.query.types.expr.BooleanExpression;
+import com.mysema.query.types.expr.ComparableExpressionBase;
+import com.mysema.query.types.path.StringPath;
 import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
@@ -145,14 +145,14 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return result;
     }
 
-    private EBoolean latestFor(QDocumentNote docNote, long svnRevision) {
+    private BooleanExpression latestFor(QDocumentNote docNote, long svnRevision) {
         return sub(otherNote).where(otherNote.ne(docNote),
                 // otherNote.note().eq(documentNote.note()),
                 otherNote.localId.eq(docNote.localId), otherNote.svnRevision.loe(svnRevision),
                 otherNote.createdOn.gt(docNote.createdOn)).notExists();
     }
 
-    private EBoolean latest(QDocumentNote docNote) {
+    private BooleanExpression latest(QDocumentNote docNote) {
         return sub(otherNote).where(otherNote.ne(docNote), otherNote.localId.eq(docNote.localId),
                 otherNote.note().eq(docNote.note()), otherNote.createdOn.gt(docNote.createdOn))
                 .notExists();
@@ -164,7 +164,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         Assert.notNull(searchTerm);
         BooleanBuilder builder = new BooleanBuilder();
         if (!searchTerm.equals("*")) {
-            for (PString path : Arrays.asList(note.lemma, documentNote.longText,
+            for (StringPath path : Arrays.asList(note.lemma, documentNote.longText,
                     note.term().basicForm, note.term().meaning)) {
                 // ,
                 // documentNote.description, FIXME
@@ -261,10 +261,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     @Override
     public List<DocumentNote> query(DocumentNoteSearchInfo searchInfo) {
         Assert.notNull(searchInfo);
-        EBoolean filters = new BooleanBuilder();
+        BooleanBuilder filters = new BooleanBuilder();
         filters.and(documentNote.deleted.eq(false));
         // document & orphans
-        EBoolean documentAndOrphanFilter = null;
+        BooleanBuilder documentAndOrphanFilter = null;
         if (!searchInfo.getDocuments().isEmpty() || searchInfo.isOrphans()) {
             documentAndOrphanFilter = new BooleanBuilder();
             if (!searchInfo.getDocuments().isEmpty()) {
@@ -277,7 +277,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         }
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
-            EBoolean filter = new BooleanBuilder();
+            BooleanBuilder filter = new BooleanBuilder();
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
                 // FIXME A quick stupid hack.
@@ -295,7 +295,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         }
         // types
         if (!searchInfo.getNoteTypes().isEmpty()) {
-            EBoolean filter = new BooleanBuilder();
+            BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : searchInfo.getNoteTypes()) {
                 filter.or(documentNote.note().types.contains(type));
             }
@@ -310,7 +310,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {
-        EComparableBase<?> comparable = null;
+        ComparableExpressionBase<?> comparable = null;
         switch (searchInfo.getOrderBy()) {
         case DATE:
             comparable = documentNote.createdOn;

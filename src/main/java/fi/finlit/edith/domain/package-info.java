@@ -8,9 +8,9 @@
         UserInfo.class, NoteType.class, NoteFormat.class, Person.class, Place.class,
         NameForm.class, Interval.class, NoteComment.class, Paragraph.class, ParagraphElement.class,
         StringElement.class, LinkElement.class })
-@QuerydslConfig(entityAccessors = true)
+@Config(entityAccessors = true)
 package fi.finlit.edith.domain;
 
-import com.mysema.query.annotations.QuerydslConfig;
+import com.mysema.query.annotations.Config;
 import com.mysema.rdfbean.annotations.MappedClasses;
 
