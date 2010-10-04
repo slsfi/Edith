@@ -15,7 +15,7 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.ui.services.DocumentRenderer;
+import fi.finlit.edith.ui.services.ContentRenderer;
 
 /**
  * Pages provides
@@ -26,7 +26,7 @@ import fi.finlit.edith.ui.services.DocumentRenderer;
 public class Pages {
 
     @Inject
-    private DocumentRenderer renderer;
+    private ContentRenderer renderer;
 
     @Parameter
     private DocumentRevision document;

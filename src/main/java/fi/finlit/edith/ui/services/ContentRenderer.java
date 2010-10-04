@@ -6,11 +6,13 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.tapestry5.MarkupWriter;
 
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
 
 //TODO : cache rendering results
@@ -20,7 +22,7 @@ import fi.finlit.edith.domain.DocumentRevision;
  * @author tiwe
  * @version $Id$
  */
-public interface DocumentRenderer {
+public interface ContentRenderer {
 
     /**
      * @param document
@@ -35,5 +37,7 @@ public interface DocumentRenderer {
      * @throws Exception
      */
     void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException;
+
+    void renderDocumentNotes(List<DocumentNote> documentNotes, MarkupWriter writer);
 
 }

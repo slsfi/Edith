@@ -19,6 +19,9 @@
         <span>
             <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
         </span>
+        <span>
+            <t:actionlink t:id="publish" t:context="[document.id,documentRevision.revision]">${message:publish}!</t:actionlink>
+        </span>
         </div>
     </p:leftPanel>
 
@@ -26,15 +29,8 @@
         <div class="panel narrow">
             <h3>${message:notes}</h3>
             <t:if test="documentNotes">
-                <ul class="notes">
-                    <t:loop source="documentNotes" value="documentNote">
-                    <li>
-                        <a href="#start${documentNote.localId}" class="notelink"><em>${documentNote.note.lemma}</em></a>
-                        <t:note.viewNote documentNote="documentNote"/>
-                    </li>
-                    </t:loop>
-                </ul>        
-                <p:else>${message:no-notes}</p:else>
+                <t:note.view documentNotes="documentNotes"/>
+            <p:else>${message:no-notes}</p:else>
             </t:if>
             <div style="clear:both;"></div>
         </div>    

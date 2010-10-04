@@ -71,7 +71,7 @@ public final class ServiceModule {
         binder.bind(PlaceRepository.class, PlaceRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
         binder.bind(SubversionService.class, SubversionServiceImpl.class);
-        binder.bind(DocumentRenderer.class, DocumentRendererImpl.class);
+        binder.bind(ContentRenderer.class, ContentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
         binder.bind(TimeService.class, SimpleTimeService.class);
     }

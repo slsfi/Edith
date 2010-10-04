@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -22,8 +23,16 @@ import org.apache.commons.lang.mutable.MutableBoolean;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Interval;
+import fi.finlit.edith.domain.LinkElement;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.Paragraph;
+import fi.finlit.edith.domain.ParagraphElement;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
 
 /**
  * DocumentWriterImpl provides
@@ -31,15 +40,17 @@ import fi.finlit.edith.domain.DocumentRevision;
  * @author tiwe
  * @version $Id$
  */
-public class DocumentRendererImpl implements DocumentRenderer {
+public class ContentRendererImpl implements ContentRenderer {
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
 
-    static final Set<String> EMPTY_ELEMENTS = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
+    static final Set<String> EMPTY_ELEMENTS = new HashSet<String>(Arrays.asList("anchor", "lb",
+            "pb"));
 
-    static final Set<String> UL_ELEMENTS = new HashSet<String>(Arrays.asList("castGroup","castList","listPerson"));
+    static final Set<String> UL_ELEMENTS = new HashSet<String>(Arrays.asList("castGroup",
+            "castList", "listPerson"));
 
-    static final Set<String> LI_ELEMENTS = new HashSet<String>(Arrays.asList("castItem","person"));
+    static final Set<String> LI_ELEMENTS = new HashSet<String>(Arrays.asList("castItem", "person"));
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
@@ -47,28 +58,112 @@ public class DocumentRendererImpl implements DocumentRenderer {
 
     private static final String DIV = "div";
 
-    private final DocumentRepository documentRepo;
+    private final DocumentRepository documentRepository;
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
-    public DocumentRendererImpl(@Inject DocumentRepository documentRepo){
-        this.documentRepo = documentRepo;
+    public ContentRendererImpl(@Inject DocumentRepository documentRepository) {
+        this.documentRepository = documentRepository;
     }
 
     @Override
-    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException {
-        InputStream is = documentRepo.getDocumentStream(document);
+    public void renderDocumentNotes(List<DocumentNote> documentNotes, MarkupWriter writer) {
+        writer.element("ul", CLASS, "notes");
+        for (DocumentNote documentNote : documentNotes) {
+            writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getLocalId());
+            writer.element("em");
+            writer.write(documentNote.getNote().getLemma());
+            writer.end();
+            writer.end();
+
+            if (documentNote.getNote().getFormat() != null) {
+                if (documentNote.getNote().getFormat().equals(NoteFormat.NOTE)) {
+                    if (documentNote.getNote().getLemmaMeaning() != null) {
+                        writer.write(", '" + documentNote.getNote().getLemmaMeaning() + "'");
+                    }
+                    if (documentNote.getNote().getSubtextSources() != null) {
+                        writer.write(", Vrt. ");
+                        writeParagraph(writer, documentNote.getNote().getSubtextSources());
+                    }
+                }
+
+                if (documentNote.getNote().getFormat().equals(NoteFormat.PERSON)) {
+                    Person person = documentNote.getNote().getPerson();
+                    if (person != null) {
+                        writer.write(", " + person.getNormalizedForm().getFirst());
+                        writer.write(", " + person.getNormalizedForm().getLast());
+                        Interval timeOfBirth = person.getTimeOfBirth();
+                        Interval timeOfDeath = person.getTimeOfDeath();
+                        if (timeOfBirth != null || timeOfDeath != null) {
+                            StringBuilder builder = new StringBuilder();
+                            if (timeOfBirth != null) {
+                                builder.append(timeOfBirth.asString());
+                            }
+                            builder.append("\u2013");
+                            if (timeOfDeath != null) {
+                                builder.append(timeOfDeath.asString());
+                            }
+                            builder.append(".");
+                            writer.write(", " + builder.toString());
+                        }
+                    }
+                }
+
+                if (documentNote.getNote().getFormat().equals(NoteFormat.PLACE)) {
+                    Place place = documentNote.getNote().getPlace();
+                    if (place != null) {
+                        writer.write(", " + place.getNormalizedForm().getName());
+                    }
+                }
+            }
+
+            if (documentNote.getNote().getDescription() != null) {
+                writer.write(", ");
+                writeParagraph(writer, documentNote.getNote().getDescription());
+            }
+            if (documentNote.getNote().getSources() != null) {
+                writer.write(", (");
+                writeParagraph(writer, documentNote.getNote().getSources());
+                writer.write(")");
+            }
+        }
+        writer.end();
+    }
+
+    private void writeParagraph(MarkupWriter writer, Paragraph paragraph) {
+        String root = "";
+        StringBuilder builder = new StringBuilder();
+        for (ParagraphElement element : paragraph.getElements()) {
+            if (element instanceof LinkElement) {
+                LinkElement linkElement = (LinkElement) element;
+                String reference = StringEscapeUtils.escapeHtml(linkElement.getReference());
+                String string = StringEscapeUtils.escapeHtml(linkElement.getString());
+                String result = "<a"
+                        + (reference == null ? "" : " href=\"" + root + reference + "\"") + ">"
+                        + string + "</a>";
+                builder.append(result);
+            } else {
+                builder.append(element.toString());
+            }
+        }
+        writer.writeRaw(builder.toString());
+    }
+
+    @Override
+    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws IOException,
+            XMLStreamException {
+        InputStream is = documentRepository.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
-        try{
+        try {
             writer.element("ul", CLASS, "pages");
             while (true) {
                 int event = reader.next();
-                if (event == XMLStreamConstants.START_ELEMENT){
+                if (event == XMLStreamConstants.START_ELEMENT) {
                     String localName = reader.getLocalName();
-                    if (localName.equals("pb")){
+                    if (localName.equals("pb")) {
                         String page = reader.getAttributeValue(null, "n");
-                        if (page != null){
+                        if (page != null) {
                             writer.element("li");
                             writer.element("a", "href", "#page" + page);
                             writer.writeRaw(page);
@@ -77,12 +172,12 @@ public class DocumentRendererImpl implements DocumentRenderer {
                         }
                     }
 
-                }else if (event == XMLStreamConstants.END_DOCUMENT) {
+                } else if (event == XMLStreamConstants.END_DOCUMENT) {
                     break;
                 }
             }
             writer.end();
-        }finally{
+        } finally {
             reader.close();
             is.close();
         }
@@ -90,8 +185,9 @@ public class DocumentRendererImpl implements DocumentRenderer {
     }
 
     @Override
-    public void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException {
-        InputStream is = documentRepo.getDocumentStream(document);
+    public void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException,
+            XMLStreamException {
+        InputStream is = documentRepository.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
         MutableBoolean noteContent = new MutableBoolean(false);

@@ -3,37 +3,28 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.components.document;
+package fi.finlit.edith.ui.components.note;
 
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
+import java.util.List;
 
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.ui.services.ContentRenderer;
 
-/**
- * ViewPanel provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class View {
-
     @Inject
     private ContentRenderer renderer;
 
     @Parameter
-    private DocumentRevision document;
+    private List<DocumentNote> documentNotes;
 
     @BeginRender
-    void beginRender(MarkupWriter writer) throws IOException, XMLStreamException {
-        renderer.renderDocument(document, writer);
+    void beginRender(MarkupWriter writer) {
+        renderer.renderDocumentNotes(documentNotes, writer);
     }
 
 }
