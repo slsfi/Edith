@@ -22,7 +22,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.mutable.MutableBoolean;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
@@ -62,8 +64,12 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
-    public ContentRendererImpl(@Inject DocumentRepository documentRepository) {
+    private final String bibliographUrl;
+
+    public ContentRendererImpl(@Inject DocumentRepository documentRepository,
+            @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl) {
         this.documentRepository = documentRepository;
+        this.bibliographUrl = bibliographUrl;
     }
 
     @Override
@@ -133,7 +139,6 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void writeParagraph(MarkupWriter writer, Paragraph paragraph) {
-        String root = "";
         StringBuilder builder = new StringBuilder();
         for (ParagraphElement element : paragraph.getElements()) {
             if (element instanceof LinkElement) {
@@ -141,7 +146,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 String reference = StringEscapeUtils.escapeHtml(linkElement.getReference());
                 String string = StringEscapeUtils.escapeHtml(linkElement.getString());
                 String result = "<a"
-                        + (reference == null ? "" : " href=\"" + root + reference + "\"") + ">"
+                        + (reference == null ? "" : " href=\"" + bibliographUrl + reference + "\"") + ">"
                         + string + "</a>";
                 builder.append(result);
             } else {

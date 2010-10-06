@@ -92,9 +92,9 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document
                 .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains(", 'johonkin ineen'"));
-        assertTrue(document.contains(", Vrt. <a href=\"kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", <a href=\"kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)</li>"));
+        assertTrue(document.contains(", Vrt. <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
+        assertTrue(document.contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
+        assertTrue(document.contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 
@@ -115,8 +115,8 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document.contains(", Fred"));
         assertTrue(document.contains(", Armisen"));
         assertTrue(document.contains(", 1970\u20132098."));
-        assertTrue(document.contains(", <a href=\"kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)</li>"));
+        assertTrue(document.contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
+        assertTrue(document.contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 
@@ -133,8 +133,8 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document
                 .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains(", New York"));
-        assertTrue(document.contains(", <a href=\"kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)</li>"));
+        assertTrue(document.contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
+        assertTrue(document.contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 }
