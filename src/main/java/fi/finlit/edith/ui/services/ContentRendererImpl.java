@@ -70,6 +70,7 @@ public class ContentRendererImpl implements ContentRenderer {
     public void renderDocumentNotes(List<DocumentNote> documentNotes, MarkupWriter writer) {
         writer.element("ul", CLASS, "notes");
         for (DocumentNote documentNote : documentNotes) {
+            writer.element("li");
             writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getLocalId());
             writer.element("em");
             writer.write(documentNote.getNote().getLemma());
@@ -126,6 +127,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 writeParagraph(writer, documentNote.getNote().getSources());
                 writer.write(")");
             }
+            writer.end();
         }
         writer.end();
     }

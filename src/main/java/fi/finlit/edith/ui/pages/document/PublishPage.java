@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.pages.document;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -42,20 +43,26 @@ public class PublishPage extends AbstractDocumentPage {
     private ContentRenderer renderer;
 
     void onActionFromPublish(String id) throws IOException, XMLStreamException  {
-        PrintWriter pw = new PrintWriter("target/document.html");
-        MarkupWriter writer = new MarkupWriterImpl();
-        renderer.renderDocument(getDocumentRevision(), writer);
-        writer.toMarkup(pw);
-        pw.close();
+        MarkupWriter documentWriter = new MarkupWriterImpl();
+        renderer.renderDocument(getDocumentRevision(), documentWriter);
+        writeHtmlFile("target/document.html", documentWriter);
 
-//        File htmlNotes = new File("target/notes.html");
-//        pw = new PrintWriter(htmlNotes);
-//        writer = new MarkupWriterImpl();
-//        renderer.renderPageLinks(getDocumentRevision(), writer);
-//        writer.toMarkup(pw);
-//        pw.close();
+        documentNotes = documentNoteRepository.getPublishableNotesOfDocument(getDocumentRevision());
+        MarkupWriter notesWriter = new MarkupWriterImpl();
+        renderer.renderDocumentNotes(documentNotes, notesWriter);
+        writeHtmlFile("target/notes.html", notesWriter);
+    }
 
-
+    private void writeHtmlFile(String path, MarkupWriter writer) throws FileNotFoundException {
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(path);
+            writer.toMarkup(pw);
+        } finally {
+            if (pw != null) {
+                pw.close();
+            }
+        }
     }
 
 }
