@@ -88,14 +88,13 @@ public class ContentRendererTest extends AbstractServiceTest {
         documentNotes.add(createDocumentNote(NoteFormat.NOTE));
         renderer.renderDocumentNotes(documentNotes, writer);
         String document = writer.toString();
-        System.err.println(document);
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
-                .contains("<a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
+                .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains(", 'johonkin ineen'"));
         assertTrue(document.contains(", Vrt. <a href=\"kalevala\">Kalevala</a>"));
         assertTrue(document.contains(", <a href=\"kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)"));
+        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 
@@ -110,15 +109,14 @@ public class ContentRendererTest extends AbstractServiceTest {
         documentNotes.add(documentNote);
         renderer.renderDocumentNotes(documentNotes, writer);
         String document = writer.toString();
-        System.err.println(document);
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
-                .contains("<a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
+                .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains(", Fred"));
         assertTrue(document.contains(", Armisen"));
         assertTrue(document.contains(", 1970\u20132098."));
         assertTrue(document.contains(", <a href=\"kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)"));
+        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 
@@ -131,13 +129,12 @@ public class ContentRendererTest extends AbstractServiceTest {
         documentNotes.add(documentNote);
         renderer.renderDocumentNotes(documentNotes, writer);
         String document = writer.toString();
-        System.err.println(document);
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
-                .contains("<a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
+                .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains(", New York"));
         assertTrue(document.contains(", <a href=\"kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)"));
+        assertTrue(document.contains(", (<a href=\"kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 }
