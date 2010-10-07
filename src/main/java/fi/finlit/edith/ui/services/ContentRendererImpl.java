@@ -35,6 +35,7 @@ import fi.finlit.edith.domain.Paragraph;
 import fi.finlit.edith.domain.ParagraphElement;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.UrlElement;
 
 /**
  * DocumentWriterImpl provides
@@ -146,8 +147,15 @@ public class ContentRendererImpl implements ContentRenderer {
                 String reference = StringEscapeUtils.escapeHtml(linkElement.getReference());
                 String string = StringEscapeUtils.escapeHtml(linkElement.getString());
                 String result = "<a"
-                        + (reference == null ? "" : " href=\"" + bibliographUrl + reference + "\"") + ">"
-                        + string + "</a>";
+                        + (reference == null ? "" : " href=\"" + bibliographUrl + reference + "\"")
+                        + ">" + string + "</a>";
+                builder.append(result);
+            } else if (element instanceof UrlElement) {
+                UrlElement urlElement = (UrlElement) element;
+                String url = StringEscapeUtils.escapeHtml(urlElement.getUrl());
+                String string = StringEscapeUtils.escapeHtml(urlElement.getString());
+                String result = "<a" + (url == null ? "" : " href=\"" + url + "\"") + ">" + string
+                        + "</a>";
                 builder.append(result);
             } else {
                 builder.append(element.toString());

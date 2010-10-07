@@ -15,6 +15,24 @@ public class ParagraphParserTest {
     private Paragraph paragraph;
 
     @Test
+    public void Parse_Paragraph_Containing_Link() throws XMLStreamException {
+        paragraph = ParagraphParser.parseParagraph("<a>foo</a>");
+        assertEquals("<a>foo</a>", paragraph.toString());
+    }
+
+    @Test
+    public void Parse_Paragraph_Containing_Link_And_Text_Elements() throws XMLStreamException {
+        paragraph = ParagraphParser.parseParagraph("bar <a>foo</a> bar");
+        assertEquals("bar <a>foo</a> bar", paragraph.toString());
+    }
+
+    @Test
+    public void Parse_Paragraph_Containing_Link_With_A_Reference() throws XMLStreamException {
+        paragraph = ParagraphParser.parseParagraph("bar <a href=\"http://www.google.com/\">foo</a> bar");
+        assertEquals("bar <a href=\"http://www.google.com/\">foo</a> bar", paragraph.toString());
+    }
+
+    @Test
     public void Parse_Paragraph_Containing_Bibliograph() throws XMLStreamException {
         paragraph = ParagraphParser.parseParagraph("<bibliograph>foo</bibliograph>");
         assertEquals("<bibliograph>foo</bibliograph>", paragraph.toString());

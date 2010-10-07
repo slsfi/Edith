@@ -10,6 +10,7 @@ import javax.xml.stream.XMLStreamReader;
 import fi.finlit.edith.domain.LinkElement;
 import fi.finlit.edith.domain.Paragraph;
 import fi.finlit.edith.domain.StringElement;
+import fi.finlit.edith.domain.UrlElement;
 
 public final class ParagraphParser {
     public static final Paragraph parseParagraph(String s) throws XMLStreamException {
@@ -18,12 +19,19 @@ public final class ParagraphParser {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(document));
         boolean inBib = false;
+        boolean inA = false;
         String reference = null;
+        String href = null;
         while (true) {
             int event = reader.next();
             if (event == XMLStreamConstants.START_ELEMENT) {
                 if (reader.getLocalName().equals("bibliograph")) {
                     inBib = true;
+                    if (reader.getAttributeCount() > 0) {
+                        reference = reader.getAttributeValue(0);
+                    }
+                } else if (reader.getLocalName().equals("a")) {
+                    inA = true;
                     if (reader.getAttributeCount() > 0) {
                         reference = reader.getAttributeValue(0);
                     }
@@ -35,11 +43,18 @@ public final class ParagraphParser {
                         element.setReference(reference);
                     }
                     paragraph.addElement(element);
+                } else if (inA) {
+                    UrlElement element = new UrlElement(reader.getText());
+                    if (reference != null) {
+                        element.setUrl(reference);
+                    }
+                    paragraph.addElement(element);
                 } else {
                     paragraph.addElement(new StringElement(reader.getText()));
                 }
             } else if (event == XMLStreamConstants.END_ELEMENT) {
                 inBib = false;
+                inA = false;
                 reference = null;
             } else if (event == XMLStreamConstants.END_DOCUMENT) {
                 reader.close();

@@ -26,6 +26,8 @@ import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.Paragraph;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.StringElement;
+import fi.finlit.edith.domain.UrlElement;
 import fi.finlit.edith.ui.services.ContentRenderer;
 
 /**
@@ -73,8 +75,8 @@ public class ContentRendererTest extends AbstractServiceTest {
         element.setReference("kalevala");
         paragraph.addElement(element);
         note.setSubtextSources(paragraph);
-        note.setDescription(paragraph);
-        note.setSources(paragraph);
+        note.setDescription(paragraph.copy());
+        note.setSources(paragraph.copy());
         note.setFormat(noteFormat);
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
@@ -92,9 +94,11 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document
                 .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains(", 'johonkin ineen'"));
-        assertTrue(document.contains(", Vrt. <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
+        assertTrue(document
+                .contains(", Vrt. <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
         assertTrue(document.contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
+        assertTrue(document
+                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 
@@ -116,7 +120,8 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document.contains(", Armisen"));
         assertTrue(document.contains(", 1970\u20132098."));
         assertTrue(document.contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
+        assertTrue(document
+                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 
@@ -124,17 +129,28 @@ public class ContentRendererTest extends AbstractServiceTest {
     public void Render_Place_Note() {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
         DocumentNote documentNote = createDocumentNote(NoteFormat.PLACE);
+        documentNote.getNote().getDescription().addElement(new StringElement(" foo "));
+        UrlElement urlElement = new UrlElement("Google");
+        urlElement.setUrl("http://www.google.com/");
+        documentNote.getNote().getDescription().addElement(urlElement);
+        documentNote.getNote().getDescription().addElement(new UrlElement("happyness"));
+        documentNote.getNote().getDescription().addElement(new LinkElement("maya"));
         Place place = new Place(new NameForm("New York", null), new HashSet<NameForm>());
         documentNote.getNote().setPlace(place);
         documentNotes.add(documentNote);
         renderer.renderDocumentNotes(documentNotes, writer);
         String document = writer.toString();
+//        System.err.println(document);
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
                 .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains(", New York"));
-        assertTrue(document.contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
-        assertTrue(document.contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
+        assertTrue(document
+                .contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a> foo <a href=\"http://www.google.com/\">Google</a>"));
+        assertTrue(document.contains("<a>happyness</a>"));
+        assertTrue(document.contains("<a>maya</a>"));
+        assertTrue(document
+                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 }

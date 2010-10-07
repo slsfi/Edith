@@ -38,6 +38,7 @@ import fi.finlit.edith.domain.Paragraph;
 import fi.finlit.edith.domain.QPerson;
 import fi.finlit.edith.domain.QPlace;
 import fi.finlit.edith.domain.StringElement;
+import fi.finlit.edith.domain.UrlElement;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
 
@@ -55,7 +56,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         private Paragraph paragraphs;
         private int counter;
         private boolean inBib;
-        private String attr;
+        private boolean inA;
+        private String reference;
+        private String url;
 
         private LoopContext() {
             documentNote = null;
@@ -91,7 +94,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String localId, String longText) {
+    public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String localId,
+            String longText) {
         UserInfo createdBy = userRepository.getCurrentUser();
 
         DocumentNote documentNote = new DocumentNote();
@@ -144,6 +148,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             data.paragraphs = null;
         } else if (localName.equals("bibliograph")) {
             data.inBib = false;
+            data.reference = null;
+        } else if (localName.equals("a")) {
+            data.inA = false;
+            data.url = null;
         }
     }
 
@@ -158,11 +166,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (localName.equals("bibliograph")) {
             data.inBib = true;
             if (reader.getAttributeCount() > 0) {
-                data.attr = reader.getAttributeValue(0);
+                data.reference = reader.getAttributeValue(0);
             }
-        } else {
-            data.inBib = false;
-            data.attr = null;
+        } else if (localName.equals("a")) {
+            data.inA = true;
+            if (reader.getAttributeCount() > 0) {
+                data.url = reader.getAttributeValue(0);
+            }
         }
     }
 
@@ -198,10 +208,15 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     String text = reader.getText().replaceAll("\\s+", " ");
                     if (data.inBib) {
                         LinkElement el = new LinkElement(text);
-                        if (data.attr != null) {
-                            el.setReference(data.attr);
+                        if (data.reference != null) {
+                            el.setReference(data.reference);
                         }
                         data.paragraphs.addElement(el);
+                    } else if (data.inA) {
+                        UrlElement el = new UrlElement(text);
+                        if (data.url != null) {
+                            el.setUrl(data.url);
+                        }
                     } else {
                         data.paragraphs.addElement(new StringElement(text));
                     }
@@ -240,8 +255,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             BooleanBuilder builder = new BooleanBuilder();
             builder.or(person.normalizedForm().first.containsIgnoreCase(searchTerm));
             builder.or(person.normalizedForm().last.containsIgnoreCase(searchTerm));
-            return createGridDataSource(person, person.normalizedForm().last.lower().asc(),
-                    false, builder.getValue());
+            return createGridDataSource(person, person.normalizedForm().last.lower().asc(), false,
+                    builder.getValue());
         }
         return createGridDataSource(person, person.normalizedForm().last.asc(), false);
     }
@@ -253,8 +268,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (!searchTerm.equals("*")) {
             BooleanBuilder builder = new BooleanBuilder();
             builder.or(place.normalizedForm().last.containsIgnoreCase(searchTerm));
-            return createGridDataSource(place, place.normalizedForm().last.lower().asc(),
-                    false, builder.getValue());
+            return createGridDataSource(place, place.normalizedForm().last.lower().asc(), false,
+                    builder.getValue());
         }
         return createGridDataSource(place, place.normalizedForm().last.asc(), false);
     }
