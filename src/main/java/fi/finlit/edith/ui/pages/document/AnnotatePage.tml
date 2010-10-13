@@ -24,9 +24,6 @@
 		  <span>
             <t:pagelink page="document/publishPage" t:context="document.id">${message:publishVersion}</t:pagelink>
           </span>
-		  <span id="mode_switcher">
-		      <a href="#">Editiotila: <span id="state">MUOKKAUS</span></a> 
-		  </span>
 		  <span>
 		      <a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a> 
 		  </span>
@@ -36,12 +33,15 @@
           <span>
               <t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink>
           </span>
+          <span id="mode_switcher">
+              <a id="normalNotes" href="#">${message:normalNotes}</a> | <a id="innerNotes" href="#">${message:innerNotes}</a> 
+          </span>
 	   </div>
 	</p:leftPanel>
 
 	<p:rightPanel>
 		<div class="panel narrow">
-			<h3>${message:query}</h3>
+			<h3>${message:noteSearch}</h3>
 			<t:note.noteSearchForm notesList="notesList" searchInfo="searchInfo"/>
 		</div>
 		
@@ -56,16 +56,16 @@
 		<div class="panel narrow">
 			<h3>${message:notes}</h3>
             <form id="note_filters">
-                <input name="numberOfInstancesInDocument" type="checkbox"/>${message:numberOfInstancesInDocument-label}
-                <input name="basicForm" type="checkbox"/>${message:basicForm-label}
-                <input name="meaning" type="checkbox"/>${message:meaning-label}
-                <input name="description" type="checkbox"/>${message:description-label}
-                <input name="document" type="checkbox"/>${message:document-label}
-                <input name="type" type="checkbox"/>${message:type-label}
-                <input name="format" type="checkbox"/>${message:format-label}
-                <input name="creator" type="checkbox"/>${message:creator-label}
-                <input name="edited" type="checkbox"/>${message:edited-label}
-                <input name="status" type="checkbox"/>${message:status-label}
+                <input id="numberOfInstancesInDocument" name="numberOfInstancesInDocument" type="checkbox"/><label for="numberOfInstancesInDocument">${message:numberOfInstancesInDocument-label}</label>
+                <input id="basicForm" name="basicForm" type="checkbox"/><label for="basicForm">${message:basicForm-label}</label>
+                <input id="meaning" name="meaning" type="checkbox"/><label for="meaning">${message:meaning-label}</label>
+                <input id="description" name="description" type="checkbox"/><label for="description">${message:description-label}</label>
+                <input id="document" name="document" type="checkbox"/><label for="document">${message:document-label}</label>
+                <input id="type" name="type" type="checkbox"/><label for="type">${message:type-label}</label>
+                <input id="format" name="format" type="checkbox"/><label for="format">${message:format-label}</label>
+                <input id="creator" name="creator" type="checkbox"/><label for="creator">${message:creator-label}</label>
+                <input id="edited" name="edited" type="checkbox"/><label for="edited">${message:edited-label}</label>
+                <input id="status" name="status" type="checkbox"/><label for="status">${message:status-label}</label>
             </form>
 			<t:zone t:id="listZone" update="show">
 				<t:delegate to="notesList" />
@@ -134,7 +134,7 @@
 					</div>
 					<div class="cleaner"></div>
 					<div class="note_edit">
-						<em><strong>${noteOnEdit.note.lemma}</strong></em>  (${lemmaInstances} ${message:amountOfInstances})
+						<em><strong>${noteOnEdit.note.lemma}</strong></em> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="lemmaInstances"/>) </span>
 						
 						<!-- This could be externalized? -->
                         <script type="text/javascript">
@@ -152,15 +152,6 @@
                             event.preventDefault();
                         });
                 		</script>
-						<span class="delete">
-							<button class="delete_question">${message:delete}</button>
-							<span class="delete_dialog">
-								${message:delete}
-								<t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
-								/
-								<a href="" class="delete_decline">${message:no}</a>
-							</span>
-						</span>
 
 						<script type="text/javascript">
 							var hideBasedOnFormat = function() {
@@ -256,7 +247,7 @@
 					<div>
 						<t:form t:id="commentForm" t:zone="commentZone" t:context="noteId" autofocus="false">
 							<t:textArea value="newCommentMessage" />
-							<input type="submit" value="${message:save}" />
+							<input type="submit" value="${message:saveComment}" />
 						</t:form>
 					</div>
 				</div>
@@ -285,7 +276,6 @@
     
     <t:block t:id="notesForLemma">
         <div><strong>${message:createNewNoteOrChooseExistingOne}</strong></div>
-        <t:eventlink t:event="chooseBackingNote" t:zone="editZone">${message:createNewNote-label}</t:eventlink>
     <t:loop source="notes" value="loopNote">
         <div>
         <t:eventlink t:event="chooseBackingNote" context="loopNote.id" t:zone="editZone"><em>${loopNote.lemma}</em></t:eventlink>
@@ -293,6 +283,7 @@
         ${loopNote.description}
         </div>
     </t:loop>
+    <t:eventlink t:event="chooseBackingNote" t:zone="editZone">${message:createNewNote-label}</t:eventlink>
     </t:block>
     
     <t:block t:id="closeDialog">

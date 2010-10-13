@@ -59,13 +59,19 @@ var toggleNoteListElements = function(checkbox) {
 
 jQuery(document).ready(function() {
 	var disableLink = false;
+	jQuery("#innerNotes").removeAttr("href").addClass("disable_link");
 	
-	jQuery("#mode_switcher").toggle(function() {
-		disableLink = true;
-		jQuery("#state").text("ANNOTOINTI");
-	}, function() {
+	jQuery("#normalNotes").click(function() {
 		disableLink = false;
-		jQuery("#state").text("MUOKKAUS");
+		jQuery(this).removeAttr("href").addClass("disable_link");
+		jQuery("#innerNotes").attr("href", "#").removeClass("disable_link");
+		
+	});
+	
+	jQuery("#innerNotes").click(function() {
+		disableLink = true;
+		jQuery(this).removeAttr("href").addClass("disable_link");
+		jQuery("#normalNotes").attr("href", "#").removeClass("disable_link");
 	});
 	
     jQuery('.notecontent').live('click',
@@ -86,7 +92,7 @@ jQuery(document).ready(function() {
     );
   
     jQuery('#createTermLink').bind('click', function() {
-    	jQuery("#dialogZone").text("Hetki...");
+    	jQuery("#dialogZone").text("Odota hetki!");
     	if (createNote()) {
     		jQuery("#dialog").jqm().jqmShow();
     	}

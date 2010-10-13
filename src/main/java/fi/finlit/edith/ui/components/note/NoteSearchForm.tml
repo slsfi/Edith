@@ -8,28 +8,60 @@
 					<strong>${message:document-label}</strong>
 				</div>
 				<div>
-				    <t:checkbox value="orphans"/>${message:orphans}		
+				    <label><t:checkbox value="orphans"/>${message:orphans}</label>	
 					<t:loop source="documents" value="document">
 						<div>
+						<label>
 							<t:checkbox value="documentSelected" />
-							${document.title}
+							${document.title}</label>
 						</div>
 					</t:loop>
 				</div>
 			</div>
 			<div>
+			    <div>
+                    <strong>${message:format-label}</strong>
+                </div>
+                <div>
+                    <t:loop source="formats" value="format">
+                        <div>
+                        <label>
+                            <t:checkbox value="formatSelected" />
+                            <t:fmt.message key="${format}" /></label>
+                        </div>
+                    </t:loop>
+                </div>
 				<div>
 					<strong>${message:type-label}</strong>
 				</div>
 				<div>
 					<t:loop source="types" value="type">
 						<div>
+						<label>
 							<t:checkbox value="typeSelected" />
-							<t:fmt.message key="${type}" />
+							<t:fmt.message key="${type}" /></label>
 						</div>
 					</t:loop>
 				</div>
 			</div>		
+			</div>
+			
+			<div class="left">
+			<div>
+				<div>
+					<strong>${message:creator-label}</strong>
+				</div>
+				<div>
+					<t:loop source="users" value="user">
+						<div>
+						<label>
+							<t:checkbox value="userSelected" />
+							${user.username}
+							</label>
+						</div>
+					</t:loop>
+				</div>
+			</div>
 			<div>
                 <div>
                     <strong>${message:orderBy-label}</strong>
@@ -45,35 +77,12 @@
                     </t:radiogroup>
                     <t:checkbox value="reversed"></t:checkbox>${message:reversed}
                 </div>
-            </div>  
-			</div>
-			
-			<div class="left">
+            </div> 	
 			<div>
-				<div>
-					<strong>${message:creator-label}</strong>
-				</div>
-				<div>
-					<t:loop source="users" value="user">
-						<div>
-							<t:checkbox value="userSelected" />
-							${user.username}
-						</div>
-					</t:loop>
-				</div>
-			</div>		
-			<div>
-				<div>
-					<strong>${message:format-label}</strong>
-				</div>
-				<div>
-					<t:loop source="formats" value="format">
-						<div>
-							<t:checkbox value="formatSelected" />
-							<t:fmt.message key="${format}" />
-						</div>
-					</t:loop>
-				</div>
+
+
+
+
 			</div>				
 			</div>
 			

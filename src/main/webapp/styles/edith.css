@@ -171,6 +171,10 @@ div.note_edit {
 	font-size: 80%;
 }
 
+.disable_link {
+	text-decoration: none !important;
+}
+
 .metadata { /*float:right;*/
 	font-size: 80%;
 }

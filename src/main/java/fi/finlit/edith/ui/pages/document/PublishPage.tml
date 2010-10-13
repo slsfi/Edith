@@ -10,11 +10,11 @@
         
     <p:leftPanel>
     <div id="document_links">
-        <span>
-            <a t:type="pageLink" t:page="document/viewPage" t:context="document.id">${message:to-view-document}</a> 
+            <span>
+            <a t:type="pageLink" t:page="document/annotatePage" t:context="document.id">${message:to-annotate-document}</a>
         </span>
         <span>
-        	<a t:type="pageLink" t:page="document/annotatePage" t:context="document.id">${message:to-annotate-document}</a>
+            <a t:type="pageLink" t:page="document/viewPage" t:context="document.id">${message:to-view-document}</a> 
         </span>
         <span>
             <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>

@@ -4,24 +4,28 @@
       
     <p:title>${message:documents}</p:title>  
 
-    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="view,annotate">
-        <p:viewCell>
-          <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${document.title}</a>
-        </p:viewCell>
-        <p:annotateCell>
+    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1">
+        <p:documentCell>
+          ${document.title}
+        </p:documentCell>
+        <p:viewsCell>
           <a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>
-        </p:annotateCell>
+        </p:viewsCell>
+        <p:nullCell>
+            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:view-document}</a>
+        </p:nullCell>
+        <p:null1Cell>
+            <a t:type="pageLink" t:page="document/printPage" t:context="${document.id}">${message:print-document}</a>
+        </p:null1Cell>
         <p:empty>
             <p>${message:no-documents}</p>
         </p:empty>
     </t:grid>
 
-    <h3>${message:add-document}</h3>
-   
-    <t:document.upload/>
-        
     <p:rightPanel>
-        
+            <p>${message:add-document}</p>
+   
+        <t:document.upload/>
     </p:rightPanel>
 
 </html>

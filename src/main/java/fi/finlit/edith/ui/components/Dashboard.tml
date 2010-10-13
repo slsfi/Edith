@@ -10,20 +10,23 @@
                     <a t:type="pageLink" t:page="documentsPage" t:disabled="isOnPage('documentsPage')">${message:documents}</a>
                 </li>                                
                 <li>
-                    <a t:type="pageLink" t:page="noteSearchPage" t:disabled="isOnPage('noteSearchPage')">${message:notesearch}</a>
+                    <a t:type="pageLink" t:page="noteSearchPage" t:disabled="isOnPage('noteSearchPage')">${message:notes}</a>
                 </li>
                 <li>
                     <a t:type="pageLink" t:page="dictionarySearchPage" t:disabled="isOnPage('dictionarySearchPage')">${message:dictionarysearch}</a>
                 </li>
                 <li>
-                    <a t:type="pageLink" t:page="personSearchPage" t:disabled="isOnPage('personSearchPage')">${message:personsearch}</a>
+                    <a t:type="pageLink" t:page="personSearchPage" t:disabled="isOnPage('personSearchPage')">${message:persons}</a>
                 </li>
                 <li>
-                    <a t:type="pageLink" t:page="placeSearchPage" t:disabled="isOnPage('placeSearchPage')">${message:placesearch}</a>
+                    <a t:type="pageLink" t:page="placeSearchPage" t:disabled="isOnPage('placeSearchPage')">${message:places}</a>
                 </li>           
                 <li>
                     <a t:type="pageLink" t:page="noteImportPage" t:disabled="isOnPage('noteImportPage')">${message:noteimport}</a>
                 </li>
+                <li>
+                    <a t:type="pagelink" t:page="helpPage" t:disabled="isOnPage('helpPage')">${message:help}</a>
+                </li>      
                 <!-- 
                 <li>
                     <a t:type="pageLink" t:page="logoutPage" t:disabled="isOnPage('logoutPage')">${message:logout}</a>

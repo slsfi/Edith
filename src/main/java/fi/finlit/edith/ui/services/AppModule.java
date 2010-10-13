@@ -95,7 +95,7 @@ public final class AppModule {
             @InjectService("DaoAuthenticationProvider") AuthenticationProvider daoAuthenticationProvider) {
         configuration.add("daoAuthenticationProvider", daoAuthenticationProvider);
     }
-    
+
     // TODO : find a generic solution for this
 //    public static void contributeTypeCoercer(Configuration<CoercionTuple<?,?>> configuration) {
 //        Coercion<String, UserInfo> stringToUserId = new Coercion<String, UserInfo>() {
@@ -114,18 +114,18 @@ public final class AppModule {
 //        configuration.add(new CoercionTuple<String, UserInfo>(String.class, UserInfo.class, stringToUserId));
 //        configuration.add(new CoercionTuple<UserInfo, String>(UserInfo.class, String.class, userIdToString));
 //    }
-    
+
     public static void contributeValueEncoderSource(
             MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,
             final com.mysema.rdfbean.object.Configuration rdfBeanConfiguration,
             final SessionFactory sessionFactory){
-        
+
         // TODO : move to RDFBeanModule
         for (final Class cl : Arrays.asList(DocumentNote.class, Document.class, Note.class)){
             configuration.add(cl, new ValueEncoderFactory(){
                 final MappedProperty idProperty = rdfBeanConfiguration.getMappedClass(cl).getIdProperty();
                 @Override
-                public ValueEncoder create(Class type) {                    
+                public ValueEncoder create(Class type) {
                     return new ValueEncoder(){
                         @Override
                         public String toClient(Object value) {
@@ -140,23 +140,23 @@ public final class AppModule {
                                 session = sessionFactory.openSession();
                             }
                             try{
-                                return session.getById(id, cl);                                
+                                return session.getById(id, cl);
                             }finally{
                                 if (close){
                                     try {
                                         session.close();
                                     } catch (IOException e) {
                                         throw new RepositoryException(e);
-                                    }    
-                                }                                
-                            }                            
-                        }                    
+                                    }
+                                }
+                            }
+                        }
                     };
                 }
-                
-            }); 
+
+            });
         }
-        
+
         configuration.add(UserInfo.class, new ValueEncoderFactory<UserInfo>(){
             @Override
             public ValueEncoder<UserInfo> create(Class<UserInfo> type) {
@@ -168,12 +168,12 @@ public final class AppModule {
                     @Override
                     public UserInfo toValue(String clientValue) {
                         return new UserInfo(clientValue);
-                    }                    
+                    }
                 };
             }
-            
+
         });
     }
 
-    
+
 }

@@ -39,14 +39,11 @@
 		<div id="bottom">
 			<div class="content">
 				<ul class="actions">
+                    <li>
+                        <a href="http://www.finlit.fi" target="_blank">SKS</a>
+                    </li>
 					<li>
-						<t:pagelink page="index" t:disabled="isOnPage('index')">${message:frontpage}</t:pagelink>
-					</li>
-					<li>
-						<t:pagelink page="aboutPage" t:disabled="isOnPage('aboutPage')">${message:about}</t:pagelink>
-					</li>
-					<li>
-						<a href="http://www.finlit.fi">SKS</a>
+						<a href="http://www.edith.fi" target="_blank">Edith</a>
 					</li>
 				</ul>
 			</div>

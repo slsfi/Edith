@@ -22,10 +22,10 @@
 			
 			<div>
                 <div>
+                <label>
                     <strong>${message:publishable-label}</strong>
-                </div>
-                <div>
                     <t:checkbox value="noteOnEdit.publishable" />
+                    </label>
                 </div>
             </div>
 
@@ -39,9 +39,9 @@
 			</div>
 
 			<div class="note">
-				<div>- ${message:meaning-label}</div>
+				<div>${message:lemmaMeaning-label}</div>
 				<div>
-					<t:textField value="noteOnEdit.note.lemmaMeaning" />
+					<t:textArea rows="1" value="noteOnEdit.note.lemmaMeaning" />
 				</div>
 			</div>
 
@@ -52,8 +52,10 @@
 				<div>
 					<t:loop source="types" value="type">
 						<div>
+						<label>
 							<t:checkbox value="selected" />
 							<t:fmt.message key="${type}" />
+							</label>
 						</div>
 					</t:loop>
 				</div>
@@ -61,7 +63,7 @@
             
 			<div class="note">
 				<div>
-					<strong>${message:basicForm-label}</strong> (${termInstances} ${message:amountOfInstances})
+					<strong>${message:basicForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="termInstances"/>)</span>
 				</div>
 				<div>
 				    <t:textField t:id="termId" value="termOnEdit.id" style="display: none;"/>
@@ -73,9 +75,9 @@
 			</div>
 
 			<div class="note">
-				<div>- ${message:meaning-label}</div>
+				<div>${message:basicFormMeaning-label}</div>
 				<div>
-					<t:textArea rows="8" t:id="termMeaning" value="termOnEdit.meaning" />
+					<t:textArea rows="1" t:id="termMeaning" value="termOnEdit.meaning" />
 				</div>
 			</div>
 
@@ -87,7 +89,7 @@
 			</div>
 			
 			<div class="note">
-			    <div><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</div>
+			    <div><label><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</label></div>
 			</div>
 			
 			<div class="person">
@@ -112,7 +114,7 @@
 			<div id="personId" name="${personId}" style="display: none;"/>
             <t:if test="person">
             <div class="person">
-                <div><strong>${message:normalizedForm-label}</strong> (${personInstances} ${message:amountOfInstances})</div>
+                <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="personInstances"/>)</span></div>
                 <t:if test="normalizedFirst">
                     <div>- ${message:firstName-label}</div>
                     <div>${normalizedFirst}</div>
@@ -196,7 +198,7 @@
             <div id="placeId" name="${placeId}" style="display: none;"/>
             <t:if test="place">
             <div class="place">
-                <div><strong>${message:normalizedForm-label}</strong> (${placeInstances} ${message:amountOfInstances})</div>
+                <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="placeInstances"/>)</span></div>
                 <t:if test="normalizedPlaceName">
                     <div>- ${message:firstName-label}</div>
                     <div>${normalizedPlaceName}</div>
@@ -236,21 +238,21 @@
 				</div>
 			</div>
 
+            <div class="note person place">
+                <div>
+                    <strong>${message:subtextSources-label}</strong>
+                </div>
+                <div>
+                    <t:textField value="subtextSources" />
+                </div>
+            </div>
+
 			<div class="note person place">
 				<div>
 					<strong>${message:sources-label}</strong>
 				</div>
 				<div>
 					<t:textField value="sources" rows="8" />
-				</div>
-			</div>
-
-			<div class="note person place">
-				<div>
-					<strong>${message:subtextSources-label}</strong>
-				</div>
-				<div>
-					<t:textField value="subtextSources" />
 				</div>
 			</div>
 
@@ -276,8 +278,17 @@
 			<t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
 			<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
 
-			<input type="submit" value="${message:save}" />
-            <t:checkbox value="saveAsNew" />${message:saveAsNew}
+			<input type="submit" value="${message:saveNote}" />
+            <label><t:checkbox t:id="saveAsNew" name="saveAsNew" value="saveAsNew" />${message:saveAsNew}</label>
+                                    <div class="delete">
+                            <button class="delete_question">${message:deleteNote}</button>
+                            <span class="delete_dialog">
+                                ${message:deleteNote}
+                                <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
+                                /
+                                <a href="" class="delete_decline">${message:no}</a>
+                            </span>
+                        </div>
 			<t:if test="submitSuccess">
 				<!-- This could be externalized? -->
 				<script type="text/javascript">

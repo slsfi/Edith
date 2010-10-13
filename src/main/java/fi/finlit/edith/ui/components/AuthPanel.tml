@@ -7,9 +7,6 @@
                     <t:fmt.message key="logged-in-as" args="[username]"/>
                 </li>
                 <li>
-                    <a t:type="pagelink" t:page="helpPage" t:disabled="isOnPage('helpPage')">${message:help}</a>
-                </li>                
-                <li>
                     <a t:type="pagelink" t:page="logoutPage" t:disabled="isOnPage('logoutPage')">${message:logout}</a>
                 </li>
             </ul>

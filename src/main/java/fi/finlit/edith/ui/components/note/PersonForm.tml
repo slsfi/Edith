@@ -52,7 +52,7 @@
 				</div>
 			</div>
 
-			<input type="submit" value="${message:save}" />
+			<input type="submit" value="${message:savePerson}" />
 		</t:form>		
 	</t:content>
 </html>
