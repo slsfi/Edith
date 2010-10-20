@@ -11,7 +11,7 @@
 	<groupId>fi.finlit</groupId>
 	<artifactId>fi.finlit.edith</artifactId>
 	<packaging>war</packaging>
-	<version>0.4.2-SNAPSHOT</version>
+	<version>0.4.4-SNAPSHOT</version>
 	<name>SKS Edith</name>
 	<description></description>
 
@@ -141,6 +141,7 @@
 			<version>2.4</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<repositories>

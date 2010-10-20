@@ -197,6 +197,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     @Override
     public DocumentNote save(DocumentNote docNote) {
+        if (docNote.getNote() == null) {
+            throw new ServiceException("Note was null for " + docNote);
+        }
         UserInfo createdBy = userRepository.getCurrentUser();
         long currentTime = timeService.currentTimeMillis();
         docNote.setCreatedOn(currentTime);
@@ -222,6 +225,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     @Override
     public DocumentNote saveAsCopy(DocumentNote docNote) {
+        if (docNote.getNote() == null) {
+            throw new ServiceException("Note was null for " + docNote);
+        }
         docNote.setNote(copy(docNote.getNote()));
         return save(docNote);
     }
