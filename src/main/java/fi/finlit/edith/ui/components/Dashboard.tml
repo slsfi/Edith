@@ -4,9 +4,6 @@
         <div class="dashboard panel">
             <ul>
                 <li>
-                    <a t:type="pagelink" t:page="index" t:disabled="isOnPage('index')">${message:frontpage}</a>
-                </li>
-                <li>
                     <a t:type="pageLink" t:page="documentsPage" t:disabled="isOnPage('documentsPage')">${message:documents}</a>
                 </li>                                
                 <li>
