@@ -31,4 +31,6 @@ public final class EDITH {
     public static final String TEI_MATERIAL_ROOT = "tei.material.root";
 
     public static final String BIBLIOGRAPH_URL = "bibliograph.url";
+
+    public static final String PUBLISH_PATH = "publish.path";
 }
