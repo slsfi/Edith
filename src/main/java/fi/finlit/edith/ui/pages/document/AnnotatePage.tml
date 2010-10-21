@@ -233,7 +233,7 @@
 								${comment.username}
 							</div>
 						<span class="delete">
-                            <button class="delete_question">${message:delete}</button>
+                            <button class="delete_question">${message:deleteComment}</button>
                             <span class="delete_dialog">
                                 ${message:delete}
                                 <t:eventlink t:event="deleteComment" t:zone="commentZone" 
@@ -249,7 +249,7 @@
 					</div>
 					<div>
 						<t:form t:id="commentForm" t:zone="commentZone" t:context="noteId" autofocus="false">
-							<t:textArea value="newCommentMessage" />
+							<t:textArea value="newCommentMessage" rows="8" />
 							<input type="submit" value="${message:saveComment}" />
 						</t:form>
 					</div>

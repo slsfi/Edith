@@ -82,7 +82,7 @@
 			</div>
 
 			<div class="note">
-				<div>- ${message:language-label}</div>
+				<div>- ${message:basicFormLanguage-label}</div>
 				<div>
 					<t:select t:id="language" />
 				</div>
