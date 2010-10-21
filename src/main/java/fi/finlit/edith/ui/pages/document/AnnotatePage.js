@@ -59,7 +59,7 @@ var toggleNoteListElements = function(checkbox) {
 
 jQuery(document).ready(function() {
 	var disableLink = false;
-	jQuery("#innerNotes").removeAttr("href").addClass("disable_link");
+	jQuery("#normalNotes").removeAttr("href").addClass("disable_link");
 	
 	jQuery("#normalNotes").click(function() {
 		disableLink = false;
