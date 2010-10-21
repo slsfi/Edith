@@ -14,6 +14,9 @@
 
 	<p:leftPanel>
 	   <div id="document_links">
+	      <span>
+            ${message:to-annotate-document}
+          </span>
 		  <span>
 			 <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a> 
 		  </span>
