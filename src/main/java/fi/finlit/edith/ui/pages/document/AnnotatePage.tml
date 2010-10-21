@@ -14,6 +14,7 @@
 
 	<p:leftPanel>
 	   <div id="document_links">
+	   <div>
 	      <span>
             ${message:to-annotate-document}
           </span>
@@ -27,6 +28,8 @@
 		  <span>
             <t:pagelink page="document/publishPage" t:context="document.id">${message:publishVersion}</t:pagelink>
           </span>
+          </div>
+          <div>
 		  <span>
 		      <a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a> 
 		  </span>
@@ -39,6 +42,7 @@
           <span id="mode_switcher">
               <a id="normalNotes" href="#">${message:normalNotes}</a> | <a id="innerNotes" href="#">${message:innerNotes}</a> 
           </span>
+          </div>
 	   </div>
 	</p:leftPanel>
 

@@ -10,6 +10,7 @@
         
     <p:leftPanel>
     <div id="document_links">
+        <div>
             <span>
             <a t:type="pageLink" t:page="document/annotatePage" t:context="document.id">${message:to-annotate-document}</a>
         </span>
@@ -22,9 +23,12 @@
         <span>
            ${message:publishVersion}
         </span>
+        </div>
+        <div>
         <span>
             <t:actionlink t:id="publish" t:context="[document.id,documentRevision.revision]">${message:publish}!</t:actionlink>
         </span>
+        </div>
         </div>
     </p:leftPanel>
 

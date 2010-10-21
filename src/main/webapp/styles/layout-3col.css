@@ -22,12 +22,12 @@ body {
 }
 
 #header {
-    height: 2em;
+    height: 4em;
 }
 
 #main1 {
     position: absolute;
-    top: 3.5em;
+    top: 5em;
     left: 0em;
     right: 0em;
     bottom: 2em;
