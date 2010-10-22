@@ -12,10 +12,13 @@
 
 <t:if test="places">
 	<t:grid source="places" row="place" rowsPerPage="20"
-		add="normalizedName,actions" exclude="id">
+		add="normalizedName,normalizedDescription,actions" exclude="id">
 		<p:normalizedNameCell>
                 ${place.normalizedForm.name}
             </p:normalizedNameCell>
+            <p:normalizedDescriptionCell>
+                ${place.normalizedForm.description}
+            </p:normalizedDescriptionCell>
 		<p:actionsCell>
 			<span class="delete_note"> <a href="" class="delete_question">${message:delete}</a>
 			<span class="delete_dialog"> ${message:delete}? <t:actionlink
