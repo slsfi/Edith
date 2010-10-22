@@ -97,9 +97,10 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document
                 .contains(", Vrt. <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
         assertTrue(document.contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
-        assertTrue(document
-                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
+        assertTrue(document, document
+                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</SPAN></li>"));
         assertTrue(document.endsWith("</ul>"));
+        System.err.println(document);
     }
 
     @Test
@@ -116,12 +117,11 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
                 .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
-        assertTrue(document.contains(", Fred"));
-        assertTrue(document.contains(", Armisen"));
+        assertTrue(document.contains(", Fred Armisen"));
         assertTrue(document.contains(", 1970\u20132098."));
         assertTrue(document.contains(", <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
         assertTrue(document
-                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
+                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</SPAN></li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 
@@ -150,7 +150,7 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document.contains("<a>happyness</a>"));
         assertTrue(document.contains("<a>maya</a>"));
         assertTrue(document
-                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</li>"));
+                .contains(", (<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</SPAN></li>"));
         assertTrue(document.endsWith("</ul>"));
     }
 }

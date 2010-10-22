@@ -73,6 +73,10 @@ public class ContentRendererImpl implements ContentRenderer {
         this.bibliographUrl = bibliographUrl;
     }
 
+    private void writeSpan(MarkupWriter writer, String attr) {
+        writer.element("SPAN", CLASS, attr);
+    }
+
     @Override
     public void renderDocumentNotes(List<DocumentNote> documentNotes, MarkupWriter writer) {
         writer.element("ul", CLASS, "notes");
@@ -87,19 +91,25 @@ public class ContentRendererImpl implements ContentRenderer {
             if (documentNote.getNote().getFormat() != null) {
                 if (documentNote.getNote().getFormat().equals(NoteFormat.NOTE)) {
                     if (documentNote.getNote().getLemmaMeaning() != null) {
+                        writeSpan(writer, "lemmaMeaning");
                         writer.write(", '" + documentNote.getNote().getLemmaMeaning() + "'");
+                        writer.end();
                     }
                     if (documentNote.getNote().getSubtextSources() != null) {
+                        writeSpan(writer, "subtextSources");
                         writer.write(", Vrt. ");
                         writeParagraph(writer, documentNote.getNote().getSubtextSources());
+                        writer.end();
                     }
                 }
 
                 if (documentNote.getNote().getFormat().equals(NoteFormat.PERSON)) {
                     Person person = documentNote.getNote().getPerson();
                     if (person != null) {
+                        writeSpan(writer, "personName");
                         writer.write(", " + person.getNormalizedForm().getFirst());
-                        writer.write(", " + person.getNormalizedForm().getLast());
+                        writer.write(" " + person.getNormalizedForm().getLast());
+                        writer.end();
                         Interval timeOfBirth = person.getTimeOfBirth();
                         Interval timeOfDeath = person.getTimeOfDeath();
                         if (timeOfBirth != null || timeOfDeath != null) {
@@ -112,7 +122,9 @@ public class ContentRendererImpl implements ContentRenderer {
                                 builder.append(timeOfDeath.asString());
                             }
                             builder.append(".");
+                            writeSpan(writer, "lifetime");
                             writer.write(", " + builder.toString());
+                            writer.end();
                         }
                     }
                 }
@@ -120,19 +132,25 @@ public class ContentRendererImpl implements ContentRenderer {
                 if (documentNote.getNote().getFormat().equals(NoteFormat.PLACE)) {
                     Place place = documentNote.getNote().getPlace();
                     if (place != null) {
+                        writeSpan(writer, "placeName");
                         writer.write(", " + place.getNormalizedForm().getName());
+                        writer.end();
                     }
                 }
             }
 
             if (documentNote.getNote().getDescription() != null) {
+                writeSpan(writer, "description");
                 writer.write(", ");
                 writeParagraph(writer, documentNote.getNote().getDescription());
+                writer.end();
             }
             if (documentNote.getNote().getSources() != null) {
+                writeSpan(writer, "sources");
                 writer.write(", (");
                 writeParagraph(writer, documentNote.getNote().getSources());
                 writer.write(")");
+                writer.end();
             }
             writer.end();
         }
