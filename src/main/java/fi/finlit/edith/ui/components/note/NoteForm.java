@@ -495,6 +495,7 @@ public class NoteForm {
         Term term = null;
         Term oldTerm = termOnEdit;
         if (saveTermAsNew) {
+            saveTermAsNew = false;
             term = new Term();
             term.setBasicForm(oldTerm.getBasicForm());
             term.setMeaning(oldTerm.getMeaning());
