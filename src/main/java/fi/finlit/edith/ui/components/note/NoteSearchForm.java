@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
@@ -20,9 +21,13 @@ import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.domain.UserRepository;
 
 public class NoteSearchForm {
+    
+    @SessionState(create=false)
+    private Collection<Document> selectedDocuments;
+    
     @Parameter
     private DocumentNoteSearchInfo searchInfo;
-
+    
     @Parameter
     private Block notesList;
 
@@ -35,17 +40,15 @@ public class NoteSearchForm {
     @Property
     private UserInfo user;
 
-    @Property
-    private Document document;
-
     @Inject
     private UserRepository userRepository;
 
-    @Inject
-    private DocumentRepository documentRepository;
-
     @Property
     private OrderBy loopedOrderBy;
+    
+    public int getSelectedDocumentCount(){
+        return selectedDocuments != null ? selectedDocuments.size() : 0;
+    }
 
     Object onSuccessFromNoteSearchForm() {
         return notesList;
@@ -101,22 +104,6 @@ public class NoteSearchForm {
             searchInfo.getCreators().add(user);
         } else {
             searchInfo.getCreators().remove(user);
-        }
-    }
-
-    public Collection<Document> getDocuments() {
-        return documentRepository.getAll();
-    }
-
-    public boolean isDocumentSelected() {
-        return searchInfo.getDocuments().contains(document);
-    }
-
-    public void setDocumentSelected(boolean selected) {
-        if (selected) {
-            searchInfo.getDocuments().add(document);
-        } else {
-            searchInfo.getDocuments().remove(document);
         }
     }
 

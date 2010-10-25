@@ -72,6 +72,10 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      */
     GridDataSource queryNotes(String searchTem);
 
+    /**
+     * @param searchInfo
+     * @return
+     */
     List<DocumentNote> query(DocumentNoteSearchInfo searchInfo);
 
     /**

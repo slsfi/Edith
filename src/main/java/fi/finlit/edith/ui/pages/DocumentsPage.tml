@@ -4,27 +4,35 @@
       
     <p:title>${message:documents}</p:title>  
 
-    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1">
-        <p:documentCell>
-          ${document.title}
-        </p:documentCell>
-        <p:viewsCell>
-          <a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>
-        </p:viewsCell>
-        <p:nullCell>
-            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:view-document}</a>
-        </p:nullCell>
-        <p:null1Cell>
-            <a t:type="pageLink" t:page="document/printPage" t:context="${document.id}">${message:print-document}</a>
-        </p:null1Cell>
-        <p:empty>
-            <p>${message:no-documents}</p>
-        </p:empty>
-    </t:grid>
+	<t:form t:id="documentsForm">
+
+	    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1,selection">
+	        <p:documentCell>
+	          ${document.title}
+	        </p:documentCell>
+	        <p:viewsCell>
+	          <a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>
+	        </p:viewsCell>
+	        <p:nullCell>
+	            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:view-document}</a>
+	        </p:nullCell>
+	        <p:null1Cell>
+	            <a t:type="pageLink" t:page="document/printPage" t:context="${document.id}">${message:print-document}</a>
+	        </p:null1Cell>
+			<p:selectionCell>
+				<t:checkbox value="documentSelected" />			
+			</p:selectionCell>
+	        <p:empty>
+	            <p>${message:no-documents}</p>
+	        </p:empty>
+	    </t:grid>
+		
+		<input type="submit" value="${message:select}" />
+		
+	</t:form>
 
     <p:rightPanel>
-            <p>${message:add-document}</p>
-   
+        <p>${message:add-document}</p>   
         <t:document.upload/>
     </p:rightPanel>
 

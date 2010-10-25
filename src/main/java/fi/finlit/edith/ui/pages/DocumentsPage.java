@@ -6,8 +6,10 @@
 package fi.finlit.edith.ui.pages;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
@@ -30,9 +32,27 @@ public class DocumentsPage {
 
     @Property
     private Document document;
+    
+    @SessionState(create=false)
+    private Collection<Document> selectedDocuments;
 
     void onActivate(){
-        documents = documentRepository.getAll();
+        if (selectedDocuments == null){
+            selectedDocuments = new HashSet<Document>();
+        }
+        documents = documentRepository.getAll();        
+    }
+    
+    public boolean isDocumentSelected() {
+        return selectedDocuments.contains(document);
+    }
+
+    public void setDocumentSelected(boolean selected) {
+        if (selected) {
+            selectedDocuments.add(document);
+        } else {
+            selectedDocuments.remove(document);
+        }
     }
 
 }

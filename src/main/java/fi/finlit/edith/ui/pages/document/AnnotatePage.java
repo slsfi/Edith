@@ -23,24 +23,14 @@ import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.SelectedText;
-import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.TermRepository;
-import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.domain.*;
 
 /**
  * AnnotatePage provides
@@ -56,6 +46,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     private static final String EDIT_ZONE = "editZone";
 
     private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
+    
+    @SessionState(create=false)
+    private Collection<Document> selectedDocuments;
 
     @Property
     private NoteComment comment;
@@ -195,7 +188,10 @@ public class AnnotatePage extends AbstractDocumentPage {
     public DocumentNoteSearchInfo getSearchInfo() {
         if (searchInfo == null) {
             searchInfo = new DocumentNoteSearchInfo();
-            searchInfo.getDocuments().add(getDocument());
+            searchInfo.getDocuments().add(getDocument());           
+        }
+        if (selectedDocuments != null){
+            searchInfo.getDocuments().addAll(selectedDocuments);
         }
         return searchInfo;
     }

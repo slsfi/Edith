@@ -8,7 +8,8 @@
 					<strong>${message:document-label}</strong>
 				</div>
 				<div>
-				    <label><t:checkbox value="orphans"/>${message:orphans}</label>	
+				    <label><t:checkbox value="orphans"/>${message:orphans}</label>					
+				<!-- 	
 					<t:loop source="documents" value="document">
 						<div>
 						<label>
@@ -16,6 +17,10 @@
 							${document.title}</label>
 						</div>
 					</t:loop>
+				-->
+				</div>
+				<div>
+					<t:fmt.message key="selectedDocuments" args="selectedDocumentCount"/>					
 				</div>
 			</div>
 			<div>
