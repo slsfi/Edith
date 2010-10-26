@@ -245,12 +245,12 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Remove_Based_On_Revision() {
-        noteRepository.importNotes(noteTestData);
-        Collection<DocumentNote> documentNotes = documentNoteRepository.getAll();
-        assertFalse(documentNotes.isEmpty());
-        for (DocumentNote documentNote : documentNotes) {
-            noteRepository.remove(documentNote, documentNote.getSVNRevision());
-        }
+        Document document = documentRepository.getDocumentForPath(testDocument);
+        String longText = "two words";
+        DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10",
+                longText);
+        assertFalse(documentNoteRepository.query(new DocumentNoteSearchInfo()).isEmpty());
+        noteRepository.remove(documentNote, documentNote.getSVNRevision());
         assertTrue(documentNoteRepository.query(new DocumentNoteSearchInfo()).isEmpty());
     }
 
