@@ -218,8 +218,21 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     @Override
-    public void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException,
+    public void renderDocument(DocumentRevision document,
+            MarkupWriter writer) throws IOException, XMLStreamException {
+        renderDocument(document, null, writer);
+    }
+
+    @Override
+    public void renderDocument(DocumentRevision document, List<DocumentNote> documentNotes, MarkupWriter writer) throws IOException,
             XMLStreamException {
+        Set<String> publishIds = null;
+        if (documentNotes != null) {
+            publishIds = new HashSet<String>();
+            for (DocumentNote documentNote : documentNotes) {
+                publishIds.add(documentNote.getLocalId());
+            }
+        }
         InputStream is = documentRepository.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
@@ -231,7 +244,7 @@ public class ContentRendererImpl implements ContentRenderer {
             while (true) {
                 int event = reader.next();
                 if (event == XMLStreamConstants.START_ELEMENT) {
-                    handleStartElement(reader, writer, context, noteIds, noteContent);
+                    handleStartElement(reader, writer, context, noteIds, noteContent, publishIds);
                 } else if (event == XMLStreamConstants.END_ELEMENT) {
                     handleEndElement(reader, writer, context);
                 } else if (event == XMLStreamConstants.CHARACTERS) {
@@ -247,7 +260,7 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void handleStartElement(XMLStreamReader reader, MarkupWriter writer,
-            ElementContext context, Set<String> noteIds, MutableBoolean noteContent) {
+            ElementContext context, Set<String> noteIds, MutableBoolean noteContent, Set<String> publishIds) {
         String localName = reader.getLocalName();
         String name = extractName(reader, localName);
         context.push(name);
@@ -263,21 +276,17 @@ public class ContentRendererImpl implements ContentRenderer {
             if (path != null) {
                 writer.attributes("id", path);
             }
-
         } else if (localName.equals(DIV)) {
             String type = reader.getAttributeValue(null, "type");
             writer.element(localName, CLASS, type);
             if (path != null) {
                 writer.attributes("id", path);
             }
-
         } else if (localName.equals("TEI")) {
             writer.element(DIV, CLASS, "tei");
-
         } else if (localName.equals("lb")) {
             writer.element("br");
             writer.end();
-
         } else if (localName.equals("pb")) {
             String page = reader.getAttributeValue(null, "n");
             if (page != null) {
@@ -285,12 +294,14 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.writeRaw(page + ".");
                 writer.end();
             }
-
         } else if (localName.equals("anchor")) {
             String id = reader.getAttributeValue(XML_NS, "id");
             if (id == null) {
                 return;
             } else if (id.startsWith("start")) {
+                if (publishIds != null && !publishIds.contains(id.replace("start", ""))) {
+                    return;
+                }
                 // start anchor
                 writer.element("span", CLASS, "notestart", "id", id);
                 writer.end();

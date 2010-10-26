@@ -2,10 +2,26 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
       xmlns:p="tapestry:parameter">
       
+                   <script type="text/javascript">
+                     jQuery(".dialog").hide();
+
+                     jQuery(".question").click(function(event) {
+                         jQuery(this).siblings().show();
+                         jQuery(this).hide();
+                         event.preventDefault();
+                     });
+
+                     jQuery(".decline").click(function(event) {
+                         jQuery(this).parent().siblings().show();
+                         jQuery(this).parent().hide();
+                         event.preventDefault();
+                     });
+                   </script>
+      
     <p:title>${document.title}</p:title>  
 
     <div class="content">
-        <t:document.view document="documentRevision"/>
+        <t:document.view document="documentRevision" documentNotes="documentNotes"/>
     </div>
         
     <p:leftPanel>
@@ -26,7 +42,13 @@
         </div>
         <div>
         <span>
-            <t:actionlink t:id="publish" t:context="[document.id,documentRevision.revision]">${message:publish}!</t:actionlink>
+            <a href="#" class="question">${message:publish}</a>
+                            <span class="dialog">
+                                ${message:publish}
+                               <t:actionlink t:id="publish" t:context="[document.id,documentRevision.revision]">${message:yes}</t:actionlink>
+                                /
+                                <a href="" class="decline">${message:no}</a>
+                                </span>
         </span>
         </div>
         </div>

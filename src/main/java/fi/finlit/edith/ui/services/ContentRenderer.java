@@ -40,4 +40,7 @@ public interface ContentRenderer {
 
     void renderDocumentNotes(List<DocumentNote> documentNotes, MarkupWriter writer);
 
+    void renderDocument(DocumentRevision document, List<DocumentNote> documentNotes,
+            MarkupWriter writer) throws IOException, XMLStreamException;
+
 }
