@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+        <style>
+            body {
+                font-family: Helvetica, Georgia, serif;
+                font-size: 1em;
+            }
+        </style>
+
+    </head>
+    <body>
+        <h1>Suomen Kirjallisuuden Seuran editioalustan tekninen kuvaus</h1>
+
+        <h2>Sovelluksen perusteknologiat</h2>
+
+        <p>Ohjelmisto on toteutettu käyttäen Java-ohjelmointikieltä. 
+        Sovelluspalvelimena käytetään Jettyä.</p>
+
+        <p>Dokumenttien tallennukseen ja versiointiin käytetään Subversion:ia.
+        Viitteet, henkilöt ym. talletetaan käyttäen Myseman kehittämää RDFBean:ia
+        Sesame RDF tietokantaan. Tietokannan sisältämän tiedon saa ulos esimerkiksi
+        erilaisten RDF-serialisointiformaattien muodossa kuten Turtle:na tai
+        RDF/XML:nä. Tietokantaan tapahtuvat kyselyt hoidetaan käyttäen meidän
+        kehittämää Querydsl:iä.</p>
+
+        <p>Käyttöliittymän toteutus on tapahtunut käyttämällä Apache Tapestryä,
+        jQuery:ä ja normaaleita web-teknologioita kuten CSS:ää ja JavaScript:iä.</p>
+
+        <p>Koko tämä pyörii tällä hetkellä teidän palvelimella, jonka
+        käyttöjärjestelmänä on Linux-pohjainen openSUSE 11.2. Tämä ei kuitenkaan
+        ole mikään vaatimus ohjelmiston toimimiselle.</p>
+
+        <p>Kaikki ohjelmiston käyttämät komponentit ovat avointa lähdekoodia.</p>
+
+        <h2>Kuvaus sovelluksen toiminnasta</h2>
+
+        <p>Editioalusta on verkkosovellus, jolla kirjautunut käyttäjä voi liittää
+        versionhallinnassa oleviin XML-tiedostoihin annotaatioita. Annotaatioihin
+        voi liittää metatietoa, joka talletetaan tietokantaan. Järjestelmä
+        tarjoaa metatiedoille haun ja mahdollisuuden muokkaukseen sekä poistoon.</p>
+
+        <h2>Käsitemalli</h2>
+
+        <p><img src="domain_uml.png" alt="" title="" /></p>
+
+        <h3>Selitykset</h3>
+
+        <ul>
+            <li>DocumentNote = dokumenttiin liitetty viite</li>
+            <li>Note = yleinen viite</li>
+            <li>Document = dokumentti</li>
+            <li>User = sovelluksen käyttäjä</li>
+            <li>Term = perusmuoto</li>
+            <li>Place = paikka</li>
+            <li>Person = henkilö</li>
+            <li>Paragraph = teksti</li>
+            <li>NoteComment = viiitteen kommentti</li>
+            <li>Profile = profiili</li>
+            <li>TermLanguage = termin kieli</li>
+            <li>NameForm = nimimuoto</li>
+            <li>ParagraphElement = tekstin osa</li>
+            <li>StringElement = teksti</li>
+            <li>LinkElement = bibliografinen viite</li>
+            <li>UrlElement = suora linkki</li>
+        </ul>
+    </body>
+</html>
