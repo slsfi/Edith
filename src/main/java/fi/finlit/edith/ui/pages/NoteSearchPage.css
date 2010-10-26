@@ -2,6 +2,11 @@
 /* Hiding right panel and center fills the whole page */
 #right {
     visibility: hidden;
+    width: 0%
+}
+
+#left {
+    width: 100%;	
 }
 
 #center {
@@ -24,4 +29,8 @@
    /*border: dotted 1px red;*/
    min-width: 10em;
    min-height: 1em;
+}
+
+.edited {
+    background-color: lime;	
 }

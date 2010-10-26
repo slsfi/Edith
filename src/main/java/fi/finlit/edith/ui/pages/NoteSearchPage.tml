@@ -31,7 +31,7 @@
                 include="longText" add="lemma,description,subtextSources,documentRevision,basicForm,meaning,actions">
                 <p:lemmaCell>
                     <t:if test="editMode">
-                        <t:inlineField t:id="lemma" value="documentNote.note.lemma" value1="documentNote.note.lemma"/>
+                        <t:inlineEditField t:id="lemma" value="documentNote.note.lemma"/>
                         <p:else>
                             <em>${documentNote.note.lemma}</em>
                         </p:else>
@@ -47,23 +47,23 @@
                     ${documentNote.longText}
                 </p:longTextCell>
                 <p:descriptionCell>
-                    <t:if test="editMode">
+                    <!--t:if test="editMode">
                         <t:inlineField t:id="description" value="documentNote.note.description" value1="documentNote.note.description" />
-                        <p:else>
+                        <p:else-->
                             <t:markdown value="documentNote.note.description"/>
-                        </p:else>
-                    </t:if>
+                        <!--/p:else>
+                    </t:if-->
                 </p:descriptionCell>                
                 <p:meaningCell>
                         ${documentNote.note.term?.meaning}
                 </p:meaningCell>
                 <p:subtextSourcesCell>
-                	<t:if test="editMode">
+                	<!--t:if test="editMode">
                         <t:inlineField t:id="subtextSources" value="documentNote.note.subtextSources" value1="documentNote.note.subtextSources" />
-                        <p:else>
+                        <p:else-->
                             <t:markdown value="documentNote.note.subtextSources"/>
-                        </p:else>
-                    </t:if>
+                        <!-- /p:else>
+                    </t:if-->
                 </p:subtextSourcesCell>
                 <p:statusCell>
 					<t:fmt.message key="NoteStatus.${documentNote.note.status}"/>

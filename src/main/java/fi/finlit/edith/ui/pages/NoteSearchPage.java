@@ -5,7 +5,8 @@
  */
 package fi.finlit.edith.ui.pages;
 
-
+import org.apache.commons.lang.StringUtils;
+import static org.apache.commons.lang.StringUtils.*;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
@@ -26,12 +27,12 @@ import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 /**
  * NoteSearch provides
- *
+ * 
  * @author tiwe
  * @version $Id$
  */
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
+@IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "deleteDialog.js" })
 public class NoteSearchPage {
 
     @Property
@@ -76,7 +77,7 @@ public class NoteSearchPage {
     }
 
     void onActionFromDelete(String noteRevisionId) {
-//        noteRevisionRepo.remove(noteRevisionId);
+        // noteRevisionRepo.remove(noteRevisionId);
         DocumentNote noteRevision = noteRevisionRepository.getById(noteRevisionId);
         documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision);
     }
@@ -104,8 +105,19 @@ public class NoteSearchPage {
     }
 
     void onSuccessFromEdit() {
-        // TODO Validations
-        noteRevisionRepository.saveAll(encoder.getAllValues());
+        //getting all values from encoder
+        for(DocumentNote editedNote : encoder.getAllValues() ){
+          
+          //If we get a not empty value for a field, 
+          //it means it has been edited
+          //We must refetch the actual document note
+          if (!isBlank(editedNote.getNote().getLemma())) {
+              DocumentNote currentNote = noteRevisionRepository.getById(editedNote.getId());
+              currentNote.getNote().setLemma(editedNote.getNote().getLemma());
+              noteRevisionRepository.save(currentNote);
+          }
+        }
+        
         context = new Context(searchTerm);
     }
 
