@@ -92,12 +92,12 @@ public class ContentRendererImpl implements ContentRenderer {
                 if (documentNote.getNote().getFormat().equals(NoteFormat.NOTE)) {
                     if (documentNote.getNote().getLemmaMeaning() != null) {
                         writeSpan(writer, "lemmaMeaning");
-                        writer.write(", '" + documentNote.getNote().getLemmaMeaning() + "'");
+                        writer.write("'" + documentNote.getNote().getLemmaMeaning() + "'");
                         writer.end();
                     }
                     if (documentNote.getNote().getSubtextSources() != null) {
                         writeSpan(writer, "subtextSources");
-                        writer.write(", Vrt. ");
+                        writer.write("Vrt. ");
                         writeParagraph(writer, documentNote.getNote().getSubtextSources());
                         writer.end();
                     }
@@ -107,8 +107,8 @@ public class ContentRendererImpl implements ContentRenderer {
                     Person person = documentNote.getNote().getPerson();
                     if (person != null) {
                         writeSpan(writer, "personName");
-                        writer.write(", " + person.getNormalizedForm().getFirst());
-                        writer.write(" " + person.getNormalizedForm().getLast());
+                        writer.write(person.getNormalizedForm().getFirst());
+                        writer.write(" " + person.getNormalizedForm().getLast() + ",");
                         writer.end();
                         Interval timeOfBirth = person.getTimeOfBirth();
                         Interval timeOfDeath = person.getTimeOfDeath();
@@ -123,7 +123,7 @@ public class ContentRendererImpl implements ContentRenderer {
                             }
                             builder.append(".");
                             writeSpan(writer, "lifetime");
-                            writer.write(", " + builder.toString());
+                            writer.write(builder.toString());
                             writer.end();
                         }
                     }
@@ -133,7 +133,7 @@ public class ContentRendererImpl implements ContentRenderer {
                     Place place = documentNote.getNote().getPlace();
                     if (place != null) {
                         writeSpan(writer, "placeName");
-                        writer.write(", " + place.getNormalizedForm().getName());
+                        writer.write(place.getNormalizedForm().getName());
                         writer.end();
                     }
                 }
@@ -141,13 +141,12 @@ public class ContentRendererImpl implements ContentRenderer {
 
             if (documentNote.getNote().getDescription() != null) {
                 writeSpan(writer, "description");
-                writer.write(", ");
                 writeParagraph(writer, documentNote.getNote().getDescription());
                 writer.end();
             }
             if (documentNote.getNote().getSources() != null) {
                 writeSpan(writer, "sources");
-                writer.write(", (");
+                writer.write("(");
                 writeParagraph(writer, documentNote.getNote().getSources());
                 writer.write(")");
                 writer.end();

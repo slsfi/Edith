@@ -4,32 +4,32 @@
 			<t:errors />
 			<div>
 				<div><strong>${message:normalizedForm-label}</strong></div>
-				<div>- ${message:firstName-label}</div>
+				<div>${message:firstName-label}</div>
 				<div><t:textField t:id="normalizedFirst" value="person.normalizedForm.first" /></div>
-				<div>- ${message:lastName-label}</div>
+				<div>${message:lastName-label}</div>
 				<div><t:textField t:id="normalizedLast" value="person.normalizedForm.last" /></div>
-    			<div>- ${message:description-label}</div>
+    			<div>${message:nameFormDescription-label}</div>
 				<div><t:textField t:id="normalizedDescription" value="person.normalizedForm.description" /></div>
 			</div>
 			
 			<div>
                 <div><strong>${message:createNameForm-label}</strong></div>
-                <div>- ${message:firstName-label}</div>
+                <div>${message:firstName-label}</div>
                 <div><t:textField t:id="newFirst" value="newFirst" /></div>
-                <div>- ${message:lastName-label}</div>
+                <div>${message:lastName-label}</div>
                 <div><t:textField t:id="newLast" value="newLast" /></div>
-                <div>- ${message:description-label}</div>
+                <div>${message:nameFormDescription-label}</div>
                 <div><t:textField t:id="newDescription" value="newDescription" /></div>
             </div>
 
 			<t:loop source="persons" value="loopPerson" volatile="true">
 				<div>
 					<div><strong>${message:nameForm-label}</strong></div>
-					<div>- ${message:firstName-label}</div> 
+					<div>${message:firstName-label}</div> 
 					<div><t:textField value="loopPerson.first" /></div>
-					<div>- ${message:lastName-label}</div>
+					<div>${message:lastName-label}</div>
 					<div><t:textField value="loopPerson.last" /></div>
-    				<div>- ${message:description-label}</div>
+    				<div>${message:nameFormDescription-label}</div>
 					<div><t:textField value="loopPerson.description" /></div>
 				</div>
 			</t:loop>

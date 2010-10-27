@@ -223,6 +223,10 @@ div.note_edit {
 	width: 95%;
 }
 
+ul.notes li span, ul.notes li .notelink {
+    margin-right: 5px;	
+}
+
 .jqmWindow {
     display: none;
     

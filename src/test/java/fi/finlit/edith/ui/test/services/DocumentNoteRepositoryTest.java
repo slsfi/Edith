@@ -549,7 +549,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         String text = "l\u00E4htee";
         Note note = noteRepository.createDocumentNote(new Note(), docRev, "100", text).getNote();
         noteRepository.createDocumentNote(note, docRev, "200", text);
-        assertEquals(7, documentNoteRepository.query(searchInfo).size());
+        assertEquals(8, documentNoteRepository.query(searchInfo).size());
     }
 
     @Test

@@ -309,6 +309,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         }
         filters.and(sub(otherNote).where(otherNote.ne(documentNote),
                 otherNote.note().eq(documentNote.note()),
+                otherNote.localId.eq(documentNote.localId),
                 otherNote.createdOn.gt(documentNote.createdOn)).notExists());
 
         return getSession().from(documentNote).where(filters).orderBy(getOrderBy(searchInfo))

@@ -82,7 +82,7 @@
 			</div>
 
 			<div class="note">
-				<div>- ${message:basicFormLanguage-label}</div>
+				<div>${message:basicFormLanguage-label}</div>
 				<div>
 					<t:select t:id="language" />
 				</div>
@@ -116,15 +116,15 @@
             <div class="person">
                 <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="personInstances"/>)</span></div>
                 <t:if test="normalizedFirst">
-                    <div>- ${message:firstName-label}</div>
+                    <div>${message:firstName-label}</div>
                     <div>${normalizedFirst}</div>
                 </t:if>
                 <t:if test="normalizedLast">
-                    <div>- ${message:lastName-label}</div>
+                    <div>${message:lastName-label}</div>
                     <div>${normalizedLast}</div>
                 </t:if>
                 <t:if test="normalizedDescription">
-                    <div>- ${message:description-label}</div>
+                    <div>${message:description-label}</div>
                     <div>${normalizedDescription}</div>
                 </t:if>
             </div>
@@ -134,15 +134,15 @@
                 <div>
                     <div><strong>${message:nameForm-label}</strong></div>
                     <t:if test="loopPerson.first">
-                        <div>- ${message:firstName-label}</div>
+                        <div>${message:firstName-label}</div>
                         <div>${loopPerson.first}</div>
                     </t:if> 
                     <t:if test="loopPerson.last">
-                        <div>- ${message:lastName-label}</div>
+                        <div>${message:lastName-label}</div>
                         <div>${loopPerson.last}</div>
                     </t:if>
                     <t:if test="loopPerson.description">
-                        <div>- ${message:description-label}</div>
+                        <div>${message:nameFormDescription-label}</div>
                         <div>${loopPerson.description}</div>
                     </t:if>
                 </div>
@@ -200,11 +200,11 @@
             <div class="place">
                 <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="placeInstances"/>)</span></div>
                 <t:if test="normalizedPlaceName">
-                    <div>- ${message:firstName-label}</div>
+                    <div>${message:name-label}</div>
                     <div>${normalizedPlaceName}</div>
                 </t:if>
                 <t:if test="normalizedPlaceDescription">
-                    <div>- ${message:description-label}</div>
+                    <div>${message:nameFormDescription-label}</div>
                     <div>${normalizedPlaceDescription}</div>
                 </t:if>
             </div>
@@ -214,11 +214,11 @@
                 <div>
                     <div><strong>${message:nameForm-label}</strong></div>
                     <t:if test="loopPlace.name">
-                        <div>- ${message:name-label}</div>
+                        <div>${message:name-label}</div>
                         <div>${loopPlace.name}</div>
                     </t:if> 
                     <t:if test="loopPlace.description">
-                        <div>- ${message:description-label}</div>
+                        <div>${message:description-label}</div>
                         <div>${loopPlace.description}</div>
                     </t:if>
                 </div>
