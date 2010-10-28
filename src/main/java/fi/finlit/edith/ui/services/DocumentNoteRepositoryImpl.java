@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.services;
 
+import static fi.finlit.edith.domain.QNote.note;
 import static fi.finlit.edith.domain.QDocumentNote.documentNote;
 
 import java.io.FileNotFoundException;
@@ -42,6 +43,7 @@ import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.Notes;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
@@ -125,7 +127,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 throw new ServiceException(e);
             }
             if (event == XMLStreamConstants.START_ELEMENT) {
-                if (reader.getLocalName().equals("anchor") && reader.getAttributeValue(0).startsWith("start")) {
+                if (reader.getLocalName().equals("anchor")
+                        && reader.getAttributeValue(0).startsWith("start")) {
                     String attr = reader.getAttributeValue(0).replace("start", "");
                     DocumentNote current = getByLocalId(docRevision, attr);
                     if (current != null && current.isPublishable()) {
@@ -215,10 +218,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 getSession().save(comment);
             }
         }
-        if (docNote.getDocument() != null) {
-            getSession().flush();
-            removeOrphans(docNote.getNote().getId());
-        }
 
         return docNote;
     }
@@ -265,28 +264,20 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     @Override
-    public List<DocumentNote> query(DocumentNoteSearchInfo searchInfo) {
+    public Notes query(DocumentNoteSearchInfo searchInfo) {
         Assert.notNull(searchInfo);
         BooleanBuilder filters = new BooleanBuilder();
         filters.and(documentNote.deleted.eq(false));
         // document & orphans
         BooleanBuilder documentAndOrphanFilter = null;
-        if (!searchInfo.getDocuments().isEmpty() || searchInfo.isOrphans()) {
-            documentAndOrphanFilter = new BooleanBuilder();
-            if (!searchInfo.getDocuments().isEmpty()) {
-                documentAndOrphanFilter.or(documentNote.document().in(searchInfo.getDocuments()));
-            }
-            if (searchInfo.isOrphans()) {
-                documentAndOrphanFilter.or(documentNote.document().isNull());
-            }
-            filters.and(documentAndOrphanFilter);
+        if (!searchInfo.getDocuments().isEmpty()) {
+            filters.and(documentNote.document().in(searchInfo.getDocuments()));
         }
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
-                // FIXME A quick stupid hack.
                 filter.or(documentNote.note().allEditors.contains(userRepository
                         .getUserInfoByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
@@ -312,8 +303,16 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 otherNote.localId.eq(documentNote.localId),
                 otherNote.createdOn.gt(documentNote.createdOn)).notExists());
 
-        return getSession().from(documentNote).where(filters).orderBy(getOrderBy(searchInfo))
-                .list(documentNote);
+        return new Notes(searchInfo.isOrphans() ? getOrphans() : null, getSession()
+                .from(documentNote).where(filters).orderBy(getOrderBy(searchInfo))
+                .list(documentNote));
+    }
+
+    @Override
+    public List<Note> getOrphans() {
+        return getSession().from(note)
+                .where(sub(documentNote).where(documentNote.note().eq(note)).notExists())
+                .list(note);
     }
 
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {
@@ -380,14 +379,5 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.note().place().id.eq(placeId), documentNote.deleted.eq(false),
                         latest(documentNote)).list(documentNote);
-    }
-
-    @Override
-    public void removeOrphans(String noteId) {
-        for (DocumentNote current : getOfNote(noteId)) {
-            if (current.getDocument() == null) {
-                remove(current);
-            }
-        }
     }
 }

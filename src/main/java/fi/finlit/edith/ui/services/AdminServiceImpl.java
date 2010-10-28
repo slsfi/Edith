@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -13,6 +13,8 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.Term;
 
 /**
@@ -40,10 +42,12 @@ public class AdminServiceImpl extends AbstractService implements AdminService{
         Session session = getSession();
         removeAll(session, DocumentNote.class);
         removeAll(session, Note.class);
-        removeAll(session, Term.class);       
+        removeAll(session, Term.class);
+        removeAll(session, Person.class);
+        removeAll(session, Place.class);
         session.flush();
     }
-    
+
     private <T> void removeAll(Session session, Class<T> type){
         for (T instance : session.findInstances(type)){
             session.delete(instance);

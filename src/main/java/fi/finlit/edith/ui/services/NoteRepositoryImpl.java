@@ -25,6 +25,7 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.rdfbean.dao.AbstractRepository;
+import com.mysema.rdfbean.dao.Repository;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.DocumentNote;
@@ -51,7 +52,7 @@ import fi.finlit.edith.domain.UserRepository;
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
 
     private static final class LoopContext {
-        private DocumentNote documentNote;
+        private Note note;
         private String text;
         private Paragraph paragraphs;
         private int counter;
@@ -61,7 +62,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         private String url;
 
         private LoopContext() {
-            documentNote = null;
+            note = null;
             text = null;
             counter = 0;
         }
@@ -76,14 +77,18 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     // TODO Move methods using documentNoteRepository to documentNoteRepository?
     private final DocumentNoteRepository documentNoteRepository;
 
+    private final NoteRepository noteRepository;
+
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
             @Inject UserRepository userRepository, @Inject TimeService timeService,
-            @Inject AuthService authService, @Inject DocumentNoteRepository documentNoteRepository) {
+            @Inject AuthService authService, @Inject DocumentNoteRepository documentNoteRepository,
+            @Inject NoteRepository noteRepository) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
         this.timeService = timeService;
         this.authService = authService;
         this.documentNoteRepository = documentNoteRepository;
+        this.noteRepository = noteRepository;
     }
 
     @Override
@@ -120,7 +125,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         getSession().save(documentNote);
         getSession().flush();
 
-        documentNoteRepository.removeOrphans(documentNote.getNote().getId());
+//        documentNoteRepository.removeOrphans(documentNote.getNote().getId());
 
         return documentNote;
     }
@@ -134,17 +139,17 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String localName = reader.getLocalName();
 
         if (localName.equals("note")) {
-            documentNoteRepository.save(data.documentNote);
+            noteRepository.save(data.note);
             data.counter++;
         } else if (localName.equals("lemma")) {
-            data.documentNote.getNote().setLemma(data.text);
+            data.note.setLemma(data.text);
         } else if (localName.equals("lemma-meaning")) {
-            data.documentNote.getNote().setLemmaMeaning(data.text);
+            data.note.setLemmaMeaning(data.text);
         } else if (localName.equals("source")) {
-            data.documentNote.getNote().setSources(data.paragraphs);
+            data.note.setSources(data.paragraphs);
             data.paragraphs = null;
         } else if (localName.equals("description")) {
-            data.documentNote.getNote().setDescription(data.paragraphs);
+            data.note.setDescription(data.paragraphs);
             data.paragraphs = null;
         } else if (localName.equals("bibliograph")) {
             data.inBib = false;
@@ -158,8 +163,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     private void handleStartElement(XMLStreamReader reader, LoopContext data) {
         String localName = reader.getLocalName();
         if (localName.equals("note")) {
-            data.documentNote = new DocumentNote();
-            data.documentNote.setNote(new Note());
+            data.note = new Note();
         } else if (localName.equals("source") || localName.equals("description")) {
             data.paragraphs = new Paragraph();
         }

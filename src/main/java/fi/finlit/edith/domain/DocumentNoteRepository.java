@@ -76,7 +76,7 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      * @param searchInfo
      * @return
      */
-    List<DocumentNote> query(DocumentNoteSearchInfo searchInfo);
+    Notes query(DocumentNoteSearchInfo searchInfo);
 
     /**
      * Returns all the document notes attached to the term.
@@ -103,13 +103,9 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      */
     List<DocumentNote> getOfNoteInDocument(String noteId, String documentId);
 
-    /**
-     * Removes the orphan DocumentNotes of the given Note.
-     *
-     * @param noteId
-     */
-    void removeOrphans(String noteId);
-
     List<DocumentNote> getPublishableNotesOfDocument(DocumentRevision documentRevision);
+
+    // TODO TEST
+    List<Note> getOrphans();
 
 }

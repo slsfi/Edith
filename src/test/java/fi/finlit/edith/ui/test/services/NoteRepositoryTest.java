@@ -177,7 +177,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     public void Import_The_Same_Notes_Twice() {
         assertEquals(9, noteRepository.importNotes(noteTestData));
         assertEquals(9, noteRepository.importNotes(noteTestData));
-        assertEquals(18, documentNoteRepository.getAll().size());
+        assertEquals(18, noteRepository.getAll().size());
     }
 
     @Test
@@ -228,12 +228,6 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Before
     public void setUp() {
         adminService.removeNotesAndTerms();
-        for (Person person : personRepository.getAll()) {
-            personRepository.remove(person);
-        }
-        for (Place place : placeRepository.getAll()) {
-            placeRepository.remove(place);
-        }
 
     }
 
@@ -249,9 +243,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         String longText = "two words";
         DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10",
                 longText);
-        assertFalse(documentNoteRepository.query(new DocumentNoteSearchInfo()).isEmpty());
+        assertFalse(documentNoteRepository.query(new DocumentNoteSearchInfo()).getDocumentNotes().isEmpty());
         noteRepository.remove(documentNote, documentNote.getSVNRevision());
-        assertTrue(documentNoteRepository.query(new DocumentNoteSearchInfo()).isEmpty());
+        assertTrue(documentNoteRepository.query(new DocumentNoteSearchInfo()).getDocumentNotes().isEmpty());
     }
 
     @Test

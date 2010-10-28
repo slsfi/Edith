@@ -172,7 +172,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     public List<DocumentNote> getDocumentNotes() {
         if (documentNotes == null) {
-            documentNotes = documentNoteRepository.query(getSearchInfo());
+            documentNotes = documentNoteRepository.query(getSearchInfo()).getDocumentNotes();
         }
         return documentNotes;
     }
