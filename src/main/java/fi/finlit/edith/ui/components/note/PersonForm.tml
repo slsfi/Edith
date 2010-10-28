@@ -36,7 +36,7 @@
 
 			<div>
 				<div>
-					<strong>${message:timeOfBirth-label} (d.M.y)</strong>
+					<strong>${message:timeOfBirth-label} (${message:timeFormat})</strong>
 				</div>
 				<div>
 					<t:textField t:id="timeOfBirth" />
@@ -45,7 +45,7 @@
 
 			<div>
 				<div>
-					<strong>${message:timeOfDeath-label} (d.M.y)</strong>
+					<strong>${message:timeOfDeath-label} (${message:timeFormat})</strong>
 				</div>
 				<div>
 					<t:textField t:id="timeOfDeath" />

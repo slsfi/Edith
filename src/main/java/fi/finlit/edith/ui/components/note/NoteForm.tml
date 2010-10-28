@@ -124,7 +124,7 @@
                     <div>${normalizedLast}</div>
                 </t:if>
                 <t:if test="normalizedDescription">
-                    <div>${message:description-label}</div>
+                    <div>${message:normalizedFormDescription-label}</div>
                     <div>${normalizedDescription}</div>
                 </t:if>
             </div>
@@ -152,7 +152,7 @@
             <t:if test="timeOfBirth">
             <div class="person">
                 <div>
-                    <strong>${message:timeOfBirth-label} (d.M.y)</strong>
+                    <strong>${message:timeOfBirth-label} (${message:timeFormat})</strong>
                 </div>
                 <div>
                     ${timeOfBirth}
@@ -163,7 +163,7 @@
             <t:if test="timeOfDeath">
             <div class="person">
                 <div>
-                    <strong>${message:timeOfDeath-label} (d.M.y)</strong>
+                    <strong>${message:timeOfDeath-label} (${message:timeFormat})</strong>
                 </div>
                 <div>
                     ${timeOfDeath}

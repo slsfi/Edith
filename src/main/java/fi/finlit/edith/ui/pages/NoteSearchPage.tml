@@ -9,7 +9,7 @@
         <t:if test="documentNotes">
             <div id="editcontrols">
                 <t:if test="!editMode">
-                    <t:actionlink t:id="toggleEdit">${message:edit}</t:actionlink>
+                    <t:actionlink t:id="toggleEdit">${message:editLemma}</t:actionlink>
                     <p:else>
                         <t:actionlink t:id="cancel">${message:cancel}</t:actionlink>
                     </p:else>
