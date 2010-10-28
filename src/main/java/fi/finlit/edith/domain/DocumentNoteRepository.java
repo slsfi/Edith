@@ -108,4 +108,6 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
     // TODO TEST
     List<Note> getOrphans();
 
+    List<DocumentNote> getNotesLessDocumentNotes();
+
 }

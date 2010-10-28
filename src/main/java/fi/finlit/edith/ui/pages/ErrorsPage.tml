@@ -1,0 +1,30 @@
+<html t:type="layout"  
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+      xmlns:p="tapestry:parameter">
+      
+    <p:title>Errors overview</p:title>  
+    
+    <h3>Document notes</h3>
+	
+	<t:grid source="documentNotes" row="documentNote"  include="localId,longText" add="actions">        
+        <p:actionsCell>
+        	<!-- 
+        	<span class="delete_note">
+        		<a href="" class="delete_question">${message:delete}</a>
+        		<span class="delete_dialog">
+            		${message:delete}? <t:actionlink t:id="delete" context="documentNote.id">${message:yes}</t:actionlink>
+            		/ <a href="" class="delete_decline">${message:no}</a>
+            	</span>
+            </span>
+			-->
+        </p:actionsCell>
+        <p:empty>
+            <p>${message:no-results}</p>
+        </p:empty>
+    </t:grid>
+
+    <p:rightPanel>
+        
+    </p:rightPanel>
+
+</html>

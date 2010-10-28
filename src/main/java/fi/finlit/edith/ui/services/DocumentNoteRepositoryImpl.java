@@ -380,4 +380,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .where(documentNote.note().place().id.eq(placeId), documentNote.deleted.eq(false),
                         latest(documentNote)).list(documentNote);
     }
+
+    @Override
+    public List<DocumentNote> getNotesLessDocumentNotes() {
+        return getSession().from(documentNote).where(documentNote.note().isNull()).list(documentNote);
+    }
 }
