@@ -480,6 +480,32 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return new DocumentRevision(docRevision, newRevision);
     }
 
+    @Override
+    public DocumentRevision removeNotesPermanently(DocumentRevision docRevision, final DocumentNote... notes){
+        long newRevision;
+        newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
+                authService.getUsername(), new UpdateCallback() {
+                    @Override
+                    public void update(InputStream source, OutputStream target) {
+                        try {
+                            streamEvents(inFactory.createFilteredReader(inFactory
+                                    .createXMLEventReader(source), createRemoveFilter(notes)),
+                                    outFactory.createXMLEventWriter(target));
+                        } catch (XMLStreamException e) {
+                            throw new ServiceException(e);
+                        }
+                    }
+                });
+
+        // persisted noteRevision has svnRevision of newly created commit
+        for (DocumentNote note : notes) {
+            noteRepository.removePermanently(note);
+        }
+
+        return new DocumentRevision(docRevision, newRevision);
+    }
+    
+    
     public void streamEvents(XMLEventReader reader, XMLEventWriter writer) throws XMLStreamException {
         try {
             while (reader.hasNext()) {

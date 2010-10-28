@@ -395,6 +395,9 @@ public class NoteForm {
         noteOnEdit.getNote().setPerson(getPerson());
         noteOnEdit.getNote().setPlace(getPlace());
 
+        logger.info("onSuccessFromNoteEditForm begins with documentNote " + noteOnEdit + ", note "
+                + noteOnEdit.getNote());
+
         // Handling the embedded term edit
         if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
             setTerm(noteOnEdit);
@@ -405,12 +408,15 @@ public class NoteForm {
         }
         try {
             if (updateLongTextSelection.isValid()) {
+                logger.info("update long text selection: " + noteOnEdit);
                 documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);
             } else {
                 if (saveAsNew) {
+                    logger.info("note saved as new: " + noteOnEdit);
                     documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
                     saveAsNew = false;
                 } else {
+                    logger.info("note saved: " + noteOnEdit);
                     documentNote = documentNoteRepository.save(noteOnEdit);
                 }
             }

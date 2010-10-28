@@ -60,13 +60,21 @@ public interface NoteRepository extends Repository<Note, String> {
     GridDataSource queryDictionary(String searchTerm);
 
     /**
-     * Remove the give Note in the given revision
+     * Remove the give Note in the given revision. This don't remove data, it just set DocumentNote to a
+     * deleted state
      *
      * @param note
      * @param newRevision
      */
     void remove(DocumentNote note, long revision);
 
+    /**
+     * Removes the document note permanently
+     * 
+     * @param note
+     */
+    void removePermanently(DocumentNote note);
+    
     /**
      * Removes a NoteComment based on its id. Returns the deleted comment.
      *

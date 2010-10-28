@@ -8,7 +8,6 @@
 	
 	<t:grid source="documentNotes" row="documentNote"  include="localId,longText" add="actions">        
         <p:actionsCell>
-        	<!-- 
         	<span class="delete_note">
         		<a href="" class="delete_question">${message:delete}</a>
         		<span class="delete_dialog">
@@ -16,7 +15,6 @@
             		/ <a href="" class="delete_decline">${message:no}</a>
             	</span>
             </span>
-			-->
         </p:actionsCell>
         <p:empty>
             <p>${message:no-results}</p>

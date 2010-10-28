@@ -289,7 +289,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
         getSession().save(documentNote);
     }
-
+    
+    @Override
+    public void removePermanently(DocumentNote note) {
+        getSession().delete(note);
+    }
+    
     @Override
     public NoteComment removeComment(String commentId) {
         NoteComment comment = getSession().getById(commentId, NoteComment.class);

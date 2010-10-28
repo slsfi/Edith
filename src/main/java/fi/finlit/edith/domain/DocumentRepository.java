@@ -94,6 +94,15 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @throws IOException
      */
     DocumentRevision removeNotes(DocumentRevision docRevision, DocumentNote... notes);
+    
+    /**
+     * Permanently removes document notes and their anchors.
+     * 
+     * @param docRevision
+     * @param notes
+     * @return
+     */
+    DocumentRevision removeNotesPermanently(DocumentRevision docRevision, DocumentNote... notes);
 
     /**
      * Update the boundaries of the given note
