@@ -87,7 +87,7 @@ jQuery(document).ready(function() {
     jQuery('.notelink').live('click',
     	function(event) {
     		var id = jQuery(this).attr('href').replace('#start','');
-    		Editor.updateEditZone("n"+id);
+    		Editor.updateEditZone("e" + id);
     	}
     );
   

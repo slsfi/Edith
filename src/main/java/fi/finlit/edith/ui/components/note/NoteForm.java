@@ -360,8 +360,15 @@ public class NoteForm {
         return placeZone.getBody();
     }
 
-    void onPrepareFromNoteEditForm(String noteRev) {
-        noteOnEdit = documentNoteRepository.getById(noteRev); // .createCopy();
+    void onPrepareFromNoteEditForm(String noteId, String docNoteId) {
+        if (docNoteId != null) {
+            noteOnEdit = documentNoteRepository.getById(docNoteId); // .createCopy();
+        } else {
+            noteOnEdit = new DocumentNote();
+            noteOnEdit.setNote(noteRepository.getById(noteId));
+            noteOnEdit.setDocRevision(documentRevision);
+            noteOnEdit.setDocument(documentRevision.getDocument());
+        }
         if (!isPerson()) {
             setPerson(noteOnEdit.getNote().getPerson());
         }

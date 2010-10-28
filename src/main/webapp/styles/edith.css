@@ -227,6 +227,22 @@ ul.notes li span, ul.notes li .notelink {
     margin-right: 5px;	
 }
 
+a.NORMAL {
+    color: blue;	
+}
+
+a.ORPHAN {
+    color: grey;
+}
+
+a.SEMI_ORPHAN {
+    color: black;   
+}
+
+a.ELSEWHERE {
+    color: red;
+}
+
 .jqmWindow {
     display: none;
     

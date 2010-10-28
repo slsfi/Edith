@@ -46,8 +46,8 @@ public class AnnotatePage extends AbstractDocumentPage {
     private static final String EDIT_ZONE = "editZone";
 
     private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
-    
-    @SessionState(create=false)
+
+    @SessionState(create = false)
     private Collection<Document> selectedDocuments;
 
     @Property
@@ -188,9 +188,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     public DocumentNoteSearchInfo getSearchInfo() {
         if (searchInfo == null) {
             searchInfo = new DocumentNoteSearchInfo();
-            searchInfo.getDocuments().add(getDocument());           
+            searchInfo.getDocuments().add(getDocument());
         }
-        if (selectedDocuments != null){
+        if (selectedDocuments != null) {
             searchInfo.getDocuments().addAll(selectedDocuments);
         }
         return searchInfo;
@@ -230,21 +230,23 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onEdit(EventContext context) {
-        selectedNotes = new ArrayList<DocumentNote>(context.getCount());
-        for (int i = 0; i < context.getCount(); i++) {
-            String localId = context.get(String.class, i);
-            // XXX Where is this n coming?
-            if (localId.startsWith("n")) {
-                localId = localId.substring(1);
+        selectedNotes = new ArrayList<DocumentNote>();
+        if (context.getCount() > 0 && context.get(String.class, 0).startsWith("n")) {
+            for (int i = 0; i < context.getCount(); i++) {
+                String localId = context.get(String.class, i).substring(1);
+                DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
+                        localId);
+                selectedNotes.add(docNote);
             }
-
-            DocumentNote rev = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
-            if (rev != null) {
-                selectedNotes.add(rev);
-            } else {
-                logger.error("Note with localId " + localId + " couldn't be found in "
-                        + getDocumentRevision());
+        } else {
+            String localId = context.get(String.class, 0).substring(1);
+            DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
+                    localId);
+            if (docNote == null) {
+                docNote = new DocumentNote();
+                docNote.setNote(noteRepository.getById(context.get(String.class, 1)));
             }
+            selectedNotes.add(docNote);
         }
 
         if (selectedNotes.size() > 0) {
@@ -383,5 +385,21 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     Object onCreatePlace() {
         return placeForm;
+    }
+
+    public DocumentNoteType getDocumentNoteType() {
+        if (note.getDocument() == null) {
+            return DocumentNoteType.ORPHAN;
+        } else if (note.getLocalId() == null) {
+            return DocumentNoteType.SEMI_ORPHAN;
+        } else if (!note.getDocument().equals(getDocument())) {
+            return DocumentNoteType.ELSEWHERE;
+        } else {
+            return DocumentNoteType.NORMAL;
+        }
+    }
+
+    private enum DocumentNoteType {
+        NORMAL, SEMI_ORPHAN, ORPHAN, ELSEWHERE;
     }
 }

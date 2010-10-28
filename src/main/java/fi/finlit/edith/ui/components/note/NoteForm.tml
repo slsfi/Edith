@@ -1,6 +1,6 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 	<t:content>
-		<t:form t:id="noteEditForm" t:zone="editZone" t:context="noteOnEdit.id">
+		<t:form t:id="noteEditForm" t:zone="editZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]">
 			<t:errors />
 			<div>
 				<div>

@@ -13,7 +13,11 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteRepository;
 
 /**
  * DocumentsPage provides
@@ -32,7 +36,7 @@ public class DocumentsPage {
 
     @Property
     private Document document;
-    
+
     @SessionState(create=false)
     private Collection<Document> selectedDocuments;
 
@@ -40,9 +44,9 @@ public class DocumentsPage {
         if (selectedDocuments == null){
             selectedDocuments = new HashSet<Document>();
         }
-        documents = documentRepository.getAll();        
+        documents = documentRepository.getAll();
     }
-    
+
     public boolean isDocumentSelected() {
         return selectedDocuments.contains(document);
     }

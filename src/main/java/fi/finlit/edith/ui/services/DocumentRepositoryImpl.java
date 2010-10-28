@@ -494,6 +494,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public DocumentNote updateNote(final DocumentNote note, final SelectedText selection) throws IOException {
         Document doc = note.getDocument();
+        if (note.getLocalId() == null) {
+            note.setLocalId(String.valueOf(timeService.currentTimeMillis()));
+        }
         long newRevision;
         newRevision = svnService.commit(doc.getSvnPath(), note.getSVNRevision(), authService
                 .getUsername(), new UpdateCallback() {
