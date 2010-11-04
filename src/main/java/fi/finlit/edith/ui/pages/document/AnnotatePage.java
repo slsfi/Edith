@@ -234,9 +234,12 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (context.getCount() > 0 && context.get(String.class, 0).startsWith("n")) {
             for (int i = 0; i < context.getCount(); i++) {
                 String localId = context.get(String.class, i).substring(1);
-                DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
-                        localId);
-                selectedNotes.add(docNote);
+                DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
+                if (docNote != null){
+                    selectedNotes.add(docNote);    
+                }else{
+                    throw new IllegalStateException("No DocumentNote available for local id " + localId);
+                }                
             }
         } else {
             String localId = context.get(String.class, 0).substring(1);

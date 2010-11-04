@@ -124,7 +124,7 @@
                     <div>${normalizedLast}</div>
                 </t:if>
                 <t:if test="normalizedDescription">
-                    <div>${message:normalizedFormDescription-label}</div>
+                    <div>${message:normalizedDescription-label}</div>
                     <div>${normalizedDescription}</div>
                 </t:if>
             </div>

@@ -96,7 +96,7 @@
 				<ul class="notes">
 					<t:loop source="documentNotes" value="note">
 						<li>
-							    <span><a href="#start${note.localId}/${note.note.id}" class="notelink ${note.note.status} ${documentNoteType}"><em>${note.note.lemma}</em></a></span>
+							    <span><a href="#start${note.localId}" id="noteid${note.note.id}" class="notelink ${note.note.status} ${documentNoteType}"><em>${note.note.lemma}</em></a></span>
 							    <span class="numberOfInstancesInDocument"> ${numberOfInstancesInDocument} ${message:amountOfInstances}; </span>
 								<span class="basicForm">${note.note.term?.basicForm}; </span>
 								<span class="meaning">${note.note.term?.meaning}; </span>
@@ -124,8 +124,7 @@
 
 							<t:loop source="selectedNotes" value="note">
 								<li>
-									<t:eventlink t:event="edit" context="e${note.localId}"
-										t:zone="editZone" class="notelink">
+									<t:eventlink t:event="edit" context="e${note.localId}" t:zone="editZone" class="notelink">
 										<em>${note.note.lemma}</em>
 									</t:eventlink>
 								</li>

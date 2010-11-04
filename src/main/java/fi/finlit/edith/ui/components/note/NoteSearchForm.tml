@@ -5,23 +5,11 @@
 			<div class="left">
 			<div>
 				<div>
-					<strong>${message:document-label}</strong>
+					<t:fmt.message key="selectedDocuments" args="selectedDocumentCount"/>					
 				</div>
 				<div>
 				    <label><t:checkbox value="orphans"/>${message:orphans}</label>					
-				<!-- 	
-					<t:loop source="documents" value="document">
-						<div>
-						<label>
-							<t:checkbox value="documentSelected" />
-							${document.title}</label>
-						</div>
-					</t:loop>
-				-->
-				</div>
-				<div>
-					<t:fmt.message key="selectedDocuments" args="selectedDocumentCount"/>					
-				</div>
+				</div>				
 			</div>
 			<div>
 			    <div>
