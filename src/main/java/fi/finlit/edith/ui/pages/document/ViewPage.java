@@ -12,7 +12,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
 
 /**
  * ViewPage provides

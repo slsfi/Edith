@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.PlaceRepository;
+import fi.finlit.edith.ui.services.PlaceRepository;
 
 public class PlaceRepositoryTest extends AbstractServiceTest {
     @Inject

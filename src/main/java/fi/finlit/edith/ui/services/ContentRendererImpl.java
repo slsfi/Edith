@@ -25,17 +25,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentRepository;
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Interval;
-import fi.finlit.edith.domain.LinkElement;
-import fi.finlit.edith.domain.NoteFormat;
-import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.ParagraphElement;
-import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.UrlElement;
+import fi.finlit.edith.domain.*;
 
 /**
  * DocumentWriterImpl provides

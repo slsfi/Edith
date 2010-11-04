@@ -11,11 +11,9 @@ import java.util.Collection;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.PersonRepository;
 
 public class PersonRepositoryImpl extends AbstractRepository<Person> implements PersonRepository {
     public PersonRepositoryImpl(@Inject SessionFactory sessionFactory) {

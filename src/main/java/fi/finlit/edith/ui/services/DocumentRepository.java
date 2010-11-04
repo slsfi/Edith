@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.domain;
+package fi.finlit.edith.ui.services;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +12,11 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysema.rdfbean.dao.Repository;
-
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**

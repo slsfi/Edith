@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.TermRepository;
+import fi.finlit.edith.ui.services.TermRepository;
 
 /**
  * AnnotatePage provides

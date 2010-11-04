@@ -21,8 +21,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 /**

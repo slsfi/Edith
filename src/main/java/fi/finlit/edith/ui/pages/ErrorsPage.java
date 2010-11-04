@@ -7,11 +7,11 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @SuppressWarnings("unused")

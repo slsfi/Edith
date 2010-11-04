@@ -3,7 +3,9 @@
  * All rights reserved.
  * 
  */
-package fi.finlit.edith.domain;
+package fi.finlit.edith.ui.services;
+
+import fi.finlit.edith.domain.SelectedText;
 
 
 /**

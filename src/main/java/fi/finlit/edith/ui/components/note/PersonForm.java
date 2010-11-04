@@ -14,7 +14,7 @@ import org.apache.tapestry5.services.Response;
 import fi.finlit.edith.domain.Interval;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.PersonRepository;
+import fi.finlit.edith.ui.services.PersonRepository;
 
 public class PersonForm {
     @Property

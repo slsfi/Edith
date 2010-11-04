@@ -11,7 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Profile;
 import fi.finlit.edith.domain.User;
-import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.ui.services.UserRepository;
 
 
 

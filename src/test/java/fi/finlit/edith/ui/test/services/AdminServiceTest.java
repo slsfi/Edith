@@ -15,11 +15,11 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
-import fi.finlit.edith.domain.TermRepository;
 import fi.finlit.edith.ui.services.AdminService;
+import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.TermRepository;
 
 /**
  * AdminServiceTest provides

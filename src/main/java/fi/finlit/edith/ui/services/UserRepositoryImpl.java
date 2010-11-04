@@ -12,12 +12,10 @@ import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.domain.UserRepository;
 
 /**
  * UserServiceImpl provides

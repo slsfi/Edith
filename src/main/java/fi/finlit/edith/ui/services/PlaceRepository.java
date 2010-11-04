@@ -1,12 +1,14 @@
-package fi.finlit.edith.domain;
+package fi.finlit.edith.ui.services;
 
 import java.util.Collection;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysema.rdfbean.dao.Repository;
+import fi.finlit.edith.domain.Place;
 
 @Transactional
 public interface PlaceRepository extends Repository<Place, String> {
+    
     Collection<Place> findByStartOfName(String partial, int limit);
+    
 }

@@ -24,24 +24,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
-import com.mysema.rdfbean.dao.AbstractRepository;
-import com.mysema.rdfbean.dao.Repository;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.LinkElement;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.QPerson;
-import fi.finlit.edith.domain.QPlace;
-import fi.finlit.edith.domain.StringElement;
-import fi.finlit.edith.domain.UrlElement;
-import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.domain.*;
 
 /**
  * NoteRepositoryImpl provides

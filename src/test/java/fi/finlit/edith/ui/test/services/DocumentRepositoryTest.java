@@ -32,13 +32,13 @@ import org.junit.Test;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteAdditionFailedException;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.AdminService;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
 /**

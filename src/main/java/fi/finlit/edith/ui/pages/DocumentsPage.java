@@ -14,10 +14,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentRepository;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.NoteRepository;
 
 /**
  * DocumentsPage provides

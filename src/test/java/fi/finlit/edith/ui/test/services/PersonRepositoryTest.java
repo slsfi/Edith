@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.PersonRepository;
+import fi.finlit.edith.ui.services.PersonRepository;
 
 public class PersonRepositoryTest extends AbstractServiceTest {
     @Inject

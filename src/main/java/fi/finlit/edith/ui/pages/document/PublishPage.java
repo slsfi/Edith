@@ -23,8 +23,8 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.ContentRenderer;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
 
 @IncludeStylesheet("context:styles/tei.css")
 @IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js"})

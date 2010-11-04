@@ -11,11 +11,9 @@ import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.TermRepository;
 
 /**
  * NoteRepositoryImpl provides

@@ -12,7 +12,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.PlaceRepository;
+import fi.finlit.edith.ui.services.PlaceRepository;
 
 public class PlaceForm {
     @Property

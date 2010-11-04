@@ -3,13 +3,13 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.domain;
+package fi.finlit.edith.ui.services;
 
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysema.rdfbean.dao.Repository;
+import fi.finlit.edith.domain.Term;
 
 /**
  * Term repository.
@@ -19,7 +19,6 @@ import com.mysema.rdfbean.dao.Repository;
  */
 @Transactional
 public interface TermRepository extends Repository<Term,String>{
-
 
     /**
      * Find matching terms by searching matches from basicForm -property.

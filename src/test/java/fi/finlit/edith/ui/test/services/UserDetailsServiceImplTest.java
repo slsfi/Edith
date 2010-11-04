@@ -12,8 +12,8 @@ import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 
-import fi.finlit.edith.domain.UserRepository;
 import fi.finlit.edith.ui.services.UserDetailsServiceImpl;
+import fi.finlit.edith.ui.services.UserRepository;
 
 public class UserDetailsServiceImplTest extends AbstractServiceTest {
     private UserDetailsServiceImpl service;

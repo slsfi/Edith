@@ -11,11 +11,9 @@ import java.util.Collection;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.PlaceRepository;
 
 public class PlaceRepositoryImpl extends AbstractRepository<Place> implements PlaceRepository {
     public PlaceRepositoryImpl(@Inject SessionFactory sessionFactory) {

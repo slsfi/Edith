@@ -5,8 +5,8 @@
  */
 package fi.finlit.edith.ui.services;
 
-import static fi.finlit.edith.domain.QNote.note;
 import static fi.finlit.edith.domain.QDocumentNote.documentNote;
+import static fi.finlit.edith.domain.QNote.note;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,22 +32,10 @@ import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
-import com.mysema.rdfbean.dao.AbstractRepository;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.Notes;
-import fi.finlit.edith.domain.QDocumentNote;
-import fi.finlit.edith.domain.QNote;
-import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.domain.UserRepository;
+import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
 /**

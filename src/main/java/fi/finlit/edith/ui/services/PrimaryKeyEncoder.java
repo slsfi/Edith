@@ -12,8 +12,6 @@ import java.util.Map;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 
-import com.mysema.rdfbean.dao.Repository;
-
 import fi.finlit.edith.domain.Identifiable;
 
 /**

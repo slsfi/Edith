@@ -15,9 +15,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.tapestry.core.Context;
 
-import fi.finlit.edith.domain.NoteRepository;
 import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.PlaceRepository;
+import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.PlaceRepository;
 
 /**
  * DictionarySearchPage provides

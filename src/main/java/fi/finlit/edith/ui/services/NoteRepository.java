@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.domain;
+package fi.finlit.edith.ui.services;
 
 import java.io.File;
 import java.util.List;
@@ -11,7 +11,10 @@ import java.util.List;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysema.rdfbean.dao.Repository;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
 
 // TODO createNote and remove could be in DocumentRepository.
 /**

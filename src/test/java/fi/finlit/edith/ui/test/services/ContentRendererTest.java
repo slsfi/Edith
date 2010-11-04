@@ -16,19 +16,9 @@ import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentRepository;
-import fi.finlit.edith.domain.Interval;
-import fi.finlit.edith.domain.LinkElement;
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteFormat;
-import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.StringElement;
-import fi.finlit.edith.domain.UrlElement;
+import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.ContentRenderer;
+import fi.finlit.edith.ui.services.DocumentRepository;
 
 /**
  * TEITest provides

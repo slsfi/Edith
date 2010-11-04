@@ -17,7 +17,7 @@ import org.apache.tapestry5.upload.services.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.NoteRepository;
+import fi.finlit.edith.ui.services.NoteRepository;
 
 /**
  * NoteImportPage provides

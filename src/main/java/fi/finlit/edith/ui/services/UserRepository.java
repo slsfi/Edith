@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.domain;
+package fi.finlit.edith.ui.services;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import javax.annotation.Nullable;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysema.rdfbean.dao.Repository;
-
+import fi.finlit.edith.domain.User;
+import fi.finlit.edith.domain.UserInfo;
 
 /**
  * UserRepository provides

@@ -7,7 +7,6 @@ package fi.finlit.edith.ui.services;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.mysema.rdfbean.dao.AbstractService;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 

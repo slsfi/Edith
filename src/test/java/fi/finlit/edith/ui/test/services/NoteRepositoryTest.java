@@ -21,20 +21,13 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
-import fi.finlit.edith.domain.DocumentRepository;
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteRepository;
-import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.PersonRepository;
-import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.PlaceRepository;
+import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.AdminService;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.PersonRepository;
+import fi.finlit.edith.ui.services.PlaceRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 /**

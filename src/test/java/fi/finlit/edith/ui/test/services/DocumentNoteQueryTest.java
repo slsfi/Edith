@@ -19,9 +19,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteRepository;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.ui.services.AdminService;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
 
 /**
  * NoteRevisionQueryTest provides
