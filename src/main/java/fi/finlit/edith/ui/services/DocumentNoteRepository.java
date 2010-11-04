@@ -77,12 +77,6 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
     GridDataSource queryNotes(String searchTem);
 
     /**
-     * @param searchInfo
-     * @return
-     */
-    Notes query(DocumentNoteSearchInfo searchInfo);
-
-    /**
      * Returns all the document notes attached to the term.
      *
      * @param termId
@@ -108,9 +102,6 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
     List<DocumentNote> getOfNoteInDocument(String noteId, String documentId);
 
     List<DocumentNote> getPublishableNotesOfDocument(DocumentRevision documentRevision);
-
-    // TODO TEST
-    List<Note> getOrphans();
 
     List<DocumentNote> getNotesLessDocumentNotes();
 

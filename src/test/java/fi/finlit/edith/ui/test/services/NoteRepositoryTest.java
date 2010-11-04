@@ -236,9 +236,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         String longText = "two words";
         DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10",
                 longText);
-        assertFalse(documentNoteRepository.query(new DocumentNoteSearchInfo()).getDocumentNotes().isEmpty());
+        assertFalse(noteRepository.query(new DocumentNoteSearchInfo()).getDocumentNotes().isEmpty());
         noteRepository.remove(documentNote, documentNote.getSVNRevision());
-        assertTrue(documentNoteRepository.query(new DocumentNoteSearchInfo()).getDocumentNotes().isEmpty());
+        assertTrue(noteRepository.query(new DocumentNoteSearchInfo()).getDocumentNotes().isEmpty());
     }
 
     @Test

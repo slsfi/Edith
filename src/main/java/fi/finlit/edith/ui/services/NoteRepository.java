@@ -12,9 +12,11 @@ import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
 import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.Notes;
 
 // TODO createNote and remove could be in DocumentRepository.
 /**
@@ -96,4 +98,14 @@ public interface NoteRepository extends Repository<Note, String> {
     GridDataSource queryPersons(String searchTerm);
 
     GridDataSource queryPlaces(String searchTerm);
+    
+
+    // TODO TEST
+    List<Note> getOrphans();
+
+    /**
+     * @param searchInfo
+     * @return
+     */
+    Notes query(DocumentNoteSearchInfo searchInfo);
 }

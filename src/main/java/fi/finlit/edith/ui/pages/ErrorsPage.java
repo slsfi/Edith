@@ -19,6 +19,9 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 public class ErrorsPage {
     
     @Inject
+    private NoteRepository noteRepository;
+    
+    @Inject
     private DocumentNoteRepository documentNoteRepository;
     
     @Inject
@@ -28,7 +31,7 @@ public class ErrorsPage {
     private DocumentNote documentNote;
 
     public List<Note> getNotes(){
-        return documentNoteRepository.getOrphans();
+        return noteRepository.getOrphans();
     }
     
     public List<DocumentNote> getDocumentNotes(){

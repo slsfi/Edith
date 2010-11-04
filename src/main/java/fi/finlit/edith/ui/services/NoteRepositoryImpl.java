@@ -5,12 +5,15 @@
  */
 package fi.finlit.edith.ui.services;
 
+import static fi.finlit.edith.domain.QDocumentNote.documentNote;
 import static fi.finlit.edith.domain.QNote.note;
 import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -24,6 +27,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.types.EntityPath;
+import com.mysema.query.types.OrderSpecifier;
+import com.mysema.query.types.expr.ComparableExpressionBase;
+import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.*;
@@ -36,6 +43,8 @@ import fi.finlit.edith.domain.*;
  */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
 
+    private static final QDocumentNote otherNote = new QDocumentNote("other");
+    
     private static final class LoopContext {
         private Note note;
         private String text;
@@ -81,6 +90,78 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         NoteComment comment = new NoteComment(n, message, authService.getUsername());
         getSession().save(comment);
         return comment;
+    }
+    
+
+    @Override
+    public Notes query(DocumentNoteSearchInfo searchInfo) {
+        Assert.notNull(searchInfo);
+        BooleanBuilder filters = new BooleanBuilder();
+        filters.and(documentNote.deleted.eq(false));
+        // document & orphans
+        BooleanBuilder documentAndOrphanFilter = null;
+        if (!searchInfo.getDocuments().isEmpty()) {
+            filters.and(documentNote.document().in(searchInfo.getDocuments()));
+        }
+        // creators
+        if (!searchInfo.getCreators().isEmpty()) {
+            BooleanBuilder filter = new BooleanBuilder();
+            Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
+            for (UserInfo userInfo : searchInfo.getCreators()) {
+                filter.or(documentNote.note().allEditors.contains(userRepository
+                        .getUserInfoByUsername(userInfo.getUsername())));
+                usernames.add(userInfo.getUsername());
+            }
+            // FIXME This is kind of useless except that we have broken data in production.
+            filter.or(documentNote.note().lastEditedBy().username.in(usernames));
+            filters.and(filter);
+        }
+        // formats
+        if (!searchInfo.getNoteFormats().isEmpty()) {
+            filters.and(documentNote.note().format.in(searchInfo.getNoteFormats()));
+        }
+        // types
+        if (!searchInfo.getNoteTypes().isEmpty()) {
+            BooleanBuilder filter = new BooleanBuilder();
+            for (NoteType type : searchInfo.getNoteTypes()) {
+                filter.or(documentNote.note().types.contains(type));
+            }
+            filters.and(filter);
+        }
+        filters.and(sub(otherNote).where(otherNote.ne(documentNote),
+                otherNote.note().eq(documentNote.note()),
+                otherNote.localId.eq(documentNote.localId),
+                otherNote.createdOn.gt(documentNote.createdOn)).notExists());
+
+        return new Notes(searchInfo.isOrphans() ? getOrphans() : null, getSession()
+                .from(documentNote).where(filters).orderBy(getOrderBy(searchInfo))
+                .list(documentNote));
+    }
+    
+    private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {
+        ComparableExpressionBase<?> comparable = null;
+        switch (searchInfo.getOrderBy()) {
+        case DATE:
+            comparable = documentNote.createdOn;
+            break;
+        case USER:
+            comparable = documentNote.note().lastEditedBy().username.toLowerCase();
+            break;
+        case STATUS:
+            comparable = documentNote.note().status.ordinal();
+            break;
+        default:
+            comparable = documentNote.note().lemma.toLowerCase();
+            break;
+        }
+        return searchInfo.isAscending() ? comparable.asc() : comparable.desc();
+    }
+    
+    @Override
+    public List<Note> getOrphans() {
+        return getSession().from(note)
+                .where(sub(documentNote).where(documentNote.note().eq(note)).notExists())
+                .list(note);
     }
 
     @Override
@@ -290,5 +371,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     @Override
     public List<Note> findNotes(String lemma) {
         return getSession().from(note).where(note.lemma.eq(lemma)).list(note);
+    }
+    
+    private BeanSubQuery sub(EntityPath<?> entity) {
+        return new BeanSubQuery().from(entity);
     }
 }
