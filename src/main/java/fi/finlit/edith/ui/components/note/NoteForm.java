@@ -30,6 +30,7 @@ import fi.finlit.edith.ui.services.ParagraphParser;
 import fi.finlit.edith.ui.services.PersonRepository;
 import fi.finlit.edith.ui.services.PlaceRepository;
 import fi.finlit.edith.ui.services.TermRepository;
+import fi.finlit.edith.ui.services.TimeService;
 
 public class NoteForm {
 
@@ -56,6 +57,9 @@ public class NoteForm {
 
     @Parameter
     private List<DocumentNote> documentNotes;
+    
+    @Inject
+    private TimeService timeService;
 
     @Inject
     private DocumentRepository documentRepository;
@@ -353,6 +357,7 @@ public class NoteForm {
             noteOnEdit = documentNoteRepository.getById(docNoteId); // .createCopy();
         } else {
             noteOnEdit = new DocumentNote();
+            noteOnEdit.setLocalId(String.valueOf(timeService.currentTimeMillis()));
             noteOnEdit.setNote(noteRepository.getById(noteId));
             noteOnEdit.setDocRevision(documentRevision);
             noteOnEdit.setDocument(documentRevision.getDocument());

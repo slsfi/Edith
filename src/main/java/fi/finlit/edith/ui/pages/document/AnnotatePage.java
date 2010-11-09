@@ -35,6 +35,7 @@ import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.TermRepository;
+import fi.finlit.edith.ui.services.TimeService;
 
 /**
  * AnnotatePage provides
@@ -50,7 +51,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     private static final String EDIT_ZONE = "editZone";
 
     private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
-
+    
     @SessionState(create = false)
     private Collection<Document> selectedDocuments;
 
@@ -68,6 +69,9 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Persist
     private SelectedText createTermSelection;
 
+    @Inject
+    private TimeService timeService;
+        
     @Inject
     private DocumentNoteRepository documentNoteRepository;
 
@@ -252,10 +256,10 @@ public class AnnotatePage extends AbstractDocumentPage {
             }
         } else {
             String localId = context.get(String.class, 0).substring(1);
-            DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
-                    localId);
+            DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
             if (docNote == null) {
                 docNote = new DocumentNote();
+                docNote.setLocalId(String.valueOf(timeService.currentTimeMillis()));
                 docNote.setNote(noteRepository.getById(context.get(String.class, 1)));
             }
             selectedNotes.add(docNote);
@@ -344,10 +348,6 @@ public class AnnotatePage extends AbstractDocumentPage {
         return StringUtils.join(result, ", ");
     }
 
-//    public boolean isInCurrentDocument() {
-//        return getDocument().equals(note.getDocument());
-//    }
-
     public int getLemmaInstances() {
         return documentNoteRepository.getOfNote(noteOnEdit.getNote().getId()).size();
     }
@@ -402,7 +402,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     public DocumentNoteType getDocumentNoteType() {
         if (note.getDocument() == null) {
             return DocumentNoteType.ORPHAN;
-        } else if (note.getLocalId() == null) {
+        } else if (note.getLongText() == null) {
             return DocumentNoteType.SEMI_ORPHAN;
         } else if (!note.getDocument().equals(getDocument())) {
             return DocumentNoteType.ELSEWHERE;
