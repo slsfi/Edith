@@ -13,10 +13,7 @@ import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.Notes;
 
 /**
  * The Interface NoteRevisionRepository.
@@ -101,8 +98,15 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      */
     List<DocumentNote> getOfNoteInDocument(String noteId, String documentId);
 
+    /**
+     * @param documentRevision
+     * @return
+     */
     List<DocumentNote> getPublishableNotesOfDocument(DocumentRevision documentRevision);
 
+    /**
+     * @return
+     */
     List<DocumentNote> getNotesLessDocumentNotes();
 
 }

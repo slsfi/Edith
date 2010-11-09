@@ -6,13 +6,11 @@
 package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QDocumentNote.documentNote;
-import static fi.finlit.edith.domain.QNote.note;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,14 +26,18 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.types.EntityPath;
-import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.BooleanExpression;
-import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.QDocumentNote;
+import fi.finlit.edith.domain.QNote;
+import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
 /**

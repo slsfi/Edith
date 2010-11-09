@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.TermRepository;
 
 /**
@@ -70,7 +71,8 @@ public class AnnotatePage extends AbstractDocumentPage {
     @Inject
     private DocumentNoteRepository documentNoteRepository;
 
-    private List<DocumentNote> documentNotes;
+    @Property
+    private List<NoteWithInstances> notesWithInstances;
 
     @Inject
     @Property
@@ -111,7 +113,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     private String newCommentMessage;
 
     @Property
-    private DocumentNote note;
+    private NoteWithInstances noteWithInstances;
 
     @Inject
     @Property
@@ -166,6 +168,9 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Property
     private String personId;
+    
+    @Property
+    private DocumentNote note;
 
     @AfterRender
     void addScript() {
@@ -173,11 +178,11 @@ public class AnnotatePage extends AbstractDocumentPage {
         renderSupport.addScript("editLink = '" + link + "';");
     }
 
-    public List<DocumentNote> getDocumentNotes() {
-        if (documentNotes == null) {
-            documentNotes = noteRepository.query(getSearchInfo()).getDocumentNotes();
+    public List<NoteWithInstances> getDocumentNotes() {
+        if (notesWithInstances == null) {
+            notesWithInstances = noteRepository.query(getSearchInfo());
         }
-        return documentNotes;
+        return notesWithInstances;
     }
 
     private Term getEditTerm(Note n) {
@@ -192,6 +197,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         if (searchInfo == null) {
             searchInfo = new DocumentNoteSearchInfo();
             searchInfo.getDocuments().add(getDocument());
+            searchInfo.setCurrentDocument(getDocument());
         }
         if (selectedDocuments != null) {
             searchInfo.getDocuments().addAll(selectedDocuments);
@@ -338,9 +344,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         return StringUtils.join(result, ", ");
     }
 
-    public boolean isInCurrentDocument() {
-        return getDocument().equals(note.getDocument());
-    }
+//    public boolean isInCurrentDocument() {
+//        return getDocument().equals(note.getDocument());
+//    }
 
     public int getLemmaInstances() {
         return documentNoteRepository.getOfNote(noteOnEdit.getNote().getId()).size();

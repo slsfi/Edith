@@ -69,19 +69,20 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     private final AuthService authService;
 
     // TODO Move methods using documentNoteRepository to documentNoteRepository?
-    private final DocumentNoteRepository documentNoteRepository;
+//    private final DocumentNoteRepository documentNoteRepository;
 
     private final NoteRepository noteRepository;
 
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, @Inject TimeService timeService,
-            @Inject AuthService authService, @Inject DocumentNoteRepository documentNoteRepository,
+            @Inject UserRepository userRepository, 
+            @Inject TimeService timeService,
+            @Inject AuthService authService,
             @Inject NoteRepository noteRepository) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
         this.timeService = timeService;
         this.authService = authService;
-        this.documentNoteRepository = documentNoteRepository;
+//        this.documentNoteRepository = documentNoteRepository;
         this.noteRepository = noteRepository;
     }
 
@@ -94,64 +95,99 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     
 
     @Override
-    public Notes query(DocumentNoteSearchInfo searchInfo) {
+    public List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo) {
         Assert.notNull(searchInfo);
         BooleanBuilder filters = new BooleanBuilder();
-        filters.and(documentNote.deleted.eq(false));
-        // document & orphans
-        BooleanBuilder documentAndOrphanFilter = null;
-        if (!searchInfo.getDocuments().isEmpty()) {
-            filters.and(documentNote.document().in(searchInfo.getDocuments()));
+        QNote note = QNote.note;
+        QDocumentNote documentNote = QDocumentNote.documentNote;
+        
+        // document
+        BooleanBuilder docFilters = new BooleanBuilder();
+        if (!searchInfo.getDocuments().isEmpty()){
+            docFilters.and(sub(documentNote).where(
+                    documentNote.deleted.eq(false),
+                    documentNote.note().eq(note),
+                    documentNote.document().in(searchInfo.getDocuments())).exists());
         }
+        
+        // orphans
+        if (searchInfo.isOrphans()){
+            docFilters.or(sub(documentNote).where(documentNote.note().eq(note)).notExists());
+        }
+        
+        if (docFilters.hasValue()){
+            filters.and(docFilters.getValue());    
+        }        
+        
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
-                filter.or(documentNote.note().allEditors.contains(userRepository
-                        .getUserInfoByUsername(userInfo.getUsername())));
+                filter.or(note.allEditors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
             }
             // FIXME This is kind of useless except that we have broken data in production.
-            filter.or(documentNote.note().lastEditedBy().username.in(usernames));
+            filter.or(note.lastEditedBy().username.in(usernames));
             filters.and(filter);
         }
+        
         // formats
         if (!searchInfo.getNoteFormats().isEmpty()) {
-            filters.and(documentNote.note().format.in(searchInfo.getNoteFormats()));
+            filters.and(note.format.in(searchInfo.getNoteFormats()));
         }
+        
         // types
         if (!searchInfo.getNoteTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : searchInfo.getNoteTypes()) {
-                filter.or(documentNote.note().types.contains(type));
+                filter.or(note.types.contains(type));
             }
             filters.and(filter);
         }
-        filters.and(sub(otherNote).where(otherNote.ne(documentNote),
-                otherNote.note().eq(documentNote.note()),
-                otherNote.localId.eq(documentNote.localId),
-                otherNote.createdOn.gt(documentNote.createdOn)).notExists());
+        
+        List<Note> notes = getSession().from(note).where(filters).orderBy(getOrderBy(searchInfo, note)).list(note);        
+        List<NoteWithInstances> rv = new ArrayList<NoteWithInstances>(notes.size());
+        for (Note n : notes){
+            BooleanBuilder f = new BooleanBuilder();
 
-        return new Notes(searchInfo.isOrphans() ? getOrphans() : null, getSession()
-                .from(documentNote).where(filters).orderBy(getOrderBy(searchInfo))
-                .list(documentNote));
+            // of given note
+            f.and(documentNote.note().eq(n));
+            
+            // not deleted
+            f.and(documentNote.deleted.eq(false));
+
+            // latest revision
+            f.and(sub(otherNote).where(otherNote.ne(documentNote),
+                    otherNote.note().eq(documentNote.note()),
+                    otherNote.localId.eq(documentNote.localId),
+                    otherNote.createdOn.gt(documentNote.createdOn)).notExists());
+            
+            // of current document
+            f.and(documentNote.document().eq(searchInfo.getCurrentDocument()));
+
+            List<DocumentNote> instances = getSession().from(documentNote).where(f).list(documentNote);
+            rv.add(new NoteWithInstances(n, instances));
+        }
+        
+        return rv;
+
     }
     
-    private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo) {
+    private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo, QNote note) {
         ComparableExpressionBase<?> comparable = null;
         switch (searchInfo.getOrderBy()) {
         case DATE:
-            comparable = documentNote.createdOn;
+            comparable = note.editedOn;
             break;
         case USER:
-            comparable = documentNote.note().lastEditedBy().username.toLowerCase();
+            comparable = note.lastEditedBy().username.toLowerCase();
             break;
         case STATUS:
-            comparable = documentNote.note().status.ordinal();
+            comparable = note.status.ordinal();
             break;
         default:
-            comparable = documentNote.note().lemma.toLowerCase();
+            comparable = note.lemma.toLowerCase();
             break;
         }
         return searchInfo.isAscending() ? comparable.asc() : comparable.desc();

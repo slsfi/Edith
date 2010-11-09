@@ -21,11 +21,19 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteSearchInfo;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.PersonRepository;
 import fi.finlit.edith.ui.services.PlaceRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
@@ -63,7 +71,15 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Inject
     @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
     private String testDocument;
-
+    
+    private int countDocumentNotes(List<NoteWithInstances> notes){
+        int count = 0;
+        for (NoteWithInstances n : notes){
+            count += n.getDocumentNotes().size();
+        }
+        return count;
+    }
+    
     @Test
     public void createComment() {
         Note note = new Note();
@@ -234,11 +250,12 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     public void Remove_Based_On_Revision() {
         Document document = documentRepository.getDocumentForPath(testDocument);
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10",
-                longText);
-        assertFalse(noteRepository.query(new DocumentNoteSearchInfo()).getDocumentNotes().isEmpty());
+        DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10", longText);
+        List<NoteWithInstances> notes = noteRepository.query(new DocumentNoteSearchInfo(document)); 
+        assertTrue(countDocumentNotes(notes) > 0);
         noteRepository.remove(documentNote, documentNote.getSVNRevision());
-        assertTrue(noteRepository.query(new DocumentNoteSearchInfo()).getDocumentNotes().isEmpty());
+        notes = noteRepository.query(new DocumentNoteSearchInfo(document));
+        assertEquals(0, countDocumentNotes(notes));
     }
 
     @Test

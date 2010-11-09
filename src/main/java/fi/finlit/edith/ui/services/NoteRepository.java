@@ -16,7 +16,6 @@ import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.Notes;
 
 // TODO createNote and remove could be in DocumentRepository.
 /**
@@ -46,6 +45,10 @@ public interface NoteRepository extends Repository<Note, String> {
      */
     DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String localId, String longText);
 
+    /**
+     * @param lemma
+     * @return
+     */
     Note find(String lemma);
 
     /**
@@ -95,11 +98,21 @@ public interface NoteRepository extends Repository<Note, String> {
      */
     List<Note> findNotes(String lemma);
 
+    /**
+     * @param searchTerm
+     * @return
+     */
     GridDataSource queryPersons(String searchTerm);
 
+    /**
+     * @param searchTerm
+     * @return
+     */
     GridDataSource queryPlaces(String searchTerm);
-    
 
+    /**
+     * @return
+     */
     // TODO TEST
     List<Note> getOrphans();
 
@@ -107,5 +120,6 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param searchInfo
      * @return
      */
-    Notes query(DocumentNoteSearchInfo searchInfo);
+    List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo);
+    
 }

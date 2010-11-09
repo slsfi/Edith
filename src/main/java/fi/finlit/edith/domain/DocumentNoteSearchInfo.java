@@ -8,6 +8,7 @@ import java.util.Set;
  *
  */
 public class DocumentNoteSearchInfo {
+    
     private Set<Document> documents = new HashSet<Document>();
 
     private Set<NoteType> noteTypes = new HashSet<NoteType>();
@@ -24,6 +25,12 @@ public class DocumentNoteSearchInfo {
 
     private Document currentDocument;
 
+    public DocumentNoteSearchInfo() {}
+    
+    public DocumentNoteSearchInfo(Document document) {
+        this.currentDocument = document;
+    }
+    
     public Set<Document> getDocuments() {
         return documents;
     }
