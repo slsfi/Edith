@@ -318,9 +318,9 @@ public class AnnotatePage extends AbstractDocumentPage {
         this.searchInfo = searchInfo;
     }
 
-    public String getTypesString() {
+    public String getTypesString() {        
         Collection<String> translated = new ArrayList<String>();
-        for (NoteType t : note.getNote().getTypes()) {
+        for (NoteType t : noteWithInstances.getNote().getTypes()) {
             translated.add(messages.get(t.toString()));
         }
         return StringUtils.join(translated, ", ");

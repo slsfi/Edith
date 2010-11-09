@@ -18,6 +18,9 @@ public class NoteWithInstances {
 
     public NoteWithInstances(Note note, Collection<DocumentNote> documentNotes) {
         this.note = note;
+        for (DocumentNote dn : documentNotes){
+            if (dn == null) throw new IllegalArgumentException();
+        }
         this.documentNotes = documentNotes;
     }
     

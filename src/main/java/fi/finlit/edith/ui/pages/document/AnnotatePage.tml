@@ -117,7 +117,6 @@
 									<span class="description">${noteWithInstances.note.description}; </span>
 									<span class="type">${typesString}; </span>
 									<span class="format"><t:if test="noteWithInstances.note.format"><t:fmt.message key="${noteWithInstances.note.format}"/></t:if>; </span>
-									<span class="creator">${note.note.lastEditedBy?.username} (${editorsForNote}); </span>
 									<span class="edited"><t:dateTimeFormat date="noteWithInstances.note.editedOnDate" format="message:dateformat-compact" />; </span>
 									<span class="status"><t:fmt.message key="NoteStatus.${noteWithInstances.note.status}"/></span>
 								</li>									
