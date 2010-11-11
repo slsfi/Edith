@@ -49,7 +49,7 @@ import fi.finlit.edith.ui.services.svn.SubversionService;
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
         DocumentNoteRepository {
 
-    private static final QDocumentNote otherNote = new QDocumentNote("other");
+    private final QDocumentNote otherNote = new QDocumentNote("other");
 
     private final TimeService timeService;
 
@@ -153,12 +153,16 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     @Override
     public GridDataSource queryNotes(String searchTerm) {
+        QDocumentNote documentNote = QDocumentNote.documentNote;
         QNote note = documentNote.note();
         Assert.notNull(searchTerm);
         BooleanBuilder builder = new BooleanBuilder();
         if (!searchTerm.equals("*")) {
-            for (StringPath path : Arrays.asList(note.lemma, documentNote.longText,
-                    note.term().basicForm, note.term().meaning)) {
+            for (StringPath path : Arrays.asList(
+                    note.lemma, 
+                    documentNote.longText,
+                    note.term().basicForm, 
+                    note.term().meaning)) {
                 // ,
                 // documentNote.description, FIXME
                 // note.subtextSources)
@@ -168,8 +172,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         builder.and(documentNote.deleted.eq(false));
         builder.and(latest(documentNote));
 
-        return createGridDataSource(documentNote, note.term().basicForm.lower().asc(), false,
-                builder.getValue());
+        return createGridDataSource(documentNote, note.term().basicForm.lower().asc(), false, builder.getValue());
     }
 
     @Override

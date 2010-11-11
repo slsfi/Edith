@@ -6,7 +6,7 @@
         <t:errors />
         <t:textfield value="searchTerm" />
         <input type="submit" value="${message:search}" />
-        <t:if test="documentNotes">
+        <t:if test="notes">
             <div id="editcontrols">
                 <t:if test="!editMode">
                     <t:actionlink t:id="toggleEdit">${message:editLemma}</t:actionlink>
@@ -19,7 +19,7 @@
          </t:if>
     </t:form>
 
-    <t:if test="documentNotes">
+    <t:if test="notes">
         <t:form t:id="edit">
             <div id="formcontrols">
                 <t:if test="editMode">
@@ -27,47 +27,42 @@
                 </t:if>
             </div>
             <div class="cleaner"> </div>
-            <t:grid source="documentNotes" row="documentNote" rowsPerPage="20" t:encoder="encoder"
-                include="longText" add="lemma,description,subtextSources,documentRevision,basicForm,meaning,actions">
+            <t:grid source="notes" row="note" rowsPerPage="20" t:encoder="encoder"
+                 include="lemma" add="description,subtextSources,basicForm,meaning">
                 <p:lemmaCell>
                     <t:if test="editMode">
-                        <t:inlineEditField t:id="lemma" value="documentNote.note.lemma"/>
+                        <t:inlineEditField t:id="lemma" value="note.lemma"/>
                         <p:else>
-                            <em>${documentNote.note.lemma}</em>
+                            <em>${note.lemma}</em>
                         </p:else>
                     </t:if>
                 </p:lemmaCell>
-                <p:documentRevisionCell>
-                    ${documentNote.document?.title}
-                </p:documentRevisionCell>
                 <p:basicFormCell>
-                    ${documentNote.note.term?.basicForm}
+                    ${note.term?.basicForm}
                 </p:basicFormCell>
-                <p:longTextCell>
-                    ${documentNote.longText}
-                </p:longTextCell>
                 <p:descriptionCell>
                     <!--t:if test="editMode">
                         <t:inlineField t:id="description" value="documentNote.note.description" value1="documentNote.note.description" />
                         <p:else-->
-                            <t:markdown value="documentNote.note.description"/>
+                            <t:markdown value="note.description"/>
                         <!--/p:else>
                     </t:if-->
                 </p:descriptionCell>                
                 <p:meaningCell>
-                        ${documentNote.note.term?.meaning}
+                        ${note.term?.meaning}
                 </p:meaningCell>
                 <p:subtextSourcesCell>
                 	<!--t:if test="editMode">
                         <t:inlineField t:id="subtextSources" value="documentNote.note.subtextSources" value1="documentNote.note.subtextSources" />
                         <p:else-->
-                            <t:markdown value="documentNote.note.subtextSources"/>
+                            <t:markdown value="note.subtextSources"/>
                         <!-- /p:else>
                     </t:if-->
                 </p:subtextSourcesCell>
                 <p:statusCell>
-					<t:fmt.message key="NoteStatus.${documentNote.note.status}"/>
+					<t:fmt.message key="NoteStatus.${note.status}"/>
                 </p:statusCell>
+				<!-- 
                 <p:actionsCell>
                 	<span class="delete_note">
                 		<a href="" class="delete_question">${message:delete}</a>
@@ -77,6 +72,7 @@
                     	</span>
                     </span>
                 </p:actionsCell>
+				-->
                 <p:empty>
                     <p>${message:no-results}</p>
                 </p:empty>

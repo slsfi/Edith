@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,7 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.ComparableExpressionBase;
+import com.mysema.query.types.path.StringPath;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
@@ -173,6 +175,27 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return rv;
 
     }
+    
+    @Override
+    public GridDataSource queryNotes(String searchTerm) {
+        QNote note = QNote.note;
+        Assert.notNull(searchTerm);
+        BooleanBuilder builder = new BooleanBuilder();
+        if (!searchTerm.equals("*")) {
+            for (StringPath path : Arrays.asList(
+                    note.lemma, 
+                    note.term().basicForm, 
+                    note.term().meaning)) {
+                // ,
+                // documentNote.description, FIXME
+                // note.subtextSources)
+                builder.or(path.containsIgnoreCase(searchTerm));
+            }
+        }
+
+        return createGridDataSource(note, note.term().basicForm.lower().asc(), false, builder.getValue());
+    }
+
     
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo, QNote note) {
         ComparableExpressionBase<?> comparable = null;

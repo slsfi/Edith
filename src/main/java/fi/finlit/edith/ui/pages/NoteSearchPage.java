@@ -5,8 +5,8 @@
  */
 package fi.finlit.edith.ui.pages;
 
-import org.apache.commons.lang.StringUtils;
-import static org.apache.commons.lang.StringUtils.*;
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
@@ -21,8 +21,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 /**
@@ -44,19 +45,22 @@ public class NoteSearchPage {
     private Context context;
 
     @Property
-    private GridDataSource documentNotes;
+    private GridDataSource notes;
 
     @Property
-    private DocumentNote documentNote;
+    private Note note;
 
+//    @Inject
+//    private DocumentNoteRepository noteRevisionRepository;
+    
     @Inject
-    private DocumentNoteRepository noteRevisionRepository;
+    private NoteRepository noteRepository;
 
     @Inject
     private DocumentRepository documentRepository;
 
     @Property
-    private PrimaryKeyEncoder<DocumentNote> encoder;
+    private PrimaryKeyEncoder<Note> encoder;
 
     @Inject
     @Path("NoteSearchPage.css")
@@ -76,11 +80,11 @@ public class NoteSearchPage {
         context = new Context(searchTerm);
     }
 
-    void onActionFromDelete(String noteRevisionId) {
-        // noteRevisionRepo.remove(noteRevisionId);
-        DocumentNote noteRevision = noteRevisionRepository.getById(noteRevisionId);
-        documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision);
-    }
+//    void onActionFromDelete(String noteRevisionId) {
+//        // noteRevisionRepo.remove(noteRevisionId);
+//        DocumentNote noteRevision = noteRevisionRepository.getById(noteRevisionId);
+//        documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision);
+//    }
 
     void onActionFromToggleEdit() {
         context = new Context(searchTerm, "edit");
@@ -101,20 +105,20 @@ public class NoteSearchPage {
     }
 
     void onPrepare() {
-        encoder = new PrimaryKeyEncoder<DocumentNote>(noteRevisionRepository);
+        encoder = new PrimaryKeyEncoder<Note>(noteRepository);
     }
 
     void onSuccessFromEdit() {
         //getting all values from encoder
-        for(DocumentNote editedNote : encoder.getAllValues() ){
+        for(Note editedNote : encoder.getAllValues() ){
           
           //If we get a not empty value for a field, 
           //it means it has been edited
           //We must refetch the actual document note
-          if (!isBlank(editedNote.getNote().getLemma())) {
-              DocumentNote currentNote = noteRevisionRepository.getById(editedNote.getId());
-              currentNote.getNote().setLemma(editedNote.getNote().getLemma());
-              noteRevisionRepository.save(currentNote);
+          if (!isBlank(editedNote.getLemma())) {
+              Note currentNote = noteRepository.getById(editedNote.getId());
+              currentNote.setLemma(editedNote.getLemma());
+              noteRepository.save(editedNote);
           }
         }
         
@@ -126,7 +130,7 @@ public class NoteSearchPage {
     }
 
     void setupRender() {
-        documentNotes = noteRevisionRepository.queryNotes(searchTerm == null ? "*" : searchTerm);
+        notes = noteRepository.queryNotes(searchTerm == null ? "*" : searchTerm);
     }
 
 }

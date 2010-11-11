@@ -109,6 +109,12 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     GridDataSource queryPlaces(String searchTerm);
+    
+    /**
+     * @param searchTerm
+     * @return
+     */
+    GridDataSource queryNotes(String searchTerm);
 
     /**
      * @return
