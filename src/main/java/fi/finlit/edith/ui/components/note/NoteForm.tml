@@ -280,15 +280,17 @@
 
 			<input type="submit" value="${message:saveNote}" />
             <label><t:checkbox t:id="saveAsNew" name="saveAsNew" value="saveAsNew" />${message:saveAsNew}</label>
-                                    <div class="delete">
-                            <button class="delete_question">${message:deleteNote}</button>
-                            <span class="delete_dialog">
-                                ${message:deleteNote}
-                                <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
-                                /
-                                <a href="" class="delete_decline">${message:no}</a>
-                            </span>
-                        </div>
+            <t:if test="noteOnEdit.id">
+            <div class="delete">
+                <button class="delete_question">${message:deleteNote}</button>
+                <span class="delete_dialog">
+                    ${message:deleteNote}
+                    <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
+                    /
+                    <a href="" class="delete_decline">${message:no}</a>
+                </span>
+            </div>
+            </t:if>
 			<t:if test="submitSuccess">
 				<!-- This could be externalized? -->
 				<script type="text/javascript">
