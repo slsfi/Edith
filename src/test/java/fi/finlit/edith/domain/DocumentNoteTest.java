@@ -21,7 +21,7 @@ public class DocumentNoteTest {
         documentNote.setLocalId("foobar");
         documentNote.setLongText("foobar is bar");
         documentNote.setNote(new Note());
-        documentNote.setSVNRevision(10);
+        documentNote.setSVNRevision(10l);
     }
 
     @Test

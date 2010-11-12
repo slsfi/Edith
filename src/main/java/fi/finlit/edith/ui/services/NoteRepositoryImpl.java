@@ -46,7 +46,7 @@ import fi.finlit.edith.domain.*;
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
 
     private static final QDocumentNote otherNote = new QDocumentNote("other");
-    
+
     private static final class LoopContext {
         private Note note;
         private String text;
@@ -70,22 +70,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private final AuthService authService;
 
-    // TODO Move methods using documentNoteRepository to documentNoteRepository?
-//    private final DocumentNoteRepository documentNoteRepository;
-
-    private final NoteRepository noteRepository;
-
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, 
+            @Inject UserRepository userRepository,
             @Inject TimeService timeService,
-            @Inject AuthService authService,
-            @Inject NoteRepository noteRepository) {
+            @Inject AuthService authService) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
         this.timeService = timeService;
         this.authService = authService;
-//        this.documentNoteRepository = documentNoteRepository;
-        this.noteRepository = noteRepository;
     }
 
     @Override
@@ -94,7 +86,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         getSession().save(comment);
         return comment;
     }
-    
+
 
     @Override
     public List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo) {
@@ -102,7 +94,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         BooleanBuilder filters = new BooleanBuilder();
         QNote note = QNote.note;
         QDocumentNote documentNote = QDocumentNote.documentNote;
-        
+
         // document
         BooleanBuilder docFilters = new BooleanBuilder();
         if (!searchInfo.getDocuments().isEmpty()){
@@ -111,16 +103,16 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     documentNote.note().eq(note),
                     documentNote.document().in(searchInfo.getDocuments())).exists());
         }
-        
+
         // orphans
         if (searchInfo.isOrphans()){
             docFilters.or(sub(documentNote).where(documentNote.note().eq(note)).notExists());
         }
-        
+
         if (docFilters.hasValue()){
-            filters.and(docFilters.getValue());    
-        }        
-        
+            filters.and(docFilters.getValue());
+        }
+
         // creators
         if (!searchInfo.getCreators().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
@@ -133,12 +125,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             filter.or(note.lastEditedBy().username.in(usernames));
             filters.and(filter);
         }
-        
+
         // formats
         if (!searchInfo.getNoteFormats().isEmpty()) {
             filters.and(note.format.in(searchInfo.getNoteFormats()));
         }
-        
+
         // types
         if (!searchInfo.getNoteTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
@@ -147,15 +139,15 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             }
             filters.and(filter);
         }
-        
-        List<Note> notes = getSession().from(note).where(filters).orderBy(getOrderBy(searchInfo, note)).list(note);        
+
+        List<Note> notes = getSession().from(note).where(filters).orderBy(getOrderBy(searchInfo, note)).list(note);
         List<NoteWithInstances> rv = new ArrayList<NoteWithInstances>(notes.size());
         for (Note n : notes){
             BooleanBuilder f = new BooleanBuilder();
 
             // of given note
             f.and(documentNote.note().eq(n));
-            
+
             // not deleted
             f.and(documentNote.deleted.eq(false));
 
@@ -164,18 +156,18 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     otherNote.note().eq(documentNote.note()),
                     otherNote.localId.eq(documentNote.localId),
                     otherNote.createdOn.gt(documentNote.createdOn)).notExists());
-            
+
             // of current document
             f.and(documentNote.document().eq(searchInfo.getCurrentDocument()));
 
             List<DocumentNote> instances = getSession().from(documentNote).where(f).list(documentNote);
             rv.add(new NoteWithInstances(n, instances));
         }
-        
+
         return rv;
 
     }
-    
+
     @Override
     public GridDataSource queryNotes(String searchTerm) {
         QNote note = QNote.note;
@@ -183,8 +175,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         BooleanBuilder builder = new BooleanBuilder();
         if (!searchTerm.equals("*")) {
             for (StringPath path : Arrays.asList(
-                    note.lemma, 
-                    note.term().basicForm, 
+                    note.lemma,
+                    note.term().basicForm,
                     note.term().meaning)) {
                 // ,
                 // documentNote.description, FIXME
@@ -196,7 +188,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return createGridDataSource(note, note.term().basicForm.lower().asc(), false, builder.getValue());
     }
 
-    
+
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo, QNote note) {
         ComparableExpressionBase<?> comparable = null;
         switch (searchInfo.getOrderBy()) {
@@ -215,7 +207,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         }
         return searchInfo.isAscending() ? comparable.asc() : comparable.desc();
     }
-    
+
     @Override
     public List<Note> getOrphans() {
         return getSession().from(note)
@@ -264,7 +256,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String localName = reader.getLocalName();
 
         if (localName.equals("note")) {
-            noteRepository.save(data.note);
+            data.note.setLastEditedBy(userRepository.getCurrentUser());
+            data.note.setEditedOn(timeService.currentTimeMillis());
+            save(data.note);
             data.counter++;
         } else if (localName.equals("lemma")) {
             data.note.setLemma(data.text);
@@ -414,12 +408,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
         getSession().save(documentNote);
     }
-    
+
     @Override
     public void removePermanently(DocumentNote note) {
         getSession().delete(note);
     }
-    
+
     @Override
     public NoteComment removeComment(String commentId) {
         NoteComment comment = getSession().getById(commentId, NoteComment.class);
@@ -431,7 +425,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     public List<Note> findNotes(String lemma) {
         return getSession().from(note).where(note.lemma.eq(lemma)).list(note);
     }
-    
+
     private BeanSubQuery sub(EntityPath<?> entity) {
         return new BeanSubQuery().from(entity);
     }

@@ -57,7 +57,7 @@ public class NoteForm {
 
     @Parameter
     private List<DocumentNote> documentNotes;
-    
+
     @Inject
     private TimeService timeService;
 
@@ -361,6 +361,9 @@ public class NoteForm {
             noteOnEdit.setNote(noteRepository.getById(noteId));
             noteOnEdit.setDocRevision(documentRevision);
             noteOnEdit.setDocument(documentRevision.getDocument());
+            if (noteOnEdit.getSVNRevision() == null) {
+                noteOnEdit.setSVNRevision(documentRevision.getRevision());
+            }
         }
         if (!isPerson()) {
             setPerson(noteOnEdit.getNote().getPerson());

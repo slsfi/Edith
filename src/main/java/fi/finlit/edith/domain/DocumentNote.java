@@ -34,7 +34,7 @@ public class DocumentNote extends Identifiable {
     private String longText;
 
     @Predicate
-    private long svnRevision;
+    private Long svnRevision;
 
     @Predicate
     private boolean deleted;
@@ -100,7 +100,7 @@ public class DocumentNote extends Identifiable {
         return note;
     }
 
-    public long getSVNRevision() {
+    public Long getSVNRevision() {
         return svnRevision;
     }
 
@@ -136,7 +136,7 @@ public class DocumentNote extends Identifiable {
         this.note = note;
     }
 
-    public void setSVNRevision(long svnRevision) {
+    public void setSVNRevision(Long svnRevision) {
         this.svnRevision = svnRevision;
     }
 
