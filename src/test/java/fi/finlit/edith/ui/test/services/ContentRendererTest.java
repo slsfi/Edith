@@ -83,9 +83,7 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
                 .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
-        assertTrue(document.contains("'johonkin ineen'"));
-        assertTrue(document
-                .contains("Vrt. <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
+        assertTrue(document.contains("'johonkin ineen', Vrt. <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
         assertTrue(document.contains("<a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
         assertTrue(document, document
                 .contains("(<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</SPAN></li>"));
@@ -109,6 +107,7 @@ public class ContentRendererTest extends AbstractServiceTest {
                 .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains("Fred Armisen"));
         assertTrue(document.contains("1970\u20132098."));
+        assertTrue(document.contains("<span>\u2013</span>"));
         assertTrue(document.contains("<a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
         assertTrue(document
                 .contains("(<a href=\"http://www.google.com/kalevala\">Kalevala</a>)</SPAN></li>"));
@@ -135,6 +134,7 @@ public class ContentRendererTest extends AbstractServiceTest {
         assertTrue(document
                 .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
         assertTrue(document.contains("New York"));
+        assertTrue(document.contains("<span>\u2013</span>"));
         assertTrue(document
                 .contains("<a href=\"http://www.google.com/kalevala\">Kalevala</a> foo <a href=\"http://www.google.com/\">Google</a>"));
         assertTrue(document.contains("<a>happyness</a>"));

@@ -67,77 +67,106 @@ public class ContentRendererImpl implements ContentRenderer {
         writer.element("SPAN", CLASS, attr);
     }
 
+    private void writeNote(MarkupWriter writer, Note note) {
+        if (note.getLemmaMeaning() != null
+                || note.getSubtextSources() != null) {
+            writeSpan(writer, "lemmaMeaningAndSubtextSources");
+            if (note.getLemmaMeaning() != null) {
+                writer.write("'" + note.getLemmaMeaning() + "'");
+            }
+            if (note.getLemmaMeaning() != null
+                    && note.getSubtextSources() != null) {
+                writer.write(", ");
+            }
+            if (note.getSubtextSources() != null) {
+                writer.write("Vrt. ");
+                writeParagraph(writer, note.getSubtextSources());
+            }
+            writer.end();
+        }
+    }
+
+    private void writePerson(MarkupWriter writer, Note note) {
+        Person person = note.getPerson();
+        if (person != null) {
+            writeSpan(writer, "personName");
+            writer.write(person.getNormalizedForm().getFirst());
+            writer.write(" " + person.getNormalizedForm().getLast());
+
+            Interval timeOfBirth = person.getTimeOfBirth();
+            Interval timeOfDeath = person.getTimeOfDeath();
+
+            if (timeOfBirth != null || timeOfDeath != null) {
+                writer.write(",");
+                writer.end();
+                StringBuilder builder = new StringBuilder();
+                if (timeOfBirth != null) {
+                    builder.append(timeOfBirth.asString());
+                }
+                builder.append("\u2013");
+                if (timeOfDeath != null) {
+                    builder.append(timeOfDeath.asString());
+                }
+                builder.append(".");
+                writeSpan(writer, "lifetime");
+                writer.write(builder.toString());
+                writer.end();
+            } else {
+                writer.write(".");
+                writer.end();
+            }
+        }
+    }
+
+    private void writePlace(MarkupWriter writer, Note note) {
+        Place place = note.getPlace();
+        if (place != null) {
+            writeSpan(writer, "placeName");
+            writer.write(place.getNormalizedForm().getName() + ".");
+            writer.end();
+        }
+    }
+
     @Override
     public void renderDocumentNotes(List<DocumentNote> documentNotes, MarkupWriter writer) {
         writer.element("ul", CLASS, "notes");
         for (DocumentNote documentNote : documentNotes) {
+            Note note = documentNote.getNote();
+
             writer.element("li");
             writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getLocalId());
             writer.element("em");
-            writer.write(documentNote.getNote().getLemma());
+            writer.write(note.getLemma());
             writer.end();
             writer.end();
 
-            if (documentNote.getNote().getFormat() != null) {
-                if (documentNote.getNote().getFormat().equals(NoteFormat.NOTE)) {
-                    if (documentNote.getNote().getLemmaMeaning() != null) {
-                        writeSpan(writer, "lemmaMeaning");
-                        writer.write("'" + documentNote.getNote().getLemmaMeaning() + "'");
-                        writer.end();
-                    }
-                    if (documentNote.getNote().getSubtextSources() != null) {
-                        writeSpan(writer, "subtextSources");
-                        writer.write("Vrt. ");
-                        writeParagraph(writer, documentNote.getNote().getSubtextSources());
-                        writer.end();
-                    }
+            if (note.getFormat() != null) {
+                if (note.getFormat().equals(NoteFormat.NOTE)) {
+                    writeNote(writer, note);
+                }
+                if (note.getFormat().equals(NoteFormat.PERSON)) {
+                    writePerson(writer, note);
                 }
 
-                if (documentNote.getNote().getFormat().equals(NoteFormat.PERSON)) {
-                    Person person = documentNote.getNote().getPerson();
-                    if (person != null) {
-                        writeSpan(writer, "personName");
-                        writer.write(person.getNormalizedForm().getFirst());
-                        writer.write(" " + person.getNormalizedForm().getLast() + ",");
-                        writer.end();
-                        Interval timeOfBirth = person.getTimeOfBirth();
-                        Interval timeOfDeath = person.getTimeOfDeath();
-                        if (timeOfBirth != null || timeOfDeath != null) {
-                            StringBuilder builder = new StringBuilder();
-                            if (timeOfBirth != null) {
-                                builder.append(timeOfBirth.asString());
-                            }
-                            builder.append("\u2013");
-                            if (timeOfDeath != null) {
-                                builder.append(timeOfDeath.asString());
-                            }
-                            builder.append(".");
-                            writeSpan(writer, "lifetime");
-                            writer.write(builder.toString());
-                            writer.end();
-                        }
-                    }
-                }
-
-                if (documentNote.getNote().getFormat().equals(NoteFormat.PLACE)) {
-                    Place place = documentNote.getNote().getPlace();
-                    if (place != null) {
-                        writeSpan(writer, "placeName");
-                        writer.write(place.getNormalizedForm().getName());
-                        writer.end();
-                    }
+                if (note.getFormat().equals(NoteFormat.PLACE)) {
+                    writePlace(writer, note);
                 }
             }
 
-            if (documentNote.getNote().getDescription() != null) {
+            if (note.getDescription() != null) {
+                if (note.getFormat() != null && !note.getFormat().equals(NoteFormat.NOTE)) {
+                    writer.element("span");
+                    writer.write("\u2013");
+                    writer.end();
+                }
                 writeSpan(writer, "description");
-                writeParagraph(writer, documentNote.getNote().getDescription());
+                writeParagraph(writer, note.getDescription());
                 writer.end();
             }
-            if (documentNote.getNote().getSources() != null) {
+            if (note.getSources() != null) {
                 writeSpan(writer, "sources");
                 writer.write("(");
-                writeParagraph(writer, documentNote.getNote().getSources());
+                writeParagraph(writer, note.getSources());
                 writer.write(")");
                 writer.end();
             }
@@ -207,14 +236,14 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     @Override
-    public void renderDocument(DocumentRevision document,
-            MarkupWriter writer) throws IOException, XMLStreamException {
+    public void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException,
+            XMLStreamException {
         renderDocument(document, null, writer);
     }
 
     @Override
-    public void renderDocument(DocumentRevision document, List<DocumentNote> documentNotes, MarkupWriter writer) throws IOException,
-            XMLStreamException {
+    public void renderDocument(DocumentRevision document, List<DocumentNote> documentNotes,
+            MarkupWriter writer) throws IOException, XMLStreamException {
         Set<String> publishIds = null;
         if (documentNotes != null) {
             publishIds = new HashSet<String>();
@@ -249,7 +278,8 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void handleStartElement(XMLStreamReader reader, MarkupWriter writer,
-            ElementContext context, Set<String> noteIds, MutableBoolean noteContent, Set<String> publishIds) {
+            ElementContext context, Set<String> noteIds, MutableBoolean noteContent,
+            Set<String> publishIds) {
         String localName = reader.getLocalName();
         String name = extractName(reader, localName);
         context.push(name);
