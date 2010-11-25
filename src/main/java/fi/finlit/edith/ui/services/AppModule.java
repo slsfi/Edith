@@ -5,7 +5,6 @@
  */
 package fi.finlit.edith.ui.services;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import nu.localhost.tapestry5.springsecurity.services.RequestInvocationDefinition;
@@ -28,7 +27,6 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetailsService;
 
-import com.mysema.rdfbean.model.RepositoryException;
 import com.mysema.rdfbean.object.MappedProperty;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
@@ -143,11 +141,7 @@ public final class AppModule {
                                 return session.getById(id, cl);
                             }finally{
                                 if (close){
-                                    try {
-                                        session.close();
-                                    } catch (IOException e) {
-                                        throw new RepositoryException(e);
-                                    }
+                                    session.close();
                                 }
                             }
                         }

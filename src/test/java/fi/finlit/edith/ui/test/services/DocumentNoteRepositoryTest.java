@@ -15,7 +15,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -91,7 +90,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Inject
     @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
     private File noteTestData;
-    
+
 
     private int countDocumentNotes(List<NoteWithInstances> notes){
         int count = 0;
@@ -227,10 +226,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         noteRepository.createDocumentNote(new Note(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
         noteRepository.createDocumentNote(new Note(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
         noteRepository.createDocumentNote(new Note(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
-        
+
         searchInfo = new DocumentNoteSearchInfo();
         searchInfo.setCurrentDocument(document);
-        
+
         addExtraNote("testo");
         addExtraNote("testo2");
     }
@@ -308,7 +307,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(6, notes.size());
     }
 
-    
+
     @Test
     public void Query_For_All_Notes_Ordered_By_Lemma_Ascending_By_Default() {
         List<NoteWithInstances> notes = noteRepository.query(searchInfo);
@@ -320,8 +319,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
                             lessThanOrEqualTo(documentNote.getNote().getLemma().toLowerCase()));
                 }
                 previous = documentNote;
-            }            
-        }        
+            }
+        }
     }
 
     @Test
@@ -391,8 +390,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
                     assertThat(previousUsername, lessThanOrEqualTo(currentUsername));
                 }
                 previous = documentNote;
-            }    
-        }        
+            }
+        }
     }
 
     @Test
@@ -409,8 +408,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
                     assertThat(previousUsername, greaterThanOrEqualTo(currentUsername));
                 }
                 previous = documentNote;
-            }    
-        }        
+            }
+        }
     }
 
     @Test
@@ -423,7 +422,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
                 assertThat(previous.getNote().getEditedOn(), lessThanOrEqualTo(note.getNote().getEditedOn()));
             }
             previous = note;
-        }        
+        }
     }
 
     @Test
@@ -452,9 +451,9 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
                             previousStatus.compareTo(currentStatus) <= 0);
                 }
                 previous = documentNote;
-            }    
+            }
         }
-        
+
     }
 
     @Test
@@ -555,9 +554,9 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
                         System.err.println("null");
                     }
                 }
-            }    
+            }
         }
-        
+
     }
 
     @Test
@@ -623,12 +622,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
             session = sessionFactory.openSession();
             session.save(documentNote);
         } finally {
-            try {
-                if (session != null) {
-                    session.close();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (session != null) {
+                session.close();
             }
         }
     }

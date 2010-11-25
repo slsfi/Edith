@@ -18,7 +18,6 @@ import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 
-import com.mysema.rdfbean.Namespaces;
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
@@ -67,7 +66,7 @@ public class ServiceTestModule {
      * Makes a memory based test configuration override
      */
     public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
-        Namespaces.register("edith", EDITH.NS);
+//        Namespaces.register("edith", EDITH.NS);
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
         configuration.add(Repository.class, repository);
