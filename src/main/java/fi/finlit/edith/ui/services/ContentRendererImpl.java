@@ -90,8 +90,7 @@ public class ContentRendererImpl implements ContentRenderer {
         Person person = note.getPerson();
         if (person != null) {
             writeSpan(writer, "personName");
-            writer.write(person.getNormalizedForm().getFirst());
-            writer.write(" " + person.getNormalizedForm().getLast());
+            writer.write(person.getNormalizedForm().getName());
 
             Interval timeOfBirth = person.getTimeOfBirth();
             Interval timeOfDeath = person.getTimeOfDeath();
