@@ -6,7 +6,6 @@
 package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -71,7 +70,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Inject
     @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
     private String testDocument;
-    
+
     private int countDocumentNotes(List<NoteWithInstances> notes){
         int count = 0;
         for (NoteWithInstances n : notes){
@@ -79,7 +78,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         }
         return count;
     }
-    
+
     @Test
     public void createComment() {
         Note note = new Note();
@@ -251,7 +250,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Document document = documentRepository.getDocumentForPath(testDocument);
         String longText = "two words";
         DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10", longText);
-        List<NoteWithInstances> notes = noteRepository.query(new DocumentNoteSearchInfo(document)); 
+        List<NoteWithInstances> notes = noteRepository.query(new DocumentNoteSearchInfo(document));
         assertTrue(countDocumentNotes(notes) > 0);
         noteRepository.remove(documentNote, documentNote.getSVNRevision());
         notes = noteRepository.query(new DocumentNoteSearchInfo(document));

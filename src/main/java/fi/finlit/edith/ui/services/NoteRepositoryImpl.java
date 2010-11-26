@@ -101,7 +101,17 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             docFilters.and(sub(documentNote).where(
                     documentNote.deleted.eq(false),
                     documentNote.note().eq(note),
-                    documentNote.document().in(searchInfo.getDocuments())).exists());
+                    documentNote.document().in(searchInfo.getDocuments()),
+                    sub(otherNote).where(otherNote.ne(documentNote),
+                            otherNote.note().eq(documentNote.note()),
+                            otherNote.localId.eq(documentNote.localId),
+                            otherNote.createdOn.gt(documentNote.createdOn)).notExists()
+                    ).exists());
+
+//            docFilters.and(sub(otherNote).where(otherNote.ne(documentNote),
+//                    otherNote.note().eq(documentNote.note()),
+//                    otherNote.localId.eq(documentNote.localId),
+//                    otherNote.createdOn.gt(documentNote.createdOn)).notExists());
         }
 
         // orphans
@@ -141,6 +151,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         }
 
         List<Note> notes = getSession().from(note).where(filters).orderBy(getOrderBy(searchInfo, note)).list(note);
+
         List<NoteWithInstances> rv = new ArrayList<NoteWithInstances>(notes.size());
         for (Note n : notes){
             BooleanBuilder f = new BooleanBuilder();

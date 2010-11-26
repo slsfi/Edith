@@ -17,6 +17,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -307,6 +308,23 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(6, notes.size());
     }
 
+    @Test
+    public void Query_and_Delete(){
+        searchInfo.setDocuments(Collections.singleton(document));
+        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        assertFalse(notes.isEmpty());
+
+        // remove note
+        assertFalse(notes.get(0).getDocumentNotes().isEmpty());
+        DocumentNote documentNote = notes.get(0).getDocumentNotes().iterator().next();
+        DocumentRevision newRevision = documentRepository.removeNotes(documentNote.getDocumentRevision(), documentNote);
+        assertNotNull(newRevision);
+
+        // assert that query returns less results
+        List<NoteWithInstances> newResults = noteRepository.query(searchInfo);
+        assertEquals(notes.size() - 1, newResults.size());
+
+    }
 
     @Test
     public void Query_For_All_Notes_Ordered_By_Lemma_Ascending_By_Default() {
