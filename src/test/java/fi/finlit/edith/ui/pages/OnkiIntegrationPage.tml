@@ -1,0 +1,22 @@
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+	<p:title>Onki integration test</p:title>
+	
+	<t:form id="form">
+
+		<select multiple="true" id="concepts" style="width:10em;height:5em;">
+			<option value="http://www.yso.fi/onto/yso/p19378 yso:kissa">yso:kissa</option>
+			<option value="http://www.yso.fi/onto/yso/p5319 yso:koira">yso:koira</option>
+		</select>
+
+		<script type="text/javascript" src="http://www.yso.fi/onki.js?16dda293819ef4024af5104146628102"></script> 
+	
+		<input onkeyup="onki['yso'].search({'fetchLabels' : true, 'languageMenu' : false, 'openonkibutton' : false, 'showCaptions' : true})" id="ysoSearch"/> 
+
+		<br/>
+		<input type="submit"/>
+
+	</t:form>
+	
+</html>
