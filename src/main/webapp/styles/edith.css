@@ -261,4 +261,10 @@ a.ELSEWHERE {
     padding: 12px;
 }
 
-.jqmOverlay { background-color: #000; }
+.jqmOverlay { 
+	background-color: #000; 
+}
+
+#conceptsList a {
+	margin-left: 0.2em;
+}

@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,12 +21,16 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mysema.rdfbean.TEST;
+import com.mysema.rdfbean.model.UID;
+
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.OntologyConcept;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.ui.services.AdminService;
@@ -131,6 +136,32 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Note note = noteRepository.find("foobar");
         assertNotNull(note);
     }
+    
+    @Test
+    public void Save_Note_with_OntologyConcepts(){
+        Document document = documentRepository.getDocumentForPath(testDocument);
+        noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "lid1234", "foobar");
+        Note note = noteRepository.find("foobar");
+        
+        // save with one concept
+        OntologyConcept concept = new OntologyConcept(new UID(TEST.NS), "XXX");
+        note.setConcepts(Collections.singleton(concept));
+        noteRepository.save(note);
+        
+        note = noteRepository.find("foobar");
+        assertEquals(1, note.getConcepts().size());
+        assertEquals("XXX", note.getConcepts().iterator().next().getLabel());
+        
+        // resave with other concept
+        concept = new OntologyConcept(new UID(TEST.NS), "Y");
+        note.setConcepts(Collections.singleton(concept));
+        noteRepository.save(note);
+        
+        note = noteRepository.find("foobar");
+        assertEquals(1, note.getConcepts().size());
+        assertEquals("Y", note.getConcepts().iterator().next().getLabel());
+    }
+    
 
     @Test
     public void importNote() throws Exception {

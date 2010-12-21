@@ -271,12 +271,40 @@
 					<div id="longTextEdit">${noteOnEdit.longText}</div>
 				</div>
 			</div>
+			
+			<div>
+				<div>
+					<strong>${message:onki-concepts-label}</strong>
+				</div>
+				<div>
+					<ul id="conceptsList" xmlns:dc="http://purl.org/dc/elements/1.1/">
+						<t:loop source="noteOnEdit.note.concepts" volatile="true" value="concept">
+							<li about="${concept.id.value}">
+	    						<span property="dc:title">${concept.label}</span><a href="#">poista</a>
+	    					</li>
+						</t:loop>	    				
+					</ul>
+					
+					<input onkeyup="onki['yso'].search({
+						'addConceptFunction' : addConcept,
+						'fetchLabels' : true, 
+						'languageMenu' : false, 
+						'openonkibutton' : false, 
+						'showCaptions' : true})" id="ysoSearch"/>
+						
+					<script type="text/javascript">
+						initOnki();
+					</script>	
+						
+				</div>
+			</div>
 
 			<t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection" />
 			<t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId" />
 			<t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId" />
 			<t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
 			<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
+			<t:hidden t:id="concepts" value="conceptsString" />
 
 			<input type="submit" value="${message:saveNote}" />
             <label><t:checkbox t:id="saveAsNew" name="saveAsNew" value="saveAsNew" />${message:saveAsNew}</label>

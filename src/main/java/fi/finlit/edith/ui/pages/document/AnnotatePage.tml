@@ -3,6 +3,8 @@
 
 	<p:title>${document.title}</p:title>
 
+	<script type="text/javascript" src="http://www.yso.fi/onki.js?16dda293819ef4024af5104146628102"></script>
+	
 	<div class="content">
 		<t:zone t:id="documentZone" update="show">
 			<t:delegate to="documentView" />

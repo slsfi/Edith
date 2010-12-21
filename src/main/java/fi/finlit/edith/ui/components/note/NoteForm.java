@@ -22,7 +22,22 @@ import org.apache.tapestry5.util.EnumSelectModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.*;
+import com.mysema.rdfbean.model.UID;
+
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.NoteStatus;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.OntologyConcept;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
@@ -157,6 +172,12 @@ public class NoteForm {
     @Property
     @Parameter
     private SelectedText updateLongTextSelection;
+    
+    @Property
+    private String conceptsString;
+    
+    @Property
+    private OntologyConcept concept;
 
     public String getDescription() {
         if (noteOnEdit.getNote().getDescription() == null) {
@@ -365,6 +386,19 @@ public class NoteForm {
                 noteOnEdit.setSVNRevision(documentRevision.getRevision());
             }
         }
+        
+        // create conceptsString
+        if (!noteOnEdit.getNote().getConcepts().isEmpty()){
+            StringBuilder builder = new StringBuilder();
+            for (OntologyConcept c : noteOnEdit.getNote().getConcepts()){
+                if (builder.length() > 0){
+                    builder.append(";");
+                }
+                builder.append(c.getId().getId() + "," + c.getLabel());
+            }
+            conceptsString = builder.toString();
+        }
+        
         if (!isPerson()) {
             setPerson(noteOnEdit.getNote().getPerson());
         }
@@ -372,6 +406,7 @@ public class NoteForm {
             setPlace(noteOnEdit.getNote().getPlace());
         }
         termOnEdit = getEditTerm(noteOnEdit.getNote());
+                
     }
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
@@ -390,6 +425,15 @@ public class NoteForm {
         DocumentNote documentNote;
         noteOnEdit.getNote().setPerson(getPerson());
         noteOnEdit.getNote().setPlace(getPlace());
+        
+        if (!StringUtils.isEmpty(conceptsString)){
+            Set<OntologyConcept> c = new HashSet<OntologyConcept>();
+            for (String uriAndLabel : conceptsString.split(";")){
+                String[] splitted = uriAndLabel.split(",");
+                c.add(new OntologyConcept(new UID(splitted[0]), splitted[1]));
+            }
+            noteOnEdit.getNote().setConcepts(c);
+        }
 
         logger.info("onSuccessFromNoteEditForm begins with documentNote " + noteOnEdit + ", note "
                 + noteOnEdit.getNote());
@@ -426,11 +470,13 @@ public class NoteForm {
         if (documentNote.getSVNRevision() > documentRevision.getRevision()) {
             documentRevision.setRevision(documentNote.getSVNRevision());
         }
+        
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
         comments = noteOnEdit.getNote().getComments();
         submitSuccess = true;
+        
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
                 .add("documentZone", documentView).add("commentZone", commentZone.getBody());
     }

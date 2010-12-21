@@ -9,7 +9,7 @@
 
 <http://www.finlit.fi/semantics/edith/#-ParagraphElement-TypedList> a owl:Class ;
 	rdfs:label "-ParagraphElement-TypedList" ;
-	rdfs:subClassOf rdf:List , _:node16ffloix38 , _:node16ffloix39 .
+	rdfs:subClassOf rdf:List , _:node1n9v5psx40 , _:node1n9v5psx41 .
 
 edith:Admin <http://semantics.mysema.com/core#enumOrdinal> "0"^^xsd:int ;
 	a edith:Profile , rdfs:Resource .
@@ -25,13 +25,13 @@ edith:DRAFT <http://semantics.mysema.com/core#enumOrdinal> "1"^^xsd:int ;
 
 edith:Document a owl:Class ;
 	rdfs:label "Document" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix1 , _:node16ffloix2 , _:node16ffloix3 , _:node16ffloix4 , _:node16ffloix5 , _:node16ffloix6 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx1 , _:node1n9v5psx2 , _:node1n9v5psx3 , _:node1n9v5psx4 , _:node1n9v5psx5 , _:node1n9v5psx6 .
 
 edith:DocumentNote a owl:Class ;
 	rdfs:label "DocumentNote" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix100 , _:node16ffloix101 , _:node16ffloix102 , _:node16ffloix103 , _:node16ffloix104 , _:node16ffloix105 , _:node16ffloix106 , _:node16ffloix107 , _:node16ffloix94 , _:node16ffloix95 , _:node16ffloix96 , _:node16ffloix97 , _:node16ffloix98 , _:node16ffloix99 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx101 , _:node1n9v5psx102 , _:node1n9v5psx103 , _:node1n9v5psx104 , _:node1n9v5psx105 , _:node1n9v5psx106 , _:node1n9v5psx107 , _:node1n9v5psx108 , _:node1n9v5psx109 , _:node1n9v5psx110 , _:node1n9v5psx111 , _:node1n9v5psx112 , _:node1n9v5psx113 , _:node1n9v5psx114 , _:node1n9v5psx115 , _:node1n9v5psx116 .
 
-edith:FINISHED <http://semantics.mysema.com/core#enumOrdinal> "3"^^xsd:int ;
+edith:FINISHED <http://semantics.mysema.com/core#enumOrdinal> "2"^^xsd:int ;
 	a edith:NoteStatus , rdfs:Resource .
 
 edith:FINNISH <http://semantics.mysema.com/core#enumOrdinal> "0"^^xsd:int ;
@@ -48,47 +48,51 @@ edith:Identifiable a owl:Class ;
 
 edith:Interval a owl:Class ;
 	rdfs:label "Interval" ;
-	rdfs:subClassOf _:node16ffloix17 , _:node16ffloix18 , _:node16ffloix19 , _:node16ffloix20 .
+	rdfs:subClassOf _:node1n9v5psx17 , _:node1n9v5psx18 , _:node1n9v5psx19 , _:node1n9v5psx20 .
 
 edith:LITERARY <http://semantics.mysema.com/core#enumOrdinal> "1"^^xsd:int ;
 	a edith:NoteType , rdfs:Resource .
 
-edith:LOCKED_FOR_EDIT <http://semantics.mysema.com/core#enumOrdinal> "2"^^xsd:int ;
-	a edith:NoteStatus , rdfs:Resource .
-
 edith:LinkElement a owl:Class ;
 	rdfs:label "LinkElement" ;
-	rdfs:subClassOf edith:Identifiable , edith:ParagraphElement , _:node16ffloix40 , _:node16ffloix41 , _:node16ffloix42 , _:node16ffloix43 .
+	rdfs:subClassOf edith:Identifiable , edith:ParagraphElement , _:node1n9v5psx42 , _:node1n9v5psx43 , _:node1n9v5psx44 , _:node1n9v5psx45 .
 
 edith:NOTE <http://semantics.mysema.com/core#enumOrdinal> "0"^^xsd:int ;
 	a edith:NoteFormat , rdfs:Resource .
 
 edith:NameForm a owl:Class ;
 	rdfs:label "NameForm" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix10 , _:node16ffloix11 , _:node16ffloix12 , _:node16ffloix13 , _:node16ffloix8 , _:node16ffloix9 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx10 , _:node1n9v5psx11 , _:node1n9v5psx12 , _:node1n9v5psx13 , _:node1n9v5psx8 , _:node1n9v5psx9 .
 
 edith:Note a owl:Class ;
 	rdfs:label "Note" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix55 , _:node16ffloix56 , _:node16ffloix57 , _:node16ffloix58 , _:node16ffloix59 , _:node16ffloix60 , _:node16ffloix61 , _:node16ffloix64 , _:node16ffloix65 , _:node16ffloix66 , _:node16ffloix67 , _:node16ffloix68 , _:node16ffloix69 , _:node16ffloix70 , _:node16ffloix71 , _:node16ffloix72 , _:node16ffloix73 , _:node16ffloix74 , _:node16ffloix75 , _:node16ffloix76 , _:node16ffloix77 , _:node16ffloix78 , _:node16ffloix79 , _:node16ffloix80 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx59 , _:node1n9v5psx60 , _:node1n9v5psx61 , _:node1n9v5psx62 , _:node1n9v5psx63 , _:node1n9v5psx64 , _:node1n9v5psx65 , _:node1n9v5psx68 , _:node1n9v5psx69 , _:node1n9v5psx70 , _:node1n9v5psx71 , _:node1n9v5psx72 , _:node1n9v5psx73 , _:node1n9v5psx74 , _:node1n9v5psx75 , _:node1n9v5psx76 , _:node1n9v5psx77 , _:node1n9v5psx78 , _:node1n9v5psx79 , _:node1n9v5psx80 , _:node1n9v5psx81 , _:node1n9v5psx82 , _:node1n9v5psx83 , _:node1n9v5psx84 , _:node1n9v5psx85 , _:node1n9v5psx86 , _:node1n9v5psx92 .
 
 edith:NoteComment a owl:Class ;
 	rdfs:label "NoteComment" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix86 , _:node16ffloix87 , _:node16ffloix88 , _:node16ffloix89 , _:node16ffloix90 , _:node16ffloix91 , _:node16ffloix92 , _:node16ffloix93 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx100 , _:node1n9v5psx93 , _:node1n9v5psx94 , _:node1n9v5psx95 , _:node1n9v5psx96 , _:node1n9v5psx97 , _:node1n9v5psx98 , _:node1n9v5psx99 .
 
 edith:NoteFormat a owl:Class ;
 	rdfs:label "NoteFormat" ;
-	owl:oneOf _:node16ffloix50 .
+	owl:oneOf _:node1n9v5psx52 .
 
 edith:NoteStatus a owl:Class ;
 	rdfs:label "NoteStatus" ;
-	owl:oneOf _:node16ffloix24 .
+	owl:oneOf _:node1n9v5psx24 .
 
 edith:NoteType a owl:Class ;
 	rdfs:label "NoteType" ;
-	owl:oneOf _:node16ffloix81 .
+	owl:oneOf _:node1n9v5psx87 .
 
 edith:OTHER <http://semantics.mysema.com/core#enumOrdinal> "2"^^xsd:int ;
 	a edith:TermLanguage , rdfs:Resource .
+
+edith:Ontology a owl:Class ;
+	rdfs:label "Ontology" .
+
+edith:OntologyConcept a owl:Class ;
+	rdfs:label "OntologyConcept" ;
+	rdfs:subClassOf _:node1n9v5psx55 , _:node1n9v5psx56 .
 
 edith:PERSON <http://semantics.mysema.com/core#enumOrdinal> "2"^^xsd:int ;
 	a edith:NoteFormat , rdfs:Resource .
@@ -96,47 +100,48 @@ edith:PERSON <http://semantics.mysema.com/core#enumOrdinal> "2"^^xsd:int ;
 edith:PLACE <http://semantics.mysema.com/core#enumOrdinal> "1"^^xsd:int ;
 	a edith:NoteFormat , rdfs:Resource .
 
-edith:PUBLISHABLE <http://semantics.mysema.com/core#enumOrdinal> "4"^^xsd:int ;
-	a edith:NoteStatus , rdfs:Resource .
-
 edith:Paragraph a owl:Class ;
 	rdfs:label "Paragraph" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix37 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx39 .
 
 edith:ParagraphElement a owl:Class ;
 	rdfs:label "ParagraphElement" .
 
 edith:Person a owl:Class ;
 	rdfs:label "Person" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix14 , _:node16ffloix15 , _:node16ffloix16 , _:node16ffloix21 , _:node16ffloix22 , _:node16ffloix23 , _:node16ffloix7 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx14 , _:node1n9v5psx15 , _:node1n9v5psx16 , _:node1n9v5psx21 , _:node1n9v5psx22 , _:node1n9v5psx23 , _:node1n9v5psx7 .
 
 edith:Place a owl:Class ;
 	rdfs:label "Place" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix29 , _:node16ffloix30 , _:node16ffloix31 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx27 , _:node1n9v5psx28 , _:node1n9v5psx29 .
 
 edith:Profile a owl:Class ;
 	rdfs:label "Profile" ;
-	owl:oneOf _:node16ffloix53 .
+	owl:oneOf _:node1n9v5psx57 .
 
 edith:SWEDISH <http://semantics.mysema.com/core#enumOrdinal> "1"^^xsd:int ;
 	a edith:TermLanguage , rdfs:Resource .
 
 edith:StringElement a owl:Class ;
 	rdfs:label "StringElement" ;
-	rdfs:subClassOf edith:Identifiable , edith:ParagraphElement , _:node16ffloix35 , _:node16ffloix36 .
+	rdfs:subClassOf edith:Identifiable , edith:ParagraphElement , _:node1n9v5psx37 , _:node1n9v5psx38 .
 
 edith:Term a owl:Class ;
 	rdfs:label "Term" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix44 , _:node16ffloix45 , _:node16ffloix46 , _:node16ffloix47 , _:node16ffloix48 , _:node16ffloix49 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx46 , _:node1n9v5psx47 , _:node1n9v5psx48 , _:node1n9v5psx49 , _:node1n9v5psx50 , _:node1n9v5psx51 .
 
 edith:TermLanguage a owl:Class ;
 	rdfs:label "TermLanguage" ;
-	owl:oneOf _:node16ffloix32 .
+	owl:oneOf _:node1n9v5psx30 .
+
+edith:UrlElement a owl:Class ;
+	rdfs:label "UrlElement" ;
+	rdfs:subClassOf edith:Identifiable , edith:ParagraphElement , _:node1n9v5psx33 , _:node1n9v5psx34 , _:node1n9v5psx35 , _:node1n9v5psx36 .
 
 edith:User <http://semantics.mysema.com/core#enumOrdinal> "1"^^xsd:int ;
 	a edith:Profile , rdfs:Resource , owl:Class ;
 	rdfs:label "User" ;
-	rdfs:subClassOf edith:Identifiable , _:node16ffloix62 , _:node16ffloix63 .
+	rdfs:subClassOf edith:Identifiable , _:node1n9v5psx66 , _:node1n9v5psx67 .
 
 edith:WORD_EXPLANATION <http://semantics.mysema.com/core#enumOrdinal> "0"^^xsd:int ;
 	a edith:NoteType , rdfs:Resource .
@@ -149,6 +154,9 @@ edith:basicForm a owl:DatatypeProperty ;
 
 edith:commentOf a owl:ObjectProperty ;
 	rdfs:label "commentOf" .
+
+edith:concept a owl:ObjectProperty ;
+	rdfs:label "concept" .
 
 edith:createdAt a owl:DatatypeProperty ;
 	rdfs:label "createdAt" .
@@ -167,6 +175,9 @@ edith:description a owl:DatatypeProperty ;
 
 edith:document a owl:ObjectProperty ;
 	rdfs:label "document" .
+
+edith:editedOn a owl:DatatypeProperty ;
+	rdfs:label "editedOn" .
 
 edith:elements a owl:ObjectProperty ;
 	rdfs:label "elements" ;
@@ -214,6 +225,9 @@ edith:normalizedForm a owl:ObjectProperty ;
 edith:note a owl:ObjectProperty ;
 	rdfs:label "note" .
 
+edith:ontology a owl:ObjectProperty ;
+	rdfs:label "ontology" .
+
 edith:otherForms a owl:ObjectProperty ;
 	rdfs:label "otherForms" .
 
@@ -222,6 +236,9 @@ edith:person a owl:ObjectProperty ;
 
 edith:place a owl:ObjectProperty ;
 	rdfs:label "place" .
+
+edith:publishable a owl:DatatypeProperty ;
+	rdfs:label "publishable" .
 
 edith:reference a owl:DatatypeProperty ;
 	rdfs:label "reference" .
@@ -238,7 +255,7 @@ edith:status a owl:ObjectProperty ;
 edith:string a owl:DatatypeProperty ;
 	rdfs:label "string" .
 
-edith:subtextSources a owl:DatatypeProperty ;
+edith:subtextSources a owl:ObjectProperty ;
 	rdfs:label "subtextSources" .
 
 edith:svnPath a owl:DatatypeProperty ;
@@ -262,433 +279,472 @@ edith:title a owl:DatatypeProperty ;
 edith:types a owl:ObjectProperty ;
 	rdfs:label "types" .
 
+edith:url a owl:DatatypeProperty ;
+	rdfs:label "url" .
+
 edith:username a owl:DatatypeProperty ;
 	rdfs:label "username" .
 
-_:node16ffloix1 a owl:Restriction ;
+_:node1n9v5psx1 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:description .
 
-_:node16ffloix10 a owl:Restriction ;
+_:node1n9v5psx10 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:first .
 
-_:node16ffloix100 a owl:Restriction ;
+_:node1n9v5psx100 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:commentOf .
+
+_:node1n9v5psx101 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:localId .
+
+_:node1n9v5psx102 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:localId .
+
+_:node1n9v5psx103 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:longText .
+
+_:node1n9v5psx104 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:longText .
+
+_:node1n9v5psx105 a owl:Restriction ;
+	owl:allValuesFrom xsd:long ;
+	owl:onProperty edith:svnRevision .
+
+_:node1n9v5psx106 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:svnRevision .
+
+_:node1n9v5psx107 a owl:Restriction ;
 	owl:allValuesFrom xsd:boolean ;
 	owl:onProperty edith:deleted .
 
-_:node16ffloix101 a owl:Restriction ;
+_:node1n9v5psx108 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:deleted .
 
-_:node16ffloix102 a owl:Restriction ;
+_:node1n9v5psx109 a owl:Restriction ;
 	owl:allValuesFrom xsd:long ;
 	owl:onProperty edith:createdOn .
 
-_:node16ffloix103 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:createdOn .
-
-_:node16ffloix104 a owl:Restriction ;
-	owl:allValuesFrom edith:Document ;
-	owl:onProperty edith:document .
-
-_:node16ffloix105 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:document .
-
-_:node16ffloix106 a owl:Restriction ;
-	owl:allValuesFrom edith:Note ;
-	owl:onProperty edith:note .
-
-_:node16ffloix107 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:note .
-
-_:node16ffloix11 a owl:Restriction ;
+_:node1n9v5psx11 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:first .
 
-_:node16ffloix12 a owl:Restriction ;
+_:node1n9v5psx110 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:createdOn .
+
+_:node1n9v5psx111 a owl:Restriction ;
+	owl:allValuesFrom xsd:boolean ;
+	owl:onProperty edith:publishable .
+
+_:node1n9v5psx112 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:publishable .
+
+_:node1n9v5psx113 a owl:Restriction ;
+	owl:allValuesFrom edith:Document ;
+	owl:onProperty edith:document .
+
+_:node1n9v5psx114 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:document .
+
+_:node1n9v5psx115 a owl:Restriction ;
+	owl:allValuesFrom edith:Note ;
+	owl:onProperty edith:note .
+
+_:node1n9v5psx116 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:note .
+
+_:node1n9v5psx12 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:last .
 
-_:node16ffloix13 a owl:Restriction ;
+_:node1n9v5psx13 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:last .
 
-_:node16ffloix14 a owl:Restriction ;
+_:node1n9v5psx14 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:normalizedForm .
 
-_:node16ffloix15 a owl:Restriction ;
+_:node1n9v5psx15 a owl:Restriction ;
 	owl:allValuesFrom edith:NameForm ;
 	owl:onProperty edith:otherForms .
 
-_:node16ffloix16 a owl:Restriction ;
+_:node1n9v5psx16 a owl:Restriction ;
 	owl:allValuesFrom edith:Interval ;
 	owl:onProperty edith:timeOfBirth .
 
-_:node16ffloix17 a owl:Restriction ;
+_:node1n9v5psx17 a owl:Restriction ;
 	owl:allValuesFrom xsd:dateTime ;
 	owl:onProperty edith:start .
 
-_:node16ffloix18 a owl:Restriction ;
+_:node1n9v5psx18 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:start .
 
-_:node16ffloix19 a owl:Restriction ;
+_:node1n9v5psx19 a owl:Restriction ;
 	owl:allValuesFrom xsd:dateTime ;
 	owl:onProperty edith:end .
 
-_:node16ffloix2 a owl:Restriction ;
+_:node1n9v5psx2 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:description .
 
-_:node16ffloix20 a owl:Restriction ;
+_:node1n9v5psx20 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:end .
 
-_:node16ffloix21 a owl:Restriction ;
+_:node1n9v5psx21 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:timeOfBirth .
 
-_:node16ffloix22 a owl:Restriction ;
+_:node1n9v5psx22 a owl:Restriction ;
 	owl:allValuesFrom edith:Interval ;
 	owl:onProperty edith:timeOfDeath .
 
-_:node16ffloix23 a owl:Restriction ;
+_:node1n9v5psx23 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:timeOfDeath .
 
-_:node16ffloix24 rdf:first edith:INITIAL ;
-	rdf:rest _:node16ffloix25 ;
+_:node1n9v5psx24 rdf:first edith:INITIAL ;
+	rdf:rest _:node1n9v5psx25 ;
 	a rdf:List .
 
-_:node16ffloix25 rdf:first edith:DRAFT ;
-	rdf:rest _:node16ffloix26 ;
+_:node1n9v5psx25 rdf:first edith:DRAFT ;
+	rdf:rest _:node1n9v5psx26 ;
 	a rdf:List .
 
-_:node16ffloix26 rdf:first edith:LOCKED_FOR_EDIT ;
-	rdf:rest _:node16ffloix27 ;
-	a rdf:List .
-
-_:node16ffloix27 rdf:first edith:FINISHED ;
-	rdf:rest _:node16ffloix28 ;
-	a rdf:List .
-
-_:node16ffloix28 rdf:first edith:PUBLISHABLE ;
+_:node1n9v5psx26 rdf:first edith:FINISHED ;
 	rdf:rest rdf:nil ;
 	a rdf:List .
 
-_:node16ffloix29 a owl:Restriction ;
+_:node1n9v5psx27 a owl:Restriction ;
 	owl:allValuesFrom edith:NameForm ;
 	owl:onProperty edith:normalizedForm .
 
-_:node16ffloix3 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:svnPath .
-
-_:node16ffloix30 a owl:Restriction ;
+_:node1n9v5psx28 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:normalizedForm .
 
-_:node16ffloix31 a owl:Restriction ;
+_:node1n9v5psx29 a owl:Restriction ;
 	owl:allValuesFrom edith:NameForm ;
 	owl:onProperty edith:otherForms .
 
-_:node16ffloix32 rdf:first edith:FINNISH ;
-	rdf:rest _:node16ffloix33 ;
+_:node1n9v5psx3 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:svnPath .
+
+_:node1n9v5psx30 rdf:first edith:FINNISH ;
+	rdf:rest _:node1n9v5psx31 ;
 	a rdf:List .
 
-_:node16ffloix33 rdf:first edith:SWEDISH ;
-	rdf:rest _:node16ffloix34 ;
+_:node1n9v5psx31 rdf:first edith:SWEDISH ;
+	rdf:rest _:node1n9v5psx32 ;
 	a rdf:List .
 
-_:node16ffloix34 rdf:first edith:OTHER ;
+_:node1n9v5psx32 rdf:first edith:OTHER ;
 	rdf:rest rdf:nil ;
 	a rdf:List .
 
-_:node16ffloix35 a owl:Restriction ;
+_:node1n9v5psx33 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:string .
 
-_:node16ffloix36 a owl:Restriction ;
+_:node1n9v5psx34 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:string .
 
-_:node16ffloix37 a owl:Restriction ;
+_:node1n9v5psx35 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:url .
+
+_:node1n9v5psx36 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:url .
+
+_:node1n9v5psx37 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:string .
+
+_:node1n9v5psx38 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:string .
+
+_:node1n9v5psx39 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:elements .
 
-_:node16ffloix38 a owl:Restriction ;
-	owl:allValuesFrom edith:ParagraphElement ;
-	owl:onProperty rdf:first .
-
-_:node16ffloix39 a owl:Restriction ;
-	owl:allValuesFrom <http://www.finlit.fi/semantics/edith/#-ParagraphElement-TypedList> ;
-	owl:onProperty rdf:rest .
-
-_:node16ffloix4 a owl:Restriction ;
+_:node1n9v5psx4 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:svnPath .
 
-_:node16ffloix40 a owl:Restriction ;
+_:node1n9v5psx40 a owl:Restriction ;
+	owl:allValuesFrom edith:ParagraphElement ;
+	owl:onProperty rdf:first .
+
+_:node1n9v5psx41 a owl:Restriction ;
+	owl:allValuesFrom <http://www.finlit.fi/semantics/edith/#-ParagraphElement-TypedList> ;
+	owl:onProperty rdf:rest .
+
+_:node1n9v5psx42 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:string .
 
-_:node16ffloix41 a owl:Restriction ;
+_:node1n9v5psx43 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:string .
 
-_:node16ffloix42 a owl:Restriction ;
+_:node1n9v5psx44 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:reference .
 
-_:node16ffloix43 a owl:Restriction ;
+_:node1n9v5psx45 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:reference .
 
-_:node16ffloix44 a owl:Restriction ;
+_:node1n9v5psx46 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:basicForm .
 
-_:node16ffloix45 a owl:Restriction ;
+_:node1n9v5psx47 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:basicForm .
 
-_:node16ffloix46 a owl:Restriction ;
+_:node1n9v5psx48 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:meaning .
 
-_:node16ffloix47 a owl:Restriction ;
+_:node1n9v5psx49 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:meaning .
 
-_:node16ffloix48 a owl:Restriction ;
+_:node1n9v5psx5 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:title .
+
+_:node1n9v5psx50 a owl:Restriction ;
 	owl:allValuesFrom edith:TermLanguage ;
 	owl:onProperty edith:language .
 
-_:node16ffloix49 a owl:Restriction ;
+_:node1n9v5psx51 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:language .
 
-_:node16ffloix5 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:title .
-
-_:node16ffloix50 rdf:first edith:NOTE ;
-	rdf:rest _:node16ffloix51 ;
+_:node1n9v5psx52 rdf:first edith:NOTE ;
+	rdf:rest _:node1n9v5psx53 ;
 	a rdf:List .
 
-_:node16ffloix51 rdf:first edith:PLACE ;
-	rdf:rest _:node16ffloix52 ;
+_:node1n9v5psx53 rdf:first edith:PLACE ;
+	rdf:rest _:node1n9v5psx54 ;
 	a rdf:List .
 
-_:node16ffloix52 rdf:first edith:PERSON ;
+_:node1n9v5psx54 rdf:first edith:PERSON ;
 	rdf:rest rdf:nil ;
 	a rdf:List .
 
-_:node16ffloix53 rdf:first edith:Admin ;
-	rdf:rest _:node16ffloix54 ;
+_:node1n9v5psx55 a owl:Restriction ;
+	owl:allValuesFrom edith:Ontology ;
+	owl:onProperty edith:ontology .
+
+_:node1n9v5psx56 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:ontology .
+
+_:node1n9v5psx57 rdf:first edith:Admin ;
+	rdf:rest _:node1n9v5psx58 ;
 	a rdf:List .
 
-_:node16ffloix54 rdf:first edith:User ;
+_:node1n9v5psx58 rdf:first edith:User ;
 	rdf:rest rdf:nil ;
 	a rdf:List .
 
-_:node16ffloix55 a owl:Restriction ;
+_:node1n9v5psx59 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:lemma .
 
-_:node16ffloix56 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:lemma .
-
-_:node16ffloix57 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:lemmaMeaning .
-
-_:node16ffloix58 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:lemmaMeaning .
-
-_:node16ffloix59 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:subtextSources .
-
-_:node16ffloix6 a owl:Restriction ;
+_:node1n9v5psx6 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:title .
 
-_:node16ffloix60 a owl:Restriction ;
+_:node1n9v5psx60 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:subtextSources .
+	owl:onProperty edith:lemma .
 
-_:node16ffloix61 a owl:Restriction ;
+_:node1n9v5psx61 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:lemmaMeaning .
+
+_:node1n9v5psx62 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:lemmaMeaning .
+
+_:node1n9v5psx63 a owl:Restriction ;
+	owl:allValuesFrom xsd:long ;
+	owl:onProperty edith:editedOn .
+
+_:node1n9v5psx64 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:editedOn .
+
+_:node1n9v5psx65 a owl:Restriction ;
 	owl:allValuesFrom edith:User ;
 	owl:onProperty edith:allEditors .
 
-_:node16ffloix62 a owl:Restriction ;
+_:node1n9v5psx66 a owl:Restriction ;
 	owl:allValuesFrom xsd:string ;
 	owl:onProperty edith:username .
 
-_:node16ffloix63 a owl:Restriction ;
+_:node1n9v5psx67 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:username .
 
-_:node16ffloix64 a owl:Restriction ;
+_:node1n9v5psx68 a owl:Restriction ;
 	owl:allValuesFrom edith:Paragraph ;
 	owl:onProperty edith:desc .
 
-_:node16ffloix65 a owl:Restriction ;
+_:node1n9v5psx69 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:desc .
 
-_:node16ffloix66 a owl:Restriction ;
-	owl:allValuesFrom edith:NoteFormat ;
-	owl:onProperty edith:format .
-
-_:node16ffloix67 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:format .
-
-_:node16ffloix68 a owl:Restriction ;
-	owl:allValuesFrom edith:User ;
-	owl:onProperty edith:lastEditedBy .
-
-_:node16ffloix69 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:lastEditedBy .
-
-_:node16ffloix7 a owl:Restriction ;
+_:node1n9v5psx7 a owl:Restriction ;
 	owl:allValuesFrom edith:NameForm ;
 	owl:onProperty edith:normalizedForm .
 
-_:node16ffloix70 a owl:Restriction ;
+_:node1n9v5psx70 a owl:Restriction ;
+	owl:allValuesFrom edith:NoteFormat ;
+	owl:onProperty edith:format .
+
+_:node1n9v5psx71 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:format .
+
+_:node1n9v5psx72 a owl:Restriction ;
+	owl:allValuesFrom edith:User ;
+	owl:onProperty edith:lastEditedBy .
+
+_:node1n9v5psx73 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:lastEditedBy .
+
+_:node1n9v5psx74 a owl:Restriction ;
 	owl:allValuesFrom edith:Person ;
 	owl:onProperty edith:person .
 
-_:node16ffloix71 a owl:Restriction ;
+_:node1n9v5psx75 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:person .
 
-_:node16ffloix72 a owl:Restriction ;
+_:node1n9v5psx76 a owl:Restriction ;
 	owl:allValuesFrom edith:Place ;
 	owl:onProperty edith:place .
 
-_:node16ffloix73 a owl:Restriction ;
+_:node1n9v5psx77 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:place .
 
-_:node16ffloix74 a owl:Restriction ;
+_:node1n9v5psx78 a owl:Restriction ;
 	owl:allValuesFrom edith:Paragraph ;
 	owl:onProperty edith:sources .
 
-_:node16ffloix75 a owl:Restriction ;
+_:node1n9v5psx79 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:sources .
 
-_:node16ffloix76 a owl:Restriction ;
+_:node1n9v5psx8 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:description .
+
+_:node1n9v5psx80 a owl:Restriction ;
 	owl:allValuesFrom edith:NoteStatus ;
 	owl:onProperty edith:status .
 
-_:node16ffloix77 a owl:Restriction ;
+_:node1n9v5psx81 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:status .
 
-_:node16ffloix78 a owl:Restriction ;
+_:node1n9v5psx82 a owl:Restriction ;
+	owl:allValuesFrom edith:Paragraph ;
+	owl:onProperty edith:subtextSources .
+
+_:node1n9v5psx83 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:subtextSources .
+
+_:node1n9v5psx84 a owl:Restriction ;
 	owl:allValuesFrom edith:Term ;
 	owl:onProperty edith:term .
 
-_:node16ffloix79 a owl:Restriction ;
+_:node1n9v5psx85 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:term .
 
-_:node16ffloix8 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:description .
-
-_:node16ffloix80 a owl:Restriction ;
+_:node1n9v5psx86 a owl:Restriction ;
 	owl:allValuesFrom edith:NoteType ;
 	owl:onProperty edith:types .
 
-_:node16ffloix81 rdf:first edith:WORD_EXPLANATION ;
-	rdf:rest _:node16ffloix82 ;
+_:node1n9v5psx87 rdf:first edith:WORD_EXPLANATION ;
+	rdf:rest _:node1n9v5psx88 ;
 	a rdf:List .
 
-_:node16ffloix82 rdf:first edith:LITERARY ;
-	rdf:rest _:node16ffloix83 ;
+_:node1n9v5psx88 rdf:first edith:LITERARY ;
+	rdf:rest _:node1n9v5psx89 ;
 	a rdf:List .
 
-_:node16ffloix83 rdf:first edith:HISTORICAL ;
-	rdf:rest _:node16ffloix84 ;
+_:node1n9v5psx89 rdf:first edith:HISTORICAL ;
+	rdf:rest _:node1n9v5psx90 ;
 	a rdf:List .
 
-_:node16ffloix84 rdf:first edith:DICTUM ;
-	rdf:rest _:node16ffloix85 ;
-	a rdf:List .
-
-_:node16ffloix85 rdf:first edith:CRITIQUE ;
-	rdf:rest rdf:nil ;
-	a rdf:List .
-
-_:node16ffloix86 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:message .
-
-_:node16ffloix87 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:message .
-
-_:node16ffloix88 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:username .
-
-_:node16ffloix89 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:username .
-
-_:node16ffloix9 a owl:Restriction ;
+_:node1n9v5psx9 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:description .
 
-_:node16ffloix90 a owl:Restriction ;
+_:node1n9v5psx90 rdf:first edith:DICTUM ;
+	rdf:rest _:node1n9v5psx91 ;
+	a rdf:List .
+
+_:node1n9v5psx91 rdf:first edith:CRITIQUE ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:node1n9v5psx92 a owl:Restriction ;
+	owl:allValuesFrom edith:OntologyConcept ;
+	owl:onProperty edith:concept .
+
+_:node1n9v5psx93 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:message .
+
+_:node1n9v5psx94 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:message .
+
+_:node1n9v5psx95 a owl:Restriction ;
+	owl:allValuesFrom xsd:string ;
+	owl:onProperty edith:username .
+
+_:node1n9v5psx96 a owl:Restriction ;
+	owl:maxCardinality "1"^^xsd:int ;
+	owl:onProperty edith:username .
+
+_:node1n9v5psx97 a owl:Restriction ;
 	owl:allValuesFrom xsd:dateTime ;
 	owl:onProperty edith:createdAt .
 
-_:node16ffloix91 a owl:Restriction ;
+_:node1n9v5psx98 a owl:Restriction ;
 	owl:maxCardinality "1"^^xsd:int ;
 	owl:onProperty edith:createdAt .
 
-_:node16ffloix92 a owl:Restriction ;
+_:node1n9v5psx99 a owl:Restriction ;
 	owl:allValuesFrom edith:Note ;
 	owl:onProperty edith:commentOf .
-
-_:node16ffloix93 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:commentOf .
-
-_:node16ffloix94 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:localId .
-
-_:node16ffloix95 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:localId .
-
-_:node16ffloix96 a owl:Restriction ;
-	owl:allValuesFrom xsd:string ;
-	owl:onProperty edith:longText .
-
-_:node16ffloix97 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:longText .
-
-_:node16ffloix98 a owl:Restriction ;
-	owl:allValuesFrom xsd:long ;
-	owl:onProperty edith:svnRevision .
-
-_:node16ffloix99 a owl:Restriction ;
-	owl:maxCardinality "1"^^xsd:int ;
-	owl:onProperty edith:svnRevision .

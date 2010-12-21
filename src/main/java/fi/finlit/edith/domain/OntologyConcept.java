@@ -21,6 +21,13 @@ public class OntologyConcept {
     @Predicate
     private Ontology ontology;
     
+    public OntologyConcept() {}
+    
+    public OntologyConcept(UID id, String label) {
+        this.id = id;
+        this.label = label;
+    }    
+    
     public UID getId() {
         return id;
     }

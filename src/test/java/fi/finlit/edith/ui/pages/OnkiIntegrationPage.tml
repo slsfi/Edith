@@ -5,14 +5,27 @@
 	
 	<t:form id="form">
 
-		<select multiple="true" id="concepts" style="width:10em;height:5em;">
-			<option value="http://www.yso.fi/onto/yso/p19378 yso:kissa">yso:kissa</option>
-			<option value="http://www.yso.fi/onto/yso/p5319 yso:koira">yso:koira</option>
-		</select>
-
+	    <ul id="conceptsList" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	    	<li about="http://www.yso.fi/onto/yso/p19378">
+	    		<span property="dc:title">yso:kissa</span><a href="#">poista</a>
+	    	</li>
+	    		
+	    	<li about="http://www.yso.fi/onto/yso/p5319">
+	    		<span property="dc:title">yso:koira</span><a href="#">poista</a>
+	    	</li>
+		</ul>
+		
+		<input type="hidden" name="concepts" id="concepts" 
+			value="http://www.yso.fi/onto/yso/p19378 yso:kissa,http://www.yso.fi/onto/yso/p5319 yso:koira"/>
+ 
 		<script type="text/javascript" src="http://www.yso.fi/onki.js?16dda293819ef4024af5104146628102"></script> 
 	
-		<input onkeyup="onki['yso'].search({'fetchLabels' : true, 'languageMenu' : false, 'openonkibutton' : false, 'showCaptions' : true})" id="ysoSearch"/> 
+		<input onkeyup="onki['yso'].search({
+			'addConceptFunction' : addConcept,
+			'fetchLabels' : true, 
+			'languageMenu' : false, 
+			'openonkibutton' : false, 
+			'showCaptions' : true})" id="ysoSearch"/> 
 
 		<br/>
 		<input type="submit"/>

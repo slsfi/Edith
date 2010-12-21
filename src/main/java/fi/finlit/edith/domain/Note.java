@@ -89,7 +89,7 @@ public class Note extends Identifiable {
     @Predicate
     private long editedOn;
     
-    @Predicate
+    @Predicate(ln="concept")
     private Set<OntologyConcept> concepts;
 
     public Set<UserInfo> getAllEditors() {
