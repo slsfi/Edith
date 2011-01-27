@@ -1,0 +1,36 @@
+<document>
+	<path>/documents/trunk/Nummisuutarit rakenteistettuna.xml</path>
+	<revision>13</revision>
+	<note>
+		<localId>1293613258346</localId>
+		<longText>Mikko</longText>
+		<svnRevision>10</svnRevision>
+		<createdOn>2011-01-27T10:37:42.242+02:00</createdOn>
+		<format>NOTE</format>
+		<lemma>Mikko</lemma>
+		<types>
+			<type>LITERARY</type>
+			<type>DICTUM</type>
+			<type>CRITIQUE</type>
+		</types>
+		<concepts>
+			<concept label="yso:kissa" id="http://www.yso.fi/onto/yso/p19378"></concept>
+		</concepts>
+	</note>
+	<note>
+		<localId>1296117090814</localId>
+		<longText>uhkaa</longText>
+		<svnRevision>12</svnRevision>
+		<createdOn>2011-01-27T10:31:45.609+02:00</createdOn>
+		<format>NOTE</format>
+		<lemma>uhkaa</lemma>
+	</note>
+	<note>
+		<localId>1296117110396</localId>
+		<longText>laki</longText>
+		<svnRevision>13</svnRevision>
+		<createdOn>2011-01-27T10:32:05.455+02:00</createdOn>
+		<format>NOTE</format>
+		<lemma>laki</lemma>
+	</note>
+</document>
