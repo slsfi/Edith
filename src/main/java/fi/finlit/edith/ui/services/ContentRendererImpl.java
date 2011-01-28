@@ -7,16 +7,28 @@ package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.mutable.MutableBoolean;
@@ -25,7 +37,20 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Interval;
+import fi.finlit.edith.domain.LinkElement;
+import fi.finlit.edith.domain.NameForm;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.OntologyConcept;
+import fi.finlit.edith.domain.Paragraph;
+import fi.finlit.edith.domain.ParagraphElement;
+import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.UrlElement;
 
 /**
  * DocumentWriterImpl provides
@@ -37,11 +62,9 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
 
-    static final Set<String> EMPTY_ELEMENTS = new HashSet<String>(Arrays.asList("anchor", "lb",
-            "pb"));
+    static final Set<String> EMPTY_ELEMENTS = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
 
-    static final Set<String> UL_ELEMENTS = new HashSet<String>(Arrays.asList("castGroup",
-            "castList", "listPerson"));
+    static final Set<String> UL_ELEMENTS = new HashSet<String>(Arrays.asList("castGroup", "castList", "listPerson"));
 
     static final Set<String> LI_ELEMENTS = new HashSet<String>(Arrays.asList("castItem", "person"));
 
@@ -54,6 +77,10 @@ public class ContentRendererImpl implements ContentRenderer {
     private final DocumentRepository documentRepository;
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
+    
+    private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
+    
+    private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
 
     private final String bibliographUrl;
 
@@ -126,6 +153,89 @@ public class ContentRendererImpl implements ContentRenderer {
         }
     }
 
+
+    @Override
+    public void renderDocumentNotesAsXML(DocumentRevision document, List<DocumentNote> documentNotes, MarkupWriter writer) {
+        writer.element("document");
+        write(writer, "path", document.getSvnPath());
+        write(writer, "revision", document.getRevision());
+        
+        for (DocumentNote note : documentNotes){
+            writer.element("note", "id", "end"+note.getLocalId());
+//            write(writer, "localId", note.getLocalId());
+            write(writer, "longText", note.getLongText());
+            write(writer, "svnRevision", note.getSVNRevision());
+            write(writer, "createdOn", note.getCreatedOnDate());
+            write(writer, "description", note.getNote().getDescription());
+            write(writer, "format", note.getNote().getFormat());
+            write(writer, "lemma", note.getNote().getLemma());
+            write(writer, "lemmaMeaning", note.getNote().getLemmaMeaning());
+            if (note.getNote().getPerson() != null){
+                writer.element("person");
+                Person person = note.getNote().getPerson();
+                writeNameForm("normalizedForm", person.getNormalizedForm(), writer);
+                writer.element("otherForms");
+                for (NameForm otherForm : person.getOtherForms()){
+                    writeNameForm("nameForm", otherForm, writer); 
+                }
+                // TODO : timeOfBirth
+                // TODO : timeOfDeath
+                writer.end(); // otherForms
+                writer.end(); // person
+            }
+            if (note.getNote().getPlace() != null){
+                writer.element("place");
+                Place place = note.getNote().getPlace();
+                writeNameForm("normalizedForm", place.getNormalizedForm(), writer);
+                writer.element("otherForms");
+                for (NameForm otherForm : place.getOtherForms()){
+                    writeNameForm("nameForm", otherForm, writer); 
+                }
+                writer.end(); // otherForms
+                writer.end(); // place
+            }
+            write(writer, "sources", note.getNote().getSources());
+            write(writer, "subtextSources", note.getNote().getSubtextSources());
+            if (!note.getNote().getTypes().isEmpty()){
+                writer.element("types");
+                for (NoteType type : note.getNote().getTypes()){
+                    write(writer, "type", type);
+                }
+                writer.end();
+            }
+            if (!note.getNote().getConcepts().isEmpty()){
+                writer.element("concepts");
+                for (OntologyConcept concept : note.getNote().getConcepts()){
+                    writer.element("concept", "id", concept.getId(), "label", concept.getLabel());
+                    writer.end();
+                }
+                writer.end();
+            }
+            writer.end(); // note
+        }
+        
+        writer.end(); // document
+        
+    }
+    
+    private void writeNameForm(String name, NameForm nameForm, MarkupWriter writer) {
+        if (nameForm != null){
+            writer.element(name);
+            write(writer, "description", nameForm.getDescription());
+            write(writer, "first", nameForm.getFirst());
+            write(writer, "last", nameForm.getLast());
+            writer.end();
+        }        
+    }
+
+    private void write(MarkupWriter writer, String element, Object content){
+        if (content != null){
+            writer.element(element);
+            writer.write(content.toString());
+            writer.end();    
+        }        
+    }
+    
     @Override
     public void renderDocumentNotes(List<DocumentNote> documentNotes, MarkupWriter writer) {
         writer.element("ul", CLASS, "notes");
@@ -240,6 +350,48 @@ public class ContentRendererImpl implements ContentRenderer {
         renderDocument(document, null, writer);
     }
 
+    @Override
+    public void renderDocumentAsXML(DocumentRevision document, List<DocumentNote> documentNotes, OutputStream out) throws IOException, XMLStreamException{
+        InputStream is = documentRepository.getDocumentStream(document);
+        XMLEventReader reader = inFactory.createXMLEventReader(is);
+        XMLEventWriter writer = outFactory.createXMLEventWriter(out);
+
+        QName note = new QName("note");
+        XMLEvent openAnchor = null;
+        try {
+            while (reader.hasNext()){
+                XMLEvent event = reader.nextEvent();
+                if (event.isStartElement()){
+                    StartElement startElement = event.asStartElement();
+                    Iterator<Attribute> attributes = startElement.getAttributes();
+                    if (startElement.getName().getLocalPart().equals("anchor") && attributes.next().getValue().startsWith("end")){
+                        String id = ((Iterator<Attribute>)startElement.getAttributes()).next().getValue().substring(3);
+                        List<Attribute> atts = new ArrayList<Attribute>();
+                        atts.add(eventFactory.createAttribute("type", "editor"));
+                        atts.add(eventFactory.createAttribute("id", "end"+id));
+                        atts.add(eventFactory.createAttribute("target", "#start"+id));
+                        event = eventFactory.createStartElement(note, atts.iterator(), null);
+                        openAnchor = event;
+                    }else{
+                        openAnchor = null;
+                    }
+                }else if (event.isEndElement()){
+                    EndElement endElement = event.asEndElement();
+                    if (openAnchor != null && endElement.getName().getLocalPart().equals("anchor")){
+                        event = eventFactory.createEndElement(note, null);                        
+                    }
+                    openAnchor = null;
+                }
+                writer.add(event);
+            }
+        } finally {
+            writer.close();
+            out.close();
+            reader.close();
+            is.close();
+        }
+    }
+    
     @Override
     public void renderDocument(DocumentRevision document, List<DocumentNote> documentNotes,
             MarkupWriter writer) throws IOException, XMLStreamException {
@@ -371,4 +523,5 @@ public class ContentRendererImpl implements ContentRenderer {
             writer.writeRaw(StringEscapeUtils.escapeXml(text));
         }
     }
+
 }
