@@ -427,12 +427,15 @@ public class NoteForm {
         noteOnEdit.getNote().setPlace(getPlace());
         
         if (!StringUtils.isEmpty(conceptsString)){
+//            System.err.println(conceptsString);
             Set<OntologyConcept> c = new HashSet<OntologyConcept>();
             for (String uriAndLabel : conceptsString.split(";")){
                 String[] splitted = uriAndLabel.split(",");
                 c.add(new OntologyConcept(new UID(splitted[0]), splitted[1]));
             }
             noteOnEdit.getNote().setConcepts(c);
+        }else{
+            noteOnEdit.getNote().setConcepts(new HashSet<OntologyConcept>());
         }
 
         logger.info("onSuccessFromNoteEditForm begins with documentNote " + noteOnEdit + ", note "
