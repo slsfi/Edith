@@ -7,7 +7,6 @@ package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -49,15 +48,15 @@ public final class DataModule {
     @SuppressWarnings("unchecked")
     private static void addUsers(OrderedConfiguration<Object> configuration,
             SaltSource saltSource, PasswordEncoder passwordEncoder) throws IOException {
-        List<String> lines = IOUtils.readLines(DataModule.class.getResourceAsStream("/users.csv"));
+        List<String> lines = IOUtils.readLines(DataModule.class.getResourceAsStream("/users.csv"), "ISO-8859-1");
         for (String line : lines){
             String[] values = line.split(";");
             User user = new User();
-            user.setUsername(values[0].toLowerCase(Locale.getDefault()));
-            user.setEmail(values[2]);
             user.setFirstName(values[0]);
             user.setLastName(values[1]);
-            if (values[2].endsWith("mysema.com")){
+            user.setUsername(values[2]);
+            user.setEmail(values[3]);
+            if (values[3].endsWith("mysema.com")){
                 user.setProfile(Profile.Admin);
             }else{
                 user.setProfile(Profile.User);
@@ -67,7 +66,7 @@ public final class DataModule {
             UserDetailsImpl userDetails = new UserDetailsImpl(
                     user.getUsername(), user.getPassword(),
                     user.getProfile().getAuthorities());
-            String password = passwordEncoder.encodePassword(user.getUsername(),saltSource.getSalt(userDetails));
+            String password = passwordEncoder.encodePassword(user.getUsername(), saltSource.getSalt(userDetails));
             user.setPassword(password);
 
             configuration.add("user-" + user.getUsername(), user);
