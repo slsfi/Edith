@@ -185,6 +185,35 @@
 				</resources>
 			</build>
 		</profile>
+		<profile>
+			<id>sls</id>
+			<build>
+				<resources>
+					<resource>
+						<filtering>true</filtering>
+						<directory>profiles/sls/res</directory>
+					</resource>
+					<resource>
+						<filtering>false</filtering>
+						<directory>src/main/resources</directory>
+					</resource>
+					<resource>
+						<filtering>false</filtering>
+						<directory>src/main/rdf</directory>
+					</resource>
+					<resource>
+						<filtering>false</filtering>
+						<directory>src/main/java</directory>
+						<includes>
+							<include>**</include>
+						</includes>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>		
 	</profiles>
 
 	<build>
