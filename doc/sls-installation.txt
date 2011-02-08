@@ -1,0 +1,26 @@
+SLS INSTALLATION
+
+WEB :
+
+http://192.168.0.8:8080/edith
+
+DIRS :
+
+SVN repository dir : /opt/svn/edith
+SVN cache dir      : /opt/svn/cache
+RDF metadata dir   : /opt/rdfbean/edith
+Published docs     : /opt/published
+Jetty              : /opt/jetty
+
+USERS :
+
+kylander
+asp
+piaf
+grandell
+herberts
+mdahlberg
+mattsson
+torvaldson
+pihlflyckt
+bjorklund
