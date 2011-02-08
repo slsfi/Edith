@@ -1,0 +1,13 @@
+- Install Java
+  sudo apt-get install sun-java6-jre sun-java6-bin sun-java6-jdk
+
+- Install Jetty
+  sudo apt-get install jetty
+  
+- Create folders
+
+- Deploy webapp
+
+- Open ports on firewall  
+  ufw allow 8080
+  ufw allow 8443
