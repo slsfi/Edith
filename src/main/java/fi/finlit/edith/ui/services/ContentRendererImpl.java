@@ -161,7 +161,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
         for (Map.Entry<Note, List<DocumentNote>> entry : noteToDocumentNotes.entrySet()){
           Note note = entry.getKey();
-          writer.element("note", "id", note.getId());
+          writer.element("note", "xml:id", "note"+note.getId());
           write(writer, "description", note.getDescription());
           write(writer, "format", note.getFormat());
           write(writer, "lemma", note.getLemma());
@@ -202,7 +202,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
           writer.element("documentNotes");
           for (DocumentNote dn : entry.getValue()){
-              writer.element("documentNote", "id", "end"+dn.getLocalId());
+              writer.element("documentNote", "xml:id", "end"+dn.getLocalId());
               write(writer, "longText", dn.getLongText());
               write(writer, "svnRevision", dn.getSVNRevision());
               write(writer, "createdOn", dn.getCreatedOnDate());
@@ -368,7 +368,7 @@ public class ContentRendererImpl implements ContentRenderer {
                         String id = ((Iterator<Attribute>)startElement.getAttributes()).next().getValue().substring(3);
                         List<Attribute> atts = new ArrayList<Attribute>();
                         atts.add(eventFactory.createAttribute("type", "editor"));
-                        atts.add(eventFactory.createAttribute("id", "end"+id));
+                        atts.add(eventFactory.createAttribute("xml:id", "end"+id));
                         atts.add(eventFactory.createAttribute("target", "#start"+id));
                         event = eventFactory.createStartElement(note, atts.iterator(), null);
                         openAnchor = event;
