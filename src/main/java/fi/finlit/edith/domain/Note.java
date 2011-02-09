@@ -88,9 +88,6 @@ public class Note extends Identifiable {
 
     @Predicate
     private long editedOn;
-    
-    @Predicate(ln="concept")
-    private Set<OntologyConcept> concepts;
 
     public Set<UserInfo> getAllEditors() {
         return allEditors;
@@ -214,14 +211,6 @@ public class Note extends Identifiable {
 
     public DateTime getEditedOnDate() {
         return new DateTime(editedOn);
-    }
-    
-    public Set<OntologyConcept> getConcepts() {
-        return concepts;
-    }
-
-    public void setConcepts(Set<OntologyConcept> concepts) {
-        this.concepts = concepts;
     }
 
     @Override

@@ -30,16 +30,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.SelectedText;
-import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.NoteWithInstances;
@@ -53,14 +44,14 @@ import fi.finlit.edith.ui.services.TimeService;
  * @version $Id$
  */
 @IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
-        "TextSelector.js", "AnnotatePage.js", "OnkiIntegration.js", "classpath:jqModal.js" })
+        "TextSelector.js", "AnnotatePage.js", "classpath:jqModal.js" })
 @IncludeStylesheet("context:styles/tei.css")
 public class AnnotatePage extends AbstractDocumentPage {
 
     private static final String EDIT_ZONE = "editZone";
 
     private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
-    
+
     @SessionState(create = false)
     private Collection<Document> selectedDocuments;
 
@@ -80,7 +71,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Inject
     private TimeService timeService;
-        
+
     @Inject
     private DocumentNoteRepository documentNoteRepository;
 
@@ -181,7 +172,7 @@ public class AnnotatePage extends AbstractDocumentPage {
 
     @Property
     private String personId;
-    
+
     @Property
     private DocumentNote note;
 
@@ -258,10 +249,10 @@ public class AnnotatePage extends AbstractDocumentPage {
                 String localId = context.get(String.class, i).substring(1);
                 DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
                 if (docNote != null){
-                    selectedNotes.add(docNote);    
+                    selectedNotes.add(docNote);
                 }else{
                     throw new IllegalStateException("No DocumentNote available for local id " + localId);
-                }                
+                }
             }
         } else {
             String localId = context.get(String.class, 0).substring(1);
@@ -331,7 +322,7 @@ public class AnnotatePage extends AbstractDocumentPage {
         this.searchInfo = searchInfo;
     }
 
-    public String getTypesString() {        
+    public String getTypesString() {
         Collection<String> translated = new ArrayList<String>();
         for (NoteType t : noteWithInstances.getNote().getTypes()) {
             translated.add(messages.get(t.toString()));

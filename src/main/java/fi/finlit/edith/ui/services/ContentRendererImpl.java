@@ -199,14 +199,6 @@ public class ContentRendererImpl implements ContentRenderer {
               }
               writer.end();
           }
-          if (!note.getConcepts().isEmpty()){
-              writer.element("concepts");
-              for (OntologyConcept concept : note.getConcepts()){
-                  writer.element("concept", "id", concept.getId(), "label", concept.getLabel());
-                  writer.end();
-              }
-              writer.end();
-          }
 
           writer.element("documentNotes");
           for (DocumentNote dn : entry.getValue()){

@@ -145,10 +145,12 @@
 	</dependencies>
 
 	<repositories>
+	<!-- 
 		<repository>
 			<id>localhost.nu</id>
 			<url>http://www.localhost.nu/java/mvn</url>
 		</repository>
+ 	-->		
 		<repository>
 		  <id>svnkit</id>
 		  <url>http://maven.svnkit.com/maven2</url>
