@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.grid.GridDataSource;
@@ -64,6 +68,12 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
+
+    private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+
+    private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
+
+    private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
     @Test
     public void addDocument() throws IOException{

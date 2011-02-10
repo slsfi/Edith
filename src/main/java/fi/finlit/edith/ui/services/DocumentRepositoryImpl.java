@@ -121,7 +121,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         String localName = element.getName().getLocalPart();
         String name = localName;
         if (localName.equals("div")){
-            name = element.getAttributeByName(TEI_TYPE_QNAME).getValue();
+            Attribute attribute = element.getAttributeByName(TEI_TYPE_QNAME);
+            if (attribute != null){
+                name = attribute.getValue();
+            }
         }
         return name;
     }
@@ -499,8 +502,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
         return new DocumentRevision(docRevision, newRevision);
     }
-    
-    
+
+
     public void streamEvents(XMLEventReader reader, XMLEventWriter writer) throws XMLStreamException {
         try {
             while (reader.hasNext()) {
