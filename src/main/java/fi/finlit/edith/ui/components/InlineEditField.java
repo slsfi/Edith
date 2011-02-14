@@ -13,42 +13,14 @@ import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.corelib.components.Hidden;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ComponentDefaultProvider;
 import org.apache.tapestry5.services.FormSupport;
 import org.apache.tapestry5.services.Request;
 
 @IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "InlineEditField.js" })
+@SuppressWarnings("unused")
 public class InlineEditField {
-
-    // @InjectContainer
-    // private Hidden field;
-    //
-    // // Change to BindParameter when updated to Tapestry 5.2
-    // // then the name can be value and it should reflect the Hidden fields value
-    // // property
-    // @Parameter
-    // private Object value1;
-    //
-    // @Inject
-    // private ComponentDefaultProvider defaultProvider;
-    //
-    // @Inject
-    // private ComponentResources resources;
-    //
-    // @SuppressWarnings("unchecked")
-    // public void afterRender(MarkupWriter writer) {
-    // ValueEncoder<Object> encoder = defaultProvider.defaultValueEncoder("value1", resources);
-    //
-    // String hiddenId = field.getControlName();
-    // String editId = "inlineField_" + hiddenId;
-    //
-    // writer.element("div", "id", editId, "contentEditable", "true", "class", "editable");
-    // writer.write(encoder.toClient(value1));
-    // writer.end();
-    //
-    // }
 
     /**
      * The value to read (when rendering) or update (when the form is submitted).
@@ -60,6 +32,7 @@ public class InlineEditField {
      * Value encoder for the value, usually determined automatically from the type of the property
      * bound to the value parameter.
      */
+    @SuppressWarnings("unchecked")
     @Parameter(required = true)
     private ValueEncoder encoder;
 
@@ -67,6 +40,7 @@ public class InlineEditField {
 
     @Environmental(false)
     private FormSupport formSupport;
+
 
     @Environmental
     private RenderSupport renderSupport;
@@ -80,6 +54,7 @@ public class InlineEditField {
     @Inject
     private Request request;
 
+    @SuppressWarnings("unchecked")
     ValueEncoder defaultEncoder() {
         return defaultProvider.defaultValueEncoder("value", resources);
     }

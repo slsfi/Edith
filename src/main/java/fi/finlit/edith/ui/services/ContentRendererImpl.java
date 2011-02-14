@@ -348,6 +348,7 @@ public class ContentRendererImpl implements ContentRenderer {
         renderDocument(document, null, writer);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void renderDocumentAsXML(DocumentRevision document, List<DocumentNote> documentNotes, OutputStream out) throws IOException, XMLStreamException{
         InputStream is = documentRepository.getDocumentStream(document);
