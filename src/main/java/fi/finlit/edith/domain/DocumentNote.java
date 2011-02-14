@@ -13,12 +13,6 @@ import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
 
-/**
- * NoteRevision provides
- *
- * @author tiwe
- * @version $Id$
- */
 @ClassMapping(ns = EDITH.NS)
 public class DocumentNote extends Identifiable {
     @Predicate

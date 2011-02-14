@@ -16,12 +16,6 @@ import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
 
-/**
- * Note provides
- *
- * @author tiwe
- * @version $Id$
- */
 @ClassMapping(ns = EDITH.NS)
 public class Note extends Identifiable {
 

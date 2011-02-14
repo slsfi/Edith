@@ -12,12 +12,6 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.PageLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-/**
- * ExternalLinkMixin provides
- *
- * @author tiwe
- * @version $Id$
- */
 @SuppressWarnings("unused")
 public class ExternalMixin {
 

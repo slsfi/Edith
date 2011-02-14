@@ -48,12 +48,6 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.UpdateCallback;
 
-/**
- * DocumentRepositoryImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements
         DocumentRepository {
 

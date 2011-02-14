@@ -17,17 +17,17 @@ import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.OrderBy;
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.UserRepository;
 
+@SuppressWarnings("unused")
 public class NoteSearchForm {
-    
+
     @SessionState(create=false)
     private Collection<Document> selectedDocuments;
-    
+
     @Parameter
     private DocumentNoteSearchInfo searchInfo;
-    
+
     @Parameter
     private Block notesList;
 
@@ -45,7 +45,7 @@ public class NoteSearchForm {
 
     @Property
     private OrderBy loopedOrderBy;
-    
+
     public int getSelectedDocumentCount(){
         return selectedDocuments != null ? selectedDocuments.size() : 0;
     }

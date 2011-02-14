@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
@@ -12,14 +12,8 @@ import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.userdetails.UserDetails;
 
-/**
- * SpringSecurityAuthService provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class SpringSecurityAuthService implements AuthService{
-    
+
     @Inject
     private LogoutService logoutService;
 

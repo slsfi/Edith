@@ -37,15 +37,10 @@ import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.TermRepository;
 import fi.finlit.edith.ui.services.TimeService;
 
-/**
- * AnnotatePage provides
- *
- * @author tiwe
- * @version $Id$
- */
 @IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
         "TextSelector.js", "AnnotatePage.js", "classpath:jqModal.js" })
 @IncludeStylesheet("context:styles/tei.css")
+@SuppressWarnings("unused")
 public class AnnotatePage extends AbstractDocumentPage {
 
     private static final String EDIT_ZONE = "editZone";

@@ -22,12 +22,6 @@ import fi.finlit.edith.ui.pages.HttpError;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
-/**
- * AbstractDocumentPage provides
- *
- * @author tiwe
- * @version $Id$
- */
 @SuppressWarnings("unused")
 public class AbstractDocumentPage {
 

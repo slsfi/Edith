@@ -5,12 +5,6 @@
  */
 package fi.finlit.edith.ui.services;
 
-/**
- * SimpleTimeService provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class SimpleTimeService implements TimeService{
 
     private long last = System.currentTimeMillis();

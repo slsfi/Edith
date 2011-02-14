@@ -14,12 +14,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 
-/**
- * ViewPage provides
- *
- * @author tiwe
- * @version $Id$
- */
 @IncludeStylesheet("context:styles/tei.css")
 @SuppressWarnings("unused")
 public class ViewPage extends AbstractDocumentPage {

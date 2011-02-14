@@ -12,13 +12,6 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Response;
 
-
-/**
- * Index provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class Index {
     @Inject
     private Response response;

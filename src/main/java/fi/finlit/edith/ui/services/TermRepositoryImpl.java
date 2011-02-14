@@ -15,12 +15,6 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Term;
 
-/**
- * NoteRepositoryImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class TermRepositoryImpl extends AbstractRepository<Term> implements TermRepository {
 
     public TermRepositoryImpl(@Inject SessionFactory sessionFactory) {

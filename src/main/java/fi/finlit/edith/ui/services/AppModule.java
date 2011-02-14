@@ -119,9 +119,9 @@ public final class AppModule {
             final SessionFactory sessionFactory){
 
         // TODO : move to RDFBeanModule
-        for (final Class cl : Arrays.asList(DocumentNote.class, Document.class, Note.class)){
+        for (final Class<?> cl : Arrays.asList(DocumentNote.class, Document.class, Note.class)){
             configuration.add(cl, new ValueEncoderFactory(){
-                final MappedProperty idProperty = rdfBeanConfiguration.getMappedClass(cl).getIdProperty();
+                final MappedProperty<?> idProperty = rdfBeanConfiguration.getMappedClass(cl).getIdProperty();
                 @Override
                 public ValueEncoder create(Class type) {
                     return new ValueEncoder(){

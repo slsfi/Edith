@@ -7,12 +7,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
-/**
- * SelectedText provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class SelectedText {
 
     private String selection;

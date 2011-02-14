@@ -1,35 +1,31 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services;
 
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.userdetails.UserDetails;
 
-/**
- * UserDetailsImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class UserDetailsImpl implements UserDetails{
-    
+
     private static final long serialVersionUID = -3810708516049551503L;
 
-    private String username, password;
-    
-    private boolean nonExpired = true, nonLocked = true, enabled = true;
+    private final String username;
 
-    private GrantedAuthority[] authorities;
-    
+    private String password;
+
+    private final boolean nonExpired = true, nonLocked = true, enabled = true;
+
+    private final GrantedAuthority[] authorities;
+
     public UserDetailsImpl(String username, String password, GrantedAuthority... auth){
         this.username = username;
         this.password = password;
         this.authorities = auth;
     }
-    
+
     @Override
     public GrantedAuthority[] getAuthorities() {
         return authorities;
@@ -39,7 +35,7 @@ public class UserDetailsImpl implements UserDetails{
     public String getPassword() {
         return password;
     }
-    
+
     public void setPassword(String password){
         this.password = password;
     }

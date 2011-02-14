@@ -26,12 +26,6 @@ import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.TermRepository;
 
-/**
- * DictionarySearchPage provides
- *
- * @author tiwe
- * @version $Id$
- */
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
 public class DictionarySearchPage {

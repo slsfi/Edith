@@ -1,17 +1,10 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.services.svn;
 
-
-/**
- * RevisionInfo provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class RevisionInfo {
 
     private final long svnRevision;

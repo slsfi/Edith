@@ -16,12 +16,6 @@ import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.Term;
 
-/**
- * AdminServiceImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class AdminServiceImpl extends AbstractService implements AdminService{
 
     public AdminServiceImpl(@Inject SessionFactory sessionFactory) {

@@ -11,12 +11,6 @@ import com.mysema.rdfbean.annotations.Unique;
 
 import fi.finlit.edith.EDITH;
 
-/**
- * Document provides
- *
- * @author tiwe
- * @version $Id$
- */
 @ClassMapping(ns=EDITH.NS)
 public class Document extends Identifiable implements Comparable<Document>{
 

@@ -1,28 +1,22 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.domain;
 
 
-/**
- * DocumentRevision provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class DocumentRevision {
-    
+
     private long revision;
-    
+
     private final Document document;
-    
+
     public DocumentRevision(Document document, long revision){
         this.document = document;
         this.revision = revision;
     }
-    
+
     public DocumentRevision(DocumentRevision docRevision, long revision) {
         this(docRevision.getDocument(), revision);
     }
@@ -40,9 +34,9 @@ public class DocumentRevision {
     }
 
     public void setRevision(long newRevision) {
-        this.revision = newRevision;        
+        this.revision = newRevision;
     }
-    
+
     @Override
     public String toString(){
         return document.getSvnPath() + " (rev" + revision + ")";

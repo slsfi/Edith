@@ -15,12 +15,6 @@ import com.mysema.rdfbean.model.IDType;
 
 import fi.finlit.edith.EDITH;
 
-/**
- * TermWithNotes provides
- *
- * @author tiwe
- * @version $Id$
- */
 @ClassMapping(ns = EDITH.NS, ln = "Term")
 public class TermWithNotes {
     @Id(IDType.LOCAL)

@@ -37,12 +37,6 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.*;
 
-/**
- * NoteRepositoryImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
 
     private static final QDocumentNote otherNote = new QDocumentNote("other");

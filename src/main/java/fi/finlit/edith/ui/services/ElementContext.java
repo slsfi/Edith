@@ -13,12 +13,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang.mutable.MutableInt;
 
-/**
- * ElementContext provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class ElementContext implements Cloneable {
 
     public static class Item implements Cloneable {

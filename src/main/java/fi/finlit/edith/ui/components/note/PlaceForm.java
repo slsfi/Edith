@@ -14,7 +14,9 @@ import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.ui.services.PlaceRepository;
 
+@SuppressWarnings("unused")
 public class PlaceForm {
+
     @Property
     private NameForm loopPlace;
 

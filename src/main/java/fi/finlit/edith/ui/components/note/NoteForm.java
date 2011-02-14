@@ -32,6 +32,7 @@ import fi.finlit.edith.ui.services.PlaceRepository;
 import fi.finlit.edith.ui.services.TermRepository;
 import fi.finlit.edith.ui.services.TimeService;
 
+@SuppressWarnings("unused")
 public class NoteForm {
 
     private static final String EDIT_ZONE = "editZone";

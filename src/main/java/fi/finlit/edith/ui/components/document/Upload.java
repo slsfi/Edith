@@ -21,12 +21,6 @@ import org.slf4j.LoggerFactory;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.DocumentRepository;
 
-/**
- * Upload provides
- *
- * @author tiwe
- * @version $Id$
- */
 @SuppressWarnings("unused")
 public class Upload {
 

@@ -40,12 +40,6 @@ import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
-/**
- * NoteRepositoryImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
         DocumentNoteRepository {
 
@@ -159,9 +153,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         BooleanBuilder builder = new BooleanBuilder();
         if (!searchTerm.equals("*")) {
             for (StringPath path : Arrays.asList(
-                    note.lemma, 
+                    note.lemma,
                     documentNote.longText,
-                    note.term().basicForm, 
+                    note.term().basicForm,
                     note.term().meaning)) {
                 // ,
                 // documentNote.description, FIXME

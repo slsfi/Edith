@@ -10,15 +10,9 @@ import com.mysema.rdfbean.annotations.Predicate;
 
 import fi.finlit.edith.EDITH;
 
-/**
- * Term provides
- *
- * @author tiwe
- * @version $Id$
- */
 @ClassMapping(ns = EDITH.NS)
 public class Term extends Identifiable {
-    
+
     @Predicate
     private String basicForm;
 

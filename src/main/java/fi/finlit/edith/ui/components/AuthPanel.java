@@ -8,14 +8,6 @@ package fi.finlit.edith.ui.components;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-
-
-/**
- * AuthPanel provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class AuthPanel extends AuthAwarePanel{
 
     @Inject

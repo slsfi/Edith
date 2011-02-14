@@ -20,12 +20,6 @@ import fi.finlit.edith.domain.Profile;
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
-/**
- * DataModule provides
- *
- * @author tiwe
- * @version $Id$
- */
 public final class DataModule {
     private DataModule() {}
 

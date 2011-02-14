@@ -9,12 +9,6 @@ import com.mysema.rdfbean.annotations.ClassMapping;
 
 import fi.finlit.edith.EDITH;
 
-/**
- * NoteStatus provides
- *
- * @author tiwe
- * @version $Id$
- */
 @ClassMapping(ns = EDITH.NS)
 public enum NoteStatus {
     INITIAL, DRAFT, FINISHED;

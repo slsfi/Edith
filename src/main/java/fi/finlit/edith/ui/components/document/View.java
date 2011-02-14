@@ -19,12 +19,6 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.ui.services.ContentRenderer;
 
-/**
- * ViewPanel provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class View {
 
     @Inject

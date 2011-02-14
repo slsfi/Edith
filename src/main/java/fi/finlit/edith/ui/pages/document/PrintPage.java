@@ -7,12 +7,6 @@ package fi.finlit.edith.ui.pages.document;
 
 import org.apache.tapestry5.annotations.IncludeStylesheet;
 
-/**
- * PrintPage provides
- *
- * @author tiwe
- * @version $Id$
- */
 @IncludeStylesheet({
     "context:styles/base.css",
     "context:styles/edith.css",

@@ -11,12 +11,6 @@ import com.mysema.rdfbean.model.IDType;
 
 import fi.finlit.edith.EDITH;
 
-/**
- * Identifiable provides
- *
- * @author tiwe
- * @version $Id$
- */
 @ClassMapping(ns = EDITH.NS)
 public class Identifiable {
 

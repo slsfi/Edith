@@ -12,12 +12,6 @@ import org.springframework.security.userdetails.UsernameNotFoundException;
 
 import fi.finlit.edith.domain.User;
 
-/**
- * UserDetailsServiceImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Inject
     private final UserRepository userRepository;

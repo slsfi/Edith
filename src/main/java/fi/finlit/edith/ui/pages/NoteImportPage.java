@@ -19,12 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.ui.services.NoteRepository;
 
-/**
- * NoteImportPage provides
- *
- * @author tiwe
- * @version $Id$
- */
 @SuppressWarnings("unused")
 public class NoteImportPage {
 

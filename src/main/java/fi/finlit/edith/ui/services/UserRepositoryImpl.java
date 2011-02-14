@@ -17,12 +17,6 @@ import com.mysema.rdfbean.object.SessionFactory;
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 
-/**
- * UserServiceImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository {
 
     private final AuthService authService;

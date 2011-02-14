@@ -14,12 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 
-/**
- * UserRepository provides
- *
- * @author tiwe
- * @version $Id$
- */
 @Transactional
 public interface UserRepository extends Repository<User,String>{
 

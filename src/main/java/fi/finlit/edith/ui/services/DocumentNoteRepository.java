@@ -16,7 +16,7 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
 
 /**
- * The Interface NoteRevisionRepository.
+ * The Interface DocumentNoteRepository.
  */
 @Transactional
 public interface DocumentNoteRepository extends Repository<DocumentNote, String> {

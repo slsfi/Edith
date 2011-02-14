@@ -41,12 +41,6 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
 
-/**
- * DocumentWriterImpl provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class ContentRendererImpl implements ContentRenderer {
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
@@ -241,6 +235,10 @@ public class ContentRendererImpl implements ContentRenderer {
         writer.element("ul", CLASS, "notes");
         for (DocumentNote documentNote : documentNotes) {
             Note note = documentNote.getNote();
+
+            if (note == null){
+                throw new IllegalStateException("Got no note for documentNote " + documentNote);
+            }
 
             writer.element("li");
             writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getLocalId());

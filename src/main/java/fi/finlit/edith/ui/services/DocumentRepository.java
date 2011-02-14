@@ -19,12 +19,6 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
-/**
- * DocumentRepository provides
- *
- * @author tiwe
- * @version $Id$
- */
 @Transactional
 public interface DocumentRepository extends Repository<Document, String> {
 
@@ -97,10 +91,10 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @throws IOException
      */
     DocumentRevision removeNotes(DocumentRevision docRevision, DocumentNote... notes);
-    
+
     /**
      * Permanently removes document notes and their anchors.
-     * 
+     *
      * @param docRevision
      * @param notes
      * @return

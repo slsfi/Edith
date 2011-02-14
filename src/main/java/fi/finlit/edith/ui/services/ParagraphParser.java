@@ -13,6 +13,7 @@ import fi.finlit.edith.domain.StringElement;
 import fi.finlit.edith.domain.UrlElement;
 
 public final class ParagraphParser {
+
     public static final Paragraph parseParagraph(String s) throws XMLStreamException {
         String document = new StringBuilder("<root>").append(s).append("</root>").toString();
         Paragraph paragraph = new Paragraph();
@@ -21,7 +22,7 @@ public final class ParagraphParser {
         boolean inBib = false;
         boolean inA = false;
         String reference = null;
-        String href = null;
+//        String href = null;
         while (true) {
             int event = reader.next();
             if (event == XMLStreamConstants.START_ELEMENT) {

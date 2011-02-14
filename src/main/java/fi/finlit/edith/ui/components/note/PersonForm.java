@@ -9,14 +9,15 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Response;
 
 import fi.finlit.edith.domain.Interval;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.ui.services.PersonRepository;
 
+@SuppressWarnings("unused")
 public class PersonForm {
+
     @Property
     private NameForm loopPerson;
 

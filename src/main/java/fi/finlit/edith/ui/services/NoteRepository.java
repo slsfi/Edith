@@ -18,12 +18,6 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 
 // TODO createNote and remove could be in DocumentRepository.
-/**
- * NoteRepository provides
- *
- * @author tiwe
- * @version $Id$
- */
 @Transactional
 public interface NoteRepository extends Repository<Note, String> {
 
@@ -78,11 +72,11 @@ public interface NoteRepository extends Repository<Note, String> {
 
     /**
      * Removes the document note permanently
-     * 
+     *
      * @param note
      */
     void removePermanently(DocumentNote note);
-    
+
     /**
      * Removes a NoteComment based on its id. Returns the deleted comment.
      *
@@ -109,7 +103,7 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     GridDataSource queryPlaces(String searchTerm);
-    
+
     /**
      * @param searchTerm
      * @return
@@ -127,5 +121,5 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo);
-    
+
 }

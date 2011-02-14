@@ -8,12 +8,6 @@ package fi.finlit.edith.ui.components;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-/**
- * Dashboard provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class Dashboard extends AuthAwarePanel{
 
     @Inject

@@ -14,12 +14,6 @@ import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 
 import fi.finlit.edith.domain.Identifiable;
 
-/**
- * PrimaryKeyEncoder provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class PrimaryKeyEncoder<T extends Identifiable> implements ValueEncoder<T> {
 
     private final Map<String, T> keyToValue = new HashMap<String, T>();

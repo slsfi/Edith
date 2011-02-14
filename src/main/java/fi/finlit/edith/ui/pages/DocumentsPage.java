@@ -13,18 +13,8 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
 
-/**
- * DocumentsPage provides
- *
- * @author tiwe
- * @version $Id$
- */
 @SuppressWarnings("unused")
 public class DocumentsPage {
 

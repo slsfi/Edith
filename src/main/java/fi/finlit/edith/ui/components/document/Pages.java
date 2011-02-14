@@ -17,12 +17,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.ui.services.ContentRenderer;
 
-/**
- * Pages provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class Pages {
 
     @Inject

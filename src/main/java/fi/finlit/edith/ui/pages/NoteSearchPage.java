@@ -20,18 +20,11 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.tapestry.core.Context;
 
-import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
-/**
- * NoteSearch provides
- * 
- * @author tiwe
- * @version $Id$
- */
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "deleteDialog.js" })
 public class NoteSearchPage {
@@ -52,7 +45,7 @@ public class NoteSearchPage {
 
 //    @Inject
 //    private DocumentNoteRepository noteRevisionRepository;
-    
+
     @Inject
     private NoteRepository noteRepository;
 
@@ -111,8 +104,8 @@ public class NoteSearchPage {
     void onSuccessFromEdit() {
         //getting all values from encoder
         for(Note editedNote : encoder.getAllValues() ){
-          
-          //If we get a not empty value for a field, 
+
+          //If we get a not empty value for a field,
           //it means it has been edited
           //We must refetch the actual document note
           if (!isBlank(editedNote.getLemma())) {
@@ -121,7 +114,7 @@ public class NoteSearchPage {
               noteRepository.save(editedNote);
           }
         }
-        
+
         context = new Context(searchTerm);
     }
 

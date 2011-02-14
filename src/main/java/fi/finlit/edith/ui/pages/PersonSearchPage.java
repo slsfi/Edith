@@ -19,11 +19,6 @@ import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.PersonRepository;
 
-/**
- * DictionarySearchPage provides
- *
- * @version $Id$
- */
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
 public class PersonSearchPage {

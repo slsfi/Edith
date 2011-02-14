@@ -11,12 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fi.finlit.edith.domain.Term;
 
-/**
- * Term repository.
- *
- * @author tiwe
- * @version $Id$
- */
 @Transactional
 public interface TermRepository extends Repository<Term,String>{
 

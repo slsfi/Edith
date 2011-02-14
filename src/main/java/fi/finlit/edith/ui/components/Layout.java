@@ -13,12 +13,6 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-/**
- * Layout provides
- *
- * @author tiwe
- * @version $Id$
- */
 @IncludeStylesheet({
     "context:styles/base.css",
     "context:styles/layout-3col.css",
