@@ -95,7 +95,7 @@
 	padding-left: 2.5em;	
 }	
 
-.actor, .camera, .caption, .date, .desc, .docAuthor, .gap, .orig, .ref, .role, .roleDesc, .set, .sound, .speaker, .tech, .view{
+.actor, .camera, .caption, .date, .desc, .docAuthor, .gap, .orig, .ref, .role, .roleDesc, .set, .sound, .speaker, .tech, .view, .persName, .note, .hi, .xref{
 	display: inline;	
 }	
 
@@ -108,6 +108,7 @@
 .notecontent:hover{
 	border-bottom: solid 2px;
 }
+
 
 
 

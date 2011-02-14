@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<TEI.2 xmlns="http://www.sls.fi/tei">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Ljungblommor I, Hfrs 1845</title>
+        <respStmt>
+          <resp>Kodning:</resp>
+          <name>CE (07-10-2009)</name>
+        </respStmt>
+        <respStmt>
+          <resp>Granskad av:</resp>
+          <name>TG (26-10-2009)</name>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Zacharias Topelius Skrifter</publisher>
+      </publicationStmt>
+      <notesStmt />
+      <sourceDesc>
+        <p xml:id="p1" />
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <handNotes>
+        <handNote />
+        <handNote />
+      </handNotes>
+    </profileDesc>
+    <revisionDesc>
+      <change>
+      </change>
+      <change>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body xml:space="preserve">
+      <!-- – » ’ -->
+      <div type="poem">
+      <pb type="orig unprinted" n="1" />
+      <pb type="ZTS" n="3" />
+        <head>Ljungblommor.</head>
+        <lg xml:id="lg1">
+          <l n="1">Vilda skogen har sin blomma</l>
+          <l n="2">Och sin doft har ödemarken,</l>
+          <l n="3">Ljungen har sin bleka rodnad,</l>
+          <l n="4">Heden äger ock sin glädje;</l>
+          <pb type="orig unprinted" n="2" />
+                    <l n="5">Och det rika menskohjertat,</l>
+          <l n="6">
+            <anchor id="lem1" />Skall, mer armt än ödemarken,</l>
+          <l n="7">Fattigt mer än sorgsna heden,</l>
+          <l n="8">Det ej sina blommor bära,</l>
+          <l n="9">Sjelf sin ljufva tröst ej nära?<note type="editor" id="en1" resp="ch" target="#lem1">6–9 Syftningen något oklar, verserna ersatta i de senare upplagorna (se nedan).</note></l>
+        </lg>
+        <lg xml:id="lg2">
+          <l n="10">
+            <anchor id="lem2" />Några sånger har jag sjungit,</l>
+          <l n="11">När i bröstet hjertat brände,</l>
+          <l n="12">
+            <anchor id="lem3" />Sjungit dem för <anchor id="lem4" /><persName>Ellis</persName><note type="editor" id="en4" resp="ch" target="#lem4">12 Namnet Elli förekommer hos Topelius om en släkting till Greta Mattsdotter (<xref type="introduction" target="1 #pos2">se inledn.</xref>).</note> glädje</l>
+          <l n="13">Och för <anchor id="lem5" /><persName>Ainas</persName><note type="editor" id="en5" resp="ch" target="#lem5">13 Namnets finska innebörd är ’beständigt, evigt’. I dikterna en omskrivning för fästmön Emilie; se komm. till »Ut till hafs!» Symboliserar, liksom namnet Elli, den nationella sångskatten.</note> aftontankar;</l>
+          <l n="14">
+            <anchor id="lem6" />
+            <persName>Selmas</persName>
+            <note type="editor" id="en6" resp="ch" target="#lem6">14 el. Shelma: eg. keltiskt ortnamn. Namnet blev känt och populärt bl.a. genom James MacPhersons <hi rend="italics">Ossian</hi>, »The Songs of Selma» och F. M. Franzéns Selmadikter.</note> panna dervid ljusnat,</l>
+          <l n="15">
+            <anchor id="lem7" />
+            <persName>Fannys</persName>
+            <note type="editor" id="en7" resp="ch" target="#lem7">15 Liksom Selma ett namn med skönlitterära associationer, t.ex. till Friedrich Gottlieb Klopstocks »An Fanny», John Keats »Ode to Fanny» och Franzéns Fannydikter. Hos Franzén är Fanny Selmas dotter.</note> ömma ögon skimrat,</l>
+          <l n="16">
+            <anchor id="lem8" />
+            <persName corresp="pe10">Emmas</persName>
+            <note type="editor" id="en8" resp="ch" target="#lem8">16 Emma är smeknamnet på hustrun Emilie. Namnet återkommer i flera av Topelius dikter, t.ex. i »Till Emma», och hos några av de skalder som Topelius värderade högt: Franzén, Almqvist och Schiller.</note> blida blåa blickar<note type="editor" id="en3" resp="ch" target="#lem3">12–16 Urvalet av flicknamn representerar de litterära traditioner till vilka Topelius dikt ansluter sig.</note></l>
+          <l n="17">Klarare än stjernor strålat.<note type="editor" id="en2" resp="ch" target="#lem2">10–17 Att åberopa sångens verkan på lyssnarna är vanligt i folkvisetraditionen. »Sångens makt», en estnisk folkvisa från samma tid, inleds t.ex. med följande ord: »När jag sätter mig att sjunga, / Börjar sjunga, börjar qväda, / Mången man i tankar sjunker, / Mången jungfru uti tårar» (<hi rend="italics">Fosterländskt album</hi> 1845, s. 3). Jfr effekten av Väinämöinens sång i <hi rend="italics">Kalevala</hi>: alla skogens väsen samlas och lystrar, och han själv rörs till tårar.</note></l>
+          <l n="18">Så i vackra ögons värma</l>
+          <l n="19">Sångerna likt drifvor smultit,</l>
+          <l n="20">Runnit upp som morgondrömmar </l>
+          <l n="21">I ett vårligt hjertas kärlek.</l>
+          <l n="22">Nu jag samlat har de späda,</l>
+          <l n="23">
+            <anchor id="lem9" />Skickar dem åt <placeName xml:lang="fin">Suomis</placeName> flickor,<note type="editor" id="en9" resp="ch" target="#lem9"> 23 I <hi rend="italics">Självbiografiska anteckningar</hi> uppger Topelius: »Tillägnan till Finlands flickor i första häftet av Ljungblommor låter väl ana den källa, vid vars rand dessa blommor uppspirat» (1922, s. 101 f.).</note></l>
+          <l n="24">Att en sorgsen stund fördrifva,</l>
+          <l n="25">Att i vårens doft och längtan </l>
+          <l n="26">Sångens ro de hulda gifva.</l>
+        </lg>
+        <dateline>
+          <date when="1845">1845.</date>
+        </dateline>
+              </div>
+      <div type="comment">
+        <p rend="noIndent" xml:id="p2">Ett manuskript är känt, daterat <hi rend="italics">Febr. 8</hi> [1843] (ms 1). Härtill finns en odaterad renskrift, med sju versrader (ms 2), versosidan har dateringen <hi rend="italics">1860</hi>. Dikten »Ljungblommor. / 2. Sången» trycktes i HT 4/3 1843. Den omarbetades i diktsamlingen till två separata dikter, »Ljungblommor» och »Sången»; båda ingår i reviderad form i de senare upplagorna av diktsamlingen.</p>
+        <p xml:id="p3">Titeldikten på runometer utgör ett lyriskt förord till diktsamlingen, där sångaren introducerar sina sånger, sina muser och sina intentioner. Tilltalet är jämförbart med de inledande runorna i <hi rend="italics">Kanteletar</hi> och <hi rend="italics">Kalevala</hi>, och återfinns också i annan muntligt traderad folkdiktning. Om ljungen som sinnebild för Topelius lyriska produktion och som motivbild för samtliga titeldikter, <xref type="introduction" target="1 #pos1">se inledn.</xref></p>
+        <p xml:id="p4">Topelius svenska runometer är liksom den finska Kalevalametern åttastavig och trokeisk, allitterations- och assonansrik och uppbyggd av parallellismer, d.v.s. en tanke upprepas och varieras i två eller flera på varandra följande verser. Versen är orimmad, men har s.k. balkar, d.v.s. parrim i rapsodins mitt eller slut, liksom samlingens följande fyra runometerdikter.</p>
+        <div type="background">
+          <head>Om ljungen som sinnebild</head>
+          <p rend="noIndent" xml:id="p5">Jag älskar skogen och hafvet, det djupa lugnet och den vilda stormen i begge. Jag älskar solen och stjernorna och månen och skyarna. Jag älskar ock den stilla daggen på dalens blommor: – striden, segern och segerns frid. På slätterna, bland verldens fröjder, går sällan min stig. Derföre är min sång en ljungblomma lik, enslig fostrad i skogen. Alldrig skall den kastas i verlden ut, der så mycket herrligt förut öfverglänser dess bleka rodnad. Aldrig skall dess namn höras på slätterna. Så som den blomstrat, skall den ock vissna, enslig och gömd och glömd. (NB 244.150)</p>
+          <lb />
+          <p rend="noIndent" xml:id="p6">Ljungen blir en sinnebild för Topelius hela lyriska produktion. Hans tre första diktsamlingar får namnet <hi rend="italics">Ljungblommor</hi>, liksom titeldikten i den första samlingen och i de senare upplagorna (1860, 1880 och 1888). Titeldikten i Topelius diktsamling <hi rend="italics">Nya Blad</hi> (1870) inleds med följande strof: »Långa vintrar ha förflutit / Sedan jag i vårens dagar / Hedens ljung har sammanknutit.» Titeldikten i Topelius sista diktsamling, som fick namnet <hi rend="italics">Ljung</hi> (1880), upptar samma motiv: »Mången sträng är ljudlöst sprungen, / Mycken snö föll hvit på heden, / Sedan sist jag bundit ljungen.» Genom ljung-motivet och det trokeiska versmåttet sammanbinder Topelius diktsamlingarna med varandra och skapar med sin liknelse en motivisk ram.</p>
+          <p xml:id="p7">Idén att likna en diktsamling vid en blomkrans härrör från antiken; ordet antologi betyder ursprungligen blomstersamling. Franzén utvecklar bilden i sitt företal till <hi rend="italics">Skaldestycken</hi> och Rückert indelar sin samling <hi rend="italics">Liebesfrühling</hi> i buketter.</p>
+          <p xml:id="p8">Förutom att Topelius liknar sina egna dikter vid ljungblomster, representerar ödemarksblomman för honom också den finska naturens vilda skönhet och den finska folksjälen. Men ljungen, liksom tuvan, heden, skogen och ödemarken, får i Topelius dikter härutöver en utvidgad innebörd i romantikens anda: som en spegling av själens landskap och människans hjärta (se komm. till dikten »Ljungblommor»).</p>
+        </div>
+        <div type="background">
+          <head>Runorna</head>
+          <p rend="noIndent" xml:id="p9">
+            <hi rend="italics">Hangolas Dikt</hi> (oktober 1840) föregås i manuskripthäftet av följande reflexion:</p>
+          <lb />
+          <p rend="noIndent" xml:id="p10">Den numera döende runan, hwars sista melancholiska toner man nu älskar att samla och bewara, har omklädt det fattiga Finska folket med en poetisk gloria af sällsamt intagande ehuru lidande skönhet. Ett folk som älskar sången så högt bär inom sig frön till den ädlaste bildning. Men gäller väl detta om det nu varande Finlands folk, som aktat sin ärfda kantele ringare än dagens ostämda lyror, och låter sina sista barder förgätna bortklaga sitt lif på Saimens stränder? […] Hvarföre skulle icke en ny poesie kunna uppblomstra i Finland sedan den gamla icke mer vill trifvas hos folket? Den gamla kunde icke vara en tidsblomma mer, derföre dog den ut. Men om blott dess rot och dess fäste är qvar, skall den ännu lefva i föryngrad gestalt. (NB 244.150)</p>
+          <lb />
+          <p rend="noIndent" xml:id="p11">De nationella strävandena som på allvar tog sin början under 1830-talet syftade till att definiera den finska kulturen och det finska folkets särart genom att särskilja det unika och autentiska och stärka det finska språket. Men förutom det särskiljande lyfte man också fram de gemensamma drag som det finska folket hade med andra ugriska folk, i synnerhet det estniska. I denna strävan var återupptäckten av folksångerna och myterna i runsångerna en betydelsefull identitetsskapande aktivitet. I romantikens anda sågs enkelheten i folkpoesin som ett uttryck för det ursprungliga och naturliga.</p>
+          <p xml:id="p12">Flera kulturpersonligheter aktiverade sig i insamlandet av runor, t.ex. H. G. Porthan. En tidig runosamlare var Topelius far, Zacharias Topelius d.ä., f.d. elev till Porthan och far till Topelius. Han utgav fem häften med runor, <hi rend="italics">Suomen Kansan Wanhoja Runoja</hi>. Eftersom Topelius egna kunskaper i finska var bristfälliga var han själv inte så förtrogen med runosångerna förrän Castrén 1841 översatte Elias Lönnrots epos <hi rend="italics">Kalevala </hi>(Topelius 1970, s. 42).</p>
+          <p xml:id="p13">Lönnrot sammanställde redan 1829–1831 ett häfte med namnet <hi rend="italics">Kantele</hi> bestående dels av material som Z. Topelius d.ä. samlat in, dels av material från egna insamlingar. Senare under 1830-talet företog Lönnrot resor till Savolax, Karelen och Vitahavskarelen, vilket resulterade i den första samlingen av <hi rend="italics">Kalevala</hi> 1835. En utökad och slutgiltig version utkom 1849. Som komplement till <hi rend="italics">Kalevala</hi> utgav Lönnrot folkvisesamlingen <hi rend="italics">Kanteletar </hi>1840–1841.</p>
+          <p xml:id="p14">De muntliga runorna som vandrade från trakt till trakt hade olika funktioner och olika teman: historiska och didaktiska runor, allmänna reflexioner, smäderunor, klagorunor, tacksägelserunor, skrönor etc. Skapelsemyter i olika varianter utgör huvudtemat i <hi rend="italics">Kalevala</hi>. En centralgestalt är den vise sångaren Väinämöinen – den finska mytologins egen bard, som åstadkommer det övernaturliga med hjälp av sitt strängaspel kantelen. Sångerna är skrivna på runometer och karakteriseras, liksom andra muntligt traderade visor, av ett starkt formaliserat språkbruk med upprepningar och stående epitet.</p>
+          <p xml:id="p15">Se även <hi rend="italics">Finland framställdt i teckningar</hi> 2011, s. 50 f.</p>
+        </div>
+        <div type="bibl">
+          <p rend="noIndent" xml:id="p16">Topelius, <hi rend="italics">Finland framställdt i teckningar</hi> 2011, s. 50 f.; <hi rend="italics">Självbiografiska anteckningar</hi> 1922, s. 101 f.; <hi rend="italics">120 dikter</hi> 1970, s. 1 f.; <hi rend="italics">Fosterländskt album</hi> 1845, s. 3</p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI.2>
