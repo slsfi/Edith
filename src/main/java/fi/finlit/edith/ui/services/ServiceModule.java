@@ -8,7 +8,6 @@ package fi.finlit.edith.ui.services;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
@@ -22,10 +21,8 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
 import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
 
-import com.mysema.rdfbean.model.FetchStrategy;
-import com.mysema.rdfbean.model.PredicateWildcardFetch;
+import com.mysema.rdfbean.model.Format;
 import com.mysema.rdfbean.model.Repository;
-import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
@@ -70,8 +67,7 @@ public final class ServiceModule {
 
     public static Configuration buildConfiguration() {
         DefaultConfiguration configuration = new DefaultConfiguration();
-        configuration.setFetchStrategies(Collections
-                .<FetchStrategy> singletonList(new PredicateWildcardFetch()));
+//        configuration.setFetchStrategies(Collections.<FetchStrategy> singletonList(new PredicateWildcardFetch()));
         configuration.addPackages(Document.class.getPackage());
         return configuration;
     }

@@ -6,10 +6,8 @@ import java.util.Map;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.mysema.rdfbean.model.Operation;
-import com.mysema.rdfbean.model.ReplaceOperation;
+import com.mysema.rdfbean.model.Format;
 import com.mysema.rdfbean.model.UID;
-import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 
@@ -33,8 +31,8 @@ public class NoteStatusTest {
         map.put(new UID(EDITH.NS, "Draft"), new UID(EDITH.NS, "DRAFT"));
         map.put(new UID(EDITH.NS, "Publishable"), new UID(EDITH.NS, "PUBLISHABLE"));
         map.put(new UID(EDITH.NS, "Initial"), new UID(EDITH.NS, "INITIAL"));
-        Operation replace = new ReplaceOperation(map);
-        repository.execute(replace);
+//        Operation replace = new ReplaceOperation(map);
+//        repository.execute(replace);
         repository.close();
         // OutputStream os = new ByteArrayOutputStream();
         // repository.export(Format.TURTLE, os);

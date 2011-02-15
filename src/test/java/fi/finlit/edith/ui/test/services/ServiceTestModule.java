@@ -18,8 +18,8 @@ import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 
+import com.mysema.rdfbean.model.Format;
 import com.mysema.rdfbean.model.Repository;
-import com.mysema.rdfbean.model.io.Format;
 import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.sesame.MemoryRepository;
 

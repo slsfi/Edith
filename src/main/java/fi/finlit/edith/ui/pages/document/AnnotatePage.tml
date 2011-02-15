@@ -288,7 +288,7 @@
 	</p:rightPanel>
 
     <div class="jqmWindow" id="dialog">
-        <t:zone t:id="dialogZone">${message:creatingNote}...</t:zone>
+        <t:zone t:id="dialogZone" update="show">${message:creatingNote}...</t:zone>
     
         <a href="#" class="jqmClose">${message:close}</a>
     </div>

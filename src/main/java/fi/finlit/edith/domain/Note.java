@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -82,6 +83,33 @@ public class Note extends Identifiable {
 
     @Predicate
     private long editedOn;
+
+    public Note createCopy(){
+        Note copy = new Note();
+        Set<NoteComment> comments = new HashSet<NoteComment>();
+        for (NoteComment comment : getComments()) {
+            NoteComment copyOfComment = comment.copy();
+            copyOfComment.setNote(copy);
+            comments.add(copyOfComment);
+            // getSession().save(copyOfComment);
+        }
+        copy.setComments(comments);
+        if (getDescription() != null) {
+            copy.setDescription(getDescription().copy());
+        }
+        copy.setFormat(getFormat());
+        copy.setLemma(getLemma());
+        copy.setLemmaMeaning(getLemmaMeaning());
+        copy.setPerson(getPerson());
+        copy.setPlace(getPlace());
+        if (getSources() != null) {
+            copy.setSources(getSources().copy());
+        }
+        copy.setSubtextSources(getSubtextSources());
+        copy.setTerm(getTerm());
+        copy.setTypes(getTypes());
+        return copy;
+    }
 
     public Set<UserInfo> getAllEditors() {
         return allEditors;

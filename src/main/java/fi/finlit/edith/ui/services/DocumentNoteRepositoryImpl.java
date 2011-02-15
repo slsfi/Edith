@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -33,7 +32,6 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
@@ -214,36 +212,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         if (docNote.getNote() == null) {
             throw new ServiceException("Note was null for " + docNote);
         }
-        docNote.setNote(copy(docNote.getNote()));
+        docNote.setNote(docNote.getNote().createCopy());
         return save(docNote);
-    }
-
-    // TODO This doesn't belong here. Though getSession() does :/
-    private Note copy(Note note) {
-        Note copy = new Note();
-        Set<NoteComment> comments = new HashSet<NoteComment>();
-        for (NoteComment comment : note.getComments()) {
-            NoteComment copyOfComment = comment.copy();
-            copyOfComment.setNote(copy);
-            comments.add(copyOfComment);
-            // getSession().save(copyOfComment);
-        }
-        copy.setComments(comments);
-        if (note.getDescription() != null) {
-            copy.setDescription(note.getDescription().copy());
-        }
-        copy.setFormat(note.getFormat());
-        copy.setLemma(note.getLemma());
-        copy.setLemmaMeaning(note.getLemmaMeaning());
-        copy.setPerson(note.getPerson());
-        copy.setPlace(note.getPlace());
-        if (note.getSources() != null) {
-            copy.setSources(note.getSources().copy());
-        }
-        copy.setSubtextSources(note.getSubtextSources());
-        copy.setTerm(note.getTerm());
-        copy.setTypes(note.getTypes());
-        return copy;
     }
 
     private BeanSubQuery sub(EntityPath<?> entity) {
