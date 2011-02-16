@@ -86,14 +86,14 @@ public class Note extends Identifiable {
 
     public Note createCopy(){
         Note copy = new Note();
-        Set<NoteComment> comments = new HashSet<NoteComment>();
+        Set<NoteComment> commentsCopy = new HashSet<NoteComment>();
         for (NoteComment comment : getComments()) {
             NoteComment copyOfComment = comment.copy();
             copyOfComment.setNote(copy);
-            comments.add(copyOfComment);
+            commentsCopy.add(copyOfComment);
             // getSession().save(copyOfComment);
         }
-        copy.setComments(comments);
+        copy.setComments(commentsCopy);
         if (getDescription() != null) {
             copy.setDescription(getDescription().copy());
         }
