@@ -87,8 +87,8 @@
 
 		    jQuery(function() {
 		    	  jQuery("#note_filters input").each(function() {
-		    	toggleNoteListElements(jQuery(this));
-		        });
+		    	      toggleNoteListElements(jQuery(this));
+		          });
 		    });
 		  </script>
 		
@@ -174,27 +174,23 @@
 
 						<script type="text/javascript">
 							var hideBasedOnFormat = function() {
-							var type
-							=jQuery("select[name='format']").val();
-							jQuery("#editZone .note").hide();
-							jQuery("#editZone .place").hide();
-							jQuery("#editZone .person").hide();
-							if (type ==
-							"NOTE") {
-							jQuery("#editZone .note").show();
-							} else if (type ==
-							"PLACE") {
-							jQuery("#editZone .place").show();
-							} else if (type ==
-							"PERSON") {
-							jQuery("#editZone .person").show();
-							}
+							    var type = jQuery("select[name='format']").val();
+							    jQuery("#editZone .note").hide();
+							    jQuery("#editZone .place").hide();
+							    jQuery("#editZone .person").hide();
+							    if (type == "NOTE") {
+  							        jQuery("#editZone .note").show();
+							    } else if (type == "PLACE") {
+							        jQuery("#editZone .place").show();
+							    } else if (type == "PERSON") {
+							        jQuery("#editZone .person").show();
+							    }
 							}
 
 							hideBasedOnFormat();
 
 							jQuery("select[name='format']").change(function() {
-							hideBasedOnFormat();
+							    hideBasedOnFormat();
 							});
                     </script>
 						<t:note.noteForm							
@@ -221,21 +217,21 @@
 			</t:if>
 		</t:block>
 		<t:zone t:id="commentZone" update="show">
-		                <script type="text/javascript">
-                            jQuery(".delete_dialog").hide();
+            <script type="text/javascript">
+                jQuery(".delete_dialog").hide();
 
-                            jQuery(".delete_question").click(function(event) {
-                                jQuery(this).siblings().show();
-                                jQuery(this).hide();
-                                event.preventDefault();
-                            });
+                jQuery(".delete_question").click(function(event) {
+                     jQuery(this).siblings().show();
+                     jQuery(this).hide();
+                     event.preventDefault();
+                });
 
-                            jQuery(".delete_decline").click(function(event) {
-                                jQuery(this).parent().siblings().show();
-                                jQuery(this).parent().hide();
-                                event.preventDefault();
-                            });
-                       </script>
+                jQuery(".delete_decline").click(function(event) {
+                     jQuery(this).parent().siblings().show();
+                     jQuery(this).parent().hide();
+                     event.preventDefault();
+                });
+            </script>
 			<t:if test="noteId">
 				<div id="comments">
 					<h3>${message:comments}</h3>
@@ -319,8 +315,7 @@
 
 	<script type="text/javascript">
 		var l10n = new Array();
-		l10n.invalidSelection =
-		"${message:invalid-selection-error}";
+		l10n.invalidSelection = "${message:invalid-selection-error}";
 	</script>
 	
 </html>
