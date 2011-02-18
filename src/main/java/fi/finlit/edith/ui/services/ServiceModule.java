@@ -42,8 +42,9 @@ import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
  *
  */
 public final class ServiceModule {
+
     // TODO : get rid of match
-    @Match({ "AdminService", "DocumentRepository", "NoteRepository", "NoteInfoRepository","UserRepository",
+    @Match({ "AdminService", "DocumentRepository", "NoteRepository", "UserRepository",
             "DocumentNoteRepository", "TermRepository", "PersonRepository", "PlaceRepository" })
     public static void adviseTransactions(TransactionalAdvisor advisor,
             MethodAdviceReceiver receiver) {
@@ -67,7 +68,6 @@ public final class ServiceModule {
 
     public static Configuration buildConfiguration() {
         DefaultConfiguration configuration = new DefaultConfiguration();
-//        configuration.setFetchStrategies(Collections.<FetchStrategy> singletonList(new PredicateWildcardFetch()));
         configuration.addPackages(Document.class.getPackage());
         return configuration;
     }
@@ -90,7 +90,6 @@ public final class ServiceModule {
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
         // app config
-        // configuration.add(EDITH.SVN_CACHE_DIR, "${java.io.tmpdir}/svncache");
         Properties properties = new Properties();
 
         InputStream stream = null;
