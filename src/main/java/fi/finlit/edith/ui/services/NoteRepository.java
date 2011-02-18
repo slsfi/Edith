@@ -114,8 +114,12 @@ public interface NoteRepository extends Repository<Note, String> {
     /**
      * @return
      */
-    // TODO TEST
     List<Note> getOrphans();
+
+    /**
+     * @return
+     */
+    List<String> getOrphanIds();
 
     /**
      * @param searchInfo
@@ -123,8 +127,15 @@ public interface NoteRepository extends Repository<Note, String> {
      */
     List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo);
 
+    /**
+     * @param editedNote
+     */
     void save(Note editedNote);
 
-    void removeNotes(Collection<Note> selectedNotes);
+    /**
+     * @param notes
+     */
+    void removeNotes(Collection<Note> notes);
+
 
 }

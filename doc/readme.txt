@@ -1,6 +1,8 @@
 * viitteiden poisto (1-2htp)
  * orpojen viitteiden poisto Viitteet näkymän kautta (checkbox)
 
+DONE
+
 * dokumenttien poisto (1-2htp)
  * dokumentti poistetaan SVN:stä
  * Document ja siihen liitetyt DocumentNote instanssit poistetaan

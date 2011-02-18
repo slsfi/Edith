@@ -27,6 +27,13 @@
 			<p:selectionCell>
 				<t:checkbox value="documentSelected" />			
 			</p:selectionCell>
+			
+			<!-- 
+			<p:deletionCell>
+				<t:checkbox value="selectedForDeletion" />
+			</p:deletionCell>
+			 -->
+			
 	        <p:empty>
 	            <p>${message:no-documents}</p>
 	        </p:empty>

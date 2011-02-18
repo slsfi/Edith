@@ -30,10 +30,13 @@ public class DocumentsPage {
     @SessionState(create=false)
     private Collection<Document> selectedDocuments;
 
+    private Collection<Document> toBeDeleted;
+
     void onActivate(){
         if (selectedDocuments == null){
             selectedDocuments = new HashSet<Document>();
         }
+        toBeDeleted = new HashSet<Document>();
         documents = documentRepository.getAll();
     }
 
@@ -48,5 +51,17 @@ public class DocumentsPage {
             selectedDocuments.remove(document);
         }
     }
+
+//    public boolean isSelectedForDeletion() {
+//        return selectedDocuments.contains(document);
+//    }
+//
+//    public void setSelectedForDeletion(boolean selected) {
+//        if (selected) {
+//            selectedDocuments.add(document);
+//        } else {
+//            selectedDocuments.remove(document);
+//        }
+//    }
 
 }

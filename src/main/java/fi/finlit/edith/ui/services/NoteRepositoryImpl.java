@@ -33,7 +33,6 @@ import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
 import com.mysema.rdfbean.object.BeanSubQuery;
-import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.*;
@@ -219,6 +218,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return getSession().from(note)
                 .where(sub(documentNote).where(documentNote.note().eq(note)).notExists())
                 .list(note);
+    }
+
+    @Override
+    public List<String> getOrphanIds() {
+        return getSession().from(note)
+                .where(sub(documentNote).where(documentNote.note().eq(note)).notExists())
+                .list(note.id);
     }
 
     @Override
@@ -437,15 +443,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public void removeNotes(Collection<Note> notes) {
-        Session session = getSession();
-        for (Note note : notes){
-            session.delete(note);
-        }
+    public void save(Note note) {
+        getSession().save(note);
     }
 
     @Override
-    public void save(Note note) {
-        getSession().save(note);
+    public void removeNotes(Collection<Note> notes) {
+        for (Note note : notes){
+            getSession().delete(note);
+        }
     }
 }

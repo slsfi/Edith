@@ -64,6 +64,8 @@ public class NoteSearchPage {
 
     private Collection<Note> selectedNotes;
 
+    private Collection<String> orphanNoteIds;
+
     private boolean removeSelected;
 
     @AfterRender
@@ -86,6 +88,9 @@ public class NoteSearchPage {
     }
 
     void onActivate(EventContext ctx) {
+        // TODO : fetch only orpahNote ids for the elements displayed in this window
+        orphanNoteIds = noteRepository.getOrphanIds();
+
         if (selectedNotes == null){
             selectedNotes = new HashSet<Note>();
         }
@@ -149,6 +154,10 @@ public class NoteSearchPage {
 
     public boolean isNotesNotEmpty(){
         return notes.getAvailableRows() > 0;
+    }
+
+    public boolean isOrphanNote(){
+        return orphanNoteIds.contains(note.getId());
     }
 
 }

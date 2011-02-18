@@ -26,7 +26,7 @@ import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.model.io.RDFSource;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
-import com.mysema.rdfbean.sesame.MemoryRepository;
+import com.mysema.rdfbean.sesame.NativeRepository;
 import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
 
 import fi.finlit.edith.EDITH;
@@ -43,7 +43,7 @@ import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
  */
 public final class ServiceModule {
     // TODO : get rid of match
-    @Match({ "AdminService", "DocumentRepository", "NoteRepository", "UserRepository",
+    @Match({ "AdminService", "DocumentRepository", "NoteRepository", "NoteInfoRepository","UserRepository",
             "DocumentNoteRepository", "TermRepository", "PersonRepository", "PlaceRepository" })
     public static void adviseTransactions(TransactionalAdvisor advisor,
             MethodAdviceReceiver receiver) {
@@ -74,8 +74,8 @@ public final class ServiceModule {
 
     public static Repository buildRepository(
             @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
-//        Namespaces.register("edith", EDITH.NS);
-        final MemoryRepository repository = new MemoryRepository();
+        final NativeRepository repository = new NativeRepository();
+        repository.setIndexes("spoc,posc,cspo,opsc");
         repository.setDataDirName(rdfbeanDataDir);
         repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
         hub.addRegistryShutdownListener(new RegistryShutdownListener() {

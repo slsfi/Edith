@@ -68,7 +68,9 @@
                 </p:statusCell>
 
 				<p:noteSelectionCell>
-					<t:checkbox value="noteSelected" />			
+					<t:if test="orphanNote">
+						<t:checkbox value="noteSelected" />
+					</t:if>								
 				</p:noteSelectionCell>
 
                 <p:empty>
