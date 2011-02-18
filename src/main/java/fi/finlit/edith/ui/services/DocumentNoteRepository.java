@@ -22,6 +22,22 @@ import fi.finlit.edith.domain.DocumentRevision;
 public interface DocumentNoteRepository extends Repository<DocumentNote, String> {
 
     /**
+     * @param docNote
+     */
+    void remove(DocumentNote docNote);
+
+    /**
+     * @param documentNoteId
+     */
+    void remove(String documentNoteId);
+
+    /**
+     * @param docNote
+     * @return
+     */
+    DocumentNote save(DocumentNote docNote);
+
+    /**
      * Get the NoteRevision with the given local id in the scope of the given document revision
      *
      * @param document

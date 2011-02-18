@@ -3,6 +3,8 @@
       xmlns:p="tapestry:parameter">
       
     <p:title>${message:documents}</p:title>  
+    
+    <h2>${message:documents}</h2>
 
 	<t:form t:id="documentsForm">
 

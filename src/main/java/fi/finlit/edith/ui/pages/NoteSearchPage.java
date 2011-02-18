@@ -7,6 +7,9 @@ package fi.finlit.edith.ui.pages;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
@@ -43,9 +46,6 @@ public class NoteSearchPage {
     @Property
     private Note note;
 
-//    @Inject
-//    private DocumentNoteRepository noteRevisionRepository;
-
     @Inject
     private NoteRepository noteRepository;
 
@@ -62,6 +62,10 @@ public class NoteSearchPage {
     @Environmental
     private RenderSupport support;
 
+    private Collection<Note> selectedNotes;
+
+    private boolean removeSelected;
+
     @AfterRender
     void addStylesheet() {
         // This is needed to have the page specific style sheet after
@@ -73,17 +77,18 @@ public class NoteSearchPage {
         context = new Context(searchTerm);
     }
 
-//    void onActionFromDelete(String noteRevisionId) {
-//        // noteRevisionRepo.remove(noteRevisionId);
-//        DocumentNote noteRevision = noteRevisionRepository.getById(noteRevisionId);
-//        documentRepository.removeNotes(noteRevision.getDocumentRevision(), noteRevision);
-//    }
-
     void onActionFromToggleEdit() {
         context = new Context(searchTerm, "edit");
     }
 
+    void onSelectedFromRemoveSelected() {
+        removeSelected = true;
+    }
+
     void onActivate(EventContext ctx) {
+        if (selectedNotes == null){
+            selectedNotes = new HashSet<Note>();
+        }
         if (ctx.getCount() >= 1) {
             searchTerm = ctx.get(String.class, 0);
         }
@@ -102,17 +107,21 @@ public class NoteSearchPage {
     }
 
     void onSuccessFromEdit() {
-        //getting all values from encoder
-        for(Note editedNote : encoder.getAllValues() ){
+        if (removeSelected){
+            noteRepository.removeNotes(selectedNotes);
 
-          //If we get a not empty value for a field,
-          //it means it has been edited
-          //We must refetch the actual document note
-          if (!isBlank(editedNote.getLemma())) {
-              Note currentNote = noteRepository.getById(editedNote.getId());
-              currentNote.setLemma(editedNote.getLemma());
-              noteRepository.save(editedNote);
-          }
+        }else{
+          //getting all values from encoder
+            for(Note editedNote : encoder.getAllValues() ){
+              //If we get a not empty value for a field,
+              //it means it has been edited
+              //We must refetch the actual document note
+              if (!isBlank(editedNote.getLemma())) {
+                  Note currentNote = noteRepository.getById(editedNote.getId());
+                  currentNote.setLemma(editedNote.getLemma());
+                  noteRepository.save(editedNote);
+              }
+            }
         }
 
         context = new Context(searchTerm);
@@ -124,6 +133,18 @@ public class NoteSearchPage {
 
     void setupRender() {
         notes = noteRepository.queryNotes(searchTerm == null ? "*" : searchTerm);
+    }
+
+    public boolean isNoteSelected() {
+        return selectedNotes.contains(note);
+    }
+
+    public void setNoteSelected(boolean selected) {
+        if (selected) {
+            selectedNotes.add(note);
+        } else {
+            selectedNotes.remove(note);
+        }
     }
 
 }

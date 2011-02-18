@@ -39,14 +39,20 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     @Override
     public UserInfo getCurrentUser() {
         String username = authService.getUsername();
-        return getSession().from(userInfo).where(userInfo.username.eq(username))
-                .uniqueResult(userInfo);
+        return getSession().from(userInfo).where(userInfo.username.eq(username)).uniqueResult(
+                userInfo);
     }
 
     @Override
     public UserInfo getUserInfoByUsername(String username) {
-        return getSession().from(userInfo).where(userInfo.username.eq(username))
-                .uniqueResult(userInfo);
+        return getSession().from(userInfo).where(userInfo.username.eq(username)).uniqueResult(
+                userInfo);
+    }
+
+    @Override
+    public User save(User entity) {
+        getSession().save(entity);
+        return entity;
     }
 
 }

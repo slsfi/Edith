@@ -2,6 +2,8 @@
 
     <p:title>${message:notesearch}</p:title>
 
+	<h2>${message:notesearch}</h2>
+
     <t:form t:id="search">
         <t:errors />
         <t:textfield value="searchTerm" />
@@ -21,14 +23,16 @@
 
     <t:if test="notes">
         <t:form t:id="edit">
+            
             <div id="formcontrols">
                 <t:if test="editMode">
                     <input type="submit" value="${message:save}" />
                 </t:if>
             </div>
+            
             <div class="cleaner"> </div>
             <t:grid source="notes" row="note" rowsPerPage="20" t:encoder="encoder"
-                 include="lemma" add="description,subtextSources,basicForm,meaning">
+                 include="lemma" add="description,subtextSources,basicForm,meaning,noteSelection">
                 <p:lemmaCell>
                     <t:if test="editMode">
                         <t:inlineEditField t:id="lemma" value="note.lemma"/>
@@ -62,21 +66,18 @@
                 <p:statusCell>
 					<t:fmt.message key="NoteStatus.${note.status}"/>
                 </p:statusCell>
-				<!-- 
-                <p:actionsCell>
-                	<span class="delete_note">
-                		<a href="" class="delete_question">${message:delete}</a>
-                		<span class="delete_dialog">
-                    		${message:delete}? <t:actionlink t:id="delete" context="documentNote.id">${message:yes}</t:actionlink>
-                    		/ <a href="" class="delete_decline">${message:no}</a>
-                    	</span>
-                    </span>
-                </p:actionsCell>
-				-->
+
+				<p:noteSelectionCell>
+					<t:checkbox value="noteSelected" />			
+				</p:noteSelectionCell>
+
                 <p:empty>
                     <p>${message:no-results}</p>
                 </p:empty>
             </t:grid>
+            
+            <t:submit t:id="removeSelected" value="${message:remove-selected}"/>
+            
         </t:form>
         <p:else>
             <p>${message:no-results}</p>

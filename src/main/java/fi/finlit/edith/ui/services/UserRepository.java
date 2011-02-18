@@ -50,4 +50,10 @@ public interface UserRepository extends Repository<User,String>{
      */
     List<User> getOrderedByName();
 
+    /**
+     * @param user
+     * @return
+     */
+    User save(User user);
+
 }

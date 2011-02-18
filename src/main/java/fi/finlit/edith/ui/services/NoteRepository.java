@@ -6,6 +6,7 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
@@ -121,5 +122,9 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo);
+
+    void save(Note editedNote);
+
+    void removeNotes(Collection<Note> selectedNotes);
 
 }

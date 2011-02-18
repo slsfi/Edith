@@ -2,6 +2,8 @@
 	xmlns:p="tapestry:parameter">
 
 	<p:title>${message:help}</p:title>
+	
+	<h2>${message:help}</h2>
 
 	<div class="content">
 		<h3>Annotointi</h3>

@@ -28,4 +28,11 @@ public interface TermRepository extends Repository<Term,String>{
      * @return
      */
     List<Term> findByBasicForm(String basicForm);
+
+    void remove(String termId);
+
+    /**
+     * @param term
+     */
+    void save(Term term);
 }

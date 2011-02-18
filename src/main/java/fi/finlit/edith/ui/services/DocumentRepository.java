@@ -110,4 +110,9 @@ public interface DocumentRepository extends Repository<Document, String> {
      */
     DocumentNote updateNote(DocumentNote note, SelectedText selection) throws IOException;
 
+    /**
+     * @param doc
+     */
+    void remove(Document doc);
+
 }

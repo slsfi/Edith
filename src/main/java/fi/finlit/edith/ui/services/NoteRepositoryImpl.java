@@ -33,6 +33,7 @@ import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
 import com.mysema.rdfbean.object.BeanSubQuery;
+import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.*;
@@ -433,5 +434,18 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private BeanSubQuery sub(EntityPath<?> entity) {
         return new BeanSubQuery().from(entity);
+    }
+
+    @Override
+    public void removeNotes(Collection<Note> notes) {
+        Session session = getSession();
+        for (Note note : notes){
+            session.delete(note);
+        }
+    }
+
+    @Override
+    public void save(Note note) {
+        getSession().save(note);
     }
 }

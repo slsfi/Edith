@@ -320,7 +320,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         doc.setSvnPath(path);
         doc.setTitle(title);
         doc.setDescription(description);
-        return save(doc);
+        getSession().save(doc);
+        return doc;
     }
 
     private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, ElementContext context, Matched matched, String localId, MutableInt endOffset) throws XMLStreamException {

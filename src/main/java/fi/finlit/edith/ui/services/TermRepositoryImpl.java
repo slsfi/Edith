@@ -32,4 +32,17 @@ public class TermRepositoryImpl extends AbstractRepository<Term> implements Term
         return getSession().from(term).where(term.basicForm.eq(basicForm)).list(term);
     }
 
+    @Override
+    public void remove(String id) {
+        Term entity = getById(id);
+        if (entity != null) {
+            getSession().delete(entity);
+        }
+    }
+
+    @Override
+    public void save(Term term) {
+        getSession().save(term);
+    }
+
 }

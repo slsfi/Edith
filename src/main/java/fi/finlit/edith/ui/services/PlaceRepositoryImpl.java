@@ -26,4 +26,23 @@ public class PlaceRepositoryImpl extends AbstractRepository<Place> implements Pl
                 .where(place.normalizedForm().last.startsWithIgnoreCase(partial)).limit(limit)
                 .list(place);
     }
+
+    @Override
+    public void remove(String placeId) {
+        Place entity = getById(placeId);
+        if (entity != null){
+            getSession().delete(entity);
+        }
+    }
+
+    @Override
+    public void save(Place place) {
+        getSession().save(place);
+    }
+
+    @Override
+    public void remove(Place place) {
+        getSession().delete(place);
+    }
+
 }

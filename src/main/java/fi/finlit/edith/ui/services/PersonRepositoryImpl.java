@@ -28,4 +28,23 @@ public class PersonRepositoryImpl extends AbstractRepository<Person> implements 
                         person.normalizedForm().last.startsWithIgnoreCase(partial))).limit(limit)
                 .list(person);
     }
+
+    @Override
+    public void remove(String personId) {
+        Person entity = getById(personId);
+        if (entity != null){
+            getSession().delete(entity);
+        }
+    }
+
+    @Override
+    public void save(Person person) {
+        getSession().save(person);
+    }
+
+    @Override
+    public void remove(Person person) {
+        getSession().delete(person);
+    }
+
 }
