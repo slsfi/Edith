@@ -6,5 +6,18 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public enum TermLanguage {
-    FINNISH, SWEDISH, OTHER
+    /**
+     *
+     */
+    FINNISH,
+
+    /**
+     *
+     */
+    SWEDISH,
+
+    /**
+     *
+     */
+    OTHER
 }

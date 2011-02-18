@@ -76,12 +76,16 @@
                 </p:empty>
             </t:grid>
             
-            <t:submit t:id="removeSelected" value="${message:remove-selected}"/>
-            
+            <t:if test="notesNotEmpty">
+            	<t:submit t:id="removeSelected" value="${message:remove-selected}"/>
+            </t:if>
+                        
         </t:form>
+        
         <p:else>
             <p>${message:no-results}</p>
         </p:else>
+        
     </t:if>
 
     <p:rightPanel>

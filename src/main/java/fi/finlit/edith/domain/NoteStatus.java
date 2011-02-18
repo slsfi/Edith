@@ -11,5 +11,18 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public enum NoteStatus {
-    INITIAL, DRAFT, FINISHED;
+    /**
+     *
+     */
+    INITIAL,
+
+    /**
+     *
+     */
+    DRAFT,
+
+    /**
+     *
+     */
+    FINISHED;
 }

@@ -147,4 +147,8 @@ public class NoteSearchPage {
         }
     }
 
+    public boolean isNotesNotEmpty(){
+        return notes.getAvailableRows() > 0;
+    }
+
 }

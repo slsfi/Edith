@@ -6,5 +6,18 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public enum NoteFormat {
-    NOTE, PLACE, PERSON
+    /**
+     *
+     */
+    NOTE,
+
+    /**
+     *
+     */
+    PLACE,
+
+    /**
+     *
+     */
+    PERSON
 }
