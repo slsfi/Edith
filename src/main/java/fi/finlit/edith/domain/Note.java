@@ -45,6 +45,7 @@ public class Note extends Identifiable {
     @Predicate(ln = "commentOf", inv = true)
     private Set<NoteComment> comments;
 
+    // TODO : refactor to String
     @Predicate(ln = "desc")
     private Paragraph description;
 
@@ -66,12 +67,14 @@ public class Note extends Identifiable {
     @Predicate
     private Place place;
 
+    // TODO : refactor to String
     @Predicate
     private Paragraph sources;
 
     @Predicate
     private NoteStatus status = NoteStatus.INITIAL;
 
+    // TODO : refactor to String
     @Predicate
     private Paragraph subtextSources;
 
