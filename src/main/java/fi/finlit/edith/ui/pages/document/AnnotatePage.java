@@ -348,8 +348,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public int getNumberOfInstancesInDocument() {
-        return documentNoteRepository.getOfNoteInDocument(note.getNote().getId(),
-                getDocument().getId()).size();
+        return noteWithInstances.getDocumentNotes().size();
     }
 
     Object onChooseBackingNote() {

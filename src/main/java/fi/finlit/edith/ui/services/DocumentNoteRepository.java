@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.services;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
 
 /**
  * The Interface DocumentNoteRepository.
@@ -64,6 +66,12 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      * @return
      */
     List<DocumentNote> getOfNote(String noteId);
+
+    /**
+     * @param notes
+     * @return
+     */
+    List<DocumentNote> getOfNotes(Collection<Note> notes);
 
     /**
      * Get the DocumentNotes of the given Person.

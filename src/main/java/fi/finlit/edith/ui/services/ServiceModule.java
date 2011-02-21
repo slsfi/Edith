@@ -75,7 +75,7 @@ public final class ServiceModule {
     public static Repository buildRepository(
             @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
         final NativeRepository repository = new NativeRepository();
-        repository.setIndexes("spoc,posc,cspo,opsc");
+        repository.setIndexes("spoc,posc,opsc");
         repository.setDataDirName(rdfbeanDataDir);
         repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
         hub.addRegistryShutdownListener(new RegistryShutdownListener() {

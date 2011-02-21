@@ -15,8 +15,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -32,6 +36,7 @@ import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
+import com.mysema.rdfbean.object.BeanQuery;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
@@ -102,10 +107,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                             otherNote.createdOn.gt(documentNote.createdOn)).notExists()
                     ).exists());
 
-//            docFilters.and(sub(otherNote).where(otherNote.ne(documentNote),
-//                    otherNote.note().eq(documentNote.note()),
-//                    otherNote.localId.eq(documentNote.localId),
-//                    otherNote.createdOn.gt(documentNote.createdOn)).notExists());
         }
 
         // orphans
@@ -144,33 +145,66 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             filters.and(filter);
         }
 
+        // get matching notes
         List<Note> notes = getSession().from(note).where(filters).orderBy(getOrderBy(searchInfo, note)).list(note);
 
-        List<NoteWithInstances> rv = new ArrayList<NoteWithInstances>(notes.size());
-        for (Note n : notes){
-            BooleanBuilder f = new BooleanBuilder();
+        if (!notes.isEmpty()){
+            // get related document notes
+            List<DocumentNote> documentNotes = getActiveDocumentNotes(searchInfo.getCurrentDocument(), notes);
 
-            // of given note
-            f.and(documentNote.note().eq(n));
+            // map document notes to notes
+            Map<Note, Set<DocumentNote>> noteToDocumentNotes = new HashMap<Note, Set<DocumentNote>>();
+            for (DocumentNote dn : documentNotes){
+                Set<DocumentNote> dnSet = noteToDocumentNotes.get(dn.getNote());
+                if (dnSet == null){
+                    dnSet = new HashSet<DocumentNote>();
+                    noteToDocumentNotes.put(dn.getNote(), dnSet);
+                }
+                dnSet.add(dn);
+            }
 
-            // not deleted
-            f.and(documentNote.deleted.eq(false));
+            // create return value
+            List<NoteWithInstances> rv = new ArrayList<NoteWithInstances>(notes.size());
+            for (Note n : notes){
+                if (noteToDocumentNotes.containsKey(n)){
+                    rv.add(new NoteWithInstances(n, noteToDocumentNotes.get(n)));
+                }else{
+                    rv.add(new NoteWithInstances(n, Collections.<DocumentNote>emptySet()));
+                }
+            }
+            return rv;
 
-            // latest revision
-            f.and(sub(otherNote).where(otherNote.ne(documentNote),
-                    otherNote.note().eq(documentNote.note()),
-                    otherNote.localId.eq(documentNote.localId),
-                    otherNote.createdOn.gt(documentNote.createdOn)).notExists());
-
-            // of current document
-            f.and(documentNote.document().eq(searchInfo.getCurrentDocument()));
-
-            List<DocumentNote> instances = getSession().from(documentNote).where(f).list(documentNote);
-            rv.add(new NoteWithInstances(n, instances));
+        }else{
+            List<NoteWithInstances> rv = new ArrayList<NoteWithInstances>(notes.size());
+            for (Note n : notes){
+                rv.add(new NoteWithInstances(n, Collections.<DocumentNote>emptySet()));
+            }
+            return rv;
         }
 
-        return rv;
 
+
+    }
+
+    private List<DocumentNote> getActiveDocumentNotes(Document document, Collection<Note> notes){
+        BeanQuery query = getSession().from(documentNote);
+
+        // of given note
+        query.where(documentNote.note().in(notes));
+
+        // not deleted
+        query.where(documentNote.deleted.eq(false));
+
+        // latest revision
+        query.where(sub(otherNote).where(otherNote.ne(documentNote),
+                otherNote.note().eq(documentNote.note()),
+                otherNote.localId.eq(documentNote.localId),
+                otherNote.createdOn.gt(documentNote.createdOn)).notExists());
+
+        // of current document
+        query.where(documentNote.document().eq(document));
+
+        return query.list(documentNote);
     }
 
     @Override

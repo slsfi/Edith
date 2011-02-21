@@ -153,7 +153,8 @@
 					</div>
 					<div class="cleaner"></div>
 					<div class="note_edit">
-						<em><strong>${noteOnEdit.note.lemma}</strong></em> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="lemmaInstances"/>) </span>
+						<em><strong>${noteOnEdit.note.lemma}</strong></em> 
+						<span class="metadata"> (<t:fmt.message key="embeddedTo" args="lemmaInstances"/>) </span>
 						
 						<!-- This could be externalized? -->
                         <script type="text/javascript">

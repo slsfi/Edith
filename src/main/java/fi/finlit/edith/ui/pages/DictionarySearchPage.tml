@@ -11,7 +11,7 @@
     </t:form>
 
     <t:if test="terms">
-        <t:grid source="terms" row="term" rowsPerPage="20" 
+        <t:grid t:id="termsGrid" source="terms" row="term" rowsPerPage="20" 
             include="basicForm,meaning" add="appearances,actions">
             <p:appearancesCell>
             	<t:if test="term.undeletedNotes">

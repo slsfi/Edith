@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
@@ -218,6 +220,14 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     private BeanSubQuery sub(EntityPath<?> entity) {
         return new BeanSubQuery().from(entity);
+    }
+
+    public List<DocumentNote> getOfNotes(Collection<Note> notes){
+        return getSession()
+        .from(documentNote)
+        .where(documentNote.note().in(notes),
+               documentNote.deleted.eq(false),
+               latest(documentNote)).list(documentNote);
     }
 
     @Override
