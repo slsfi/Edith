@@ -26,7 +26,6 @@ import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.ParagraphParser;
 import fi.finlit.edith.ui.services.PersonRepository;
 import fi.finlit.edith.ui.services.PlaceRepository;
 import fi.finlit.edith.ui.services.TermRepository;
@@ -450,13 +449,13 @@ public class NoteForm {
 
     public void setSubtextSources(String subtextSources) throws XMLStreamException {
         if (subtextSources != null) {
-            noteOnEdit.getNote().setSubtextSources(ParagraphParser.parseParagraph(subtextSources));
+            noteOnEdit.getNote().setSubtextSourcesString(subtextSources);
         }
     }
 
     public void setDescription(String description) throws XMLStreamException {
         if (description != null) {
-            noteOnEdit.getNote().setDescription(ParagraphParser.parseParagraph(description));
+            noteOnEdit.getNote().setDescriptionString(description);
         }
     }
 
@@ -497,7 +496,7 @@ public class NoteForm {
 
     public void setSources(String sources) throws XMLStreamException {
         if (sources != null) {
-            noteOnEdit.getNote().setSources(ParagraphParser.parseParagraph(sources));
+            noteOnEdit.getNote().setSourcesString(sources);
         }
     }
 

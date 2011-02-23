@@ -69,7 +69,7 @@ public class ParagraphPersistenceTest extends AbstractServiceTest{
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
         Paragraph paragraph = newParagraph();
-        note.setDescription(paragraph);
+        note.setDescriptionString(paragraph.toString());
         session.save(note);
         session.save(documentNote);
         session.close();
@@ -86,8 +86,8 @@ public class ParagraphPersistenceTest extends AbstractServiceTest{
     private Paragraph newParagraph() {
         Paragraph paragraph = new Paragraph();
         paragraph.addElement(new StringElement("a"));
-        paragraph.addElement(new StringElement("b"));
         paragraph.addElement(new LinkElement("c"));
+        paragraph.addElement(new StringElement("b"));
         return paragraph;
     }
 

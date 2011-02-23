@@ -47,7 +47,10 @@ public class Note extends Identifiable {
 
     // TODO : refactor to String
     @Predicate(ln = "desc")
-    private Paragraph description;
+    public Paragraph description;
+
+    @Predicate(ln="descriptionString")
+    private String descriptionString;
 
     @Predicate
     private NoteFormat format;
@@ -69,14 +72,20 @@ public class Note extends Identifiable {
 
     // TODO : refactor to String
     @Predicate
-    private Paragraph sources;
+    public Paragraph sources;
+
+    @Predicate(ln="sourcesString")
+    private String sourcesString;
 
     @Predicate
     private NoteStatus status = NoteStatus.INITIAL;
 
     // TODO : refactor to String
     @Predicate
-    private Paragraph subtextSources;
+    public Paragraph subtextSources;
+
+    @Predicate(ln="subtextSourcesString")
+    private String subtextSourcesString;
 
     @Predicate
     private Term term;
@@ -97,18 +106,21 @@ public class Note extends Identifiable {
             // getSession().save(copyOfComment);
         }
         copy.setComments(commentsCopy);
-        if (getDescription() != null) {
-            copy.setDescription(getDescription().copy());
-        }
+        copy.setDescriptionString(getDescriptionString());
+//        if (getDescription() != null) {
+//            copy.setDescription(getDescription().copy());
+//        }
         copy.setFormat(getFormat());
         copy.setLemma(getLemma());
         copy.setLemmaMeaning(getLemmaMeaning());
         copy.setPerson(getPerson());
         copy.setPlace(getPlace());
-        if (getSources() != null) {
-            copy.setSources(getSources().copy());
-        }
-        copy.setSubtextSources(getSubtextSources());
+        copy.setSourcesString(getSourcesString());
+//        if (getSources() != null) {
+//            copy.setSources(getSources().copy());
+//        }
+//        copy.setSubtextSources(getSubtextSources());
+        copy.setSubtextSourcesString(getSubtextSourcesString());
         copy.setTerm(getTerm());
         copy.setTypes(getTypes());
         return copy;
@@ -120,10 +132,6 @@ public class Note extends Identifiable {
 
     public Set<NoteComment> getComments() {
         return comments;
-    }
-
-    public Paragraph getDescription() {
-        return description;
     }
 
     public NoteFormat getFormat() {
@@ -150,16 +158,8 @@ public class Note extends Identifiable {
         return place;
     }
 
-    public Paragraph getSources() {
-        return sources;
-    }
-
     public NoteStatus getStatus() {
         return status;
-    }
-
-    public Paragraph getSubtextSources() {
-        return subtextSources;
     }
 
     public Term getTerm() {
@@ -176,10 +176,6 @@ public class Note extends Identifiable {
 
     public void setComments(Set<NoteComment> comments) {
         this.comments = comments;
-    }
-
-    public void setDescription(Paragraph description) {
-        this.description = description;
     }
 
     public void setFormat(NoteFormat format) {
@@ -206,16 +202,8 @@ public class Note extends Identifiable {
         this.place = place;
     }
 
-    public void setSources(Paragraph sources) {
-        this.sources = sources;
-    }
-
     public void setStatus(NoteStatus status) {
         this.status = status;
-    }
-
-    public void setSubtextSources(Paragraph subtextSources) {
-        this.subtextSources = subtextSources;
     }
 
     public void setTerm(Term term) {
@@ -241,6 +229,42 @@ public class Note extends Identifiable {
     @Override
     public String toString() {
         return "Note [lemma=" + lemma + "]";
+    }
+
+    public Paragraph getDescription(){
+        return Paragraph.parseSafe(descriptionString);
+    }
+
+    public String getDescriptionString() {
+        return descriptionString;
+    }
+
+    public void setDescriptionString(String descriptionString) {
+        this.descriptionString = descriptionString;
+    }
+
+    public Paragraph getSources(){
+        return Paragraph.parseSafe(sourcesString);
+    }
+
+    public String getSourcesString() {
+        return sourcesString;
+    }
+
+    public void setSourcesString(String sourcesString) {
+        this.sourcesString = sourcesString;
+    }
+
+    public Paragraph getSubtextSources(){
+        return Paragraph.parseSafe(subtextSourcesString);
+    }
+
+    public String getSubtextSourcesString() {
+        return subtextSourcesString;
+    }
+
+    public void setSubtextSourcesString(String subtextSourcesString) {
+        this.subtextSourcesString = subtextSourcesString;
     }
 
 }

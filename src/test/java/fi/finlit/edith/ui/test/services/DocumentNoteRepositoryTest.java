@@ -478,34 +478,35 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Save_As_Copy() {
         DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).get(0);
         Note initialNote = noteRepository.getById(documentNote.getNote().getId());
-        initialNote.setDescription(new Paragraph());
+        initialNote.setDescriptionString(new Paragraph().toString());
         initialNote.setFormat(NoteFormat.PLACE);
         initialNote.setLemmaMeaning("fajflkjsalj");
         initialNote.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
         initialNote.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
-        initialNote.setSources(new Paragraph());
-        initialNote.setSubtextSources(new Paragraph());
+        initialNote.setSourcesString(new Paragraph().toString());
+        initialNote.setSubtextSourcesString(new Paragraph().toString());
         initialNote.setTerm(new Term());
         initialNote.getTerm().setBasicForm("foobar");
         initialNote.getTypes().add(NoteType.HISTORICAL);
         noteRepository.save(initialNote);
+
         documentNote = documentNoteRepository.getById(documentNote.getId());
-        documentNote.getNote().setDescription(new Paragraph());
-        documentNote.getNote().getDescription().addElement(new StringElement("foo"));
+        documentNote.getNote().setDescriptionString(new Paragraph().toString());
+        documentNote.getNote().setDescriptionString(documentNote.getNote().getDescription().addElement(new StringElement("foo")).toString());
         documentNote.getNote().setFormat(NoteFormat.PERSON);
         documentNote.getNote().setLemmaMeaning("totally different");
         documentNote.getNote().getPerson().getNormalizedForm().setFirst("something else");
         documentNote.getNote().getPlace().getNormalizedForm().setName("barfo");
-        documentNote.getNote().setSources(new Paragraph());
-        documentNote.getNote().getSources().addElement(new StringElement("bar"));
-        documentNote.getNote().setSubtextSources(new Paragraph());
-        documentNote.getNote().getSubtextSources().addElement(new StringElement("foooo"));
+        documentNote.getNote().setSourcesString(new Paragraph().toString());
+        documentNote.getNote().setSourcesString(documentNote.getNote().getSources().addElement(new StringElement("bar")).toString());
+        documentNote.getNote().setSubtextSourcesString(new Paragraph().toString());
+        documentNote.getNote().setSubtextSourcesString(documentNote.getNote().getSubtextSources().addElement(new StringElement("foooo")).toString());
         documentNote.getNote().getTerm().setBasicForm("baaaaar");
         documentNote.getNote().getTypes().add(NoteType.WORD_EXPLANATION);
-        documentNote.getNote().getComments()
-                .add(new NoteComment(documentNote.getNote(), "jeejee", "vesa"));
+        documentNote.getNote().getComments().add(new NoteComment(documentNote.getNote(), "jeejee", "vesa"));
         Note note = documentNoteRepository.getById(documentNote.getId()).getNote();
         documentNoteRepository.saveAsCopy(documentNote);
+
         DocumentNote copyOfDocumentNote = documentNoteRepository.getById(documentNote.getId());
         Note copyOfNote = copyOfDocumentNote.getNote();
         assertThat(copyOfNote, not(note));

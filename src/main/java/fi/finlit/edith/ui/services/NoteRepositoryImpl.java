@@ -311,10 +311,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         } else if (localName.equals("lemma-meaning")) {
             data.note.setLemmaMeaning(data.text);
         } else if (localName.equals("source")) {
-            data.note.setSources(data.paragraphs);
+            data.note.setSourcesString(data.paragraphs.toString());
             data.paragraphs = null;
         } else if (localName.equals("description")) {
-            data.note.setDescription(data.paragraphs);
+            data.note.setDescriptionString(data.paragraphs.toString());
             data.paragraphs = null;
         } else if (localName.equals("bibliograph")) {
             data.inBib = false;
