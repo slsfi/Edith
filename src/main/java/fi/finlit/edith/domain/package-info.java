@@ -6,8 +6,7 @@
 @MappedClasses( { Document.class, Identifiable.class, Note.class, DocumentNote.class,
         NoteStatus.class, Term.class, TermWithNotes.class, Profile.class, User.class,
         UserInfo.class, NoteType.class, NoteFormat.class, Person.class, Place.class,
-        NameForm.class, Interval.class, NoteComment.class, Paragraph.class, ParagraphElement.class,
-        StringElement.class, LinkElement.class, UrlElement.class})
+        NameForm.class, Interval.class, NoteComment.class})
 @Config(entityAccessors = true)
 package fi.finlit.edith.domain;
 

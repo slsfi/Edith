@@ -78,19 +78,17 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void writeNote(MarkupWriter writer, Note note) {
-        if (note.getLemmaMeaning() != null
-                || note.getSubtextSources() != null) {
+        if (note.getLemmaMeaning() != null || note.getSubtextSources() != null) {
             writeSpan(writer, "lemmaMeaningAndSubtextSources");
             if (note.getLemmaMeaning() != null) {
                 writer.write("'" + note.getLemmaMeaning() + "'");
             }
-            if (note.getLemmaMeaning() != null
-                    && note.getSubtextSources() != null) {
+            if (note.getLemmaMeaning() != null && note.getSubtextSources() != null) {
                 writer.write(", ");
             }
             if (note.getSubtextSources() != null) {
                 writer.write("Vrt. ");
-                writeParagraph(writer, note.getSubtextSources());
+                writeParagraph(writer, Paragraph.parseSafe(note.getSubtextSources()));
             }
             writer.end();
         }
@@ -267,13 +265,13 @@ public class ContentRendererImpl implements ContentRenderer {
                     writer.end();
                 }
                 writeSpan(writer, "description");
-                writeParagraph(writer, note.getDescription());
+                writeParagraph(writer, Paragraph.parseSafe(note.getDescription()));
                 writer.end();
             }
             if (note.getSources() != null) {
                 writeSpan(writer, "sources");
                 writer.write("(");
-                writeParagraph(writer, note.getSources());
+                writeParagraph(writer, Paragraph.parseSafe(note.getSources()));
                 writer.write(")");
                 writer.end();
             }

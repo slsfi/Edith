@@ -8,6 +8,7 @@ package fi.finlit.edith.ui.services;
 import static fi.finlit.edith.domain.QUser.user;
 import static fi.finlit.edith.domain.QUserInfo.userInfo;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -18,6 +19,8 @@ import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 
 public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository {
+
+//    private final Expression<UserInfo> selectUserInfo = QUserInfo.create(userInfo.username);
 
     private final AuthService authService;
 
@@ -38,21 +41,23 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
 
     @Override
     public UserInfo getCurrentUser() {
-        String username = authService.getUsername();
-        return getSession().from(userInfo).where(userInfo.username.eq(username)).uniqueResult(
-                userInfo);
+        return getUserInfoByUsername(authService.getUsername());
     }
 
     @Override
     public UserInfo getUserInfoByUsername(String username) {
-        return getSession().from(userInfo).where(userInfo.username.eq(username)).uniqueResult(
-                userInfo);
+        return getSession().from(userInfo).where(userInfo.username.eq(username)).uniqueResult(userInfo);
     }
 
     @Override
     public User save(User entity) {
         getSession().save(entity);
         return entity;
+    }
+
+    @Override
+    public Collection<UserInfo> getAllUserInfos() {
+        return getSession().from(userInfo).list(userInfo);
     }
 
 }

@@ -7,15 +7,8 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.mysema.rdfbean.annotations.ClassMapping;
-import com.mysema.rdfbean.annotations.Container;
-import com.mysema.rdfbean.annotations.ContainerType;
-import com.mysema.rdfbean.annotations.Predicate;
-
-import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.ParagraphParser;
 
-@ClassMapping(ns = EDITH.NS)
 public class Paragraph extends Identifiable {
 
     public static final Paragraph parseSafe(String s){
@@ -30,8 +23,6 @@ public class Paragraph extends Identifiable {
         }
     }
 
-    @Container(ContainerType.LIST)
-    @Predicate
     private final List<ParagraphElement> elements = new ArrayList<ParagraphElement>();
 
     public List<ParagraphElement> getElements() {

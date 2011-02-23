@@ -3,18 +3,11 @@
  */
 package fi.finlit.edith.domain;
 
-import com.mysema.rdfbean.annotations.ClassMapping;
-import com.mysema.rdfbean.annotations.Predicate;
 
-import fi.finlit.edith.EDITH;
+public class UrlElement implements ParagraphElement {
 
-@ClassMapping(ns = EDITH.NS)
-public class UrlElement extends Identifiable implements ParagraphElement {
-
-    @Predicate
     private String string;
 
-    @Predicate
     private String url;
 
     public UrlElement() {
@@ -33,8 +26,7 @@ public class UrlElement extends Identifiable implements ParagraphElement {
 
     @Override
     public String toString() {
-        return "<a" + (url == null ? "" : " href=\"" + url + "\"") + ">"
-                + string + "</a>";
+        return "<a" + (url == null ? "" : " href=\"" + url + "\"") + ">" + string + "</a>";
     }
 
     public void setUrl(String url) {

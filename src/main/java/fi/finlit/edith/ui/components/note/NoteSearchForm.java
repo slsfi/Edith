@@ -1,8 +1,6 @@
 package fi.finlit.edith.ui.components.note;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.annotations.Parameter;
@@ -15,7 +13,6 @@ import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.OrderBy;
-import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.ui.services.UserRepository;
 
@@ -55,12 +52,7 @@ public class NoteSearchForm {
     }
 
     public Collection<UserInfo> getUsers() {
-        Collection<User> users = userRepository.getAll();
-        List<UserInfo> userIds = new ArrayList<UserInfo>(users.size());
-        for (User u : users) {
-            userIds.add(new UserInfo(u.getUsername()));
-        }
-        return userIds;
+        return userRepository.getAllUserInfos();
     }
 
     public NoteType[] getTypes() {

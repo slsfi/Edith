@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.services;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -55,5 +56,10 @@ public interface UserRepository extends Repository<User,String>{
      * @return
      */
     User save(User user);
+
+    /**
+     * @return
+     */
+    Collection<UserInfo> getAllUserInfos();
 
 }

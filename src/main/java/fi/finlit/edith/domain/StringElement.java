@@ -3,15 +3,9 @@
  */
 package fi.finlit.edith.domain;
 
-import com.mysema.rdfbean.annotations.ClassMapping;
-import com.mysema.rdfbean.annotations.Predicate;
 
-import fi.finlit.edith.EDITH;
+public class StringElement implements ParagraphElement {
 
-@ClassMapping(ns = EDITH.NS)
-public class StringElement extends Identifiable implements ParagraphElement {
-
-    @Predicate
     private String string;
 
     public StringElement() {

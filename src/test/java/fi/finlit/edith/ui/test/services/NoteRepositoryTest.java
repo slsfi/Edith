@@ -167,9 +167,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals("'keritte'", note.getLemmaMeaning());
         assertEquals(
                 "(murt. kerii ’keri\u00E4’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
-                note.getDescription().toString().replaceAll("\\s+", " ").trim());
+                note.getDescription().replaceAll("\\s+", " ").trim());
         assertEquals("<bibliograph>v</bibliograph>",
-                note.getSources().toString().replaceAll("\\s+", " ").trim());
+                note.getSources().replaceAll("\\s+", " ").trim());
     }
 
     @Test
@@ -199,12 +199,12 @@ public class NoteRepositoryTest extends AbstractServiceTest {
                 lemma);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
-        assertEquals(note.getDescription().getElements(),
+        assertEquals(note.getDescription(),
                 documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getNote()
-                        .getDescription().getElements());
-        assertEquals(note.getSources().getElements(),
+                        .getDescription());
+        assertEquals(note.getSources(),
                 documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getNote()
-                        .getSources().getElements());
+                        .getSources());
     }
 
     @Test

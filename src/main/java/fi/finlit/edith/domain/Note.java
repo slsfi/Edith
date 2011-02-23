@@ -45,10 +45,6 @@ public class Note extends Identifiable {
     @Predicate(ln = "commentOf", inv = true)
     private Set<NoteComment> comments;
 
-    // TODO : refactor to String
-    @Predicate(ln = "desc")
-    public Paragraph description;
-
     @Predicate(ln="descriptionString")
     private String descriptionString;
 
@@ -70,19 +66,11 @@ public class Note extends Identifiable {
     @Predicate
     private Place place;
 
-    // TODO : refactor to String
-    @Predicate
-    public Paragraph sources;
-
     @Predicate(ln="sourcesString")
     private String sourcesString;
 
     @Predicate
     private NoteStatus status = NoteStatus.INITIAL;
-
-    // TODO : refactor to String
-    @Predicate
-    public Paragraph subtextSources;
 
     @Predicate(ln="subtextSourcesString")
     private String subtextSourcesString;
@@ -106,21 +94,14 @@ public class Note extends Identifiable {
             // getSession().save(copyOfComment);
         }
         copy.setComments(commentsCopy);
-        copy.setDescriptionString(getDescriptionString());
-//        if (getDescription() != null) {
-//            copy.setDescription(getDescription().copy());
-//        }
+        copy.setDescription(getDescription());
         copy.setFormat(getFormat());
         copy.setLemma(getLemma());
         copy.setLemmaMeaning(getLemmaMeaning());
         copy.setPerson(getPerson());
         copy.setPlace(getPlace());
-        copy.setSourcesString(getSourcesString());
-//        if (getSources() != null) {
-//            copy.setSources(getSources().copy());
-//        }
-//        copy.setSubtextSources(getSubtextSources());
-        copy.setSubtextSourcesString(getSubtextSourcesString());
+        copy.setSources(getSources());
+        copy.setSubtextSources(getSubtextSources());
         copy.setTerm(getTerm());
         copy.setTypes(getTypes());
         return copy;
@@ -231,39 +212,27 @@ public class Note extends Identifiable {
         return "Note [lemma=" + lemma + "]";
     }
 
-    public Paragraph getDescription(){
-        return Paragraph.parseSafe(descriptionString);
-    }
-
-    public String getDescriptionString() {
+    public String getDescription() {
         return descriptionString;
     }
 
-    public void setDescriptionString(String descriptionString) {
+    public void setDescription(String descriptionString) {
         this.descriptionString = descriptionString;
     }
 
-    public Paragraph getSources(){
-        return Paragraph.parseSafe(sourcesString);
-    }
-
-    public String getSourcesString() {
+    public String getSources() {
         return sourcesString;
     }
 
-    public void setSourcesString(String sourcesString) {
+    public void setSources(String sourcesString) {
         this.sourcesString = sourcesString;
     }
 
-    public Paragraph getSubtextSources(){
-        return Paragraph.parseSafe(subtextSourcesString);
-    }
-
-    public String getSubtextSourcesString() {
+    public String getSubtextSources() {
         return subtextSourcesString;
     }
 
-    public void setSubtextSourcesString(String subtextSourcesString) {
+    public void setSubtextSources(String subtextSourcesString) {
         this.subtextSourcesString = subtextSourcesString;
     }
 

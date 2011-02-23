@@ -64,9 +64,9 @@ public class ContentRendererTest extends AbstractServiceTest {
         LinkElement element = new LinkElement("Kalevala");
         element.setReference("kalevala");
         paragraph.addElement(element);
-        note.setSubtextSourcesString(paragraph.toString());
-        note.setDescriptionString(paragraph.copy().toString());
-        note.setSourcesString(paragraph.copy().toString());
+        note.setSubtextSources(paragraph.toString());
+        note.setDescription(paragraph.copy().toString());
+        note.setSources(paragraph.copy().toString());
         note.setFormat(noteFormat);
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
@@ -118,14 +118,14 @@ public class ContentRendererTest extends AbstractServiceTest {
     public void Render_Place_Note() {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
         DocumentNote documentNote = createDocumentNote(NoteFormat.PLACE);
-        Paragraph description = documentNote.getNote().getDescription();
+        Paragraph description = Paragraph.parseSafe(documentNote.getNote().getDescription());
         description.addElement(new StringElement(" foo "));
         UrlElement urlElement = new UrlElement("Google");
         urlElement.setUrl("http://www.google.com/");
         description.addElement(urlElement);
         description.addElement(new UrlElement("happyness"));
         description.addElement(new LinkElement("maya"));
-        documentNote.getNote().setDescriptionString(description.toString());
+        documentNote.getNote().setDescription(description.toString());
         Place place = new Place(new NameForm("New York", null), new HashSet<NameForm>());
         documentNote.getNote().setPlace(place);
         documentNotes.add(documentNote);

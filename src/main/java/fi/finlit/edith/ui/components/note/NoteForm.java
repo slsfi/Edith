@@ -159,10 +159,7 @@ public class NoteForm {
     private SelectedText updateLongTextSelection;
 
     public String getDescription() {
-        if (noteOnEdit.getNote().getDescription() == null) {
-            return null;
-        }
-        return noteOnEdit.getNote().getDescription().toString();
+        return noteOnEdit.getNote().getDescription();
     }
 
     private Term getEditTerm(Note note) {
@@ -267,10 +264,7 @@ public class NoteForm {
     }
 
     public String getSources() {
-        if (noteOnEdit.getNote().getSources() == null) {
-            return null;
-        }
-        return noteOnEdit.getNote().getSources().toString();
+        return noteOnEdit.getNote().getSources();
     }
 
     public NoteStatus getStatus() {
@@ -441,21 +435,18 @@ public class NoteForm {
     }
 
     public String getSubtextSources() {
-        if (noteOnEdit.getNote().getSubtextSources() == null) {
-            return null;
-        }
-        return noteOnEdit.getNote().getSubtextSources().toString();
+        return noteOnEdit.getNote().getSubtextSources();
     }
 
     public void setSubtextSources(String subtextSources) throws XMLStreamException {
         if (subtextSources != null) {
-            noteOnEdit.getNote().setSubtextSourcesString(subtextSources);
+            noteOnEdit.getNote().setSubtextSources(subtextSources);
         }
     }
 
     public void setDescription(String description) throws XMLStreamException {
         if (description != null) {
-            noteOnEdit.getNote().setDescriptionString(description);
+            noteOnEdit.getNote().setDescription(description);
         }
     }
 
@@ -496,7 +487,7 @@ public class NoteForm {
 
     public void setSources(String sources) throws XMLStreamException {
         if (sources != null) {
-            noteOnEdit.getNote().setSourcesString(sources);
+            noteOnEdit.getNote().setSources(sources);
         }
     }
 
