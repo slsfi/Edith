@@ -103,9 +103,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         BooleanBuilder docFilters = new BooleanBuilder();
         if (!searchInfo.getDocuments().isEmpty()){
             docFilters.and(sub(documentNote).where(
-                    documentNote.deleted.eq(false),
                     documentNote.note().eq(note),
                     documentNote.document().in(searchInfo.getDocuments()),
+                    documentNote.deleted.eq(false),
                     sub(otherNote).where(otherNote.ne(documentNote),
                             otherNote.note().eq(documentNote.note()),
                             otherNote.localId.eq(documentNote.localId),
@@ -151,7 +151,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         }
 
         // get matching notes
-        List<Note> notes = getSession().from(note).where(filters).orderBy(getOrderBy(searchInfo, note)).list(note);
+        List<Note> notes = getSession().from(note).where(filters.getValue()).orderBy(getOrderBy(searchInfo, note)).list(note);
 
         if (!notes.isEmpty()){
             // get related document notes
@@ -204,6 +204,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         // of given note
         query.where(documentNote.note().in(notes));
 
+        // of current document
+        query.where(documentNote.document().eq(document));
+
         // not deleted
         query.where(documentNote.deleted.eq(false));
 
@@ -212,9 +215,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 otherNote.note().eq(documentNote.note()),
                 otherNote.localId.eq(documentNote.localId),
                 otherNote.createdOn.gt(documentNote.createdOn)).notExists());
-
-        // of current document
-        query.where(documentNote.document().eq(document));
 
         List<DocumentNote> rv = query.list(documentNote);
 
