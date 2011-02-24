@@ -20,12 +20,6 @@ import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.ContentRenderer;
 import fi.finlit.edith.ui.services.DocumentRepository;
 
-/**
- * TEITest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class ContentRendererTest extends AbstractServiceTest {
 
     private static final String doc1 = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";

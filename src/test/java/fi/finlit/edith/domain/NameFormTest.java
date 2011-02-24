@@ -1,10 +1,11 @@
 package fi.finlit.edith.domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class NameFormTest {
+
     private NameForm nameForm;
 
     @Test

@@ -21,12 +21,6 @@ import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.TermRepository;
 
-/**
- * AdminServiceTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class AdminServiceTest extends AbstractServiceTest{
 
     @Inject

@@ -16,6 +16,8 @@
 	<description></description>
 
 	<properties>
+		<extraResources>src/main/resources</extraResources>
+	
 		<failIfNoTests>false</failIfNoTests>
 		<tapestry.version>5.1.0.5</tapestry.version>
 		<jetty.version>6.1.0-SNAPSHOT</jetty.version>
@@ -161,78 +163,36 @@
 	<profiles>
 		<profile>
 			<id>sks</id>
-			<build>
-				<resources>
-					<resource>
-						<filtering>true</filtering>
-						<directory>profiles/sks/res</directory>
-					</resource>
-					<resource>
-						<filtering>false</filtering>
-						<directory>src/main/resources</directory>
-					</resource>
-					<resource>
-						<filtering>false</filtering>
-						<directory>src/main/rdf</directory>
-					</resource>
-					<resource>
-						<filtering>false</filtering>
-						<directory>src/main/java</directory>
-						<includes>
-							<include>**</include>
-						</includes>
-						<excludes>
-							<exclude>**/*.java</exclude>
-						</excludes>
-					</resource>
-				</resources>
-			</build>
+			<properties>
+				<extraResources>profiles/sks/res</extraResources>
+			</properties>
 		</profile>
 		<profile>
 			<id>sls</id>
-			<build>
-				<resources>
-					<resource>
-						<filtering>true</filtering>
-						<directory>profiles/sls/res</directory>
-					</resource>
-					<resource>
-						<filtering>false</filtering>
-						<directory>src/main/resources</directory>
-					</resource>
-					<resource>
-						<filtering>false</filtering>
-						<directory>src/main/rdf</directory>
-					</resource>
-					<resource>
-						<filtering>false</filtering>
-						<directory>src/main/java</directory>
-						<includes>
-							<include>**</include>
-						</includes>
-						<excludes>
-							<exclude>**/*.java</exclude>
-						</excludes>
-					</resource>
-				</resources>
-			</build>
-		</profile>		
+			<properties>
+				<extraResources>profiles/sls/res</extraResources>
+			</properties>
+		</profile>
 	</profiles>
 
 	<build>
 		<finalName>edith</finalName>
 		<resources>
 			<resource>
+				<directory>${extraResources}</directory>
 				<filtering>false</filtering>
+			</resource>		
+			<resource>
 				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
 			</resource>
 			<resource>
-				<filtering>false</filtering>
 				<directory>src/main/rdf</directory>
+				<filtering>false</filtering>
 			</resource>
 			<resource>
-				<filtering>false</filtering>
 				<directory>src/main/java</directory>
+				<filtering>false</filtering>
 				<includes>
 					<include>**</include>
 				</includes>
@@ -243,12 +203,12 @@
 		</resources>
 		<testResources>
 			<testResource>
-				<filtering>false</filtering>
 				<directory>src/test/resources</directory>
+				<filtering>false</filtering>
 			</testResource>
 			<testResource>
-				<filtering>false</filtering>
 				<directory>src/test/java</directory>
+				<filtering>false</filtering>
 				<includes>
 					<include>**</include>
 				</includes>

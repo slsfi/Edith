@@ -23,12 +23,6 @@ import fi.finlit.edith.testutil.TapestryTestRunner;
 import fi.finlit.edith.ui.services.DataModule;
 import fi.finlit.edith.ui.services.ServiceModule;
 
-/**
- * AbstractServiceTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 @RunWith(TapestryTestRunner.class)
 @Modules({ ServiceTestModule.class, ServiceModule.class, DataModule.class, RDFBeanModule.class })
 public abstract class AbstractServiceTest {

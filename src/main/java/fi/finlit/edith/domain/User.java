@@ -11,7 +11,6 @@ import com.mysema.rdfbean.annotations.Unique;
 
 import fi.finlit.edith.EDITH;
 
-// TODO : use "user:"<username> as URL schema ?!?
 @ClassMapping(ns=EDITH.NS)
 public class User extends Identifiable{
 

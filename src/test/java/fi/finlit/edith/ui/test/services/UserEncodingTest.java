@@ -17,12 +17,6 @@ import fi.finlit.edith.domain.User;
 import fi.finlit.edith.ui.services.UserDetailsImpl;
 import fi.finlit.edith.ui.services.UserRepository;
 
-/**
- * UserEncodingTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class UserEncodingTest extends AbstractServiceTest {
 
     @Inject

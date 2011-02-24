@@ -22,12 +22,6 @@ import org.junit.Test;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 
-/**
- * NoteAdditionTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class NoteAddition2Test extends AbstractServiceTest {
     @Inject
     @Symbol(ServiceTestModule.TEST_DOCUMENT_CONTENT_KEY)

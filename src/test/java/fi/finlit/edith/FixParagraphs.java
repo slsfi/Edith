@@ -8,7 +8,7 @@ import com.mysema.rdfbean.sesame.NativeRepository;
 
 import fi.finlit.edith.domain.Note;
 
-public class FixData {
+public class FixParagraphs {
 
     public static void main(String[] args){
         NativeRepository repository = new NativeRepository();
@@ -35,6 +35,8 @@ public class FixData {
         }
 
     }
+
+
 
 //    private static void changeParagraphsIntoStrings(Session session) {
 //        // notes

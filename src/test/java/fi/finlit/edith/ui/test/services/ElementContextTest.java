@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 
@@ -15,14 +15,8 @@ import org.junit.Test;
 
 import fi.finlit.edith.ui.services.ElementContext;
 
-/**
- * ElementContextTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class ElementContextTest {
-    
+
     @Test
     public void testPush() {
         ElementContext context = new ElementContext(3);
@@ -78,7 +72,7 @@ public class ElementContextTest {
         context.push("bar"); // bar will be bar2 in context
         assertThat(context.getPath(), not(equalTo(clonedContext.getPath())));
     }
-    
+
     @Test
     public void teiHeader(){
         ElementContext context = new ElementContext(3);
@@ -96,7 +90,7 @@ public class ElementContextTest {
         context.push("title");
         assertEquals("titleStmt-title2", context.getPath());
     }
-    
+
     @Test
     public void text(){
         ElementContext context = new ElementContext(3);

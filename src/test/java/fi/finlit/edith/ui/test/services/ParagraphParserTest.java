@@ -12,6 +12,7 @@ import fi.finlit.edith.domain.StringElement;
 import fi.finlit.edith.ui.services.ParagraphParser;
 
 public class ParagraphParserTest {
+
     private Paragraph paragraph;
 
     @Test

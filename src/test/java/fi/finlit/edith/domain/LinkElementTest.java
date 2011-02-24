@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class LinkElementTest {
+
     @Test
     public void To_String() {
         assertEquals("<bibliograph>foo</bibliograph>", new LinkElement("foo").toString());

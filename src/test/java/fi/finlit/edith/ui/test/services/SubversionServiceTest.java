@@ -49,13 +49,6 @@ import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
 import fi.finlit.edith.ui.services.svn.UpdateCallback;
 
-/**
- * SubversionServiceTest provides
- *
- * @author tiwe
- * @author vema
- * @version $Id$
- */
 public class SubversionServiceTest extends AbstractServiceTest {
 
     private static final Logger logger = LoggerFactory.getLogger(SubversionServiceTest.class);

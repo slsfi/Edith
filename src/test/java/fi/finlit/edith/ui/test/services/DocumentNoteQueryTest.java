@@ -23,12 +23,6 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 
-/**
- * NoteRevisionQueryTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class DocumentNoteQueryTest extends AbstractServiceTest{
 
     @Inject

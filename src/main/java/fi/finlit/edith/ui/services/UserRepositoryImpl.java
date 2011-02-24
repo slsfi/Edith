@@ -20,8 +20,6 @@ import fi.finlit.edith.domain.UserInfo;
 
 public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository {
 
-//    private final Expression<UserInfo> selectUserInfo = QUserInfo.create(userInfo.username);
-
     private final AuthService authService;
 
     public UserRepositoryImpl(@Inject SessionFactory sessionFactory, @Inject AuthService authService) {

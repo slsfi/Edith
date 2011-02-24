@@ -26,12 +26,6 @@ import com.mysema.rdfbean.sesame.MemoryRepository;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.AuthService;
 
-/**
- * ServiceTestModule provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class ServiceTestModule {
 
     public static final String NOTE_TEST_DATA_KEY = "note.test.data";
@@ -48,8 +42,7 @@ public class ServiceTestModule {
         configuration.add(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
         File testDocumentFile = new File("etc/demo-material/tei/Nummisuutarit rakenteistettuna.xml");
         configuration.add(TEST_DOCUMENT_FILE_KEY, testDocumentFile.getPath());
-        configuration.add(TEST_DOCUMENT_CONTENT_KEY,
-                FileUtils.readFileToString(testDocumentFile, "UTF-8"));
+        configuration.add(TEST_DOCUMENT_CONTENT_KEY, FileUtils.readFileToString(testDocumentFile, "UTF-8"));
         configuration.add(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna.xml");
         configuration.add(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         configuration.add(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
@@ -66,7 +59,6 @@ public class ServiceTestModule {
      * Makes a memory based test configuration override
      */
     public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
-//        Namespaces.register("edith", EDITH.NS);
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
         configuration.add(Repository.class, repository);

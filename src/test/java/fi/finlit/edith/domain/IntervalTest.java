@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class IntervalTest {
+
     private Interval interval;
 
     @Before

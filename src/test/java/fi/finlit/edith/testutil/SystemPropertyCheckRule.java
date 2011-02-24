@@ -11,12 +11,6 @@ import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * SystemPropertyCheckRule provides
- * 
- * @author tiwe
- * @version $Id$
- */
 public class SystemPropertyCheckRule implements MethodRule {
 
     private static final Logger logger = LoggerFactory.getLogger(SystemPropertyCheckRule.class);

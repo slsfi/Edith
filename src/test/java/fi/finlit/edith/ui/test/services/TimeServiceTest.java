@@ -12,12 +12,6 @@ import org.junit.Test;
 
 import fi.finlit.edith.ui.services.TimeService;
 
-/**
- * TimeServiceTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class TimeServiceTest extends AbstractServiceTest{
 
     @Inject

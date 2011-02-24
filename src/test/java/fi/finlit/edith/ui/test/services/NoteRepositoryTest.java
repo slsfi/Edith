@@ -37,12 +37,6 @@ import fi.finlit.edith.ui.services.PersonRepository;
 import fi.finlit.edith.ui.services.PlaceRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
-/**
- * NoteRepositoryTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Inject

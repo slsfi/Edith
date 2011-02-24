@@ -29,6 +29,8 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
@@ -43,6 +45,8 @@ import com.mysema.rdfbean.object.SessionFactory;
 import fi.finlit.edith.domain.*;
 
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
+
+    private static final Logger logger = LoggerFactory.getLogger(NoteRepositoryImpl.class);
 
     private static final QDocumentNote otherNote = new QDocumentNote("other");
 
@@ -89,6 +93,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     @Override
     public List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo) {
+        long start = System.currentTimeMillis();
         Assert.notNull(searchInfo);
         BooleanBuilder filters = new BooleanBuilder();
         QNote note = QNote.note;
@@ -172,6 +177,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     rv.add(new NoteWithInstances(n, Collections.<DocumentNote>emptySet()));
                 }
             }
+
+            logDuration("NoteRepository.query", start);
             return rv;
 
         }else{
@@ -179,14 +186,19 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             for (Note n : notes){
                 rv.add(new NoteWithInstances(n, Collections.<DocumentNote>emptySet()));
             }
+
+            logDuration("NoteRepository.query", start);
             return rv;
         }
 
 
-
     }
 
+
+
     private List<DocumentNote> getActiveDocumentNotes(Document document, Collection<Note> notes){
+        long start = System.currentTimeMillis();
+
         BeanQuery query = getSession().from(documentNote);
 
         // of given note
@@ -204,7 +216,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         // of current document
         query.where(documentNote.document().eq(document));
 
-        return query.list(documentNote);
+        List<DocumentNote> rv = query.list(documentNote);
+
+        logDuration("NoteRepository.getActiveDocumentNotes", start);
+        return rv;
     }
 
     @Override
@@ -485,6 +500,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     public void removeNotes(Collection<Note> notes) {
         for (Note note : notes){
             getSession().delete(note);
+        }
+    }
+
+    private void logDuration(String method, long start) {
+        long duration = System.currentTimeMillis()-start;
+        if (duration > 500){
+            logger.warn(method + " took " + duration+"ms");
         }
     }
 }

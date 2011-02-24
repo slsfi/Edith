@@ -37,12 +37,6 @@ import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 import fi.finlit.edith.ui.services.ElementContext;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
-/**
- * NoteAdditionTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class NoteAdditionTest extends AbstractServiceTest{
 
     @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_CONTENT_KEY)

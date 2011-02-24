@@ -48,12 +48,6 @@ import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.UserRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
-/**
- * NoteRevisionRepositoryTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Inject
     @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)

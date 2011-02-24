@@ -19,12 +19,6 @@ import fi.finlit.edith.domain.User;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.UserRepository;
 
-/**
- * UserRepositoryTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class UserRepositoryTest extends AbstractServiceTest {
 
     @Inject

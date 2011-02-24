@@ -7,21 +7,15 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * DocumentTest provides
- *
- * @author tiwe
- * @version $Id$
- */
 public class DocumentTest {
 
-    private Document doc1 = new Document();
-    
+    private final Document doc1 = new Document();
+
     @Before
     public void setUp(){
         doc1.setSvnPath("path");
     }
-    
+
     @Test
     public void testHashCode() {
        assertEquals("path".hashCode(), doc1.hashCode());
