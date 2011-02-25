@@ -8,8 +8,10 @@ DONE
  * Document ja siihen liitetyt DocumentNote instanssit poistetaan
  * poisto Dokumentti-listauksen kautta (checkbox + lisävahvistus)
  
+ DONE
+ 
 * dokumenttien visualisointi hakemisto-puussa (optionaalinen)
  
 
 
-TODO : DocumentNote.lastest (boolean) property to optimize latest documentnotes queries
+TODO : DocumentNote.latest (boolean) property to optimize latest documentnotes queries

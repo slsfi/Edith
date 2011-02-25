@@ -79,4 +79,8 @@ public class DocumentsPage {
         }
     }
 
+    public boolean isDocumentsNotEmpty(){
+        return !documents.isEmpty();
+    }
+
 }
