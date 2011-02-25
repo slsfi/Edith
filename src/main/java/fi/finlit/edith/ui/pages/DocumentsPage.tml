@@ -38,8 +38,17 @@
 	    </t:grid>
 		
 		<t:if test="documentsNotEmpty">		
-			<t:submit value="${message:select}" />		
-			<t:submit t:id="removeSelected" value="${message:remove-selected}"/>		
+			<t:submit value="${message:select-documents}" />
+					
+			<input type="button" class="delete_question" style="font-size:80%; margin-left:0.5em;" value="${message:remove-selected}"/>
+			
+            <span class="delete_dialog" style="font-size:80%;"> 
+            	${message:remove-selected}?
+            	<t:submit t:id="removeSelected" value="${message:yes}"/>  
+            	/ 
+            	<input type="button" class="delete_decline" value="${message:no}"/> 
+            </span> 
+												
 		</t:if>
 		
 	</t:form>
