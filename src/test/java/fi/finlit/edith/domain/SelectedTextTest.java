@@ -15,7 +15,7 @@ public class SelectedTextTest {
     private SelectedText selectedText;
 
     @Before
-    public void Before() {
+    public void setUp() {
         selectedText = new SelectedText(START_ID, END_ID, SELECTION);
     }
 

@@ -18,7 +18,7 @@ public class TimeServiceTest extends AbstractServiceTest{
     private TimeService timeService;
 
     @Test
-    public void currentTimeMillis(){
+    public void CurrentTimeMillis(){
         long t1 = timeService.currentTimeMillis();
         long t2 = timeService.currentTimeMillis();
         assertTrue(t2 > t1);

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.ui.test.services;
 
@@ -25,17 +25,17 @@ public class RevisionInfoTest {
     }
 
     @Test
-    public void testEquals() {
+    public void Equals() {
         assertTrue(ri.equals(ri2));
     }
 
     @Test
-    public void testHashCode() {
+    public void HashCode() {
         assertEquals(ri.hashCode(), ri2.hashCode());
     }
 
     @Test
-    public void testRevisionInfo_Long() {
+    public void RevisionInfo_Long() {
         RevisionInfo revisionInfo = new RevisionInfo(666);
         assertEquals("", revisionInfo.getCreated());
         assertEquals("", revisionInfo.getCreator());

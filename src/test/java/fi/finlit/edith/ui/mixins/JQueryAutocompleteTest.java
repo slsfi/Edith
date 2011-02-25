@@ -1,6 +1,6 @@
 package fi.finlit.edith.ui.mixins;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class JQueryAutocompleteTest {
     private JQueryAutocomplete autocomplete;
 
     @Test
-    public void testGenerateResponse() {
+    public void GenerateResponse() {
         autocomplete = new JQueryAutocomplete();
         List<Object> matches = new ArrayList<Object>();
         matches.add("foobar");

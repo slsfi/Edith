@@ -18,7 +18,7 @@ import fi.finlit.edith.ui.services.ElementContext;
 public class ElementContextTest {
 
     @Test
-    public void testPush() {
+    public void Push() {
         ElementContext context = new ElementContext(3);
         context.push("baz");
         context.push("bar");
@@ -30,7 +30,7 @@ public class ElementContextTest {
     }
 
     @Test
-    public void testPop() {
+    public void Pop() {
         ElementContext context = new ElementContext(3);
         context.push("baz");
         context.push("bar");
@@ -49,7 +49,7 @@ public class ElementContextTest {
     }
 
     @Test
-    public void testGetPath() {
+    public void GetPath() {
         ElementContext context = new ElementContext(0);
         context.push("baz");
         context.push("bar");
@@ -61,7 +61,7 @@ public class ElementContextTest {
     }
 
     @Test
-    public void testClone() throws Exception {
+    public void Clone() throws Exception {
         ElementContext context = new ElementContext(0);
         context.push("foo");
         context.push("bar");
@@ -74,7 +74,7 @@ public class ElementContextTest {
     }
 
     @Test
-    public void teiHeader(){
+    public void TeiHeader(){
         ElementContext context = new ElementContext(3);
         context.push("TEI");
         assertNull(context.getPath());

@@ -112,7 +112,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void importFile() throws Exception {
+    public void ImportFile() throws Exception {
         long currentRevision = subversionService.getLatestRevision();
         long expected = currentRevision + 1;
         String newPath = documentRoot + "/" + UUID.randomUUID().toString();
@@ -120,7 +120,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getStream() throws Exception {
+    public void GetStream() throws Exception {
         String svnPath = documentRoot + "/notesTestData.txt";
         long revision = subversionService.importFile(svnPath, noteTestData);
         InputStream expected = register(new FileInputStream(noteTestData));
@@ -130,7 +130,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test(expected = SubversionException.class)
-    public void delete() throws Exception {
+    public void Delete() throws Exception {
         String svnPath = documentRoot + "/notesTestData.txt";
         long revision = subversionService.importFile(svnPath, noteTestData);
         InputStream expected = register(new FileInputStream(noteTestData));
@@ -144,11 +144,11 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     @Test
     @Ignore
-    public void getRevisions() {
+    public void GetRevisions() {
     }
 
     @Test
-    public void getEntries() {
+    public void GetEntries() {
         String svnPath = documentRoot;
         String filename = "testFile.txt";
         subversionService.importFile(svnPath + "/" + filename, testFile);
@@ -160,7 +160,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void checkout() throws Exception {
+    public void Checkout() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
@@ -169,7 +169,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     // TODO This test is really slow, find out why.
     @Test
-    public void update() throws Exception {
+    public void Update() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
@@ -190,7 +190,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     @Test(expected = RuntimeException.class)
     @Ignore
-    public void update_conflict() throws Exception {
+    public void Update_conflict() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
@@ -211,7 +211,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void commit() throws Exception {
+    public void Commit() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         long oldRevision = subversionService.importFile(svnPath, testFile);
         subversionService.commit(svnPath, subversionService.getLatestRevision(), authService
@@ -243,17 +243,17 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     @Test
     @Ignore
-    public void commit_user_checkout_already_exists() throws Exception {
+    public void Commit_user_checkout_already_exists() throws Exception {
     }
 
     @Test
     @Ignore
-    public void commit_merge_conflict() throws Exception {
+    public void Commit_merge_conflict() throws Exception {
     }
 
     // TODO This test is really slow, find out why.
     @Test
-    public void commit_file() throws Exception {
+    public void Commit_file() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
@@ -267,7 +267,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     // TODO This test is really slow, find out why.
     @Test(expected = RuntimeException.class)
-    public void commit_file_results_in_conflict() throws Exception {
+    public void Commit_file_results_in_conflict() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
@@ -290,7 +290,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getLatestRevision() {
+    public void GetLatestRevision() {
         long revision = subversionService.getLatestRevision();
         long expected = revision + 1;
         subversionService.importFile(documentRoot + "/foobar", noteTestData);
@@ -298,7 +298,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getLatestRevision_String() throws IOException {
+    public void GetLatestRevision_String() throws IOException {
         String svnPath = documentRoot + "/testFile.txt";
         subversionService.importFile(svnPath, testFile);
         subversionService.checkout(checkoutDirectory, -1);
@@ -343,11 +343,11 @@ public class SubversionServiceTest extends AbstractServiceTest {
 
     @Test
     @Ignore
-    public void initialize() {
+    public void Initialize() {
     }
 
     @Test
     @Ignore
-    public void destroy() {
+    public void Destroy() {
     }
 }

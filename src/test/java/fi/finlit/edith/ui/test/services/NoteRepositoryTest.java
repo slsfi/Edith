@@ -65,6 +65,13 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
     private String testDocument;
 
+
+    @Before
+    public void setUp() {
+        adminService.removeNotesAndTerms();
+
+    }
+
     private int countDocumentNotes(List<NoteWithInstances> notes){
         int count = 0;
         for (NoteWithInstances n : notes){
@@ -74,7 +81,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void createComment() {
+    public void CreateComment() {
         Note note = new Note();
         noteRepository.save(note);
         NoteComment comment = noteRepository.createComment(note, "boomboomboom");
@@ -84,7 +91,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void createLemmaForLongText() {
+    public void CreateLemmaForLongText() {
         assertEquals("word", Note.createLemmaFromLongText("word"));
         assertEquals("word1 word2", Note.createLemmaFromLongText("word1 word2"));
         assertEquals("word1 \u2013 \u2013 word3", Note.createLemmaFromLongText("word1 word2 word3"));
@@ -96,7 +103,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void createNote() {
+    public void CreateNote() {
         Document document = documentRepository.getDocumentForPath(testDocument);
 
         String longText = "two words";
@@ -107,7 +114,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void createNote_Note_With_The_Lemma_Already_Exists_Notes_Are_Same() {
+    public void CreateNote_Note_With_The_Lemma_Already_Exists_Notes_Are_Same() {
         Document document = documentRepository.getDocumentForPath(testDocument);
 
         String longText = "two words";
@@ -119,41 +126,15 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void find() {
+    public void Find() {
         Document document = documentRepository.getDocumentForPath(testDocument);
         noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "lid1234", "foobar");
         Note note = noteRepository.find("foobar");
         assertNotNull(note);
     }
 
-//    @Test
-//    public void Save_Note_with_OntologyConcepts(){
-//        Document document = documentRepository.getDocumentForPath(testDocument);
-//        noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "lid1234", "foobar");
-//        Note note = noteRepository.find("foobar");
-//
-//        // save with one concept
-//        OntologyConcept concept = new OntologyConcept(new UID(TEST.NS), "XXX");
-//        note.setConcepts(Collections.singleton(concept));
-//        noteRepository.save(note);
-//
-//        note = noteRepository.find("foobar");
-//        assertEquals(1, note.getConcepts().size());
-//        assertEquals("XXX", note.getConcepts().iterator().next().getLabel());
-//
-//        // resave with other concept
-//        concept = new OntologyConcept(new UID(TEST.NS), "Y");
-//        note.setConcepts(Collections.singleton(concept));
-//        noteRepository.save(note);
-//
-//        note = noteRepository.find("foobar");
-//        assertEquals(1, note.getConcepts().size());
-//        assertEquals("Y", note.getConcepts().iterator().next().getLabel());
-//    }
-
-
     @Test
-    public void importNote() throws Exception {
+    public void ImportNote() throws Exception {
         noteRepository.importNotes(noteTestData);
         Note note = noteRepository.find("kereitten");
         assertNotNull(note);
@@ -216,13 +197,13 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void queryDictionary() throws Exception {
+    public void QueryDictionary() throws Exception {
         assertEquals(9, noteRepository.importNotes(noteTestData));
         assertEquals(0, noteRepository.queryDictionary("*").getAvailableRows());
     }
 
     @Test
-    public void queryDictionary2() throws Exception {
+    public void QueryDictionary2() throws Exception {
         assertEquals(9, noteRepository.importNotes(noteTestData));
         GridDataSource dataSource = noteRepository.queryDictionary("a");
         int count1 = dataSource.getAvailableRows();
@@ -231,7 +212,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void remove() {
+    public void Remove() {
         Document document = documentRepository.getDocumentForPath(testDocument);
         List<RevisionInfo> revisions = documentRepository.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
@@ -241,7 +222,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void removeComment() {
+    public void RemoveComment() {
         Note note = new Note();
         noteRepository.save(note);
         NoteComment comment = noteRepository.createComment(note, "boomboomboom");
@@ -253,11 +234,6 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertTrue(comments.isEmpty());
     }
 
-    @Before
-    public void setUp() {
-        adminService.removeNotesAndTerms();
-
-    }
 
     @Test
     public void Find_Notes() {

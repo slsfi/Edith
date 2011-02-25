@@ -47,12 +47,12 @@ public class DocumentNoteQueryTest extends AbstractServiceTest{
     }
 
     @Test
-    public void queryNotes(){
+    public void QueryNotes(){
         assertEquals(1, documentNoteRepository.queryNotes("*").getAvailableRows());
     }
 
     @Test
-    public void queryNotes_kaikki() throws Exception{
+    public void QueryNotes_All() throws Exception{
         GridDataSource dataSource = documentNoteRepository.queryNotes("*");
         assertEquals(1, dataSource.getAvailableRows());
         dataSource.prepare(0, 1, Collections.<SortConstraint>emptyList());

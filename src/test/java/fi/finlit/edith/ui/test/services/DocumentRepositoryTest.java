@@ -59,8 +59,22 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
 
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() {
+        closeStreams();
+        adminService.removeNotesAndTerms();
+        subversionService.destroy();
+        subversionService.initialize();
+    }
+
+
     @Test
-    public void addDocument() throws IOException{
+    public void AddDocument() throws IOException{
         File file = File.createTempFile("test", null);
         FileUtils.writeStringToFile(file, "test file", "UTF-8");
         String targetPath = "/documents/" + UUID.randomUUID().toString();
@@ -71,7 +85,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote() throws Exception {
+    public void AddNote() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
@@ -84,7 +98,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void addRemoveNote() throws IOException, NoteAdditionFailedException{
+    public void AddRemoveNote() throws IOException, NoteAdditionFailedException{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         int count = documentNoteRepository.queryNotes("*").getAvailableRows();
 
@@ -118,7 +132,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getAll() {
+    public void GetAll() {
         assertEquals(6, documentRepository.getAll().size());
     }
 
@@ -136,31 +150,31 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getDocumentForPath() {
+    public void GetDocumentForPath() {
         assertNotNull(documentRepository.getDocumentForPath("/documents/" + UUID.randomUUID().toString()));
     }
 
     @Test
-    public void getDocumentsOfFolder() {
+    public void GetDocumentsOfFolder() {
         assertEquals(6, documentRepository.getDocumentsOfFolder(documentRoot).size());
     }
 
     @Test
-    public void getDocumentStream() throws IOException {
+    public void GetDocumentStream() throws IOException {
         for (Document document : documentRepository.getAll()) {
             register(documentRepository.getDocumentStream(new DocumentRevision(document, -1)));
         }
     }
 
     @Test
-    public void getRevisions() {
+    public void GetRevisions() {
         for (Document document : documentRepository.getAll()) {
             assertFalse(documentRepository.getRevisions(document).isEmpty());
         }
     }
 
     @Test
-    public void removeAllNotes() throws Exception{
+    public void RemoveAllNotes() throws Exception{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
@@ -177,7 +191,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void removeNotes() throws Exception {
+    public void RemoveNotes() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
@@ -190,7 +204,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void removeNotes_several() throws Exception {
+    public void RemoveNotes_several() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
@@ -209,20 +223,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertFalse(content.contains(start(noteRev3.getLocalId()) + text3 + end(noteRev3.getLocalId())));
     }
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() {
-        closeStreams();
-        adminService.removeNotesAndTerms();
-        subversionService.destroy();
-        subversionService.initialize();
-    }
-
     @Test
-    public void updateNote() throws Exception {
+    public void UpdateNote() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
@@ -239,7 +241,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void updateNote2() throws IOException, NoteAdditionFailedException{
+    public void UpdateNote2() throws IOException, NoteAdditionFailedException{
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         String element = "play-act-sp3-p";
         String text = "\u00E4st";

@@ -95,7 +95,7 @@ public class CrawlingTest {
     public MethodRule rule = new SystemPropertyCheckRule("webtest");
 
     @Test
-    public void browsePages() throws Exception {
+    public void BrowsePages() throws Exception {
         webDriver.get(baseUrl + "/login");
         webDriver.findElement(By.name("j_username")).sendKeys(USERNAME);
         webDriver.findElement(By.name("j_password")).sendKeys(PASSWORD);

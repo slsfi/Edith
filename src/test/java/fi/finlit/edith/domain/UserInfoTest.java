@@ -12,7 +12,7 @@ public class UserInfoTest {
     private static final String username = "foobar";
 
     @Before
-    public void before() {
+    public void setUp() {
         userInfo = new UserInfo(username);
     }
 

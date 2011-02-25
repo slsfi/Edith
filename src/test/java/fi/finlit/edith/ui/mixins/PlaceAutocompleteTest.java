@@ -18,7 +18,7 @@ public class PlaceAutocompleteTest {
     private PlaceAutocomplete autocomplete;
 
     @Before
-    public void Before() {
+    public void setUp() {
         autocomplete = new PlaceAutocomplete();
     }
 

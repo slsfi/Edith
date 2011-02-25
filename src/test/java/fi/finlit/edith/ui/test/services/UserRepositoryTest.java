@@ -28,19 +28,19 @@ public class UserRepositoryTest extends AbstractServiceTest {
     private AuthService authService;
 
     @Test
-    public void getByUsername() {
+    public void GetByUsername() {
         for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")) {
             assertNotNull(userRepo.getByUsername(username));
         }
     }
 
     @Test
-    public void getCurrentUser() {
+    public void GetCurrentUser() {
         assertEquals(authService.getUsername(), userRepo.getCurrentUser().getUsername());
     }
 
     @Test
-    public void getOrderedByName() {
+    public void GetOrderedByName() {
         List<User> users = userRepo.getOrderedByName();
         User previous = null;
         for (User user : users) {
@@ -52,7 +52,7 @@ public class UserRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getUserInfoByUsername() {
+    public void GetUserInfoByUsername() {
         for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")) {
             assertNotNull(userRepo.getUserInfoByUsername(username));
         }

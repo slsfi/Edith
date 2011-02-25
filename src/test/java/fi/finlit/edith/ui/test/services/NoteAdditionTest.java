@@ -75,7 +75,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     }
 
     @Test
-    public void generic_selections_in_cleared_document() throws Exception {
+    public void Generic_selections_in_cleared_document() throws Exception {
         List<SelectedText> failedSelectedTexts = new ArrayList<SelectedText>();
         List<SelectedText> selections = createSelections();
         for (SelectedText sel : selections) {
@@ -93,7 +93,7 @@ public class NoteAdditionTest extends AbstractServiceTest{
     }
 
     @Test
-    public void generic_selections_in_unmodified_document() throws Exception {
+    public void Generic_selections_in_unmodified_document() throws Exception {
         List<SelectedText> failedSelectedTexts = new ArrayList<SelectedText>();
         List<SelectedText> selections = createSelections();
         source = new StringReader(testDocumentContent);

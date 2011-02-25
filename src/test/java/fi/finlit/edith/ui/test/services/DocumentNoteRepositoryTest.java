@@ -68,9 +68,6 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Inject
     private DocumentRepository documentRepository;
 
-//    @Inject
-//    private SubversionService subversionService;
-
     @Inject
     private SessionFactory sessionFactory;
 

@@ -65,7 +65,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_for_p() throws Exception {
+    public void AddNote_for_p() throws Exception {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
         addNote(new SelectedText(element, element, text));
@@ -76,7 +76,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_for_speaker() throws Exception {
+    public void AddNote_for_speaker() throws Exception {
         String element = "play-act-sp-speaker";
         String text = "Esko.";
         addNote(new SelectedText(element, element, text));
@@ -87,7 +87,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_multiple_elements() throws Exception {
+    public void AddNote_multiple_elements() throws Exception {
         String start = "play-act-sp2-p";
         String end = "play-act-sp3-speaker";
         String text = "ja polvip\u00F6ksyt. Esko.";
@@ -99,7 +99,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_multiple_elements_2() throws Exception {
+    public void AddNote_multiple_elements_2() throws Exception {
         String start = "play-act-sp2-p";
         String end = "play-act-sp3-p";
         String text = "ja polvip\u00F6ksyt. Esko. (panee ty\u00F6ns\u00E4 pois).";
@@ -111,7 +111,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_long() throws Exception {
+    public void AddNote_long() throws Exception {
         String element = "play-act-sp-p";
         StringBuilder text = new StringBuilder();
         text.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
@@ -125,7 +125,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_short_note_1() throws Exception {
+    public void AddNote_short_note_1() throws Exception {
         String element = "play-act-stage";
         String text = "es";
         addNote(new SelectedText(element, element, 1, 1, text.toString()));
@@ -136,7 +136,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_short_note_2() throws Exception {
+    public void AddNote_short_note_2() throws Exception {
         String element = "play-act-stage";
         String text = "es";
         addNote(new SelectedText(element, element, 2, 2, text));
@@ -147,7 +147,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_short_note_3() throws Exception {
+    public void AddNote_short_note_3() throws Exception {
         String element = "play-act-stage";
         String text = "es";
         addNote(new SelectedText(element, element, 3, 3, text));
@@ -157,7 +157,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_one_char() throws Exception {
+    public void AddNote_one_char() throws Exception {
         String element = "play-act-stage";
         String text = "i";
         addNote(new SelectedText(element, element, 12, 12, text));
@@ -168,7 +168,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_line_breaks_in_selection() throws Exception {
+    public void AddNote_line_breaks_in_selection() throws Exception {
         String startElement = "play-description-castList-castItem8-roleDesc";
         String endElement = "play-description-castList-castItem9-roleDesc";
         String text = " \nori sepp\u00E4\n.\nKarri\n,\ntalon";
@@ -180,7 +180,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_start_element_inside_end_element() throws Exception {
+    public void AddNote_start_element_inside_end_element() throws Exception {
         String startElement = "play-act-stage-ref";
         String endElement = "play-act-stage";
         String text = "uone\n: per";
@@ -193,7 +193,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_start_element_inside_end_element2() throws Exception {
+    public void AddNote_start_element_inside_end_element2() throws Exception {
         String startElement = "play-act-sp3-p-stage";
         String endElement = "play-act-sp3-p";
         String text = "\u00E4lt\u00E4 ulos) .";
@@ -205,7 +205,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_start_element_inside_end_element_end_does_not_escape() throws Exception {
+    public void AddNote_start_element_inside_end_element_end_does_not_escape() throws Exception {
         String startElement = "play-act-stage-ref";
         String endElement = "play-act-stage";
         String text = "uone\n: p";
@@ -218,7 +218,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_end_element_inside_start_element() throws Exception {
+    public void AddNote_end_element_inside_start_element() throws Exception {
         String startElement = "play-act-stage";
         String endElement = "play-act-stage-ref";
         String text = "piaksen huo";
@@ -233,7 +233,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_end_element_deeply_inside_start_element() throws Exception {
+    public void AddNote_end_element_deeply_inside_start_element() throws Exception {
         String startElement = "play-description-castList-castItem13";
         String endElement = "play-description-castList-castItem13-roleDesc-ref";
         String text = ", kraatari";
@@ -245,7 +245,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_start_element_inside_end_element_and_end_element_inside_start_element()
+    public void AddNote_start_element_inside_end_element_and_end_element_inside_start_element()
             throws Exception {
         String startElement = "play-act-stage-ref";
         String endElement = "play-act-stage";
@@ -267,7 +267,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_end_element_inside_start_element_and_start_element_inside_end_element_()
+    public void AddNote_end_element_inside_start_element_and_start_element_inside_end_element_()
             throws Exception {
         String startElement = "play-act-stage";
         String endElement = "play-act-stage-ref2";
@@ -286,7 +286,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_on_top_of_another_note_in_child() throws Exception {
+    public void AddNote_on_top_of_another_note_in_child() throws Exception {
         String startElement = "play-act-stage-ref";
         String endElement = "play-act-stage";
         String text = "ne\n: per\u00E4";
@@ -301,7 +301,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_verify_subelement_not_eaten() throws Exception {
+    public void AddNote_verify_subelement_not_eaten() throws Exception {
         String element = "play-act-stage";
         String text = "Topi";
         addNote(new SelectedText(element, element, text));
@@ -315,7 +315,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_huge_difference_between_elements() throws Exception {
+    public void AddNote_huge_difference_between_elements() throws Exception {
         String startElement = "sourceDesc-biblStruct-monogr-imprint-date";
         String endElement = "play-ref";
         String text = "65 [H";
@@ -328,7 +328,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_same_element()
+    public void AddNote_same_element()
             throws Exception {
         String element = "play-act-sp4-p";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
@@ -340,7 +340,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_twice_overlapping() throws Exception {
+    public void AddNote_twice_overlapping() throws Exception {
         String element = "play-act-sp3-p";
         String text = "\u00E4st";
 
@@ -355,7 +355,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_twice_overlapping2() throws Exception {
+    public void AddNote_twice_overlapping2() throws Exception {
         String startElement = "play-description-castList-castItem7-role";
         String endElement = "play-description-castList-castItem8-roleDesc";
         String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
@@ -371,7 +371,7 @@ public class NoteAddition2Test extends AbstractServiceTest {
     }
 
     @Test
-    public void addNote_role_description() throws Exception {
+    public void AddNote_role_description() throws Exception {
         String startElement = "play-description-castList-castItem7-role";
         String endElement = "play-description-castList-castItem8-roleDesc";
         String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";

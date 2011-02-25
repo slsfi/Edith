@@ -24,7 +24,7 @@ public class UserEncodingTest extends AbstractServiceTest {
 
     @Test
     @Ignore
-    public void encoding() throws Exception {
+    public void Encoding() throws Exception {
         PasswordEncoder passwordEncoder = new ShaPasswordEncoder();
 
         SaltSourceImpl saltSource = new SaltSourceImpl();

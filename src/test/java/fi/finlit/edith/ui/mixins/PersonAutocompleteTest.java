@@ -18,7 +18,7 @@ public class PersonAutocompleteTest {
     private PersonAutocomplete autocomplete;
 
     @Before
-    public void Before() {
+    public void setUp() {
         autocomplete = new PersonAutocomplete();
     }
 

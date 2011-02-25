@@ -19,7 +19,7 @@ public class TermAutocompleteTest {
     private TermAutocomplete autocomplete;
 
     @Before
-    public void Before() {
+    public void setUp() {
         autocomplete = new TermAutocomplete();
     }
 

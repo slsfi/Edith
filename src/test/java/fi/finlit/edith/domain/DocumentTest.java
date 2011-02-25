@@ -17,19 +17,19 @@ public class DocumentTest {
     }
 
     @Test
-    public void testHashCode() {
+    public void HashCode() {
        assertEquals("path".hashCode(), doc1.hashCode());
     }
 
     @Test
-    public void testCompareTo() {
+    public void CompareTo() {
         Document doc2 = new Document();
         doc2.setSvnPath("z");
         assertTrue(doc1.compareTo(doc2) < 0);
     }
 
     @Test
-    public void testEqualsObject() {
+    public void EqualsObject() {
         Document doc2 = new Document();
         doc2.setSvnPath("z");
         assertFalse(doc1.equals(doc2));

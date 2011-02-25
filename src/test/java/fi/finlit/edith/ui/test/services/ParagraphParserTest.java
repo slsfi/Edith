@@ -15,6 +15,11 @@ public class ParagraphParserTest {
 
     private Paragraph paragraph;
 
+    @Before
+    public void setUp() throws Exception {
+        paragraph = new Paragraph();
+    }
+
     @Test
     public void Parse_Paragraph_Containing_Link() throws XMLStreamException {
         paragraph = ParagraphParser.parseParagraph("<a>foo</a>");
@@ -73,13 +78,8 @@ public class ParagraphParserTest {
         assertEquals("foo", paragraph.toString());
     }
 
-    @Before
-    public void setUp() throws Exception {
-        paragraph = new Paragraph();
-    }
-
     @Test
-    public void testAddElement() {
+    public void AddElement() {
         paragraph.addElement(new StringElement("el"));
         assertEquals("el", paragraph.toString());
     }
