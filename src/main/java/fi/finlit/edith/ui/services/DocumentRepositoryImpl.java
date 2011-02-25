@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mysema.commons.lang.Assert;
+import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
@@ -43,6 +44,7 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
@@ -144,7 +146,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private final NoteRepository noteRepository;
 
-    private final DocumentNoteRepository noteRevisionRepository;
+    private final DocumentNoteRepository documentNoteRepository;
 
     private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
@@ -159,14 +161,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject SubversionService svnService,
             @Inject NoteRepository noteRepository,
-            @Inject DocumentNoteRepository noteRevisionRepository,
+            @Inject DocumentNoteRepository documentNoteRepository,
             @Inject TimeService timeService,
             @Inject AuthService authService) {
         super(sessionFactory, document);
         this.documentRoot = documentRoot;
         this.svnService = svnService;
         this.noteRepository = noteRepository;
-        this.noteRevisionRepository = noteRevisionRepository;
+        this.documentNoteRepository = documentNoteRepository;
         this.timeService = timeService;
         this.authService = authService;
     }
@@ -430,17 +432,37 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return svnService.getRevisions(doc.getSvnPath());
     }
 
+
+    @Override
+    public void removeAll(Collection<Document> documents) {
+        for (Document document : documents){
+            remove(document);
+        }
+    }
+
     @Override
     public void remove(Document doc) {
         Assert.notNull(doc, "document was null");
+
+        // delete from svn
         svnService.delete(doc.getSvnPath());
+
+        // delete related document notes
+        QDocumentNote documentNote = QDocumentNote.documentNote;
+        Session session = getSession();
+        List<DocumentNote> documentNotes = session.from(documentNote)
+            .where(documentNote.document().eq(doc)).list(documentNote);
+
+        if (!documentNotes.isEmpty()){
+            session.deleteAll(documentNotes.toArray());
+        }
     }
 
     @Override
     public DocumentRevision removeAllNotes(Document doc) {
         long revision = svnService.getLatestRevision(doc.getSvnPath());
         DocumentRevision docRevision = doc.getRevision(revision);
-        List<DocumentNote> noteRevisions = noteRevisionRepository.getOfDocument(docRevision);
+        List<DocumentNote> noteRevisions = documentNoteRepository.getOfDocument(docRevision);
         DocumentNote[] notes = new DocumentNote[noteRevisions.size()];
         for (int i = 0; i < notes.length; i++){
             notes[i] = noteRevisions.get(i);
@@ -537,7 +559,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         DocumentNote copy = note.createCopy();
         copy.setLongText(selection.getSelection());
         copy.setSVNRevision(newRevision);
-        noteRevisionRepository.save(copy);
+        documentNoteRepository.save(copy);
         return copy;
     }
 
@@ -546,5 +568,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createAttribute("xml", XML_NS, "id", anchorId));
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
     }
+
 
 }

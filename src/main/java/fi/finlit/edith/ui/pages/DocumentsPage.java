@@ -30,9 +30,14 @@ public class DocumentsPage {
     @SessionState(create=false)
     private Collection<Document> selectedDocuments;
 
+    private Collection<Document> selectedForDeletion;
+
     private Collection<Document> toBeDeleted;
 
+    private boolean removeSelected;
+
     void onActivate(){
+        selectedForDeletion = new HashSet<Document>();
         if (selectedDocuments == null){
             selectedDocuments = new HashSet<Document>();
         }
@@ -52,16 +57,26 @@ public class DocumentsPage {
         }
     }
 
-//    public boolean isSelectedForDeletion() {
-//        return selectedDocuments.contains(document);
-//    }
-//
-//    public void setSelectedForDeletion(boolean selected) {
-//        if (selected) {
-//            selectedDocuments.add(document);
-//        } else {
-//            selectedDocuments.remove(document);
-//        }
-//    }
+    void onSelectedFromRemoveSelected() {
+        removeSelected = true;
+    }
+
+    void onSuccessFromDocumentsForm() {
+        if (removeSelected){
+            documentRepository.removeAll(selectedForDeletion);
+        }
+    }
+
+    public boolean isSelectedForDeletion() {
+        return selectedForDeletion.contains(document);
+    }
+
+    public void setSelectedForDeletion(boolean selected) {
+        if (selected) {
+            selectedForDeletion.add(document);
+        } else {
+            selectedForDeletion.remove(document);
+        }
+    }
 
 }

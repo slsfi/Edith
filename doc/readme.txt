@@ -12,3 +12,4 @@ DONE
  
 
 
+TODO : DocumentNote.lastest (boolean) property to optimize latest documentnotes queries

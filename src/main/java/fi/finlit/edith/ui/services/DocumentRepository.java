@@ -8,6 +8,7 @@ package fi.finlit.edith.ui.services;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -114,5 +115,10 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @param doc
      */
     void remove(Document doc);
+
+    /**
+     * @param documents
+     */
+    void removeAll(Collection<Document> documents);
 
 }

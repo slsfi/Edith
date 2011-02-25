@@ -8,7 +8,7 @@
 
 	<t:form t:id="documentsForm">
 
-	    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1,null2,selection">
+	    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1,null2,selection,deletion">
 	        <p:documentCell>
 	          ${document.title}
 	        </p:documentCell>
@@ -28,11 +28,9 @@
 				<t:checkbox value="documentSelected" />			
 			</p:selectionCell>
 			
-			<!-- 
 			<p:deletionCell>
 				<t:checkbox value="selectedForDeletion" />
 			</p:deletionCell>
-			 -->
 			
 	        <p:empty>
 	            <p>${message:no-documents}</p>
@@ -40,6 +38,8 @@
 	    </t:grid>
 		
 		<input type="submit" value="${message:select}" />
+		
+		<t:submit t:id="removeSelected" value="${message:remove-selected}"/>
 		
 	</t:form>
 

@@ -36,10 +36,13 @@ import org.springframework.util.Assert;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
+import com.mysema.query.types.Predicate;
+import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
 import com.mysema.rdfbean.object.BeanQuery;
 import com.mysema.rdfbean.object.BeanSubQuery;
+import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.*;
@@ -99,28 +102,26 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         QNote note = QNote.note;
         QDocumentNote documentNote = QDocumentNote.documentNote;
 
+        Predicate nonOrphan = null, orphan = null;
+
         // document
-        BooleanBuilder docFilters = new BooleanBuilder();
         if (!searchInfo.getDocuments().isEmpty()){
-            docFilters.and(sub(documentNote).where(
-                    documentNote.note().eq(note),
+            // create filter condition for non orphan matches
+            nonOrphan = BooleanExpression.allOf(documentNote.note().eq(note),
                     documentNote.document().in(searchInfo.getDocuments()),
                     documentNote.deleted.eq(false),
                     sub(otherNote).where(otherNote.ne(documentNote),
                             otherNote.note().eq(documentNote.note()),
                             otherNote.localId.eq(documentNote.localId),
                             otherNote.createdOn.gt(documentNote.createdOn)).notExists()
-                    ).exists());
+                    );
 
         }
 
         // orphans
         if (searchInfo.isOrphans()){
-            docFilters.or(sub(documentNote).where(documentNote.note().eq(note)).notExists());
-        }
-
-        if (docFilters.hasValue()){
-            filters.and(docFilters.getValue());
+            // create filter condition for orphan matches
+            orphan = sub(documentNote).where(documentNote.note().eq(note)).notExists();
         }
 
         // creators
@@ -151,7 +152,18 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         }
 
         // get matching notes
-        List<Note> notes = getSession().from(note).where(filters.getValue()).orderBy(getOrderBy(searchInfo, note)).list(note);
+        Session session = getSession();
+        List<Note> notes = new ArrayList<Note>();
+        OrderSpecifier<?> order = getOrderBy(searchInfo, note);
+        if (nonOrphan != null){
+            notes.addAll(session.from(note, documentNote).where(nonOrphan, filters.getValue()).orderBy(order).listDistinct(note));
+        }
+        if (orphan != null){
+            notes.addAll(session.from(note).where(orphan, filters.getValue()).orderBy(order).list(note));
+        }
+        if (orphan == null && nonOrphan == null){
+            notes.addAll(session.from(note).where(filters.getValue()).orderBy(order).list(note));
+        }
 
         if (!notes.isEmpty()){
             // get related document notes
@@ -191,21 +203,18 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             return rv;
         }
 
-
     }
-
-
 
     private List<DocumentNote> getActiveDocumentNotes(Document document, Collection<Note> notes){
         long start = System.currentTimeMillis();
 
         BeanQuery query = getSession().from(documentNote);
 
-        // of given note
-        query.where(documentNote.note().in(notes));
-
         // of current document
         query.where(documentNote.document().eq(document));
+
+        // of given note
+        query.where(documentNote.note().in(notes));
 
         // not deleted
         query.where(documentNote.deleted.eq(false));

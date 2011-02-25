@@ -67,10 +67,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession()
                 .from(documentNote)
                 .where(documentNote.document().eq(docRevision.getDocument()),
-                        documentNote.localId.eq(localId),
-                        documentNote.svnRevision.loe(docRevision.getRevision()),
-                        documentNote.deleted.eq(false),
-                        latestFor(documentNote, docRevision.getRevision()))
+                       documentNote.localId.eq(localId),
+                       documentNote.svnRevision.loe(docRevision.getRevision()),
+                       documentNote.deleted.eq(false),
+                       latestFor(documentNote, docRevision.getRevision()))
                 .uniqueResult(documentNote);
     }
 
@@ -80,9 +80,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession()
                 .from(documentNote)
                 .where(documentNote.document().eq(docRevision.getDocument()),
-                        documentNote.svnRevision.loe(docRevision.getRevision()),
-                        documentNote.deleted.not(),
-                        latestFor(documentNote, docRevision.getRevision()))
+                       documentNote.svnRevision.loe(docRevision.getRevision()),
+                       documentNote.deleted.not(),
+                       latestFor(documentNote, docRevision.getRevision()))
                 .orderBy(documentNote.createdOn.asc()).list(documentNote);
     }
 
@@ -135,14 +135,16 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     private BooleanExpression latestFor(QDocumentNote docNote, long svnRevision) {
         return sub(otherNote).where(otherNote.ne(docNote),
                 // otherNote.note().eq(documentNote.note()),
-                otherNote.localId.eq(docNote.localId), otherNote.svnRevision.loe(svnRevision),
+                otherNote.localId.eq(docNote.localId),
+                otherNote.svnRevision.loe(svnRevision),
                 otherNote.createdOn.gt(docNote.createdOn)).notExists();
     }
 
     private BooleanExpression latest(QDocumentNote docNote) {
-        return sub(otherNote).where(otherNote.ne(docNote), otherNote.localId.eq(docNote.localId),
-                otherNote.note().eq(docNote.note()), otherNote.createdOn.gt(docNote.createdOn))
-                .notExists();
+        return sub(otherNote).where(otherNote.ne(docNote),
+                otherNote.localId.eq(docNote.localId),
+                otherNote.note().eq(docNote.note()),
+                otherNote.createdOn.gt(docNote.createdOn)).notExists();
     }
 
     @Override
@@ -235,8 +237,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         Assert.notNull(noteId);
         return getSession()
                 .from(documentNote)
-                .where(documentNote.note().id.eq(noteId), documentNote.deleted.eq(false),
-                        latest(documentNote)).list(documentNote);
+                .where(documentNote.note().id.eq(noteId),
+                       documentNote.deleted.eq(false),
+                       latest(documentNote)).list(documentNote);
     }
 
     @Override
@@ -246,8 +249,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession()
                 .from(documentNote)
                 .where(documentNote.note().id.eq(noteId),
-                        documentNote.document().id.eq(documentId), documentNote.deleted.eq(false),
-                        latest(documentNote)).list(documentNote);
+                       documentNote.document().id.eq(documentId),
+                       documentNote.deleted.eq(false),
+                       latest(documentNote)).list(documentNote);
     }
 
     @Override
@@ -255,8 +259,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         Assert.notNull(termId);
         return getSession()
                 .from(documentNote)
-                .where(documentNote.note().term().id.eq(termId), documentNote.deleted.eq(false),
-                        latest(documentNote)).list(documentNote);
+                .where(documentNote.note().term().id.eq(termId),
+                       documentNote.deleted.eq(false),
+                       latest(documentNote)).list(documentNote);
     }
 
     @Override
@@ -265,7 +270,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession()
                 .from(documentNote)
                 .where(documentNote.note().person().id.eq(personId),
-                        documentNote.deleted.eq(false), latest(documentNote)).list(documentNote);
+                       documentNote.deleted.eq(false),
+                       latest(documentNote)).list(documentNote);
     }
 
     @Override
@@ -273,8 +279,9 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         Assert.notNull(placeId);
         return getSession()
                 .from(documentNote)
-                .where(documentNote.note().place().id.eq(placeId), documentNote.deleted.eq(false),
-                        latest(documentNote)).list(documentNote);
+                .where(documentNote.note().place().id.eq(placeId),
+                       documentNote.deleted.eq(false),
+                       latest(documentNote)).list(documentNote);
     }
 
     @Override
