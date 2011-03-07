@@ -46,7 +46,7 @@ public class Note extends Identifiable {
     private Set<NoteComment> comments;
 
     @Predicate(ln="descriptionString")
-    private String descriptionString;
+    private String description;
 
     @Predicate
     private NoteFormat format;
@@ -67,13 +67,13 @@ public class Note extends Identifiable {
     private Place place;
 
     @Predicate(ln="sourcesString")
-    private String sourcesString;
+    private String sources;
 
     @Predicate
     private NoteStatus status = NoteStatus.INITIAL;
 
     @Predicate(ln="subtextSourcesString")
-    private String subtextSourcesString;
+    private String subtextSources;
 
     @Predicate
     private Term term;
@@ -213,27 +213,27 @@ public class Note extends Identifiable {
     }
 
     public String getDescription() {
-        return descriptionString;
+        return description;
     }
 
     public void setDescription(String descriptionString) {
-        this.descriptionString = descriptionString;
+        this.description = descriptionString;
     }
 
     public String getSources() {
-        return sourcesString;
+        return sources;
     }
 
     public void setSources(String sourcesString) {
-        this.sourcesString = sourcesString;
+        this.sources = sourcesString;
     }
 
     public String getSubtextSources() {
-        return subtextSourcesString;
+        return subtextSources;
     }
 
     public void setSubtextSources(String subtextSourcesString) {
-        this.subtextSourcesString = subtextSourcesString;
+        this.subtextSources = subtextSourcesString;
     }
 
 }
