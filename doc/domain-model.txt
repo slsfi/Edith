@@ -1,0 +1,66 @@
+class DocumentNote {
+  document: Document
+  localId
+  svnRevision
+  deleted: boolean
+  createdOn: num
+  note: Note
+  publishable: boolean
+}
+
+class Note {
+  allEditors : UserInfo*
+  comments: NoteComment*
+  description
+  format: NoteFormat
+  lastEditedBy: User
+  lemma
+  lemmaMeaning
+  person: Person
+  place: Place
+  sources
+  status: NoteStatus
+  subtextSources
+  term: Term
+  types: NoteType*
+  editedOn: num
+}
+
+class NoteComment {
+  note: Note
+  message
+  username
+  createdAt: timestamp
+}
+
+class Person {
+  normalizedForm: NameForm
+  otherForms: NameForm*
+  timeofBirth
+  timeOfDeath
+}
+
+class Place {
+  normalizedForm: NameForm
+  otherForm: NameForm*
+}
+
+enum NoteStatus {
+  INITIAL,
+  DRAFT,
+  FINISHED
+}
+
+enum NoteType {
+  WORD_EXPLANATION,
+  LITERARY,
+  HISTORIAL,
+  DICTUM,
+  CRITIQUE
+}
+
+class Term {
+  basicForm
+  meaning
+  language
+}
