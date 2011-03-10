@@ -1,15 +1,17 @@
-class DocumentNote {
+// Dokumentti-viite
+class DocumentNote { 
   document: Document
-  localId
-  svnRevision
+  localId // viiteen id dokumentissä
+  svnRevision // SVN revisio
   deleted: boolean
   createdOn: num
   note: Note
-  publishable: boolean
+  publishable: boolean // julkaistavissa
 }
 
-class Note {
-  allEditors : UserInfo*
+// Viite
+class Note { 
+  allEditors : User*
   comments: NoteComment*
   description
   format: NoteFormat
@@ -18,49 +20,69 @@ class Note {
   lemmaMeaning
   person: Person
   place: Place
-  sources
+  sources // lähteet
   status: NoteStatus
-  subtextSources
+  subtextSources // Subtekstin lähteet
   term: Term
   types: NoteType*
-  editedOn: num
+  editedOn: number
 }
 
-class NoteComment {
+// Kommentti
+class NoteComment { 
   note: Note
   message
   username
   createdAt: timestamp
 }
 
-class Person {
+// Henkilö
+class Person { 
   normalizedForm: NameForm
   otherForms: NameForm*
   timeofBirth
   timeOfDeath
 }
 
-class Place {
+// Paikka
+class Place { 
   normalizedForm: NameForm
   otherForm: NameForm*
 }
 
-enum NoteStatus {
-  INITIAL,
-  DRAFT,
-  FINISHED
-}
-
-enum NoteType {
-  WORD_EXPLANATION,
-  LITERARY,
-  HISTORIAL,
-  DICTUM,
-  CRITIQUE
-}
-
+// Termi, Käsite
 class Term {
-  basicForm
-  meaning
-  language
+  basicForm // perusmouto
+  meaning // merkitys
+  language // kieli
+}
+
+// Nimimuoto
+class NameForm {
+  description
+  first
+  last
+}
+
+// Viitteen formaatti
+enum NoteFormat {
+  NOTE, // Viite
+  PLACE, // Paikkaviite
+  PERSON // Henkilöviite
+}
+
+// Viitteen tila
+enum NoteStatus {
+  INITIAL, // alustava
+  DRAFT, // luonnos
+  FINISHED // valmis
+}
+
+// Viitteen tyyppi
+enum NoteType {
+  WORD_EXPLANATION, // Sananselitys
+  LITERARY, // Kirjallinen
+  HISTORIAL, // Historiallinen
+  DICTUM, // Sananparsi
+  CRITIQUE // Tekstikriittinen
 }
