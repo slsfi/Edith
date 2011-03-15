@@ -2,6 +2,7 @@
 class DocumentNote { 
   document: Document
   localId // viiteen id dokumentissä
+  longText
   svnRevision // SVN revisio
   deleted: boolean
   createdOn: num
