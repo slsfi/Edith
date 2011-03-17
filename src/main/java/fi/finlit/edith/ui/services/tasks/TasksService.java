@@ -23,6 +23,7 @@ public class TasksService implements Runnable {
             @Inject ReplacedByAdditionTask replacedBy) {
         this.sessionFactory = sessionFactory;
         tasks.add(replacedBy);
+        run();
     }
 
     @Override

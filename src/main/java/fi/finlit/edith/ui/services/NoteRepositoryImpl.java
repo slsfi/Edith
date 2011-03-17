@@ -51,8 +51,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private static final Logger logger = LoggerFactory.getLogger(NoteRepositoryImpl.class);
 
-//    private static final QDocumentNote otherNote = new QDocumentNote("other");
-
     private static final class LoopContext {
         private Note note;
         private String text;
@@ -111,11 +109,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                     documentNote.document().in(searchInfo.getDocuments()),
                     documentNote.deleted.eq(false),
                     documentNote.replacedBy().isNull());
-//                    sub(otherNote).where(otherNote.ne(documentNote),
-//                            otherNote.note().eq(documentNote.note()),
-//                            otherNote.localId.eq(documentNote.localId),
-//                            otherNote.createdOn.gt(documentNote.createdOn)).notExists()
-//                    );
 
         }
 
@@ -221,10 +214,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         query.where(documentNote.deleted.eq(false));
 
         // latest revision
-//        query.where(sub(otherNote).where(otherNote.ne(documentNote),
-//                otherNote.note().eq(documentNote.note()),
-//                otherNote.localId.eq(documentNote.localId),
-//                otherNote.createdOn.gt(documentNote.createdOn)).notExists());
         query.where(documentNote.replacedBy().isNull());
 
         List<DocumentNote> rv = query.list(documentNote);

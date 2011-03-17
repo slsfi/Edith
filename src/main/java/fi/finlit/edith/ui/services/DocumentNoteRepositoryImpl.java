@@ -140,14 +140,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 otherNote.createdOn.gt(docNote.createdOn)).notExists();
     }
 
-    private BooleanExpression latest(QDocumentNote docNote) {
-        return docNote.replacedBy().isNull();
-//        return sub(otherNote).where(otherNote.ne(docNote),
-//                otherNote.localId.eq(docNote.localId),
-//                otherNote.note().eq(docNote.note()),
-//                otherNote.createdOn.gt(docNote.createdOn)).notExists();
-    }
-
     @Override
     public GridDataSource queryNotes(String searchTerm) {
         QDocumentNote documentNote = QDocumentNote.documentNote;
@@ -167,7 +159,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             }
         }
         builder.and(documentNote.deleted.eq(false));
-        builder.and(latest(documentNote));
+        builder.and(documentNote.replacedBy().isNull());
 
         return createGridDataSource(documentNote, note.term().basicForm.lower().asc(), false, builder.getValue());
     }
@@ -231,7 +223,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         .from(documentNote)
         .where(documentNote.note().in(notes),
                documentNote.deleted.eq(false),
-               latest(documentNote)).list(documentNote);
+               documentNote.replacedBy().isNull()).list(documentNote);
     }
 
     @Override
@@ -241,7 +233,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.note().id.eq(noteId),
                        documentNote.deleted.eq(false),
-                       latest(documentNote)).list(documentNote);
+                       documentNote.replacedBy().isNull()).list(documentNote);
     }
 
     @Override
@@ -253,7 +245,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .where(documentNote.note().id.eq(noteId),
                        documentNote.document().id.eq(documentId),
                        documentNote.deleted.eq(false),
-                       latest(documentNote)).list(documentNote);
+                       documentNote.replacedBy().isNull()).list(documentNote);
     }
 
     @Override
@@ -263,7 +255,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.note().term().id.eq(termId),
                        documentNote.deleted.eq(false),
-                       latest(documentNote)).list(documentNote);
+                       documentNote.replacedBy().isNull()).list(documentNote);
     }
 
     @Override
@@ -273,7 +265,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.note().person().id.eq(personId),
                        documentNote.deleted.eq(false),
-                       latest(documentNote)).list(documentNote);
+                       documentNote.replacedBy().isNull()).list(documentNote);
     }
 
     @Override
@@ -283,7 +275,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.note().place().id.eq(placeId),
                        documentNote.deleted.eq(false),
-                       latest(documentNote)).list(documentNote);
+                       documentNote.replacedBy().isNull()).list(documentNote);
     }
 
     @Override
