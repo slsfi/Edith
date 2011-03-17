@@ -559,7 +559,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         DocumentNote copy = note.createCopy();
         copy.setLongText(selection.getSelection());
         copy.setSVNRevision(newRevision);
-        documentNoteRepository.save(copy);
+//        documentNoteRepository.save(copy);
+        note.setReplacedBy(copy);
+        documentNoteRepository.save(note);
+
         return copy;
     }
 

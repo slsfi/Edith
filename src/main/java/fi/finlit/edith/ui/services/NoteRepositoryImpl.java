@@ -51,7 +51,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private static final Logger logger = LoggerFactory.getLogger(NoteRepositoryImpl.class);
 
-    private static final QDocumentNote otherNote = new QDocumentNote("other");
+//    private static final QDocumentNote otherNote = new QDocumentNote("other");
 
     private static final class LoopContext {
         private Note note;
@@ -110,11 +110,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             nonOrphan = BooleanExpression.allOf(documentNote.note().eq(note),
                     documentNote.document().in(searchInfo.getDocuments()),
                     documentNote.deleted.eq(false),
-                    sub(otherNote).where(otherNote.ne(documentNote),
-                            otherNote.note().eq(documentNote.note()),
-                            otherNote.localId.eq(documentNote.localId),
-                            otherNote.createdOn.gt(documentNote.createdOn)).notExists()
-                    );
+                    documentNote.replacedBy().isNull());
+//                    sub(otherNote).where(otherNote.ne(documentNote),
+//                            otherNote.note().eq(documentNote.note()),
+//                            otherNote.localId.eq(documentNote.localId),
+//                            otherNote.createdOn.gt(documentNote.createdOn)).notExists()
+//                    );
 
         }
 
@@ -220,10 +221,11 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         query.where(documentNote.deleted.eq(false));
 
         // latest revision
-        query.where(sub(otherNote).where(otherNote.ne(documentNote),
-                otherNote.note().eq(documentNote.note()),
-                otherNote.localId.eq(documentNote.localId),
-                otherNote.createdOn.gt(documentNote.createdOn)).notExists());
+//        query.where(sub(otherNote).where(otherNote.ne(documentNote),
+//                otherNote.note().eq(documentNote.note()),
+//                otherNote.localId.eq(documentNote.localId),
+//                otherNote.createdOn.gt(documentNote.createdOn)).notExists());
+        query.where(documentNote.replacedBy().isNull());
 
         List<DocumentNote> rv = query.list(documentNote);
 
@@ -309,6 +311,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         documentNote.setDocRevision(docRevision);
         documentNote.setLocalId(localId);
         documentNote.setNote(n);
+        getSession().save(n);
         getSession().save(documentNote);
         getSession().flush();
 
@@ -475,8 +478,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         documentNote.setCreatedOn(timeService.currentTimeMillis());
         documentNote.setSVNRevision(revision);
         documentNote.setDeleted(true);
-
         getSession().save(documentNote);
+
+        documentNoteToBeRemoved.setReplacedBy(documentNote);
+        getSession().save(documentNoteToBeRemoved);
     }
 
     @Override

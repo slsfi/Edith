@@ -29,23 +29,27 @@ public final class DataModule {
             OrderedConfiguration<Object> configuration,
             SaltSource saltSource,
             PasswordEncoder passwordEncoder,
-            @Inject SubversionService subversionService) throws IOException {
+            @Inject SubversionService subversionService,
+            @Inject UserRepository userRepository) throws IOException {
 
         logger.info("Initializing DataModule");
 
         subversionService.initialize();
 
-        // users
-        addUsers(configuration, saltSource, passwordEncoder);
+        addUsers(userRepository, saltSource, passwordEncoder);
     }
 
     @SuppressWarnings("unchecked")
-    private static void addUsers(OrderedConfiguration<Object> configuration,
-            SaltSource saltSource, PasswordEncoder passwordEncoder) throws IOException {
+    private static void addUsers(UserRepository userRepository,
+            SaltSource saltSource,
+            PasswordEncoder passwordEncoder) throws IOException {
         List<String> lines = IOUtils.readLines(DataModule.class.getResourceAsStream("/users.csv"), "ISO-8859-1");
         for (String line : lines){
             String[] values = line.split(";");
-            User user = new User();
+            User user = userRepository.getByUsername(values[2]);
+            if (user == null){
+                user = new User();
+            }
             user.setFirstName(values[0]);
             user.setLastName(values[1]);
             user.setUsername(values[2]);
@@ -63,7 +67,7 @@ public final class DataModule {
             String password = passwordEncoder.encodePassword(user.getUsername(), saltSource.getSalt(userDetails));
             user.setPassword(password);
 
-            configuration.add("user-" + user.getUsername(), user);
+            userRepository.save(user);
         }
     }
 

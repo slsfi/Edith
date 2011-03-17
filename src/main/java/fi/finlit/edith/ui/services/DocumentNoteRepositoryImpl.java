@@ -141,10 +141,11 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     private BooleanExpression latest(QDocumentNote docNote) {
-        return sub(otherNote).where(otherNote.ne(docNote),
-                otherNote.localId.eq(docNote.localId),
-                otherNote.note().eq(docNote.note()),
-                otherNote.createdOn.gt(docNote.createdOn)).notExists();
+        return docNote.replacedBy().isNull();
+//        return sub(otherNote).where(otherNote.ne(docNote),
+//                otherNote.localId.eq(docNote.localId),
+//                otherNote.note().eq(docNote.note()),
+//                otherNote.createdOn.gt(docNote.createdOn)).notExists();
     }
 
     @Override
@@ -201,6 +202,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             docNote.getNote().setAllEditors(new HashSet<UserInfo>());
         }
         docNote.getNote().getAllEditors().add(createdBy);
+        getSession().save(docNote.getNote());
         getSession().save(docNote);
         if (docNote.getNote().getComments() != null) {
             for (NoteComment comment : docNote.getNote().getComments()) {

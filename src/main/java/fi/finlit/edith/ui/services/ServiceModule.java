@@ -33,6 +33,8 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
+import fi.finlit.edith.ui.services.tasks.ReplacedByAdditionTask;
+import fi.finlit.edith.ui.services.tasks.TasksService;
 
 /**
  * ServiceModule provides service bindings and RDFBean configuration elements
@@ -52,6 +54,14 @@ public final class ServiceModule {
     }
 
     public static void bind(ServiceBinder binder) {
+        // services
+        binder.bind(SubversionService.class, SubversionServiceImpl.class);
+        binder.bind(ContentRenderer.class, ContentRendererImpl.class);
+        binder.bind(AuthService.class, SpringSecurityAuthService.class);
+        binder.bind(TimeService.class, SimpleTimeService.class);
+        binder.bind(TasksService.class);
+
+        // repositories
         binder.bind(AdminService.class, AdminServiceImpl.class);
         binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
         binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
@@ -60,10 +70,9 @@ public final class ServiceModule {
         binder.bind(PersonRepository.class, PersonRepositoryImpl.class);
         binder.bind(PlaceRepository.class, PlaceRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
-        binder.bind(SubversionService.class, SubversionServiceImpl.class);
-        binder.bind(ContentRenderer.class, ContentRendererImpl.class);
-        binder.bind(AuthService.class, SpringSecurityAuthService.class);
-        binder.bind(TimeService.class, SimpleTimeService.class);
+
+        // tasks
+        binder.bind(ReplacedByAdditionTask.class);
     }
 
     public static Configuration buildConfiguration() {

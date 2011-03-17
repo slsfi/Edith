@@ -45,6 +45,9 @@ public class DocumentNote extends Identifiable {
     @Predicate
     private boolean publishable;
 
+    @Predicate
+    private DocumentNote replacedBy;
+
     public DocumentNote createCopy() {
         DocumentNote copy = new DocumentNote();
         copy.setLongText(longText);
@@ -140,6 +143,14 @@ public class DocumentNote extends Identifiable {
 
     public boolean isPublishable() {
         return publishable;
+    }
+
+    public DocumentNote getReplacedBy() {
+        return replacedBy;
+    }
+
+    public void setReplacedBy(DocumentNote replacedBy) {
+        this.replacedBy = replacedBy;
     }
 
     @Override
