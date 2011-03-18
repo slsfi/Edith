@@ -1,4 +1,4 @@
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.domain;
 
 import java.io.StringReader;
 
@@ -7,10 +7,6 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import fi.finlit.edith.domain.LinkElement;
-import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.StringElement;
-import fi.finlit.edith.domain.UrlElement;
 
 public final class ParagraphParser {
 

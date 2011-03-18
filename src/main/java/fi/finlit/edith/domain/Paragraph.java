@@ -7,7 +7,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.lang.StringUtils;
 
-import fi.finlit.edith.ui.services.ParagraphParser;
 
 public class Paragraph extends Identifiable {
 
