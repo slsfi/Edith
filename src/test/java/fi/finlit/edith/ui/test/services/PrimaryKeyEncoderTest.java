@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Before;
@@ -38,4 +39,10 @@ public class PrimaryKeyEncoderTest extends AbstractServiceTest {
         assertNotNull(encoder.toValue(user.getId()));
     }
 
+    @Test
+    public void GetAllValues(){
+        assertTrue(encoder.getAllValues().isEmpty());
+        encoder.toValue(user.getId());
+        assertEquals(1, encoder.getAllValues().size());
+    }
 }

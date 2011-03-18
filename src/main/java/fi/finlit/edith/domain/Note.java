@@ -40,10 +40,10 @@ public class Note extends Identifiable {
     }
 
     @Predicate
-    private Set<UserInfo> allEditors;
+    private Set<UserInfo> allEditors = new HashSet<UserInfo>();
 
     @Predicate(ln = "commentOf", inv = true)
-    private Set<NoteComment> comments;
+    private Set<NoteComment> comments = new HashSet<NoteComment>();
 
     @Predicate(ln="descriptionString")
     private String description;
@@ -79,7 +79,7 @@ public class Note extends Identifiable {
     private Term term;
 
     @Predicate
-    private Set<NoteType> types;
+    private Set<NoteType> types = new HashSet<NoteType>();
 
     @Predicate
     private long editedOn;

@@ -1,5 +1,6 @@
 package fi.finlit.edith.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -9,12 +10,12 @@ import fi.finlit.edith.EDITH;
 
 @ClassMapping(ns = EDITH.NS)
 public class Person extends Identifiable {
-    
+
     @Predicate
     private NameForm normalizedForm;
 
     @Predicate
-    private Set<NameForm> otherForms;
+    private Set<NameForm> otherForms = new HashSet<NameForm>();
 
     @Predicate
     private Interval timeOfBirth;

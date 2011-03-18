@@ -27,7 +27,7 @@ public class TermWithNotes {
     private String meaning;
 
     @Predicate(ln = "term", inv = true)
-    private Set<Note> notes;
+    private Set<Note> notes = new HashSet<Note>();
 
     public String getBasicForm() {
         return basicForm;

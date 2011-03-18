@@ -7,9 +7,14 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.internal.services.MarkupWriterImpl;
@@ -40,6 +45,13 @@ public class ContentRendererTest extends AbstractServiceTest {
     }
 
     @Test
+    public void renderDocumentAsXML() throws IOException, XMLStreamException{
+        List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        renderer.renderDocumentAsXML(documentRepository.getDocumentForPath(doc2).getRevision(-1), docNotes, out);
+    }
+
+    @Test
     public void renderPageLinks() throws Exception {
         renderer.renderPageLinks(documentRepository.getDocumentForPath(doc1).getRevision(-1),
                 writer);
@@ -48,6 +60,12 @@ public class ContentRendererTest extends AbstractServiceTest {
     @Test
     public void renderDocumentWithNotes() throws Exception {
         renderer.renderDocument(documentRepository.getDocumentForPath(doc2).getRevision(-1), writer);
+    }
+
+    @Test
+    public void renderDocumentNotesAsXML(){
+        List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
+        renderer.renderDocumentNotesAsXML(documentRepository.getDocumentForPath(doc2).getRevision(-1), docNotes, writer);
     }
 
     private DocumentNote createDocumentNote(NoteFormat noteFormat) {
