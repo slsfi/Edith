@@ -173,6 +173,12 @@
 				<extraResources>profiles/sls/res</extraResources>
 			</properties>
 		</profile>
+		<profile>
+			<id>standalone</id>
+			<properties>
+				<extraResources>profiles/standalone/res</extraResources>
+			</properties>
+		</profile>		
 	</profiles>
 
 	<build>
