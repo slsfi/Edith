@@ -3,10 +3,6 @@ package fi.finlit.edith.ui.services;
 import java.util.Collection;
 
 import com.mysema.query.types.EntityPath;
-import com.mysema.rdfbean.model.BID;
-import com.mysema.rdfbean.model.IDType;
-import com.mysema.rdfbean.model.UID;
-import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 /**
@@ -20,16 +16,9 @@ public abstract class AbstractRepository<T> extends AbstractService
 
     private final EntityPath<T> entityPath;
 
-    private final IDType idType;
-
     protected AbstractRepository(SessionFactory sessionFactory, EntityPath<T> entity){
-        this(sessionFactory, entity, IDType.LOCAL);
-    }
-
-    protected AbstractRepository(SessionFactory sessionFactory, EntityPath<T> entity, IDType idType){
         super(sessionFactory);
         this.entityPath = entity;
-        this.idType = idType;
     }
 
     @SuppressWarnings("unchecked")
@@ -44,15 +33,7 @@ public abstract class AbstractRepository<T> extends AbstractService
 
     @Override
     public T getById(String id) {
-        Session session = getSession();
-        if (idType == IDType.LOCAL){
-            return session.getById(id, getType());
-        }else if (idType == IDType.RESOURCE){
-            return session.get(entityPath.getType(), new BID(id));
-        }else{
-            return session.get(entityPath.getType(), new UID(id));
-        }
-
+        return getSession().getById(id, entityPath.getType());
     }
 
 }

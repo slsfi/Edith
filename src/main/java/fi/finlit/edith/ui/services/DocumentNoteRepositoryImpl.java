@@ -176,7 +176,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
 
     @Override
     public void remove(String documentNoteId) {
-        DocumentNote note = super.getById(documentNoteId);
+        DocumentNote note = getById(documentNoteId);
         remove(note);
     }
 
@@ -282,4 +282,5 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     public List<DocumentNote> getNotesLessDocumentNotes() {
         return getSession().from(documentNote).where(documentNote.note().isNull()).list(documentNote);
     }
+
 }
