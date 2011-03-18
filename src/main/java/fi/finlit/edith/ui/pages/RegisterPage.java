@@ -6,7 +6,6 @@
 package fi.finlit.edith.ui.pages;
 
 import org.apache.tapestry5.annotations.InjectPage;
-import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Profile;
@@ -15,7 +14,6 @@ import fi.finlit.edith.ui.services.UserRepository;
 
 public class RegisterPage extends BasePage{
 
-    @Property
     private User user;
 
     @Inject
@@ -24,10 +22,19 @@ public class RegisterPage extends BasePage{
     @InjectPage
     private LoginPage loginPage;
 
-    Object onSuccess(){
+    public Object onSuccess(){
         user.setProfile(Profile.User);
         userRepository.save(user);
         // TODO : check that username is not taken
         return loginPage;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }

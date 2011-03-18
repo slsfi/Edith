@@ -26,8 +26,13 @@ public class Pages {
     private DocumentRevision document;
 
     @BeginRender
-    void beginRender(MarkupWriter writer) throws XMLStreamException, IOException {
+    public void beginRender(MarkupWriter writer) throws XMLStreamException, IOException {
         renderer.renderPageLinks(document, writer);
     }
+
+    public void setDocument(DocumentRevision document) {
+        this.document = document;
+    }
+
 
 }
