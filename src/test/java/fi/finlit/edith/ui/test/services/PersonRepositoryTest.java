@@ -1,6 +1,8 @@
 package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
@@ -32,6 +34,13 @@ public class PersonRepositoryTest extends AbstractServiceTest {
     @After
     public void After() {
         personRepository.remove(person);
+    }
+
+    @Test
+    public void Remove(){
+        assertNotNull(personRepository.getById(person.getId()));
+        personRepository.remove(person.getId());
+        assertNull(personRepository.getById(person.getId()));
     }
 
     @Test

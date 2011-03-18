@@ -2,6 +2,8 @@ package fi.finlit.edith.ui.test.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -49,6 +51,17 @@ public class TermRepositoryImplTest extends AbstractServiceTest {
         repository.save(term3);
         List<Term> results = repository.findByStartOfBasicForm("bar", 2);
         assertEquals(2, results.size());
+    }
+
+    @Test
+    public void Remove(){
+        Term term = new Term();
+        term.setBasicForm("bar");
+        repository.save(term);
+
+        assertNotNull(repository.getById(term.getId()));
+        repository.remove(term.getId());
+        assertNull(repository.getById(term.getId()));
     }
 
 }
