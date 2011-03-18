@@ -27,6 +27,7 @@ import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetailsService;
 
 import com.mysema.rdfbean.object.SessionFactory;
+import com.mysema.rdfbean.tapestry.EntityValueEncoderFactory;
 import com.mysema.tapestry.PageMappingRule;
 
 import fi.finlit.edith.domain.Document;
