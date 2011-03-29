@@ -95,6 +95,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mysema.rdf</groupId>
+			<artifactId>rdfbean-virtuoso</artifactId>
+			<version>${rdfbean.version}</version>
+		</dependency>		
+		<dependency>
+			<groupId>com.mysema.rdf</groupId>
 			<artifactId>rdfbean-tapestry</artifactId>
 			<version>${rdfbean.version}</version>
 		</dependency>

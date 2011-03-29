@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
@@ -190,9 +189,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         docNote.setCreatedOn(currentTime);
         docNote.getNote().setEditedOn(currentTime);
         docNote.getNote().setLastEditedBy(createdBy);
-        if (docNote.getNote().getAllEditors() == null) {
-            docNote.getNote().setAllEditors(new HashSet<UserInfo>());
-        }
         docNote.getNote().getAllEditors().add(createdBy);
         getSession().save(docNote.getNote());
         getSession().save(docNote);

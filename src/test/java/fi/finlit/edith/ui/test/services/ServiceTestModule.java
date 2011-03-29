@@ -61,6 +61,10 @@ public class ServiceTestModule {
     public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
         MemoryRepository repository = new MemoryRepository();
         repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
+
+//        VirtuosoRepository repository = new VirtuosoRepository("localhost:1111", "dba", "dba");
+//        repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
+
         configuration.add(Repository.class, repository);
 
         AuthService authService = new AuthService() {
