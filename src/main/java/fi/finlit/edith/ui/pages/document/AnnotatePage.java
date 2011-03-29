@@ -37,7 +37,8 @@ import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.TermRepository;
 import fi.finlit.edith.ui.services.TimeService;
 
-@IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
+@IncludeJavaScriptLibrary({
+        "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
         "TextSelector.js", "AnnotatePage.js", "classpath:jqModal.js" })
 @IncludeStylesheet("context:styles/tei.css")
 @SuppressWarnings("unused")
@@ -209,7 +210,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     void onActivate() {
-        System.err.println("AnnotatePage.onActivate");
+        System.err.println("onActivate");
         if (createTermSelection == null) {
             createTermSelection = new SelectedText();
         }
@@ -239,6 +240,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     Object onEdit(EventContext context) {
+        System.err.println("onEdit");
         selectedNotes = new ArrayList<DocumentNote>();
         if (context.getCount() > 0 && context.get(String.class, 0).startsWith("n")) {
             for (int i = 0; i < context.getCount(); i++) {
@@ -269,6 +271,7 @@ public class AnnotatePage extends AbstractDocumentPage {
             comments = Collections.<NoteComment> emptySet();
         }
         moreThanOneSelectable = selectedNotes.size() > 1;
+        System.err.println("onEdit --");
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
     }
 

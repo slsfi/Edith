@@ -347,6 +347,7 @@ public class NoteForm {
     }
 
     void onPrepareFromNoteEditForm(String noteId, String docNoteId) {
+        System.err.println("noteForm.onPrepareFromNoteEditForm");
         if (docNoteId != null) {
             noteOnEdit = documentNoteRepository.getById(docNoteId); // .createCopy();
         } else {
@@ -367,7 +368,7 @@ public class NoteForm {
             setPlace(noteOnEdit.getNote().getPlace());
         }
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-
+        System.err.println("noteForm.onPrepareFromNoteEditForm --");
     }
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
