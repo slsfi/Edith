@@ -347,9 +347,11 @@ public class NoteForm {
     }
 
     void onPrepareFromNoteEditForm(String noteId, String docNoteId) {
-        System.err.println("noteForm.onPrepareFromNoteEditForm");
+        System.err.println("noteForm.onPrepareFromNoteEditForm " + noteId + " " + docNoteId);
         if (docNoteId != null) {
-            noteOnEdit = documentNoteRepository.getById(docNoteId); // .createCopy();
+            if (noteOnEdit == null){
+                noteOnEdit = documentNoteRepository.getById(docNoteId); // .createCopy();
+            }
         } else {
             noteOnEdit = new DocumentNote();
             noteOnEdit.setLocalId(String.valueOf(timeService.currentTimeMillis()));

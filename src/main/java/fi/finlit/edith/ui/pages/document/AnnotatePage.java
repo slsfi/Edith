@@ -276,16 +276,21 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     void onPrepareFromCommentForm(String id) {
-        noteOnEdit = documentNoteRepository.getById(id);
+        if (noteOnEdit == null){
+            System.err.println("onPrepareFromCommentForm");
+            noteOnEdit = documentNoteRepository.getById(id);
+            System.err.println("onPrepareFromCommentForm --");
+        }
     }
 
     Object onSuccessFromCommentForm() {
+        System.err.println("onSuccessFromCommentForm");
         comments = noteOnEdit.getNote().getComments();
         if (newCommentMessage != null) {
             comments.add(noteRepository.createComment(noteOnEdit.getNote(), newCommentMessage));
             newCommentMessage = null;
         }
-
+        System.err.println("onSuccessFromCommentForm --");
         return commentZone.getBody();
     }
 
