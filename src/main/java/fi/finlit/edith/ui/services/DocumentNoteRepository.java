@@ -133,4 +133,10 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      */
     List<DocumentNote> getNotesLessDocumentNotes();
 
+    /**
+     * @param note
+     * @return
+     */
+    int getDocumentNoteCount(Note note);
+
 }

@@ -348,7 +348,7 @@ public class AnnotatePage extends AbstractDocumentPage {
     }
 
     public int getLemmaInstances() {
-        return documentNoteRepository.getOfNote(noteOnEdit.getNote().getId()).size();
+        return documentNoteRepository.getDocumentNoteCount(noteOnEdit.getNote());
     }
 
     public int getNumberOfInstancesInDocument() {

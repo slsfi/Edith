@@ -232,6 +232,17 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                        documentNote.replacedBy().isNull()).list(documentNote);
     }
 
+
+    @Override
+    public int getDocumentNoteCount(Note note) {
+        return (int)getSession()
+            .from(documentNote)
+            .where(documentNote.note().eq(note),
+               documentNote.deleted.eq(false),
+               documentNote.replacedBy().isNull()).count();
+    }
+
+
     @Override
     public List<DocumentNote> getOfNoteInDocument(String noteId, String documentId) {
         Assert.notNull(noteId);
