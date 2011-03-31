@@ -8,30 +8,31 @@ class DocumentNote {
   createdOn: num
   note: Note
   publishable: boolean // julkaistavissa
+  printPosition
 }
 
 // Viite
 class Note { 
   allEditors : User*
-  comments: NoteComment*
+  comments: Comment*
   description
-  format: NoteFormat
+  format: Format
   lastEditedBy: User
   lemma
   lemmaMeaning
   person: Person
   place: Place
   sources // lähteet
-  status: NoteStatus
+  status: Status
   subtextSources // Subtekstin lähteet
   term: Term
-  types: NoteType*
+  types: Type*
   editedOn: number
 }
 
 // Kommentti
-class NoteComment { 
-  note: Note
+class Comment { 
+  note: Note/Term
   message
   username
   createdAt: timestamp
@@ -56,6 +57,12 @@ class Term {
   basicForm // perusmouto
   meaning // merkitys
   language // kieli
+  comments: Comment*
+  description
+  lastEditedBy: User
+  sources // lähteet
+  status: Status
+  types: Type*  
 }
 
 // Nimimuoto
@@ -66,24 +73,27 @@ class NameForm {
 }
 
 // Viitteen formaatti
-enum NoteFormat {
+enum Format {
   NOTE, // Viite
   PLACE, // Paikkaviite
   PERSON // Henkilöviite
 }
 
 // Viitteen tila
-enum NoteStatus {
+enum Status {
   INITIAL, // alustava
   DRAFT, // luonnos
   FINISHED // valmis
 }
 
 // Viitteen tyyppi
-enum NoteType {
+enum Type {
   WORD_EXPLANATION, // Sananselitys
   LITERARY, // Kirjallinen
   HISTORIAL, // Historiallinen
   DICTUM, // Sananparsi
-  CRITIQUE // Tekstikriittinen
+  CRITIQUE, // Tekstikriittinen
+  TITLE, 
+  TRANSLATION,
+  REFERENCE
 }
