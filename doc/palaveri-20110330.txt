@@ -1,0 +1,19 @@
+Muutokset :
+
+* SKS : Vanha käyttis
+* SLS : Term painotteinen käyttis, Termin tiedot kopioidaan Note:en
+* DocumentNote.printPosition (String)
+* NoteComment -> Comment
+* NoteType -> Type
+* NoteStatus -> Status
+
+Arviot :
+
+* 2,3,6 : 10-20 htp
+* 4: 5-10 htp
+* 5: 5 htp
+
+Mietittäväksi :
+
+* SLS : Viitteiden ristiinlinkitykset (Note-DocumentNote or DocumentNote-DocumentNote)
+* SLS : uudet NoteType arvot
