@@ -29,6 +29,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -45,6 +46,7 @@ import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
 
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
@@ -74,19 +76,23 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private final AuthService authService;
 
+    private final boolean extendedTerm;
+
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
             @Inject UserRepository userRepository,
             @Inject TimeService timeService,
-            @Inject AuthService authService) {
+            @Inject AuthService authService,
+            @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
         super(sessionFactory, note);
         this.userRepository = userRepository;
         this.timeService = timeService;
         this.authService = authService;
+        this.extendedTerm = extendedTerm;
     }
 
     @Override
     public NoteComment createComment(Note n, String message) {
-        NoteComment comment = new NoteComment(n, message, authService.getUsername());
+        NoteComment comment = new NoteComment(extendedTerm ? n.getTerm() : n, message, authService.getUsername());
         getSession().save(comment);
         return comment;
     }
@@ -127,7 +133,11 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 usernames.add(userInfo.getUsername());
             }
             // FIXME This is kind of useless except that we have broken data in production.
-            filter.or(note.lastEditedBy().username.in(usernames));
+            if (extendedTerm) {
+                filter.or(note.term().lastEditedBy().username.in(usernames));   
+            } else {
+                filter.or(note.lastEditedBy().username.in(usernames));    
+            }            
             filters.and(filter);
         }
 
@@ -140,7 +150,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (!searchInfo.getNoteTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : searchInfo.getNoteTypes()) {
-                filter.or(note.types.contains(type));
+                if (extendedTerm) {
+                    filter.or(note.term().types.contains(type));    
+                } else {
+                    filter.or(note.types.contains(type));
+                }
+                
             }
             filters.and(filter);
         }
@@ -264,7 +279,11 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             comparable = note.editedOn;
             break;
         case USER:
-            comparable = note.lastEditedBy().username.toLowerCase();
+            if (extendedTerm) {
+                comparable = note.term().lastEditedBy().username.toLowerCase();
+            } else {
+                comparable = note.lastEditedBy().username.toLowerCase();    
+            }            
             break;
         case STATUS:
             comparable = note.status.ordinal();
@@ -299,7 +318,11 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         long currentTime = timeService.currentTimeMillis();
         documentNote.setCreatedOn(currentTime);
         n.setEditedOn(currentTime);
-        n.setLastEditedBy(createdBy);
+        if (extendedTerm) {
+            n.getTerm().setLastEditedBy(createdBy);
+        } else {
+            n.setLastEditedBy(createdBy);    
+        }        
         if (n.getAllEditors() == null) {
             n.setAllEditors(new HashSet<UserInfo>());
         }
@@ -332,7 +355,11 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String localName = reader.getLocalName();
 
         if (localName.equals("note")) {
-            data.note.setLastEditedBy(userRepository.getCurrentUser());
+            if (extendedTerm) {
+                data.note.getTerm().setLastEditedBy(userRepository.getCurrentUser());
+            } else {
+                data.note.setLastEditedBy(userRepository.getCurrentUser());    
+            }            
             data.note.setEditedOn(timeService.currentTimeMillis());
             save(data.note);
             data.counter++;
@@ -341,10 +368,18 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         } else if (localName.equals("lemma-meaning")) {
             data.note.setLemmaMeaning(data.text);
         } else if (localName.equals("source")) {
-            data.note.setSources(data.paragraphs.toString());
+            if (extendedTerm) {
+                data.note.getTerm().setSources(data.paragraphs.toString());    
+            } else {
+                data.note.setSources(data.paragraphs.toString());
+            }            
             data.paragraphs = null;
         } else if (localName.equals("description")) {
-            data.note.setDescription(data.paragraphs.toString());
+            if (extendedTerm) {
+                data.note.getTerm().setDescription(data.paragraphs.toString());    
+            } else {
+                data.note.setDescription(data.paragraphs.toString());
+            }            
             data.paragraphs = null;
         } else if (localName.equals("bibliograph")) {
             data.inBib = false;

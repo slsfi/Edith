@@ -16,8 +16,6 @@ public final class EDITH {
 
     public static final String DATA = BASE + "data#";
 
-    // symbol keys
-
     public static final String REPO_URL_PROPERTY = "svn.repo.url";
 
     public static final String REPO_FILE_PROPERTY = "svn.repo.file";
@@ -33,4 +31,7 @@ public final class EDITH {
     public static final String BIBLIOGRAPH_URL = "bibliograph.url";
 
     public static final String PUBLISH_PATH = "publish.path";
+    
+    public static final String EXTENDED_TERM = "extendedTerm";
+
 }

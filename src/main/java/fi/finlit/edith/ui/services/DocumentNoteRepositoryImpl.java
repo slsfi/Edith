@@ -21,6 +21,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
@@ -30,6 +31,7 @@ import com.mysema.query.types.path.StringPath;
 import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
@@ -49,14 +51,18 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     private final UserRepository userRepository;
 
     private final SubversionService subversionService;
+    
+    private final boolean extendedTerm;
 
     public DocumentNoteRepositoryImpl(@Inject SessionFactory sessionFactory,
             @Inject UserRepository userRepository, @Inject TimeService timeService,
-            @Inject SubversionService subversionService) {
+            @Inject SubversionService subversionService,
+            @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
         super(sessionFactory, documentNote);
         this.userRepository = userRepository;
         this.timeService = timeService;
         this.subversionService = subversionService;
+        this.extendedTerm = extendedTerm;
     }
 
     @Override
@@ -186,8 +192,13 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         long currentTime = timeService.currentTimeMillis();
         docNote.setCreatedOn(currentTime);
         docNote.getNote().setEditedOn(currentTime);
-        docNote.getNote().setLastEditedBy(createdBy);
-        docNote.getNote().getAllEditors().add(createdBy);
+        if (extendedTerm) {
+            docNote.getNote().getTerm().setLastEditedBy(createdBy);
+            docNote.getNote().getTerm().getAllEditors().add(createdBy);
+        } else {            
+            docNote.getNote().setLastEditedBy(createdBy);
+            docNote.getNote().getAllEditors().add(createdBy);    
+        }
         getSession().save(docNote.getNote());
         getSession().save(docNote);
         if (docNote.getNote().getComments() != null) {
