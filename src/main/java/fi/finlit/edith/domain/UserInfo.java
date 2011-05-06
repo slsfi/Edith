@@ -9,9 +9,7 @@ import com.mysema.query.annotations.QueryProjection;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns=EDITH.NS, ln="User")
+@ClassMapping(ln="User")
 public class UserInfo extends Identifiable {
 
     @Predicate

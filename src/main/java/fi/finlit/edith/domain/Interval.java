@@ -11,9 +11,7 @@ import com.mysema.rdfbean.annotations.Id;
 import com.mysema.rdfbean.annotations.Predicate;
 import com.mysema.rdfbean.model.IDType;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns = EDITH.NS)
+@ClassMapping
 public class Interval {
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("d.M.y").withZone(
             DateTimeZone.UTC);
@@ -80,7 +78,7 @@ public class Interval {
         return new Interval(new DateTime(year, 1, 1, 0, 0, 0, 0), new DateTime(year + 1, 1, 1, 0,
                 0, 0, 0));
     }
-
+    
     /**
      * This creates an empty interval for the start of the given date
      *

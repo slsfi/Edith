@@ -76,7 +76,7 @@ public final class ServiceModule {
     }
 
     public static Configuration buildConfiguration() {
-        DefaultConfiguration configuration = new DefaultConfiguration();
+        DefaultConfiguration configuration = new DefaultConfiguration(EDITH.NS);
         configuration.addPackages(Document.class.getPackage());
         return configuration;
     }

@@ -150,13 +150,27 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         List<Note> notes = new ArrayList<Note>();
         OrderSpecifier<?> order = getOrderBy(searchInfo, note);
         if (nonOrphan != null){
-            notes.addAll(session.from(note, documentNote).where(nonOrphan, filters.getValue()).orderBy(order).listDistinct(note));
+            if (filters.getValue() != null){ // TODO : simplify after next Querydsl release
+                notes.addAll(session.from(note, documentNote).where(nonOrphan, filters.getValue()).orderBy(order).listDistinct(note));    
+            }else{
+                notes.addAll(session.from(note, documentNote).where(nonOrphan).orderBy(order).listDistinct(note));
+            }            
         }
         if (orphan != null){
-            notes.addAll(session.from(note).where(orphan, filters.getValue()).orderBy(order).list(note));
+            if (filters.getValue() != null){ // TODO : simplify after next Querydsl release
+                notes.addAll(session.from(note).where(orphan, filters.getValue()).orderBy(order).list(note));    
+            }else{
+                notes.addAll(session.from(note).where(orphan).orderBy(order).list(note));
+            }
+            
         }
         if (orphan == null && nonOrphan == null){
-            notes.addAll(session.from(note).where(filters.getValue()).orderBy(order).list(note));
+            if (filters.getValue() != null){ // TODO : simplify after next Querydsl release
+                notes.addAll(session.from(note).where(filters.getValue()).orderBy(order).list(note));    
+            }else{
+                notes.addAll(session.from(note).orderBy(order).list(note));
+            }
+            
         }
 
         if (!notes.isEmpty()){

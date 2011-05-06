@@ -5,13 +5,11 @@ import org.joda.time.DateTime;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns = EDITH.NS)
+@ClassMapping
 public class NoteComment extends Identifiable {
 
     @Predicate(ln="commentOf")
-    private Note note;
+    private Concept concept;
 
     @Predicate
     private String message;
@@ -25,19 +23,19 @@ public class NoteComment extends Identifiable {
     public NoteComment() {
     }
 
-    public NoteComment(Note note, String message, String username) {
-        this.note = note;
+    public NoteComment(Concept concept, String message, String username) {
+        this.concept = concept;
         this.message = message;
         this.username = username;
         createdAt = new DateTime();
     }
 
-    public Note getNote() {
-        return note;
+    public Concept getConcept() {
+        return concept;
     }
 
-    public void setNote(Note note) {
-        this.note = note;
+    public void setConcept(Concept concept) {
+        this.concept = concept;
     }
 
     public String getMessage() {
@@ -73,7 +71,7 @@ public class NoteComment extends Identifiable {
         NoteComment comment = new NoteComment();
         comment.setCreatedAt(createdAt);
         comment.setMessage(message);
-        comment.setNote(note);
+        comment.setConcept(concept);
         comment.setUsername(username);
         return comment;
     }

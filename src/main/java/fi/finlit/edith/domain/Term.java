@@ -8,10 +8,8 @@ package fi.finlit.edith.domain;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns = EDITH.NS)
-public class Term extends Identifiable {
+@ClassMapping
+public class Term extends Concept {
 
     @Predicate
     private String basicForm;

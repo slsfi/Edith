@@ -11,9 +11,7 @@ import org.joda.time.DateTime;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns = EDITH.NS)
+@ClassMapping
 public class DocumentNote extends Identifiable {
     @Predicate
     private Document document;
@@ -47,6 +45,9 @@ public class DocumentNote extends Identifiable {
 
     @Predicate
     private DocumentNote replacedBy;
+    
+    @Predicate
+    private String lemmaPosition;
 
     public DocumentNote createCopy() {
         DocumentNote copy = new DocumentNote();
@@ -59,6 +60,7 @@ public class DocumentNote extends Identifiable {
         copy.setSVNRevision(svnRevision);
         copy.setDeleted(deleted);
         copy.setLocalId(localId);
+        copy.setLemmaPosition(lemmaPosition);
         return copy;
     }
 
@@ -151,6 +153,14 @@ public class DocumentNote extends Identifiable {
 
     public void setReplacedBy(DocumentNote replacedBy) {
         this.replacedBy = replacedBy;
+    }
+    
+    public String getLemmaPosition() {
+        return lemmaPosition;
+    }
+
+    public void setLemmaPosition(String lemmaPosition) {
+        this.lemmaPosition = lemmaPosition;
     }
 
     @Override

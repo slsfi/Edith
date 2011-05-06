@@ -249,10 +249,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(note.getPerson().getNormalizedForm().getDescription(), persistedNote
                 .getPerson().getNormalizedForm().getDescription());
         assertEquals(note.getFormat(), persistedNote.getFormat());
-        assertEquals(note.getPerson().getTimeOfBirth().getDate(), persistedNote.getPerson()
-                .getTimeOfBirth().getDate());
-        assertEquals(note.getPerson().getTimeOfDeath().getDate(), persistedNote.getPerson()
-                .getTimeOfDeath().getDate());
+        
+        assertEquals(note.getPerson().getTimeOfBirth().getStart(), persistedNote.getPerson().getTimeOfBirth().getStart());
+        assertEquals(note.getPerson().getTimeOfBirth().getEnd(),   persistedNote.getPerson().getTimeOfBirth().getEnd());
+        assertEquals(note.getPerson().getTimeOfBirth().getDate(), persistedNote.getPerson().getTimeOfBirth().getDate());
+        
+        assertEquals(note.getPerson().getTimeOfDeath().getStart(), persistedNote.getPerson().getTimeOfDeath().getStart());
+        assertEquals(note.getPerson().getTimeOfDeath().getEnd(), persistedNote.getPerson().getTimeOfDeath().getEnd());
+        assertEquals(note.getPerson().getTimeOfDeath().getDate(), persistedNote.getPerson().getTimeOfDeath().getDate());
     }
 
     @Test

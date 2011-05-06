@@ -9,9 +9,7 @@ import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 import com.mysema.rdfbean.annotations.Unique;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns=EDITH.NS)
+@ClassMapping
 public class User extends Identifiable{
 
     @Predicate

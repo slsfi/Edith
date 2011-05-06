@@ -80,7 +80,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.document().eq(docRevision.getDocument()),
                        documentNote.svnRevision.loe(docRevision.getRevision()),
-                       documentNote.deleted.not(),
+                       documentNote.deleted.eq(false),
                        latestFor(documentNote, docRevision.getRevision()))
                 .orderBy(documentNote.createdOn.asc()).list(documentNote);
     }
@@ -167,10 +167,8 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     public void remove(DocumentNote docNote) {
         Assert.notNull(docNote, "note was null");
         // XXX What was the point in having .createCopy?
-        DocumentNote deleted = docNote;
-        deleted.setDeleted(true);
-        // deleted.setCreatedBy(userRepository.getCurrentUser());
-        getSession().save(deleted);
+        docNote.setDeleted(true);
+        getSession().save(docNote);
     }
 
     @Override

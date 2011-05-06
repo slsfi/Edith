@@ -9,9 +9,7 @@ import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Id;
 import com.mysema.rdfbean.model.IDType;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns = EDITH.NS)
+@ClassMapping
 public class Identifiable {
 
     @Id(IDType.LOCAL)

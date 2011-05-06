@@ -6,9 +6,7 @@ import java.util.Set;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns = EDITH.NS)
+@ClassMapping
 public class Place extends Identifiable {
 
     @Predicate

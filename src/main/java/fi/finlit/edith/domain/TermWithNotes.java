@@ -13,9 +13,7 @@ import com.mysema.rdfbean.annotations.Id;
 import com.mysema.rdfbean.annotations.Predicate;
 import com.mysema.rdfbean.model.IDType;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns = EDITH.NS, ln = "Term")
+@ClassMapping(ln = "Term")
 public class TermWithNotes {
     @Id(IDType.LOCAL)
     private String id;

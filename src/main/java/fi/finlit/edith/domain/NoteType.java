@@ -2,9 +2,7 @@ package fi.finlit.edith.domain;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
 
-import fi.finlit.edith.EDITH;
-
-@ClassMapping(ns = EDITH.NS)
+@ClassMapping
 public enum NoteType {
     /**
      *
@@ -29,5 +27,20 @@ public enum NoteType {
     /**
      *
      */
-    CRITIQUE
+    CRITIQUE,
+    
+    /**
+     * 
+     */
+    TITLE,
+    
+    /**
+     * 
+     */
+    TRANSLATION,
+    
+    /**
+     * 
+     */
+    REFERENCE
 }
