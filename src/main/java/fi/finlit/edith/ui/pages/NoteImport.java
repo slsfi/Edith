@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 import fi.finlit.edith.ui.services.NoteRepository;
 
 @SuppressWarnings("unused")
-public class NoteImportPage {
+public class NoteImport {
 
-    private static final Logger logger = LoggerFactory.getLogger(NoteImportPage.class);
+    private static final Logger logger = LoggerFactory.getLogger(NoteImport.class);
 
     @Inject
     private NoteRepository noteRepository;

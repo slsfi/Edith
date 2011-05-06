@@ -5,6 +5,6 @@
  */
 package fi.finlit.edith.ui.pages;
 
-public class AboutPage {
+public class LoginFailed extends Base{
 
 }

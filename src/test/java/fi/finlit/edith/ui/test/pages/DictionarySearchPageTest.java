@@ -5,7 +5,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import fi.finlit.edith.ui.pages.DictionarySearchPage;
+import fi.finlit.edith.ui.pages.DictionarySearch;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
 
@@ -13,7 +13,7 @@ public class DictionarySearchPageTest extends AbstractServiceTest{
     
     @Autobuild
     @Inject
-    private DictionarySearchPage dictionarySearchPage;
+    private DictionarySearch dictionarySearchPage;
     
     @Test
     public void setupRender(){

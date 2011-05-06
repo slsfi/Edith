@@ -4,14 +4,14 @@ import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Test;
 
-import fi.finlit.edith.ui.pages.LogoutPage;
+import fi.finlit.edith.ui.pages.Logout;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
 public class LogoutPageTest extends AbstractServiceTest{
 
     @Autobuild
     @Inject
-    private LogoutPage logoutPage;
+    private Logout logoutPage;
     
     @Test
     public void onActivate(){

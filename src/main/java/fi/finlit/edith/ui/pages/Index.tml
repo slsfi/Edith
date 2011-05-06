@@ -8,13 +8,13 @@
 
     <ul>
         <li>
-            <a t:type="pageLink" t:page="documentsPage">${message:documents}</a>
+            <a t:type="pageLink" t:page="documents">${message:documents}</a>
         </li>                       
         <li>
-            <a t:type="pageLink" t:page="noteSearchPage">${message:notesearch}</a>
+            <a t:type="pageLink" t:page="noteSearch">${message:notesearch}</a>
         </li>
         <li>
-            <a t:type="pageLink" t:page="noteImportPage">${message:noteimport}</a>
+            <a t:type="pageLink" t:page="noteImport">${message:noteimport}</a>
         </li>
     </ul>
 

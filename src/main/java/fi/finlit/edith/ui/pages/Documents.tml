@@ -13,16 +13,16 @@
 	          ${document.title}
 	        </p:documentCell>
 	        <p:viewsCell>
-	          <a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:annotate-document}</a>
+	          <a t:type="pageLink" t:page="document/annotate" t:context="${document.id}">${message:annotate-document}</a>
 	        </p:viewsCell>
 	        <p:nullCell>
-	            <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:view-document}</a>
+	            <a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:view-document}</a>
 	        </p:nullCell>
 	        <p:null1Cell>
-	            <a t:type="pageLink" t:page="document/printPage" t:context="${document.id}">${message:print-document}</a>
+	            <a t:type="pageLink" t:page="document/print" t:context="${document.id}">${message:print-document}</a>
 	        </p:null1Cell>
 	        <p:null2Cell>
-                <a t:type="pageLink" t:page="document/publishPage" t:context="${document.id}">${message:publishVersion}</a>
+                <a t:type="pageLink" t:page="document/publish" t:context="${document.id}">${message:publishVersion}</a>
             </p:null2Cell>
 			<p:selectionCell>
 				<t:checkbox value="documentSelected" />			

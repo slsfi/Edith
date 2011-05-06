@@ -16,7 +16,7 @@ import fi.finlit.edith.ui.services.DocumentNoteRepository;
 
 @IncludeStylesheet("context:styles/tei.css")
 @SuppressWarnings("unused")
-public class ViewPage extends AbstractDocumentPage {
+public class View extends AbstractDocument {
 
     @Inject
     private DocumentNoteRepository documentNoteRepository;

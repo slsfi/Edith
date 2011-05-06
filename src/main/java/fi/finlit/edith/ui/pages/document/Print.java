@@ -12,6 +12,6 @@ import org.apache.tapestry5.annotations.IncludeStylesheet;
     "context:styles/edith.css",
     "context:styles/tei.css"
 })
-public class PrintPage extends AbstractDocumentPage{
+public class Print extends AbstractDocument{
 
 }

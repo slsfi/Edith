@@ -30,7 +30,7 @@ import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "deleteDialog.js" })
-public class NoteSearchPage {
+public class NoteSearch {
 
     @Property
     private String searchTerm;
@@ -56,7 +56,7 @@ public class NoteSearchPage {
     private PrimaryKeyEncoder<Note> encoder;
 
     @Inject
-    @Path("NoteSearchPage.css")
+    @Path("NoteSearch.css")
     private Asset stylesheet;
 
     @Environmental

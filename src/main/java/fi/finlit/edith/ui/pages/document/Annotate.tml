@@ -19,14 +19,14 @@
             ${message:to-annotate-document}
           </span>
 		  <span>
-			 <a t:type="pageLink" t:page="document/viewPage" t:context="${document.id}">${message:to-view-document}</a> 
+			 <a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:to-view-document}</a> 
 		  </span>
 		  <span>
-			 <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion} 
+			 <t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion} 
 		     </t:pagelink>
 		  </span>
 		  <span>
-            <t:pagelink page="document/publishPage" t:context="document.id">${message:publishVersion}</t:pagelink>
+            <t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink>
           </span>
           </div>
           <div>

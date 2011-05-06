@@ -34,7 +34,7 @@ import fi.finlit.edith.ui.services.TermRepository;
 
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
-public class DictionarySearchPage {
+public class DictionarySearch {
 
     @Property
     private String searchTerm;

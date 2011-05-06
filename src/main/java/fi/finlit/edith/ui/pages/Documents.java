@@ -18,7 +18,7 @@ import fi.finlit.edith.ui.services.DocumentRepository;
 
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
-public class DocumentsPage {
+public class Documents {
 
     @Inject
     private DocumentRepository documentRepository;

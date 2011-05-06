@@ -7,14 +7,14 @@
                     <t:fmt.message key="logged-in-as" args="[username]"/>
                 </li>
                 <li>
-                    <a t:type="pagelink" t:page="logoutPage" t:disabled="isOnPage('logoutPage')">${message:logout}</a>
+                    <a t:type="pagelink" t:page="logout" t:disabled="isOnPage('logout')">${message:logout}</a>
                 </li>
             </ul>
              
     		<p:else>
             <ul class="actions">
                 <li>
-                    <a t:type="pageLink" t:page="loginPage" t:disabled="isOnPage('loginPage')">${message:login}</a>
+                    <a t:type="pageLink" t:page="login" t:disabled="isOnPage('login')">${message:login}</a>
                 </li>
             </ul>    			
     		</p:else>

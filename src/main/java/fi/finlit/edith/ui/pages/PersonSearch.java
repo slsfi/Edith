@@ -15,13 +15,13 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.tapestry.core.Context;
 
-import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.PlaceRepository;
+import fi.finlit.edith.ui.services.PersonRepository;
 
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
-public class PlaceSearchPage {
+public class PersonSearch {
 
     @Property
     private String searchTerm;
@@ -29,16 +29,16 @@ public class PlaceSearchPage {
     private Context context;
 
     @Property
-    private GridDataSource places;
+    private GridDataSource persons;
 
     @Property
-    private Place place;
+    private Person person;
 
     @Inject
     private NoteRepository noteRepository;
 
     @Inject
-    private PlaceRepository placeRepository;
+    private PersonRepository personRepository;
 
     @Environmental
     private RenderSupport support;
@@ -55,15 +55,28 @@ public class PlaceSearchPage {
     }
 
     public void setupRender() {
-        places = noteRepository.queryPlaces(searchTerm == null ? "*" : searchTerm);
+        persons = noteRepository.queryPersons(searchTerm == null ? "*" : searchTerm);
     }
 
     Object onPassivate() {
         return context == null ? null : context.toArray();
     }
 
-    void onActionFromDelete(String placeId) {
-        placeRepository.remove(placeId);
+    void onActionFromDelete(String personId) {
+        personRepository.remove(personId);
     }
 
+    public String getTimeOfBirth() {
+        if (person.getTimeOfBirth() != null) {
+            return person.getTimeOfBirth().asString();
+        }
+        return null;
+    }
+
+    public String getTimeOfDeath() {
+        if (person.getTimeOfDeath() != null) {
+            return person.getTimeOfDeath().asString();
+        }
+        return null;
+    }
 }

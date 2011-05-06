@@ -15,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.ui.pages.document.PublishPage;
+import fi.finlit.edith.ui.pages.document.Publish;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 import fi.finlit.edith.ui.test.services.ServiceTestModule;
@@ -25,7 +25,7 @@ public class PublishPageTest extends AbstractServiceTest{
     
     @Autobuild
     @Inject
-    private PublishPage publishPage;
+    private Publish publishPage;
     
     @Inject
     @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)

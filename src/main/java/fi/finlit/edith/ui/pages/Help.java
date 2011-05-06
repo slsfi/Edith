@@ -5,6 +5,6 @@
  */
 package fi.finlit.edith.ui.pages;
 
-public final class LoginPage extends BasePage {
+public class Help {
 
 }

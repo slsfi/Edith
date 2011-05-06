@@ -34,7 +34,7 @@ import fi.finlit.edith.ui.services.svn.SubversionService;
 @IncludeStylesheet("context:styles/tei.css")
 @IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js"})
 @SuppressWarnings("unused")
-public class PublishPage extends AbstractDocumentPage {
+public class Publish extends AbstractDocument {
     @Inject
     private DocumentNoteRepository documentNoteRepository;
 

@@ -23,7 +23,7 @@ import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @SuppressWarnings("unused")
-public class AbstractDocumentPage {
+public class AbstractDocument {
 
     @Inject
     private DocumentRepository documentRepository;

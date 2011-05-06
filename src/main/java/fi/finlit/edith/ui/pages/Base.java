@@ -9,7 +9,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.ui.services.AuthService;
 
-public abstract class BasePage {
+public abstract class Base {
 
     @Inject
     private AuthService authService;

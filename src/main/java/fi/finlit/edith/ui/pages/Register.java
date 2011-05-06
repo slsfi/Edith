@@ -12,7 +12,7 @@ import fi.finlit.edith.domain.Profile;
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.ui.services.UserRepository;
 
-public class RegisterPage extends BasePage{
+public class Register extends Base{
 
     private User user;
 
@@ -20,7 +20,7 @@ public class RegisterPage extends BasePage{
     private UserRepository userRepository;
 
     @InjectPage
-    private LoginPage loginPage;
+    private Login loginPage;
 
     public Object onSuccess(){
         user.setProfile(Profile.User);

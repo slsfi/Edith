@@ -9,7 +9,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.ui.services.AuthService;
 
-public class LogoutPage extends BasePage {
+public class Logout extends Base {
 
     @Inject
     private AuthService authService;

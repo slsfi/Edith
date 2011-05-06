@@ -4,29 +4,29 @@
         <div class="dashboard panel">
             <ul>
                 <li>
-                    <a t:type="pageLink" t:page="documentsPage" t:disabled="isOnPage('documentsPage')">${message:documents}</a>
+                    <a t:type="pageLink" t:page="documents" t:disabled="isOnPage('documents')">${message:documents}</a>
                 </li>                                
                 <li>
-                    <a t:type="pageLink" t:page="noteSearchPage" t:disabled="isOnPage('noteSearchPage')">${message:notes}</a>
+                    <a t:type="pageLink" t:page="noteSearch" t:disabled="isOnPage('noteSearch')">${message:notes}</a>
                 </li>
                 <li>
-                    <a t:type="pageLink" t:page="dictionarySearchPage" t:disabled="isOnPage('dictionarySearchPage')">${message:dictionarysearch}</a>
+                    <a t:type="pageLink" t:page="dictionarySearch" t:disabled="isOnPage('dictionarySearch')">${message:dictionarysearch}</a>
                 </li>
                 <li>
-                    <a t:type="pageLink" t:page="personSearchPage" t:disabled="isOnPage('personSearchPage')">${message:persons}</a>
+                    <a t:type="pageLink" t:page="personSearch" t:disabled="isOnPage('personSearch')">${message:persons}</a>
                 </li>
                 <li>
-                    <a t:type="pageLink" t:page="placeSearchPage" t:disabled="isOnPage('placeSearchPage')">${message:places}</a>
+                    <a t:type="pageLink" t:page="placeSearch" t:disabled="isOnPage('placeSearch')">${message:places}</a>
                 </li>           
                 <li>
-                    <a t:type="pageLink" t:page="noteImportPage" t:disabled="isOnPage('noteImportPage')">${message:noteimport}</a>
+                    <a t:type="pageLink" t:page="noteImport" t:disabled="isOnPage('noteImport')">${message:noteimport}</a>
                 </li>
                 <li>
-                    <a t:type="pagelink" t:page="helpPage" t:disabled="isOnPage('helpPage')">${message:help}</a>
+                    <a t:type="pagelink" t:page="help" t:disabled="isOnPage('help')">${message:help}</a>
                 </li>      
                 <!-- 
                 <li>
-                    <a t:type="pageLink" t:page="logoutPage" t:disabled="isOnPage('logoutPage')">${message:logout}</a>
+                    <a t:type="pageLink" t:page="logout" t:disabled="isOnPage('logout')">${message:logout}</a>
                 </li>
                  -->
             </ul>            

@@ -11,16 +11,16 @@
     <p:leftPanel>
     <div id="document_links">
         <span>
-        	<a t:type="pageLink" t:page="document/annotatePage" t:context="${document.id}">${message:to-annotate-document}</a>
+        	<a t:type="pageLink" t:page="document/annotate" t:context="${document.id}">${message:to-annotate-document}</a>
         </span>
         <span>
             ${message:to-view-document} 
         </span>
         <span>
-            <t:pagelink page="document/printPage" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
+            <t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
         </span>
         <span>
-            <t:pagelink page="document/publishPage" t:context="document.id">${message:publishVersion}</t:pagelink>
+            <t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink>
         </span>
         </div>
     </p:leftPanel>

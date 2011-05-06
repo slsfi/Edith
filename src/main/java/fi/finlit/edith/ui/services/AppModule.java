@@ -18,9 +18,7 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.AliasContribution;
-import org.apache.tapestry5.services.ComponentClassResolver;
 import org.apache.tapestry5.services.ValueEncoderFactory;
-import org.apache.tapestry5.urlrewriter.URLRewriterRule;
 import org.springframework.security.providers.AuthenticationProvider;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
@@ -28,7 +26,6 @@ import org.springframework.security.userdetails.UserDetailsService;
 
 import com.mysema.rdfbean.object.SessionFactory;
 import com.mysema.rdfbean.tapestry.EntityValueEncoderFactory;
-import com.mysema.tapestry.PageMappingRule;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
@@ -71,12 +68,12 @@ public final class AppModule {
         configuration.add(new RequestInvocationDefinition("/**", "ROLE_USER"));
     }
 
-    public static void contributeURLRewriter(
-            OrderedConfiguration<URLRewriterRule> configuration,
-            ComponentClassResolver componentResolver) {
-        // strip "page" suffix off from page names
-        configuration.add("pageMapping", new PageMappingRule(componentResolver));
-    }
+//    public static void contributeURLRewriter(
+//            OrderedConfiguration<URLRewriterRule> configuration,
+//            ComponentClassResolver componentResolver) {
+//        // strip "page" suffix off from page names
+//        configuration.add("pageMapping", new PageMappingRule(componentResolver));
+//    }
 
     public static void bind(ServiceBinder binder){
         binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);

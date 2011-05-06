@@ -17,7 +17,7 @@ public class Index {
     private Response response;
 
     @InjectPage
-    private DocumentsPage documentsPage;
+    private Documents documentsPage;
 
     Object onActivate(EventContext eventContext) throws IOException {
         if (eventContext.getCount() > 0) {

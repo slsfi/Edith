@@ -39,14 +39,14 @@ import fi.finlit.edith.ui.services.TimeService;
 
 @IncludeJavaScriptLibrary({
         "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
-        "TextSelector.js", "AnnotatePage.js", "classpath:jqModal.js" })
+        "TextSelector.js", "Annotate.js", "classpath:jqModal.js" })
 @IncludeStylesheet("context:styles/tei.css")
 @SuppressWarnings("unused")
-public class AnnotatePage extends AbstractDocumentPage {
+public class Annotate extends AbstractDocument {
 
     private static final String EDIT_ZONE = "editZone";
 
-    private static final Logger logger = LoggerFactory.getLogger(AnnotatePage.class);
+    private static final Logger logger = LoggerFactory.getLogger(Annotate.class);
 
     @SessionState(create = false)
     private Collection<Document> selectedDocuments;

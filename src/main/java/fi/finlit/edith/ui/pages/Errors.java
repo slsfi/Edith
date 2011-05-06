@@ -16,7 +16,7 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @SuppressWarnings("unused")
 @IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
-public class ErrorsPage {
+public class Errors {
     
     @Inject
     private NoteRepository noteRepository;
