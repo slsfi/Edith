@@ -9,15 +9,17 @@
                 <li>
                     <a t:type="pageLink" t:page="noteSearch" t:disabled="isOnPage('noteSearch')">${message:notes}</a>
                 </li>
-                <li>
-                    <a t:type="pageLink" t:page="dictionarySearch" t:disabled="isOnPage('dictionarySearch')">${message:dictionarysearch}</a>
-                </li>
-                <li>
-                    <a t:type="pageLink" t:page="personSearch" t:disabled="isOnPage('personSearch')">${message:persons}</a>
-                </li>
-                <li>
-                    <a t:type="pageLink" t:page="placeSearch" t:disabled="isOnPage('placeSearch')">${message:places}</a>
-                </li>           
+                <t:if test="!slsMode">
+	                <li>
+	                    <a t:type="pageLink" t:page="dictionarySearch" t:disabled="isOnPage('dictionarySearch')">${message:dictionarysearch}</a>
+	                </li>
+	                <li>
+	                    <a t:type="pageLink" t:page="personSearch" t:disabled="isOnPage('personSearch')">${message:persons}</a>
+	                </li>
+	                <li>
+	                    <a t:type="pageLink" t:page="placeSearch" t:disabled="isOnPage('placeSearch')">${message:places}</a>
+	                </li>
+                </t:if>           
                 <li>
                     <a t:type="pageLink" t:page="noteImport" t:disabled="isOnPage('noteImport')">${message:noteimport}</a>
                 </li>

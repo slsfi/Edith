@@ -8,12 +8,12 @@ package fi.finlit.edith.ui.components;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-@IncludeStylesheet({
+@Import( stylesheet = {
     "context:styles/base.css",
     "context:styles/layout-3col.css",
     "context:styles/edith.css",

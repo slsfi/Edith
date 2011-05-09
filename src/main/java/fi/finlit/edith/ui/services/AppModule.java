@@ -89,6 +89,12 @@ public final class AppModule {
         configuration.add("daoAuthenticationProvider", daoAuthenticationProvider);
     }
 
+    public static void contributeClasspathAssetAliasManager(
+            MappedConfiguration<String, String> configuration) {
+        //Root
+        configuration.add("", "");
+    }
+    
     @SuppressWarnings("unchecked")
     public static void contributeValueEncoderSource(
             MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,
