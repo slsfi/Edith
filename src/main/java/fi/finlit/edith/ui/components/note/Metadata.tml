@@ -1,8 +1,8 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 	<t:content>
 		<span>
-			<t:if test="note.description">, <t:markdown value="note.description"/></t:if>
-			<t:if test="note.subtextSources">, <t:markdown value="note.subtextSources"/></t:if>
+			<t:if test="note.concept.description">, <t:markdown value="note.concept.description"/></t:if>
+			<t:if test="note.concept.subtextSources">, <t:markdown value="note.concept.subtextSources"/></t:if>
 			<t:if test="note.term">
 				<t:if test="note.term.meaning">, ${note.term.meaning}</t:if>
 			</t:if>
