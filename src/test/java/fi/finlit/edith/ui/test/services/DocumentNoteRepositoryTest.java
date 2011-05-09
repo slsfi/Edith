@@ -15,16 +15,12 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.tapestry5.PropertyConduit;
-import org.apache.tapestry5.beaneditor.BeanModel;
-import org.apache.tapestry5.beaneditor.PropertyModel;
 import org.apache.tapestry5.grid.ColumnSort;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
@@ -39,6 +35,8 @@ import org.junit.Test;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
+import fi.finlit.edith.EDITH;
+import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
@@ -50,7 +48,7 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Inject
-    @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
+    @Symbol(EdithTestConstants.TEST_DOCUMENT_KEY)
     private String testDocument;
 
     @Inject
@@ -71,6 +69,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Inject
     private SessionFactory sessionFactory;
 
+    @Inject 
+    @Symbol(EDITH.EXTENDED_TERM)
+    private boolean extendedTerm;
+    
     private Document document;
 
     private DocumentRevision docRev;
@@ -80,7 +82,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     private DocumentNoteSearchInfo searchInfo;
 
     @Inject
-    @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
+    @Symbol(EdithTestConstants.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
 
@@ -103,7 +105,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         DocumentNote dn1 = new DocumentNote();
         dn1.setDocument(doc);
         dn1.setLocalId("1");
-        Note n1 = new Note();
+        Note n1 = createNote();
         n1.setLemma(lemma);
         n1.setLemmaMeaning(lemmaMeaning);
         dn1.setNote(n1);
@@ -111,7 +113,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         DocumentNote dn2 = new DocumentNote();
         dn2.setDocument(doc);
         dn2.setLocalId("2");
-        Note n2 = new Note();
+        Note n2 = createNote();
         n2.setLemma("barfoo");
         dn2.setNote(n2);
 
@@ -171,10 +173,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void queryNotes_sorting_is_case_insensitive() {
-        noteRepository.createDocumentNote(new Note(), docRev, "5", "a");
-        noteRepository.createDocumentNote(new Note(), docRev, "6", "b");
-        noteRepository.createDocumentNote(new Note(), docRev, "7", "A");
-        noteRepository.createDocumentNote(new Note(), docRev, "8", "B");
+        noteRepository.createDocumentNote(createNote(), docRev, "5", "a");
+        noteRepository.createDocumentNote(createNote(), docRev, "6", "b");
+        noteRepository.createDocumentNote(createNote(), docRev, "7", "A");
+        noteRepository.createDocumentNote(createNote(), docRev, "8", "B");
         GridDataSource gds = documentNoteRepository.queryNotes("*");
         int n = gds.getAvailableRows();
         List<SortConstraint> sortConstraints = new ArrayList<SortConstraint>();
@@ -214,10 +216,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         docRev = document.getRevision(latestRevision);
-        noteRepository.createDocumentNote(new Note(), docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
-        noteRepository.createDocumentNote(new Note(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
-        noteRepository.createDocumentNote(new Note(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
-        noteRepository.createDocumentNote(new Note(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        noteRepository.createDocumentNote(createNote(), docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
+        noteRepository.createDocumentNote(createNote(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
+        noteRepository.createDocumentNote(createNote(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
+        noteRepository.createDocumentNote(createNote(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
 
         searchInfo = new DocumentNoteSearchInfo();
         searchInfo.setCurrentDocument(document);
@@ -229,7 +231,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Person_Note() {
         DocumentNote documentNote = noteRepository
-                .createDocumentNote(new Note(), docRev, "3",
+                .createDocumentNote(createNote(), docRev, "3",
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PERSON);
@@ -262,7 +264,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Person_With_The_Same_Birth_And_Death_Date() {
         DocumentNote documentNote = noteRepository
-                .createDocumentNote(new Note(), docRev, "3",
+                .createDocumentNote(createNote(), docRev, "3",
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PERSON);
@@ -280,7 +282,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Place_Note() {
         DocumentNote documentNote = noteRepository
-                .createDocumentNote(new Note(), docRev, "3",
+                .createDocumentNote(createNote(), docRev, "3",
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PLACE);
@@ -398,8 +400,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         for (NoteWithInstances note : notes){
             for (DocumentNote documentNote : note.getDocumentNotes()) {
                 if (previous != null) {
-                    String previousUsername = previous.getNote().getLastEditedBy().getUsername();
-                    String currentUsername = documentNote.getNote().getLastEditedBy().getUsername();
+                    String previousUsername, currentUsername;
+                    if (extendedTerm) {
+                        previousUsername = previous.getNote().getTerm().getLastEditedBy().getUsername();
+                        currentUsername = documentNote.getNote().getTerm().getLastEditedBy().getUsername();                        
+                    } else {
+                        previousUsername = previous.getNote().getLastEditedBy().getUsername();
+                        currentUsername = documentNote.getNote().getLastEditedBy().getUsername();
+                    }
                     assertThat(previousUsername, lessThanOrEqualTo(currentUsername));
                 }
                 previous = documentNote;
@@ -416,8 +424,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         for (NoteWithInstances note : notes){
             for (DocumentNote documentNote : note.getDocumentNotes()) {
                 if (previous != null) {
-                    String previousUsername = previous.getNote().getLastEditedBy().getUsername();
-                    String currentUsername = documentNote.getNote().getLastEditedBy().getUsername();
+                    String previousUsername, currentUsername;
+                    if (extendedTerm) {
+                        previousUsername = previous.getNote().getTerm().getLastEditedBy().getUsername();
+                        currentUsername = documentNote.getNote().getTerm().getLastEditedBy().getUsername();                        
+                    } else {
+                        previousUsername = previous.getNote().getLastEditedBy().getUsername();
+                        currentUsername = documentNote.getNote().getLastEditedBy().getUsername();
+                    }
                     assertThat(previousUsername, greaterThanOrEqualTo(currentUsername));
                 }
                 previous = documentNote;
@@ -542,7 +556,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Add_The_Same_Word_Twice() {
         String text = "l\u00E4htee";
-        Note note = noteRepository.createDocumentNote(new Note(), docRev, "100", text).getNote();
+        Note note = noteRepository.createDocumentNote(createNote(), docRev, "100", text).getNote();
         noteRepository.createDocumentNote(note, docRev, "200", text);
         assertEquals(6, countDocumentNotes(noteRepository.query(searchInfo)));
     }
@@ -552,7 +566,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Query_For_Document_Notes_And_Retrieve_The_One_Attached_To_Current_Document() {
         // FIXME
         String text = "l\u00E4htee";
-        Note note = noteRepository.createDocumentNote(new Note(), docRev, "100", text).getNote();
+        Note note = noteRepository.createDocumentNote(createNote(), docRev, "100", text).getNote();
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
         documentNoteRepository.save(documentNote);
@@ -604,7 +618,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Get_Publishable_Notes_Of_Document() throws Exception {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
-        DocumentNote documentNote = documentRepository.addNote(new Note(), docRev, new SelectedText(element, element, text));
+        DocumentNote documentNote = documentRepository.addNote(createNote(), docRev, new SelectedText(element, element, text));
         docRev = documentNote.getDocRevision();
         documentNote.setPublishable(true);
         assertTrue(documentNoteRepository.getPublishableNotesOfDocument(docRev).isEmpty());
@@ -619,12 +633,21 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         if (userInfo == null) {
             userInfo = new UserInfo(username);
         }
-        Note note = new Note();
+        Note note = createNote();
         note.setLemma("TheLemma");
-        note.setTypes(new HashSet<NoteType>());
-        note.getTypes().add(NoteType.HISTORICAL);
+        if (extendedTerm) {
+            note.getTerm().setTypes(new HashSet<NoteType>());
+            note.getTerm().getTypes().add(NoteType.HISTORICAL);
+        } else {
+            note.setTypes(new HashSet<NoteType>());
+            note.getTypes().add(NoteType.HISTORICAL);    
+        }        
         note.setFormat(NoteFormat.PERSON);
-        note.setLastEditedBy(userInfo);
+        if (extendedTerm) {
+            note.getTerm().setLastEditedBy(userInfo);
+        } else {
+            note.setLastEditedBy(userInfo);    
+        }        
         note.setAllEditors(new HashSet<UserInfo>());
         note.getAllEditors().add(userInfo);
         documentNote.setNote(note);
@@ -640,67 +663,12 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
             }
         }
     }
-
-    private static final class PropertyModelMock implements PropertyModel {
-
-        @Override
-        public PropertyModel dataType(String dataType) {
-            return null;
+    
+    private Note createNote() {
+        Note note = new Note();
+        if (extendedTerm) {
+            note.setTerm(new Term());
         }
-
-        @Override
-        public PropertyConduit getConduit() {
-            return null;
-        }
-
-        @Override
-        public String getDataType() {
-            return null;
-        }
-
-        @Override
-        public String getId() {
-            return null;
-        }
-
-        @Override
-        public String getLabel() {
-            return null;
-        }
-
-        @Override
-        public String getPropertyName() {
-            return "longText";
-        }
-
-        @Override
-        public Class<String> getPropertyType() {
-            return String.class;
-        }
-
-        @Override
-        public boolean isSortable() {
-            return true;
-        }
-
-        @Override
-        public PropertyModel label(String label) {
-            return null;
-        }
-
-        @Override
-        public BeanModel<DocumentNote> model() {
-            return null;
-        }
-
-        @Override
-        public PropertyModel sortable(boolean sortable) {
-            return null;
-        }
-
-        @Override
-        public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-            return null;
-        }
+        return note;
     }
 }

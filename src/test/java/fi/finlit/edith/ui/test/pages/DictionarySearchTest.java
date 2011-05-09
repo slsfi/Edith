@@ -9,7 +9,7 @@ import fi.finlit.edith.ui.pages.DictionarySearch;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
 
-public class DictionarySearchPageTest extends AbstractServiceTest{
+public class DictionarySearchTest extends AbstractServiceTest{
     
     @Autobuild
     @Inject

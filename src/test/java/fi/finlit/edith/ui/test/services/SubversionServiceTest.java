@@ -44,6 +44,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
 import fi.finlit.edith.EDITH;
+import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
@@ -65,7 +66,7 @@ public class SubversionServiceTest extends AbstractServiceTest {
     private String documentRoot;
 
     @Inject
-    @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
+    @Symbol(EdithTestConstants.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
     @Inject

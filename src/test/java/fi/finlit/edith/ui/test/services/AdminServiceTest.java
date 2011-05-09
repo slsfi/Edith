@@ -15,6 +15,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Test;
 
+import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.ui.services.AdminService;
@@ -32,7 +33,7 @@ public class AdminServiceTest extends AbstractServiceTest{
     @Inject
     private AdminService adminService;
 
-    @Inject @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
+    @Inject @Symbol(EdithTestConstants.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
     @After

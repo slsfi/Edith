@@ -14,21 +14,21 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.pages.document.Publish;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
-import fi.finlit.edith.ui.test.services.ServiceTestModule;
 
 @Ignore
-public class PublishPageTest extends AbstractServiceTest{
+public class PublishTest extends AbstractServiceTest{
     
     @Autobuild
     @Inject
     private Publish publishPage;
     
     @Inject
-    @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
+    @Symbol(EdithTestConstants.TEST_DOCUMENT_KEY)
     private String testDocument;
     
     @Inject

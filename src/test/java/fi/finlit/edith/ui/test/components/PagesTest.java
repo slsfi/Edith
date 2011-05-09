@@ -13,16 +13,16 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Test;
 
+import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.components.document.Pages;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
-import fi.finlit.edith.ui.test.services.ServiceTestModule;
 
 public class PagesTest extends AbstractServiceTest{
 
     @Inject
-    @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
+    @Symbol(EdithTestConstants.TEST_DOCUMENT_KEY)
     private String testDocument;
 
     @Inject

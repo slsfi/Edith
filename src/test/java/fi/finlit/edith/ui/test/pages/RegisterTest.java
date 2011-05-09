@@ -8,7 +8,7 @@ import fi.finlit.edith.domain.User;
 import fi.finlit.edith.ui.pages.Register;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
-public class RegisterPageTest extends AbstractServiceTest {
+public class RegisterTest extends AbstractServiceTest {
 
     @Autobuild
     @Inject

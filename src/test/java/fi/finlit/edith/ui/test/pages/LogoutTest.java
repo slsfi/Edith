@@ -7,7 +7,7 @@ import org.junit.Test;
 import fi.finlit.edith.ui.pages.Logout;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
-public class LogoutPageTest extends AbstractServiceTest{
+public class LogoutTest extends AbstractServiceTest{
 
     @Autobuild
     @Inject

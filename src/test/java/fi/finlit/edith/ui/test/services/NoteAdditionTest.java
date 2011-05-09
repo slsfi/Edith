@@ -32,6 +32,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 import fi.finlit.edith.ui.services.ElementContext;
@@ -39,7 +40,7 @@ import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
 public class NoteAdditionTest extends AbstractServiceTest{
 
-    @Inject @Symbol(ServiceTestModule.TEST_DOCUMENT_CONTENT_KEY)
+    @Inject @Symbol(EdithTestConstants.TEST_DOCUMENT_CONTENT_KEY)
     private String testDocumentContent;
 
     @Inject @Autobuild

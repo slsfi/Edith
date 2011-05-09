@@ -19,12 +19,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 
 public class NoteAddition2Test extends AbstractServiceTest {
     @Inject
-    @Symbol(ServiceTestModule.TEST_DOCUMENT_CONTENT_KEY)
+    @Symbol(EdithTestConstants.TEST_DOCUMENT_CONTENT_KEY)
     private String testDocumentContent;
 
     @Inject

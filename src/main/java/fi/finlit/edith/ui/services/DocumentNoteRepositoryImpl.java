@@ -63,6 +63,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         this.timeService = timeService;
         this.subversionService = subversionService;
         this.extendedTerm = extendedTerm;
+        System.err.println(extendedTerm);
     }
 
     @Override
@@ -193,8 +194,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         docNote.setCreatedOn(currentTime);
         docNote.getNote().setEditedOn(currentTime);
         if (extendedTerm) {
-            docNote.getNote().getTerm().setLastEditedBy(createdBy);
-            docNote.getNote().getTerm().getAllEditors().add(createdBy);
+            if (docNote.getNote().getTerm() != null) {
+                docNote.getNote().getTerm().setLastEditedBy(createdBy);
+                docNote.getNote().getTerm().getAllEditors().add(createdBy);    
+            }
         } else {            
             docNote.getNote().setLastEditedBy(createdBy);
             docNote.getNote().getAllEditors().add(createdBy);    

@@ -319,7 +319,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         documentNote.setCreatedOn(currentTime);
         n.setEditedOn(currentTime);
         if (extendedTerm) {
-            n.getTerm().setLastEditedBy(createdBy);
+            if (n.getTerm() != null) {
+                n.getTerm().setLastEditedBy(createdBy);    
+            }            
         } else {
             n.setLastEditedBy(createdBy);    
         }        
@@ -394,6 +396,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String localName = reader.getLocalName();
         if (localName.equals("note")) {
             data.note = new Note();
+            if (extendedTerm) {
+                data.note.setTerm(new Term());
+            }
         } else if (localName.equals("source") || localName.equals("description")) {
             data.paragraphs = new Paragraph();
         }

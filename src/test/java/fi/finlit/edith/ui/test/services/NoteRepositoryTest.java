@@ -20,6 +20,8 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.finlit.edith.EDITH;
+import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteSearchInfo;
@@ -28,6 +30,7 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
@@ -58,18 +61,20 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     private PlaceRepository placeRepository;
 
     @Inject
-    @Symbol(ServiceTestModule.NOTE_TEST_DATA_KEY)
+    @Symbol(EdithTestConstants.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
     @Inject
-    @Symbol(ServiceTestModule.TEST_DOCUMENT_KEY)
+    @Symbol(EdithTestConstants.TEST_DOCUMENT_KEY)
     private String testDocument;
 
+    @Inject 
+    @Symbol(EDITH.EXTENDED_TERM)
+    private boolean extendedTerm;
 
     @Before
     public void setUp() {
         adminService.removeNotesAndTerms();
-
     }
 
     private int countDocumentNotes(List<NoteWithInstances> notes){
@@ -82,10 +87,15 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void CreateComment() {
-        Note note = new Note();
+        Note note = createNote();
         noteRepository.save(note);
         NoteComment comment = noteRepository.createComment(note, "boomboomboom");
-        Collection<NoteComment> comments = noteRepository.getById(note.getId()).getComments();
+        Collection<NoteComment> comments;
+        if (extendedTerm) {
+            comments = noteRepository.getById(note.getId()).getTerm().getComments();
+        } else {
+            comments = noteRepository.getById(note.getId()).getComments();
+        }
         assertEquals(1, comments.size());
         assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
     }
@@ -107,7 +117,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Document document = documentRepository.getDocumentForPath(testDocument);
 
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10",
+        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10",
                 longText);
 
         assertNotNull(documentNote);
@@ -118,7 +128,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Document document = documentRepository.getDocumentForPath(testDocument);
 
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10",
+        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10",
                 longText);
         DocumentNote documentNote2 = noteRepository.createDocumentNote(documentNote.getNote(), document.getRevision(-1), "11",
                 longText);
@@ -128,7 +138,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Find() {
         Document document = documentRepository.getDocumentForPath(testDocument);
-        noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "lid1234", "foobar");
+        noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "lid1234", "foobar");
         Note note = noteRepository.find("foobar");
         assertNotNull(note);
     }
@@ -140,11 +150,13 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(note);
         assertEquals("kereitten", note.getLemma());
         assertEquals("'keritte'", note.getLemmaMeaning());
+        String description = extendedTerm ? note.getTerm().getDescription() : note.getDescription();
+        String sources = extendedTerm ? note.getTerm().getSources() : note.getSources(); 
         assertEquals(
                 "(murt. kerii ’keri\u00E4’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
-                note.getDescription().replaceAll("\\s+", " ").trim());
+                description.replaceAll("\\s+", " ").trim());
         assertEquals("<bibliograph>v</bibliograph>",
-                note.getSources().replaceAll("\\s+", " ").trim());
+                sources.replaceAll("\\s+", " ").trim());
     }
 
     @Test
@@ -199,7 +211,8 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void QueryDictionary() throws Exception {
         assertEquals(9, noteRepository.importNotes(noteTestData));
-        assertEquals(0, noteRepository.queryDictionary("*").getAvailableRows());
+        assertEquals(extendedTerm ? 9 : 0, noteRepository.queryDictionary("*").getAvailableRows());
+        
     }
 
     @Test
@@ -218,22 +231,30 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         String longText = UUID.randomUUID().toString();
-        noteRepository.createDocumentNote(new Note(), document.getRevision(latestRevision), "10", longText);
+        noteRepository.createDocumentNote(createNote(), document.getRevision(latestRevision), "10", longText);
     }
 
     @Test
     public void RemoveComment() {
-        Note note = new Note();
+        Note note = createNote();
         noteRepository.save(note);
         NoteComment comment = noteRepository.createComment(note, "boomboomboom");
-        Collection<NoteComment> comments = noteRepository.getById(note.getId()).getComments();
+        Collection<NoteComment> comments;
+        if (extendedTerm) {
+            comments = noteRepository.getById(note.getId()).getTerm().getComments();
+        } else {
+            comments = noteRepository.getById(note.getId()).getComments();   
+        }
         assertEquals(1, comments.size());
         assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
         noteRepository.removeComment(comment.getId());
-        comments = noteRepository.getById(note.getId()).getComments();
+        if (extendedTerm) {
+            comments = noteRepository.getById(note.getId()).getTerm().getComments();    
+        } else {
+            comments = noteRepository.getById(note.getId()).getComments();
+        }        
         assertTrue(comments.isEmpty());
     }
-
 
     @Test
     public void Find_Notes() {
@@ -245,7 +266,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     public void Remove_Based_On_Revision() {
         Document document = documentRepository.getDocumentForPath(testDocument);
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createDocumentNote(new Note(), document.getRevision(-1), "10", longText);
+        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10", longText);
         List<NoteWithInstances> notes = noteRepository.query(new DocumentNoteSearchInfo(document));
         assertTrue(countDocumentNotes(notes) > 0);
         noteRepository.remove(documentNote, documentNote.getSVNRevision());
@@ -282,4 +303,13 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals(0, noteRepository.queryPlaces("Helssin").getAvailableRows());
         assertEquals(1, noteRepository.queryPlaces("Helsin").getAvailableRows());
     }
+        
+    private Note createNote() {
+        Note note = new Note();
+        if (extendedTerm) {
+            note.setTerm(new Term());
+        }
+        return note;
+    }
+    
 }
