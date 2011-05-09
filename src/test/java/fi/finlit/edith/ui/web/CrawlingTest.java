@@ -65,6 +65,7 @@ public class CrawlingTest {
             System.setProperty("production.mode", "false");
             System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
             System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
+            System.setProperty(EDITH.EXTENDED_TERM, "false");
             JettyHelper.startJetty("src/main/webapp", "/", 9080, 9443);
         }
     }

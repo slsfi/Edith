@@ -24,7 +24,7 @@ import fi.finlit.edith.ui.services.DataModule;
 import fi.finlit.edith.ui.services.ServiceModule;
 
 @RunWith(TapestryTestRunner.class)
-@Modules({ ServiceTestModule.class, ServiceModule.class, DataModule.class, RDFBeanModule.class })
+@Modules({ SKSServiceTestModule.class, ServiceModule.class, DataModule.class, RDFBeanModule.class })
 public abstract class AbstractServiceTest {
 
     static {
