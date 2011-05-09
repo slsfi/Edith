@@ -27,9 +27,11 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
@@ -171,6 +173,9 @@ public class Annotate extends AbstractDocument {
 
     @Property
     private DocumentNote note;
+    
+    @Inject @Symbol(EDITH.EXTENDED_TERM) 
+    private boolean extendedTerm;
 
     @AfterRender
     void addScript() {
@@ -234,7 +239,7 @@ public class Annotate extends AbstractDocument {
     Object onDeleteComment(String noteId, String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
         noteOnEdit = documentNoteRepository.getById(noteId);
-        comments = noteOnEdit.getNote().getComments();
+        comments = noteOnEdit.getConcept(extendedTerm).getComments();
         comments.remove(deletedComment);
         return commentZone.getBody();
     }
@@ -266,7 +271,7 @@ public class Annotate extends AbstractDocument {
         if (selectedNotes.size() > 0) {
             noteOnEdit = selectedNotes.get(0);
             termOnEdit = getEditTerm(noteOnEdit.getNote());
-            comments = noteOnEdit.getNote().getComments();
+            comments = noteOnEdit.getConcept(extendedTerm).getComments();
         } else {
             comments = Collections.<NoteComment> emptySet();
         }
@@ -285,9 +290,9 @@ public class Annotate extends AbstractDocument {
 
     Object onSuccessFromCommentForm() {
         System.err.println("onSuccessFromCommentForm");
-        comments = noteOnEdit.getNote().getComments();
+        comments = noteOnEdit.getConcept(extendedTerm).getComments();
         if (newCommentMessage != null) {
-            comments.add(noteRepository.createComment(noteOnEdit.getNote(), newCommentMessage));
+            comments.add(noteRepository.createComment(noteOnEdit.getConcept(extendedTerm), newCommentMessage));
             newCommentMessage = null;
         }
         System.err.println("onSuccessFromCommentForm --");
@@ -328,7 +333,7 @@ public class Annotate extends AbstractDocument {
 
     public String getTypesString() {
         Collection<String> translated = new ArrayList<String>();
-        for (NoteType t : noteWithInstances.getNote().getTypes()) {
+        for (NoteType t : noteWithInstances.getNote().getConcept(extendedTerm).getTypes()) {
             translated.add(messages.get(t.toString()));
         }
         return StringUtils.join(translated, ", ");
@@ -344,8 +349,8 @@ public class Annotate extends AbstractDocument {
 
     private String getEditors(DocumentNote documentNote) {
         Collection<String> result = new ArrayList<String>();
-        for (UserInfo user : documentNote.getNote().getAllEditors()) {
-            if (!documentNote.getNote().getLastEditedBy().equals(user)) {
+        for (UserInfo user : documentNote.getConcept(extendedTerm).getAllEditors()) {
+            if (!documentNote.getConcept(extendedTerm).getLastEditedBy().equals(user)) {
                 result.add(user.getUsername());
             }
         }

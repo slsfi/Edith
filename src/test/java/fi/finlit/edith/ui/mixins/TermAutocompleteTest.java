@@ -27,7 +27,7 @@ public class TermAutocompleteTest {
     public void Generate_Response_One_Element_Found_And_Meaning_Is_Set() throws SecurityException,
             NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         List<Object> terms = new ArrayList<Object>();
-        Field field = Term.class.getSuperclass().getSuperclass().getDeclaredField("id"); // Term -> Concept -> Identifiable
+        Field field = Term.class.getSuperclass().getDeclaredField("id");
         field.setAccessible(true);
         Term term = new Term();
         field.set(term, "111");

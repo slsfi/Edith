@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
+import fi.finlit.edith.domain.Concept;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.DocumentRevision;
@@ -25,10 +26,10 @@ public interface NoteRepository extends Repository<Note, String> {
     /**
      * Creates a comment for the given note.
      *
-     * @param note
+     * @param concept
      * @param message
      */
-    NoteComment createComment(Note note, String message);
+    NoteComment createComment(Concept concept, String message);
 
     /**
      * Create a new Note for the given DocumentRevision with the given local id, lemma and long text
@@ -136,6 +137,12 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param notes
      */
     void removeNotes(Collection<Note> notes);
+
+    /**
+     * @param id
+     * @return
+     */
+    NoteComment getCommentById(String id);
 
 
 }

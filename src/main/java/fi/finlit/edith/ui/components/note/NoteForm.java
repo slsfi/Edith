@@ -18,10 +18,12 @@ import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.util.EnumSelectModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
@@ -157,9 +159,11 @@ public class NoteForm {
     @Property
     @Parameter
     private SelectedText updateLongTextSelection;
+    
+    @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm;
 
     public String getDescription() {
-        return noteOnEdit.getNote().getDescription();
+        return noteOnEdit.getNote().getConcept(extendedTerm).getDescription();
     }
 
     private Term getEditTerm(Note note) {
@@ -257,22 +261,22 @@ public class NoteForm {
     }
 
     public Set<NoteType> getSelectedTypes() {
-        if (noteOnEdit.getNote().getTypes() == null) {
-            noteOnEdit.getNote().setTypes(new HashSet<NoteType>());
+        if (noteOnEdit.getConcept(extendedTerm).getTypes() == null) {
+            noteOnEdit.getConcept(extendedTerm).setTypes(new HashSet<NoteType>());
         }
-        return noteOnEdit.getNote().getTypes();
+        return noteOnEdit.getConcept(extendedTerm).getTypes();
     }
 
     public String getSources() {
-        return noteOnEdit.getNote().getSources();
+        return noteOnEdit.getConcept(extendedTerm).getSources();
     }
 
     public NoteStatus getStatus() {
-        return noteOnEdit.getNote().getStatus();
+        return noteOnEdit.getConcept(extendedTerm).getStatus();
     }
 
     public EnumSelectModel getStatusModel() {
-        final NoteStatus[] availableStatuses = noteOnEdit.getNote().getStatus()
+        final NoteStatus[] availableStatuses = noteOnEdit.getConcept(extendedTerm).getStatus()
                 .equals(NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL,
                 NoteStatus.DRAFT, NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT,
                 NoteStatus.FINISHED };
@@ -399,8 +403,8 @@ public class NoteForm {
             setTerm(noteOnEdit);
         }
 
-        if (noteOnEdit.getNote().getStatus().equals(NoteStatus.INITIAL)) {
-            noteOnEdit.getNote().setStatus(NoteStatus.DRAFT);
+        if (noteOnEdit.getConcept(extendedTerm).getStatus().equals(NoteStatus.INITIAL)) {
+            noteOnEdit.getConcept(extendedTerm).setStatus(NoteStatus.DRAFT);
         }
         try {
             if (updateLongTextSelection.isValid()) {
@@ -430,7 +434,7 @@ public class NoteForm {
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        comments = noteOnEdit.getNote().getComments();
+        comments = noteOnEdit.getConcept(extendedTerm).getComments();
         submitSuccess = true;
 
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
@@ -438,18 +442,18 @@ public class NoteForm {
     }
 
     public String getSubtextSources() {
-        return noteOnEdit.getNote().getSubtextSources();
+        return noteOnEdit.getConcept(extendedTerm).getSubtextSources();
     }
 
     public void setSubtextSources(String subtextSources) throws XMLStreamException {
         if (subtextSources != null) {
-            noteOnEdit.getNote().setSubtextSources(subtextSources);
+            noteOnEdit.getConcept(extendedTerm).setSubtextSources(subtextSources);
         }
     }
 
     public void setDescription(String description) throws XMLStreamException {
         if (description != null) {
-            noteOnEdit.getNote().setDescription(description);
+            noteOnEdit.getConcept(extendedTerm).setDescription(description);
         }
     }
 
@@ -490,13 +494,13 @@ public class NoteForm {
 
     public void setSources(String sources) throws XMLStreamException {
         if (sources != null) {
-            noteOnEdit.getNote().setSources(sources);
+            noteOnEdit.getConcept(extendedTerm).setSources(sources);
         }
     }
 
     @Validate("required")
     public void setStatus(NoteStatus status) {
-        noteOnEdit.getNote().setStatus(status);
+        noteOnEdit.getConcept(extendedTerm).setStatus(status);
     }
 
     private void setTerm(DocumentNote documentNote) {

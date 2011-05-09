@@ -91,8 +91,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public NoteComment createComment(Note n, String message) {
-        NoteComment comment = new NoteComment(extendedTerm ? n.getTerm() : n, message, authService.getUsername());
+    public NoteComment createComment(Concept concept, String message) {
+        NoteComment comment = new NoteComment(concept, message, authService.getUsername());
         getSession().save(comment);
         return comment;
     }
@@ -129,14 +129,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             BooleanBuilder filter = new BooleanBuilder();
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
-                filter.or(note.allEditors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
+                filter.or(note.concept().allEditors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
             }
             // FIXME This is kind of useless except that we have broken data in production.
             if (extendedTerm) {
-                filter.or(note.term().lastEditedBy().username.in(usernames));   
+                filter.or(note.term().concept().lastEditedBy().username.in(usernames));   
             } else {
-                filter.or(note.lastEditedBy().username.in(usernames));    
+                filter.or(note.concept().lastEditedBy().username.in(usernames));    
             }            
             filters.and(filter);
         }
@@ -151,9 +151,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : searchInfo.getNoteTypes()) {
                 if (extendedTerm) {
-                    filter.or(note.term().types.contains(type));    
+                    filter.or(note.term().concept().types.contains(type));    
                 } else {
-                    filter.or(note.types.contains(type));
+                    filter.or(note.concept().types.contains(type));
                 }
                 
             }
@@ -270,6 +270,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
         return createGridDataSource(note, note.term().basicForm.lower().asc(), false, builder.getValue());
     }
+    
+
+    @Override
+    public NoteComment getCommentById(String id) {
+        return getSession().getById(id, NoteComment.class);
+    }
 
 
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo, QNote note) {
@@ -280,13 +286,17 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             break;
         case USER:
             if (extendedTerm) {
-                comparable = note.term().lastEditedBy().username.toLowerCase();
+                comparable = note.term().concept().lastEditedBy().username.toLowerCase();
             } else {
-                comparable = note.lastEditedBy().username.toLowerCase();    
+                comparable = note.concept().lastEditedBy().username.toLowerCase();    
             }            
             break;
         case STATUS:
-            comparable = note.status.ordinal();
+            if (extendedTerm) {
+                comparable = note.term().concept().status.ordinal();
+            } else {
+                comparable = note.concept().status.ordinal();    
+            }            
             break;
         default:
             comparable = note.lemma.toLowerCase();
@@ -318,17 +328,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         long currentTime = timeService.currentTimeMillis();
         documentNote.setCreatedOn(currentTime);
         n.setEditedOn(currentTime);
-        if (extendedTerm) {
-            if (n.getTerm() != null) {
-                n.getTerm().setLastEditedBy(createdBy);    
-            }            
-        } else {
-            n.setLastEditedBy(createdBy);    
-        }        
-        if (n.getAllEditors() == null) {
-            n.setAllEditors(new HashSet<UserInfo>());
+        if (n.getConcept(extendedTerm) != null) {
+            n.getConcept(extendedTerm).setLastEditedBy(createdBy);
+        }       
+        if (n.getConcept(extendedTerm).getAllEditors() == null) {
+            n.getConcept(extendedTerm).setAllEditors(new HashSet<UserInfo>());
         }
-        n.getAllEditors().add(createdBy);
+        n.getConcept(extendedTerm).getAllEditors().add(createdBy);
         documentNote.setSVNRevision(docRevision.getRevision());
         documentNote.setLongText(longText);
 
@@ -357,11 +363,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         String localName = reader.getLocalName();
 
         if (localName.equals("note")) {
-            if (extendedTerm) {
-                data.note.getTerm().setLastEditedBy(userRepository.getCurrentUser());
-            } else {
-                data.note.setLastEditedBy(userRepository.getCurrentUser());    
-            }            
+            data.note.getConcept(extendedTerm).setLastEditedBy(userRepository.getCurrentUser());
             data.note.setEditedOn(timeService.currentTimeMillis());
             save(data.note);
             data.counter++;
@@ -370,18 +372,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         } else if (localName.equals("lemma-meaning")) {
             data.note.setLemmaMeaning(data.text);
         } else if (localName.equals("source")) {
-            if (extendedTerm) {
-                data.note.getTerm().setSources(data.paragraphs.toString());    
-            } else {
-                data.note.setSources(data.paragraphs.toString());
-            }            
+            data.note.getConcept(extendedTerm).setSources(data.paragraphs.toString());
             data.paragraphs = null;
         } else if (localName.equals("description")) {
-            if (extendedTerm) {
-                data.note.getTerm().setDescription(data.paragraphs.toString());    
-            } else {
-                data.note.setDescription(data.paragraphs.toString());
-            }            
+            data.note.getConcept(extendedTerm).setDescription(data.paragraphs.toString());
             data.paragraphs = null;
         } else if (localName.equals("bibliograph")) {
             data.inBib = false;
@@ -566,4 +560,5 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             logger.warn(method + " took " + duration+"ms");
         }
     }
+
 }

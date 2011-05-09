@@ -193,23 +193,18 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         long currentTime = timeService.currentTimeMillis();
         docNote.setCreatedOn(currentTime);
         docNote.getNote().setEditedOn(currentTime);
-        if (extendedTerm) {
-            if (docNote.getNote().getTerm() != null) {
-                docNote.getNote().getTerm().setLastEditedBy(createdBy);
-                docNote.getNote().getTerm().getAllEditors().add(createdBy);    
-            }
-        } else {            
-            docNote.getNote().setLastEditedBy(createdBy);
-            docNote.getNote().getAllEditors().add(createdBy);    
+        if (docNote.getConcept(extendedTerm) != null) {
+            docNote.getConcept(extendedTerm).setLastEditedBy(createdBy);
+            docNote.getConcept(extendedTerm).getAllEditors().add(createdBy);
         }
         getSession().save(docNote.getNote());
         getSession().save(docNote);
-        if (docNote.getNote().getComments() != null) {
-            for (NoteComment comment : docNote.getNote().getComments()) {
+        if (docNote.getConcept(extendedTerm) != null && docNote.getConcept(extendedTerm).getComments() != null) {
+            for (NoteComment comment : docNote.getConcept(extendedTerm).getComments()) {
                 getSession().save(comment);
             }
         }
-
+        
         return docNote;
     }
 

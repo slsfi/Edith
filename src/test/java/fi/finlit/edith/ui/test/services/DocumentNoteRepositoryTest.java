@@ -361,7 +361,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         documentNoteRepository.save(notes.get(0).getDocumentNotes().iterator().next());
         notes = noteRepository.query(searchInfo);
         assertEquals(1, notes.size());
-        assertEquals("timo", notes.get(0).getNote().getLastEditedBy().getUsername());
+        assertEquals("timo", notes.get(0).getNote().getConcept(extendedTerm).getLastEditedBy().getUsername());
     }
 
     @Test
@@ -401,13 +401,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
             for (DocumentNote documentNote : note.getDocumentNotes()) {
                 if (previous != null) {
                     String previousUsername, currentUsername;
-                    if (extendedTerm) {
-                        previousUsername = previous.getNote().getTerm().getLastEditedBy().getUsername();
-                        currentUsername = documentNote.getNote().getTerm().getLastEditedBy().getUsername();                        
-                    } else {
-                        previousUsername = previous.getNote().getLastEditedBy().getUsername();
-                        currentUsername = documentNote.getNote().getLastEditedBy().getUsername();
-                    }
+                    previousUsername = previous.getNote().getConcept(extendedTerm).getLastEditedBy().getUsername();
+                    currentUsername = documentNote.getNote().getConcept(extendedTerm).getLastEditedBy().getUsername();
                     assertThat(previousUsername, lessThanOrEqualTo(currentUsername));
                 }
                 previous = documentNote;
@@ -425,13 +420,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
             for (DocumentNote documentNote : note.getDocumentNotes()) {
                 if (previous != null) {
                     String previousUsername, currentUsername;
-                    if (extendedTerm) {
-                        previousUsername = previous.getNote().getTerm().getLastEditedBy().getUsername();
-                        currentUsername = documentNote.getNote().getTerm().getLastEditedBy().getUsername();                        
-                    } else {
-                        previousUsername = previous.getNote().getLastEditedBy().getUsername();
-                        currentUsername = documentNote.getNote().getLastEditedBy().getUsername();
-                    }
+                    previousUsername = previous.getNote().getConcept(extendedTerm).getLastEditedBy().getUsername();
+                    currentUsername = documentNote.getNote().getConcept(extendedTerm).getLastEditedBy().getUsername();
                     assertThat(previousUsername, greaterThanOrEqualTo(currentUsername));
                 }
                 previous = documentNote;
@@ -465,15 +455,15 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         searchInfo.setOrderBy(OrderBy.STATUS);
         List<NoteWithInstances> notes = noteRepository.query(searchInfo);
         DocumentNote edited = notes.get(2).getDocumentNotes().iterator().next();
-        edited.getNote().setStatus(NoteStatus.FINISHED);
+        edited.getNote().getConcept(extendedTerm).setStatus(NoteStatus.FINISHED);
         documentNoteRepository.save(edited);
         notes = noteRepository.query(searchInfo);
         DocumentNote previous = null;
         for (NoteWithInstances note : notes){
             for (DocumentNote documentNote : note.getDocumentNotes()) {
                 if (previous != null) {
-                    NoteStatus previousStatus = previous.getNote().getStatus();
-                    NoteStatus currentStatus = documentNote.getNote().getStatus();
+                    NoteStatus previousStatus = previous.getNote().getConcept(extendedTerm).getStatus();
+                    NoteStatus currentStatus = documentNote.getNote().getConcept(extendedTerm).getStatus();
                     assertTrue(previousStatus + " " + currentStatus,
                             previousStatus.compareTo(currentStatus) <= 0);
                 }
@@ -487,48 +477,50 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Save_As_Copy() {
         DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).get(0);
         Note initialNote = noteRepository.getById(documentNote.getNote().getId());
-        initialNote.setDescription(new Paragraph().toString());
+        Concept concept = initialNote.getConcept(extendedTerm);
+        
+        concept.setDescription(new Paragraph().toString());
         initialNote.setFormat(NoteFormat.PLACE);
         initialNote.setLemmaMeaning("fajflkjsalj");
         initialNote.setPerson(new Person(new NameForm(), new HashSet<NameForm>()));
         initialNote.setPlace(new Place(new NameForm(), new HashSet<NameForm>()));
-        initialNote.setSources(new Paragraph().toString());
-        initialNote.setSubtextSources(new Paragraph().toString());
+        concept.setSources(new Paragraph().toString());
+        concept.setSubtextSources(new Paragraph().toString());
         initialNote.setTerm(new Term());
         initialNote.getTerm().setBasicForm("foobar");
-        initialNote.getTypes().add(NoteType.HISTORICAL);
+        concept.getTypes().add(NoteType.HISTORICAL);
         noteRepository.save(initialNote);
 
         documentNote = documentNoteRepository.getById(documentNote.getId());
-        documentNote.getNote().setDescription(new Paragraph().toString());
-        documentNote.getNote().setDescription(new Paragraph().addElement(new StringElement("foo")).toString());
+        documentNote.getConcept(extendedTerm).setDescription(new Paragraph().toString());
+        documentNote.getConcept(extendedTerm).setDescription(new Paragraph().addElement(new StringElement("foo")).toString());
         documentNote.getNote().setFormat(NoteFormat.PERSON);
         documentNote.getNote().setLemmaMeaning("totally different");
         documentNote.getNote().getPerson().getNormalizedForm().setFirst("something else");
         documentNote.getNote().getPlace().getNormalizedForm().setName("barfo");
-        documentNote.getNote().setSources(new Paragraph().toString());
-        documentNote.getNote().setSources(new Paragraph().addElement(new StringElement("bar")).toString());
-        documentNote.getNote().setSubtextSources(new Paragraph().toString());
-        documentNote.getNote().setSubtextSources(new Paragraph().addElement(new StringElement("foooo")).toString());
+        documentNote.getConcept(extendedTerm).setSources(new Paragraph().toString());
+        documentNote.getConcept(extendedTerm).setSources(new Paragraph().addElement(new StringElement("bar")).toString());
+        documentNote.getConcept(extendedTerm).setSubtextSources(new Paragraph().toString());
+        documentNote.getConcept(extendedTerm).setSubtextSources(new Paragraph().addElement(new StringElement("foooo")).toString());
         documentNote.getNote().getTerm().setBasicForm("baaaaar");
-        documentNote.getNote().getTypes().add(NoteType.WORD_EXPLANATION);
-        documentNote.getNote().getComments().add(new NoteComment(documentNote.getNote(), "jeejee", "vesa"));
+        documentNote.getConcept(extendedTerm).getTypes().add(NoteType.WORD_EXPLANATION);
+        documentNote.getConcept(extendedTerm).getComments().add(new NoteComment(documentNote.getConcept(extendedTerm), "jeejee", "vesa"));
         Note note = documentNoteRepository.getById(documentNote.getId()).getNote();
         documentNoteRepository.saveAsCopy(documentNote);
 
         DocumentNote copyOfDocumentNote = documentNoteRepository.getById(documentNote.getId());
         Note copyOfNote = copyOfDocumentNote.getNote();
         assertThat(copyOfNote, not(note));
-        assertThat(copyOfNote.getDescription(), not(note.getDescription()));
+        assertThat(copyOfNote.getConcept(extendedTerm).getDescription(), not(note.getConcept(extendedTerm).getDescription()));
         assertThat(copyOfNote.getFormat(), not(note.getFormat()));
         assertThat(copyOfNote.getLemmaMeaning(), not(note.getLemmaMeaning()));
         assertEquals(copyOfNote.getPerson(), note.getPerson());
         assertEquals(copyOfNote.getPlace(), note.getPlace());
-        assertThat(copyOfNote.getSources(), not(note.getSources()));
-        assertThat(copyOfNote.getSubtextSources(), not(note.getSubtextSources()));
+        assertThat(copyOfNote.getConcept(extendedTerm).getSources(), not(note.getConcept(extendedTerm).getSources()));
+        assertThat(copyOfNote.getConcept(extendedTerm).getSubtextSources(), not(note.getConcept(extendedTerm).getSubtextSources()));
         assertEquals(copyOfNote.getTerm(), note.getTerm());
-        assertThat(copyOfNote.getTypes(), not(note.getTypes()));
-        assertThat(copyOfNote.getComments(), not(note.getComments()));
+        assertThat(copyOfNote.getConcept(extendedTerm).getTypes(), not(note.getConcept(extendedTerm).getTypes()));
+        assertThat(copyOfNote.getConcept(extendedTerm).getComments(), not(note.getConcept(extendedTerm).getComments()));
     }
 
     @Test
@@ -635,21 +627,12 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         }
         Note note = createNote();
         note.setLemma("TheLemma");
-        if (extendedTerm) {
-            note.getTerm().setTypes(new HashSet<NoteType>());
-            note.getTerm().getTypes().add(NoteType.HISTORICAL);
-        } else {
-            note.setTypes(new HashSet<NoteType>());
-            note.getTypes().add(NoteType.HISTORICAL);    
-        }        
+        note.getConcept(extendedTerm).setTypes(new HashSet<NoteType>());
+        note.getConcept(extendedTerm).getTypes().add(NoteType.HISTORICAL);
         note.setFormat(NoteFormat.PERSON);
-        if (extendedTerm) {
-            note.getTerm().setLastEditedBy(userInfo);
-        } else {
-            note.setLastEditedBy(userInfo);    
-        }        
-        note.setAllEditors(new HashSet<UserInfo>());
-        note.getAllEditors().add(userInfo);
+        note.getConcept(extendedTerm).setLastEditedBy(userInfo);
+        note.getConcept(extendedTerm).setAllEditors(new HashSet<UserInfo>());
+        note.getConcept(extendedTerm).getAllEditors().add(userInfo);
         documentNote.setNote(note);
         documentNote.setLongText("thelongtext");
         documentNote.setCreatedOn(new DateTime().getMillis());

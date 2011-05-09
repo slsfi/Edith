@@ -7,7 +7,7 @@ import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
 @ClassMapping
-public abstract class Concept extends Identifiable {
+public class Concept extends Identifiable {
 
     @Predicate
     private Set<UserInfo> allEditors = new HashSet<UserInfo>();
@@ -97,4 +97,21 @@ public abstract class Concept extends Identifiable {
         this.subtextSources = subtextSourcesString;
     }
     
+    public Concept createCopy(String id){
+        Concept copy = new Concept();
+        copy.setId(id);
+        Set<NoteComment> commentsCopy = new HashSet<NoteComment>();
+        for (NoteComment comment : getComments()) {
+            NoteComment copyOfComment = comment.copy();
+            copyOfComment.setConcept(copy);
+            commentsCopy.add(copyOfComment);
+            // getSession().save(copyOfComment);
+        }
+        copy.setComments(commentsCopy);
+        copy.setDescription(getDescription());
+        copy.setSources(getSources());
+        copy.setSubtextSources(getSubtextSources());
+        copy.setTypes(getTypes());
+        return copy;
+    }
 }

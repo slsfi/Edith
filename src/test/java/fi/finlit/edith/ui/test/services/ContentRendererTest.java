@@ -19,8 +19,10 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Test;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.ContentRenderer;
 import fi.finlit.edith.ui.services.DocumentRepository;
@@ -36,6 +38,9 @@ public class ContentRendererTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepository;
+    
+    @Inject @Symbol(EDITH.EXTENDED_TERM) 
+    private boolean extendedTerm;
 
     private final MarkupWriter writer = new MarkupWriterImpl();
 
@@ -70,15 +75,17 @@ public class ContentRendererTest extends AbstractServiceTest {
 
     private DocumentNote createDocumentNote(NoteFormat noteFormat) {
         Note note = new Note();
+        Concept concept = note.getConcept(extendedTerm);
+        
         note.setLemma("taloon");
         note.setLemmaMeaning("johonkin ineen");
         Paragraph paragraph = new Paragraph();
         LinkElement element = new LinkElement("Kalevala");
         element.setReference("kalevala");
         paragraph.addElement(element);
-        note.setSubtextSources(paragraph.toString());
-        note.setDescription(paragraph.copy().toString());
-        note.setSources(paragraph.copy().toString());
+        concept.setSubtextSources(paragraph.toString());
+        concept.setDescription(paragraph.copy().toString());
+        concept.setSources(paragraph.copy().toString());
         note.setFormat(noteFormat);
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
@@ -130,14 +137,16 @@ public class ContentRendererTest extends AbstractServiceTest {
     public void Render_Place_Note() {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
         DocumentNote documentNote = createDocumentNote(NoteFormat.PLACE);
-        Paragraph description = Paragraph.parseSafe(documentNote.getNote().getDescription());
+        Concept concept = documentNote.getConcept(extendedTerm);
+        
+        Paragraph description = Paragraph.parseSafe(concept.getDescription());
         description.addElement(new StringElement(" foo "));
         UrlElement urlElement = new UrlElement("Google");
         urlElement.setUrl("http://www.google.com/");
         description.addElement(urlElement);
         description.addElement(new UrlElement("happyness"));
         description.addElement(new LinkElement("maya"));
-        documentNote.getNote().setDescription(description.toString());
+        concept.setDescription(description.toString());
         Place place = new Place(new NameForm("New York", null), new HashSet<NameForm>());
         documentNote.getNote().setPlace(place);
         documentNotes.add(documentNote);

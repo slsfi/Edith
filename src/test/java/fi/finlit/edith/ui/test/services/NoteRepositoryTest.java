@@ -84,18 +84,33 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         }
         return count;
     }
+    
+    @Test
+    public void Note_Id_Equals_Concept_Id(){
+        Note note = createNote();
+        noteRepository.save(note);
+        if (!extendedTerm) {
+            assertEquals(note.getId(), note.getConcept(extendedTerm).getId());
+        }
+    }
 
+    @Test
+    public void CreateComment_And_Load() {
+        Note note = createNote();
+        noteRepository.save(note);
+        NoteComment comment = noteRepository.createComment(note.getConcept(extendedTerm), "boomboomboom");
+        NoteComment loaded = noteRepository.getCommentById(comment.getId());        
+        assertEquals(comment.getId(), loaded.getId());
+        assertEquals(note.getConcept(extendedTerm).getId(), loaded.getConcept().getId());
+        assertEquals(comment.getConcept().getId(), loaded.getConcept().getId());
+    }
+    
     @Test
     public void CreateComment() {
         Note note = createNote();
         noteRepository.save(note);
-        NoteComment comment = noteRepository.createComment(note, "boomboomboom");
-        Collection<NoteComment> comments;
-        if (extendedTerm) {
-            comments = noteRepository.getById(note.getId()).getTerm().getComments();
-        } else {
-            comments = noteRepository.getById(note.getId()).getComments();
-        }
+        NoteComment comment = noteRepository.createComment(note.getConcept(extendedTerm), "boomboomboom");
+        Collection<NoteComment> comments = noteRepository.getById(note.getId()).getConcept(extendedTerm).getComments();
         assertEquals(1, comments.size());
         assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
     }
@@ -150,8 +165,8 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(note);
         assertEquals("kereitten", note.getLemma());
         assertEquals("'keritte'", note.getLemmaMeaning());
-        String description = extendedTerm ? note.getTerm().getDescription() : note.getDescription();
-        String sources = extendedTerm ? note.getTerm().getSources() : note.getSources(); 
+        String description = note.getConcept(extendedTerm).getDescription();
+        String sources = note.getConcept(extendedTerm).getSources(); 
         assertEquals(
                 "(murt. kerii ’keri\u00E4’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
                 description.replaceAll("\\s+", " ").trim());
@@ -186,12 +201,10 @@ public class NoteRepositoryTest extends AbstractServiceTest {
                 lemma);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
-        assertEquals(note.getDescription(),
-                documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getNote()
-                        .getDescription());
-        assertEquals(note.getSources(),
-                documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getNote()
-                        .getSources());
+        assertEquals(note.getConcept(extendedTerm).getDescription(),
+                documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getConcept(extendedTerm).getDescription());
+        assertEquals(note.getConcept(extendedTerm).getSources(),
+                documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getConcept(extendedTerm).getSources());
     }
 
     @Test
@@ -238,21 +251,12 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     public void RemoveComment() {
         Note note = createNote();
         noteRepository.save(note);
-        NoteComment comment = noteRepository.createComment(note, "boomboomboom");
-        Collection<NoteComment> comments;
-        if (extendedTerm) {
-            comments = noteRepository.getById(note.getId()).getTerm().getComments();
-        } else {
-            comments = noteRepository.getById(note.getId()).getComments();   
-        }
+        NoteComment comment = noteRepository.createComment(note.getConcept(extendedTerm), "boomboomboom");
+        Collection<NoteComment> comments = noteRepository.getById(note.getId()).getConcept(extendedTerm).getComments();
         assertEquals(1, comments.size());
         assertEquals(comment.getMessage(), comments.iterator().next().getMessage());
         noteRepository.removeComment(comment.getId());
-        if (extendedTerm) {
-            comments = noteRepository.getById(note.getId()).getTerm().getComments();    
-        } else {
-            comments = noteRepository.getById(note.getId()).getComments();
-        }        
+        comments = noteRepository.getById(note.getId()).getConcept(extendedTerm).getComments();
         assertTrue(comments.isEmpty());
     }
 

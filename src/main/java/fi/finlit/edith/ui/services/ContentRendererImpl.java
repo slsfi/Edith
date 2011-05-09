@@ -67,10 +67,14 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private final String bibliographUrl;
 
+    private final boolean extendedTerm;
+    
     public ContentRendererImpl(@Inject DocumentRepository documentRepository,
-            @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl) {
+            @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl,
+            @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
         this.documentRepository = documentRepository;
         this.bibliographUrl = bibliographUrl;
+        this.extendedTerm = extendedTerm;
     }
 
     private void writeSpan(MarkupWriter writer, String attr) {
@@ -78,17 +82,18 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void writeNote(MarkupWriter writer, Note note) {
-        if (note.getLemmaMeaning() != null || note.getSubtextSources() != null) {
+        Concept concept = note.getConcept(extendedTerm);
+        if (note.getLemmaMeaning() != null || concept.getSubtextSources() != null) {
             writeSpan(writer, "lemmaMeaningAndSubtextSources");
             if (note.getLemmaMeaning() != null) {
                 writer.write("'" + note.getLemmaMeaning() + "'");
             }
-            if (note.getLemmaMeaning() != null && note.getSubtextSources() != null) {
+            if (note.getLemmaMeaning() != null && concept.getSubtextSources() != null) {
                 writer.write(", ");
             }
-            if (note.getSubtextSources() != null) {
+            if (concept.getSubtextSources() != null) {
                 writer.write("Vrt. ");
-                writeParagraph(writer, Paragraph.parseSafe(note.getSubtextSources()));
+                writeParagraph(writer, Paragraph.parseSafe(concept.getSubtextSources()));
             }
             writer.end();
         }
@@ -153,8 +158,9 @@ public class ContentRendererImpl implements ContentRenderer {
 
         for (Map.Entry<Note, List<DocumentNote>> entry : noteToDocumentNotes.entrySet()){
           Note note = entry.getKey();
+          Concept concept = note.getConcept(extendedTerm);
           writer.element("note", "xml:id", "note"+note.getId());
-          write(writer, "description", note.getDescription());
+          write(writer, "description", concept.getDescription());
           write(writer, "format", note.getFormat());
           write(writer, "lemma", note.getLemma());
           write(writer, "lemmaMeaning", note.getLemmaMeaning());
@@ -182,11 +188,11 @@ public class ContentRendererImpl implements ContentRenderer {
               writer.end(); // otherForms
               writer.end(); // place
           }
-          write(writer, "sources", note.getSources());
-          write(writer, "subtextSources", note.getSubtextSources());
-          if (!note.getTypes().isEmpty()){
+          write(writer, "sources", concept.getSources());
+          write(writer, "subtextSources", concept.getSubtextSources());
+          if (!concept.getTypes().isEmpty()){
               writer.element("types");
-              for (NoteType type : note.getTypes()){
+              for (NoteType type : concept.getTypes()){
                   write(writer, "type", type);
               }
               writer.end();
@@ -233,7 +239,8 @@ public class ContentRendererImpl implements ContentRenderer {
         writer.element("ul", CLASS, "notes");
         for (DocumentNote documentNote : documentNotes) {
             Note note = documentNote.getNote();
-
+            Concept concept = documentNote.getConcept(extendedTerm);
+            
             if (note == null){
                 throw new IllegalStateException("Got no note for documentNote " + documentNote);
             }
@@ -258,20 +265,20 @@ public class ContentRendererImpl implements ContentRenderer {
                 }
             }
 
-            if (note.getDescription() != null) {
+            if (concept.getDescription() != null) {
                 if (note.getFormat() != null && !note.getFormat().equals(NoteFormat.NOTE)) {
                     writer.element("span");
                     writer.write("\u2013");
                     writer.end();
                 }
                 writeSpan(writer, "description");
-                writeParagraph(writer, Paragraph.parseSafe(note.getDescription()));
+                writeParagraph(writer, Paragraph.parseSafe(concept.getDescription()));
                 writer.end();
             }
-            if (note.getSources() != null) {
+            if (concept.getSources() != null) {
                 writeSpan(writer, "sources");
                 writer.write("(");
-                writeParagraph(writer, Paragraph.parseSafe(note.getSources()));
+                writeParagraph(writer, Paragraph.parseSafe(concept.getSources()));
                 writer.write(")");
                 writer.end();
             }

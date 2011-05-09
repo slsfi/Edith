@@ -5,18 +5,17 @@
  */
 package fi.finlit.edith.domain;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
+import com.mysema.rdfbean.annotations.Mixin;
 import com.mysema.rdfbean.annotations.Predicate;
 
 @ClassMapping
-public class Note extends Concept {
+public class Note extends Identifiable {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
@@ -36,6 +35,9 @@ public class Note extends Concept {
         }
         return result;
     }
+    
+    @Mixin
+    private Concept concept = new Concept();
 
     @Predicate
     private NoteFormat format;
@@ -60,27 +62,15 @@ public class Note extends Concept {
 
     public Note createCopy(){
         Note copy = new Note();
-        Set<NoteComment> commentsCopy = new HashSet<NoteComment>();
-        for (NoteComment comment : getComments()) {
-            NoteComment copyOfComment = comment.copy();
-            copyOfComment.setConcept(copy);
-            commentsCopy.add(copyOfComment);
-            // getSession().save(copyOfComment);
-        }
-        copy.setComments(commentsCopy);
-        copy.setDescription(getDescription());
         copy.setFormat(getFormat());
         copy.setLemma(getLemma());
         copy.setLemmaMeaning(getLemmaMeaning());
         copy.setPerson(getPerson());
         copy.setPlace(getPlace());
-        copy.setSources(getSources());
-        copy.setSubtextSources(getSubtextSources());
         copy.setTerm(getTerm());
-        copy.setTypes(getTypes());
+        copy.setConcept(concept.createCopy(getId()));
         return copy;
     }
-
 
     public NoteFormat getFormat() {
         return format;
@@ -131,7 +121,6 @@ public class Note extends Concept {
         this.term = term;
     }
 
-
     public long getEditedOn() {
         return editedOn;
     }
@@ -149,6 +138,27 @@ public class Note extends Concept {
         return "Note [lemma=" + lemma + "]";
     }
 
+    public Concept getConcept(boolean extendedTerm) {
+        if (extendedTerm) {
+            return term.getConcept();
+        } else {
+            return concept;
+        }
+    }
 
+    /**
+     * Use the concept via getConcept(extendedTerm)
+     * 
+     * @return
+     */
+    @Deprecated
+    public Concept getConcept() {
+        return concept;
+    }
+    
+    private void setConcept(Concept concept) {
+        this.concept = concept;
+    }
+    
 
 }

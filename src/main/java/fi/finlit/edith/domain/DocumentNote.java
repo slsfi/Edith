@@ -13,6 +13,7 @@ import com.mysema.rdfbean.annotations.Predicate;
 
 @ClassMapping
 public class DocumentNote extends Identifiable {
+    
     @Predicate
     private Document document;
 
@@ -166,6 +167,10 @@ public class DocumentNote extends Identifiable {
     @Override
     public String toString() {
         return "DocumentNote: " + StringUtils.abbreviate(longText, 30);
+    }
+    
+    public Concept getConcept(boolean extendedTerm) {
+        return note.getConcept(extendedTerm);
     }
 
 }
