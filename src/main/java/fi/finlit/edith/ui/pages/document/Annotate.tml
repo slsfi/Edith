@@ -97,28 +97,28 @@
 					<t:loop source="notesWithInstances" value="noteWithInstances">
 						<t:loop source="noteWithInstances.documentNotes" value="note">
 							<li>
-								<span><a href="#start${note.localId}" id="noteid${note.note.id}" class="notelink ${note.note.status} ${documentNoteType}"><em>${note.note.lemma}</em></a></span>
+								<span><a href="#start${note.localId}" id="noteid${note.note.id}" class="notelink ${note.note.concept.status} ${documentNoteType}"><em>${note.note.lemma}</em></a></span>
 								<span class="numberOfInstancesInDocument"> ${numberOfInstancesInDocument} ${message:amountOfInstances}; </span>
 								<span class="basicForm">${note.note.term?.basicForm}; </span>
 								<span class="meaning">${note.note.term?.meaning}; </span>
-								<span class="description">${note.note.description}; </span>
+								<span class="description">${note.note.concept.description}; </span>
 								<span class="document">${note.document?.title}; </span>
 								<span class="type">${typesString}; </span>
 								<span class="format"><t:if test="note.note.format"><t:fmt.message key="${note.note.format}"/></t:if>; </span>
 								<!--span class="creator">${note.note.lastEditedBy?.username} (${editorsForNote}); </span-->
 								<span class="edited"><t:dateTimeFormat date="note.note.editedOnDate" format="message:dateformat-compact" />; </span>
-								<span class="status"><t:fmt.message key="NoteStatus.${note.note.status}"/></span>
+								<span class="status"><t:fmt.message key="NoteStatus.${note.note.concept.status}"/></span>
 							</li>							
 							<p:empty>
 								<li>
-								    <span><a href="#start" id="noteid${noteWithInstances.note.id}" class="notelink ${noteWithInstances.note.status} ORPHAN"><em>${noteWithInstances.note.lemma}</em></a></span>
+								    <span><a href="#start" id="noteid${noteWithInstances.note.id}" class="notelink ${noteWithInstances.note.concept.status} ORPHAN"><em>${noteWithInstances.note.lemma}</em></a></span>
 									<span class="basicForm">${noteWithInstances.note.term?.basicForm}; </span>
 									<span class="meaning">${noteWithInstances.note.term?.meaning}; </span>
-									<span class="description">${noteWithInstances.note.description}; </span>
+									<span class="description">${noteWithInstances.note.concept.description}; </span>
 									<span class="type">${typesString}; </span>
 									<span class="format"><t:if test="noteWithInstances.note.format"><t:fmt.message key="${noteWithInstances.note.format}"/></t:if>; </span>
 									<span class="edited"><t:dateTimeFormat date="noteWithInstances.note.editedOnDate" format="message:dateformat-compact" />; </span>
-									<span class="status"><t:fmt.message key="NoteStatus.${noteWithInstances.note.status}"/></span>
+									<span class="status"><t:fmt.message key="NoteStatus.${noteWithInstances.note.concept.status}"/></span>
 								</li>									
 							</p:empty>
 						</t:loop>						
@@ -149,7 +149,7 @@
 					<div class="metadata">
 						<t:dateTimeFormat date="noteOnEdit.note.editedOnDate"
 							format="message:dateformat-compact" />
-						${noteOnEdit.note.lastEditedBy.username} (${editorsForNoteOnEdit})
+						${noteOnEdit.note.concept.lastEditedBy.username} (${editorsForNoteOnEdit})
 					</div>
 					<div class="cleaner"></div>
 					<div class="note_edit">
@@ -296,7 +296,7 @@
         <div>
         <t:eventlink t:event="chooseBackingNote" context="loopNote.id" t:zone="editZone"><em>${loopNote.lemma}</em></t:eventlink>
         ${loopNote.lemmaMeaning}
-        ${loopNote.description}
+        ${loopNote.concept.description}
         </div>
     </t:loop>
     <t:eventlink t:event="chooseBackingNote" t:zone="editZone">${message:createNewNote-label}</t:eventlink>
