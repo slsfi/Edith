@@ -160,7 +160,10 @@ public class NoteForm {
     @Parameter
     private SelectedText updateLongTextSelection;
     
-    @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm;
+    
+    @Inject @Symbol(EDITH.EXTENDED_TERM)
+    @Property
+    private boolean extendedTerm;
 
     public String getDescription() {
         return noteOnEdit.getNote().getConcept(extendedTerm).getDescription();

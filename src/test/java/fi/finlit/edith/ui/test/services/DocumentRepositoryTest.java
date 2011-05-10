@@ -35,6 +35,7 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
@@ -59,6 +60,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
 
+    @Inject 
+    @Symbol(EDITH.EXTENDED_TERM)
+    private boolean extendedTerm;
 
     @Before
     public void setUp() throws Exception {
@@ -90,7 +94,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote note = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote note = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
 
         String content = getContent(document.getSvnPath(), -1);
         String localId = note.getLocalId();
@@ -105,7 +109,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         // add
         String element = "play-act-sp4-p";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
-        DocumentNote documentNote = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote documentNote = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
 
         assertEquals(count+1, documentNoteRepository.queryNotes("*").getAvailableRows());
         // remove
@@ -125,8 +129,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "s";
 
-        documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, 1, 1, text));
-        DocumentNote note2 = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, 2, 2, text));
+        documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, 1, 1, text));
+        DocumentNote note2 = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, 2, 2, text));
         List<DocumentNote> documentNotes = documentNoteRepository.getOfDocument(note2.getDocRevision());
         assertEquals(2, documentNotes.size());
     }
@@ -179,7 +183,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote noteRevision = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRevision = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
         DocumentRevision docRevision = noteRevision.getDocumentRevision();
 
         List<DocumentNote> revs = documentNoteRepository.getOfDocument(docRevision);
@@ -196,7 +200,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote noteRev = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRev = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
         documentRepository.removeNotes(document.getRevision(-1), new DocumentNote[] { noteRev });
 
         String content = getContent(document.getSvnPath(), -1);
@@ -211,10 +215,10 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String text2 = "ottaa";
         String text3 = "ullakosta";
 
-        DocumentNote noteRev = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRev = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
         // note2 won't be removed
-        DocumentNote noteRev2 = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText( element, element, text2));
-        DocumentNote noteRev3 = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, text3));
+        DocumentNote noteRev2 = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText( element, element, text2));
+        DocumentNote noteRev3 = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text3));
         documentRepository.removeNotes(document.getRevision(-1), new DocumentNote[] { noteRev, noteRev3 });
 
         String content = getContent(document.getSvnPath(), -1);
@@ -229,7 +233,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote noteRevision = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRevision = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
 
         String newText = "sun ullakosta";
         documentRepository.updateNote(noteRevision, new SelectedText(element, element, newText));
@@ -246,7 +250,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp3-p";
         String text = "\u00E4st";
 
-        DocumentNote noteRevision = documentRepository.addNote(new Note(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRevision = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
 
         //T-äst-ä
         String newText = "T\u00E4st\u00E4";
@@ -268,6 +272,14 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         IOUtils.closeQuietly(stream);
         documentRepository.remove(document);
         documentRepository.getDocumentStream(document.getRevision(-1));
+    }
+        
+    private Note createNote() {
+        Note note = new Note();
+        if (extendedTerm) {
+            note.setTerm(new Term());
+        }
+        return note;
     }
 
 }

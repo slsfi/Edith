@@ -328,13 +328,16 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         long currentTime = timeService.currentTimeMillis();
         documentNote.setCreatedOn(currentTime);
         n.setEditedOn(currentTime);
-        if (n.getConcept(extendedTerm) != null) {
-            n.getConcept(extendedTerm).setLastEditedBy(createdBy);
-        }       
-        if (n.getConcept(extendedTerm).getAllEditors() == null) {
-            n.getConcept(extendedTerm).setAllEditors(new HashSet<UserInfo>());
-        }
-        n.getConcept(extendedTerm).getAllEditors().add(createdBy);
+        
+        Concept concept = n.getConcept(extendedTerm);
+        if (concept != null) {
+            concept.setLastEditedBy(createdBy);
+            if (concept.getAllEditors() == null) {
+                concept.setAllEditors(new HashSet<UserInfo>());
+            }
+            concept.getAllEditors().add(createdBy);
+        }               
+        
         documentNote.setSVNRevision(docRevision.getRevision());
         documentNote.setLongText(longText);
 

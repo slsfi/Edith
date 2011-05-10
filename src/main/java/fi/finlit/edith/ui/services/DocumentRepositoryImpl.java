@@ -155,7 +155,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private final TimeService timeService;
 
     private final AuthService authService;
-
+            
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
