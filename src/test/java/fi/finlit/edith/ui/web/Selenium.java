@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.JettyHelper;
 import com.mysema.commons.jetty.WebappStarter;
 
@@ -20,6 +21,8 @@ public abstract class Selenium {
     public WebDriver driver;
 
     public abstract WebappStarter starter();
+
+    public JettyConfig config;
 
     public String locales() {
         return "fi,sv,en";
@@ -31,14 +34,12 @@ public abstract class Selenium {
         return p;
     }
 
-    public abstract int port();
-
     public void startSelenium() {
 
         if (driver == null) {
 
             try {
-                starter().start(port());
+                config = starter().start();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -48,7 +49,7 @@ public abstract class Selenium {
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
                     driver.close();
-                    JettyHelper.stopJettyAtPort(port());
+                    JettyHelper.stopJettyAtPort(config.port);
                     driver = null;
                 }
             });
@@ -57,11 +58,19 @@ public abstract class Selenium {
     }
 
     public String path() {
-        return "http://127.0.0.1:" + port();
+        return "http://127.0.0.1:" + config.port;
     }
 
     public void get(String url) {
         driver.get(path() + url);
+    }
+
+    public String currentUrl() {
+        return driver.getCurrentUrl();
+    }
+
+    public String title() {
+        return driver.getTitle();
     }
 
     public WebElement findByLinkText(String linkText) {
@@ -96,7 +105,7 @@ public abstract class Selenium {
     public void assertTitleNot(String title) {
         assertTrue("Page title should not be: " + title, !title.equals(driver.getTitle()));
     }
-    
+
     public void assertLink(String linkText) {
         assertNotNull("Link text not found: " + linkText, findByLinkText(linkText));
     }

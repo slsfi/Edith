@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.WebappStarter;
 
 import fi.finlit.edith.SLSEdithDebugStart;
@@ -17,7 +18,7 @@ public class SLSAnnotateTest extends Selenium {
     }
 
     @Test
-    public void testSvLocale() {
+    public void Texts_Are_In_Swedish_Locale() {
 
         get("/login");
         findElement(By.name("j_username")).sendKeys("lassi");
@@ -45,16 +46,13 @@ public class SLSAnnotateTest extends Selenium {
     public WebappStarter starter() {
         return new SLSEdithDebugStart() {
             @Override
-            public String root() {
-                return "target/sls-test/";
+            public JettyConfig configure() throws Exception {
+                root = "target/sls-test/";
+                return super.configure().setPort(8090);
             }
 
         };
     }
 
-    @Override
-    public int port() {
-        return 8090;
-    }
 
 }
