@@ -23,13 +23,12 @@ import org.junit.rules.MethodRule;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.mysema.commons.jetty.JettyHelper;
 
 import fi.finlit.edith.EDITH;
@@ -80,15 +79,7 @@ public class CrawlingTest {
     @Before
     public void setUp() {
         if (runTests) {
-            webDriver = new HtmlUnitDriver() {
-                @Override
-                protected WebClient modifyWebClient(WebClient client) {
-                    client.setThrowExceptionOnFailingStatusCode(true);
-                    client.setPrintContentOnFailingStatusCode(true);
-                    client.setJavaScriptEnabled(false);
-                    return client;
-                }
-            };
+            webDriver = new FirefoxDriver();
         }
     }
 

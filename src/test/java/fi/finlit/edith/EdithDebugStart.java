@@ -10,11 +10,18 @@ import java.io.File;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
+import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.JettyHelper;
+import com.mysema.commons.jetty.WebappStarter;
 
-public class EdithDebugStart {
+public class EdithDebugStart implements WebappStarter {
     
     public static void main(String[] args) throws Exception{
+        new EdithDebugStart().start(8080);
+    }
+
+    @Override
+    public JettyConfig start(int port) throws Exception {
         FSRepositoryFactory.setup();        
         File svnRepo = new File("target/repo");
         
@@ -25,7 +32,7 @@ public class EdithDebugStart {
         
         System.setProperty(EDITH.EXTENDED_TERM, "false");
         
-        JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
+        return JettyHelper.startJetty("src/main/webapp", "/", port, port+1);
     }
 
 }

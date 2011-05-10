@@ -20,7 +20,7 @@
 
     <failIfNoTests>false</failIfNoTests>
     <tapestry.version>5.2.5</tapestry.version>
-    <jetty.version>6.1.0-SNAPSHOT</jetty.version>
+    <jetty.version>6.1.15</jetty.version>
 	<rdfbean.version>1.5.4</rdfbean.version>
     <commons.tapestry.version>0.2.0</commons.tapestry.version>
   </properties>
@@ -132,19 +132,21 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.seleniumhq.webdriver</groupId>
-      <artifactId>webdriver-htmlunit</artifactId>
-      <version>0.9.7376</version>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-firefox-driver</artifactId>
+      <version>2.0b3</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.seleniumhq.webdriver</groupId>
-      <artifactId>webdriver-support</artifactId>
-      <version>0.9.7376</version>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-support</artifactId>
+      <version>2.0b3</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.seleniumhq.webdriver</groupId>
-      <artifactId>webdriver-firefox</artifactId>
-      <version>0.9.7376</version>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-all</artifactId>
+        <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.easymock</groupId>
