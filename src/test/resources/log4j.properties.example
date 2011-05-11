@@ -8,3 +8,4 @@ log4j.logger.com.mysema.rdfbean.sesame.query=DEBUG
 log4j.logger.fi.finlit.edith.ui.services.DocumentRepositoryImpl=DEBUG
 
 log4j.logger.com.mysema.rdfbean.object.SessionImpl=DEBUG
+#log4j.logger.fi.finlit.edith.ui.web = DEBUG
