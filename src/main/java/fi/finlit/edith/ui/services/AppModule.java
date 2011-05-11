@@ -91,8 +91,8 @@ public final class AppModule {
 
     public static void contributeClasspathAssetAliasManager(
             MappedConfiguration<String, String> configuration) {
-        //Root
-        configuration.add("", "");
+        //Javascript
+        configuration.add("js", "js");
     }
     
     @SuppressWarnings("unchecked")

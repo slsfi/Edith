@@ -8,24 +8,24 @@ import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.ContentType;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Field;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Events;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.internal.util.Holder;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONArray;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ResponseRenderer;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.TextStreamResponse;
 
-@IncludeJavaScriptLibrary( { "jquery-autocomplete.js", "classpath:jquery-1.4.1.js",
-        "classpath:ui/jquery.ui.core.js", "classpath:ui/jquery.ui.widget.js",
-        "classpath:ui/jquery.ui.position.js", "classpath:ui/jquery.ui.autocomplete.js" })
-@IncludeStylesheet( { "context:styles/themes/base/jquery-ui.css", "jquery-autocomplete.css" })
+@Import(library = { "jquery-autocomplete.js", "classpath:js/jquery-1.4.1.js",
+        "classpath:js/ui/jquery.ui.core.js", "classpath:js/ui/jquery.ui.widget.js",
+        "classpath:js/ui/jquery.ui.position.js", "classpath:js/ui/jquery.ui.autocomplete.js" }, stylesheet = {
+        "context:styles/themes/base/jquery-ui.css", "jquery-autocomplete.css" })
 @Events(EventConstants.PROVIDE_COMPLETIONS)
 public class JQueryAutocomplete {
     static final String EVENT_NAME = "jqueryautocomplete";
@@ -39,7 +39,7 @@ public class JQueryAutocomplete {
     private ComponentResources resources;
 
     @Environmental
-    private RenderSupport renderSupport;
+    private JavaScriptSupport renderSupport;
 
     @Inject
     private Request request;
@@ -55,8 +55,9 @@ public class JQueryAutocomplete {
                 renderSupport);
     }
 
-    protected void init(String elementId, String ajaxURI, RenderSupport support) {
-        support.addInit("jQueryAutocompleter", new JSONArray(elementId, ajaxURI));
+    protected void init(String elementId, String ajaxURI, JavaScriptSupport support) {
+        support.addInitializerCall("jQueryAutocompleter", new JSONObject("elementId", elementId,
+                "url", ajaxURI));
     }
 
     Object onJQueryAutocomplete() {

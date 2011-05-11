@@ -49,8 +49,8 @@ import fi.finlit.edith.ui.services.TermRepository;
 import fi.finlit.edith.ui.services.TimeService;
 
 @Import(library = {
-        "classpath:jquery-1.4.1.js", "classpath:TapestryExt.js",
-        "TextSelector.js", "Annotate.js", "classpath:jqModal.js" },
+        "classpath:js/jquery-1.4.1.js", "classpath:js/TapestryExt.js",
+        "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js" },
         stylesheet= {"context:styles/tei.css"})
 @SuppressWarnings("unused")
 public class Annotate extends AbstractDocument {

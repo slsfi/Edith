@@ -11,6 +11,7 @@ import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.Environmental;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -18,7 +19,7 @@ import org.apache.tapestry5.services.ComponentDefaultProvider;
 import org.apache.tapestry5.services.FormSupport;
 import org.apache.tapestry5.services.Request;
 
-@IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "InlineEditField.js" })
+@Import(library = { "classpath:js/jquery-1.4.1.js", "InlineEditField.js" })
 @SuppressWarnings("unused")
 public class InlineEditField {
 

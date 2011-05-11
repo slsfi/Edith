@@ -3,22 +3,23 @@ package fi.finlit.edith.ui.mixins;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import fi.finlit.edith.domain.Term;
 
 // TODO : use common superclass for TermAutocomplete and JQueryAutocomplete
-@IncludeJavaScriptLibrary({ "term-autocomplete.js" })
+@Import(library = { "term-autocomplete.js" })
 public class TermAutocomplete extends JQueryAutocomplete {
 
     @Override
-    protected void init(String elementId, String ajaxURI, RenderSupport renderSupport) {
+    protected void init(String elementId, String ajaxURI, JavaScriptSupport renderSupport) {
         super.init(elementId, ajaxURI, renderSupport);
         // Hooking our own function
-        renderSupport.addInit("termAutocompleter", new JSONArray().put(elementId));
+        renderSupport.addInitializerCall("termAutocompleter",
+                new JSONObject("elementId", elementId));
     }
 
     @Override

@@ -8,7 +8,7 @@ package fi.finlit.edith.ui.pages;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -17,7 +17,7 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.services.DocumentRepository;
 
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
+@Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
 public class Documents {
 
     @Inject

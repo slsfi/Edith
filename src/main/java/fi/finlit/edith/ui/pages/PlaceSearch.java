@@ -6,9 +6,7 @@
 package fi.finlit.edith.ui.pages;
 
 import org.apache.tapestry5.EventContext;
-import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.annotations.Environmental;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -20,7 +18,7 @@ import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.PlaceRepository;
 
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
+@Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
 public class PlaceSearch {
 
     @Property
@@ -39,9 +37,6 @@ public class PlaceSearch {
 
     @Inject
     private PlaceRepository placeRepository;
-
-    @Environmental
-    private RenderSupport support;
 
     void onActivate(EventContext ctx) {
         if (ctx.getCount() >= 1) {

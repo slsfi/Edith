@@ -15,7 +15,7 @@ import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Environmental;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.grid.GridDataSource;
@@ -29,7 +29,7 @@ import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js", "deleteDialog.js" })
+@Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
 public class NoteSearch {
 
     @Property

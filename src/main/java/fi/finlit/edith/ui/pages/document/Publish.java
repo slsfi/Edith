@@ -9,16 +9,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -31,8 +28,7 @@ import fi.finlit.edith.ui.services.ContentRenderer;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
-@IncludeStylesheet("context:styles/tei.css")
-@IncludeJavaScriptLibrary({ "classpath:jquery-1.4.1.js"})
+@Import(stylesheet = { "context:styles/tei.css" }, library = { "classpath:js/jquery-1.4.1.js" })
 @SuppressWarnings("unused")
 public class Publish extends AbstractDocument {
     @Inject

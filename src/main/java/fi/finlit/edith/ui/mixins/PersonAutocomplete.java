@@ -3,21 +3,22 @@ package fi.finlit.edith.ui.mixins;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import fi.finlit.edith.domain.Person;
 
-@IncludeJavaScriptLibrary({ "person-autocomplete.js" })
+@Import(library = { "person-autocomplete.js" })
 public class PersonAutocomplete extends JQueryAutocomplete {
 
     @Override
-    protected void init(String elementId, String ajaxURI, RenderSupport renderSupport) {
+    protected void init(String elementId, String ajaxURI, JavaScriptSupport renderSupport) {
         super.init(elementId, ajaxURI, renderSupport);
         // Hooking our own function
-        renderSupport.addInit("personAutocompleter", new JSONArray().put(elementId));
+        renderSupport.addInitializerCall("personAutocompleter", new JSONObject("elementId",
+                elementId));
     }
 
     @Override

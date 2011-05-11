@@ -14,9 +14,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.EventContext;
-import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.annotations.Environmental;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Grid;
@@ -33,7 +31,7 @@ import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.TermRepository;
 
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js", "deleteDialog.js" })
+@Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
 public class DictionarySearch {
 
     @Property
@@ -63,9 +61,6 @@ public class DictionarySearch {
     private DocumentNoteRepository documentNoteRepository;
 
     private Map<Note, Collection<DocumentNote>> documentNotes;
-
-    @Environmental
-    private RenderSupport support;
 
     void onActivate(EventContext ctx) {
         if (ctx.getCount() >= 1) {

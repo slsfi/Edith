@@ -19,14 +19,13 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class Crawler extends Selenium  {
+public abstract class Crawler extends Selenium {
 
     private static final Logger logger = LoggerFactory.getLogger(Crawler.class);
 
-
     private static final String USERNAME = "vesa";
     private static final String PASSWORD = "vesa";
-    
+
     @Test
     public void BrowsePages() throws Exception {
         get("/login");
@@ -53,9 +52,14 @@ public abstract class Crawler extends Selenium  {
         while (!links.isEmpty()) {
             String current = links.pop();
             current = current.startsWith("/") ? current : "/" + current;
-            // FIXME We are skipping URLs that contain ".." because they break in HtmlUnit.
-            // Find out why such URLs are constructed.
-            if (visited.contains(current) || current.contains("..")) {
+
+            if (visited.contains(current)) {
+                continue;
+            }
+            if (current.contains("..")) {
+                // FIXME We are skipping URLs that contain ".." because they break in HtmlUnit.
+                // Find out why such URLs are constructed.
+                logger.warn("Skipping url that contains .. :" + current);
                 continue;
             }
             result.add(current);
@@ -67,6 +71,10 @@ public abstract class Crawler extends Selenium  {
             }
             for (WebElement element : findElements(By.tagName("a"))) {
                 String href = null;
+                if (element.getAttribute("href") == null) {
+                    logger.warn("A-tag without href found: " + element.getText());
+                    continue;
+                }
                 try {
                     href = URLDecoder.decode(element.getAttribute("href"), "UTF-8");
                 } catch (UnsupportedEncodingException e) {
