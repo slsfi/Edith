@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.MethodRule;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,6 +18,8 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.JettyHelper;
 import com.mysema.commons.jetty.WebappStarter;
+
+import fi.finlit.edith.testutil.SystemPropertyCheckRule;
 
 public abstract class Selenium {
 
@@ -33,6 +38,20 @@ public abstract class Selenium {
         p.setPreference("intl.accept_languages", locales());
         return p;
     }
+
+    public boolean webtestMode() {
+        return System.getProperty("webtest") != null;
+    }
+
+    @Before
+    public void before() {
+        if (webtestMode()) {
+            startSelenium();
+        }
+    }
+    
+    @Rule
+    public MethodRule rule = new SystemPropertyCheckRule("webtest");
 
     public void startSelenium() {
 

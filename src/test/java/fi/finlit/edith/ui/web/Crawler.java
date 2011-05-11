@@ -26,7 +26,7 @@ public abstract class Crawler extends Selenium  {
 
     private static final String USERNAME = "vesa";
     private static final String PASSWORD = "vesa";
-
+    
     @Test
     public void BrowsePages() throws Exception {
         get("/login");
@@ -59,9 +59,9 @@ public abstract class Crawler extends Selenium  {
                 continue;
             }
             result.add(current);
-            driver.get(current);
+            logger.debug("About to visit page: " + current);
+            get(current);
             visited.add(current);
-            logger.debug(driver.getCurrentUrl());
             if (title().contains("Exception")) {
                 fail(currentUrl() + " contained an exception!");
             }
