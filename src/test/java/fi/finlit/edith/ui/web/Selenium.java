@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.MethodRule;
@@ -23,11 +24,11 @@ import fi.finlit.edith.testutil.SystemPropertyCheckRule;
 
 public abstract class Selenium {
 
-    public WebDriver driver;
+    private static WebDriver driver;
 
     public abstract WebappStarter starter();
 
-    public JettyConfig config;
+    private static JettyConfig config;
 
     public String locales() {
         return "fi,sv,en";
@@ -39,42 +40,27 @@ public abstract class Selenium {
         return p;
     }
 
-    public boolean webtestMode() {
+    private boolean webtestMode() {
         return System.getProperty("webtest") != null;
     }
 
     @Before
-    public void before() {
-        if (webtestMode()) {
-            startSelenium();
+    public void beforeClass() throws Exception {
+        if (webtestMode() && driver == null) {
+            config = starter().start();
+            driver = new FirefoxDriver(profile());
         }
+    }
+    
+    @AfterClass
+    public static void afterClass() {
+        driver.close();
+        driver = null;
+        JettyHelper.stopJettyAtPort(config.port);
     }
     
     @Rule
     public MethodRule rule = new SystemPropertyCheckRule("webtest");
-
-    public void startSelenium() {
-
-        if (driver == null) {
-
-            try {
-                config = starter().start();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            driver = new FirefoxDriver(profile());
-
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                public void run() {
-                    driver.close();
-                    JettyHelper.stopJettyAtPort(config.port);
-                    driver = null;
-                }
-            });
-
-        }
-    }
 
     public String path() {
         return "http://127.0.0.1:" + config.port;
@@ -102,7 +88,6 @@ public abstract class Selenium {
 
     public WebElement findElement(String cssSelector) {
         return driver.findElement(byCss(cssSelector));
-
     }
 
     public List<WebElement> findElements(By by) {

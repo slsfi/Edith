@@ -7,14 +7,14 @@ package fi.finlit.edith.ui.pages.document;
 
 import java.util.List;
 
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 
-@IncludeStylesheet("context:styles/tei.css")
+@Import(stylesheet="context:styles/tei.css")
 @SuppressWarnings("unused")
 public class View extends AbstractDocument {
 

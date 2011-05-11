@@ -12,6 +12,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
 
+@SuppressWarnings("unused")
 public class Dashboard extends AuthAwarePanel{
 
     @Inject

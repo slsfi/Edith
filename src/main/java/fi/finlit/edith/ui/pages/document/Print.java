@@ -5,9 +5,9 @@
  */
 package fi.finlit.edith.ui.pages.document;
 
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 
-@IncludeStylesheet({
+@Import(stylesheet={
     "context:styles/base.css",
     "context:styles/edith.css",
     "context:styles/tei.css"
