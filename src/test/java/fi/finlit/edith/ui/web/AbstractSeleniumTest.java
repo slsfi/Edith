@@ -77,6 +77,10 @@ public abstract class AbstractSeleniumTest {
     public String title() {
         return driver.getTitle();
     }
+    
+    public String pageSource() {
+        return driver.getPageSource();
+    }
 
     public WebElement findByLinkText(String linkText) {
         return driver.findElement(By.linkText(linkText));

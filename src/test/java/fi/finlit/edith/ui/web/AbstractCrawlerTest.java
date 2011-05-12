@@ -68,7 +68,8 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
             get(current);
             visited.add(current);
             if (title().contains("Exception")) {
-                fail(currentUrl() + " contained an exception : " + title());
+                System.err.println(pageSource());
+                fail(currentUrl() + " contained an exception.");
             }
             for (WebElement element : findElements(By.tagName("a"))) {
                 String href = null;
@@ -81,8 +82,7 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
                 }
-                if (href != null && !href.startsWith("mailto:") && !href.startsWith("http")
-                        && !href.contains("#")) {
+                if (href != null && !href.startsWith("mailto:") && !href.startsWith("http") && !href.contains("#") && !href.contains("t:ac")) {
                     links.add(href);
                 }
             }
