@@ -8,7 +8,7 @@ public class SLSCrawlerTest extends AbstractCrawlerTest {
 
     @Override
     public WebappStarter starter() {
-        return new SLSEdithDebugStart("target/sls-test/", 8090);
+        return SLSEdithDebugStart.test();
     }
 
 }

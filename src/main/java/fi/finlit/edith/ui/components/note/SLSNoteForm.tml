@@ -1,0 +1,163 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<t:content>
+		<t:form t:id="noteEditForm" t:zone="editZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]">
+			<t:errors />
+			
+			<div>
+                <div>
+                    <strong>${message:longText-label}</strong>
+                </div>
+                <div>
+                    <div id="longTextEdit">${noteOnEdit.longText}</div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <div>
+                    <strong>${message:lemma-label}</strong>
+                </div>
+                <div>
+                    <t:textField value="noteOnEdit.note.lemma" />
+                </div>
+            </div>
+            
+            <div>
+                <div>
+                    <strong>${message:lemmaPosition-label}</strong>
+                </div>
+                <div>
+                    <t:textField value="noteOnEdit.lemmaPosition" />
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <strong>${message:linkedNotes}</strong>
+                </div>
+                <div>
+                    TBD
+                </div>
+            </div>
+            
+            <div class="note">
+                <div>
+                    <strong>${message:type-label}</strong>
+                </div>
+                <div>
+                    <t:loop source="types" value="type">
+                        <div>
+                        <label>
+                            <t:checkbox value="selected" />
+                            <t:fmt.message key="${type}" />
+                            </label>
+                        </div>
+                    </t:loop>
+                </div>
+            </div>
+
+            <div class="note">
+                <div>
+                    <strong>${message:basicForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="termInstances"/>)</span>
+                </div>
+                <div>
+                    <t:textField t:id="termId" value="termOnEdit.id" style="display: none;"/>
+                </div>
+                <div>
+                    <t:textField t:id="basicForm" value="termOnEdit.basicForm"
+                        t:mixins="termAutocomplete" />
+                </div>
+            </div>
+
+            <div class="note">
+                <div>${message:basicFormMeaning-label}</div>
+                <div>
+                    <t:textArea rows="1" t:id="termMeaning" value="termOnEdit.meaning" />
+                </div>
+            </div>
+            
+            <div class="note">
+                <div>${message:basicFormLanguage-label}</div>
+                <div>
+                    <t:select t:id="language" />
+                </div>
+            </div>
+            
+            <div class="note">
+                <div>
+                    <strong>${message:description-label}</strong>
+                </div>
+                <div>
+                    <t:textArea value="description" rows="8" />
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <strong>${message:linkTo-label}</strong>
+                </div>
+                <div>
+                   TBD
+                </div>
+            </div>
+            
+            <div class="note">
+                <div>
+                    <strong>${message:sources-label}</strong>
+                </div>
+                <div>
+                    <t:textField value="sources" rows="8" />
+                </div>
+            </div>
+
+
+			<div>
+				<div>
+					<strong>${message:status-label}</strong>
+				</div>
+				<div>
+					<t:select model="statusModel" value="status" />
+				</div>
+			</div>
+			
+			<div class="note">
+			    <div><label><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</label></div>
+			</div>
+			
+			<div>
+				<div></div>
+				<div>
+					<a id="longTextEditLink" href="#">${message:updateLink}</a>
+				</div>
+			</div>
+
+			
+			<t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection" />
+			<t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId" />
+			<t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId" />
+			<t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
+			<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
+
+			<input type="submit" value="${message:saveNote}" />
+
+            <t:if test="noteOnEdit.id">
+            <div class="delete">
+                <button class="delete_question">${message:deleteNote}</button>
+                <span class="delete_dialog">
+                    ${message:deleteNote}
+                    <t:eventlink t:event="delete" t:zone="editZone" context="noteOnEdit.id">${message:yes}</t:eventlink>
+                    /
+                    <a href="" class="delete_decline">${message:no}</a>
+                </span>
+            </div>
+            </t:if>
+			<t:if test="submitSuccess">
+				<!-- This could be externalized? -->
+				<script type="text/javascript">
+					jQuery(function() {
+					jQuery("#submit_success_info").fadeOut(3000);
+					});</script>
+				<p id="submit_success_info">${message:submit-success}</p>
+			</t:if>
+		</t:form>
+	</t:content>
+</html>

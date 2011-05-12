@@ -1,6 +1,5 @@
 package fi.finlit.edith.ui.components.note;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +10,6 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
-import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
@@ -24,22 +22,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.NoteStatus;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.PersonRepository;
-import fi.finlit.edith.ui.services.PlaceRepository;
 import fi.finlit.edith.ui.services.TermRepository;
 import fi.finlit.edith.ui.services.TimeService;
 
 @SuppressWarnings("unused")
-public class NoteForm {
+public abstract class AbstractNoteForm {
 
     private static final String EDIT_ZONE = "editZone";
 
-    private static final Logger logger = LoggerFactory.getLogger(NoteForm.class);
-
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    
     @Parameter
     @Property
     private Block closeDialog;
@@ -73,33 +78,19 @@ public class NoteForm {
     @Parameter
     private Block documentView;
 
-    @Inject
-    @Property
-    private Block editPersonForm;
-
-    @Inject
-    @Property
-    private Block editPlaceForm;
-
     @Parameter
     private Block errorBlock;
 
     @Parameter
     private String infoMessage;
 
-    @Property
-    private NameForm loopPerson;
-
-    @Property
-    private NameForm loopPlace;
-
+    
     @Inject
     private Messages messages;
 
     @Parameter
     private Block noteEdit;
 
-    @Property
     @Parameter
     private DocumentNote noteOnEdit;
 
@@ -109,30 +100,6 @@ public class NoteForm {
     @Parameter
     @Property
     private Block notesList;
-
-    private Person person;
-
-    @Property
-    private String personId;
-
-    @Inject
-    private PersonRepository personRepository;
-
-    @InjectComponent
-    @Property
-    private Zone personZone;
-
-    private Place place;
-
-    @Property
-    private String placeId;
-
-    @Inject
-    private PlaceRepository placeRepository;
-
-    @InjectComponent
-    @Property
-    private Zone placeZone;
 
     @Property
     private boolean saveAsNew;
@@ -177,87 +144,23 @@ public class NoteForm {
     public NoteFormat getFormat() {
         return noteOnEdit.getNote().getFormat();
     }
+    
+    public DocumentNote getNoteOnEdit() {
+        return noteOnEdit;
+    }
+    
+    public void setNoteOnEdit(DocumentNote noteOnEdit) {
+        this.noteOnEdit = noteOnEdit;
+    }
+    
+    protected DocumentNoteRepository getDocumentNoteRepository() {
+        return documentNoteRepository;
+    }
 
     public TermLanguage getLanguage() {
         return termOnEdit.getLanguage();
     }
 
-    public String getNormalizedDescription() {
-        if (isPerson()) {
-            return getPerson().getNormalizedForm().getDescription();
-        }
-        return null;
-    }
-
-    public String getNormalizedFirst() {
-        if (isPerson()) {
-            return getPerson().getNormalizedForm().getFirst();
-        }
-        return null;
-    }
-
-    public String getNormalizedLast() {
-        if (isPerson()) {
-            return getPerson().getNormalizedForm().getLast();
-        }
-        return null;
-    }
-
-    public String getNormalizedPlaceDescription() {
-        if (isPlace()) {
-            return getPlace().getNormalizedForm().getDescription();
-        }
-        return null;
-    }
-
-    public String getNormalizedPlaceName() {
-        if (isPlace()) {
-            return getPlace().getNormalizedForm().getName();
-        }
-        return null;
-    }
-
-    private Person getPerson() {
-        if (personId != null) {
-            return personRepository.getById(personId);
-        }
-        return person;
-    }
-
-    public int getPersonInstances() {
-        if (isPerson()) {
-            return documentNoteRepository.getOfPerson(getPerson().getId()).size();
-        }
-        return 0;
-    }
-
-    public Set<NameForm> getPersons() {
-        if (isPerson()) {
-            return getPerson().getOtherForms();
-        }
-        return new HashSet<NameForm>();
-    }
-
-    private Place getPlace() {
-        if (placeId != null) {
-            return placeRepository.getById(placeId);
-        }
-        return place;
-    }
-
-    public int getPlaceInstances() {
-        if (isPlace()) {
-            return documentNoteRepository.getOfPlace(getPlace().getId()).size();
-        }
-        return 0;
-    }
-
-    public Set<NameForm> getPlaces() {
-        if (isPlace()) {
-            return getPlace().getOtherForms();
-        }
-        return new HashSet<NameForm>();
-    }
 
     public String getSearch() {
         return "";
@@ -293,65 +196,16 @@ public class NoteForm {
         return 0;
     }
 
-    public String getTimeOfBirth() {
-        if (isPerson() && getPerson().getTimeOfBirth() != null) {
-            return getPerson().getTimeOfBirth().asString();
-        }
-        return null;
-    }
-
-    public String getTimeOfDeath() {
-        if (isPerson() && getPerson().getTimeOfDeath() != null) {
-            return getPerson().getTimeOfDeath().asString();
-        }
-        return null;
-    }
-
     public NoteType[] getTypes() {
         return NoteType.values();
     }
 
-    public boolean isPerson() {
-        if (person == null && personId != null) {
-            person = personRepository.getById(personId);
-        }
-        return person != null;
-    }
-
-    public boolean isPlace() {
-        if (place == null && placeId != null) {
-            place = placeRepository.getById(placeId);
-        }
-        return place != null;
-    }
+  
 
     public boolean isSelected() {
         return getSelectedTypes().contains(type);
     }
 
-    Object onEditPerson(String id) {
-        personId = id;
-        return editPersonForm;
-    }
-
-    Object onEditPlace(String id) {
-        placeId = id;
-        return editPlaceForm;
-    }
-
-    Object onPerson(String id) {
-        if (!isPerson()) {
-            setPerson(personRepository.getById(id));
-        }
-        return personZone.getBody();
-    }
-
-    Object onPlace(String id) {
-        if (!isPlace()) {
-            setPlace(placeRepository.getById(id));
-        }
-        return placeZone.getBody();
-    }
 
     void onPrepareFromNoteEditForm(String noteId, String docNoteId) {
         System.err.println("noteForm.onPrepareFromNoteEditForm " + noteId + " " + docNoteId);
@@ -369,13 +223,7 @@ public class NoteForm {
                 noteOnEdit.setSVNRevision(documentRevision.getRevision());
             }
         }
-
-        if (!isPerson()) {
-            setPerson(noteOnEdit.getNote().getPerson());
-        }
-        if (!isPlace()) {
-            setPlace(noteOnEdit.getNote().getPlace());
-        }
+        
         termOnEdit = getEditTerm(noteOnEdit.getNote());
         System.err.println("noteForm.onPrepareFromNoteEditForm --");
     }
@@ -384,19 +232,9 @@ public class NoteForm {
         return termRepository.findByStartOfBasicForm(partial, 10);
     }
 
-    Collection<Person> onProvideCompletionsFromPerson(String partial) {
-        return personRepository.findByStartOfFirstAndLastName(partial, 10);
-    }
-
-    Collection<Place> onProvideCompletionsFromPlace(String partial) {
-        return placeRepository.findByStartOfName(partial, 10);
-    }
-
+   
     Object onSuccessFromNoteEditForm() {
         DocumentNote documentNote;
-        noteOnEdit.getNote().setPerson(getPerson());
-        noteOnEdit.getNote().setPlace(getPlace());
-
 
         logger.info("onSuccessFromNoteEditForm begins with documentNote " + noteOnEdit + ", note "
                 + noteOnEdit.getNote());
@@ -469,19 +307,7 @@ public class NoteForm {
         termOnEdit.setLanguage(language);
     }
 
-    private void setPerson(Person person) {
-        this.person = person;
-        if (isPerson()) {
-            personId = person.getId();
-        }
-    }
-
-    private void setPlace(Place place) {
-        this.place = place;
-        if (isPlace()) {
-            placeId = place.getId();
-        }
-    }
+ 
 
     public void setSearch(String s) {
         // Do nothing

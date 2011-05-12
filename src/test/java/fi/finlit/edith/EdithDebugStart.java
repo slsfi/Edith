@@ -23,6 +23,7 @@ public final class EdithDebugStart extends WebappStarter {
         new EdithDebugStart("target/sks-dev/", 8080).start();
     }
     
+    
     public EdithDebugStart(String root, int port) {
         this.root = root;
         this.port = port;

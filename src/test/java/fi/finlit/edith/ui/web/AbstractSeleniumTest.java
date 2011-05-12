@@ -1,9 +1,12 @@
 package fi.finlit.edith.ui.web;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.net.ConnectException;
+import java.net.URL;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -29,6 +32,8 @@ public abstract class AbstractSeleniumTest {
     public abstract WebappStarter starter();
 
     private static JettyConfig config;
+    
+    private static boolean externalJetty = false;
 
     public String locales() {
         return "fi,sv,en";
@@ -47,8 +52,24 @@ public abstract class AbstractSeleniumTest {
     @Before
     public void beforeClass() throws Exception {
         if (webtestMode() && driver == null) {
-            config = starter().start();
+            long start = System.currentTimeMillis();
             driver = new FirefoxDriver(profile());
+            System.out.println("Firefox driver start took " + (System.currentTimeMillis() - start));
+
+            config = starter().configure();
+            
+            //Try if there is jetty running on our port already
+            try {
+                new URL(path() + "/").getContent();
+                System.out.println("Jetty already running on port " + config.port);
+                externalJetty = true;
+                return;
+            } catch(ConnectException e) {
+                //No jetty, start it then
+            }
+            
+            starter().start();
+            
         }
     }
     
@@ -56,7 +77,9 @@ public abstract class AbstractSeleniumTest {
     public static void afterClass() {
         driver.close();
         driver = null;
-        JettyHelper.stopJettyAtPort(config.port);
+        if (!externalJetty) {
+            JettyHelper.stopJettyAtPort(config.port);
+        }
     }
     
     @Rule
@@ -116,6 +139,13 @@ public abstract class AbstractSeleniumTest {
 
     public void assertLink(String linkText) {
         assertNotNull("Link text not found: " + linkText, findByLinkText(linkText));
+    }
+
+    public void assertContainsText(WebElement element, String expected) {
+        assertNotNull(element);
+        assertTrue("Element [" + element.getText() + "] does not contain text [" + expected + "]",
+                element.getText().contains(expected));
+
     }
 
 }

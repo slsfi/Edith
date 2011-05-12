@@ -27,6 +27,17 @@ public class SLSAnnotateTest extends AbstractSeleniumTest {
         // Open nummisuutarit_simp.xml
         findElement("a[href='/document/annotate/12']").click();
         assertTitleNot("Application Exception");
+
+        assertContainsText(findElement(By.id("document_links")), "Kommentarvy");
+        assertLink("Textvy");
+        assertLink("Publiceringsvy");
+    }
+
+    @Test
+    public void New_Note_Can_Be_Created() {
+        
+        
+        
         
     }
 
@@ -37,7 +48,7 @@ public class SLSAnnotateTest extends AbstractSeleniumTest {
 
     @Override
     public WebappStarter starter() {
-        return new SLSEdithDebugStart("target/sls-test/", 8090);
+        return SLSEdithDebugStart.test();
     }
 
 }

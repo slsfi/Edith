@@ -173,46 +173,46 @@
                         });
                 		</script>
 
-						<script type="text/javascript">
-							var hideBasedOnFormat = function() {
-							    var type = jQuery("select[name='format']").val();
-							    jQuery("#editZone .note").hide();
-							    jQuery("#editZone .place").hide();
-							    jQuery("#editZone .person").hide();
-							    if (type == "NOTE") {
-  							        jQuery("#editZone .note").show();
-							    } else if (type == "PLACE") {
-							        jQuery("#editZone .place").show();
-							    } else if (type == "PERSON") {
-							        jQuery("#editZone .person").show();
-							    }
-							}
-
-							hideBasedOnFormat();
-
-							jQuery("select[name='format']").change(function() {
-							    hideBasedOnFormat();
-							});
-                    </script>
-						<t:note.noteForm							
-							noteOnEdit="noteOnEdit" 
-							termOnEdit="termOnEdit"
-							documentRevision="documentRevision"
-							createTermSelection="createTermSelection"
-							updateLongTextSelection="updateLongTextSelection"
-							infoMessage="infoMessage"
-							selectedNotes="selectedNotes"
-							comments="comments"
-							searchInfo="searchInfo"
-							documentNotes="documentNotes"
-							notesList="notesList"
-							noteEdit="noteEdit"
-							errorBlock="errorBlock"
-							documentView="documentView"
-							commentZone="commentZone"
-							personForm="personForm"
-							placeForm="placeForm"
-							closeDialog="closeDialog"/> 
+                     <t:if test="slsMode">
+                         <t:note.SLSNoteForm                            
+                            noteOnEdit="noteOnEdit" 
+                            termOnEdit="termOnEdit"
+                            documentRevision="documentRevision"
+                            createTermSelection="createTermSelection"
+                            updateLongTextSelection="updateLongTextSelection"
+                            infoMessage="infoMessage"
+                            selectedNotes="selectedNotes"
+                            comments="comments"
+                            searchInfo="searchInfo"
+                            documentNotes="documentNotes"
+                            notesList="notesList"
+                            noteEdit="noteEdit"
+                            errorBlock="errorBlock"
+                            documentView="documentView"
+                            commentZone="commentZone"
+                            />
+                     <p:else>
+                        <t:note.SKSNoteForm                            
+                            noteOnEdit="noteOnEdit" 
+                            termOnEdit="termOnEdit"
+                            documentRevision="documentRevision"
+                            createTermSelection="createTermSelection"
+                            updateLongTextSelection="updateLongTextSelection"
+                            infoMessage="infoMessage"
+                            selectedNotes="selectedNotes"
+                            comments="comments"
+                            searchInfo="searchInfo"
+                            documentNotes="documentNotes"
+                            notesList="notesList"
+                            noteEdit="noteEdit"
+                            errorBlock="errorBlock"
+                            documentView="documentView"
+                            commentZone="commentZone"
+                            personForm="personForm"
+                            placeForm="placeForm"
+                            closeDialog="closeDialog"/>
+                     </p:else>
+                     </t:if> 
 					</div>
 				</div>
 			</t:if>

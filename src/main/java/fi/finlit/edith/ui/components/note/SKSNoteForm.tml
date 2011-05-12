@@ -1,5 +1,28 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 	<t:content>
+	   <script type="text/javascript">
+	       var hideBasedOnFormat = function() {
+	           var type = jQuery("select[name='format']").val();
+	           jQuery("#editZone .note").hide();
+	           jQuery("#editZone .place").hide();
+	           jQuery("#editZone .person").hide();
+	           if (type == "NOTE") {
+	               jQuery("#editZone .note").show();
+	           } else if (type == "PLACE") {
+	               jQuery("#editZone .place").show();
+	           } else if (type == "PERSON") {
+	               jQuery("#editZone .person").show();
+	           }
+	       }
+	
+	       hideBasedOnFormat();
+	
+	       jQuery("select[name='format']").change(function() {
+	           hideBasedOnFormat();
+	       });
+        </script>
+	
+	
 		<t:form t:id="noteEditForm" t:zone="editZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]">
 			<t:errors />
 			<div>
