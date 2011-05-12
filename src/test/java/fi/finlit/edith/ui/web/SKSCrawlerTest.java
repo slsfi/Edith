@@ -8,7 +8,7 @@ public class SKSCrawlerTest extends AbstractCrawlerTest{
     
     @Override
     public WebappStarter starter() {
-        return new EdithDebugStart("target/sks-test/", 8090);
+        return new EdithDebugStart("target/sks-test/", 8091);
     }
 
 }
