@@ -19,11 +19,12 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class Crawler extends Selenium {
+public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(Crawler.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractCrawlerTest.class);
 
     private static final String USERNAME = "vesa";
+    
     private static final String PASSWORD = "vesa";
 
     @Test

@@ -4,12 +4,11 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.WebappStarter;
 
 import fi.finlit.edith.SLSEdithDebugStart;
 
-public class SLSAnnotateTest extends Selenium {
+public class SLSAnnotateTest extends AbstractSeleniumTest {
 
     @Test
     public void Texts_Are_In_Swedish_Locale() {
@@ -38,15 +37,7 @@ public class SLSAnnotateTest extends Selenium {
 
     @Override
     public WebappStarter starter() {
-        return new SLSEdithDebugStart() {
-            @Override
-            public JettyConfig configure() throws Exception {
-                root = "target/sls-test/";
-                return super.configure().setPort(8090);
-            }
-
-        };
+        return new SLSEdithDebugStart("target/sls-test/", 8090);
     }
-
 
 }

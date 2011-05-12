@@ -13,12 +13,19 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.WebappStarter;
 
-public class EdithDebugStart extends WebappStarter {
+public final class EdithDebugStart extends WebappStarter {
 
-    protected String root = "target/sks-dev/";
+    private final String root;
+    
+    private final int port;
     
     public static void main(String[] args) throws Exception {
-        new EdithDebugStart().start();
+        new EdithDebugStart("target/sks-dev/", 8080).start();
+    }
+    
+    public EdithDebugStart(String root, int port) {
+        this.root = root;
+        this.port = port;
     }
 
     @Override
@@ -32,7 +39,7 @@ public class EdithDebugStart extends WebappStarter {
         System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
 
         System.setProperty(EDITH.EXTENDED_TERM, "false");
-        return new JettyConfig(8080);
+        return new JettyConfig(port);
     }
 
 }

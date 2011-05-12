@@ -22,7 +22,7 @@ import com.mysema.commons.jetty.WebappStarter;
 
 import fi.finlit.edith.testutil.SystemPropertyCheckRule;
 
-public abstract class Selenium {
+public abstract class AbstractSeleniumTest {
 
     private static WebDriver driver;
 

@@ -13,12 +13,19 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.WebappStarter;
 
-public class SLSEdithDebugStart extends WebappStarter {
+public final class SLSEdithDebugStart extends WebappStarter {
 
-    protected String root = "target/sls-dev/"; 
+    private final String root;
+    
+    private final int port;
     
     public static void main(String[] args) throws Exception {
-        new SLSEdithDebugStart().start();
+        new SLSEdithDebugStart("target/sls-dev/", 8080).start();
+    }
+    
+    public SLSEdithDebugStart(String root, int port) {
+        this.root = root;
+        this.port = port;
     }
 
     @Override
@@ -34,7 +41,7 @@ public class SLSEdithDebugStart extends WebappStarter {
 
         System.setProperty(EDITH.EXTENDED_TERM, "true");
         
-        return new JettyConfig(8080);
+        return new JettyConfig(port);
     }
 
 }
