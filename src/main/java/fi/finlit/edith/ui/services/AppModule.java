@@ -10,14 +10,12 @@ import java.util.Arrays;
 import nu.localhost.tapestry5.springsecurity.services.RequestInvocationDefinition;
 
 import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.SubModule;
-import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.ValueEncoderFactory;
 import org.springframework.security.providers.AuthenticationProvider;
 import org.springframework.security.providers.encoding.PasswordEncoder;
@@ -80,10 +78,14 @@ public final class AppModule {
         binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
     }
 
-    public static void contributeAlias(Configuration<AliasContribution<PasswordEncoder>> configuration ) {
-        configuration.add( AliasContribution.create(PasswordEncoder.class, new ShaPasswordEncoder() ) );
-    }
+//    public static void contributeAlias(Configuration<AliasContribution<PasswordEncoder>> configuration ) {
+//        configuration.add( AliasContribution.create(PasswordEncoder.class, new ShaPasswordEncoder() ) );
+//    }
 
+    public static void contributeServiceOverride(MappedConfiguration<Class<?>,Object> configuration) {
+      configuration.add(PasswordEncoder.class, new ShaPasswordEncoder());
+    }
+    
     public static void contributeProviderManager(
             OrderedConfiguration<AuthenticationProvider> configuration,
             @InjectService("DaoAuthenticationProvider") AuthenticationProvider daoAuthenticationProvider) {
@@ -109,22 +111,7 @@ public final class AppModule {
             configuration.add(cl, new EntityValueEncoderFactory(sessionFactory, rdfBeanConfiguration, cl));
         }
 
-        configuration.add(UserInfo.class, new ValueEncoderFactory<UserInfo>(){
-            @Override
-            public ValueEncoder<UserInfo> create(Class<UserInfo> type) {
-                return new ValueEncoder<UserInfo>(){
-                    @Override
-                    public String toClient(UserInfo value) {
-                        return value.getUsername();
-                    }
-                    @Override
-                    public UserInfo toValue(String clientValue) {
-                        return new UserInfo(clientValue);
-                    }
-                };
-            }
-
-        });
+        configuration.add(UserInfo.class, new UserInfoValueEncoderFactory());
     }
 
 

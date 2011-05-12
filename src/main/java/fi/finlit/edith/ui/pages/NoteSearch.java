@@ -12,7 +12,6 @@ import java.util.HashSet;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.EventContext;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
@@ -20,6 +19,7 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import com.mysema.tapestry.core.Context;
 
@@ -60,7 +60,7 @@ public class NoteSearch {
     private Asset stylesheet;
 
     @Environmental
-    private RenderSupport support;
+    private JavaScriptSupport support;
 
     private Collection<Note> selectedNotes;
 
@@ -72,7 +72,8 @@ public class NoteSearch {
     void addStylesheet() {
         // This is needed to have the page specific style sheet after
         // other css includes
-        support.addStylesheetLink(stylesheet, null);
+//        support.addStylesheetLink(stylesheet, null);
+        support.importStylesheet(stylesheet);
     }
 
     void onActionFromCancel() {

@@ -8,7 +8,7 @@ package fi.finlit.edith.ui.pages;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.ui.services.TermRepository;
 
 @SuppressWarnings("unused")
-@IncludeJavaScriptLibrary( { "classpath:jquery-1.4.1.js" })
+@Import(library="classpath:jquery-1.4.1.js" )
 public class AutocompleteTestPage {
 
     @Inject

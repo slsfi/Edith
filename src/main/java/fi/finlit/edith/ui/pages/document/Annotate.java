@@ -425,11 +425,11 @@ public class Annotate extends AbstractDocument {
     }
     
     private Note createNote() {
-        Note note = new Note();
+        Note n = new Note();
         if (slsMode) {
-            note.setTerm(new Term());
+            n.setTerm(new Term());
         }
-        return note;
+        return n;
     }
     
     public Concept getLoopNoteConcept() {
