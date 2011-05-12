@@ -76,7 +76,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         subversionService.initialize();
     }
 
-
     @Test
     public void AddDocument() throws IOException{
         File file = File.createTempFile("test", null);

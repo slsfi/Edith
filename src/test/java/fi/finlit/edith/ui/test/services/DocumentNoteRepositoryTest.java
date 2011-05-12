@@ -93,6 +93,27 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         }
         return count;
     }
+    
+    @Before
+    public void setUp() {
+        adminService.removeNotesAndTerms();
+
+        document = documentRepository.getDocumentForPath(testDocument);
+        List<RevisionInfo> revisions = documentRepository.getRevisions(document);
+        latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
+
+        docRev = document.getRevision(latestRevision);
+        noteRepository.createDocumentNote(createNote(), docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
+        noteRepository.createDocumentNote(createNote(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
+        noteRepository.createDocumentNote(createNote(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
+        noteRepository.createDocumentNote(createNote(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+
+        searchInfo = new DocumentNoteSearchInfo();
+        searchInfo.setCurrentDocument(document);
+
+        addExtraNote("testo");
+        addExtraNote("testo2");
+    }
 
     // TODO Is this desired behavior?
     @Test
@@ -141,7 +162,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getByLocalId() {
+    public void getByLocalId_Returns_NonNull_Result() {
         assertNotNull(documentNoteRepository.getByLocalId(docRev, "1"));
         assertNotNull(documentNoteRepository.getByLocalId(docRev, "2"));
         assertNotNull(documentNoteRepository.getByLocalId(docRev, "3"));
@@ -149,12 +170,12 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getOfDocument() {
+    public void getOfDocument_Resturns_Right_Amount_Of_Results() {
         assertEquals(4, documentNoteRepository.getOfDocument(docRev).size());
     }
 
     @Test
-    public void getOfDocument_with_note_updates() {
+    public void getOfDocument_With_Note_Updates() {
         assertEquals(4, documentNoteRepository.getOfDocument(docRev).size());
 
         for (DocumentNote documentNote : documentNoteRepository.getOfDocument(docRev)) {
@@ -167,12 +188,12 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void queryNotes() {
+    public void queryNotes_Returns_More_Than_Zero_Results() {
         assertTrue(documentNoteRepository.queryNotes("annoit").getAvailableRows() > 0);
     }
 
     @Test
-    public void queryNotes_sorting_is_case_insensitive() {
+    public void queryNotes_Sorting_Is_Case_Insensitive() {
         noteRepository.createDocumentNote(createNote(), docRev, "5", "a");
         noteRepository.createDocumentNote(createNote(), docRev, "6", "b");
         noteRepository.createDocumentNote(createNote(), docRev, "7", "A");
@@ -194,7 +215,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void Remove() {
+    public void Remove_Sets_Deleted_Flag() {
         DocumentNote documentNote = documentNoteRepository.getByLocalId(docRev, "1");
         documentNoteRepository.remove(documentNote);
         assertTrue(documentNoteRepository.getById(documentNote.getId()).isDeleted());
@@ -207,26 +228,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertTrue(documentNoteRepository.getById(documentNote.getId()).isDeleted());
     }
 
-    @Before
-    public void setUp() {
-        adminService.removeNotesAndTerms();
 
-        document = documentRepository.getDocumentForPath(testDocument);
-        List<RevisionInfo> revisions = documentRepository.getRevisions(document);
-        latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
-
-        docRev = document.getRevision(latestRevision);
-        noteRepository.createDocumentNote(createNote(), docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
-        noteRepository.createDocumentNote(createNote(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
-        noteRepository.createDocumentNote(createNote(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
-        noteRepository.createDocumentNote(createNote(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
-
-        searchInfo = new DocumentNoteSearchInfo();
-        searchInfo.setCurrentDocument(document);
-
-        addExtraNote("testo");
-        addExtraNote("testo2");
-    }
 
     @Test
     public void Store_And_Retrieve_Person_Note() {
