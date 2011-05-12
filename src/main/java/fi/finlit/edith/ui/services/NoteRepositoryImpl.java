@@ -129,15 +129,11 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             BooleanBuilder filter = new BooleanBuilder();
             Collection<String> usernames = new ArrayList<String>(searchInfo.getCreators().size());
             for (UserInfo userInfo : searchInfo.getCreators()) {
-                filter.or(note.concept().allEditors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
+                filter.or(note.concept(extendedTerm).allEditors.contains(userRepository.getUserInfoByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
             }
             // FIXME This is kind of useless except that we have broken data in production.
-            if (extendedTerm) {
-                filter.or(note.term().concept().lastEditedBy().username.in(usernames));   
-            } else {
-                filter.or(note.concept().lastEditedBy().username.in(usernames));    
-            }            
+            filter.or(note.concept(extendedTerm).lastEditedBy().username.in(usernames));
             filters.and(filter);
         }
 
@@ -150,12 +146,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (!searchInfo.getNoteTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : searchInfo.getNoteTypes()) {
-                if (extendedTerm) {
-                    filter.or(note.term().concept().types.contains(type));    
-                } else {
-                    filter.or(note.concept().types.contains(type));
-                }
-                
+                filter.or(note.concept(extendedTerm).types.contains(type));                
             }
             filters.and(filter);
         }
@@ -285,18 +276,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             comparable = note.editedOn;
             break;
         case USER:
-            if (extendedTerm) {
-                comparable = note.term().concept().lastEditedBy().username.toLowerCase();
-            } else {
-                comparable = note.concept().lastEditedBy().username.toLowerCase();    
-            }            
+            comparable = note.concept(extendedTerm).lastEditedBy().username.toLowerCase();
             break;
         case STATUS:
-            if (extendedTerm) {
-                comparable = note.term().concept().status.ordinal();
-            } else {
-                comparable = note.concept().status.ordinal();    
-            }            
+            comparable = note.concept(extendedTerm).status.ordinal();
             break;
         default:
             comparable = note.lemma.toLowerCase();
