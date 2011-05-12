@@ -98,7 +98,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void setUp() {
         adminService.removeNotesAndTerms();
 
-        document = documentRepository.getDocumentForPath(testDocument);
+        document = documentRepository.getOrCreateDocumentForPath(testDocument);
         List<RevisionInfo> revisions = documentRepository.getRevisions(document);
         latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 

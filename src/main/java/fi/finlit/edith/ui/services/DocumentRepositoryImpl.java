@@ -8,14 +8,18 @@ package fi.finlit.edith.ui.services;
 import static fi.finlit.edith.domain.QDocument.document;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.EventFilter;
@@ -29,6 +33,7 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -176,6 +181,37 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public void addDocument(String svnPath, File file) {
         svnService.importFile(svnPath, file);
+    }
+
+    @Override
+    public int addDocumentsFromZip(String parentSvnPath, File file) {
+        try {
+            String parent = parentSvnPath.endsWith("/") ? parentSvnPath : parentSvnPath + "/";
+            ZipFile zipFile = new ZipFile(file);
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            int rv = 0;
+            while (entries.hasMoreElements()) {
+                ZipEntry zipEntry = entries.nextElement();
+                if (!zipEntry.getName().endsWith(".xml")) {
+                    continue;
+                }
+                InputStream in = zipFile.getInputStream(zipEntry);
+                File outFile = File.createTempFile("tei", ".xml");
+                OutputStream out = new FileOutputStream(outFile);
+                try {
+                    IOUtils.copy(in, out);                       
+                } finally {
+                    in.close();
+                    out.close();
+                }
+                addDocument(parent + zipEntry.getName(), outFile);
+                outFile.delete();
+                rv++;
+            }
+            return rv;
+        } catch (IOException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
@@ -389,7 +425,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public Document getDocumentForPath(String svnPath) {
+    public Document getOrCreateDocumentForPath(String svnPath) {
         Assert.notNull(svnPath, "svnPath was null");
         Document doc = getDocumentMetadata(svnPath);
         if (doc == null) {
@@ -398,6 +434,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return doc;
     }
 
+    @Override
+    public Document getDocumentForPath(String svnPath) {
+        Assert.notNull(svnPath, "svnPath was null");
+        return getDocumentMetadata(svnPath);
+    }
+    
     private Document getDocumentMetadata(String svnPath) {
         return getSession().from(document)
             .where(document.svnPath.eq(svnPath))

@@ -30,6 +30,15 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @param file
      */
     void addDocument(String svnPath, File file);
+    
+    /**
+     * Import documents from the given ZIP file
+     * 
+     * @param parentSvnPath
+     * @param file
+     * @return amount of imported documents
+     */
+    int addDocumentsFromZip(String parentSvnPath, File file);
 
     /**
      * Add the given note for the given Document
@@ -43,8 +52,16 @@ public interface DocumentRepository extends Repository<Document, String> {
     DocumentNote addNote(Note note, DocumentRevision docRevision, SelectedText selection) throws IOException, NoteAdditionFailedException;
 
     /**
-     * Get a Document handle for the given path
+     * Get a Document handle for the given path or create a new one if none could be found
      *
+     * @param svnPath
+     * @return
+     */
+    Document getOrCreateDocumentForPath(String svnPath);
+    
+    /**
+     * Get a Document handle for the given path
+     * 
      * @param svnPath
      * @return
      */
@@ -112,11 +129,15 @@ public interface DocumentRepository extends Repository<Document, String> {
     DocumentNote updateNote(DocumentNote note, SelectedText selection) throws IOException;
 
     /**
+     * Remove the given document
+     * 
      * @param doc
      */
     void remove(Document doc);
 
     /**
+     * Remove the given documents
+     * 
      * @param documents
      */
     void removeAll(Collection<Document> documents);

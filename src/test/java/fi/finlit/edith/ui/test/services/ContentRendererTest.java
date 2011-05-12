@@ -46,31 +46,31 @@ public class ContentRendererTest extends AbstractServiceTest {
 
     @Test
     public void renderDocument() throws Exception {
-        renderer.renderDocument(documentRepository.getDocumentForPath(doc1).getRevision(-1), writer);
+        renderer.renderDocument(documentRepository.getOrCreateDocumentForPath(doc1).getRevision(-1), writer);
     }
 
     @Test
     public void renderDocumentAsXML() throws IOException, XMLStreamException{
         List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        renderer.renderDocumentAsXML(documentRepository.getDocumentForPath(doc2).getRevision(-1), docNotes, out);
+        renderer.renderDocumentAsXML(documentRepository.getOrCreateDocumentForPath(doc2).getRevision(-1), docNotes, out);
     }
 
     @Test
     public void renderPageLinks() throws Exception {
-        renderer.renderPageLinks(documentRepository.getDocumentForPath(doc1).getRevision(-1),
+        renderer.renderPageLinks(documentRepository.getOrCreateDocumentForPath(doc1).getRevision(-1),
                 writer);
     }
 
     @Test
     public void renderDocumentWithNotes() throws Exception {
-        renderer.renderDocument(documentRepository.getDocumentForPath(doc2).getRevision(-1), writer);
+        renderer.renderDocument(documentRepository.getOrCreateDocumentForPath(doc2).getRevision(-1), writer);
     }
 
     @Test
     public void renderDocumentNotesAsXML(){
         List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
-        renderer.renderDocumentNotesAsXML(documentRepository.getDocumentForPath(doc2).getRevision(-1), docNotes, writer);
+        renderer.renderDocumentNotesAsXML(documentRepository.getOrCreateDocumentForPath(doc2).getRevision(-1), docNotes, writer);
     }
 
     private DocumentNote createDocumentNote(NoteFormat noteFormat) {

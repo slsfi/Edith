@@ -39,7 +39,7 @@ public class PublishTest extends AbstractServiceTest{
     
     @Before
     public void setUp() throws IOException{
-        Document document = repository.getDocumentForPath(testDocument);
+        Document document = repository.getOrCreateDocumentForPath(testDocument);
         EventContext context = new ArrayEventContext(typeCoercer, new Object[]{document.getId()});
         publishPage.onActivate(context);
     }

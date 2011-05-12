@@ -129,7 +129,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void CreateNote() {
-        Document document = documentRepository.getDocumentForPath(testDocument);
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
 
         String longText = "two words";
         DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10",
@@ -140,7 +140,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void CreateNote_Note_With_The_Lemma_Already_Exists_Notes_Are_Same() {
-        Document document = documentRepository.getDocumentForPath(testDocument);
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
 
         String longText = "two words";
         DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10",
@@ -152,7 +152,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Find() {
-        Document document = documentRepository.getDocumentForPath(testDocument);
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "lid1234", "foobar");
         Note note = noteRepository.find("foobar");
         assertNotNull(note);
@@ -180,7 +180,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         String lemma = "riksi\u00E4";
         Note note = noteRepository.find(lemma);
         assertNotNull(note);
-        Document document = documentRepository.getDocumentForPath(testDocument);
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         DocumentNote documentNote = noteRepository.createDocumentNote(note, document.getRevision(-1), "123456",
                 lemma);
         assertNotNull(documentNote);
@@ -196,7 +196,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         String lemma = "riksi\u00E4";
         Note note = noteRepository.find(lemma);
         assertNotNull(note);
-        Document document = documentRepository.getDocumentForPath(testDocument);
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         DocumentNote documentNote = noteRepository.createDocumentNote(note, document.getRevision(-1), "123456",
                 lemma);
         assertNotNull(documentNote);
@@ -239,7 +239,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Remove() {
-        Document document = documentRepository.getDocumentForPath(testDocument);
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         List<RevisionInfo> revisions = documentRepository.getRevisions(document);
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
@@ -268,7 +268,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Remove_Based_On_Revision() {
-        Document document = documentRepository.getDocumentForPath(testDocument);
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         String longText = "two words";
         DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10", longText);
         List<NoteWithInstances> notes = noteRepository.query(new DocumentNoteSearchInfo(document));

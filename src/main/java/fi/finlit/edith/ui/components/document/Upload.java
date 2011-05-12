@@ -49,9 +49,15 @@ public class Upload {
         File tempFile = File.createTempFile("upload", null);
         try {
             file.write(tempFile);
-            String path = documentRoot + "/" + file.getFileName();
-            documentRepo.addDocument(path, tempFile);
-            message = messages.format("document-stored-msg", file.getFileName());
+            if (file.getFileName().endsWith(".zip")) {
+                int count = documentRepo.addDocumentsFromZip(documentRoot, tempFile);
+                message = messages.format("documents-stored-msg", file.getFileName());
+            } else {
+                String path = documentRoot + "/" + file.getFileName();
+                documentRepo.addDocument(path, tempFile);
+                message = messages.format("document-stored-msg", file.getFileName());    
+            }
+            
         } finally {
             if (!tempFile.delete()) {
                 logger.error("Delete of " + tempFile.getAbsolutePath() + " failed");

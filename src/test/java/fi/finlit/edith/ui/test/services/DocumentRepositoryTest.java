@@ -83,10 +83,22 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String targetPath = "/documents/" + UUID.randomUUID().toString();
         documentRepository.addDocument(targetPath, file);
 
-        Document document = documentRepository.getDocumentForPath(targetPath);
+        Document document = documentRepository.getOrCreateDocumentForPath(targetPath);
         assertFalse(documentRepository.getRevisions(document).isEmpty());
     }
 
+    @Test
+    public void AddDocuments_From_Zip() {
+        File file = new File("src/test/resources/tei.zip");
+        assertEquals(5, documentRepository.addDocumentsFromZip("/documents/parent", file));
+        
+        assertTrue(subversionService.getLatestRevision("/documents/parent/Kullervo.xml") > 0);
+        assertTrue(subversionService.getLatestRevision("/documents/parent/Nummisuutarit_100211.xml") > 0);
+        assertTrue(subversionService.getLatestRevision("/documents/parent/Nummisuutarit.xml") > 0);
+        assertTrue(subversionService.getLatestRevision("/documents/parent/Olviretki_Schleusingenissa_manuscript.xml") > 0);
+        assertTrue(subversionService.getLatestRevision("/documents/parent/xmlparsertest.xml") > 0);
+    }
+    
     @Test
     public void AddNote() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
@@ -149,12 +161,12 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     private Document getDocument(String path){
-        return documentRepository.getDocumentForPath(documentRoot + path);
+        return documentRepository.getOrCreateDocumentForPath(documentRoot + path);
     }
 
     @Test
     public void GetDocumentForPath() {
-        assertNotNull(documentRepository.getDocumentForPath("/documents/" + UUID.randomUUID().toString()));
+        assertNotNull(documentRepository.getOrCreateDocumentForPath("/documents/" + UUID.randomUUID().toString()));
     }
 
     @Test

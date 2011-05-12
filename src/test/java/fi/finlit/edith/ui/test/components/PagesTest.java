@@ -34,7 +34,7 @@ public class PagesTest extends AbstractServiceTest{
 
     @Test
     public void BeginRender() throws XMLStreamException, IOException{
-        Document document = documentRepository.getDocumentForPath(testDocument);
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         pages.setDocument(document.getRevision(-1));
 
         MarkupWriter writer = new MarkupWriterImpl();
