@@ -40,6 +40,7 @@ import fi.finlit.edith.domain.UserInfo;
  */
 @SubModule( { DataModule.class, ServiceModule.class })
 public final class AppModule {
+    
     private AppModule() {}
 
     public static void contributeApplicationDefaults(

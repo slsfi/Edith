@@ -56,8 +56,7 @@ public class JQueryAutocomplete {
     }
 
     protected void init(String elementId, String ajaxURI, JavaScriptSupport support) {
-        support.addInitializerCall("jQueryAutocompleter", new JSONObject("elementId", elementId,
-                "url", ajaxURI));
+        support.addInitializerCall("jQueryAutocompleter", new JSONObject("elementId", elementId, "url", ajaxURI));
     }
 
     Object onJQueryAutocomplete() {

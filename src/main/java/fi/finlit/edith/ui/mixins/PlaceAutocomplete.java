@@ -17,8 +17,7 @@ public class PlaceAutocomplete extends JQueryAutocomplete {
     protected void init(String elementId, String ajaxURI, JavaScriptSupport renderSupport) {
         super.init(elementId, ajaxURI, renderSupport);
         // Hooking our own function
-        renderSupport.addInitializerCall("placeAutocompleter", new JSONObject("elementId",
-                elementId));
+        renderSupport.addInitializerCall("placeAutocompleter", elementId);
     }
 
     @Override

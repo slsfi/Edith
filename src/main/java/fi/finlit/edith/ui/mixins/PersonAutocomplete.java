@@ -17,8 +17,7 @@ public class PersonAutocomplete extends JQueryAutocomplete {
     protected void init(String elementId, String ajaxURI, JavaScriptSupport renderSupport) {
         super.init(elementId, ajaxURI, renderSupport);
         // Hooking our own function
-        renderSupport.addInitializerCall("personAutocompleter", new JSONObject("elementId",
-                elementId));
+        renderSupport.addInitializerCall("personAutocompleter", elementId);
     }
 
     @Override

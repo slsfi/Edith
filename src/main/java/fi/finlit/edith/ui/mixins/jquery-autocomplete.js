@@ -1,6 +1,6 @@
 jQuery.noConflict();
 
-Tapestry.Initializer.jQueryAutocompleter = function(elementId, url )
+Tapestry.Initializer.jQueryAutocompleter = function(config)
 {
-	jQuery("#" + elementId).autocomplete({ source: url });
+	jQuery("#" + config.elementId).autocomplete({ source: config.url });
 };

@@ -31,17 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.SelectedText;
-import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.NoteWithInstances;
@@ -319,7 +309,7 @@ public class Annotate extends AbstractDocument {
         if (notes.isEmpty()) {
             DocumentNote documentNote = null;
             try {
-                Note n = new Note();
+                Note n = createNote();
                 documentNote = getDocumentRepository().addNote(n, documentRevision,
                         createTermSelection);
             } catch (Exception e) {
@@ -390,7 +380,7 @@ public class Annotate extends AbstractDocument {
         DocumentRevision documentRevision = getDocumentRevision();
         try {
             if (noteId == null) {
-                documentNote = getDocumentRepository().addNote(new Note(), documentRevision,
+                documentNote = getDocumentRepository().addNote(createNote(), documentRevision,
                         createTermSelection);
             } else {
                 documentNote = getDocumentRepository().addNote(noteRepository.getById(noteId),
@@ -432,5 +422,29 @@ public class Annotate extends AbstractDocument {
 
     private enum DocumentNoteType {
         NORMAL, SEMI_ORPHAN, ORPHAN, ELSEWHERE;
+    }
+    
+    private Note createNote() {
+        Note note = new Note();
+        if (slsMode) {
+            note.setTerm(new Term());
+        }
+        return note;
+    }
+    
+    public Concept getLoopNoteConcept() {
+        return loopNote.getConcept(slsMode);
+    }
+    
+    public Concept getNoteConcept() {
+        return note.getConcept(slsMode);
+    }
+    
+    public Concept getNoteOnEditConcept() {
+        return noteOnEdit.getConcept(slsMode);
+    }
+    
+    public Concept getNoteWithInstancesConcept() {
+        return noteWithInstances.getNote().getConcept(slsMode);
     }
 }

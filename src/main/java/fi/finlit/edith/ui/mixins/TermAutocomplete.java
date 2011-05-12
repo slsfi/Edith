@@ -18,8 +18,7 @@ public class TermAutocomplete extends JQueryAutocomplete {
     protected void init(String elementId, String ajaxURI, JavaScriptSupport renderSupport) {
         super.init(elementId, ajaxURI, renderSupport);
         // Hooking our own function
-        renderSupport.addInitializerCall("termAutocompleter",
-                new JSONObject("elementId", elementId));
+        renderSupport.addInitializerCall("termAutocompleter", elementId);
     }
 
     @Override
