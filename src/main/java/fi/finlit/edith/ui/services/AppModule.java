@@ -67,20 +67,9 @@ public final class AppModule {
         configuration.add(new RequestInvocationDefinition("/**", "ROLE_USER"));
     }
 
-//    public static void contributeURLRewriter(
-//            OrderedConfiguration<URLRewriterRule> configuration,
-//            ComponentClassResolver componentResolver) {
-//        // strip "page" suffix off from page names
-//        configuration.add("pageMapping", new PageMappingRule(componentResolver));
-//    }
-
     public static void bind(ServiceBinder binder){
         binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
     }
-
-//    public static void contributeAlias(Configuration<AliasContribution<PasswordEncoder>> configuration ) {
-//        configuration.add( AliasContribution.create(PasswordEncoder.class, new ShaPasswordEncoder() ) );
-//    }
 
     public static void contributeServiceOverride(MappedConfiguration<Class<?>,Object> configuration) {
       configuration.add(PasswordEncoder.class, new ShaPasswordEncoder());
