@@ -54,8 +54,10 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     
     private final boolean extendedTerm;
 
-    public DocumentNoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, @Inject TimeService timeService,
+    public DocumentNoteRepositoryImpl(
+            @Inject SessionFactory sessionFactory,
+            @Inject UserRepository userRepository, 
+            @Inject TimeService timeService,
             @Inject SubversionService subversionService,
             @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
         super(sessionFactory, documentNote);
