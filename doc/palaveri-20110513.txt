@@ -1,0 +1,25 @@
+* Käyttöliittymäleiskat ulkopuoliselta graafikolta
+ * SLS selvittää kuka heistä voisi auttaa (Jarkko Hyppönen)
+
+* Virtuoso käyttöön (SKS, SLS)
+ * Jos OpenLink ei tarjoa korjausta sopivan nopeasti, hoidetaan korjaus toisella tavalla
+
+* SLS instanssin päivitys
+ * Niklas lomalla, Mikael auttaa asennus-tehtävissä
+ 
+* SLS : Viitteet-näkymä pois
+ 
+* SLS : TEI-dokumentti ladattavaksi
+ 
+* Accordeon näkymä viitteiden editointiin
+ 
+* Dokumenttien valinta Annotointi -sivulle
+ 
+* Vapaan tekstihakuun exact match tuki
+ 
+* Viitteiden esiintymisjärjestys luku ja julkaisunäkymässä
+ 
+* SLS Accordeon sisältö : Dokumentit, Haku, Tulokset, Esiintymät, Muokkaus
+
+* SKS Accordeon sisältö : Dokumentit, Haku, Tulokset, Muokkaus
+
