@@ -62,6 +62,7 @@ public class DocumentNote extends Identifiable {
         copy.setDeleted(deleted);
         copy.setLocalId(localId);
         copy.setLemmaPosition(lemmaPosition);
+        copy.setPublishable(publishable);
         return copy;
     }
 

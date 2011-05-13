@@ -44,7 +44,7 @@ import fi.finlit.edith.ui.services.TimeService;
         stylesheet= {"context:styles/tei.css"})
 @SuppressWarnings("unused")
 public class Annotate extends AbstractDocument {
-
+    
     private static final String EDIT_ZONE = "editZone";
 
     private static final Logger logger = LoggerFactory.getLogger(Annotate.class);
@@ -56,7 +56,7 @@ public class Annotate extends AbstractDocument {
     private NoteComment comment;
 
     @Property
-    private Set<NoteComment> comments;
+    private List<NoteComment> comments;
 
     @InjectComponent
     @Property
@@ -240,7 +240,7 @@ public class Annotate extends AbstractDocument {
     Object onDeleteComment(String noteId, String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
         noteOnEdit = documentNoteRepository.getById(noteId);
-        comments = noteOnEdit.getConcept(slsMode).getComments();
+        comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());        
         comments.remove(deletedComment);
         return commentZone.getBody();
     }
@@ -272,9 +272,9 @@ public class Annotate extends AbstractDocument {
         if (selectedNotes.size() > 0) {
             noteOnEdit = selectedNotes.get(0);
             termOnEdit = getEditTerm(noteOnEdit.getNote());
-            comments = noteOnEdit.getConcept(slsMode).getComments();
+            comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
         } else {
-            comments = Collections.<NoteComment> emptySet();
+            comments = Collections.<NoteComment> emptyList();
         }
         moreThanOneSelectable = selectedNotes.size() > 1;
         System.err.println("onEdit --");
@@ -291,9 +291,9 @@ public class Annotate extends AbstractDocument {
 
     Object onSuccessFromCommentForm() {
         System.err.println("onSuccessFromCommentForm");
-        comments = noteOnEdit.getConcept(slsMode).getComments();
+        comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
         if (newCommentMessage != null) {
-            comments.add(noteRepository.createComment(noteOnEdit.getConcept(slsMode), newCommentMessage));
+            comments.add(0, noteRepository.createComment(noteOnEdit.getConcept(slsMode), newCommentMessage));
             newCommentMessage = null;
         }
         System.err.println("onSuccessFromCommentForm --");
@@ -446,5 +446,11 @@ public class Annotate extends AbstractDocument {
     
     public Concept getNoteWithInstancesConcept() {
         return noteWithInstances.getNote().getConcept(slsMode);
+    }
+    
+    private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
+        List<NoteComment> rv = new ArrayList<NoteComment>(c);
+        Collections.sort(rv, NoteCommentComparator.DESC);
+        return rv;
     }
 }

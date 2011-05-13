@@ -22,16 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentRevision;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteFormat;
-import fi.finlit.edith.domain.NoteStatus;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.SelectedText;
-import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.domain.TermLanguage;
+import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
@@ -83,7 +74,6 @@ public abstract class AbstractNoteForm {
 
     @Parameter
     private String infoMessage;
-
     
     @Inject
     private Messages messages;
@@ -126,8 +116,7 @@ public abstract class AbstractNoteForm {
     @Property
     @Parameter
     private SelectedText updateLongTextSelection;
-    
-    
+        
     @Inject @Symbol(EDITH.EXTENDED_TERM)
     @Property
     private boolean extendedTerm;
@@ -306,8 +295,6 @@ public abstract class AbstractNoteForm {
     public void setLanguage(TermLanguage language) {
         termOnEdit.setLanguage(language);
     }
-
- 
 
     public void setSearch(String s) {
         // Do nothing

@@ -274,6 +274,20 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertTrue(content.contains(start(localId) + newText + end(localId)));
         // Täst<anchor xml:id="start1266836640612"/>ä<anchor xml:id="end1266836640612"/> rientää
     }
+    
+    @Test
+    public void UpdateNote_With_Publishable_State() throws IOException, NoteAdditionFailedException {
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        String element = "play-act-sp3-p";
+        String text = "\u00E4st";
+
+        DocumentNote noteRevision = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
+        noteRevision.setPublishable(true);
+        
+        String newText = "T\u00E4st\u00E4";
+        DocumentNote updatedRevision = documentRepository.updateNote(noteRevision, new SelectedText(element, element, newText));
+        assertTrue(updatedRevision.isPublishable());
+    }
 
     @Test(expected = RuntimeException.class)
     public void Remove() throws Exception {
