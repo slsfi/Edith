@@ -1,5 +1,6 @@
 package fi.finlit.edith.ui.components.note;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +42,7 @@ public abstract class AbstractNoteForm {
     private Block closeDialog;
 
     @Parameter
-    private Set<NoteComment> comments;
+    private List<NoteComment> comments;
 
     @Parameter
     private Zone commentZone;
@@ -264,7 +265,7 @@ public abstract class AbstractNoteForm {
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        comments = noteOnEdit.getConcept(extendedTerm).getComments();
+        comments = getSortedComments(noteOnEdit.getConcept(extendedTerm).getComments());
         submitSuccess = true;
 
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
@@ -332,5 +333,11 @@ public abstract class AbstractNoteForm {
             term = oldTerm;
         }
         documentNote.getNote().setTerm(term);
+    }
+    
+    private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
+        List<NoteComment> rv = new ArrayList<NoteComment>(c);
+        Collections.sort(rv, NoteCommentComparator.DESC);
+        return rv;
     }
 }

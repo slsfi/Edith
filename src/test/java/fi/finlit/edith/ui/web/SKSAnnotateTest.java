@@ -1,8 +1,6 @@
 package fi.finlit.edith.ui.web;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import com.mysema.commons.jetty.WebappStarter;
 
@@ -14,8 +12,7 @@ public class SKSAnnotateTest extends AbstractSeleniumTest {
     public void Submit_Annotate_Form() {
         login("lassi", "lassi");        
         get("/document/annotate/12");
-    
-        WebElement element = findElement(By.id("play-act-sp7-p"));
+
         // TODO
     }
 
