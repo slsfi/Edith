@@ -97,9 +97,8 @@ public class Concept extends Identifiable {
         this.subtextSources = subtextSourcesString;
     }
     
-    public Concept createCopy(String id){
+    public Concept createCopy(){
         Concept copy = new Concept();
-        copy.setId(id);
         Set<NoteComment> commentsCopy = new HashSet<NoteComment>();
         for (NoteComment comment : getComments()) {
             NoteComment copyOfComment = comment.copy();

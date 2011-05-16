@@ -1,6 +1,5 @@
 package fi.finlit.edith.ui.components.note;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -190,12 +189,9 @@ public abstract class AbstractNoteForm {
         return NoteType.values();
     }
 
-  
-
     public boolean isSelected() {
         return getSelectedTypes().contains(type);
     }
-
 
     void onPrepareFromNoteEditForm(String noteId, String docNoteId) {
         System.err.println("noteForm.onPrepareFromNoteEditForm " + noteId + " " + docNoteId);
@@ -240,7 +236,13 @@ public abstract class AbstractNoteForm {
         try {
             if (updateLongTextSelection.isValid()) {
                 logger.info("update long text selection: " + noteOnEdit);
-                documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);
+                if (saveAsNew) {
+                    Note newNote = noteOnEdit.getNote().createCopy();
+                    documentNote = documentRepository.addNote(newNote, documentRevision, updateLongTextSelection);
+                } else {
+                    documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);    
+                }
+                
             } else {
                 if (saveAsNew) {
                     logger.info("note saved as new: " + noteOnEdit);
@@ -265,7 +267,7 @@ public abstract class AbstractNoteForm {
         selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        comments = getSortedComments(noteOnEdit.getConcept(extendedTerm).getComments());
+        comments = NoteComment.getSortedComments(noteOnEdit.getConcept(extendedTerm).getComments());
         submitSuccess = true;
 
         return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
@@ -335,9 +337,4 @@ public abstract class AbstractNoteForm {
         documentNote.getNote().setTerm(term);
     }
     
-    private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
-        List<NoteComment> rv = new ArrayList<NoteComment>(c);
-        Collections.sort(rv, NoteCommentComparator.DESC);
-        return rv;
-    }
 }

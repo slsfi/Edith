@@ -162,7 +162,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getByLocalId_Returns_NonNull_Result() {
+    public void GetByLocalId_Returns_NonNull_Result() {
         assertNotNull(documentNoteRepository.getByLocalId(docRev, "1"));
         assertNotNull(documentNoteRepository.getByLocalId(docRev, "2"));
         assertNotNull(documentNoteRepository.getByLocalId(docRev, "3"));
@@ -170,12 +170,12 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getOfDocument_Resturns_Right_Amount_Of_Results() {
+    public void GetOfDocument_Resturns_Right_Amount_Of_Results() {
         assertEquals(4, documentNoteRepository.getOfDocument(docRev).size());
     }
 
     @Test
-    public void getOfDocument_With_Note_Updates() {
+    public void GetOfDocument_With_Note_Updates() {
         assertEquals(4, documentNoteRepository.getOfDocument(docRev).size());
 
         for (DocumentNote documentNote : documentNoteRepository.getOfDocument(docRev)) {
@@ -188,12 +188,12 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void queryNotes_Returns_More_Than_Zero_Results() {
+    public void QueryNotes_Returns_More_Than_Zero_Results() {
         assertTrue(documentNoteRepository.queryNotes("annoit").getAvailableRows() > 0);
     }
 
     @Test
-    public void queryNotes_Sorting_Is_Case_Insensitive() {
+    public void QueryNotes_Sorting_Is_Case_Insensitive() {
         noteRepository.createDocumentNote(createNote(), docRev, "5", "a");
         noteRepository.createDocumentNote(createNote(), docRev, "6", "b");
         noteRepository.createDocumentNote(createNote(), docRev, "7", "A");
@@ -220,7 +220,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         documentNoteRepository.remove(documentNote);
         assertTrue(documentNoteRepository.getById(documentNote.getId()).isDeleted());
     }
-
+    
     @Test
     public void Remove_By_Id() {
         DocumentNote documentNote = documentNoteRepository.getByLocalId(docRev, "1");
@@ -512,6 +512,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
         DocumentNote copyOfDocumentNote = documentNoteRepository.getById(documentNote.getId());
         Note copyOfNote = copyOfDocumentNote.getNote();
+        assertThat(copyOfNote.getId(), not(note.getId()));
         assertThat(copyOfNote, not(note));
         assertThat(copyOfNote.getConcept(extendedTerm).getDescription(), not(note.getConcept(extendedTerm).getDescription()));
         assertThat(copyOfNote.getFormat(), not(note.getFormat()));

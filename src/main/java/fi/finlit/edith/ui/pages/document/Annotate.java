@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
@@ -240,7 +239,7 @@ public class Annotate extends AbstractDocument {
     Object onDeleteComment(String noteId, String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
         noteOnEdit = documentNoteRepository.getById(noteId);
-        comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());        
+        comments = NoteComment.getSortedComments(noteOnEdit.getConcept(slsMode).getComments());        
         comments.remove(deletedComment);
         return commentZone.getBody();
     }
@@ -272,7 +271,7 @@ public class Annotate extends AbstractDocument {
         if (selectedNotes.size() > 0) {
             noteOnEdit = selectedNotes.get(0);
             termOnEdit = getEditTerm(noteOnEdit.getNote());
-            comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
+            comments = NoteComment.getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
         } else {
             comments = Collections.<NoteComment> emptyList();
         }
@@ -291,7 +290,7 @@ public class Annotate extends AbstractDocument {
 
     Object onSuccessFromCommentForm() {
         System.err.println("onSuccessFromCommentForm");
-        comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
+        comments = NoteComment.getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
         if (newCommentMessage != null) {
             comments.add(0, noteRepository.createComment(noteOnEdit.getConcept(slsMode), newCommentMessage));
             newCommentMessage = null;
@@ -448,9 +447,4 @@ public class Annotate extends AbstractDocument {
         return noteWithInstances.getNote().getConcept(slsMode);
     }
     
-    private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
-        List<NoteComment> rv = new ArrayList<NoteComment>(c);
-        Collections.sort(rv, NoteCommentComparator.DESC);
-        return rv;
-    }
 }

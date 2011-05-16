@@ -68,7 +68,7 @@ public class Note extends Identifiable {
         copy.setPerson(getPerson());
         copy.setPlace(getPlace());
         copy.setTerm(getTerm());
-        copy.setConcept(concept.createCopy(getId()));
+        copy.setConcept(concept.createCopy());
         return copy;
     }
 

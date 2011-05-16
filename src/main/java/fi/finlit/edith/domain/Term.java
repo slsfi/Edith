@@ -61,7 +61,7 @@ public class Term extends Identifiable {
         term.setBasicForm(basicForm);
         term.setMeaning(meaning);
         term.setLanguage(language);
-        term.setConcept(concept.createCopy(getId()));
+        term.setConcept(concept.createCopy());
         return term;
     }
     

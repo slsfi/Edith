@@ -1,5 +1,10 @@
 package fi.finlit.edith.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import org.joda.time.DateTime;
 
 import com.mysema.rdfbean.annotations.ClassMapping;
@@ -84,6 +89,12 @@ public class NoteComment extends Identifiable {
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+    
+    public static List<NoteComment> getSortedComments(Set<NoteComment> c) {
+        List<NoteComment> rv = new ArrayList<NoteComment>(c);
+        Collections.sort(rv, NoteCommentComparator.DESC);
+        return rv;
     }
 
 }

@@ -13,10 +13,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.MethodRule;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Mouse;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.DoubleClickAction;
+import org.openqa.selenium.internal.Locatable;
 
 import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.JettyHelper;
@@ -74,11 +78,15 @@ public abstract class AbstractSeleniumTest {
     
     @AfterClass
     public static void afterClass() {
-        driver.close();
-        driver = null;
-        if (!externalJetty) {
-            JettyHelper.stopJettyAtPort(config.port);
-        }
+        if (driver != null) {
+            driver.close();
+            driver = null;
+            
+            if (!externalJetty) {
+                JettyHelper.stopJettyAtPort(config.port);
+            }
+        }       
+        
     }
     
     @Rule
@@ -99,7 +107,16 @@ public abstract class AbstractSeleniumTest {
         }
         
     }
+    
+    protected void dblClick(WebElement element) {
+        Action dblClick = new DoubleClickAction(getMouse(), (Locatable)element);
+        dblClick.perform();
+    }
 
+    private Mouse getMouse() {
+        return ((FirefoxDriver)driver).getMouse();
+    }
+    
     public void get(String url) {
         driver.get(path() + url);
     }
