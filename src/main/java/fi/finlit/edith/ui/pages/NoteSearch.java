@@ -19,10 +19,13 @@ import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import com.mysema.tapestry.core.Context;
 
+import fi.finlit.edith.EDITH;
+import fi.finlit.edith.domain.Concept;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
@@ -67,6 +70,11 @@ public class NoteSearch {
     private Collection<String> orphanNoteIds;
 
     private boolean removeSelected;
+    
+    @Inject
+    @Symbol(EDITH.EXTENDED_TERM)
+    @Property
+    private boolean slsMode;
 
     @AfterRender
     void addStylesheet() {
@@ -161,4 +169,7 @@ public class NoteSearch {
         return orphanNoteIds.contains(note.getId());
     }
 
+    public Concept getConcept() {
+        return note.getConcept(slsMode);
+    }
 }

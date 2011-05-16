@@ -23,16 +23,15 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractCrawlerTest.class);
 
-    private static final String USERNAME = "vesa";
-    
-    private static final String PASSWORD = "vesa";
-
     @Test
     public void BrowsePages() throws Exception {
-        get("/login");
-        findElement(By.name("j_username")).sendKeys(USERNAME);
-        findElement(By.name("j_password")).sendKeys(PASSWORD);
-        findElement(By.id("loginForm")).submit();
+        login("vesa", "vesa");
+//        get("/login");
+//        findElement(By.name("j_username")).sendKeys(USERNAME);
+//        findElement(By.name("j_password")).sendKeys(PASSWORD);
+//        findElement(By.id("loginForm")).submit();
+        get("/adddummydata");
+        
         Set<String> pages = crawl();
         get("/logout");
         for (String page : pages) {
@@ -82,7 +81,11 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
                 }
-                if (href != null && !href.startsWith("mailto:") && !href.startsWith("http") && !href.contains("#") && !href.contains("t:ac")) {
+                if (href != null 
+                        && !href.startsWith("mailto:") 
+                        && !href.startsWith("http") 
+                        && !href.contains("#") 
+                        && !href.contains("t:ac")) {
                     links.add(href);
                 }
             }

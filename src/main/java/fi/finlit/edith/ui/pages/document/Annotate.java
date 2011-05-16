@@ -42,7 +42,7 @@ import fi.finlit.edith.ui.services.TimeService;
         "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js" },
         stylesheet= {"context:styles/tei.css"})
 @SuppressWarnings("unused")
-public class Annotate extends AbstractDocument {
+public class Annotate extends AbstractDocumentPage {
     
     private static final String EDIT_ZONE = "editZone";
 

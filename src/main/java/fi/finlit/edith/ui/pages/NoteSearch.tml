@@ -32,7 +32,7 @@
             
             <div class="cleaner"> </div>
             <t:grid source="notes" row="note" rowsPerPage="20" t:encoder="encoder"
-                 include="lemma,description,subtextSources" add="basicForm,meaning,deletion">
+                 include="lemma" add="description,subtextSources,basicForm,meaning,deletion">
                 <p:lemmaCell>
                     <t:if test="editMode">
                         <t:inlineEditField t:id="lemma" value="note.lemma"/>
@@ -45,16 +45,16 @@
                     ${note.term?.basicForm}
                 </p:basicFormCell>
                 <p:descriptionCell>
-                    <t:markdown value="note.concept.description"/>
+                    <t:markdown value="concept.description"/>
                 </p:descriptionCell>                
                 <p:meaningCell>
                         ${note.term?.meaning}
                 </p:meaningCell>
                 <p:subtextSourcesCell>
-                    <t:markdown value="note.concept.subtextSources"/>
+                    <t:markdown value="concept.subtextSources"/>
                 </p:subtextSourcesCell>
                 <p:statusCell>
-					<t:fmt.message key="NoteStatus.${note.concept.status}"/>
+					<t:fmt.message key="NoteStatus.${concept.status}"/>
                 </p:statusCell>
 
 				<p:deletionCell>
