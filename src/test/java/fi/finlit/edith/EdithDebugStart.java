@@ -15,16 +15,15 @@ import com.mysema.commons.jetty.WebappStarter;
 
 public final class EdithDebugStart extends WebappStarter {
 
+    public static void main(String[] args) throws Exception {
+        Setups.SKS_DEV.start();
+    }
+    
     private final String root;
     
     private final int port;
     
-    public static void main(String[] args) throws Exception {
-        new EdithDebugStart("target/sks-dev/", 8080).start();
-    }
-    
-    
-    public EdithDebugStart(String root, int port) {
+    EdithDebugStart(String root, int port) {
         this.root = root;
         this.port = port;
     }

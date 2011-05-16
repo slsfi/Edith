@@ -2,13 +2,13 @@ package fi.finlit.edith.ui.web;
 
 import com.mysema.commons.jetty.WebappStarter;
 
-import fi.finlit.edith.EdithDebugStart;
+import fi.finlit.edith.Setups;
 
 public class SKSCrawlerTest extends AbstractCrawlerTest{
     
     @Override
     public WebappStarter starter() {
-        return new EdithDebugStart("target/sks-test/", 8091);
+        return Setups.SKS_TEST;
     }
 
 }

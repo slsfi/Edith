@@ -236,8 +236,7 @@
 			<t:if test="noteId">
 				<div id="comments">
 					<h3>${message:comments}</h3>
-					<t:loop source="comments" value="comment"
-						volatile="true">
+					<t:loop source="comments" value="comment" volatile="true">
 						<div>
 							<div>${comment.message}</div>
 							<div class="metadata">

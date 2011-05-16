@@ -87,6 +87,18 @@ public abstract class AbstractSeleniumTest {
     public String path() {
         return "http://127.0.0.1:" + config.port;
     }
+    
+
+    protected void login(String user, String password) {
+        get("/login");
+        if (!title().contains("Access is denied")) {
+            findElement(By.name("j_username")).sendKeys(user);
+            WebElement passwordElement = findElement(By.name("j_password"));
+            passwordElement.sendKeys(password);
+            passwordElement.submit();    
+        }
+        
+    }
 
     public void get(String url) {
         driver.get(path() + url);

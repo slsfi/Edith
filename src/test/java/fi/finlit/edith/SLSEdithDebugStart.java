@@ -15,23 +15,15 @@ import com.mysema.commons.jetty.WebappStarter;
 
 public final class SLSEdithDebugStart extends WebappStarter {
 
-    public static WebappStarter dev() {
-        return new SLSEdithDebugStart("target/sls-dev/", 8080);
-    }
-    
-    public static WebappStarter test() {
-        return new SLSEdithDebugStart("target/sls-test/", 8090);
-    }
-        
     public static void main(String[] args) throws Exception {
-        SLSEdithDebugStart.dev().start();
+        Setups.SLS_DEV.start();
     }
 
     private final String root;
     
     private final int port;
     
-    public SLSEdithDebugStart(String root, int port) {
+    SLSEdithDebugStart(String root, int port) {
         this.root = root;
         this.port = port;
     }
