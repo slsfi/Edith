@@ -7,6 +7,7 @@ package fi.finlit.edith;
 
 import java.io.File;
 
+import org.apache.commons.io.FileUtils;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
@@ -23,15 +24,28 @@ public final class SLSEdithDebugStart extends WebappStarter {
     
     private final int port;
     
-    SLSEdithDebugStart(String root, int port) {
+    private final boolean clear;
+    
+    SLSEdithDebugStart(String root, int port, boolean clear) {
         this.root = root;
         this.port = port;
+        this.clear = clear;
     }
 
     @Override
     public JettyConfig configure() throws Exception {
         FSRepositoryFactory.setup();
-        File svnRepo = new File(root + "repo-sls");
+        File rootFile = new File(root);
+        if (clear && rootFile.exists()) {
+            FileUtils.cleanDirectory(rootFile);    
+            rootFile.delete();
+            File svnCache = new File("target/svncache");
+            if (svnCache.exists()) {
+                FileUtils.cleanDirectory(svnCache);
+                svnCache.delete();    
+            }            
+        }        
+        File svnRepo = new File(rootFile, "repo-sls");
 
         System.setProperty("org.mortbay.jetty.webapp.parentLoaderPriority", "true");
         System.setProperty("production.mode", "false");

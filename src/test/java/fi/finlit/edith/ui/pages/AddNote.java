@@ -9,6 +9,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
@@ -30,12 +31,13 @@ public class AddNote {
     Index onActivate(EventContext context) throws IOException, NoteAdditionFailedException{
         String docId = context.get(String.class, 0);
         String startElement = context.get(String.class, 1);
-        String text = context.get(String.class, 2);
+        String endElement = context.get(String.class, 2);
+        String text = context.get(String.class, 3);
         
         Document document = documentRepository.getById(docId);
-        documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(startElement, startElement, text));
+        DocumentNote documentNote = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(startElement, endElement, text));
         
-        System.err.println("Added note");
+        System.err.println("Added note with local id " + documentNote.getLocalId() + " and revision " + documentNote.getSVNRevision());
         return index;
     }
  

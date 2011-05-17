@@ -1,9 +1,9 @@
 package fi.finlit.edith.ui.web;
 
-import org.junit.Ignore;
+import java.util.UUID;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import com.mysema.commons.jetty.WebappStarter;
 
@@ -12,14 +12,45 @@ import fi.finlit.edith.Setups;
 public class SKSAnnotateTest extends AbstractSeleniumTest {
     
     @Test
-    @Ignore
-    public void Submit_Annotate_Form() {
-        login("lassi", "lassi");        
+    public void GetForm_FillForm_And_Submit() {
+        login("lassi", "lassi");
+        get("/addnote/12/play-act-sp53-p/play-act-sp53-p/minusta");
         get("/document/annotate/12"); // nummisuutarit_simp.xml
-
-        WebElement element = findElement(By.id("play-act-sp53-p")); // Mitäs mamma nyt tykkää minusta
-        dblClick(element);        
-        findElement(By.id("createTermLink")).click();
+         
+        // get form
+        findElement(By.cssSelector("a.notelink")).click();
+        By noteFormSubmit = By.cssSelector("input.noteFormSubmit"); 
+        wait(element(noteFormSubmit));        
+        
+        // fill form
+        String random = UUID.randomUUID().toString();
+        findElement(By.cssSelector("div.lemma input")).sendKeys("lemma-"+random);
+        findElement(By.cssSelector("div.lemmaMeaning textarea")).sendKeys("lemmaMeaning-"+random);
+//        findElement(By.cssSelector("div.basicForm input")).sendKeys("basicForm-"+random);
+//        findElement(By.cssSelector("div.basicFormMeaning input")).sendKeys("basicFormMeaning-"+random);
+        
+        // submit
+        findElement(noteFormSubmit).click();
+        
+    }
+    
+    @Test
+    public void Submit_NoteForm_As_New() {
+        login("lassi", "lassi");
+        get("/addnote/12/play-act-sp53-p/play-act-sp53-p/minusta");
+        get("/document/annotate/12"); // nummisuutarit_simp.xml
+         
+        // get form
+        findElement(By.cssSelector("a.notelink")).click();
+        By noteFormSubmit = By.cssSelector("input.noteFormSubmit"); 
+        wait(element(noteFormSubmit));
+        
+        // fill form
+        findElement(By.cssSelector(".saveAsNew input")).toggle();
+        
+        // submit
+        findElement(noteFormSubmit).click();
+        
     }
     
     @Override

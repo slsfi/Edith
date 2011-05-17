@@ -25,7 +25,7 @@
 	
 		<t:form t:id="noteEditForm" t:zone="editZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]">
 			<t:errors />
-			<div>
+			<div class="format">
 				<div>
 					<strong>${message:format-label}</strong>
 				</div>
@@ -34,7 +34,7 @@
 				</div>
 			</div>
 
-			<div>
+			<div class="status">
 				<div>
 					<strong>${message:status-label}</strong>
 				</div>
@@ -43,7 +43,7 @@
 				</div>
 			</div>
 			
-			<div>
+			<div class="publishable">
                 <div>
                 <label>
                     <strong>${message:publishable-label}</strong>
@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-			<div class="note">
+			<div class="note lemma">
 				<div>
 					<strong>${message:lemma-label}</strong>
 				</div>
@@ -61,14 +61,14 @@
 				</div>
 			</div>
 
-			<div class="note">
+			<div class="note lemmaMeaning">
 				<div>${message:lemmaMeaning-label}</div>
 				<div>
 					<t:textArea rows="1" value="noteOnEdit.note.lemmaMeaning" />
 				</div>
 			</div>
 
-			<div class="note">
+			<div class="note type">
 				<div>
 					<strong>${message:type-label}</strong>
 				</div>
@@ -84,7 +84,7 @@
 				</div>
 			</div>
             
-			<div class="note">
+			<div class="note basicForm">
 				<div>
 					<strong>${message:basicForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="termInstances"/>)</span>
 				</div>
@@ -97,34 +97,34 @@
 				</div>
 			</div>
 
-			<div class="note">
+			<div class="note basicFormMeaning">
 				<div>${message:basicFormMeaning-label}</div>
 				<div>
 					<t:textArea rows="1" t:id="termMeaning" value="termOnEdit.meaning" />
 				</div>
 			</div>
 
-			<div class="note">
+			<div class="note basicFormLanguage">
 				<div>${message:basicFormLanguage-label}</div>
 				<div>
 					<t:select t:id="language" />
 				</div>
 			</div>
 			
-			<div class="note">
+			<div class="note saveTermAsNew">
 			    <div><label><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</label></div>
 			</div>
 			
 			<div class="person">
-			         <strong>${message:personSearch}</strong>
-            <t:textField t:id="person" value="search" t:mixins="personAutocomplete" />
-			         <t:textfield t:id="personId" value="personId" style="display: none;"/>
-                
+			    <strong>${message:personSearch}</strong>
+            	<t:textField t:id="person" value="search" t:mixins="personAutocomplete" />
+			    <t:textfield t:id="personId" value="personId" style="display: none;"/>                
             </div>
+            
 			<t:zone id="personZone" t:id="personZone" t:zone="personZone">
                  <t:block t:id="editPersonForm">
-            <t:note.personForm closeDialog="closeDialog" personId="personId" personZone="personZone"/>
-    </t:block>
+            		<t:note.personForm closeDialog="closeDialog" personId="personId" personZone="personZone"/>
+    			</t:block>
 			<script type="text/javascript">
 			jQuery(function() {
 			    jQuery("input[name='personId']").attr("value", jQuery("#personId").attr("name"));
@@ -286,7 +286,7 @@
 				</div>
 			</div>
 
-			<div>
+			<div class="longText">
 				<div>
 					<strong>${message:longText-label}</strong>
 				</div>
@@ -301,8 +301,12 @@
 			<t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
 			<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
 
-			<input type="submit" value="${message:saveNote}" />
-            <label><t:checkbox t:id="saveAsNew" name="saveAsNew" value="saveAsNew" />${message:saveAsNew}</label>
+			<input type="submit" value="${message:saveNote}" class="noteFormSubmit"/>
+			
+			<div class="saveAsNew">
+            	<label><t:checkbox t:id="saveAsNew" name="saveAsNew" value="saveAsNew" />${message:saveAsNew}</label>
+            </div>
+            
             <t:if test="noteOnEdit.id">
             <div class="delete">
                 <button class="delete_question">${message:deleteNote}</button>

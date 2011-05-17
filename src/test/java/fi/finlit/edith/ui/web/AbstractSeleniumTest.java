@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.rules.MethodRule;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Mouse;
+import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -21,6 +22,9 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.DoubleClickAction;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.mysema.commons.jetty.JettyConfig;
 import com.mysema.commons.jetty.JettyHelper;
@@ -167,6 +171,21 @@ public abstract class AbstractSeleniumTest {
 
     public void assertLink(String linkText) {
         assertNotNull("Link text not found: " + linkText, findByLinkText(linkText));
+    }
+    
+    protected void wait(ExpectedCondition<Boolean> expected) {
+        Wait<WebDriver> wait = new WebDriverWait(driver, 3);
+        wait.until(expected);
+    }
+    
+    protected ExpectedCondition<Boolean> element(final By findCondition) {
+        return new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver from) {
+                RenderedWebElement element = (RenderedWebElement)driver.findElement(findCondition);
+                return element.isDisplayed();
+            }
+        };
     }
 
     public void assertContainsText(WebElement element, String expected) {

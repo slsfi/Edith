@@ -3,7 +3,7 @@
 		<t:form t:id="noteEditForm" t:zone="editZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]">
 			<t:errors />
 			
-			<div>
+			<div class="longText">
                 <div>
                     <strong>${message:longText-label}</strong>
                 </div>
@@ -12,7 +12,7 @@
                 </div>
             </div>
             
-            <div class="note">
+            <div class="note lemma">
                 <div>
                     <strong>${message:lemma-label}</strong>
                 </div>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             
-            <div>
+            <div class="lemmaPosition">
                 <div>
                     <strong>${message:lemmaPosition-label}</strong>
                 </div>
@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <div>
+            <div class="linkedNotes">
                 <div>
                     <strong>${message:linkedNotes}</strong>
                 </div>
@@ -39,7 +39,7 @@
                 </div>
             </div>
             
-            <div class="note">
+            <div class="note type">
                 <div>
                     <strong>${message:type-label}</strong>
                 </div>
@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            <div class="note">
+            <div class="note basicForm">
                 <div>
                     <strong>${message:basicForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="termInstances"/>)</span>
                 </div>
@@ -68,21 +68,21 @@
                 </div>
             </div>
 
-            <div class="note">
+            <div class="note basicFormMeaning">
                 <div>${message:basicFormMeaning-label}</div>
                 <div>
                     <t:textArea rows="1" t:id="termMeaning" value="termOnEdit.meaning" />
                 </div>
             </div>
             
-            <div class="note">
+            <div class="note basicFormLanguage">
                 <div>${message:basicFormLanguage-label}</div>
                 <div>
                     <t:select t:id="language" />
                 </div>
             </div>
             
-            <div class="note">
+            <div class="note description">
                 <div>
                     <strong>${message:description-label}</strong>
                 </div>
@@ -100,7 +100,7 @@
                 </div>
             </div>
             
-            <div class="note">
+            <div class="note sources">
                 <div>
                     <strong>${message:sources-label}</strong>
                 </div>
@@ -109,8 +109,7 @@
                 </div>
             </div>
 
-
-			<div>
+			<div class="status">
 				<div>
 					<strong>${message:status-label}</strong>
 				</div>
@@ -119,7 +118,7 @@
 				</div>
 			</div>
 			
-			<div class="note">
+			<div class="note saveTermAsNew">
 			    <div><label><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</label></div>
 			</div>
 			
@@ -137,7 +136,7 @@
 			<t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
 			<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
 
-			<input type="submit" value="${message:saveNote}" />
+			<input type="submit" value="${message:saveNote}" class="noteFormSubmit"/>
 
             <t:if test="noteOnEdit.id">
             <div class="delete">
