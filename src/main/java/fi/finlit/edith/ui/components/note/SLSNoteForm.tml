@@ -3,7 +3,7 @@
     
       <fieldset>
     
-        <legend>Viite</legend>
+        <legend>${message:noteEdit}</legend>
     
         <div class="metadata">
           <t:dateTimeFormat date="noteOnEdit.note.editedOnDate"
@@ -73,7 +73,7 @@
             </div>
     
     
-            <input type="submit" value="${message:saveNote}" />
+            <input type="submit" value="${message:save}" />
     
             <t:remove>
             <t:if test="noteOnEdit.id">

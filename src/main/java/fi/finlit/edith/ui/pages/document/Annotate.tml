@@ -84,7 +84,7 @@
 	
 	
 	<div id="documentsAccordion">
-        <h5><a href="#">Dokumentit</a></h5>
+        <h5><a href="#">${message:documents-label}</a></h5>
         <div id="documentsTree">
             <ul>
                 <li>
@@ -106,19 +106,19 @@
         </div>
     </div>
     <div id="searchAccordion">
-        <h3><a href="#">${message:noteSearch}</a></h3>
+        <h3><a href="#">${message:notesearch}</a></h3>
         <div>
             <t:note.noteSearchForm searchInfo="searchInfo" searchResults="searchResults.notesList"/>
         </div>
     </div>
 	<div id="searchResultsAccordion">
-        <h3><a href="#">${message:notes}</a></h3>
+        <h3><a href="#">${message:notesearchresults}</a></h3>
         <div>
             <t:note.searchResults searchInfo="searchInfo" documentNotes="documentNotes" noteEdit="noteEdit"/>        
         </div>
     </div>
     <div id="instancesAccordion">
-        <h3><a href="#">Esiintymät</a></h3>
+        <h3><a href="#">${message:document-notes}</a></h3>
         <div>
         
             <t:note.documentNotes noteEdit="noteEdit"/>

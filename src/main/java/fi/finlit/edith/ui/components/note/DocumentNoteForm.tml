@@ -37,7 +37,7 @@
       <!--  t:zone="noteEditZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]" -->
       <t:form t:id="documentNoteForm">
         <fieldset>
-        <legend>Esiintymä</legend>
+        <legend>${message:document-note}</legend>
         
         <div class="metadata">
         <t:dateTimeFormat date="noteOnEdit.createdOnDate" format="message:dateformat-compact" />
