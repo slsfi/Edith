@@ -1,0 +1,72 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+<t:content>
+
+    <script type="text/javascript">
+      jQuery(function() {
+    	  
+    	  var originalText = "${noteOnEdit.longText}";
+    	  
+    	  //Show update button, if there is selection
+    	  jQuery('body').live('mousemove', function() {
+    		  
+              if(TextSelector.getSelection() == "") { 
+                  jQuery("#updateLinkSubmit").hide();
+                  jQuery("#longTextEdit").html(originalText);
+              } else {
+            	  
+            	  if (!TextSelector.updateIndices(TextSelector.getSelection())) {
+            		  return;
+            	  }
+            	  
+                  jQuery("#updateLinkSubmit").show();
+                  jQuery("#longTextEdit").html(TextSelector.selection);
+                  jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
+                  jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
+                  jQuery(":input[name='selectedText_2']").val(TextSelector.selection);
+                  jQuery(":input[name='selectedStartIndex_2']").val(TextSelector.startIndex);
+                  jQuery(":input[name='selectedEndIndex_2']").val(TextSelector.endIndex);
+              }
+          });
+    	  
+    	  
+      });
+    </script>
+    
+    <div class="document-note-form">
+        
+      <!--  t:zone="noteEditZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]" -->
+      <t:form t:id="documentNoteForm">
+        <fieldset>
+        <legend>Esiintymä</legend>
+        
+        <div class="metadata">
+        <t:dateTimeFormat date="noteOnEdit.createdOnDate" format="message:dateformat-compact" />
+        </div>
+        
+        <t:errors />
+        
+        <div class="field">
+            <label for="longTextEdit">${message:longText-label}</label>
+            <div id="longTextEdit">${noteOnEdit.longText}</div>
+        </div>
+        
+        <div class="field">
+            <t:label for="lemmaPosition">${message:lemmaPosition-label}</t:label>
+            <t:textField t:id="lemmaPosition" value="noteOnEdit.lemmaPosition" />
+        </div>
+        
+        <t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection" />
+        <t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId" />
+        <t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId" />
+        <t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
+        <t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
+    
+    
+        <input id="updateLinkSubmit" style="display:none;" type="submit" value="${message:updateLink}" />
+        <input type="submit" value="${message:save}" />
+    
+        </fieldset>
+      </t:form>
+    </div>
+</t:content>
+</html>

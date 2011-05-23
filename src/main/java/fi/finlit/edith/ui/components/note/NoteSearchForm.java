@@ -3,6 +3,7 @@ package fi.finlit.edith.ui.components.note;
 import java.util.Collection;
 
 import org.apache.tapestry5.Block;
+import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
@@ -24,9 +25,9 @@ public class NoteSearchForm {
 
     @Parameter
     private DocumentNoteSearchInfo searchInfo;
-
+    
     @Parameter
-    private Block notesList;
+    private Block searchResults;
 
     @Property
     private NoteType type;
@@ -48,7 +49,7 @@ public class NoteSearchForm {
     }
 
     Object onSuccessFromNoteSearchForm() {
-        return notesList;
+        return searchResults;
     }
 
     public Collection<UserInfo> getUsers() {

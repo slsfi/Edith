@@ -20,4 +20,8 @@
     		</p:else>
     	</t:if>   	        
   	</t:content>    
+    
+    <t:block id="infoBlock">
+            ${infoMessage}
+        </t:block>
 </html>

@@ -46,6 +46,9 @@ public final class AppModule {
         // general config
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "fi,en,sv,de");
         configuration.add(SymbolConstants.PRODUCTION_MODE, System.getProperty("production.mode", "false"));
+        
+        //Disable automatic form autofocus
+        configuration.add(SymbolConstants.FORM_CLIENT_LOGIC_ENABLED, "false");
 
         // Spring Security config
         configuration.add("spring-security.loginform.url", "/login");

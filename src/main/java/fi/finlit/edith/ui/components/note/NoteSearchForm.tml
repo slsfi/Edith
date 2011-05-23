@@ -1,5 +1,20 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 	<t:content>
+        
+        <script type="text/javascript">
+
+            jQuery(function() {
+            	
+            	//Open the search results accordion in when 
+                //there is a search action
+            	jQuery("#noteSearchFormSubmit").click( function() {
+            		var acc = jQuery("#searchResultsAccordion"); 
+                     if (acc.accordion("option", "active") === false) {
+                         acc.accordion("activate", 0);
+                     }
+            	});                               
+            });
+        </script>
 		<t:form t:id="noteSearchForm" t:zone="listZone">
 			<t:errors />
 			<div class="left">
@@ -79,9 +94,10 @@
 			</div>				
 			</div>
 			
-			<div style="clear:both;"/>
+			<div style="clear:both;"></div>
 			
-			<input type="submit" value="${message:query}" />		
+			<input id="noteSearchFormSubmit" type="submit" value="${message:query}" />	
+				
 		</t:form>		
 	</t:content>
 </html>	

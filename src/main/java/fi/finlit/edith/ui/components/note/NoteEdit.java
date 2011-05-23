@@ -1,0 +1,148 @@
+package fi.finlit.edith.ui.components.note;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.tapestry5.Block;
+import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
+
+import fi.finlit.edith.EDITH;
+import fi.finlit.edith.domain.Concept;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.NoteCommentComparator;
+import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.ui.components.InfoMessage;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.NoteRepository;
+
+@SuppressWarnings("unused")
+public class NoteEdit {
+    
+    @Parameter
+    @Property
+    private DocumentRevision documentRevision;
+    
+    @Parameter
+    @Property
+    private SelectedText createTermSelection;
+    
+    @Parameter
+    @Property
+    private InfoMessage infoMessage;
+    
+    @Inject
+    private Block noteEditBlock;
+
+    @Property
+    private NoteComment comment;
+
+    @Property
+    private List<NoteComment> comments;
+
+    @InjectComponent
+    @Property
+    private Zone commentZone;
+
+    @Inject
+    private NoteRepository noteRepository;
+
+    @Inject
+    private DocumentNoteRepository documentNoteRepository;
+
+    private DocumentNote noteOnEdit;
+
+    @Property
+    private String newCommentMessage;
+
+    @Property
+    private Note loopNote;
+
+    @Property
+    private List<DocumentNote> selectedNotes;
+    
+    @Property
+    private Term termOnEdit;
+
+    @Inject
+    @Symbol(EDITH.EXTENDED_TERM)
+    @Property
+    private boolean slsMode;
+
+    public String getNoteId() {
+        return noteOnEdit != null ? noteOnEdit.getId() : null;
+    }
+
+    public Block getBlock() {
+        return noteEditBlock;
+    }
+    
+    Object onDeleteComment(String noteId, String commentId) {
+        NoteComment deletedComment = noteRepository.removeComment(commentId);
+        noteOnEdit = documentNoteRepository.getById(noteId);
+        comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
+        comments.remove(deletedComment);
+        return commentZone.getBody();
+    }
+
+    private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
+        List<NoteComment> rv = new ArrayList<NoteComment>(c);
+        Collections.sort(rv, NoteCommentComparator.DESC);
+        return rv;
+    }
+
+    void onPrepareFromCommentForm(String id) {
+        if (noteOnEdit == null) {
+            System.err.println("onPrepareFromCommentForm");
+            noteOnEdit = documentNoteRepository.getById(id);
+            System.err.println("onPrepareFromCommentForm --");
+        }
+    }
+
+    Object onSuccessFromCommentForm() {
+        System.err.println("onSuccessFromCommentForm");
+        comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
+        if (newCommentMessage != null) {
+            comments.add(0,
+                    noteRepository.createComment(noteOnEdit.getConcept(slsMode), newCommentMessage));
+            newCommentMessage = null;
+        }
+        System.err.println("onSuccessFromCommentForm --");
+        return commentZone.getBody();
+    }
+
+    private Note createNote() {
+        Note n = new Note();
+        if (slsMode) {
+            n.setTerm(new Term());
+        }
+        return n;
+    }
+
+    public Concept getLoopNoteConcept() {
+        return loopNote.getConcept(slsMode);
+    }
+
+    
+    public int getLemmaInstances() {
+        return documentNoteRepository.getDocumentNoteCount(noteOnEdit.getNote());
+    }
+    
+    public void setNoteOnEdit(DocumentNote noteOnEdit) {
+        this.noteOnEdit = noteOnEdit;
+    }
+    
+    public DocumentNote getNoteOnEdit() {
+        return noteOnEdit;
+    }
+}

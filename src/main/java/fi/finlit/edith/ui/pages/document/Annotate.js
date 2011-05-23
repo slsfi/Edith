@@ -39,14 +39,6 @@ var updateSelectionLink = function() {
 	}
 }
 
-var updateUpdateLink = function() {
-	if(TextSelector.getSelection() == "") { 
-		jQuery("#longTextEditLink").hide();
-	} else {
-		jQuery("#longTextEditLink").show();
-	}
-}
-
 var toggleNoteListElements = function(checkbox) {
 	var checkbox = checkbox;
 	var isChecked = checkbox.attr("checked");
@@ -78,9 +70,16 @@ jQuery(document).ready(function() {
         function(event) {
             if (!disableLink) {
             	var classes = jQuery(this).attr('class').replace(/notecontent\ /g,'').replace(/\ /g, '/');
-            	Editor.updateEditZone(classes);
+            	jQuery(":input[name='selectedNoteLocalId']").val(classes);
+    			TapestryExt.submitZoneForm(jQuery("#selectNoteForm").get(0));
             }
         }    
+    );
+    
+    jQuery(".selectable-note").live('click',
+    	function(event) {
+    		alert("selected");
+    	}
     );
     
     // live updated
@@ -88,15 +87,19 @@ jQuery(document).ready(function() {
     	function(event) {
     		var localId= jQuery(this).attr('href').replace('#start','');
 			var noteId = jQuery(this).attr('id').replace('noteid', '');
-    		Editor.updateEditZone("e" + localId + "/" + noteId);
+			var url = ".documentnotes.selectdocumentnote/" + noteId
+			TapestryExt.updateZone("documentNotesZone", url);
+			
+    		//Editor.updateEditZone("e" + localId + "/" + noteId);
     	}
     );
   
     jQuery('#createTermLink').bind('click', function() {
-    	jQuery("#dialogZone").text("Odota hetki!");
-    	if (createNote()) {
-    		jQuery("#dialog").jqm().jqmShow();
-    	}
+    	//jQuery("#dialogZone").text("Odota hetki!");
+    	//if (createNote()) {
+    		//jQuery("#dialog").jqm().jqmShow();
+    	//}
+    	createNote();
     });
     
     /* TODO disable for note editing!
@@ -111,8 +114,6 @@ jQuery(document).ready(function() {
 
     jQuery('body').live('mousemove', updateSelectionLink);
     
-    jQuery('body').live('mousemove', updateUpdateLink);
-    
     jQuery("#note_filters input").click(function() {
     	toggleNoteListElements(jQuery(this));
     });
@@ -124,11 +125,13 @@ jQuery(document).ready(function() {
 
     jQuery(".jqmClose").click(function() {
     	jQuery("#dialog").jqmHide();
-    })
+    });
+    
 });
 
 var Editor = {		
 	updateEditZone: function(context){
+		alert("updateEditZone: " + context);
 		var link = editLink.replace('CONTEXT',context);
 		TapestryExt.updateZone('editZone', link);
 	},

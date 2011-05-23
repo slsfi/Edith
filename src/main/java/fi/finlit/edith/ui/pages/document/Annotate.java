@@ -5,12 +5,9 @@
  */
 package fi.finlit.edith.ui.pages.document;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventContext;
@@ -21,7 +18,6 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -30,17 +26,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.DocumentNoteSearchInfo;
+import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.ui.components.InfoMessage;
+import fi.finlit.edith.ui.components.note.DocumentNotes;
+import fi.finlit.edith.ui.components.note.NoteEdit;
+import fi.finlit.edith.ui.components.note.SearchResults;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.TermRepository;
 import fi.finlit.edith.ui.services.TimeService;
 
 @Import(library = {
-        "classpath:js/jquery-1.4.1.js", "classpath:js/TapestryExt.js",
-        "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js" },
-        stylesheet= {"context:styles/tei.css"})
+        "classpath:js/jquery-1.5.1.min.js", "classpath:js/TapestryExt.js",
+        "classpath:js/jquery-ui-1.8.12.custom.min.js", "classpath:js/jquery.dynatree.min.js",
+        "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js", "classpath:js/jquery.cookie.js" },
+        stylesheet= {"context:styles/tei.css", 
+        "context:styles/smoothness/jquery-ui-1.8.12.custom.css",
+        "context:styles/dynatree/skin/ui.dynatree.css"})
 @SuppressWarnings("unused")
 public class Annotate extends AbstractDocumentPage {
     
@@ -52,16 +61,6 @@ public class Annotate extends AbstractDocumentPage {
     private Collection<Document> selectedDocuments;
 
     @Property
-    private NoteComment comment;
-
-    @Property
-    private List<NoteComment> comments;
-
-    @InjectComponent
-    @Property
-    private Zone commentZone;
-
-    @Property
     @Persist
     private SelectedText createTermSelection;
 
@@ -70,9 +69,6 @@ public class Annotate extends AbstractDocumentPage {
 
     @Inject
     private DocumentNoteRepository documentNoteRepository;
-
-    @Property
-    private List<NoteWithInstances> notesWithInstances;
 
     @Inject
     @Property
@@ -89,48 +85,28 @@ public class Annotate extends AbstractDocumentPage {
     @Property
     private Block closeDialog;
 
-    @Inject
+    @InjectComponent
     @Property
-    private Block personForm;
-
-    @Inject
-    @Property
-    private Block placeForm;
-
-    @Inject
-    private Block infoBlock;
-
-    @Property
-    private String infoMessage;
-
+    private InfoMessage infoMessage;
+    
     @Inject
     private Messages messages;
 
     @Property
     private boolean moreThanOneSelectable;
 
+    
     @Property
-    private String newCommentMessage;
-
-    @Property
-    private NoteWithInstances noteWithInstances;
-
-    @Inject
-    @Property
-    private Block noteEdit;
-
-    @Property
-    private DocumentNote noteOnEdit;
+    private DocumentNote note;
 
     @Inject
     private NoteRepository noteRepository;
 
     @Property
     private String noteRevisionId;
-
-    @Inject
+    
     @Property
-    private Block notesList;
+    private String selectedNoteLocalId;
 
     @Inject
     @Property
@@ -145,12 +121,6 @@ public class Annotate extends AbstractDocumentPage {
     @Persist
     private DocumentNoteSearchInfo searchInfo;
 
-    @Property
-    private List<DocumentNote> selectedNotes;
-
-    @Property
-    private Term termOnEdit;
-
     @Inject
     private TermRepository termRepository;
 
@@ -158,24 +128,28 @@ public class Annotate extends AbstractDocumentPage {
     private NoteType type;
 
     @Property
-    private SelectedText updateLongTextSelection;
-
-    @Property
     private List<Note> notes;
 
-    @Property
-    private Note loopNote;
 
     @Property
     private String personId;
 
-    @Property
-    private DocumentNote note;
-    
     @Inject
     @Symbol(EDITH.EXTENDED_TERM)
     @Property
     private boolean slsMode;
+    
+    @InjectComponent
+    @Property
+    private SearchResults searchResults;
+    
+    @InjectComponent
+    @Property
+    private DocumentNotes documentNotes;
+    
+    @InjectComponent
+    @Property
+    private NoteEdit noteEdit;
 
     @AfterRender
     void addScript() {
@@ -183,20 +157,13 @@ public class Annotate extends AbstractDocumentPage {
         renderSupport.addScript("editLink = '" + link + "';");
     }
 
-    public List<NoteWithInstances> getDocumentNotes() {
-        if (notesWithInstances == null) {
-            notesWithInstances = noteRepository.query(getSearchInfo());
-        }
-        return notesWithInstances;
-    }
+   
 
     private Term getEditTerm(Note n) {
         return n.getTerm() != null ? n.getTerm() : new Term();
     }
 
-    public String getNoteId() {
-        return noteOnEdit != null ? noteOnEdit.getId() : null;
-    }
+    
 
     public DocumentNoteSearchInfo getSearchInfo() {
         if (searchInfo == null) {
@@ -219,93 +186,79 @@ public class Annotate extends AbstractDocumentPage {
         if (createTermSelection == null) {
             createTermSelection = new SelectedText();
         }
-        if (updateLongTextSelection == null) {
-            updateLongTextSelection = new SelectedText();
-        }
+    }
+    
+    Object onSuccessFromSelectNoteForm() {
+
+        //Strip first n from the id
+        String localId = selectedNoteLocalId.substring(1);
+        DocumentNote documentNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
+                localId);
+        noteEdit.setNoteOnEdit(documentNote);
+        return noteEdit.getBlock();
+
     }
 
     Object onDelete(EventContext context) {
-        noteOnEdit = documentNoteRepository.getById(context.get(String.class, 0));
-        DocumentRevision documentRevision = getDocumentRevision();
-        documentRevision = getDocumentRepository().removeNotes(documentRevision, noteOnEdit);
+//        noteOnEdit = documentNoteRepository.getById(context.get(String.class, 0));
+//        DocumentRevision documentRevision = getDocumentRevision();
+//        documentRevision = getDocumentRepository().removeNotes(documentRevision, noteOnEdit);
 
         // prepare view with new revision
-        getDocumentRevision().setRevision(documentRevision.getRevision());
-        selectedNotes = Collections.emptyList();
-        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock).add("listZone", notesList)
+//        getDocumentRevision().setRevision(documentRevision.getRevision());
+//        selectedNotes = Collections.emptyList();
+        return new MultiZoneUpdate(EDIT_ZONE, emptyBlock)
+                //.add("listZone", notesList)
                 .add("documentZone", documentView).add("commentZone", emptyBlock);
     }
 
-    Object onDeleteComment(String noteId, String commentId) {
-        NoteComment deletedComment = noteRepository.removeComment(commentId);
-        noteOnEdit = documentNoteRepository.getById(noteId);
-        comments = NoteComment.getSortedComments(noteOnEdit.getConcept(slsMode).getComments());        
-        comments.remove(deletedComment);
-        return commentZone.getBody();
-    }
-
     Object onEdit(EventContext context) {
-        System.err.println("onEdit");
-        selectedNotes = new ArrayList<DocumentNote>();
-        if (context.getCount() > 0 && context.get(String.class, 0).startsWith("n")) {
-            for (int i = 0; i < context.getCount(); i++) {
-                String localId = context.get(String.class, i).substring(1);
-                DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
-                if (docNote != null){
-                    selectedNotes.add(docNote);
-                }else{
-                    throw new IllegalStateException("No DocumentNote available for local id " + localId);
-                }
-            }
-        } else {
-            String localId = context.get(String.class, 0).substring(1);
-            DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
-            if (docNote == null) {
-                docNote = new DocumentNote();
-                docNote.setLocalId(String.valueOf(timeService.currentTimeMillis()));
-                docNote.setNote(noteRepository.getById(context.get(String.class, 1)));
-            }
-            selectedNotes.add(docNote);
-        }
-
-        if (selectedNotes.size() > 0) {
-            noteOnEdit = selectedNotes.get(0);
-            termOnEdit = getEditTerm(noteOnEdit.getNote());
-            comments = NoteComment.getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
-        } else {
-            comments = Collections.<NoteComment> emptyList();
-        }
-        moreThanOneSelectable = selectedNotes.size() > 1;
-        System.err.println("onEdit --");
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("commentZone", commentZone.getBody());
+//        System.err.println("onEdit");
+//        selectedNotes = new ArrayList<DocumentNote>();
+//        if (context.getCount() > 0 && context.get(String.class, 0).startsWith("n")) {
+//            for (int i = 0; i < context.getCount(); i++) {
+//                String localId = context.get(String.class, i).substring(1);
+//                DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
+//                if (docNote != null){
+//                    selectedNotes.add(docNote);
+//                }else{
+//                    throw new IllegalStateException("No DocumentNote available for local id " + localId);
+//                }
+//            }
+//        } else {
+//            String localId = context.get(String.class, 0).substring(1);
+//            DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
+//            if (docNote == null) {
+//                docNote = new DocumentNote();
+//                docNote.setLocalId(String.valueOf(timeService.currentTimeMillis()));
+//                docNote.setNote(noteRepository.getById(context.get(String.class, 1)));
+//            }
+//            selectedNotes.add(docNote);
+//        }
+//
+//        if (selectedNotes.size() > 0) {
+//            noteOnEdit = selectedNotes.get(0);
+//            termOnEdit = getEditTerm(noteOnEdit.getNote());
+//            comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
+//        } else {
+//            comments = Collections.<NoteComment> emptyList();
+//        }
+//        moreThanOneSelectable = selectedNotes.size() > 1;
+//        System.err.println("onEdit --");
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
+//        .add("commentZone", commentZone.getBody())
+        ;
     }
 
-    void onPrepareFromCommentForm(String id) {
-        if (noteOnEdit == null){
-            System.err.println("onPrepareFromCommentForm");
-            noteOnEdit = documentNoteRepository.getById(id);
-            System.err.println("onPrepareFromCommentForm --");
-        }
-    }
-
-    Object onSuccessFromCommentForm() {
-        System.err.println("onSuccessFromCommentForm");
-        comments = NoteComment.getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
-        if (newCommentMessage != null) {
-            comments.add(0, noteRepository.createComment(noteOnEdit.getConcept(slsMode), newCommentMessage));
-            newCommentMessage = null;
-        }
-        System.err.println("onSuccessFromCommentForm --");
-        return commentZone.getBody();
-    }
+   
 
     Object onSuccessFromCreateTerm() {
         logger.info(createTermSelection.toString());
         DocumentRevision documentRevision = getDocumentRevision();
 
-        notes = noteRepository.findNotes(Note.createLemmaFromLongText(createTermSelection
-                .getSelection()));
-        if (notes.isEmpty()) {
+//        notes = noteRepository.findNotes(Note.createLemmaFromLongText(createTermSelection
+//                .getSelection()));
+//        if (notes.isEmpty()) {
             DocumentNote documentNote = null;
             try {
                 Note n = createNote();
@@ -313,56 +266,44 @@ public class Annotate extends AbstractDocumentPage {
                         createTermSelection);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                infoMessage = messages.format("note-addition-failed");
-                return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
+                infoMessage.addErrorMsg("note-addition-failed");
+                return infoMessage.getBlock();
             }
             documentRevision.setRevision(documentNote.getSVNRevision());
-            selectedNotes = Collections.singletonList(documentNote);
-            noteOnEdit = documentNote;
-            termOnEdit = getEditTerm(noteOnEdit.getNote());
-            return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
-                    .add("documentZone", documentView).add("commentZone", commentZone.getBody())
-                    .add("dialogZone", closeDialog);
-        }
-        return new MultiZoneUpdate("dialogZone", notesForLemma);
+            documentNotes.setNoteId(documentNote.getNote().getId());
+            noteEdit.setNoteOnEdit(documentNote);
+            infoMessage.addInfoMsg("create-success");
+            return new MultiZoneUpdate("infoMessageZone", infoMessage.getBlock())
+                .add("documentNotesZone",documentNotes.getBlock())
+                .add("noteEditZone", noteEdit.getBlock())
+                .add("documentZone", documentView);
+
+                
+                
+                
+                
+                
+                //            selectedNotes = Collections.singletonList(documentNote);
+//            termOnEdit = getEditTerm(noteOnEdit.getNote());
+//            return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
+//                    //.add("listZone", notesList)
+//                    .add("documentZone", documentView).add("commentZone", commentZone.getBody())
+//                    .add("dialogZone", closeDialog);
+//        }
+        //return new MultiZoneUpdate("dialogZone", notesForLemma);
     }
+            
+    private Note createNote() {
+        Note n = new Note();
+        if (slsMode) {
+            n.setTerm(new Term());
+        }
+        return n;
+}
+            
 
     public void setSearchInfo(DocumentNoteSearchInfo searchInfo) {
         this.searchInfo = searchInfo;
-    }
-
-    public String getTypesString() {
-        Collection<String> translated = new ArrayList<String>();
-        for (NoteType t : noteWithInstances.getNote().getConcept(slsMode).getTypes()) {
-            translated.add(messages.get(t.toString()));
-        }
-        return StringUtils.join(translated, ", ");
-    }
-
-    public String getEditorsForNote() {
-        return getEditors(note);
-    }
-
-    public String getEditorsForNoteOnEdit() {
-        return getEditors(noteOnEdit);
-    }
-
-    private String getEditors(DocumentNote documentNote) {
-        Collection<String> result = new ArrayList<String>();
-        for (UserInfo user : documentNote.getConcept(slsMode).getAllEditors()) {
-            if (!documentNote.getConcept(slsMode).getLastEditedBy().equals(user)) {
-                result.add(user.getUsername());
-            }
-        }
-        return StringUtils.join(result, ", ");
-    }
-
-    public int getLemmaInstances() {
-        return documentNoteRepository.getDocumentNoteCount(noteOnEdit.getNote());
-    }
-
-    public int getNumberOfInstancesInDocument() {
-        return noteWithInstances.getDocumentNotes().size();
     }
 
     Object onChooseBackingNote() {
@@ -374,77 +315,32 @@ public class Annotate extends AbstractDocumentPage {
     }
 
     private Object handleUserChoice(String noteId) {
-        logger.info(createTermSelection.toString());
-        DocumentNote documentNote;
-        DocumentRevision documentRevision = getDocumentRevision();
-        try {
-            if (noteId == null) {
-                documentNote = getDocumentRepository().addNote(createNote(), documentRevision,
-                        createTermSelection);
-            } else {
-                documentNote = getDocumentRepository().addNote(noteRepository.getById(noteId),
-                        documentRevision, createTermSelection);
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            infoMessage = messages.format("note-addition-failed");
-            return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
-        }
-        documentRevision.setRevision(documentNote.getSVNRevision());
-        selectedNotes = Collections.singletonList(documentNote);
-        noteOnEdit = documentNote;
-        termOnEdit = getEditTerm(noteOnEdit.getNote());
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
-                .add("documentZone", documentView).add("commentZone", commentZone.getBody())
+//        logger.info(createTermSelection.toString());
+//        DocumentNote documentNote;
+//        DocumentRevision documentRevision = getDocumentRevision();
+//        try {
+//            if (noteId == null) {
+//                documentNote = getDocumentRepository().addNote(createNote(), documentRevision,
+//                        createTermSelection);
+//            } else {
+//                documentNote = getDocumentRepository().addNote(noteRepository.getById(noteId),
+//                        documentRevision, createTermSelection);
+//            }
+//        } catch (Exception e) {
+//            logger.error(e.getMessage(), e);
+//            infoMessage = messages.format("note-addition-failed");
+//            return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
+//        }
+//        documentRevision.setRevision(documentNote.getSVNRevision());
+//        selectedNotes = Collections.singletonList(documentNote);
+//        noteOnEdit = documentNote;
+//        termOnEdit = getEditTerm(noteOnEdit.getNote());
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
+            //.add("listZone", notesList)
+                //.add("documentZone", documentView).add("commentZone", commentZone.getBody())
                 .add("dialogZone", closeDialog);
     }
 
-    Object onCreatePerson() {
-        return personForm;
-    }
 
-    Object onCreatePlace() {
-        return placeForm;
-    }
-
-    public DocumentNoteType getDocumentNoteType() {
-        if (note.getDocument() == null) {
-            return DocumentNoteType.ORPHAN;
-        } else if (note.getLongText() == null) {
-            return DocumentNoteType.SEMI_ORPHAN;
-        } else if (!note.getDocument().equals(getDocument())) {
-            return DocumentNoteType.ELSEWHERE;
-        } else {
-            return DocumentNoteType.NORMAL;
-        }
-    }
-
-    private enum DocumentNoteType {
-        NORMAL, SEMI_ORPHAN, ORPHAN, ELSEWHERE;
-    }
-    
-    private Note createNote() {
-        Note n = new Note();
-        if (slsMode) {
-            n.setTerm(new Term());
-        }
-        return n;
-    }
-    
-    public Concept getLoopNoteConcept() {
-        return loopNote.getConcept(slsMode);
-    }
-    
-    public Concept getNoteConcept() {
-        return note.getConcept(slsMode);
-    }
-    
-    public Concept getNoteOnEditConcept() {
-        return noteOnEdit.getConcept(slsMode);
-    }
-    
-    public Concept getNoteWithInstancesConcept() {
-        return noteWithInstances.getNote().getConcept(slsMode);
-    }
-    
+   
 }

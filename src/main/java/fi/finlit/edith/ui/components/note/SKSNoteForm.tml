@@ -21,6 +21,21 @@
 	           hideBasedOnFormat();
 	       });
         </script>
+        
+        
+         <fieldset>
+                
+                <legend>Viite</legend>
+                
+                    <div class="metadata">
+                        <t:dateTimeFormat date="noteOnEdit.note.editedOnDate"
+                            format="message:dateformat-compact" />
+                        ${noteOnEditConcept.lastEditedBy.username} (${editorsForNoteOnEdit})
+                    </div>
+                    
+                    
+                    <div class="cleaner"></div>
+                    <div class="note_edit">
 	
 	
 		<t:form t:id="noteEditForm" t:zone="editZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]">
@@ -123,8 +138,8 @@
             
 			<t:zone id="personZone" t:id="personZone" t:zone="personZone">
                  <t:block t:id="editPersonForm">
-            		<t:note.personForm closeDialog="closeDialog" personId="personId" personZone="personZone"/>
-    			</t:block>
+            <t:note.personForm personId="personId" personZone="personZone"/>
+    </t:block>
 			<script type="text/javascript">
 			jQuery(function() {
 			    jQuery("input[name='personId']").attr("value", jQuery("#personId").attr("name"));
@@ -206,7 +221,7 @@
             </div>
             <t:zone id="placeZone" t:id="placeZone" t:zone="placeZone">
                  <t:block t:id="editPlaceForm">
-            <t:note.placeForm closeDialog="closeDialog" placeId="placeId" placeZone="placeZone"/>
+            <t:note.placeForm placeId="placeId" placeZone="placeZone"/>
     </t:block>
             <script type="text/javascript">
             jQuery(function() {
@@ -327,5 +342,7 @@
 				<p id="submit_success_info">${message:submit-success}</p>
 			</t:if>
 		</t:form>
+    </div>
+    </fieldset>
 	</t:content>
 </html>

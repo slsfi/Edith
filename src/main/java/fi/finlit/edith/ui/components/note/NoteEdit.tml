@@ -1,0 +1,115 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+  xmlns:p="tapestry:parameter">
+<t:content>
+
+        <t:zone t:id="noteEditZone" update="show" />
+
+        <t:block t:id="noteEditBlock">
+
+                <script type="text/javascript">
+                  jQuery(".delete_dialog").hide();
+
+                  jQuery(".delete_question").click(function(event) {
+                      jQuery(this).siblings().show();
+                      jQuery(this).hide();
+                      event.preventDefault();
+                  });
+
+                  jQuery(".delete_decline").click(function(event) {
+                      jQuery(this).parent().siblings().show();
+                      jQuery(this).parent().hide();
+                      event.preventDefault();
+                  });
+                </script>
+            
+                <div class="panel narrow">
+                
+                <t:note.documentNoteForm noteOnEdit="noteOnEdit"/>
+                
+                
+                        
+                     <t:if test="slsMode">
+                         <t:note.SLSNoteForm                            
+                            noteOnEdit="noteOnEdit" 
+                            termOnEdit="termOnEdit"
+                            documentRevision="documentRevision"
+                            createTermSelection="createTermSelection"
+                            infoMessage="infoMessage"
+                            selectedNotes="selectedNotes"
+                            comments="comments"
+                            searchInfo="searchInfo"
+                            notesList="notesList"
+                            documentView="documentView"
+                            commentZone="commentZone"
+                            />
+                     <p:else>
+                        <t:note.SKSNoteForm                            
+                            noteOnEdit="noteOnEdit" 
+                            termOnEdit="termOnEdit"
+                            documentRevision="documentRevision"
+                            createTermSelection="createTermSelection"
+                            infoMessage="infoMessage"
+                            selectedNotes="selectedNotes"
+                            comments="comments"
+                            searchInfo="searchInfo"
+                            notesList="notesList"
+                            commentZone="commentZone"
+                            />
+                     </p:else>
+                     </t:if> 
+                    
+                </div>
+        </t:block>
+        <t:zone t:id="commentZone" update="show">
+            <script type="text/javascript">
+                jQuery(".delete_dialog").hide();
+
+                jQuery(".delete_question").click(function(event) {
+                     jQuery(this).siblings().show();
+                     jQuery(this).hide();
+                     event.preventDefault();
+                });
+
+                jQuery(".delete_decline").click(function(event) {
+                     jQuery(this).parent().siblings().show();
+                     jQuery(this).parent().hide();
+                     event.preventDefault();
+                });
+            </script>
+            <t:if test="noteId">
+                <div id="comments">
+                    <h3>${message:comments}</h3>
+                    <t:loop source="comments" value="comment" volatile="true">
+                        <div>
+                            <div>${comment.message}</div>
+                            <div class="metadata">
+                                <t:dateTimeFormat date="comment.createdAt"
+                                    format="message:dateformat-compact" />
+                                ${comment.username}
+                            </div>
+                        <span class="delete">
+                            <button class="delete_question">${message:deleteComment}</button>
+                            <span class="delete_dialog">
+                                ${message:delete}
+                                <t:eventlink t:event="deleteComment" t:zone="commentZone" 
+                                    context="[noteId,comment.id]">${message:yes}</t:eventlink>
+                                /
+                                <a href="" class="delete_decline">${message:no}</a>
+                            </span>
+                        </span>
+                        </div>
+                    </t:loop>
+                    <div>
+                        <strong>${message:createNewComment-label}</strong>
+                    </div>
+                    <div>
+                        <t:form t:id="commentForm" t:zone="commentZone" t:context="noteId" autofocus="false">
+                            <t:textArea value="newCommentMessage" rows="8" />
+                            <input type="submit" value="${message:saveComment}" />
+                        </t:form>
+                    </div>
+                </div>
+           </t:if>
+        </t:zone>
+</t:content>
+</html>

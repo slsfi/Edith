@@ -10,6 +10,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
+import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
+import fi.finlit.edith.ui.components.InfoMessage;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
@@ -36,9 +38,6 @@ public abstract class AbstractNoteForm {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
-    @Parameter
-    @Property
-    private Block closeDialog;
 
     @Parameter
     private List<NoteComment> comments;
@@ -53,9 +52,6 @@ public abstract class AbstractNoteForm {
     @Inject
     private DocumentNoteRepository documentNoteRepository;
 
-    @Parameter
-    private List<DocumentNote> documentNotes;
-
     @Inject
     private TimeService timeService;
 
@@ -67,19 +63,14 @@ public abstract class AbstractNoteForm {
     private DocumentRevision documentRevision;
 
     @Parameter
-    private Block documentView;
-
-    @Parameter
-    private Block errorBlock;
-
-    @Parameter
-    private String infoMessage;
+    @Property
+    private InfoMessage infoMessage;
     
     @Inject
     private Messages messages;
 
-    @Parameter
-    private Block noteEdit;
+    @InjectContainer
+    private NoteEdit noteEdit;
 
     @Parameter
     private DocumentNote noteOnEdit;
@@ -87,7 +78,7 @@ public abstract class AbstractNoteForm {
     @Inject
     private NoteRepository noteRepository;
 
-    @Parameter
+    @Inject //Parameter
     @Property
     private Block notesList;
 
@@ -234,16 +225,16 @@ public abstract class AbstractNoteForm {
             noteOnEdit.getConcept(extendedTerm).setStatus(NoteStatus.DRAFT);
         }
         try {
-            if (updateLongTextSelection.isValid()) {
-                logger.info("update long text selection: " + noteOnEdit);
-                if (saveAsNew) {
-                    Note newNote = noteOnEdit.getNote().createCopy();
-                    documentNote = documentRepository.addNote(newNote, documentRevision, updateLongTextSelection);
-                } else {
-                    documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);    
-                }
-                
-            } else {
+//            if (updateLongTextSelection.isValid()) {
+//                logger.info("update long text selection: " + noteOnEdit);
+//                if (saveAsNew) {
+//                    Note newNote = noteOnEdit.getNote().createCopy();
+//                    documentNote = documentRepository.addNote(newNote, documentRevision, updateLongTextSelection);
+//                } else {
+//                    documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);    
+//                }
+//                
+//            } else {
                 if (saveAsNew) {
                     logger.info("note saved as new: " + noteOnEdit);
                     documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
@@ -252,11 +243,11 @@ public abstract class AbstractNoteForm {
                     logger.info("note saved: " + noteOnEdit);
                     documentNote = documentNoteRepository.save(noteOnEdit);
                 }
-            }
+            //}
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
-            infoMessage = messages.format("note-addition-failed");
-            return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
+            infoMessage.addErrorMsg("note-addition-failed");
+            return new MultiZoneUpdate(EDIT_ZONE, infoMessage.getBlock());
         }
 
         // prepare view (with possibly new revision)
@@ -264,14 +255,19 @@ public abstract class AbstractNoteForm {
             documentRevision.setRevision(documentNote.getSVNRevision());
         }
 
-        selectedNotes = Collections.singletonList(documentNote);
+        //selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
         comments = NoteComment.getSortedComments(noteOnEdit.getConcept(extendedTerm).getComments());
         submitSuccess = true;
+        infoMessage.addInfoMsg("submit-success");
 
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("listZone", notesList)
-                .add("documentZone", documentView).add("commentZone", commentZone.getBody());
+        return new MultiZoneUpdate("noteEditZone", noteEdit.getBlock())
+            .add("infoMessageZone", infoMessage.getBlock())
+                //.add("listZone", notesList)
+                //.add("documentZone", documentView)
+                //.add("commentZone", commentZone.getBody())
+        ;
     }
 
     public String getSubtextSources() {
@@ -337,4 +333,11 @@ public abstract class AbstractNoteForm {
         documentNote.getNote().setTerm(term);
     }
     
+    public Concept getNoteOnEditConcept() {
+        return noteOnEdit.getConcept(extendedTerm);
+    }
+    
+    public String getEditorsForNoteOnEdit() {
+        return noteOnEdit.getEditors(extendedTerm);
+    }
 }

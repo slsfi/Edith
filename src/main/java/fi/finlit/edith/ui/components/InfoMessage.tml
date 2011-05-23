@@ -1,0 +1,28 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+<t:content>
+  <t:zone t:id="infoMessageZone" update="show"> 
+    <t:block id="infoMessageBlock">
+      <script type="text/javascript">
+        jQuery(function(){
+      	  setTimeout(function() {
+      		    jQuery('#info-message .info').fadeOut('fast');
+      		}, 3000);
+      	  jQuery("#info-message .error").click(function() { jQuery(this).hide() } );
+        });
+      </script>
+      <div id="info-message">
+        <div class="info">
+            <t:if test="info">
+                <p>${infoMsg}</p>
+            </t:if>
+        </div>
+        <div class="error">
+            <t:if test="error">
+                <p>${errorMsg}</p>
+            </t:if>
+        </div>
+      </div>
+    </t:block>
+  </t:zone>
+</t:content>
+</html>

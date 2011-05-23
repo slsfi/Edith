@@ -47,241 +47,131 @@
 	</p:leftPanel>
 
 	<p:rightPanel>
-		<div class="panel narrow">
-			<h3>${message:noteSearch}</h3>
-			<t:note.noteSearchForm notesList="notesList" searchInfo="searchInfo"/>
-		</div>
-		
-		<t:form t:id="createTerm" t:zone="listZone">
-			<t:hidden t:id="selectedText_1" value="createTermSelection.selection" />
-			<t:hidden t:id="selectedStartId_1" value="createTermSelection.startId" />
-			<t:hidden t:id="selectedEndId_1" value="createTermSelection.endId" />
-			<t:hidden t:id="selectedStartIndex_1" value="createTermSelection.startIndex" />
-			<t:hidden t:id="selectedEndIndex_1" value="createTermSelection.endIndex" />
-		</t:form>
-
-		<div class="panel narrow">
-			<h3>${message:notes}</h3>
-            <form id="note_filters">
-                <input id="numberOfInstancesInDocument" name="numberOfInstancesInDocument" type="checkbox"/><label for="numberOfInstancesInDocument">${message:numberOfInstancesInDocument-label}</label>
-                <input id="basicForm" name="basicForm" type="checkbox"/><label for="basicForm">${message:basicForm-label}</label>
-                <input id="meaning" name="meaning" type="checkbox"/><label for="meaning">${message:meaning-label}</label>
-                <input id="description" name="description" type="checkbox"/><label for="description">${message:description-label}</label>
-                <input id="document" name="document" type="checkbox"/><label for="document">${message:document-label}</label>
-                <input id="type" name="type" type="checkbox"/><label for="type">${message:type-label}</label>
-                <input id="format" name="format" type="checkbox"/><label for="format">${message:format-label}</label>
-                <input id="creator" name="creator" type="checkbox"/><label for="creator">${message:creator-label}</label>
-                <input id="edited" name="edited" type="checkbox"/><label for="edited">${message:edited-label}</label>
-                <input id="status" name="status" type="checkbox"/><label for="status">${message:status-label}</label>
-            </form>
-			<t:zone t:id="listZone" update="show">
-				<t:delegate to="notesList" />
-			</t:zone>
-			<div style="clear:both;"></div>
-		</div>
-
-		<t:zone t:id="editZone" update="show" />
-
-		<t:block t:id="notesList">
-		  <script type="text/javascript">
-
-		    jQuery(function() {
-		    	  jQuery("#note_filters input").each(function() {
-		    	      toggleNoteListElements(jQuery(this));
-		          });
-		    });
-		  </script>
-		
-			<t:if test="documentNotes">
-				<ul class="notes">
-					<t:loop source="notesWithInstances" value="noteWithInstances">
-						<t:loop source="noteWithInstances.documentNotes" value="note">
-							<li>
-								<span><a href="#start${note.localId}" id="noteid${note.note.id}" class="notelink ${noteConcept.status} ${documentNoteType}"><em>${note.note.lemma}</em></a></span>
-								<span class="numberOfInstancesInDocument"> ${numberOfInstancesInDocument} ${message:amountOfInstances}; </span>
-								<span class="basicForm">${note.note.term?.basicForm}; </span>
-								<span class="meaning">${note.note.term?.meaning}; </span>
-								<span class="description">${noteConcept.description}; </span>
-								<span class="document">${note.document?.title}; </span>
-								<span class="type">${typesString}; </span>
-								<span class="format"><t:if test="note.note.format"><t:fmt.message key="${note.note.format}"/></t:if>; </span>
-								<!--span class="creator">${note.note.lastEditedBy?.username} (${editorsForNote}); </span-->
-								<span class="edited"><t:dateTimeFormat date="note.note.editedOnDate" format="message:dateformat-compact" />; </span>
-								<span class="status"><t:fmt.message key="NoteStatus.${noteConcept.status}"/></span>
-							</li>							
-							<p:empty>
-								<li>
-								    <span><a href="#start" id="noteid${noteWithInstances.note.id}" class="notelink ${noteWithInstancesConcept.status} ORPHAN"><em>${noteWithInstances.note.lemma}</em></a></span>
-									<span class="basicForm">${noteWithInstances.note.term?.basicForm}; </span>
-									<span class="meaning">${noteWithInstances.note.term?.meaning}; </span>
-									<span class="description">${noteWithInstancesConcept.description}; </span>
-									<span class="type">${typesString}; </span>
-									<span class="format"><t:if test="noteWithInstances.note.format"><t:fmt.message key="${noteWithInstances.note.format}"/></t:if>; </span>
-									<span class="edited"><t:dateTimeFormat date="noteWithInstances.note.editedOnDate" format="message:dateformat-compact" />; </span>
-									<span class="status"><t:fmt.message key="NoteStatus.${noteWithInstancesConcept.status}"/></span>
-								</li>									
-							</p:empty>
-						</t:loop>						
-					</t:loop>
-				</ul>
-				<p:else>${message:no-notes}</p:else>
-			</t:if>
-		</t:block>
-
-		<t:block t:id="noteEdit">
-			<t:if test="!selectedNotes.empty">
-				<div class="panel narrow">
-
-					<t:if test="moreThanOneSelectable">
-						<h3>${message:selectNote}</h3>
-						<ul class="notes">
-
-							<t:loop source="selectedNotes" value="note">
-								<li>
-									<t:eventlink t:event="edit" context="e${note.localId}" t:zone="editZone" class="notelink">
-										<em>${note.note.lemma}</em>
-									</t:eventlink>
-								</li>
-							</t:loop>
-						</ul>
-					</t:if>
-					<h3>${message:noteEdit}</h3>
-					<div class="metadata">
-						<t:dateTimeFormat date="noteOnEdit.note.editedOnDate"
-							format="message:dateformat-compact" />
-						${noteOnEditConcept.lastEditedBy.username} (${editorsForNoteOnEdit})
-					</div>
-					<div class="cleaner"></div>
-					<div class="note_edit">
-						<em><strong>${noteOnEdit.note.lemma}</strong></em> 
-						<span class="metadata"> (<t:fmt.message key="embeddedTo" args="lemmaInstances"/>) </span>
-						
-						<!-- This could be externalized? -->
-                        <script type="text/javascript">
-                        jQuery(".delete_dialog").hide();
-
-                        jQuery(".delete_question").click(function(event) {
-                            jQuery(this).siblings().show();
-                            jQuery(this).hide();
-                            event.preventDefault();
-                        });
-
-                        jQuery(".delete_decline").click(function(event) {
-                            jQuery(this).parent().siblings().show();
-                            jQuery(this).parent().hide();
-                            event.preventDefault();
-                        });
-                		</script>
-
-                     <t:if test="slsMode">
-                         <t:note.SLSNoteForm                            
-                            noteOnEdit="noteOnEdit" 
-                            termOnEdit="termOnEdit"
-                            documentRevision="documentRevision"
-                            createTermSelection="createTermSelection"
-                            updateLongTextSelection="updateLongTextSelection"
-                            infoMessage="infoMessage"
-                            selectedNotes="selectedNotes"
-                            comments="comments"
-                            searchInfo="searchInfo"
-                            documentNotes="documentNotes"
-                            notesList="notesList"
-                            noteEdit="noteEdit"
-                            errorBlock="errorBlock"
-                            documentView="documentView"
-                            commentZone="commentZone"
-                            />
-                     <p:else>
-                        <t:note.SKSNoteForm                            
-                            noteOnEdit="noteOnEdit" 
-                            termOnEdit="termOnEdit"
-                            documentRevision="documentRevision"
-                            createTermSelection="createTermSelection"
-                            updateLongTextSelection="updateLongTextSelection"
-                            infoMessage="infoMessage"
-                            selectedNotes="selectedNotes"
-                            comments="comments"
-                            searchInfo="searchInfo"
-                            documentNotes="documentNotes"
-                            notesList="notesList"
-                            noteEdit="noteEdit"
-                            errorBlock="errorBlock"
-                            documentView="documentView"
-                            commentZone="commentZone"
-                            personForm="personForm"
-                            placeForm="placeForm"
-                            closeDialog="closeDialog"/>
-                     </p:else>
-                     </t:if> 
-					</div>
-				</div>
-			</t:if>
-		</t:block>
-		<t:zone t:id="commentZone" update="show">
-            <script type="text/javascript">
-                jQuery(".delete_dialog").hide();
-
-                jQuery(".delete_question").click(function(event) {
-                     jQuery(this).siblings().show();
-                     jQuery(this).hide();
-                     event.preventDefault();
-                });
-
-                jQuery(".delete_decline").click(function(event) {
-                     jQuery(this).parent().siblings().show();
-                     jQuery(this).parent().hide();
-                     event.preventDefault();
-                });
-            </script>
-			<t:if test="noteId">
-				<div id="comments">
-					<h3>${message:comments}</h3>
-					<t:loop source="comments" value="comment" volatile="true">
-						<div>
-							<div>${comment.message}</div>
-							<div class="metadata">
-								<t:dateTimeFormat date="comment.createdAt"
-									format="message:dateformat-compact" />
-								${comment.username}
-							</div>
-						<span class="delete">
-                            <button class="delete_question">${message:deleteComment}</button>
-                            <span class="delete_dialog">
-                                ${message:delete}
-                                <t:eventlink t:event="deleteComment" t:zone="commentZone" 
-                                    context="[noteId,comment.id]">${message:yes}</t:eventlink>
-                                /
-                                <a href="" class="delete_decline">${message:no}</a>
-                            </span>
-                        </span>
-						</div>
-					</t:loop>
-					<div>
-						<strong>${message:createNewComment-label}</strong>
-					</div>
-					<div>
-						<t:form t:id="commentForm" t:zone="commentZone" t:context="noteId" autofocus="false">
-							<t:textArea value="newCommentMessage" rows="8" />
-							<input type="submit" value="${message:saveComment}" />
-						</t:form>
-					</div>
-				</div>
-			</t:if>
-		</t:zone>
-
-		<t:block id="infoBlock">
-			${infoMessage}
-        </t:block>
-
-		<t:block id="errorBlock">
-			<div class="error">${infoMessage}</div>
-		</t:block>
-
-		<t:block id="emptyBlock">
-			<span />
-		</t:block>
+	
+	<script type="text/javascript">
+	  jQuery(function() {
+		  
+		 var saveState = function(event, ui) {
+			 var id = jQuery(this).attr("id");
+			 var state = jQuery(this).accordion("option", "active");
+			 if (state === false) {
+				 state = -1;
+			 }
+			 //alert("saving " + id +" "+ state)
+             jQuery.cookie(id, state, {expires: 7});
+		 };
+		 
+		 var loadState = function(event, ui) {
+			 var id = jQuery(this).attr("id");
+             var state = jQuery.cookie(id);
+             //alert("loaded " + id + " " + state);
+             if (state == 0) {
+            	//alert("setting " + id + " " + state);
+                jQuery(this).accordion("option", "active", 0);
+             } 
+		 }
+		  
+		 jQuery('#documentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState});
+		 jQuery('#searchAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState });
+		 jQuery('#searchResultsAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState });
+		 jQuery('#instancesAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState });
+		 jQuery('#editAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState });
+		 
+		 jQuery("#documentsTree").dynatree();
+		 
+	   });
+	</script>
+	
+	
+	<div id="documentsAccordion">
+        <h5><a href="#">Dokumentit</a></h5>
+        <div id="documentsTree">
+            <ul>
+                <li>
+                    <span>Kansio 1</span>
+                    <ul>
+                        <li>Dokumentti1</li>
+                        <li>Dokumentti2</li>
+                    </ul>
+                </li>
+                
+                <li>
+                    <span>Kansio 2</span>
+                    <ul>
+                        <li>Dokumentti1</li>
+                        <li>Dokumentti2</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="searchAccordion">
+        <h3><a href="#">${message:noteSearch}</a></h3>
+        <div>
+            <t:note.noteSearchForm searchInfo="searchInfo" searchResults="searchResults.notesList"/>
+        </div>
+    </div>
+	<div id="searchResultsAccordion">
+        <h3><a href="#">${message:notes}</a></h3>
+        <div>
+            <t:note.searchResults searchInfo="searchInfo" documentNotes="documentNotes" noteEdit="noteEdit"/>        
+        </div>
+    </div>
+    <div id="instancesAccordion">
+        <h3><a href="#">Esiintymät</a></h3>
+        <div>
+        
+            <t:note.documentNotes noteEdit="noteEdit"/>
+        
+            <t:remove>
+            <!-- This is going to be replaced with *** model -->    
+	        <t:if test="moreThanOneSelectable">
+	           <h3>${message:selectNote}</h3>
+	           <ul class="notes">
+	
+	               <t:loop source="selectedNotes" value="note">
+	                   <li>
+	                       <t:eventlink t:event="edit" context="e${note.localId}" t:zone="editZone" class="notelink">
+	                           <em>${note.note.lemma}</em>
+	                       </t:eventlink>
+	                   </li>
+	               </t:loop>
+	           </ul>
+	        </t:if>
+            </t:remove>
+        </div>
+    </div>
+	
+	<div id="editAccordion">
+        <h3><a href="#">${message:noteEdit}</a></h3>
+        <div>
+          
+          <t:note.noteEdit documentRevision="documentRevision" 
+                           createTermSelection="createTermSelection"
+                           infoMessage="infoMessage"/>
+              
+        </div>
+    </div>
+	
+    <t:form t:id="createTerm" t:zone="listZone">
+       <t:hidden t:id="selectedText_1" value="createTermSelection.selection" />
+       <t:hidden t:id="selectedStartId_1" value="createTermSelection.startId" />
+       <t:hidden t:id="selectedEndId_1" value="createTermSelection.endId" />
+       <t:hidden t:id="selectedStartIndex_1" value="createTermSelection.startIndex" />
+       <t:hidden t:id="selectedEndIndex_1" value="createTermSelection.endIndex" />
+    </t:form>
+    
+    <t:form t:id="selectNoteForm" t:zone="noteEditZone">
+        <t:hidden t:id="selectedNoteLocalId" value="selectedNoteLocalId" />
+    </t:form>
+    
+	<t:block id="emptyBlock">
+		<span />
+	</t:block>
 
 	</p:rightPanel>
+  
+    <t:infoMessage />
 
     <div class="jqmWindow" id="dialog">
         <t:zone t:id="dialogZone" update="show">${message:creatingNote}...</t:zone>
@@ -289,6 +179,7 @@
         <a href="#" class="jqmClose">${message:close}</a>
     </div>
     
+    <t:remove>
     <t:block t:id="notesForLemma">
         <div><strong>${message:createNewNoteOrChooseExistingOne}</strong></div>
     <t:loop source="notes" value="loopNote">
@@ -300,6 +191,7 @@
     </t:loop>
     <t:eventlink t:event="chooseBackingNote" t:zone="editZone">${message:createNewNote-label}</t:eventlink>
     </t:block>
+    </t:remove>
     
     <t:block t:id="closeDialog">
         ${message:create-success}

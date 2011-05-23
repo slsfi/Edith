@@ -94,4 +94,14 @@ public class DocumentNoteSearchInfo {
     public Document getCurrentDocument() {
         return currentDocument;
     }
+
+    @Override
+    public String toString() {
+        return "DocumentNoteSearchInfo [documents=" + documents + ", noteTypes=" + noteTypes
+                + ", noteFormats=" + noteFormats + ", creators=" + creators + ", orderBy="
+                + orderBy + ", ascending=" + ascending + ", orphans=" + orphans
+                + ", currentDocument=" + currentDocument + "]";
+    }
+    
+    
 }

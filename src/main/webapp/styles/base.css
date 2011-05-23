@@ -1,6 +1,15 @@
 body {
-	font-family: arial, helvetica, clean, sans-serif;
+	font-family: georgia, serif;
 	background-color: #fff;
+	font-size: 100%;
+	line-height: 1.125em;
+}
+
+/**
+* Overriding basic JQuery setting
+*/
+.ui-widget {
+    font-family: georgia, serif;	
 }
 
 ul,ol,li,h1,h2,h3,h4,h5,p {
@@ -66,3 +75,9 @@ p {
 	float: right;
 }
 
+fieldset {
+    border: 1px solid  #AAA;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 2em;
+}

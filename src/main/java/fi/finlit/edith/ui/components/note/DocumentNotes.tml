@@ -1,0 +1,44 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+  xmlns:p="tapestry:parameter">
+<t:content>
+
+  <div class="panel narrow document-notes">
+    <t:zone t:id="documentNotesZone" update="show">
+      <t:block t:id="documentNotesBlock">
+
+        <script type="text/javascript">
+          jQuery(function() {
+    		//Scroll to the selected document note if found
+    		var elem = jQuery("#start${selectedNote.localId}");
+    		if (elem.size() != 0) {
+    			jQuery("#left").scrollTo(elem);
+    		}
+    	  });
+  
+          //Update edit zone
+    	  jQuery(".document-notes .selectable-note").click(
+            function(event) {
+            	jQuery(".document-notes .notes li").removeClass("selected-note");
+            	jQuery(this).closest("li").addClass("selected-note");
+            	//Update note instances view on the selection
+            	TapestryExt.updateZone('noteEditZone', jQuery(this).attr("href"));
+            	return false;
+            });
+		</script>
+
+
+
+        <ul class="notes">
+          <t:loop source="documentNotes" value="documentNote">
+            <li><t:actionlink t:id="selectDocumentNote"
+                context="documentNote.id" class="selectable-note">${documentNote.note.lemma} (${documentNote.documentRevision.document.title})</t:actionlink>
+            </li>
+          </t:loop>
+        </ul>
+
+
+      </t:block>
+    </t:zone>
+  </div>
+</t:content>
+</html>
