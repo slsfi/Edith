@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -23,23 +24,15 @@ import fi.finlit.edith.domain.NoteCommentComparator;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.ui.components.InfoMessage;
+import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 
 @SuppressWarnings("unused")
 public class NoteEdit {
     
-    @Parameter
-    @Property
-    private DocumentRevision documentRevision;
-    
-    @Parameter
-    @Property
-    private SelectedText createTermSelection;
-    
-    @Parameter
-    @Property
-    private InfoMessage infoMessage;
+    @InjectPage
+    private Annotate page;
     
     @Inject
     private Block noteEditBlock;
@@ -71,14 +64,6 @@ public class NoteEdit {
     @Property
     private List<DocumentNote> selectedNotes;
     
-    @Property
-    private Term termOnEdit;
-
-    @Inject
-    @Symbol(EDITH.EXTENDED_TERM)
-    @Property
-    private boolean slsMode;
-
     public String getNoteId() {
         return noteOnEdit != null ? noteOnEdit.getId() : null;
     }
@@ -87,10 +72,12 @@ public class NoteEdit {
         return noteEditBlock;
     }
     
+    
+    
     Object onDeleteComment(String noteId, String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
         noteOnEdit = documentNoteRepository.getById(noteId);
-        comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
+        comments = getSortedComments(noteOnEdit.getConcept(isSlsMode()).getComments());
         comments.remove(deletedComment);
         return commentZone.getBody();
     }
@@ -111,10 +98,10 @@ public class NoteEdit {
 
     Object onSuccessFromCommentForm() {
         System.err.println("onSuccessFromCommentForm");
-        comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
+        comments = getSortedComments(noteOnEdit.getConcept(isSlsMode()).getComments());
         if (newCommentMessage != null) {
             comments.add(0,
-                    noteRepository.createComment(noteOnEdit.getConcept(slsMode), newCommentMessage));
+                    noteRepository.createComment(noteOnEdit.getConcept(isSlsMode()), newCommentMessage));
             newCommentMessage = null;
         }
         System.err.println("onSuccessFromCommentForm --");
@@ -123,20 +110,25 @@ public class NoteEdit {
 
     private Note createNote() {
         Note n = new Note();
-        if (slsMode) {
+        if (isSlsMode()) {
             n.setTerm(new Term());
         }
         return n;
     }
+    
+    public boolean isSlsMode() {
+        return page.isSlsMode();
+    }
 
     public Concept getLoopNoteConcept() {
-        return loopNote.getConcept(slsMode);
+        return loopNote.getConcept(page.isSlsMode());
     }
 
     
     public int getLemmaInstances() {
         return documentNoteRepository.getDocumentNoteCount(noteOnEdit.getNote());
     }
+        
     
     public void setNoteOnEdit(DocumentNote noteOnEdit) {
         this.noteOnEdit = noteOnEdit;
@@ -145,4 +137,5 @@ public class NoteEdit {
     public DocumentNote getNoteOnEdit() {
         return noteOnEdit;
     }
+    
 }

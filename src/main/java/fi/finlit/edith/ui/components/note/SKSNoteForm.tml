@@ -310,12 +310,6 @@
 				</div>
 			</div>
 			
-			<t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection" />
-			<t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId" />
-			<t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId" />
-			<t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
-			<t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
-
 			<input type="submit" value="${message:saveNote}" class="noteFormSubmit"/>
 			
 			<div class="saveAsNew">

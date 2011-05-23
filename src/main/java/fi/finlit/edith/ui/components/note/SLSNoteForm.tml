@@ -86,16 +86,6 @@
               </div>
             </t:if>
             </t:remove>
-            <t:if test="submitSuccess">
-              <!-- This could be externalized? -->
-              <script type="text/javascript">
-    											jQuery(function() {
-    												jQuery("#submit_success_info")
-    														.fadeOut(3000);
-    											});
-    										</script>
-              <p id="submit_success_info">${message:submit-success}</p>
-            </t:if>
           </t:form>
     
         </div>

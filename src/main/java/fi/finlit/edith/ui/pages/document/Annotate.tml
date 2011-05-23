@@ -108,13 +108,13 @@
     <div id="searchAccordion">
         <h3><a href="#">${message:notesearch}</a></h3>
         <div>
-            <t:note.noteSearchForm searchInfo="searchInfo" searchResults="searchResults.notesList"/>
+            <t:note.noteSearchForm />
         </div>
     </div>
 	<div id="searchResultsAccordion">
         <h3><a href="#">${message:notesearchresults}</a></h3>
         <div>
-            <t:note.searchResults searchInfo="searchInfo" documentNotes="documentNotes" noteEdit="noteEdit"/>        
+            <t:note.searchResults />        
         </div>
     </div>
     <div id="instancesAccordion">
@@ -146,9 +146,7 @@
         <h3><a href="#">${message:noteEdit}</a></h3>
         <div>
           
-          <t:note.noteEdit documentRevision="documentRevision" 
-                           createTermSelection="createTermSelection"
-                           infoMessage="infoMessage"/>
+          <t:note.noteEdit />
               
         </div>
     </div>

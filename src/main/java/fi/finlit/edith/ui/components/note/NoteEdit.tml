@@ -24,40 +24,15 @@
             
                 <div class="panel narrow">
                 
-                <t:note.documentNoteForm noteOnEdit="noteOnEdit"/>
-                
-                
-                        
-                     <t:if test="slsMode">
-                         <t:note.SLSNoteForm                            
-                            noteOnEdit="noteOnEdit" 
-                            termOnEdit="termOnEdit"
-                            documentRevision="documentRevision"
-                            createTermSelection="createTermSelection"
-                            infoMessage="infoMessage"
-                            selectedNotes="selectedNotes"
-                            comments="comments"
-                            searchInfo="searchInfo"
-                            notesList="notesList"
-                            documentView="documentView"
-                            commentZone="commentZone"
-                            />
-                     <p:else>
-                        <t:note.SKSNoteForm                            
-                            noteOnEdit="noteOnEdit" 
-                            termOnEdit="termOnEdit"
-                            documentRevision="documentRevision"
-                            createTermSelection="createTermSelection"
-                            infoMessage="infoMessage"
-                            selectedNotes="selectedNotes"
-                            comments="comments"
-                            searchInfo="searchInfo"
-                            notesList="notesList"
-                            commentZone="commentZone"
-                            />
-                     </p:else>
-                     </t:if> 
-                    
+                  <t:note.documentNoteForm noteOnEdit="noteOnEdit"/>
+                  
+                  <t:if test="slsMode">
+                     <t:note.SLSNoteForm noteOnEdit="noteOnEdit"/>                           
+                  <p:else>
+                    <t:note.SKSNoteForm noteOnEdit="noteOnEdit"/>                           
+                  </p:else>
+                  </t:if> 
+    
                 </div>
         </t:block>
         <t:zone t:id="commentZone" update="show">

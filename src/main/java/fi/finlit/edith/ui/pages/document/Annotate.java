@@ -18,6 +18,7 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -69,9 +70,8 @@ public class Annotate extends AbstractDocumentPage {
 
     @Inject
     private DocumentNoteRepository documentNoteRepository;
-
+  
     @Inject
-    @Property
     private Block documentView;
 
     @Inject
@@ -79,14 +79,9 @@ public class Annotate extends AbstractDocumentPage {
 
     @Inject
     @Property
-    private Block errorBlock;
-
-    @Inject
-    @Property
     private Block closeDialog;
 
     @InjectComponent
-    @Property
     private InfoMessage infoMessage;
     
     @Inject
@@ -136,19 +131,15 @@ public class Annotate extends AbstractDocumentPage {
 
     @Inject
     @Symbol(EDITH.EXTENDED_TERM)
-    @Property
     private boolean slsMode;
     
     @InjectComponent
-    @Property
     private SearchResults searchResults;
     
     @InjectComponent
-    @Property
     private DocumentNotes documentNotes;
     
     @InjectComponent
-    @Property
     private NoteEdit noteEdit;
 
     @AfterRender
@@ -274,6 +265,7 @@ public class Annotate extends AbstractDocumentPage {
             noteEdit.setNoteOnEdit(documentNote);
             infoMessage.addInfoMsg("create-success");
             return new MultiZoneUpdate("infoMessageZone", infoMessage.getBlock())
+                .add("listZone", searchResults.getBlock())
                 .add("documentNotesZone",documentNotes.getBlock())
                 .add("noteEditZone", noteEdit.getBlock())
                 .add("documentZone", documentView);
@@ -341,6 +333,28 @@ public class Annotate extends AbstractDocumentPage {
                 .add("dialogZone", closeDialog);
     }
 
-
+    public boolean isSlsMode() {
+        return slsMode;
+    }
+    
+    public NoteEdit getNoteEdit() {
+        return noteEdit;
+    }
+    
+    public InfoMessage getInfoMessage() {
+        return infoMessage;
+    }
+    
+    public SearchResults getSearchResults() {
+        return searchResults;
+    }
+    
+    public DocumentNotes getDocumentNotes() {
+        return documentNotes;
+    }
+    
+    public Block getDocumentView() {
+        return documentView;
+    }
    
 }

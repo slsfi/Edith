@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.InjectContainer;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
 import fi.finlit.edith.ui.components.InfoMessage;
+import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
@@ -37,7 +39,9 @@ public abstract class AbstractNoteForm {
     private static final String EDIT_ZONE = "editZone";
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    
+
+    @InjectPage
+    private Annotate page;
 
     @Parameter
     private List<NoteComment> comments;
@@ -58,29 +62,14 @@ public abstract class AbstractNoteForm {
     @Inject
     private DocumentRepository documentRepository;
 
-    @Property
-    @Parameter
-    private DocumentRevision documentRevision;
-
-    @Parameter
-    @Property
-    private InfoMessage infoMessage;
-    
     @Inject
     private Messages messages;
-
-    @InjectContainer
-    private NoteEdit noteEdit;
 
     @Parameter
     private DocumentNote noteOnEdit;
 
     @Inject
     private NoteRepository noteRepository;
-
-    @Inject //Parameter
-    @Property
-    private Block notesList;
 
     @Property
     private boolean saveAsNew;
@@ -104,16 +93,12 @@ public abstract class AbstractNoteForm {
     @Property
     private NoteType type;
 
-    @Property
-    @Parameter
-    private SelectedText updateLongTextSelection;
-        
-    @Inject @Symbol(EDITH.EXTENDED_TERM)
-    @Property
-    private boolean extendedTerm;
+    public boolean isSlsMode() {
+        return page.isSlsMode();
+    }
 
     public String getDescription() {
-        return noteOnEdit.getNote().getConcept(extendedTerm).getDescription();
+        return noteOnEdit.getNote().getConcept(isSlsMode()).getDescription();
     }
 
     private Term getEditTerm(Note note) {
@@ -124,15 +109,15 @@ public abstract class AbstractNoteForm {
     public NoteFormat getFormat() {
         return noteOnEdit.getNote().getFormat();
     }
-    
+
     public DocumentNote getNoteOnEdit() {
         return noteOnEdit;
     }
-    
+
     public void setNoteOnEdit(DocumentNote noteOnEdit) {
         this.noteOnEdit = noteOnEdit;
     }
-    
+
     protected DocumentNoteRepository getDocumentNoteRepository() {
         return documentNoteRepository;
     }
@@ -141,31 +126,29 @@ public abstract class AbstractNoteForm {
         return termOnEdit.getLanguage();
     }
 
-
     public String getSearch() {
         return "";
     }
 
     public Set<NoteType> getSelectedTypes() {
-        if (noteOnEdit.getConcept(extendedTerm).getTypes() == null) {
-            noteOnEdit.getConcept(extendedTerm).setTypes(new HashSet<NoteType>());
+        if (getNoteOnEditConcept().getTypes() == null) {
+            getNoteOnEditConcept().setTypes(new HashSet<NoteType>());
         }
-        return noteOnEdit.getConcept(extendedTerm).getTypes();
+        return noteOnEdit.getConcept(isSlsMode()).getTypes();
     }
 
     public String getSources() {
-        return noteOnEdit.getConcept(extendedTerm).getSources();
+        return getNoteOnEditConcept().getSources();
     }
 
     public NoteStatus getStatus() {
-        return noteOnEdit.getConcept(extendedTerm).getStatus();
+        return getNoteOnEditConcept().getStatus();
     }
 
     public EnumSelectModel getStatusModel() {
-        final NoteStatus[] availableStatuses = noteOnEdit.getConcept(extendedTerm).getStatus()
-                .equals(NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL,
-                NoteStatus.DRAFT, NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT,
-                NoteStatus.FINISHED };
+        final NoteStatus[] availableStatuses = getNoteOnEditConcept().getStatus().equals(
+                NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
+                NoteStatus.FINISHED } : new NoteStatus[] { NoteStatus.DRAFT, NoteStatus.FINISHED };
         return new EnumSelectModel(NoteStatus.class, messages, availableStatuses);
     }
 
@@ -187,20 +170,20 @@ public abstract class AbstractNoteForm {
     void onPrepareFromNoteEditForm(String noteId, String docNoteId) {
         System.err.println("noteForm.onPrepareFromNoteEditForm " + noteId + " " + docNoteId);
         if (docNoteId != null) {
-            if (noteOnEdit == null){
+            if (noteOnEdit == null) {
                 noteOnEdit = documentNoteRepository.getById(docNoteId); // .createCopy();
             }
         } else {
             noteOnEdit = new DocumentNote();
             noteOnEdit.setLocalId(String.valueOf(timeService.currentTimeMillis()));
             noteOnEdit.setNote(noteRepository.getById(noteId));
-            noteOnEdit.setDocRevision(documentRevision);
-            noteOnEdit.setDocument(documentRevision.getDocument());
+            noteOnEdit.setDocRevision(page.getDocumentRevision());
+            noteOnEdit.setDocument(page.getDocument());
             if (noteOnEdit.getSVNRevision() == null) {
-                noteOnEdit.setSVNRevision(documentRevision.getRevision());
+                noteOnEdit.setSVNRevision(page.getDocumentRevision().getRevision());
             }
         }
-        
+
         termOnEdit = getEditTerm(noteOnEdit.getNote());
         System.err.println("noteForm.onPrepareFromNoteEditForm --");
     }
@@ -209,7 +192,6 @@ public abstract class AbstractNoteForm {
         return termRepository.findByStartOfBasicForm(partial, 10);
     }
 
-   
     Object onSuccessFromNoteEditForm() {
         DocumentNote documentNote;
 
@@ -221,68 +203,57 @@ public abstract class AbstractNoteForm {
             setTerm(noteOnEdit);
         }
 
-        if (noteOnEdit.getConcept(extendedTerm).getStatus().equals(NoteStatus.INITIAL)) {
-            noteOnEdit.getConcept(extendedTerm).setStatus(NoteStatus.DRAFT);
+        if (getNoteOnEditConcept().getStatus().equals(NoteStatus.INITIAL)) {
+            getNoteOnEditConcept().setStatus(NoteStatus.DRAFT);
         }
         try {
-//            if (updateLongTextSelection.isValid()) {
-//                logger.info("update long text selection: " + noteOnEdit);
-//                if (saveAsNew) {
-//                    Note newNote = noteOnEdit.getNote().createCopy();
-//                    documentNote = documentRepository.addNote(newNote, documentRevision, updateLongTextSelection);
-//                } else {
-//                    documentNote = documentRepository.updateNote(noteOnEdit, updateLongTextSelection);    
-//                }
-//                
-//            } else {
-                if (saveAsNew) {
-                    logger.info("note saved as new: " + noteOnEdit);
-                    documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
-                    saveAsNew = false;
-                } else {
-                    logger.info("note saved: " + noteOnEdit);
-                    documentNote = documentNoteRepository.save(noteOnEdit);
-                }
-            //}
+            if (saveAsNew) {
+                logger.info("note saved as new: " + noteOnEdit);
+                documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
+                saveAsNew = false;
+            } else {
+                logger.info("note saved: " + noteOnEdit);
+                documentNote = documentNoteRepository.save(noteOnEdit);
+            }
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
-            infoMessage.addErrorMsg("note-addition-failed");
-            return new MultiZoneUpdate(EDIT_ZONE, infoMessage.getBlock());
+            page.getInfoMessage().addErrorMsg("note-addition-failed");
+            return new MultiZoneUpdate("infoMessageZone", page.getInfoMessage().getBlock());
         }
 
         // prepare view (with possibly new revision)
-        if (documentNote.getSVNRevision() > documentRevision.getRevision()) {
-            documentRevision.setRevision(documentNote.getSVNRevision());
+        if (documentNote.getSVNRevision() > page.getDocumentRevision().getRevision()) {
+            page.getDocumentRevision().setRevision(documentNote.getSVNRevision());
         }
 
-        //selectedNotes = Collections.singletonList(documentNote);
+        // selectedNotes = Collections.singletonList(documentNote);
         noteOnEdit = documentNote;
         termOnEdit = getEditTerm(noteOnEdit.getNote());
-        comments = NoteComment.getSortedComments(noteOnEdit.getConcept(extendedTerm).getComments());
+        comments = NoteComment.getSortedComments(getNoteOnEditConcept().getComments());
         submitSuccess = true;
-        infoMessage.addInfoMsg("submit-success");
+        page.getInfoMessage().addInfoMsg("submit-success");
 
-        return new MultiZoneUpdate("noteEditZone", noteEdit.getBlock())
-            .add("infoMessageZone", infoMessage.getBlock())
-                //.add("listZone", notesList)
-                //.add("documentZone", documentView)
-                //.add("commentZone", commentZone.getBody())
+        return new MultiZoneUpdate("noteEditZone", page.getNoteEdit().getBlock()).add(
+                "infoMessageZone", page.getInfoMessage().getBlock())
+        // .add("listZone", notesList)
+        // .add("documentZone", documentView)
+        // .add("commentZone", commentZone.getBody())
         ;
     }
 
     public String getSubtextSources() {
-        return noteOnEdit.getConcept(extendedTerm).getSubtextSources();
+        return getNoteOnEditConcept().getSubtextSources();
     }
 
     public void setSubtextSources(String subtextSources) throws XMLStreamException {
         if (subtextSources != null) {
-            noteOnEdit.getConcept(extendedTerm).setSubtextSources(subtextSources);
+            getNoteOnEditConcept().setSubtextSources(subtextSources);
         }
     }
 
     public void setDescription(String description) throws XMLStreamException {
         if (description != null) {
-            noteOnEdit.getConcept(extendedTerm).setDescription(description);
+            getNoteOnEditConcept().setDescription(description);
         }
     }
 
@@ -309,13 +280,13 @@ public abstract class AbstractNoteForm {
 
     public void setSources(String sources) throws XMLStreamException {
         if (sources != null) {
-            noteOnEdit.getConcept(extendedTerm).setSources(sources);
+            getNoteOnEditConcept().setSources(sources);
         }
     }
 
     @Validate("required")
     public void setStatus(NoteStatus status) {
-        noteOnEdit.getConcept(extendedTerm).setStatus(status);
+        getNoteOnEditConcept().setStatus(status);
     }
 
     private void setTerm(DocumentNote documentNote) {
@@ -332,12 +303,12 @@ public abstract class AbstractNoteForm {
         }
         documentNote.getNote().setTerm(term);
     }
-    
+
     public Concept getNoteOnEditConcept() {
-        return noteOnEdit.getConcept(extendedTerm);
+        return noteOnEdit.getConcept(isSlsMode());
     }
-    
+
     public String getEditorsForNoteOnEdit() {
-        return noteOnEdit.getEditors(extendedTerm);
+        return noteOnEdit.getEditors(isSlsMode());
     }
 }

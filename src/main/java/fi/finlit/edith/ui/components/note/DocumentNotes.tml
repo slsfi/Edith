@@ -7,8 +7,10 @@
       <t:block t:id="documentNotesBlock">
 
         <script type="text/javascript">
+          
           jQuery(function() {
-    		//Scroll to the selected document note if found
+        	  
+    		//Scroll to the selected document note if found on load
     		var elem = jQuery("#start${selectedNote.localId}");
     		if (elem.size() != 0) {
     			jQuery("#left").scrollTo(elem);
@@ -16,10 +18,17 @@
     	  });
   
           //Update edit zone
-    	  jQuery(".document-notes .selectable-note").click(
+    	  jQuery(".document-notes .selectable-doc-note").click(
             function(event) {
             	jQuery(".document-notes .notes li").removeClass("selected-note");
             	jQuery(this).closest("li").addClass("selected-note");
+            	
+            	//Scroll to selected element on click
+            	var elem = jQuery("#start"+ jQuery(this).attr("localId"));
+            	if (elem.size() != 0) {
+                    jQuery("#left").scrollTo(elem);
+                }
+            	
             	//Update note instances view on the selection
             	TapestryExt.updateZone('noteEditZone', jQuery(this).attr("href"));
             	return false;
@@ -31,7 +40,8 @@
         <ul class="notes">
           <t:loop source="documentNotes" value="documentNote">
             <li><t:actionlink t:id="selectDocumentNote"
-                context="documentNote.id" class="selectable-note">${documentNote.note.lemma} (${documentNote.documentRevision.document.title})</t:actionlink>
+                context="documentNote.id" class="selectable-doc-note" localId="${documentNote.localId}">${documentNote.note.lemma} 
+                    (${documentNote.documentRevision.document.title})</t:actionlink>
             </li>
           </t:loop>
         </ul>
