@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectContainer;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -17,8 +18,8 @@ import fi.finlit.edith.ui.services.DocumentNoteRepository;
 @SuppressWarnings("unused")
 public class DocumentNotes {
 
-    @Parameter
-    private NoteEdit noteEdit;
+    @InjectPage
+    private Annotate page;
 
     @Inject
     private Block documentNotesBlock;
@@ -55,18 +56,31 @@ public class DocumentNotes {
         return selectedNote;
     }
 
+    public void setSelectedNote(DocumentNote selectedNote) {
+        this.selectedNote = selectedNote; 
+    }
+
+    public String getSelectedCssClass() {
+        return documentNote.getId().equals(getSelectedNote().getId()) ? "selected-note" : "";
+    }
+    
     Object onActionFromSelectDocumentNote(String documentNoteId) {
         System.out.println("select documentNote " + documentNoteId);
 
         selectedNote = documentNoteRepository.getById(documentNoteId);
 
-        noteEdit.setNoteOnEdit(selectedNote);
-        return noteEdit.getBlock();
+        page.getNoteEdit().setDocumentNoteOnEdit(selectedNote);
+        return page.getNoteEdit().getBlock();
     }
 
     public void setNoteId(String noteId) {
         System.out.println("Setting noteid to " + noteId);
         this.noteId = noteId;
     }
+    
+    public String getLocalId() {
+        return getSelectedNote() != null ? getSelectedNote().getLocalId() : "";
+    }
+
 
 }

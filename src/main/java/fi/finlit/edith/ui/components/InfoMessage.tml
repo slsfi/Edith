@@ -1,28 +1,50 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 <t:content>
-  <t:zone t:id="infoMessageZone" update="show"> 
+  <t:zone t:id="infoMessageZone" update="show">
     <t:block id="infoMessageBlock">
-      <script type="text/javascript">
+        <script type="text/javascript">
         jQuery(function(){
-      	  setTimeout(function() {
-      		    jQuery('#info-message .info').fadeOut('fast');
-      		}, 3000);
-      	  jQuery("#info-message .error").click(function() { jQuery(this).hide() } );
+            InfoMessage.showInfo("${infoMsg}")
+            InfoMessage.showError("${errorMsg}")
         });
-      </script>
-      <div id="info-message">
-        <div class="info">
-            <t:if test="info">
-                <p>${infoMsg}</p>
-            </t:if>
-        </div>
-        <div class="error">
-            <t:if test="error">
-                <p>${errorMsg}</p>
-            </t:if>
-        </div>
-      </div>
-    </t:block>
+        </script>
+    </t:block> 
   </t:zone>
+  
+    <script type="text/javascript">
+      var InfoMessage = {
+          fadeMsg : function() {
+              setTimeout(function() {
+                  jQuery('#info-message').hide();
+              }, 3000);  	
+          },
+          
+          showError: function(msg) {
+        	if ( msg !== "" ) { 
+          	 jQuery("#info-message .error").html("<p>"+msg+"</p>");
+          	 jQuery("#info-message").show();
+        	}
+          },
+          
+          showInfo: function(msg) {
+        	if (msg !== "") {
+              jQuery("#info-message .info").html("<p>"+msg+"</p>");
+              jQuery("#info-message").show();
+          	  this.fadeMsg();
+            }
+          }
+              
+      };
+      jQuery(function(){
+        jQuery("#info-message").hide().click(function() { jQuery(this).hide() } );
+      });
+    </script>
+    <div id="info-message">
+      <div class="info">
+      </div>
+      <div class="error">
+      </div>
+    </div>
+    
 </t:content>
 </html>

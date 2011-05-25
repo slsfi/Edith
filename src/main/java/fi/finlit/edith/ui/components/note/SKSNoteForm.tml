@@ -28,7 +28,7 @@
                 <legend>Viite</legend>
                 
                     <div class="metadata">
-                        <t:dateTimeFormat date="noteOnEdit.note.editedOnDate"
+                        <t:dateTimeFormat date="noteOnEdit.editedOnDate"
                             format="message:dateformat-compact" />
                         ${noteOnEditConcept.lastEditedBy.username} (${editorsForNoteOnEdit})
                     </div>
@@ -38,7 +38,7 @@
                     <div class="note_edit">
 	
 	
-		<t:form t:id="noteEditForm" t:zone="editZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]">
+		<t:form t:id="noteEditForm" t:zone="editZone" t:context="[noteOnEdit.id]">
 			<t:errors />
 			<div class="format">
 				<div>
@@ -58,6 +58,8 @@
 				</div>
 			</div>
 			
+            <t:remove>
+            <!-- Is documentNote right place for publishable?? -->
 			<div class="publishable">
                 <div>
                 <label>
@@ -66,20 +68,21 @@
                     </label>
                 </div>
             </div>
+            </t:remove>
 
 			<div class="note lemma">
 				<div>
 					<strong>${message:lemma-label}</strong>
 				</div>
 				<div>
-					<t:textField value="noteOnEdit.note.lemma" />
+					<t:textField value="noteOnEdit.lemma" />
 				</div>
 			</div>
 
 			<div class="note lemmaMeaning">
 				<div>${message:lemmaMeaning-label}</div>
 				<div>
-					<t:textArea rows="1" value="noteOnEdit.note.lemmaMeaning" />
+					<t:textArea rows="1" value="noteOnEdit.lemmaMeaning" />
 				</div>
 			</div>
 
@@ -301,6 +304,7 @@
 				</div>
 			</div>
 
+            <t:remove>
 			<div class="longText">
 				<div>
 					<strong>${message:longText-label}</strong>
@@ -309,6 +313,7 @@
 					<div id="longTextEdit">${noteOnEdit.longText}</div>
 				</div>
 			</div>
+            </t:remove>
 			
 			<input type="submit" value="${message:saveNote}" class="noteFormSubmit"/>
 			
@@ -327,14 +332,7 @@
                 </span>
             </div>
             </t:if>
-			<t:if test="submitSuccess">
-				<!-- This could be externalized? -->
-				<script type="text/javascript">
-					jQuery(function() {
-					jQuery("#submit_success_info").fadeOut(3000);
-					});</script>
-				<p id="submit_success_info">${message:submit-success}</p>
-			</t:if>
+			
 		</t:form>
     </div>
     </fieldset>

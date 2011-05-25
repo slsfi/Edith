@@ -303,14 +303,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Query_For_All_Notes() {
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         assertEquals(6, notes.size());
     }
 
     @Test
     public void Query_and_Delete(){
         searchInfo.setDocuments(Collections.singleton(document));
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         assertFalse(notes.isEmpty());
 
         // remove note
@@ -320,14 +320,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(newRevision);
 
         // assert that query returns less results
-        List<NoteWithInstances> newResults = noteRepository.query(searchInfo);
+        List<NoteWithInstances> newResults = noteRepository.findNotesWithInstances(searchInfo);
         assertEquals(notes.size() - 1, newResults.size());
 
     }
 
     @Test
     public void Query_For_All_Notes_Ordered_By_Lemma_Ascending_By_Default() {
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         DocumentNote previous = null;
         for (NoteWithInstances note : notes){
             for (DocumentNote documentNote : note.getDocumentNotes()) {
@@ -343,14 +343,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Query_For_Notes_Based_On_Document() {
         searchInfo.getDocuments().add(docRev.getDocument());
-        assertEquals(4, noteRepository.query(searchInfo).size());
+        assertEquals(4, noteRepository.findNotesWithInstances(searchInfo).size());
     }
 
     @Test
     public void Query_For_Notes_Based_On_Creator() {
         UserInfo userInfo = userRepository.getUserInfoByUsername("testo");
         searchInfo.getCreators().add(userInfo);
-        assertEquals(1, noteRepository.query(searchInfo).size());
+        assertEquals(1, noteRepository.findNotesWithInstances(searchInfo).size());
     }
 
     @Test
@@ -358,10 +358,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Query_For_Notes_Based_On_Editors() {
         UserInfo userInfo = userRepository.getUserInfoByUsername("testo");
         searchInfo.getCreators().add(userInfo);
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         assertEquals(1, notes.size());
         documentNoteRepository.save(notes.get(0).getDocumentNotes().iterator().next());
-        notes = noteRepository.query(searchInfo);
+        notes = noteRepository.findNotesWithInstances(searchInfo);
         assertEquals(1, notes.size());
         assertEquals("timo", notes.get(0).getNote().getConcept(extendedTerm).getLastEditedBy().getUsername());
     }
@@ -372,32 +372,32 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         UserInfo userInfo2 = userRepository.getUserInfoByUsername("testo2");
         searchInfo.getCreators().add(userInfo1);
         searchInfo.getCreators().add(userInfo2);
-        assertEquals(2, noteRepository.query(searchInfo).size());
+        assertEquals(2, noteRepository.findNotesWithInstances(searchInfo).size());
     }
 
     @Test
     public void Query_For_Notes_Based_On_Note_Type() {
         searchInfo.getNoteTypes().add(NoteType.HISTORICAL);
-        assertEquals(2, noteRepository.query(searchInfo).size());
+        assertEquals(2, noteRepository.findNotesWithInstances(searchInfo).size());
     }
 
     @Test
     public void Query_For_Notes_Based_On_Note_Type_Two_Filters() {
         searchInfo.getNoteTypes().add(NoteType.HISTORICAL);
         searchInfo.getNoteTypes().add(NoteType.DICTUM);
-        assertEquals(2, noteRepository.query(searchInfo).size());
+        assertEquals(2, noteRepository.findNotesWithInstances(searchInfo).size());
     }
 
     @Test
     public void Query_For_Notes_Based_On_Note_Format() {
         searchInfo.getNoteFormats().add(NoteFormat.PERSON);
-        assertEquals(2, noteRepository.query(searchInfo).size());
+        assertEquals(2, noteRepository.findNotesWithInstances(searchInfo).size());
     }
 
     @Test
     public void Query_For_All_Notes_Order_By_Creator_Ascending() {
         searchInfo.setOrderBy(OrderBy.USER);
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         DocumentNote previous = null;
         for (NoteWithInstances note : notes){
             for (DocumentNote documentNote : note.getDocumentNotes()) {
@@ -416,7 +416,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Query_For_All_Notes_Order_By_Creator_Descending() {
         searchInfo.setOrderBy(OrderBy.USER);
         searchInfo.setAscending(false);
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         DocumentNote previous = null;
         for (NoteWithInstances note : notes){
             for (DocumentNote documentNote : note.getDocumentNotes()) {
@@ -434,7 +434,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Query_For_All_Notes_Order_By_Date_Of_Creation_Ascending() {
         searchInfo.setOrderBy(OrderBy.DATE);
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         NoteWithInstances previous = null;
         for (NoteWithInstances note : notes){
             if (previous != null){
@@ -449,17 +449,17 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         noteRepository.importNotes(noteTestData);
         assertEquals(15, noteRepository.getAll().size());
         searchInfo.setOrphans(true);
-        assertEquals(9, noteRepository.query(searchInfo).size());
+        assertEquals(9, noteRepository.findNotesWithInstances(searchInfo).size());
     }
 
     @Test
     public void Query_For_All_Notes_Order_By_Status() {
         searchInfo.setOrderBy(OrderBy.STATUS);
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         DocumentNote edited = notes.get(2).getDocumentNotes().iterator().next();
         edited.getNote().getConcept(extendedTerm).setStatus(NoteStatus.FINISHED);
         documentNoteRepository.save(edited);
-        notes = noteRepository.query(searchInfo);
+        notes = noteRepository.findNotesWithInstances(searchInfo);
         DocumentNote previous = null;
         for (NoteWithInstances note : notes){
             for (DocumentNote documentNote : note.getDocumentNotes()) {
@@ -553,7 +553,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         String text = "l\u00E4htee";
         Note note = noteRepository.createDocumentNote(createNote(), docRev, "100", text).getNote();
         noteRepository.createDocumentNote(note, docRev, "200", text);
-        assertEquals(6, countDocumentNotes(noteRepository.query(searchInfo)));
+        assertEquals(6, countDocumentNotes(noteRepository.findNotesWithInstances(searchInfo)));
     }
 
     @Test
@@ -567,7 +567,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         documentNoteRepository.save(documentNote);
 
         searchInfo.setCurrentDocument(document);
-        List<NoteWithInstances> notes = noteRepository.query(searchInfo);
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(searchInfo);
         for (NoteWithInstances n : notes){
             for (DocumentNote current : n.getDocumentNotes()) {
                 if (current.getNote().getLemma().equals(text)) {

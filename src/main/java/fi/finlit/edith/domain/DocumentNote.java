@@ -5,9 +5,6 @@
  */
 package fi.finlit.edith.domain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
@@ -175,16 +172,6 @@ public class DocumentNote extends Identifiable {
     
     public Concept getConcept(boolean extendedTerm) {
         return note.getConcept(extendedTerm);
-    }
-    
-    public String getEditors(boolean extendedTerm) {
-        Collection<String> result = new ArrayList<String>();
-        for (UserInfo user : getConcept(extendedTerm).getAllEditors()) {
-            if (!getConcept(extendedTerm).getLastEditedBy().equals(user)) {
-                result.add(user.getUsername());
-            }
-        }
-        return StringUtils.join(result, ", ");
     }
     
 }

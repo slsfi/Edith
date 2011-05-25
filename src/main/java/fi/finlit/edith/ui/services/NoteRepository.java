@@ -32,7 +32,7 @@ public interface NoteRepository extends Repository<Note, String> {
     NoteComment createComment(Concept concept, String message);
 
     /**
-     * Create a new Note for the given DocumentRevision with the given local id, lemma and long text
+     * Create a new document note for the given DocumentRevision with the given local id, lemma and long text
      *
      * @param docRevision
      * @param localId
@@ -40,6 +40,15 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String localId, String longText);
+    
+    /**
+     * A create new document not variant where local id is from current time
+     * @param note
+     * @param docRevision
+     * @param longText
+     * @return
+     */
+    DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String longText);
 
     /**
      * @param lemma
@@ -126,8 +135,15 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param searchInfo
      * @return
      */
-    List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo);
+    List<NoteWithInstances> findNotesWithInstances(DocumentNoteSearchInfo searchInfo);
 
+    /**
+     * @param searchInfo
+     * @return
+     */
+    List<Note> findNotes(DocumentNoteSearchInfo searchInfo);
+
+    
     /**
      * @param editedNote
      */

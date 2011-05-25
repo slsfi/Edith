@@ -1,53 +1,56 @@
 jQuery.noConflict();
 
-var createNote = function() {
-	if (!TextSelector.updateIndices(TextSelector.getSelection())) {
-			alert(l10n.invalidSelection);
-			return false;
-	}
-	jQuery(":input[name='selectedStartId_1']").val(TextSelector.startId);
-	jQuery(":input[name='selectedEndId_1']").val(TextSelector.endId);
-	jQuery(":input[name='selectedText_1']").val(TextSelector.selection);
-	jQuery(":input[name='selectedStartIndex_1']").val(TextSelector.startIndex);
-	jQuery(":input[name='selectedEndIndex_1']").val(TextSelector.endIndex);
-
-	//Submit form
-	TapestryExt.submitZoneForm(jQuery("#createTerm").get(0));
-	return true;
-}
-
-var updateNote = function() {
-	if (!TextSelector.updateIndices(TextSelector.getSelection())) {
-		alert(l10n.invalidSelection);
-		return;
-	}
+var Annotate = {
 	
-	jQuery("#longTextEdit").html(TextSelector.selection);
-	jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
-	jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
-	jQuery(":input[name='selectedText_2']").val(TextSelector.selection);
-	jQuery(":input[name='selectedStartIndex_2']").val(TextSelector.startIndex);
-	jQuery(":input[name='selectedEndIndex_2']").val(TextSelector.endIndex);
-	return false;
-}
+	selectedNoteId : null,
+	
+	updateSelectionForm : function() {
+		if (!TextSelector.updateIndices(TextSelector.getSelection())) {
+			InfoMessage.showError("Could not make valid selection. Try again.");
+			return false;
+		}
+		jQuery(":input[name^='selectedStartId']").val(TextSelector.startId);
+		jQuery(":input[name^='selectedEndId']").val(TextSelector.endId);
+		jQuery(":input[name^='selectedText']").val(TextSelector.selection);
+		jQuery(":input[name^='selectedStartIndex']").val(TextSelector.startIndex);
+		jQuery(":input[name^='selectedEndIndex']").val(TextSelector.endIndex);
+		return true;
+	},
 
-var updateSelectionLink = function() {
-	if(TextSelector.getSelection() == "") { 
-		jQuery(".selection-link").addClass('disabled');
-	} else {
-		jQuery(".selection-link").removeClass('disabled');
-	}
-}
+	createNote : function() {
+		if(!this.updateSelectionForm()) {
+			return false;
+		}
+		TapestryExt.submitZoneForm(jQuery("#createTermForm").get(0));
+		return false;
+	},
 
-var toggleNoteListElements = function(checkbox) {
-	var checkbox = checkbox;
-	var isChecked = checkbox.attr("checked");
-	if (isChecked) {
-		jQuery(".notes ." + checkbox.attr("name")).show();
-	} else {
-		jQuery(".notes ." + checkbox.attr("name")).hide();
-	}
-}
+	connectNote : function() {
+		if(!this.updateSelectionForm()) {
+			return false;
+		}
+		jQuery(":input[name='noteToLinkId']").val(Annotate.selectedNoteId);
+		TapestryExt.submitZoneForm(jQuery("#connectTermForm").get(0));
+		return false;
+	},
+	
+	setSelectedNote : function(noteId) {
+		this.selectedNoteId = noteId;
+	},
+	
+	updateSelectionLinks : function() {
+		if( TextSelector.getSelection() == "" ) { 
+			jQuery("#createTermLink").addClass('disabled');
+			jQuery("#connectTermLink").addClass('disabled');
+		} else {
+			jQuery("#createTermLink").removeClass('disabled');
+			if (this.selectedNoteId !== null) {
+				jQuery("#connectTermLink").removeClass('disabled');
+			}
+		}
+	},
+
+};
 
 jQuery(document).ready(function() {
 	var disableLink = false;
@@ -76,31 +79,24 @@ jQuery(document).ready(function() {
         }    
     );
     
-    jQuery(".selectable-note").live('click',
-    	function(event) {
-    		alert("selected");
-    	}
-    );
+    //jQuery(".selectable-note").live('click',
+    //	function(event) {
+    //		alert("selected");
+    //	}
+    //);
     
     // live updated
-    jQuery('.notelink').live('click',
-    	function(event) {
-    		var localId= jQuery(this).attr('href').replace('#start','');
-			var noteId = jQuery(this).attr('id').replace('noteid', '');
-			var url = ".documentnotes.selectdocumentnote/" + noteId
-			TapestryExt.updateZone("documentNotesZone", url);
-			
-    		//Editor.updateEditZone("e" + localId + "/" + noteId);
-    	}
-    );
+    //jQuery('.notelink').live('click',
+    //	function(event) {
+    //		var localId= jQuery(this).attr('href').replace('#start','');
+	//		var noteId = jQuery(this).attr('id').replace('noteid', '');		
+    //		//Editor.updateEditZone("e" + localId + "/" + noteId);
+    //	}
+    //);
   
-    jQuery('#createTermLink').bind('click', function() {
-    	//jQuery("#dialogZone").text("Odota hetki!");
-    	//if (createNote()) {
-    		//jQuery("#dialog").jqm().jqmShow();
-    	//}
-    	createNote();
-    });
+    jQuery('#createTermLink').bind('click', function() { Annotate.createNote() });
+    jQuery("#connectTermLink").bind("click", function() { Annotate.connectNote() });
+    jQuery('body').bind('mousemove', function() { Annotate.updateSelectionLinks() });
     
     /* TODO disable for note editing!
     jQuery(document).keydown(function(event) {
@@ -109,15 +105,7 @@ jQuery(document).ready(function() {
     	}
     });
     */
-    
-    jQuery('#longTextEditLink').live('click', updateNote);
-
-    jQuery('body').live('mousemove', updateSelectionLink);
-    
-    jQuery("#note_filters input").click(function() {
-    	toggleNoteListElements(jQuery(this));
-    });
-    
+   
     jQuery(".jqmOpen").click(function() {
     	jQuery("#dialogZone").text("Hetki...");
     	jQuery("#dialog").jqm().jqmShow();
@@ -128,11 +116,3 @@ jQuery(document).ready(function() {
     });
     
 });
-
-var Editor = {		
-	updateEditZone: function(context){
-		alert("updateEditZone: " + context);
-		var link = editLink.replace('CONTEXT',context);
-		TapestryExt.updateZone('editZone', link);
-	},
-}

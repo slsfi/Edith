@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +32,8 @@ import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.User;
+import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
@@ -38,6 +41,7 @@ import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.PersonRepository;
 import fi.finlit.edith.ui.services.PlaceRepository;
+import fi.finlit.edith.ui.services.UserRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 public class NoteRepositoryTest extends AbstractServiceTest {
@@ -47,6 +51,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private NoteRepository noteRepository;
+    
+    @Inject
+    private UserRepository userRepository;
 
     @Inject
     private DocumentRepository documentRepository;
@@ -138,6 +145,17 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(documentNote);
     }
 
+    @Test
+    public void LoadById() {
+        Note note = createNote();
+        noteRepository.save(note);
+        
+        Note loaded = noteRepository.getById(note.getId());
+        assertNotNull(loaded);
+        assertNotNull(loaded.getConcept(extendedTerm));
+        
+    }
+    
     @Test
     public void CreateNote_Note_With_The_Lemma_Already_Exists_Notes_Are_Same() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
@@ -265,16 +283,35 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         noteRepository.importNotes(noteTestData);
         assertEquals(1, noteRepository.findNotes("kereitten").size());
     }
+    
+    @Test
+    public void Find_Notes_With_Search() {
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
+        String longText = "two words";
+        noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10", longText);
+        DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
+        //Empty finds all
+        assertEquals(1, noteRepository.findNotes(search).size());
+        
+        //With document we should find our note
+        search.setCurrentDocument(document);
+        assertEquals(1, noteRepository.findNotes(search).size());
+        
+        //False hit
+        userRepository.save(new User("dummy"));
+        search.setCreators(Collections.singleton(new UserInfo("dummy")));
+        assertEquals(0, noteRepository.findNotes(search).size());
+    }
 
     @Test
     public void Remove_Based_On_Revision() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         String longText = "two words";
         DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10", longText);
-        List<NoteWithInstances> notes = noteRepository.query(new DocumentNoteSearchInfo(document));
+        List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(new DocumentNoteSearchInfo(document));
         assertTrue(countDocumentNotes(notes) > 0);
         noteRepository.remove(documentNote, documentNote.getSVNRevision());
-        notes = noteRepository.query(new DocumentNoteSearchInfo(document));
+        notes = noteRepository.findNotesWithInstances(new DocumentNoteSearchInfo(document));
         assertEquals(0, countDocumentNotes(notes));
     }
 

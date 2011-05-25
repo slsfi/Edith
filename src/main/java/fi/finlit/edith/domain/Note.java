@@ -5,6 +5,8 @@
  */
 package fi.finlit.edith.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -158,6 +160,16 @@ public class Note extends Identifiable {
     
     private void setConcept(Concept concept) {
         this.concept = concept;
+    }
+    
+    public String getEditors(boolean extendedTerm) {
+        Collection<String> result = new ArrayList<String>();
+        for (UserInfo user : getConcept(extendedTerm).getAllEditors()) {
+            if (!getConcept(extendedTerm).getLastEditedBy().equals(user)) {
+                result.add(user.getUsername());
+            }
+        }
+        return StringUtils.join(result, ", ");
     }
     
 

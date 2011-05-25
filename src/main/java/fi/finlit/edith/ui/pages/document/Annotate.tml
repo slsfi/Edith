@@ -28,8 +28,11 @@
           </div>
           <div>
 		  <span>
-		      <a id="createTermLink" class="disabled selection-link" href="#">${message:createTerm}</a> 
+		      <a id="createTermLink" class="disabled" href="#">${message:createTerm}</a> 
 		  </span>
+          <span>
+              <a id="connectTermLink" class="disabled" href="#">${message:connectTerm}</a> 
+          </span>
 		  
 		  <t:if test="!slsMode">
 		  <span>
@@ -121,7 +124,7 @@
         <h3><a href="#">${message:document-notes}</a></h3>
         <div>
         
-            <t:note.documentNotes noteEdit="noteEdit"/>
+            <t:note.documentNotes />
         
             <t:remove>
             <!-- This is going to be replaced with *** model -->    
@@ -151,12 +154,21 @@
         </div>
     </div>
 	
-    <t:form t:id="createTerm" t:zone="listZone">
+    <t:form t:id="createTermForm" t:zone="listZone">
        <t:hidden t:id="selectedText_1" value="createTermSelection.selection" />
        <t:hidden t:id="selectedStartId_1" value="createTermSelection.startId" />
        <t:hidden t:id="selectedEndId_1" value="createTermSelection.endId" />
        <t:hidden t:id="selectedStartIndex_1" value="createTermSelection.startIndex" />
        <t:hidden t:id="selectedEndIndex_1" value="createTermSelection.endIndex" />
+    </t:form>
+    
+    <t:form t:id="connectTermForm" t:zone="listZone">
+       <t:hidden t:id="noteToLinkId" value="noteToLinkId" />
+       <t:hidden t:id="selectedText_2" value="createTermSelection.selection" />
+       <t:hidden t:id="selectedStartId_2" value="createTermSelection.startId" />
+       <t:hidden t:id="selectedEndId_2" value="createTermSelection.endId" />
+       <t:hidden t:id="selectedStartIndex_2" value="createTermSelection.startIndex" />
+       <t:hidden t:id="selectedEndIndex_2" value="createTermSelection.endIndex" />
     </t:form>
     
     <t:form t:id="selectNoteForm" t:zone="noteEditZone">

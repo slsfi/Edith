@@ -13,6 +13,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.ui.services.PersonRepository;
 import fi.finlit.edith.ui.services.PlaceRepository;
 
@@ -36,6 +37,10 @@ public class SKSNoteForm extends AbstractNoteForm {
     @InjectComponent
     @Property
     private Zone personZone;
+    
+    //TODO This does not belong here, term have to be edited in it's on component
+    @Property
+    private Term termOnEdit;
 
     @InjectComponent
     @Property
@@ -57,22 +62,22 @@ public class SKSNoteForm extends AbstractNoteForm {
     @Inject
     private PersonRepository personRepository;
 
-    void onPrepareFromNoteEditForm(String noteId, String docNoteId) {
+    void onPrepareFromNoteEditForm(String noteId) {
 
-        super.onPrepareFromNoteEditForm(noteId, docNoteId);
+        super.onPrepareFromNoteEditForm(noteId);
 
         if (!isPerson()) {
-            setPerson(getNoteOnEdit().getNote().getPerson());
+            setPerson(getNoteOnEdit().getPerson());
         }
         if (!isPlace()) {
-            setPlace(getNoteOnEdit().getNote().getPlace());
+            setPlace(getNoteOnEdit().getPlace());
         }
 
     }
 
     Object onSuccessFromNoteEditForm() {
-        getNoteOnEdit().getNote().setPerson(getPerson());
-        getNoteOnEdit().getNote().setPlace(getPlace());
+        getNoteOnEdit().setPerson(getPerson());
+        getNoteOnEdit().setPlace(getPlace());
         return super.onSuccessFromNoteEditForm();
     }
 

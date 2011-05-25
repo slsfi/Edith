@@ -66,7 +66,7 @@ public abstract class AbstractNoteForm {
     private Messages messages;
 
     @Parameter
-    private DocumentNote noteOnEdit;
+    private Note noteOnEdit;
 
     @Inject
     private NoteRepository noteRepository;
@@ -80,13 +80,6 @@ public abstract class AbstractNoteForm {
     @Parameter
     private List<DocumentNote> selectedNotes;
 
-    @Property
-    private boolean submitSuccess;
-
-    @Property
-    @Parameter
-    private Term termOnEdit;
-
     @Inject
     private TermRepository termRepository;
 
@@ -98,7 +91,7 @@ public abstract class AbstractNoteForm {
     }
 
     public String getDescription() {
-        return noteOnEdit.getNote().getConcept(isSlsMode()).getDescription();
+        return noteOnEdit.getConcept(isSlsMode()).getDescription();
     }
 
     private Term getEditTerm(Note note) {
@@ -107,14 +100,14 @@ public abstract class AbstractNoteForm {
 
     @Validate("required")
     public NoteFormat getFormat() {
-        return noteOnEdit.getNote().getFormat();
+        return noteOnEdit.getFormat();
     }
 
-    public DocumentNote getNoteOnEdit() {
+    public Note getNoteOnEdit() {
         return noteOnEdit;
     }
 
-    public void setNoteOnEdit(DocumentNote noteOnEdit) {
+    public void setNoteOnEdit(Note noteOnEdit) {
         this.noteOnEdit = noteOnEdit;
     }
 
@@ -123,7 +116,7 @@ public abstract class AbstractNoteForm {
     }
 
     public TermLanguage getLanguage() {
-        return termOnEdit.getLanguage();
+        return getEditTerm(noteOnEdit).getLanguage();
     }
 
     public String getSearch() {
@@ -153,8 +146,8 @@ public abstract class AbstractNoteForm {
     }
 
     public int getTermInstances() {
-        if (noteOnEdit.getNote().getTerm() != null) {
-            return documentNoteRepository.getOfTerm(noteOnEdit.getNote().getTerm().getId()).size();
+        if (noteOnEdit.getTerm() != null) {
+            return documentNoteRepository.getOfTerm(noteOnEdit.getTerm().getId()).size();
         }
         return 0;
     }
@@ -167,25 +160,9 @@ public abstract class AbstractNoteForm {
         return getSelectedTypes().contains(type);
     }
 
-    void onPrepareFromNoteEditForm(String noteId, String docNoteId) {
-        System.err.println("noteForm.onPrepareFromNoteEditForm " + noteId + " " + docNoteId);
-        if (docNoteId != null) {
-            if (noteOnEdit == null) {
-                noteOnEdit = documentNoteRepository.getById(docNoteId); // .createCopy();
-            }
-        } else {
-            noteOnEdit = new DocumentNote();
-            noteOnEdit.setLocalId(String.valueOf(timeService.currentTimeMillis()));
-            noteOnEdit.setNote(noteRepository.getById(noteId));
-            noteOnEdit.setDocRevision(page.getDocumentRevision());
-            noteOnEdit.setDocument(page.getDocument());
-            if (noteOnEdit.getSVNRevision() == null) {
-                noteOnEdit.setSVNRevision(page.getDocumentRevision().getRevision());
-            }
-        }
-
-        termOnEdit = getEditTerm(noteOnEdit.getNote());
-        System.err.println("noteForm.onPrepareFromNoteEditForm --");
+    void onPrepareFromNoteEditForm(String noteId) {
+        System.err.println("noteForm.onPrepareFromNoteEditForm " + noteId);
+        noteOnEdit = noteRepository.getById(noteId);
     }
 
     List<Term> onProvideCompletionsFromBasicForm(String partial) {
@@ -193,44 +170,34 @@ public abstract class AbstractNoteForm {
     }
 
     Object onSuccessFromNoteEditForm() {
-        DocumentNote documentNote;
+        logger.info("onSuccessFromNoteEditForm begins with " + noteOnEdit);
 
-        logger.info("onSuccessFromNoteEditForm begins with documentNote " + noteOnEdit + ", note "
-                + noteOnEdit.getNote());
-
-        // Handling the embedded term edit
-        if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
-            setTerm(noteOnEdit);
-        }
+//        // Handling the embedded term edit
+//        if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
+//            setTerm(noteOnEdit);
+//        }
 
         if (getNoteOnEditConcept().getStatus().equals(NoteStatus.INITIAL)) {
             getNoteOnEditConcept().setStatus(NoteStatus.DRAFT);
         }
         try {
-            if (saveAsNew) {
-                logger.info("note saved as new: " + noteOnEdit);
-                documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
-                saveAsNew = false;
-            } else {
+//            if (saveAsNew) {
+//                logger.info("note saved as new: " + noteOnEdit);
+//                documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
+//                saveAsNew = false;
+//            } else {
                 logger.info("note saved: " + noteOnEdit);
-                documentNote = documentNoteRepository.save(noteOnEdit);
-            }
+                noteRepository.save(noteOnEdit);
+            //}
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
             page.getInfoMessage().addErrorMsg("note-addition-failed");
             return new MultiZoneUpdate("infoMessageZone", page.getInfoMessage().getBlock());
         }
 
-        // prepare view (with possibly new revision)
-        if (documentNote.getSVNRevision() > page.getDocumentRevision().getRevision()) {
-            page.getDocumentRevision().setRevision(documentNote.getSVNRevision());
-        }
-
         // selectedNotes = Collections.singletonList(documentNote);
-        noteOnEdit = documentNote;
-        termOnEdit = getEditTerm(noteOnEdit.getNote());
+        //termOnEdit = getEditTerm(noteOnEdit.getNote());
         comments = NoteComment.getSortedComments(getNoteOnEditConcept().getComments());
-        submitSuccess = true;
         page.getInfoMessage().addInfoMsg("submit-success");
 
         return new MultiZoneUpdate("noteEditZone", page.getNoteEdit().getBlock()).add(
@@ -258,12 +225,12 @@ public abstract class AbstractNoteForm {
     }
 
     public void setFormat(NoteFormat format) {
-        noteOnEdit.getNote().setFormat(format);
+        noteOnEdit.setFormat(format);
     }
 
     @Validate("required")
     public void setLanguage(TermLanguage language) {
-        termOnEdit.setLanguage(language);
+        getEditTerm(noteOnEdit).setLanguage(language);
     }
 
     public void setSearch(String s) {
@@ -289,20 +256,20 @@ public abstract class AbstractNoteForm {
         getNoteOnEditConcept().setStatus(status);
     }
 
-    private void setTerm(DocumentNote documentNote) {
-        Term term = null;
-        Term oldTerm = termOnEdit;
-        if (saveTermAsNew) {
-            saveTermAsNew = false;
-            term = new Term();
-            term.setBasicForm(oldTerm.getBasicForm());
-            term.setMeaning(oldTerm.getMeaning());
-            term.setLanguage(oldTerm.getLanguage());
-        } else {
-            term = oldTerm;
-        }
-        documentNote.getNote().setTerm(term);
-    }
+//    private void setTerm(DocumentNote documentNote) {
+//        Term term = null;
+//        Term oldTerm = termOnEdit;
+//        if (saveTermAsNew) {
+//            saveTermAsNew = false;
+//            term = new Term();
+//            term.setBasicForm(oldTerm.getBasicForm());
+//            term.setMeaning(oldTerm.getMeaning());
+//            term.setLanguage(oldTerm.getLanguage());
+//        } else {
+//            term = oldTerm;
+//        }
+//        documentNote.getNote().setTerm(term);
+//    }
 
     public Concept getNoteOnEditConcept() {
         return noteOnEdit.getConcept(isSlsMode());

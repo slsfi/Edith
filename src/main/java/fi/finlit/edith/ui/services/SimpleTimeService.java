@@ -7,9 +7,10 @@ package fi.finlit.edith.ui.services;
 
 public class SimpleTimeService implements TimeService{
 
-    private long last = System.currentTimeMillis();
+    private volatile long last = System.currentTimeMillis();
 
     @Override
+    //FIXME This is not thread safe if multiple threads need to get unique long
     public long currentTimeMillis() {
         while (last == System.currentTimeMillis()){
             try {

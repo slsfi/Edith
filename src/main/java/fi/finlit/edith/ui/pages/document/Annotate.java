@@ -40,6 +40,7 @@ import fi.finlit.edith.ui.components.note.DocumentNotes;
 import fi.finlit.edith.ui.components.note.NoteEdit;
 import fi.finlit.edith.ui.components.note.SearchResults;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.TermRepository;
 import fi.finlit.edith.ui.services.TimeService;
@@ -125,9 +126,11 @@ public class Annotate extends AbstractDocumentPage {
     @Property
     private List<Note> notes;
 
-
     @Property
     private String personId;
+    
+    @Property
+    private String noteToLinkId;
 
     @Inject
     @Symbol(EDITH.EXTENDED_TERM)
@@ -185,7 +188,7 @@ public class Annotate extends AbstractDocumentPage {
         String localId = selectedNoteLocalId.substring(1);
         DocumentNote documentNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
                 localId);
-        noteEdit.setNoteOnEdit(documentNote);
+        noteEdit.setDocumentNoteOnEdit(documentNote);
         return noteEdit.getBlock();
 
     }
@@ -240,10 +243,41 @@ public class Annotate extends AbstractDocumentPage {
 //        .add("commentZone", commentZone.getBody())
         ;
     }
+    
+    private MultiZoneUpdate error(String msg) {
+        infoMessage.addErrorMsg(msg);
+        return new MultiZoneUpdate("infoMessageZone", infoMessage.getBlock());
+    }
 
-   
+    private MultiZoneUpdate noteHasChanged(DocumentNote documentNote, String msg) {
+        getDocumentRevision().setRevision(documentNote.getSVNRevision());
+        documentNotes.setNoteId(documentNote.getNote().getId());
+        noteEdit.setDocumentNoteOnEdit(documentNote);
+        infoMessage.addInfoMsg(msg);
+        return new MultiZoneUpdate("infoMessageZone", infoMessage.getBlock())
+                .add("listZone", searchResults.getBlock())
+                .add("documentNotesZone", documentNotes.getBlock())
+                .add("noteEditZone", noteEdit.getBlock()).add("documentZone", documentView);
+    }
 
-    Object onSuccessFromCreateTerm() {
+    Object onSuccessFromConnectTermForm() {
+        logger.info("connect term with note id " + noteToLinkId);
+
+        try {
+            Note note = noteRepository.getById(noteToLinkId);
+            DocumentNote documentNote = noteRepository.createDocumentNote(note,
+                    getDocumentRevision(), createTermSelection.getSelection());
+            documentNote = getDocumentRepository().updateNote(documentNote, createTermSelection);
+
+            return noteHasChanged(documentNote, "note-connect-success");
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return error("note-connect-failed");
+        }
+    }
+
+    Object onSuccessFromCreateTermForm() {
         logger.info(createTermSelection.toString());
         DocumentRevision documentRevision = getDocumentRevision();
 
@@ -260,17 +294,8 @@ public class Annotate extends AbstractDocumentPage {
                 infoMessage.addErrorMsg("note-addition-failed");
                 return infoMessage.getBlock();
             }
-            documentRevision.setRevision(documentNote.getSVNRevision());
-            documentNotes.setNoteId(documentNote.getNote().getId());
-            noteEdit.setNoteOnEdit(documentNote);
-            infoMessage.addInfoMsg("create-success");
-            return new MultiZoneUpdate("infoMessageZone", infoMessage.getBlock())
-                .add("listZone", searchResults.getBlock())
-                .add("documentNotesZone",documentNotes.getBlock())
-                .add("noteEditZone", noteEdit.getBlock())
-                .add("documentZone", documentView);
-
-                
+            
+            return noteHasChanged(documentNote, "create-success");
                 
                 
                 

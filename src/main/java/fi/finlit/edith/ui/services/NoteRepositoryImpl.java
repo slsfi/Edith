@@ -97,9 +97,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return comment;
     }
 
-
     @Override
-    public List<NoteWithInstances> query(DocumentNoteSearchInfo searchInfo) {
+    public List<Note> findNotes(DocumentNoteSearchInfo searchInfo) {
         long start = System.currentTimeMillis();
         Assert.notNull(searchInfo);
         BooleanBuilder filters = new BooleanBuilder();
@@ -178,7 +177,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             }
             
         }
-
+        logDuration("NoteRepository.findNotes", start);
+        return notes;
+    }
+    
+    @Override
+    public List<NoteWithInstances> findNotesWithInstances(DocumentNoteSearchInfo searchInfo) {
+        List<Note> notes = findNotes(searchInfo);
+        long start = System.currentTimeMillis();
         if (!notes.isEmpty()){
             // get related document notes
             List<DocumentNote> documentNotes = getActiveDocumentNotes(searchInfo.getCurrentDocument(), notes);
@@ -204,7 +210,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 }
             }
 
-            logDuration("NoteRepository.query", start);
+            logDuration("NoteRepository.findNotesWithInstances", start);
             return rv;
 
         }else{
@@ -213,7 +219,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 rv.add(new NoteWithInstances(n, Collections.<DocumentNote>emptySet()));
             }
 
-            logDuration("NoteRepository.query", start);
+            logDuration("NoteRepository.findNotesWithInstaces", start);
             return rv;
         }
 
@@ -300,6 +306,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return getSession().from(note)
                 .where(sub(documentNote).where(documentNote.note().eq(note)).notExists())
                 .list(note.id);
+    }
+    
+    
+    @Override
+    public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String longText) {
+        return createDocumentNote(n, docRevision, String.valueOf(timeService.currentTimeMillis()),
+                longText);
     }
 
     @Override

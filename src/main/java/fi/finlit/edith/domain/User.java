@@ -25,6 +25,11 @@ public class User extends Identifiable{
     @Unique
     private String username;
 
+    public User() {}
+    public User(String username) {
+        this.username = username;
+    }
+    
     public String getEmail() {
         return email;
     }

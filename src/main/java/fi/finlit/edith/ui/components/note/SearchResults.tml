@@ -20,16 +20,33 @@
 
         <t:block t:id="notesList">
           <script type="text/javascript">
+          
+            var SearchResults = {
+      		   toggleNoteListElements : function(checkbox) {
+      		        var checkbox = checkbox;
+      		        var isChecked = checkbox.attr("checked");
+      		        if (isChecked) {
+      		            jQuery(".notes ." + checkbox.attr("name")).show();
+      		        } else {
+      		            jQuery(".notes ." + checkbox.attr("name")).hide();
+      		        }
+      		    }
+	
+            };
 
             jQuery(function() {
                   jQuery("#note_filters input").each(function() {
-                      toggleNoteListElements(jQuery(this));
+                      SearchResults.toggleNoteListElements(jQuery(this));
                   });
                   
                   jQuery(".search-results .selectable-note").click(
                     function(event) {
                         jQuery(".search-results .notes li").removeClass("selected-note");
                         jQuery(this).closest("li").addClass("selected-note");
+                        
+                        //Inform Annotate page on selected note
+                        Annotate.setSelectedNote(jQuery(this).attr("noteId"));
+                        
                         //Update note instances view on the selection
                         TapestryExt.updateZone('documentNotesZone', jQuery(this).attr("href"));
                         return false;
@@ -43,40 +60,26 @@
         
             <t:if test="searchResults">
                 <ul class="notes">
-                    <t:loop source="notesWithInstances" value="noteWithInstances">
-                        <t:loop source="noteWithInstances.documentNotes" value="note">
+                    <t:loop source="notes" value="note">
                             <li>
                                 <span>
-                                <t:actionlink t:id="selectNote" context="note.note.id"
-                                    class="selectable-note ${noteConcept.status} ${documentNoteType}">
-                                    <em>${note.note.lemma}</em>
+                                <t:actionlink t:id="selectNote" context="note.id" noteId="${note.id}"
+                                    class="selectable-note ${noteConcept.status}">
+                                    <em>${note.lemma}</em>
                                 </t:actionlink> 
                                  </span>
                                 
-                                <span class="numberOfInstancesInDocument"> ${numberOfInstancesInDocument} ${message:amountOfInstances}; </span>
-                                <span class="basicForm">${note.note.term?.basicForm}; </span>
-                                <span class="meaning">${note.note.term?.meaning}; </span>
+                                <span class="basicForm">${note.term?.basicForm}; </span>
+                                <span class="meaning">${note.term?.meaning}; </span>
                                 <span class="description">${noteConcept.description}; </span>
-                                <span class="document">${note.document?.title}; </span>
                                 <span class="type">${typesString}; </span>
-                                <span class="format"><t:if test="note.note.format"><t:fmt.message key="${note.note.format}"/></t:if>; </span>
+                                <span class="format"><t:if test="note.format"><t:fmt.message key="${note.format}"/></t:if>; </span>
                                 <span class="creator">${noteConcept.lastEditedBy?.username} (${editorsForNote}); </span>
-                                <span class="edited"><t:dateTimeFormat date="note.note.editedOnDate" format="message:dateformat-compact" />; </span>
-                                <span class="status"><t:fmt.message key="NoteStatus.${noteConcept.status}"/></span>
+                                <span class="edited"><t:dateTimeFormat date="note.editedOnDate" format="message:dateformat-compact" />; </span>
+                                <t:remove>
+                                  <span class="status"><t:fmt.message key="NoteStatus.${noteConcept.status}"/></span>
+                                </t:remove>
                             </li>                           
-                            <p:empty>
-                                <li>
-                                    <span><a href="#start" id="noteid${noteWithInstances.note.id}" class="notelink ${noteWithInstancesConcept.status} ORPHAN"><em>${noteWithInstances.note.lemma}</em></a></span>
-                                    <span class="basicForm">${noteWithInstances.note.term?.basicForm}; </span>
-                                    <span class="meaning">${noteWithInstances.note.term?.meaning}; </span>
-                                    <span class="description">${noteWithInstancesConcept.description}; </span>
-                                    <span class="type">${typesString}; </span>
-                                    <span class="format"><t:if test="noteWithInstances.note.format"><t:fmt.message key="${noteWithInstances.note.format}"/></t:if>; </span>
-                                    <span class="edited"><t:dateTimeFormat date="noteWithInstances.note.editedOnDate" format="message:dateformat-compact" />; </span>
-                                    <span class="status"><t:fmt.message key="NoteStatus.${noteWithInstancesConcept.status}"/></span>
-                                </li>                                   
-                            </p:empty>
-                        </t:loop>                       
                     </t:loop>
                 </ul>
                 <p:else>${message:no-notes}</p:else>

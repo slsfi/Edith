@@ -329,3 +329,7 @@ ul.dynatree-container {
     background-color: red;
     color: white;
 }
+
+#info-message {
+    text-align: center;
+}

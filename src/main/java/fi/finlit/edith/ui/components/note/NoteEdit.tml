@@ -24,7 +24,9 @@
             
                 <div class="panel narrow">
                 
-                  <t:note.documentNoteForm noteOnEdit="noteOnEdit"/>
+                  <t:if test="documentNoteOnEdit">
+                    <t:note.documentNoteForm documentNoteOnEdit="documentNoteOnEdit"/>
+                  </t:if>
                   
                   <t:if test="slsMode">
                      <t:note.SLSNoteForm noteOnEdit="noteOnEdit"/>                           

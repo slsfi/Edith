@@ -6,7 +6,7 @@
         <legend>${message:noteEdit}</legend>
     
         <div class="metadata">
-          <t:dateTimeFormat date="noteOnEdit.note.editedOnDate"
+          <t:dateTimeFormat date="noteOnEdit.editedOnDate"
             format="message:dateformat-compact" />
           ${noteOnEditConcept.lastEditedBy.username}
           (${editorsForNoteOnEdit})
@@ -16,12 +16,12 @@
     
         <div class="note_edit">
     
-          <t:form t:id="noteEditForm" t:zone="noteEditZone" t:context="[noteOnEdit.note.id,noteOnEdit.id]">
+          <t:form t:id="noteEditForm" t:zone="noteEditZone" t:context="[noteOnEdit.id]">
             <t:errors />
     
             <div class="field">
               <t:label for="lemma">${message:lemma-label}</t:label>
-              <t:textField t:id="lemma" value="noteOnEdit.note.lemma" />
+              <t:textField t:id="lemma" value="noteOnEdit.lemma" />
             </div>
     
             <div class="field">
@@ -35,12 +35,12 @@
 
             <div class="field">
               <t:label for="basicForm">${message:basicForm-label}</t:label>
-              <t:textField t:id="basicForm" value="noteOnEdit.note.term.basicForm" />
+              <t:textField t:id="basicForm" value="noteOnEdit.term.basicForm" />
             </div>
     
             <div class="field">
               <t:label for="termMeaning">${message:basicFormMeaning-label}</t:label>
-              <t:textArea rows="1" t:id="termMeaning" value="noteOnEdit.note.term.meaning" />
+              <t:textArea rows="1" t:id="termMeaning" value="noteOnEdit.term.meaning" />
             </div>
     
             <div class="field">

@@ -12,6 +12,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 public class InfoMessage {
 
     @Inject
+    @Property
     private Block infoMessageBlock;
     
     @Inject
@@ -64,11 +65,11 @@ public class InfoMessage {
     }
     
     public String getInfoMsg() {
-        return messages.get(info);
+        return info != null ? messages.get(info) : "";
     }
     
     public String getErrorMsg() {
-        return messages.get(error);
+        return error != null ? messages.get(error) : "";
     }
     
 //    public void setInfoKeys(List<String> infoKeys) {

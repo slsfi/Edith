@@ -49,7 +49,13 @@ public class SearchResults {
     private NoteWithInstances noteWithInstances;
 
     @Property
-    private DocumentNote note;
+    private List<Note> notes;
+
+    @Property
+    private Note note;
+
+    @Property
+    private DocumentNote documentNote;
 
     @Inject
     private Messages messages;
@@ -63,13 +69,10 @@ public class SearchResults {
 
         System.out.println("Searching with" + page.getSearchInfo());
 
-        notesWithInstances = noteRepository.query(page.getSearchInfo());
-        if (notesWithInstances != null) {
-            System.out.println("Found " + notesWithInstances.size() + " results from query "
-                    + page.getSearchInfo());
+        // TODO Handle SKS case
 
-        }
-        return notesWithInstances != null && notesWithInstances.size() > 0;
+        notes = noteRepository.findNotes(page.getSearchInfo());
+        return notes != null && notes.size() > 0;
     }
 
     Object onActionFromSelectNote(String noteId) {
@@ -79,16 +82,18 @@ public class SearchResults {
         DocumentNote selected = page.getDocumentNotes().getSelectedNote();
         if (selected != null) {
             System.out.println("selected documentnote " + selected);
-            page.getNoteEdit().setNoteOnEdit(selected);
-            return new MultiZoneUpdate("documentNotesZone", page.getDocumentNotes().getBlock())
-                    .add("noteEditZone", page.getNoteEdit().getBlock());
+            page.getNoteEdit().setDocumentNoteOnEdit(selected);
+
+        } else {
+            page.getNoteEdit().setNoteOnEdit(noteRepository.getById(noteId));
         }
-        return page.getDocumentNotes().getBlock();
+        return new MultiZoneUpdate("documentNotesZone", page.getDocumentNotes().getBlock()).add(
+                "noteEditZone", page.getNoteEdit().getBlock());
     }
 
     public String getTypesString() {
         Collection<String> translated = new ArrayList<String>();
-        for (NoteType t : noteWithInstances.getNote().getConcept(page.isSlsMode()).getTypes()) {
+        for (NoteType t : note.getConcept(page.isSlsMode()).getTypes()) {
             translated.add(messages.get(t.toString()));
         }
         return StringUtils.join(translated, ", ");
@@ -115,11 +120,11 @@ public class SearchResults {
     }
 
     public DocumentNoteType getDocumentNoteType() {
-        if (note.getDocument() == null) {
+        if (documentNote.getDocument() == null) {
             return DocumentNoteType.ORPHAN;
-        } else if (note.getLongText() == null) {
+        } else if (documentNote.getLongText() == null) {
             return DocumentNoteType.SEMI_ORPHAN;
-        } else if (!note.getDocument().equals(page.getDocument())) {
+        } else if (!documentNote.getDocument().equals(page.getDocument())) {
             return DocumentNoteType.ELSEWHERE;
         } else {
             return DocumentNoteType.NORMAL;

@@ -11,7 +11,7 @@
           jQuery(function() {
         	  
     		//Scroll to the selected document note if found on load
-    		var elem = jQuery("#start${selectedNote.localId}");
+    		var elem = jQuery("#start${localId}");
     		if (elem.size() != 0) {
     			jQuery("#left").scrollTo(elem);
     		}
@@ -39,9 +39,10 @@
 
         <ul class="notes">
           <t:loop source="documentNotes" value="documentNote">
-            <li><t:actionlink t:id="selectDocumentNote"
-                context="documentNote.id" class="selectable-doc-note" localId="${documentNote.localId}">${documentNote.note.lemma} 
-                    (${documentNote.documentRevision.document.title})</t:actionlink>
+            <li class="${selectedCssClass}">
+                <t:actionlink t:id="selectDocumentNote"
+                context="documentNote.id" class="selectable-doc-note" localId="${documentNote.localId}">${documentNote.longText}, 
+                    ${documentNote.documentRevision.document.title}</t:actionlink>
             </li>
           </t:loop>
         </ul>

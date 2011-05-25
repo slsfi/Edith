@@ -53,7 +53,9 @@ public class NoteEdit {
     @Inject
     private DocumentNoteRepository documentNoteRepository;
 
-    private DocumentNote noteOnEdit;
+    private DocumentNote documentNoteOnEdit;
+    
+    private Note noteOnEdit;
 
     @Property
     private String newCommentMessage;
@@ -65,7 +67,7 @@ public class NoteEdit {
     private List<DocumentNote> selectedNotes;
     
     public String getNoteId() {
-        return noteOnEdit != null ? noteOnEdit.getId() : null;
+        return documentNoteOnEdit != null ? documentNoteOnEdit.getId() : null;
     }
 
     public Block getBlock() {
@@ -76,8 +78,8 @@ public class NoteEdit {
     
     Object onDeleteComment(String noteId, String commentId) {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
-        noteOnEdit = documentNoteRepository.getById(noteId);
-        comments = getSortedComments(noteOnEdit.getConcept(isSlsMode()).getComments());
+        documentNoteOnEdit = documentNoteRepository.getById(noteId);
+        comments = getSortedComments(documentNoteOnEdit.getConcept(isSlsMode()).getComments());
         comments.remove(deletedComment);
         return commentZone.getBody();
     }
@@ -89,19 +91,19 @@ public class NoteEdit {
     }
 
     void onPrepareFromCommentForm(String id) {
-        if (noteOnEdit == null) {
+        if (documentNoteOnEdit == null) {
             System.err.println("onPrepareFromCommentForm");
-            noteOnEdit = documentNoteRepository.getById(id);
+            documentNoteOnEdit = documentNoteRepository.getById(id);
             System.err.println("onPrepareFromCommentForm --");
         }
     }
 
     Object onSuccessFromCommentForm() {
         System.err.println("onSuccessFromCommentForm");
-        comments = getSortedComments(noteOnEdit.getConcept(isSlsMode()).getComments());
+        comments = getSortedComments(documentNoteOnEdit.getConcept(isSlsMode()).getComments());
         if (newCommentMessage != null) {
             comments.add(0,
-                    noteRepository.createComment(noteOnEdit.getConcept(isSlsMode()), newCommentMessage));
+                    noteRepository.createComment(documentNoteOnEdit.getConcept(isSlsMode()), newCommentMessage));
             newCommentMessage = null;
         }
         System.err.println("onSuccessFromCommentForm --");
@@ -126,16 +128,24 @@ public class NoteEdit {
 
     
     public int getLemmaInstances() {
-        return documentNoteRepository.getDocumentNoteCount(noteOnEdit.getNote());
+        return documentNoteRepository.getDocumentNoteCount(documentNoteOnEdit.getNote());
     }
         
-    
-    public void setNoteOnEdit(DocumentNote noteOnEdit) {
+    public void setNoteOnEdit(Note noteOnEdit) {
         this.noteOnEdit = noteOnEdit;
     }
-    
-    public DocumentNote getNoteOnEdit() {
+
+    public Note getNoteOnEdit() {
         return noteOnEdit;
+    }
+    
+    public void setDocumentNoteOnEdit(DocumentNote documentNoteOnEdit) {
+        this.documentNoteOnEdit = documentNoteOnEdit;
+        setNoteOnEdit(documentNoteOnEdit.getNote());
+    }
+    
+    public DocumentNote getDocumentNoteOnEdit() {
+        return documentNoteOnEdit;
     }
     
 }
