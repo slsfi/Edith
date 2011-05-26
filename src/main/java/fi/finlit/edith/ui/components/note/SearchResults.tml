@@ -1,7 +1,42 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 	<t:content>
 
+        <script type="text/javascript">
+          
+            var SearchResults = {
+               toggleNoteListElements : function(checkbox) {
+                    var checkbox = checkbox;
+                    var isChecked = checkbox.attr("checked");
+                    if (isChecked) {
+                        jQuery(".notes ." + checkbox.attr("name")).show();
+                    } else {
+                        jQuery(".notes ." + checkbox.attr("name")).hide();
+                    }
+                }
+            };
+
+            jQuery(function() {
+            	jQuery("#note_filters input").click(function() {
+                    SearchResults.toggleNoteListElements(jQuery(this));
+                });
+                
+                jQuery(".search-results .selectable-note").live('click',
+                  function(event) {
+                      jQuery(".search-results .notes li").removeClass("selected-note");
+                      jQuery(this).closest("li").addClass("selected-note");
+                      
+                      //Inform Annotate page on selected note
+                      Annotate.setSelectedNote(jQuery(this).attr("noteId"));
+                      
+                      //Update note instances view on the selection
+                      TapestryExt.updateZone('documentNotesZone', jQuery(this).attr("href"));
+                      return false;
+                  }
+                );
+            });
+        </script>
         <div class="panel narrow search-results">
+        
             <form id="note_filters">
                 <input id="numberOfInstancesInDocument" name="numberOfInstancesInDocument" type="checkbox"/><label for="numberOfInstancesInDocument">${message:numberOfInstancesInDocument-label}</label>
                 <input id="basicForm" name="basicForm" type="checkbox"/><label for="basicForm">${message:basicForm-label}</label>
@@ -14,51 +49,21 @@
                 <input id="edited" name="edited" type="checkbox"/><label for="edited">${message:edited-label}</label>
                 <input id="status" name="status" type="checkbox"/><label for="status">${message:status-label}</label>
             </form>
+                          
             <t:zone t:id="listZone" update="show">
                 <t:delegate to="notesList"/>
             </t:zone>
 
-        <t:block t:id="notesList">
-          <script type="text/javascript">
-          
-            var SearchResults = {
-      		   toggleNoteListElements : function(checkbox) {
-      		        var checkbox = checkbox;
-      		        var isChecked = checkbox.attr("checked");
-      		        if (isChecked) {
-      		            jQuery(".notes ." + checkbox.attr("name")).show();
-      		        } else {
-      		            jQuery(".notes ." + checkbox.attr("name")).hide();
-      		        }
-      		    }
-	
-            };
-
-            jQuery(function() {
+        <t:block t:id="notesList">                  
+            <t:if test="searchResults">
+            <script type="text/javascript">
+              jQuery(function() {
                   jQuery("#note_filters input").each(function() {
                       SearchResults.toggleNoteListElements(jQuery(this));
                   });
-                  
-                  jQuery(".search-results .selectable-note").click(
-                    function(event) {
-                        jQuery(".search-results .notes li").removeClass("selected-note");
-                        jQuery(this).closest("li").addClass("selected-note");
-                        
-                        //Inform Annotate page on selected note
-                        Annotate.setSelectedNote(jQuery(this).attr("noteId"));
-                        
-                        //Update note instances view on the selection
-                        TapestryExt.updateZone('documentNotesZone', jQuery(this).attr("href"));
-                        return false;
-                    }
-                  );
-                  
-                  
-            });
-          </script>
-        
-        
-            <t:if test="searchResults">
+              });
+            </script>
+          
                 <ul class="notes">
                     <t:loop source="notes" value="note">
                             <li>

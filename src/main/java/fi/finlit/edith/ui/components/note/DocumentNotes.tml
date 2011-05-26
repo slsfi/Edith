@@ -1,6 +1,26 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
   xmlns:p="tapestry:parameter">
 <t:content>
+    <script type="text/javascript">
+      //Update edit zone
+      jQuery(function() {
+      jQuery(".document-notes .selectable-doc-note").live("click",
+        function(event) {
+            jQuery(".document-notes .notes li").removeClass("selected-note");
+            jQuery(this).closest("li").addClass("selected-note");
+            
+            //Scroll to selected element on click
+            var elem = jQuery("#start"+ jQuery(this).attr("localId"));
+            if (elem.size() != 0) {
+                jQuery("#left").scrollTo(elem);
+            }
+            
+            //Update note instances view on the selection
+            TapestryExt.updateZone('noteEditZone', jQuery(this).attr("href"));
+            return false;
+        });
+      });
+   </script>
 
   <div class="panel narrow document-notes">
     <t:zone t:id="documentNotesZone" update="show">
@@ -17,25 +37,7 @@
     		}
     	  });
   
-          //Update edit zone
-    	  jQuery(".document-notes .selectable-doc-note").click(
-            function(event) {
-            	jQuery(".document-notes .notes li").removeClass("selected-note");
-            	jQuery(this).closest("li").addClass("selected-note");
-            	
-            	//Scroll to selected element on click
-            	var elem = jQuery("#start"+ jQuery(this).attr("localId"));
-            	if (elem.size() != 0) {
-                    jQuery("#left").scrollTo(elem);
-                }
-            	
-            	//Update note instances view on the selection
-            	TapestryExt.updateZone('noteEditZone', jQuery(this).attr("href"));
-            	return false;
-            });
 		</script>
-
-
 
         <ul class="notes">
           <t:loop source="documentNotes" value="documentNote">

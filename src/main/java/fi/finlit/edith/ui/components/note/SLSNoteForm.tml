@@ -73,7 +73,10 @@
             </div>
     
     
-            <input type="submit" value="${message:save}" />
+            <t:submit t:id="save" value="${message:save}" />
+            <t:if test="deletableNote">
+                <t:submit class="right" t:id="delete" value="${message:delete}" />
+            </t:if>
     
             <t:remove>
             <t:if test="noteOnEdit.id">

@@ -301,7 +301,20 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         userRepository.save(new User("dummy"));
         search.setCreators(Collections.singleton(new UserInfo("dummy")));
         assertEquals(0, noteRepository.findNotes(search).size());
+        
     }
+
+//    If we are using remote permanently, then this test is not necessary    
+//    @Test
+//    public void Find_Notes_As_Orpan_With_Deleted_Doc_Notes() {
+//        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
+//        String longText = "two words";
+//        DocumentNote docNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10", longText);
+//        
+//        DocumentNoteSearchInfo search = new DocumentNoteSearchInfo(document);
+//        assertEquals(1, noteRepository.findNotes(search).size());
+//        
+//    }
 
     @Test
     public void Remove_Based_On_Revision() {

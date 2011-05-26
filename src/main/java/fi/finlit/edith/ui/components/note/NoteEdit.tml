@@ -28,12 +28,14 @@
                     <t:note.documentNoteForm documentNoteOnEdit="documentNoteOnEdit"/>
                   </t:if>
                   
-                  <t:if test="slsMode">
-                     <t:note.SLSNoteForm noteOnEdit="noteOnEdit"/>                           
-                  <p:else>
-                    <t:note.SKSNoteForm noteOnEdit="noteOnEdit"/>                           
-                  </p:else>
-                  </t:if> 
+                  <t:if test="noteOnEdit">
+                    <t:if test="slsMode">
+                       <t:note.SLSNoteForm noteOnEdit="noteOnEdit"/>                           
+                    <p:else>
+                      <t:note.SKSNoteForm noteOnEdit="noteOnEdit"/>                           
+                    </p:else>
+                    </t:if>
+                  </t:if>
     
                 </div>
         </t:block>

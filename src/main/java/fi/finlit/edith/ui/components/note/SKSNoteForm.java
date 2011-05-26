@@ -74,6 +74,12 @@ public class SKSNoteForm extends AbstractNoteForm {
         }
 
     }
+    
+//  // Handling the embedded term edit
+//  if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
+//      setTerm(noteOnEdit);
+//  }
+
 
     Object onSuccessFromNoteEditForm() {
         getNoteOnEdit().setPerson(getPerson());

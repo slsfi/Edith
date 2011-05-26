@@ -85,7 +85,13 @@ public abstract class AbstractNoteForm {
 
     @Property
     private NoteType type;
+    
+    private boolean delete;
 
+    void onSelectedFromDelete() {
+        delete = true;
+    }
+    
     public boolean isSlsMode() {
         return page.isSlsMode();
     }
@@ -172,40 +178,43 @@ public abstract class AbstractNoteForm {
     Object onSuccessFromNoteEditForm() {
         logger.info("onSuccessFromNoteEditForm begins with " + noteOnEdit);
 
-//        // Handling the embedded term edit
-//        if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
-//            setTerm(noteOnEdit);
-//        }
-
-        if (getNoteOnEditConcept().getStatus().equals(NoteStatus.INITIAL)) {
-            getNoteOnEditConcept().setStatus(NoteStatus.DRAFT);
-        }
         try {
-//            if (saveAsNew) {
-//                logger.info("note saved as new: " + noteOnEdit);
-//                documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
-//                saveAsNew = false;
-//            } else {
+            
+            if (getNoteOnEditConcept().getStatus().equals(NoteStatus.INITIAL)) {
+                getNoteOnEditConcept().setStatus(NoteStatus.DRAFT);
+            }
+
+            // if (saveAsNew) {
+            // logger.info("note saved as new: " + noteOnEdit);
+            // documentNote = documentNoteRepository.saveAsCopy(noteOnEdit);
+            // saveAsNew = false;
+
+            if (delete) {
+                
+                logger.info("note removed: " + noteOnEdit);
+                noteRepository.removeNote(noteOnEdit);
+                page.getNoteEdit().setNoteOnEdit(null);
+                return page.zoneWithInfo("delete-success")
+                    .add("listZone", page.getSearchResults())
+                    .add("noteEditZone", page.getNoteEdit());
+                
+            } else {
+                
                 logger.info("note saved: " + noteOnEdit);
                 noteRepository.save(noteOnEdit);
-            //}
+                comments = NoteComment.getSortedComments(getNoteOnEditConcept().getComments());
+                return page.zoneWithInfo("submit-success")
+                    .add("listZone", page.getSearchResults());
+                    
+            }
+
+            
+            // .add("commentZone", commentZone.getBody())
+
         } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-            page.getInfoMessage().addErrorMsg("note-addition-failed");
-            return new MultiZoneUpdate("infoMessageZone", page.getInfoMessage().getBlock());
+            return page.zoneWithError("note-addition-failed", e);
         }
 
-        // selectedNotes = Collections.singletonList(documentNote);
-        //termOnEdit = getEditTerm(noteOnEdit.getNote());
-        comments = NoteComment.getSortedComments(getNoteOnEditConcept().getComments());
-        page.getInfoMessage().addInfoMsg("submit-success");
-
-        return new MultiZoneUpdate("noteEditZone", page.getNoteEdit().getBlock()).add(
-                "infoMessageZone", page.getInfoMessage().getBlock())
-        // .add("listZone", notesList)
-        // .add("documentZone", documentView)
-        // .add("commentZone", commentZone.getBody())
-        ;
     }
 
     public String getSubtextSources() {
@@ -277,5 +286,9 @@ public abstract class AbstractNoteForm {
 
     public String getEditorsForNoteOnEdit() {
         return noteOnEdit.getEditors(isSlsMode());
+    }
+    
+    public boolean isDeletableNote() {
+        return documentNoteRepository.getDocumentNoteCount(noteOnEdit) == 0;
     }
 }

@@ -150,15 +150,25 @@ public interface NoteRepository extends Repository<Note, String> {
     void save(Note editedNote);
 
     /**
+     * Remove notes
+     * 
      * @param notes
      */
     void removeNotes(Collection<Note> notes);
+
+    /**
+     * Remove note
+     * 
+     * @param note
+     */
+    void removeNote(Note note);
 
     /**
      * @param id
      * @return
      */
     NoteComment getCommentById(String id);
+
 
 
 }

@@ -141,7 +141,9 @@ public class NoteEdit {
     
     public void setDocumentNoteOnEdit(DocumentNote documentNoteOnEdit) {
         this.documentNoteOnEdit = documentNoteOnEdit;
-        setNoteOnEdit(documentNoteOnEdit.getNote());
+        if (documentNoteOnEdit != null) {
+            setNoteOnEdit(documentNoteOnEdit.getNote());
+        }
     }
     
     public DocumentNote getDocumentNoteOnEdit() {

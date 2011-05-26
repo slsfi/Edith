@@ -110,16 +110,24 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         // document
         if (!searchInfo.getDocuments().isEmpty()){
             // create filter condition for non orphan matches
-            nonOrphan = BooleanExpression.allOf(documentNote.note().eq(note),
+            BooleanBuilder builder = new BooleanBuilder();
+            builder.and(BooleanExpression.allOf(documentNote.note().eq(note),
                     documentNote.document().in(searchInfo.getDocuments()),
-                    documentNote.deleted.eq(false),
-                    documentNote.replacedBy().isNull());
-
+                    documentNote.replacedBy().isNull()));
+            
+            //Remove deleted if orphans is false
+            //XXX Would be better if the orphan search could be done without
+            // using document references
+            if (!searchInfo.isOrphans()) {
+                builder.and(documentNote.deleted.eq(false));
+            }
+            nonOrphan = builder.getValue();
         }
 
         // orphans
         if (searchInfo.isOrphans()){
             // create filter condition for orphan matches
+            // notes which don't have any document notes at all
             orphan = sub(documentNote).where(documentNote.note().eq(note)).notExists();
         }
 
@@ -547,9 +555,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
+    public void removeNote(Note note) {
+        getSession().delete(note);
+    }
+    
+    @Override
     public void removeNotes(Collection<Note> notes) {
         for (Note note : notes){
-            getSession().delete(note);
+            removeNote(note);
         }
     }
 

@@ -381,5 +381,16 @@ public class Annotate extends AbstractDocumentPage {
     public Block getDocumentView() {
         return documentView;
     }
-   
+
+    public MultiZoneUpdate zoneWithInfo(String msg) {
+        getInfoMessage().addInfoMsg(msg);
+        return new MultiZoneUpdate("infoMessageZone", getInfoMessage().getBlock());
+    }
+    
+    public MultiZoneUpdate zoneWithError(String msg, Throwable e) {
+        logger.error(msg, e);
+        getInfoMessage().addErrorMsg(msg);
+        return new MultiZoneUpdate("infoMessageZone", getInfoMessage().getBlock());
+    }
+    
 }

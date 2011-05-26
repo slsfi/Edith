@@ -1,6 +1,5 @@
 package fi.finlit.edith.ui.components.note;
 
-import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -62,10 +61,12 @@ public class DocumentNoteForm {
 
             DocumentRevision documentRevision = page.getDocumentRevision();
             String successMsg = "submit-success";
-
+            String noteId = documentNoteOnEdit.getNote().getId();
+            
             if (delete) {
                 documentRevision = documentRepository.removeNotes(documentRevision, documentNoteOnEdit);
                 page.getNoteEdit().setNoteOnEdit(documentNoteOnEdit.getNote());
+                page.getNoteEdit().setDocumentNoteOnEdit(null);
                 successMsg = "delete-success";
             } else {
                 if (updateLongTextSelection.isValid()) {
@@ -77,19 +78,16 @@ public class DocumentNoteForm {
                 page.getNoteEdit().setDocumentNoteOnEdit(documentNoteOnEdit);
             }
 
-            page.getDocumentNotes().setNoteId(documentNoteOnEdit.getNote().getId());
+            page.getDocumentNotes().setNoteId(noteId);
             page.getDocumentRevision().setRevision(documentRevision.getRevision());
             
-            page.getInfoMessage().addInfoMsg(successMsg);
-            return new MultiZoneUpdate("noteEditZone", page.getNoteEdit().getBlock())
-                    .add("infoMessageZone", page.getInfoMessage().getBlock())
-                    .add("documentZone", page.getDocumentView())
-                    .add("documentNotesZone", page.getDocumentNotes().getBlock());
+            return page.zoneWithInfo(successMsg)
+                .add("noteEditZone", page.getNoteEdit().getBlock())
+                .add("documentZone", page.getDocumentView())
+                .add("documentNotesZone", page.getDocumentNotes().getBlock());
 
         } catch (Exception e) {
-            logger.error("Update long text failed", e);
-            page.getInfoMessage().addInfoMsg("note-edition-failed");
-            return new MultiZoneUpdate("infoMessageZone", page.getInfoMessage().getBlock());
+            return page.zoneWithError("note-edition-failed", e);
         }
 
     }
