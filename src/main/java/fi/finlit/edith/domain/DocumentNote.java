@@ -49,6 +49,9 @@ public class DocumentNote extends Identifiable {
     
     @Predicate
     private String lemmaPosition;
+    
+    @Predicate
+    private int position;
 
     public DocumentNote createCopy() {
         DocumentNote copy = new DocumentNote();
@@ -63,6 +66,7 @@ public class DocumentNote extends Identifiable {
         copy.setLocalId(localId);
         copy.setLemmaPosition(lemmaPosition);
         copy.setPublishable(publishable);
+        
         return copy;
     }
 
@@ -172,6 +176,14 @@ public class DocumentNote extends Identifiable {
     
     public Concept getConcept(boolean extendedTerm) {
         return note.getConcept(extendedTerm);
+    }
+    
+    public void setPosition(int position) {
+        this.position = position;
+    }
+    
+    public int getPosition() {
+        return position;
     }
     
 }

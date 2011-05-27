@@ -39,7 +39,7 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param longText
      * @return
      */
-    DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String localId, String longText);
+    DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String localId, String longText, int position);
     
     /**
      * A create new document not variant where local id is from current time

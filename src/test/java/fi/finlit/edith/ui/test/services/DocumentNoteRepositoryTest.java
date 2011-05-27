@@ -103,10 +103,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         docRev = document.getRevision(latestRevision);
-        noteRepository.createDocumentNote(createNote(), docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
-        noteRepository.createDocumentNote(createNote(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.");
-        noteRepository.createDocumentNote(createNote(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
-        noteRepository.createDocumentNote(createNote(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
+        noteRepository.createDocumentNote(createNote(), docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen", 0);
+        noteRepository.createDocumentNote(createNote(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.", 0);
+        noteRepository.createDocumentNote(createNote(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.", 0);
+        noteRepository.createDocumentNote(createNote(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4", 0);
 
         searchInfo = new DocumentNoteSearchInfo();
         searchInfo.setCurrentDocument(document);
@@ -194,10 +194,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void QueryNotes_Sorting_Is_Case_Insensitive() {
-        noteRepository.createDocumentNote(createNote(), docRev, "5", "a");
-        noteRepository.createDocumentNote(createNote(), docRev, "6", "b");
-        noteRepository.createDocumentNote(createNote(), docRev, "7", "A");
-        noteRepository.createDocumentNote(createNote(), docRev, "8", "B");
+        noteRepository.createDocumentNote(createNote(), docRev, "a");
+        noteRepository.createDocumentNote(createNote(), docRev, "b");
+        noteRepository.createDocumentNote(createNote(), docRev, "A");
+        noteRepository.createDocumentNote(createNote(), docRev, "B");
         GridDataSource gds = documentNoteRepository.queryNotes("*");
         int n = gds.getAvailableRows();
         List<SortConstraint> sortConstraints = new ArrayList<SortConstraint>();
@@ -233,7 +233,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Person_Note() {
         DocumentNote documentNote = noteRepository
-                .createDocumentNote(createNote(), docRev, "3",
+                .createDocumentNote(createNote(), docRev,
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PERSON);
@@ -266,7 +266,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Person_With_The_Same_Birth_And_Death_Date() {
         DocumentNote documentNote = noteRepository
-                .createDocumentNote(createNote(), docRev, "3",
+                .createDocumentNote(createNote(), docRev,
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PERSON);
@@ -284,7 +284,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Store_And_Retrieve_Place_Note() {
         DocumentNote documentNote = noteRepository
-                .createDocumentNote(createNote(), docRev, "3",
+                .createDocumentNote(createNote(), docRev,
                         "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
         Note note = documentNote.getNote();
         note.setFormat(NoteFormat.PLACE);
@@ -551,8 +551,8 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Add_The_Same_Word_Twice() {
         String text = "l\u00E4htee";
-        Note note = noteRepository.createDocumentNote(createNote(), docRev, "100", text).getNote();
-        noteRepository.createDocumentNote(note, docRev, "200", text);
+        Note note = noteRepository.createDocumentNote(createNote(), docRev, text).getNote();
+        noteRepository.createDocumentNote(note, docRev, text);
         assertEquals(6, countDocumentNotes(noteRepository.findNotesWithInstances(searchInfo)));
     }
 
@@ -561,7 +561,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     public void Query_For_Document_Notes_And_Retrieve_The_One_Attached_To_Current_Document() {
         // FIXME
         String text = "l\u00E4htee";
-        Note note = noteRepository.createDocumentNote(createNote(), docRev, "100", text).getNote();
+        Note note = noteRepository.createDocumentNote(createNote(), docRev, text).getNote();
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
         documentNoteRepository.save(documentNote);

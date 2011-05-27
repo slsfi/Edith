@@ -53,10 +53,12 @@
               <t:textArea t:id="description" value="description" rows="8" />
             </div>
     
+            <!-- TODO In the future 
             <div class="field">
               <label>${message:linkTo-label}</label>
               <div>TBD</div>
             </div>
+            -->
     
             <div class="field">
               <t:label for="sources">${message:sources-label}</t:label>

@@ -320,12 +320,12 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     @Override
     public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String longText) {
         return createDocumentNote(n, docRevision, String.valueOf(timeService.currentTimeMillis()),
-                longText);
+                longText, 0);
     }
 
     @Override
     public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String localId,
-            String longText) {
+            String longText, int position) {
         UserInfo createdBy = userRepository.getCurrentUser();
 
         DocumentNote documentNote = new DocumentNote();
@@ -352,6 +352,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         documentNote.setDocRevision(docRevision);
         documentNote.setLocalId(localId);
         documentNote.setNote(n);
+        documentNote.setPosition(position);
         getSession().save(n);
         getSession().save(documentNote);
         getSession().flush();

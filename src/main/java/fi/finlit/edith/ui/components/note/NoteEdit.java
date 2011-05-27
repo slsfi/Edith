@@ -37,16 +37,6 @@ public class NoteEdit {
     @Inject
     private Block noteEditBlock;
 
-    @Property
-    private NoteComment comment;
-
-    @Property
-    private List<NoteComment> comments;
-
-    @InjectComponent
-    @Property
-    private Zone commentZone;
-
     @Inject
     private NoteRepository noteRepository;
 
@@ -56,9 +46,6 @@ public class NoteEdit {
     private DocumentNote documentNoteOnEdit;
     
     private Note noteOnEdit;
-
-    @Property
-    private String newCommentMessage;
 
     @Property
     private Note loopNote;
@@ -75,41 +62,6 @@ public class NoteEdit {
     }
     
     
-    
-    Object onDeleteComment(String noteId, String commentId) {
-        NoteComment deletedComment = noteRepository.removeComment(commentId);
-        documentNoteOnEdit = documentNoteRepository.getById(noteId);
-        comments = getSortedComments(documentNoteOnEdit.getConcept(isSlsMode()).getComments());
-        comments.remove(deletedComment);
-        return commentZone.getBody();
-    }
-
-    private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
-        List<NoteComment> rv = new ArrayList<NoteComment>(c);
-        Collections.sort(rv, NoteCommentComparator.DESC);
-        return rv;
-    }
-
-    void onPrepareFromCommentForm(String id) {
-        if (documentNoteOnEdit == null) {
-            System.err.println("onPrepareFromCommentForm");
-            documentNoteOnEdit = documentNoteRepository.getById(id);
-            System.err.println("onPrepareFromCommentForm --");
-        }
-    }
-
-    Object onSuccessFromCommentForm() {
-        System.err.println("onSuccessFromCommentForm");
-        comments = getSortedComments(documentNoteOnEdit.getConcept(isSlsMode()).getComments());
-        if (newCommentMessage != null) {
-            comments.add(0,
-                    noteRepository.createComment(documentNoteOnEdit.getConcept(isSlsMode()), newCommentMessage));
-            newCommentMessage = null;
-        }
-        System.err.println("onSuccessFromCommentForm --");
-        return commentZone.getBody();
-    }
-
     private Note createNote() {
         Note n = new Note();
         if (isSlsMode()) {

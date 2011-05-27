@@ -139,7 +139,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
 
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10",
+        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1),
                 longText);
 
         assertNotNull(documentNote);
@@ -161,9 +161,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
 
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10",
+        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1),
                 longText);
-        DocumentNote documentNote2 = noteRepository.createDocumentNote(documentNote.getNote(), document.getRevision(-1), "11",
+        DocumentNote documentNote2 = noteRepository.createDocumentNote(documentNote.getNote(), document.getRevision(-1),
                 longText);
         assertEquals(documentNote.getNote().getId(), documentNote2.getNote().getId());
     }
@@ -171,7 +171,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Find() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
-        noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "lid1234", "foobar");
+        noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "foobar");
         Note note = noteRepository.find("foobar");
         assertNotNull(note);
     }
@@ -200,7 +200,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(note);
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         DocumentNote documentNote = noteRepository.createDocumentNote(note, document.getRevision(-1), "123456",
-                lemma);
+                lemma, 0);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
         assertNotNull(documentNoteRepository.getByLocalId(document.getRevision(-1), "123456")
@@ -216,7 +216,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(note);
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         DocumentNote documentNote = noteRepository.createDocumentNote(note, document.getRevision(-1), "123456",
-                lemma);
+                lemma, 0);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
         assertEquals(note.getConcept(extendedTerm).getDescription(),
@@ -262,7 +262,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         long latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         String longText = UUID.randomUUID().toString();
-        noteRepository.createDocumentNote(createNote(), document.getRevision(latestRevision), "10", longText);
+        noteRepository.createDocumentNote(createNote(), document.getRevision(latestRevision), longText);
     }
 
     @Test
@@ -288,7 +288,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     public void Find_Notes_With_Search() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         String longText = "two words";
-        noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10", longText);
+        noteRepository.createDocumentNote(createNote(), document.getRevision(-1), longText);
         DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
         //Empty finds all
         assertEquals(1, noteRepository.findNotes(search).size());
@@ -320,7 +320,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     public void Remove_Based_On_Revision() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10", longText);
+        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), longText);
         List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(new DocumentNoteSearchInfo(document));
         assertTrue(countDocumentNotes(notes) > 0);
         noteRepository.remove(documentNote, documentNote.getSVNRevision());

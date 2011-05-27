@@ -218,13 +218,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     public DocumentNote addNote(Note note, DocumentRevision docRevision, final SelectedText selection) throws IOException, NoteAdditionFailedException{
         final String localId = String.valueOf(timeService.currentTimeMillis());
         long newRevision;
+        final MutableInt position = new MutableInt(0);
         newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
                 authService.getUsername(), new UpdateCallback() {
                     @Override
                     public void update(InputStream source, OutputStream target) throws IOException {
                         try {
-                            addNote(inFactory.createXMLEventReader(source), outFactory
-                                    .createXMLEventWriter(target), selection, localId);
+                            position.setValue(addNote(inFactory.createXMLEventReader(source), outFactory
+                                    .createXMLEventWriter(target), selection, localId));
                         } catch (XMLStreamException e) {
                             throw new ServiceException(e);
                         } catch (NoteAdditionFailedException e) {
@@ -234,10 +235,12 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 });
 
         // persisted noteRevision has svnRevision of newly created commit
-        return noteRepository.createDocumentNote(note, new DocumentRevision(docRevision, newRevision), localId,selection.getSelection());
+        DocumentNote docNote =  noteRepository.createDocumentNote(note, new DocumentRevision(docRevision, newRevision), 
+                localId, selection.getSelection(), position.intValue());
+        return docNote;
     }
 
-    public void addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws NoteAdditionFailedException {
+    public int addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, String localId) throws NoteAdditionFailedException {
         logger.info(sel.toString());
         ElementContext context = new ElementContext(3);
         /* Used to concat all the strings while buffering. */
@@ -249,6 +252,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         /* Used to store all the events while buffering. */
         List<XMLEvent> events = new ArrayList<XMLEvent>();
         MutableInt endOffset = new MutableInt(0);
+        
+        //Some sort of absolute position to have elements in order
+        MutableInt position = new MutableInt(0) ;
 
         Matched matched = new Matched();
         try {
@@ -261,6 +267,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 boolean handled = false;
                 XMLEvent event = reader.nextEvent();
                 if (event.isStartElement()) {
+                    position.increment();
                     context.push(extractName(event.asStartElement()));
                     if (buffering && !matched.areBothMatched()) {
                         handled = true;
@@ -303,6 +310,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         startedBuffering = true;
                     }
                 } else if (event.isCharacters()) {
+                    position.increment();
                     if (buffering && !matched.areBothMatched()) {
                         events.add(event);
                         handled = true;
@@ -315,6 +323,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                         }
                     }
                 } else if (event.isEndElement()) {
+                    position.increment();
                     if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
                         flush(writer, !matched.isStartMatched() ? allStrings.toString() : endStrings.toString(), sel, events, context, matched, localId, endOffset);
                         buffering = false;
@@ -351,6 +360,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 throw new NoteAdditionFailedException(sel, localId, matched.isStartMatched(), matched.isEndMatched());
             }
         }
+        return position.intValue();
     }
 
     private Document createDocument(String path, String title, String description) {
@@ -362,7 +372,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return doc;
     }
 
-    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, ElementContext context, Matched matched, String localId, MutableInt endOffset) throws XMLStreamException {
+    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, 
+            ElementContext context, Matched matched, String localId, MutableInt endOffset) throws XMLStreamException {
         String startAnchor = "start"+localId;
         String endAnchor = "end"+localId;
         boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
@@ -581,6 +592,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             note.setLocalId(String.valueOf(timeService.currentTimeMillis()));
         }
         long newRevision;
+        final MutableInt position = new MutableInt(0);
         newRevision = svnService.commit(doc.getSvnPath(), note.getSVNRevision(), authService
                 .getUsername(), new UpdateCallback() {
             @Override
@@ -588,7 +600,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 try {
                     XMLEventReader eventReader = inFactory.createFilteredReader(inFactory
                             .createXMLEventReader(source), createRemoveFilter(new DocumentNote [] { note }));
-                    addNote(eventReader, outFactory.createXMLEventWriter(target), selection, note.getLocalId());
+                    position.setValue(
+                            addNote(eventReader, outFactory.createXMLEventWriter(target), selection, note.getLocalId())
+                    );
                 } catch (XMLStreamException e) {
                     throw new ServiceException(e);
                 } catch (NoteAdditionFailedException e) {
@@ -601,6 +615,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         DocumentNote copy = note.createCopy();
         copy.setLongText(selection.getSelection());
         copy.setSVNRevision(newRevision);
+        copy.setPosition(position.intValue());
 //        documentNoteRepository.save(copy);
         note.setReplacedBy(copy);
         documentNoteRepository.save(note);
