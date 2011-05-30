@@ -43,12 +43,6 @@ public abstract class AbstractNoteForm {
     @InjectPage
     private Annotate page;
 
-    @Parameter
-    private List<NoteComment> comments;
-
-    @Parameter
-    private Zone commentZone;
-
     @Property
     @Parameter
     private SelectedText createTermSelection;
@@ -179,7 +173,7 @@ public abstract class AbstractNoteForm {
         logger.info("onSuccessFromNoteEditForm begins with " + noteOnEdit);
 
         try {
-            
+
             if (getNoteOnEditConcept().getStatus().equals(NoteStatus.INITIAL)) {
                 getNoteOnEditConcept().setStatus(NoteStatus.DRAFT);
             }
@@ -190,28 +184,22 @@ public abstract class AbstractNoteForm {
             // saveAsNew = false;
 
             if (delete) {
-                
+
                 logger.info("note removed: " + noteOnEdit);
                 noteRepository.removeNote(noteOnEdit);
                 page.getNoteEdit().setNoteOnEdit(null);
-                return page.zoneWithInfo("delete-success")
-                    .add("listZone", page.getSearchResults())
-                    .add("noteEditZone", page.getNoteEdit());
-                
+                return page.zoneWithInfo("delete-success").add("listZone", page.getSearchResults())
+                        .add("noteEditZone", page.getNoteEdit());
+
             } else {
-                
+
                 logger.info("note saved: " + noteOnEdit);
                 noteRepository.save(noteOnEdit);
-                comments = NoteComment.getSortedComments(getNoteOnEditConcept().getComments());
-                return page.zoneWithInfo("submit-success")
-                    .add("listZone", page.getSearchResults());
-                    
+                return page.zoneWithInfo("submit-success").add("listZone", page.getSearchResults());
+
             }
 
-            
-            // .add("commentZone", commentZone.getBody())
-
-        } catch (final Exception e) {
+        } catch (Exception e) {
             return page.zoneWithError("note-addition-failed", e);
         }
 

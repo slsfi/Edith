@@ -232,7 +232,7 @@ div.note_edit {
 	border-bottom: solid 1px #D0D0D0;
 }
 
-.note_edit input[type="text"], .note_edit textarea, #commentZone textArea {
+.note_edit input[type="text"], .note_edit textarea, #commentsAccordion textarea {
 	width: 95%;
 }
 
@@ -332,4 +332,20 @@ ul.dynatree-container {
 
 #info-message {
     text-align: center;
+}
+
+/**
+* Comments
+*/
+.comment {
+  margin-bottom: 1em;	
+}
+
+.comment-metadata {
+    float:right;
+    padding-left: 1em;
+    height: 3em;
+}
+.comment-msg {
+
 }

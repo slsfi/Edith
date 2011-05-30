@@ -4,8 +4,6 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.DocumentRevision;
@@ -16,7 +14,7 @@ import fi.finlit.edith.ui.services.DocumentRepository;
 
 public class DocumentNoteForm {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    //private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Parameter
     @Property
@@ -59,14 +57,15 @@ public class DocumentNoteForm {
     Object onSuccessFromDocumentNoteForm() {
         try {
 
-            DocumentRevision documentRevision = page.getDocumentRevision();
             String successMsg = "submit-success";
             String noteId = documentNoteOnEdit.getNote().getId();
             
             if (delete) {
-                documentRevision = documentRepository.removeNotes(documentRevision, documentNoteOnEdit);
+                DocumentRevision documentRevision = documentRepository.removeNotes(
+                        page.getDocumentRevision(), documentNoteOnEdit);
                 page.getNoteEdit().setNoteOnEdit(documentNoteOnEdit.getNote());
                 page.getNoteEdit().setDocumentNoteOnEdit(null);
+                page.getDocumentRevision().setRevision(documentRevision.getRevision());
                 successMsg = "delete-success";
             } else {
                 if (updateLongTextSelection.isValid()) {
@@ -76,15 +75,16 @@ public class DocumentNoteForm {
                 }
                 page.getDocumentNotes().setSelectedNote(documentNoteOnEdit);
                 page.getNoteEdit().setDocumentNoteOnEdit(documentNoteOnEdit);
+                page.getDocumentRevision().setRevision(documentNoteOnEdit.getSVNRevision());
             }
 
             page.getDocumentNotes().setNoteId(noteId);
-            page.getDocumentRevision().setRevision(documentRevision.getRevision());
             
             return page.zoneWithInfo(successMsg)
                 .add("noteEditZone", page.getNoteEdit().getBlock())
                 .add("documentZone", page.getDocumentView())
                 .add("documentNotesZone", page.getDocumentNotes().getBlock());
+                
 
         } catch (Exception e) {
             return page.zoneWithError("note-edition-failed", e);

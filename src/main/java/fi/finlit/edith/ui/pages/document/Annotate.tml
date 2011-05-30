@@ -52,33 +52,37 @@
 	<p:rightPanel>
 	
 	<script type="text/javascript">
-	  jQuery(function() {
-		  
-		 var saveState = function(event, ui) {
-			 var id = jQuery(this).attr("id");
-			 var state = jQuery(this).accordion("option", "active");
-			 if (state === false) {
-				 state = -1;
-			 }
-			 //alert("saving " + id +" "+ state)
+	   var AccordionState = {
+	     saveState : function(event, ui) {
+             var id = jQuery(this).attr("id");
+             var state = jQuery(this).accordion("option", "active");
+             if (state === false) {
+                 state = -1;
+             }
              jQuery.cookie(id, state, {expires: 7});
-		 };
-		 
-		 var loadState = function(event, ui) {
-			 var id = jQuery(this).attr("id");
+         },
+         
+         loadState : function(event, ui) {
+             var id = jQuery(this).attr("id");
              var state = jQuery.cookie(id);
-             //alert("loaded " + id + " " + state);
              if (state == 0) {
-            	//alert("setting " + id + " " + state);
                 jQuery(this).accordion("option", "active", 0);
              } 
-		 }
-		  
-		 jQuery('#documentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState});
-		 jQuery('#searchAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState });
-		 jQuery('#searchResultsAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState });
-		 jQuery('#instancesAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState });
-		 jQuery('#editAccordion').accordion({ collapsible: true, active: false, clearStyle:true, create: loadState, change: saveState });
+         }	   
+	   };
+	
+	   jQuery(function() {
+	   
+	     jQuery('#documentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+	    	 create: AccordionState.loadState, change: AccordionState.saveState});
+	     jQuery('#searchAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+	    	 create: AccordionState.loadState, change: AccordionState.saveState });
+		 jQuery('#searchResultsAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+			 create: AccordionState.loadState, change: AccordionState.saveState });
+		 jQuery('#instancesAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+			 create: AccordionState.loadState, change: AccordionState.saveState });
+		 jQuery('#editAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+			 create: AccordionState.loadState, change: AccordionState.saveState });
 		 
 		 jQuery("#documentsTree").dynatree();
 		 

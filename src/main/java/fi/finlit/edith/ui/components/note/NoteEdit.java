@@ -53,6 +53,9 @@ public class NoteEdit {
     @Property
     private List<DocumentNote> selectedNotes;
     
+    @InjectComponent
+    private Comments comments;
+    
     public String getNoteId() {
         return documentNoteOnEdit != null ? documentNoteOnEdit.getId() : null;
     }
@@ -100,6 +103,10 @@ public class NoteEdit {
     
     public DocumentNote getDocumentNoteOnEdit() {
         return documentNoteOnEdit;
+    }
+    
+    public Comments getComments() {
+        return comments;
     }
     
 }

@@ -340,14 +340,22 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 concept.setAllEditors(new HashSet<UserInfo>());
             }
             concept.getAllEditors().add(createdBy);
-        }               
+            
+        }   
         
         documentNote.setSVNRevision(docRevision.getRevision());
         documentNote.setLongText(longText);
 
+        String createdLemma = Note.createLemmaFromLongText(longText); 
         if (n.getLemma() == null) {
-            n.setLemma(Note.createLemmaFromLongText(longText));
+            n.setLemma(createdLemma);
         }
+        
+        //Extended term version gets the lemma also to basicTerm automatically
+        if (extendedTerm && n.getTerm() != null && n.getTerm().getBasicForm() == null) {
+            n.getTerm().setBasicForm(createdLemma);
+        }
+        
         documentNote.setDocument(docRevision.getDocument());
         documentNote.setDocRevision(docRevision);
         documentNote.setLocalId(localId);

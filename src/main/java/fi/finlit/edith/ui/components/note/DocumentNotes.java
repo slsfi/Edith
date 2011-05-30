@@ -79,6 +79,7 @@ public class DocumentNotes {
         selectedNote = documentNoteRepository.getById(documentNoteId);
 
         page.getNoteEdit().setDocumentNoteOnEdit(selectedNote);
+        
         return page.getNoteEdit().getBlock();
     }
 

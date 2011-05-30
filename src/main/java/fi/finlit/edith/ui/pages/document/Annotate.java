@@ -36,6 +36,7 @@ import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.ui.components.InfoMessage;
+import fi.finlit.edith.ui.components.note.Comments;
 import fi.finlit.edith.ui.components.note.DocumentNotes;
 import fi.finlit.edith.ui.components.note.NoteEdit;
 import fi.finlit.edith.ui.components.note.SearchResults;
@@ -144,7 +145,7 @@ public class Annotate extends AbstractDocumentPage {
     
     @InjectComponent
     private NoteEdit noteEdit;
-
+   
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
@@ -188,7 +189,6 @@ public class Annotate extends AbstractDocumentPage {
         String localId = selectedNoteLocalId.substring(1);
         DocumentNote documentNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
                 localId);
-        
         documentNotes.setNoteId(documentNote.getNote().getId());
         documentNotes.setSelectedNote(documentNote);
         noteEdit.setDocumentNoteOnEdit(documentNote);
@@ -250,6 +250,7 @@ public class Annotate extends AbstractDocumentPage {
     
     private MultiZoneUpdate noteHasChanged(DocumentNote documentNote, String msg) {
         getDocumentRevision().setRevision(documentNote.getSVNRevision());
+        
         documentNotes.setNoteId(documentNote.getNote().getId());
         documentNotes.setSelectedNote(documentNote);
         noteEdit.setDocumentNoteOnEdit(documentNote);
@@ -378,7 +379,7 @@ public class Annotate extends AbstractDocumentPage {
     public Block getDocumentView() {
         return documentView;
     }
-
+    
     public MultiZoneUpdate zoneWithInfo(String msg) {
         getInfoMessage().addInfoMsg(msg);
         return new MultiZoneUpdate("infoMessageZone", getInfoMessage().getBlock());

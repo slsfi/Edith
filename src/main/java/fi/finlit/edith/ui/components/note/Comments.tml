@@ -1,0 +1,109 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+  xmlns:p="tapestry:parameter">
+<t:content>
+
+   
+    
+      <t:if test="noteOnEdit">
+        <script type="text/javascript">
+              
+              jQuery(function() {
+                  jQuery('#commentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true });
+                  //, create: AccordionState.loadState, change: AccordionState.saveState}); 
+              });
+              
+          </script>
+        <div id="commentsAccordion">
+                  <h5><a href="#">${message:comments}</a></h5>
+                  <div>
+                  
+                  <t:zone id="commentZone" update="show">
+                    <t:delegate to="commentsBlock"/>
+                  </t:zone>
+                  
+                  <t:block id="commentsBlock">
+                  
+                   <t:loop source="comments" value="comment">
+                        <div class="comment">
+                            <div class="comment-metadata"> 
+                                <t:dateTimeFormat date="comment.createdAt"
+                                    format="message:dateformat-compact" />
+                                ${comment.username}<br/>
+                                <t:eventlink t:event="deleteComment" t:zone="commentZone" 
+                                    context="[noteOnEdit.id,comment.id]">${message:deleteComment}</t:eventlink>
+                            </div>
+                            <div class="comment-msg">${comment.message}</div>
+                            <div class="cleaner"></div>
+                        </div>
+                   </t:loop>    
+                  
+                  
+                  <t:form t:id="commentForm" t:zone="commentZone" t:context="noteOnEdit.id">
+                      <div class="field">
+                        <t:label for="newCommentMessage">${message:createNewComment-label}</t:label>
+                        <t:textArea t:id="newCommentMessage" value="newCommentMessage" rows="8" />
+                      </div>
+                      <input type="submit" value="${message:saveComment}" />
+                    </t:form>  
+                    
+                   </t:block>
+                      
+                  </div>
+        </div>
+      </t:if>              
+   
+
+
+       <t:remove>
+          <script type="text/javascript">
+              jQuery(".delete_dialog").hide();
+
+              jQuery(".delete_question").click(function(event) {
+                   jQuery(this).siblings().show();
+                   jQuery(this).hide();
+                   event.preventDefault();
+              });
+
+              jQuery(".delete_decline").click(function(event) {
+                   jQuery(this).parent().siblings().show();
+                   jQuery(this).parent().hide();
+                   event.preventDefault();
+              });
+              
+              jQuery(function() {
+            	  jQuery('#commentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true });
+            	  //, create: AccordionState.loadState, change: AccordionState.saveState}); 
+              });
+              
+          </script>
+    
+            
+                    <t:loop source="comments" value="comment" volatile="true">
+                        <div>
+                            <div>${comment.message}</div>
+                            <div class="metadata">
+                                <t:dateTimeFormat date="comment.createdAt"
+                                    format="message:dateformat-compact" />
+                                ${comment.username}
+                            </div>
+                        <span class="delete">
+                            <button class="delete_question">${message:deleteComment}</button>
+                            <span class="delete_dialog">
+                                ${message:delete}
+                                <t:eventlink t:event="deleteComment" t:zone="commentZone" 
+                                    context="[noteId,comment.id]">${message:yes}</t:eventlink>
+                                /
+                                <a href="" class="delete_decline">${message:no}</a>
+                            </span>
+                        </span>
+                        </div>
+                    </t:loop>
+                    
+                    <br/><br/>
+                    
+                                    
+                 
+                        </t:remove>
+
+</t:content>
+</html>

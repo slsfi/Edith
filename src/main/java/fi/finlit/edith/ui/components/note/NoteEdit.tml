@@ -48,6 +48,9 @@
                       <t:note.SKSNoteForm noteOnEdit="noteOnEdit"/>                           
                     </p:else>
                     </t:if>
+                    
+                    <t:note.comments noteOnEdit="noteOnEdit" />
+                    
                   </t:if>
     
                 </div>
