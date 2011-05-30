@@ -148,7 +148,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void GetAll() {
-        assertEquals(6, documentRepository.getAll().size());
+        assertEquals(7, documentRepository.getAll().size());
     }
 
     private String getContent(String svnPath, long svnRevision) throws IOException{
@@ -171,7 +171,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void GetDocumentsOfFolder() {
-        assertEquals(6, documentRepository.getDocumentsOfFolder(documentRoot).size());
+        assertEquals(7, documentRepository.getDocumentsOfFolder(documentRoot).size());
     }
 
     @Test
