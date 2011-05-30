@@ -5,10 +5,10 @@ var Annotate = {
 	selectedNoteId : null,
 	
 	updateSelectionForm : function() {
-		if (!TextSelector.updateIndices(TextSelector.getSelection())) {
-			InfoMessage.showError("Could not make valid selection. Try again.");
-			return false;
-		}
+		//if (!TextSelector.updateIndices(TextSelector.getSelection())) {
+		//	InfoMessage.showError("Could not make valid selection. Try again.");
+		//	return false;
+		//}
 		jQuery(":input[name^='selectedStartId']").val(TextSelector.startId);
 		jQuery(":input[name^='selectedEndId']").val(TextSelector.endId);
 		jQuery(":input[name^='selectedText']").val(TextSelector.selection);
@@ -29,7 +29,7 @@ var Annotate = {
 		if(!this.updateSelectionForm()) {
 			return false;
 		}
-		jQuery(":input[name='noteToLinkId']").val(Annotate.selectedNoteId);
+		jQuery(":input[name='noteToLinkId']").val(this.selectedNoteId);
 		TapestryExt.submitZoneForm(jQuery("#connectTermForm").get(0));
 		return false;
 	},
@@ -42,13 +42,22 @@ var Annotate = {
 		if( TextSelector.getSelection() == "" ) { 
 			jQuery("#createTermLink").addClass('disabled');
 			jQuery("#connectTermLink").addClass('disabled');
-		} else {
+		} else if ( TextSelector.updateIndices(TextSelector.getSelection()) ) {
 			jQuery("#createTermLink").removeClass('disabled');
 			if (this.selectedNoteId !== null) {
 				jQuery("#connectTermLink").removeClass('disabled');
 			}
 		}
 	},
+	
+	clearSelectionLinks : function() {
+		//Have fast version on the mousemove to clear out
+		if( TextSelector.getSelection() == "" ) { 
+			jQuery("#createTermLink").addClass('disabled');
+			jQuery("#connectTermLink").addClass('disabled');
+		}
+	},
+	
 
 };
 
@@ -96,7 +105,8 @@ jQuery(document).ready(function() {
   
     jQuery('#createTermLink').bind('click', function() { Annotate.createNote() });
     jQuery("#connectTermLink").bind("click", function() { Annotate.connectNote() });
-    jQuery('body').bind('mousemove', function() { Annotate.updateSelectionLinks() });
+    jQuery('body').bind('mouseup', function() { Annotate.updateSelectionLinks() });
+    jQuery('body').bind('mousemove', function() { Annotate.clearSelectionLinks() });
     
     /* TODO disable for note editing!
     jQuery(document).keydown(function(event) {

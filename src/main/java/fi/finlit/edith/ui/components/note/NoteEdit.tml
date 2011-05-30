@@ -29,6 +29,19 @@
                   </t:if>
                   
                   <t:if test="noteOnEdit">
+                    
+                    <script type="text/javascript">
+                      jQuery(function(){
+                    	  //Show selection on the search results
+                    	  //It's in here because note can be selected from the document too
+                    	  jQuery(".search-results .notes li").removeClass("selected-note");
+                          jQuery(".search-results [noteId='${noteOnEdit.id}']").closest("li").addClass("selected-note");  
+                    	  
+                          //Inform Annotate page on selected note
+                          Annotate.setSelectedNote('${noteOnEdit.id}');	  
+                      });
+                    </script>
+                    
                     <t:if test="slsMode">
                        <t:note.SLSNoteForm noteOnEdit="noteOnEdit"/>                           
                     <p:else>

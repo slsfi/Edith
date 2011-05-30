@@ -22,11 +22,8 @@
                 
                 jQuery(".search-results .selectable-note").live('click',
                   function(event) {
-                      jQuery(".search-results .notes li").removeClass("selected-note");
+                	  jQuery(".search-results .notes li").removeClass("selected-note");
                       jQuery(this).closest("li").addClass("selected-note");
-                      
-                      //Inform Annotate page on selected note
-                      Annotate.setSelectedNote(jQuery(this).attr("noteId"));
                       
                       //Update note instances view on the selection
                       TapestryExt.updateZone('documentNotesZone', jQuery(this).attr("href"));

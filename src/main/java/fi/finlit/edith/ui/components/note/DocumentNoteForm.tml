@@ -4,9 +4,8 @@
     <script type="text/javascript">
       //XXX Maybe these should be on external file
       var DocumentNoteForm = {
-    	  originalText : "${documentNoteOnEdit.longText}",
           setTextSelection : function() {
-        	  jQuery("#longTextEdit").html(this.originalText + " --> " + TextSelector.selection);
+        	  jQuery("#longTextUpdate").html(" --> " + TextSelector.selection);
         	  jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
               jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
               jQuery(":input[name='selectedText_2']").val(TextSelector.selection);
@@ -14,7 +13,7 @@
               jQuery(":input[name='selectedEndIndex_2']").val(TextSelector.endIndex);
           },
           clearTextSelection : function() {
-        	  jQuery("#longTextEdit").html(this.originalText);
+        	  jQuery("#longTextUpdate").html("");
               jQuery(":input[name='selectedText_2']").val(null);
           }
     		  
@@ -23,28 +22,37 @@
       jQuery(function() {
     	  
     	  //Remove previously binded versions
-    	  var eventName = "mousemove.documentNoteForm";
+    	  var mmoveEvt = "mousemove.documentNoteForm";
+    	  var mupEvt = "mouseup.documentNoteForm";
+    	  var saveButton = jQuery(".document-note-form :input[name^='save']");
     	  
-    	  jQuery('body').unbind(eventName);
+    	  //Unbind, so we don't stack these events as this part will
+    	  //be loaded again and again on the ajax update
+    	  jQuery('body').unbind(mmoveEvt);
+    	  jQuery('body').unbind(mupEvt);
+    	  
     	  //Show update button, if there is selection
-    	  jQuery('body').bind(eventName, function() {
-    		  
-    		  var saveButton = jQuery(".document-note-form :input[name^='save']"); 
-    		  
+    	  jQuery('body').bind(mupEvt, function() {
               if(TextSelector.getSelection() == "") { 
                   saveButton.val("${message:save}");
                   DocumentNoteForm.clearTextSelection();
               } else {
-            	  
             	  if (!TextSelector.updateIndices(TextSelector.getSelection())) {
             		  return;
             	  }
-            	  
                   saveButton.val("${message:updateLink}");
                   DocumentNoteForm.setTextSelection();
-                  
               }
           });
+    	  
+    	  //Clear on mousemove, just in case
+    	  jQuery('body').bind(mmoveEvt, function() {
+              if(TextSelector.getSelection() == "") { 
+            	  saveButton.val("${message:save}");
+                  DocumentNoteForm.clearTextSelection();
+              } 
+          });
+    	  
     	  
     	  
       });
@@ -57,7 +65,8 @@
         <legend>${message:document-note}</legend>
         
         <div class="metadata">
-        <t:dateTimeFormat date="documentNoteOnEdit.createdOnDate" format="message:dateformat-compact" />
+            <!--t:dateTimeFormat date="documentNoteOnEdit.createdOnDate" format="message:dateformat-compact" /-->
+            ${documentNoteOnEdit.position}
         </div>
         
         <t:errors />
@@ -65,6 +74,7 @@
         <div class="field">
             <label for="longTextEdit">${message:longText-label}</label>
             <div id="longTextEdit">${documentNoteOnEdit.longText}</div>
+            <div id="longTextUpdate"></div>
         </div>
         
         <div class="field">

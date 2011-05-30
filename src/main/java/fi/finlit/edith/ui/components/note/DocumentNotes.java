@@ -1,5 +1,7 @@
 package fi.finlit.edith.ui.components.note;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
@@ -39,10 +41,17 @@ public class DocumentNotes {
     public Block getBlock() {
         return documentNotesBlock;
     }
+    
+    private Comparator<DocumentNote> byPosition = new Comparator<DocumentNote>() {
+        public int compare(DocumentNote n1, DocumentNote n2) {
+            return n1.getPosition() - n2.getPosition();
+        }
+    };
 
     public List<DocumentNote> getDocumentNotes() {
         if (documentNotes == null) {
             documentNotes = documentNoteRepository.getOfNote(noteId);
+            Collections.sort(documentNotes, byPosition);
         }
 
         return documentNotes;

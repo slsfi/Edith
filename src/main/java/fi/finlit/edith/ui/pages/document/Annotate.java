@@ -188,8 +188,12 @@ public class Annotate extends AbstractDocumentPage {
         String localId = selectedNoteLocalId.substring(1);
         DocumentNote documentNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
                 localId);
+        
+        documentNotes.setNoteId(documentNote.getNote().getId());
+        documentNotes.setSelectedNote(documentNote);
         noteEdit.setDocumentNoteOnEdit(documentNote);
-        return noteEdit.getBlock();
+        return new MultiZoneUpdate("documentNotesZone", documentNotes.getBlock())
+            .add("noteEditZone", noteEdit.getBlock());
 
     }
 
@@ -244,17 +248,13 @@ public class Annotate extends AbstractDocumentPage {
         ;
     }
     
-    private MultiZoneUpdate error(String msg) {
-        infoMessage.addErrorMsg(msg);
-        return new MultiZoneUpdate("infoMessageZone", infoMessage.getBlock());
-    }
-
     private MultiZoneUpdate noteHasChanged(DocumentNote documentNote, String msg) {
         getDocumentRevision().setRevision(documentNote.getSVNRevision());
         documentNotes.setNoteId(documentNote.getNote().getId());
+        documentNotes.setSelectedNote(documentNote);
         noteEdit.setDocumentNoteOnEdit(documentNote);
         infoMessage.addInfoMsg(msg);
-        return new MultiZoneUpdate("infoMessageZone", infoMessage.getBlock())
+        return zoneWithInfo(msg)
                 .add("listZone", searchResults.getBlock())
                 .add("documentNotesZone", documentNotes.getBlock())
                 .add("noteEditZone", noteEdit.getBlock()).add("documentZone", documentView);
@@ -272,8 +272,7 @@ public class Annotate extends AbstractDocumentPage {
             return noteHasChanged(documentNote, "note-connect-success");
 
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return error("note-connect-failed");
+            return zoneWithError("note-connect-failed", e);
         }
     }
 
@@ -290,9 +289,7 @@ public class Annotate extends AbstractDocumentPage {
                 documentNote = getDocumentRepository().addNote(n, documentRevision,
                         createTermSelection);
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                infoMessage.addErrorMsg("note-addition-failed");
-                return infoMessage.getBlock();
+                return zoneWithError("note-addition-failed", e);
             }
             
             return noteHasChanged(documentNote, "create-success");
