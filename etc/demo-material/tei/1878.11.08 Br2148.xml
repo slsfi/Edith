@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.tei-c.org/ns/1.0 file:/T:/TEI-scheman%20(AT)/tei_brevschema_kommentator.xsd"
+  xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc> 
+      <titleStmt> 
+        <title>Br2148</title> 
+        <respStmt> 
+          <resp>Ansvarig redaktör:</resp> 
+          <name>Laura Mattsson</name> 
+        </respStmt> 
+      </titleStmt> 
+      <publicationStmt> 
+        <publisher>Zacharias Topelius Skrifter</publisher> 
+      </publicationStmt> 
+      <sourceDesc> 
+        <p>Arkivsignum: se databas</p> 
+      </sourceDesc> 
+    </fileDesc> 
+    <profileDesc> 
+      <handNotes> 
+        <handNote medium="black-ink"/> 
+      </handNotes> 
+    </profileDesc> 
+  </teiHeader> 
+  <text> 
+    <body xml:space="preserve"><!-- – ” ’ æ ½ --> 
+      <div type="letter">
+        <opener>
+          <address><persName>Bonnier</persName>.</address>
+          <dateline><placeName>Helsingfors</placeName> 8 Nov. 1878.</dateline>
+          <salute>Min gode Bror!</salute>
+        </opener> 
+        <p rend="noIndent">För några veckor sedan tog jag mig friheten anbefalla till dina vänliga råd en ung person, <persName>Mathilda Ingman</persName>, som söker plats vid <orgName>Kongl. Theaterns elevskola</orgName>. Som jag då skref, känner jag icke hennes anlag och föga annat om hennes person, än att hon är utan allt värn i <placeName>Stockholm</placeName> och följaktligen, med sitt fagra utseende, så godt som förlorad, om icke någon antager sig henne. Jag hoppas att hon icke beredt dig bryderi och att hon fått plats i någon bra familj.</p>
+        <p><anchor id="lem1"/>Jag har nu afsked<note type="editor" id="en1" target="#lem1">Topelius hade erhållit avsked från rektorstjänsten den 6 september.</note> och återgår till skrifvarehandtverket, hvarför jag i tid<pb/> velat rådgöra med dig, min gamle vän och bundsförvandt, om blifvande planer. Till en början är jag åter upptagen af en psalmbokskomité; dernäst förestå <anchor id="lem4"/>historiska arbeten<note type="editor" id="en4" target="#lem4">Troligen den Finlands historia han åtagit sig att skriva men inte avslutade (se Topelius, <hi rend="italics">Självbiografiska anteckningar</hi> 1922, s. 272).</note>. Men kan jag, som jag hoppas, afdela dagen, f. m. för vetenskapen och e. m. för literaturen, så torde dock något medhinnas. Lefver jag till Maj, flyttar jag på landet, – hvart, är ännu icke bestämdt, men nära stad och post. Den omständighet, att jag nu sparar ihop till ett eget litet torp, gör att jag 1879 behöfver pengar och har också förledt mig att för detta år – men endast för detta år – skrifva i tidningar. Jag har lofvat några bidrag för nästa år åt <anchor id="lem2"/><persName>Lindström</persName>, som betalar 200 kronor per ark, utan<pb/><note type="editor" id="en2" target="#lem2">Topelius noveller ”Toma hjertan” och ”Konungens Handske” hade tidigare publicerats i <hi rend="italics">Nya Dagligt Alllehanda</hi>. Jfr Bonniers svar 21/11 1878.</note> vidare eganderätt, och åt <persName>Stjernstedt</persName> i <title>Förr och Nu</title>. Många ark torde det icke blifva.</p> 
+        <p>Hålla vi ut framåt jul nästa år, så ville jag utsända 5:te häftet af <title>Läsning för Barn</title> på samma sätt som det 4:de. Dertill finnas både äldre tryckta och nya otryckta bidrag nästan kompletta.</p>
+        <p>Hvad skola vi derutöfver närmast tänka uppnå? Föreslå en plan: du känner hvad som kan komma i fråga. Lefver jag 1880, ville jag än engång utsända ett häfte lyrik, efter 10 års mellantid. <title>Fältskärn</title> leker mig i hågen – jag fruktar visst anspråken efter de förra delarnas framgång och vill icke sända ut något sämre, men Gudilof, ehuru ögonen blifvit sämre och arbetstiden på qvällarna deraf förminskad, känner jag icke <gap reason="damage" extent="1" unit="words"/> <unclear reason="damage" resp="AH MaD ch">sp</unclear>år af ålderdomen.</p><pb/>
+        <p>Det gäller dock nu att uppgöra en förståndig arbetsplan, som i mån af tid och helsa efterhand kan realiseras, – antingen i samlade skrifter – lyrik, dramatik, barnböcker, noveller etcetera – eller i fristående verk. Det är derom jag nu <del>nu</del> beder om ditt vänskapsfulla förslag. – Det skall intressera mig att se den illustrerade barnboken och att höra om <title>Fältskärns</title> illustrationer kunna realiseras. <title>F.</title> utkommer nu på finska i andra förbättrade upplagan.</p>
+        <p>Jag förmodar att det allmänna ekonomiska obeståndet inverkar äfven på bokmarknaden, men det skall väl hafva sin öfvergång. Till julen utsänder jag i <placeName>Hfors</placeName> <anchor id="lem3"/>tre akademiska tal, ett dito vid Runebergsfest<add place="sublinear">en</add> och småtexter till bilder af <persName>Alexandra Såltin</persName>.<note type="editor" id="en3" target="#lem3"><hi rend="italics">Redogörelse för kejserliga Alexanders-Universitetets i Finland förvaltning och verksamhet ifrån den 1 september 1875 till samma dag 1878 afgifven af Universitetets d.v. Rektor</hi> (103 s.), <hi rend="italics">Tal, vid K. Alexander-Universitetets inskrifningar den 15 september 1877, den 19 januari 1878 och den 14 september 1878 af Universitetets d.v. Rektor</hi> (38 s.), <hi rend="italics">Kejserliga Alexanders Universitetets i Finland minnesfest öfver Professoren Johan Ludvig Runeberg den 6 maj 1878</hi> (18 s.), och <hi rend="italics">Barnens sommar på landet af Alexandra Såltin</hi>, 15 teckningar med text av Z. T.</note></p>
+        <p>Må väl. En helsning till de dina,</p>
+      <closer>
+        <salute>från Vänne<supplied reason="damage" resp="MaD ch">n</supplied></salute>
+        <signed><supplied reason="damage" resp="MaD ch">Z. Topelius.</supplied></signed>
+      </closer> 
+      </div> 
+    </body> 
+  </text> 
+</TEI>
