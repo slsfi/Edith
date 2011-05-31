@@ -224,7 +224,7 @@ div.note_edit {
 	float: right;
 }
 
-#document_links, #document_links span {
+.top_links, .top_links span, #document_links, #document_links span {
 	margin: 5px;
 }
 
