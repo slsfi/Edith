@@ -18,8 +18,9 @@ var TextSelector = {
 
 	getOccurrenceInString : function(str, substr, minIndex) {
 		var occurrence = 0;
-		for ( var i = 0; i < str.length; ++i) {
-			var s = str.substring(i);
+		for (var i = 0; i < str.length; ++i) {
+		  /* FIXME: The selection "tamies.\n Leenan-Ka" breaks with Chrome.
+		   * There is a trailing comma which is handled on Firefox. */
 			if (str.substring(i).indexOf(substr) == 0) {
 				++occurrence;
 				if (i >= minIndex) {
