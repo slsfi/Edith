@@ -16,7 +16,7 @@ public class RegisterTest extends AbstractServiceTest {
 
     @Test
     public void OnSuccess(){
-        User user = new User();
+        User user = new User("john_doe_82");
         registerPage.setUser(user);
         registerPage.onSuccess();
     }
