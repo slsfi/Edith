@@ -13,8 +13,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -24,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNRevisionProperty;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
@@ -37,7 +39,7 @@ import fi.finlit.edith.EDITH;
 
 /**
  * SubversionServiceImpl is the default implementation of the SubversionService interface
- * 
+ *
  * @author tiwe
  * @version $Id$
  */
@@ -178,13 +180,17 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public Collection<String> getEntries(String svnFolder, long revision) {
+    public Map<String, String> getEntries(String svnFolder, long revision) {
         try {
             List<SVNDirEntry> entries = new ArrayList<SVNDirEntry>();
             svnRepository.getDir(svnFolder, revision, false, entries);
-            List<String> rv = new ArrayList<String>(entries.size());
+            Map<String, String> rv = new HashMap<String, String>(entries.size());
             for (SVNDirEntry entry : entries) {
-                rv.add(entry.getName());
+                if (entry.getKind().equals(SVNNodeKind.DIR)) {
+                    rv.putAll(getEntries(svnFolder + "/" + entry.getName(), revision));
+                } else {
+                    rv.put(svnFolder + "/" + entry.getName(), entry.getName());
+                }
             }
             return rv;
         } catch (SVNException s) {
@@ -264,7 +270,10 @@ public class SubversionServiceImpl implements SubversionService {
                     out.close();
                 }
             }
-            return new FileInputStream(documentFile);
+            if (documentFile.isFile()) {
+                return new FileInputStream(documentFile);
+            }
+            return null;
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
@@ -278,7 +287,7 @@ public class SubversionServiceImpl implements SubversionService {
             return clientManager
                     .getCommitClient()
                     .doImport(file, repoSvnURL.appendPath(svnPath, false), svnPath + " added",
-                            false).getNewRevision();
+                            true).getNewRevision();
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
@@ -304,9 +313,10 @@ public class SubversionServiceImpl implements SubversionService {
 
             if (new File(teiMaterialRoot).exists()) {
                 for (File file : new File(teiMaterialRoot).listFiles()) {
-                    if (file.isFile()) {
-                        importFile(documentRoot + "/" + file.getName(), file);
+                    if (file.getName().endsWith(".svn")) {
+                        continue;
                     }
+                    importFile(documentRoot + "/" + file.getName(), file);
                 }
             }
         } catch (SVNException s) {
@@ -324,4 +334,22 @@ public class SubversionServiceImpl implements SubversionService {
         }
     }
 
+    @Override
+    public List<FileItem> getFileItems(String path, int revision) {
+        try {
+            List<SVNDirEntry> entries = new ArrayList<SVNDirEntry>();
+            svnRepository.getDir(path, revision, false, entries);
+            List<FileItem> fileItems = new ArrayList<FileItem>();
+            for (SVNDirEntry entry : entries) {
+                if (entry.getKind().equals(SVNNodeKind.DIR)) {
+                    fileItems.add(new FileItem(entry.getName(), path + "/" + entry.getRelativePath(), true, new ArrayList<FileItem>()));
+                } else {
+                    fileItems.add(new FileItem(entry.getName(), path + "/" + entry.getRelativePath(), false, null));
+                }
+            }
+           return fileItems;
+        } catch (SVNException s) {
+            throw new SubversionException(s.getMessage(), s);
+        }
+    }
 }

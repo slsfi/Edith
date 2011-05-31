@@ -20,7 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -153,9 +153,9 @@ public class SubversionServiceTest extends AbstractServiceTest {
         String svnPath = documentRoot;
         String filename = "testFile.txt";
         subversionService.importFile(svnPath + "/" + filename, testFile);
-        Collection<String> entries = subversionService.getEntries(svnPath, subversionService
+        Map<String, String> entries = subversionService.getEntries(svnPath, subversionService
                 .getLatestRevision());
-        assertTrue(entries.contains(filename));
+        assertTrue(entries.values().contains(filename));
         // There should be other files as well
         assertTrue(entries.size() > 1);
     }

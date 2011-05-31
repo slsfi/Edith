@@ -60,7 +60,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
 
-    @Inject 
+    @Inject
     @Symbol(EDITH.EXTENDED_TERM)
     private boolean extendedTerm;
 
@@ -91,14 +91,14 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     public void AddDocuments_From_Zip() {
         File file = new File("src/test/resources/tei.zip");
         assertEquals(5, documentRepository.addDocumentsFromZip("/documents/parent", file));
-        
+
         assertTrue(subversionService.getLatestRevision("/documents/parent/Kullervo.xml") > 0);
         assertTrue(subversionService.getLatestRevision("/documents/parent/Nummisuutarit_100211.xml") > 0);
         assertTrue(subversionService.getLatestRevision("/documents/parent/Nummisuutarit.xml") > 0);
         assertTrue(subversionService.getLatestRevision("/documents/parent/Olviretki_Schleusingenissa_manuscript.xml") > 0);
         assertTrue(subversionService.getLatestRevision("/documents/parent/xmlparsertest.xml") > 0);
     }
-    
+
     @Test
     public void AddNote() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
@@ -148,7 +148,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void GetAll() {
-        assertEquals(7, documentRepository.getAll().size());
+        assertEquals(10, documentRepository.getAll().size());
     }
 
     private String getContent(String svnPath, long svnRevision) throws IOException{
@@ -171,7 +171,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void GetDocumentsOfFolder() {
-        assertEquals(7, documentRepository.getDocumentsOfFolder(documentRoot).size());
+        assertEquals(10, documentRepository.getDocumentsOfFolder(documentRoot).size());
     }
 
     @Test
@@ -274,7 +274,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertTrue(content.contains(start(localId) + newText + end(localId)));
         // Täst<anchor xml:id="start1266836640612"/>ä<anchor xml:id="end1266836640612"/> rientää
     }
-    
+
     @Test
     public void UpdateNote_With_Publishable_State() throws IOException, NoteAdditionFailedException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
@@ -283,7 +283,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         DocumentNote noteRevision = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
         noteRevision.setPublishable(true);
-        
+
         String newText = "T\u00E4st\u00E4";
         DocumentNote updatedRevision = documentRepository.updateNote(noteRevision, new SelectedText(element, element, newText));
         assertTrue(updatedRevision.isPublishable());
@@ -298,7 +298,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         documentRepository.remove(document);
         documentRepository.getDocumentStream(document.getRevision(-1));
     }
-        
+
     private Note createNote() {
         Note note = new Note();
         if (extendedTerm) {

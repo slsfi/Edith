@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.tmatesoft.svn.core.SVNException;
 
@@ -50,7 +51,7 @@ public interface SubversionService {
      * @param revision
      * @return collection of child names
      */
-    Collection<String> getEntries(String svnFolder, long revision);
+    Map<String, String> getEntries(String svnFolder, long revision);
 
     /**
      * Retrieves the latest revision number.
@@ -99,5 +100,7 @@ public interface SubversionService {
      * Creates the repository and adds the directory structure.
      */
     void initialize();
+
+    List<FileItem> getFileItems(String path, int revision);
 
 }

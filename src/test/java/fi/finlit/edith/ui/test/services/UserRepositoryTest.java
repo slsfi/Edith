@@ -22,7 +22,7 @@ import fi.finlit.edith.ui.services.UserRepository;
 public class UserRepositoryTest extends AbstractServiceTest {
 
     @Inject
-    private UserRepository userRepo;
+    private UserRepository userRepository;
 
     @Inject
     private AuthService authService;
@@ -30,18 +30,18 @@ public class UserRepositoryTest extends AbstractServiceTest {
     @Test
     public void GetByUsername() {
         for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")) {
-            assertNotNull(userRepo.getByUsername(username));
+            assertNotNull(userRepository.getByUsername(username));
         }
     }
 
     @Test
     public void GetCurrentUser() {
-        assertEquals(authService.getUsername(), userRepo.getCurrentUser().getUsername());
+        assertEquals(authService.getUsername(), userRepository.getCurrentUser().getUsername());
     }
 
     @Test
     public void GetOrderedByName() {
-        List<User> users = userRepo.getOrderedByName();
+        List<User> users = userRepository.getOrderedByName();
         User previous = null;
         for (User user : users) {
             if (previous != null) {
@@ -54,7 +54,7 @@ public class UserRepositoryTest extends AbstractServiceTest {
     @Test
     public void GetUserInfoByUsername() {
         for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")) {
-            assertNotNull(userRepo.getUserInfoByUsername(username));
+            assertNotNull(userRepository.getUserInfoByUsername(username));
         }
     }
 }

@@ -17,6 +17,8 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -34,6 +36,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -51,6 +54,7 @@ import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.ui.services.svn.FileItem;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.UpdateCallback;
@@ -160,7 +164,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     private final TimeService timeService;
 
     private final AuthService authService;
-            
+
     public DocumentRepositoryImpl(
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
@@ -199,7 +203,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 File outFile = File.createTempFile("tei", ".xml");
                 OutputStream out = new FileOutputStream(outFile);
                 try {
-                    IOUtils.copy(in, out);                       
+                    IOUtils.copy(in, out);
                 } finally {
                     in.close();
                     out.close();
@@ -235,7 +239,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 });
 
         // persisted noteRevision has svnRevision of newly created commit
-        DocumentNote docNote =  noteRepository.createDocumentNote(note, new DocumentRevision(docRevision, newRevision), 
+        DocumentNote docNote =  noteRepository.createDocumentNote(note, new DocumentRevision(docRevision, newRevision),
                 localId, selection.getSelection(), position.intValue());
         return docNote;
     }
@@ -252,7 +256,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         /* Used to store all the events while buffering. */
         List<XMLEvent> events = new ArrayList<XMLEvent>();
         MutableInt endOffset = new MutableInt(0);
-        
+
         //Some sort of absolute position to have elements in order
         MutableInt position = new MutableInt(0) ;
 
@@ -372,7 +376,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         return doc;
     }
 
-    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events, 
+    private void flush(XMLEventWriter writer, String string, SelectedText sel, List<XMLEvent> events,
             ElementContext context, Matched matched, String localId, MutableInt endOffset) throws XMLStreamException {
         String startAnchor = "start"+localId;
         String endAnchor = "end"+localId;
@@ -450,7 +454,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         Assert.notNull(svnPath, "svnPath was null");
         return getDocumentMetadata(svnPath);
     }
-    
+
     private Document getDocumentMetadata(String svnPath) {
         return getSession().from(document)
             .where(document.svnPath.eq(svnPath))
@@ -460,13 +464,14 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public List<Document> getDocumentsOfFolder(String svnFolder) {
         Assert.notNull(svnFolder, "svnFolder was null");
-        Collection<String> entries = svnService.getEntries(svnFolder, /* HEAD */-1);
+        Map<String, String> entries = svnService.getEntries(svnFolder, /* HEAD */-1);
         List<Document> documents = new ArrayList<Document>(entries.size());
-        for (String entry : entries) {
-            String path = svnFolder + "/" + entry;
+        for (Entry<String, String> entry : entries.entrySet()) {
+            String path = entry.getKey();
+            String title = entry.getValue();
             Document doc = getDocumentMetadata(path);
             if (doc == null) {
-                doc = createDocument(path, entry, null);
+                doc = createDocument(path, title, null);
             }
             documents.add(doc);
         }
@@ -484,7 +489,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         Assert.notNull(doc, "document was null");
         return svnService.getRevisions(doc.getSvnPath());
     }
-
 
     @Override
     public void removeAll(Collection<Document> documents) {
@@ -629,5 +633,19 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         writer.add(eventFactory.createEndElement("", TEI_NS, "anchor"));
     }
 
-
+    @Override
+    public List<FileItemWithDocumentId> fromPath(String path) {
+        List<FileItem> files = StringUtils.isEmpty(path) ? svnService.getFileItems(documentRoot, -1) :
+                                                           svnService.getFileItems(path, -1);
+        List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
+        for (FileItem file : files) {
+            Document document = getDocumentForPath(file.getPath());
+            if (document == null) {
+                document = createDocument(file.getPath(), file.getTitle(), null);
+            }
+            rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.isFolder(),
+                    file.getChildren(), document.getId()));
+        }
+        return rv;
+    }
 }

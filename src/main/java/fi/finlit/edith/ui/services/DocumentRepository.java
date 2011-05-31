@@ -30,10 +30,10 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @param file
      */
     void addDocument(String svnPath, File file);
-    
+
     /**
      * Import documents from the given ZIP file
-     * 
+     *
      * @param parentSvnPath
      * @param file
      * @return amount of imported documents
@@ -58,10 +58,10 @@ public interface DocumentRepository extends Repository<Document, String> {
      * @return
      */
     Document getOrCreateDocumentForPath(String svnPath);
-    
+
     /**
      * Get a Document handle for the given path
-     * 
+     *
      * @param svnPath
      * @return
      */
@@ -130,16 +130,17 @@ public interface DocumentRepository extends Repository<Document, String> {
 
     /**
      * Remove the given document
-     * 
+     *
      * @param doc
      */
     void remove(Document doc);
 
     /**
      * Remove the given documents
-     * 
+     *
      * @param documents
      */
     void removeAll(Collection<Document> documents);
 
+    List<FileItemWithDocumentId> fromPath(String path);
 }

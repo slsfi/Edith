@@ -51,7 +51,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Inject
     private NoteRepository noteRepository;
-    
+
     @Inject
     private UserRepository userRepository;
 
@@ -75,7 +75,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Symbol(EdithTestConstants.TEST_DOCUMENT_KEY)
     private String testDocument;
 
-    @Inject 
+    @Inject
     @Symbol(EDITH.EXTENDED_TERM)
     private boolean extendedTerm;
 
@@ -91,7 +91,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         }
         return count;
     }
-    
+
     @Test
     public void Note_Id_Equals_Concept_Id(){
         Note note = createNote();
@@ -106,12 +106,12 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         Note note = createNote();
         noteRepository.save(note);
         NoteComment comment = noteRepository.createComment(note.getConcept(extendedTerm), "boomboomboom");
-        NoteComment loaded = noteRepository.getCommentById(comment.getId());        
+        NoteComment loaded = noteRepository.getCommentById(comment.getId());
         assertEquals(comment.getId(), loaded.getId());
         assertEquals(note.getConcept(extendedTerm).getId(), loaded.getConcept().getId());
         assertEquals(comment.getConcept().getId(), loaded.getConcept().getId());
     }
-    
+
     @Test
     public void CreateComment() {
         Note note = createNote();
@@ -149,13 +149,13 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     public void LoadById() {
         Note note = createNote();
         noteRepository.save(note);
-        
+
         Note loaded = noteRepository.getById(note.getId());
         assertNotNull(loaded);
         assertNotNull(loaded.getConcept(extendedTerm));
-        
+
     }
-    
+
     @Test
     public void CreateNote_Note_With_The_Lemma_Already_Exists_Notes_Are_Same() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
@@ -184,7 +184,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals("kereitten", note.getLemma());
         assertEquals("'keritte'", note.getLemmaMeaning());
         String description = note.getConcept(extendedTerm).getDescription();
-        String sources = note.getConcept(extendedTerm).getSources(); 
+        String sources = note.getConcept(extendedTerm).getSources();
         assertEquals(
                 "(murt. kerii ’keri\u00E4’, ks. <bibliograph>Itkonen 1989</bibliograph> , 363).",
                 description.replaceAll("\\s+", " ").trim());
@@ -243,7 +243,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     public void QueryDictionary() throws Exception {
         assertEquals(9, noteRepository.importNotes(noteTestData));
         assertEquals(extendedTerm ? 9 : 0, noteRepository.queryDictionary("*").getAvailableRows());
-        
+
     }
 
     @Test
@@ -283,7 +283,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         noteRepository.importNotes(noteTestData);
         assertEquals(1, noteRepository.findNotes("kereitten").size());
     }
-    
+
     @Test
     public void Find_Notes_With_Search() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
@@ -292,28 +292,28 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
         //Empty finds all
         assertEquals(1, noteRepository.findNotes(search).size());
-        
+
         //With document we should find our note
         search.setCurrentDocument(document);
         assertEquals(1, noteRepository.findNotes(search).size());
-        
+
         //False hit
         userRepository.save(new User("dummy"));
         search.setCreators(Collections.singleton(new UserInfo("dummy")));
         assertEquals(0, noteRepository.findNotes(search).size());
-        
+
     }
 
-//    If we are using remote permanently, then this test is not necessary    
+//    If we are using remote permanently, then this test is not necessary
 //    @Test
 //    public void Find_Notes_As_Orpan_With_Deleted_Doc_Notes() {
 //        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
 //        String longText = "two words";
 //        DocumentNote docNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), "10", longText);
-//        
+//
 //        DocumentNoteSearchInfo search = new DocumentNoteSearchInfo(document);
 //        assertEquals(1, noteRepository.findNotes(search).size());
-//        
+//
 //    }
 
     @Test
@@ -357,7 +357,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals(0, noteRepository.queryPlaces("Helssin").getAvailableRows());
         assertEquals(1, noteRepository.queryPlaces("Helsin").getAvailableRows());
     }
-        
+
     private Note createNote() {
         Note note = new Note();
         if (extendedTerm) {
@@ -365,5 +365,5 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         }
         return note;
     }
-    
+
 }

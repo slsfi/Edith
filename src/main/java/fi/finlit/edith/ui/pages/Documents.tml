@@ -1,11 +1,56 @@
 <html t:type="layout"  
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
       xmlns:p="tapestry:parameter">
+  
+  <script type="text/javascript">
+  (function($) {
+    $(function() {
       
-    <p:title>${message:documents}</p:title>  
-    
-    <h2>${message:documents}</h2>
+      $('#directory-tree').dynatree({
+        initAjax: {
+          url: '/documents:json'
+        },
+        
+        onActivate: function(node) {
+          if (!node.data.isFolder) {
+            $('#to_annotate').removeClass('disabled');
+          }
+        },
 
+        onLazyRead: function(node) {
+          node.appendAjax({
+            url: '/documents:json/',
+            data: 'path=' + node.data.path
+          });
+        }
+        
+      });
+      
+      $('#to_annotate').click(function(e) {
+        e.preventDefault();
+        var node = $("#directory-tree").dynatree("getActiveNode");
+        if (node != null) {
+          window.location.href = '/document/annotate/' + node.data.documentId;
+        }
+      });
+
+      
+    });
+  })(jQuery);
+  </script>
+
+  <p:title>${message:documents}</p:title>  
+
+  <p:leftPanel>
+    <div class="top_links">
+      <span><a id="to_annotate" href="#" class="disabled">${message:to-annotate-document}</a></span>
+    </div>
+  </p:leftPanel>
+
+  <h2>${message:documents}</h2>
+      
+  <div id="directory-tree"/>
+      
 	<t:form t:id="documentsForm">
 
 	    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1,null2,selection,deletion">
