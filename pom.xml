@@ -56,6 +56,13 @@
       </exclusions>
     </dependency>
 
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>1.7.1</version>
+      <scope>compile</scope>
+    </dependency>
+
     <!-- security -->
     <dependency>
       <groupId>nu.localhost.tapestry</groupId>
