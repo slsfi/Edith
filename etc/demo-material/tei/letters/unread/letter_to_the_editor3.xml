@@ -1,0 +1,1205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="drama_test.xsl"?>
+<?oxygen RNGSchema="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="xml"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Nummisuutarit: elektroninen versio</title>
+                <author>Kivi, Aleksis</author>
+            </titleStmt>
+            <editionStmt>
+                <edition>Tietoja kriittisestä editiosta.</edition>
+                <respStmt xml:id="ok">
+                    <resp>TEI-koodaus, ...</resp>
+                    <name>Ossi Kokko</name>
+                </respStmt>
+                <respStmt xml:id="sk">
+                    <resp>TEI-koodaus, ...</resp>
+                    <name>Sakari Katajamäki</name>
+                </respStmt>
+            </editionStmt>
+            <publicationStmt>
+                <distributor>SKS</distributor>
+                <date>2009</date>
+                <availability>
+                    <p>Käyttöehdot.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <biblStruct>
+                    <monogr>
+                        <title>Nummisuutarit</title>
+                        <author>Kivi, Aleksis</author>
+                        <imprint>
+                            <publisher>...</publisher>
+                            <pubPlace>...</pubPlace>
+                            <date>1865</date>
+                        </imprint>
+                    </monogr>  
+                </biblStruct>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="play">
+                <pb facs="0001.tif" n="1"/>
+                <ref xml:id="pageref.1" target="helminauha.xml#pageref.1">[Helminauha]</ref>
+                <div type="description">
+                    <head>Nummi-suutarit.</head>
+                    <head>Komedia 5:ssä näytöksessä.</head>
+                    <byline>Kirjoittanut<lb/>
+                        <docAuthor>Alexis Kivi</docAuthor>. </byline>
+                    <pb n="2"/>
+                    <pb n="3"/>
+                    <castList>
+                        <head>Jäsenet:</head>
+                        <castItem><role>Sepeteus</role>, <roleDesc>lukkari</roleDesc>.</castItem>
+                        <castItem><role>Topias</role>,
+                            <roleDesc>suutarimestari</roleDesc>.</castItem>
+                        <castItem><role>Martta</role>, <roleDesc>hänen
+                            vaimonsa</roleDesc>.</castItem>
+                        <castItem><role>Esko></role>
+                            <gap>
+                                <desc>[AALTOSULKU]</desc>
+                            </gap><roleDesc>hänen poikansa</roleDesc>.</castItem>
+                        <castItem>
+                            <role>Iivari</role>
+                        </castItem>
+                        <castItem><role>Niko</role>, <roleDesc>merimies</roleDesc>.</castItem>
+                        <castItem><role>Jaana</role>, <roleDesc>hänen tyttärensä, Topiaksen
+                                hoitolapsi</roleDesc>.</castItem>
+                        <castItem><role>Kristo</role>, <roleDesc>nuori seppä</roleDesc>.</castItem>
+                        <castItem><role>Karri</role>, <roleDesc>talonisäntä</roleDesc>.</castItem>
+                        <castItem><role>Kreeta</role>, <roleDesc>kasvatteensa</roleDesc>.</castItem>
+                        <castItem><role>Jaakko</role>, <roleDesc>puusuutari</roleDesc>.</castItem>
+                        <castItem><role>Sakeri</role>, <roleDesc>Martan veli, viralta pantu
+                                polisi</roleDesc>.</castItem>
+                        <castItem><role>Antres</role>, <roleDesc><ref xml:id="ref.1" target="note.1">kraatari</ref> ja
+                            <ref xml:id="ref.2" target="note.2">klanetin</ref>-puhaltaja</roleDesc>.</castItem>
+                        <castItem><role>Teemu</role>,
+                            <roleDesc>viulun-soittaja</roleDesc>.</castItem>
+                        <castItem><role>Eerikki</role>, <roleDesc>lautamies</roleDesc>.</castItem>
+                        <castItem><role>Leenan-Kalle</role>.</castItem>
+                        <castItem><role>Teemun isä</role>.</castItem>
+                        <castItem><role>Anna-muori</role>.</castItem>
+                        <castItem><role>Eräs nainen Karrin talossa</role>.</castItem>
+                        <castItem><role>Häämiehiä ja kuokkavieraita</role>.</castItem>
+                    </castList>
+                    <stage type="location">Näytelmäpaikka Hämeessä.</stage>
+                </div>
+                <pb n="5"/>
+                <div type="act" n="1">
+                    <head>Ensimäinen Näytös.</head>
+                    <stage type="setting">(Topiaksen <ref xml:id="ref.3" target="note.3">huone</ref>: perällä ovi ja akkuna, oikealla pöytä,
+                        vasemmalla sivu-ovi ja enemmän edessä samalla sivulla <ref xml:id="ref.4" target="note.4">rahi</ref> ja siinä suutarin
+                        kaluja. Jaana istuu pöydän ääressä, kutoen sukkaa, Esko rahin vieressä,
+                        neuloen).</stage>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Jaana! Käskihän äitini, lähteissänsä kylään, että matkalle, nimittäin
+                            hääretkelleni, itsiäni sonnustan, ja sulhais-vaatteisin puettuna olen,
+                            koska hän takaisin palajaa?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Ja käski sun ullakosta ottaa päälles isäs hännystakin, hatun, punaisen
+                            västin ja polvipöksyt.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>(panee työnsä pois). Peijakas! Tästä rientää täytyy, sillä askeleen otan,
+                            jota ei nauraa tule. <stage>(Menee perältä ulos)</stage>.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Ennen minua hän nai ja on hänellä siis oikeus periä viisisataa riksiä,
+                            niinkuin määrää jälkeensäätös, ja minä paitsi jään. Mutta riksit monet
+                            tuhannet eivät ole Kristoni verranvastaiset, kuin vaan hänen kerran
+                            omakseni saan ja omaksensa joudun minä; ja nytpä, luulen, kohta toivoni
+                            perille pääsen. <stage>(Kristo tulee).</stage> Kristo! Kuinka rohkenet tulla tänne!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Onhan ämmä tiessään?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Läksi kirkonkylään.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Ja Topias itse perunamaata perkaavan näkyy. Mutta missä ovat poikansa,
+                            missä se harjastukkainen Esko?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Hiljaa! <ref xml:id="ref.5" target="note.5">Ullakossa hän parhaallaan pukee itsiänsä sulhaiseksi.</ref></p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Sulhaiseksi?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Hän paikalla <anchor xml:id="start1"/>lähtee häihinsä Mikko Vilkastuksen<anchor xml:id="end1"/> kanssa.</p>
+                    </sp>
+                    <pb n="6"/>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Asiasta tulee siis jotain?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Tulee kaiketi. Nyt kiirehtivät, <anchor xml:id="start2"/>koska suutarille käskyn käräjiin annoit,
+                            saadaksesi naimalupaa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Ja sentään ala-ikäisenä naittavat poikansa; mynti on hän vasta puolen
+                            vuoden päästä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Nytpä äitinsä on kutsumassa tänne lukkaria <anchor xml:id="end2"/>lupauskirjaa isän puolesta
+                            tekemään.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Niin menee meiltä viisisataa riksiä. Nummi-suutarin poika ne riistää
+                            meiltä, ja sinä olet kuitenkin vanhempi häntä. Tuhat tulimmaista! Se
+                            kaistapäinen korpraali, miksi teki hän näin kummallisen jälkisäätöksen?
+                            ”Kumpi heistä ennen naiduksi <anchor xml:id="start3"/>tulee”, niin seisoo säätös-kirjassa. Onko
+                            tämä järjellinen ehto, jolle hän perintö-oikeuden perustaa! Kaikki
+                            yhdelle tai puolet <anchor xml:id="start4"/>kummallenkin määrätty, niin emmepä tietäisi tässä
+                            sydäntä karvastelevasta kiusasta nyt. Vahingosta en huoli, mutta se
+                            kiusa! – Olispa toisin toki, luulen minä, <anchor xml:id="end3"/>käynyt, jos ei kova onni sulle
+                            suutaria edusmieheksi pannut olis, mutta tätä ehkä äitisi kuollessa jo
+                            tarkoittivat ja ovat siis <anchor xml:id="end4"/>tarkoituksensa päässä nyt. Rutto sen suutarin
+                            niskaan!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Marttaa enemmin kuin Topiasta meidän moittia tulee; vaimonsapa tässä
+                            vallitsee ja neuvot antaa, ja totella saa niin suutari kuin poikansa ja
+                            minä. Minua on hän aina tuimasti kohdellut, etenkin siitä asti, koska
+                            näkivät, ettei ollut heillä toivoa minusta tyhmän poikansa vaimoksi, ja
+                            tätä varroit he kauvan.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Hän on se mainittu suutarin Martta.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Olis nyt isäni tässä, mutta voi että taisi hän jättää vaimon ja lapsen ja
+                            karata vieraille maille!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Hänestä olen jotain kuullut.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Isästäni! Mitä olet kuullut?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Että löytyy hän Suomessa taas; Turussa hänen nähneet ovat, niinkuin
+                            kerrotaan.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Mutta rangaistus uhkaa häntä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Muutaman vuorokauden vettä-leipää laki mat<pb n="7"/> ruusille määrää,
+                            joka laivastansa karkaa. Mutta hänen asiansa saa vielä helpomman muodon
+                            siitä, että enemmin kuin puolet miehistöstä saman laivan jätit ja
+                            samalla matkalla, joka näyttää päällysmiehissä olleen syyn. – Mutta
+                            Martta tulee.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Riennä tästä, Kristo!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Hän on jo portaalla.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Meidän hukka perii.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Eipä hätää tässä. <stage>(Martta tulee).</stage></p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Kristo huoneessani? Ulos! Tuossa on ovi edessäs.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Takanain se on, mutta edessäni on se kuuluisa suutarin Martta ja tässä on
+                            ottotyttärensä sulhainen, Kristo, nuori ja uljas seppä. Vävyksenne
+                            taidatte häntä kutsua.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Ulos tuvastani, lurjus!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Lähe kiireesti, Kristo, ja elä kanssansa riitele!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Mutta ollaan tästälähin ystäviä, Marttani, koska en enään seiso tiellänne
+                            viiteen sataan riksiin; ne kereitten niin vikkelästi Eskollenne.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Sinä kirottu mies, etkö tahdo tästä lähteä?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Tottele minua, Kristo!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kristo.</speaker>
+                        <p>Mutta saakeli sun perii vielä niiden viiden sadan tähden. Koko pitäjämme
+                            ja vielä monen naapuripitäjänkin kohta kaikuman pitää veisusta, jonka
+                            nimitän: ”Suutarin Martta”. <stage>(Menee. Martta heittää haarun peräänsä).</stage></p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Nokitonttu! (Eskon ääni ullakosta: ”Mikä meteli siellä alhaalla?”)
+                            (Jaanalle). Sinä lunttu! Enkö ole sua kieltänyt kanssakäymistä pitämästä
+                            kanssansa?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaana.</speaker>
+                        <p>Mitä taisin tehdä? Ei ollut hän tässä käskystäni.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Kitas kiinni ja sukankudin kynsistäsi pois! Onko se edes tuumaakaan
+                            tänään joutunut eteenpäin? Pois! ja laita itses Nummikoppeliin perkamaan
+                            ja käske Topias sisään. <stage>(Jaana menee).</stage> Mitä teet sinä siellä ylhäällä?
+                            (Eskon ääni: ”Hä’ puen itseni häävaatteisin, niinkuin sanottu oli”). Tee
+                            sitten joutua ja elä <pb n="8"/> kuhnaile siellä, kilpikonna! Kohta ovat
+                            lukkari ja Vilkastuksen Mikko tässä. (Eskon ääni: ”Hetken päästä olen
+                            valmis; isän housuja vedän parhaallaan jalkaani”). <stage>(Martta itsekseen.)</stage>
+                            Mutta tästä hääreisustansa taasen, sen varmaan tiedän, monta naurujuttua
+                            nousta pitää, sillä hän on aika tolvana, itsepintainen kuin vanha sonni
+                            ja joka irvihampaan leikkikalu. Kylläpä häntä kohtaan, sen tieköön
+                            Jumal’, parastani koettanut olen, sekä neuvoilla että köydenpäällä,
+                            mutta turhaan kaikki: kannettu vesi ei kaivossa pysy. – Mutta eipä näy
+                            vielä Iivaria kotona, ja eilän läksi hän jo kylään, se noiduttu penikka;
+                            mutta tuleppas sieltä, niin pamppuni selkäs taasen pehmittämän pitää,
+                            sen lupaan. Koettaa täytyy. Rikos rangaistusta vaatii, joko se sitten
+                            auttaa tai kaataa, mutta rangaistus tulkoon. – Niin on mulla kaksi
+                            poikaa: yksi ukulina tässä edessäni töllöttelee, toinen, vallassa
+                            riettauden hengen, kylästä kylään kekkaloittee. <stage>(Topias tulee).</stage></p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Johan olet kotona, Martta. Mitä sanoi kanttoori?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Niin, mitä sanoi hän. Näinpä maat ja mantereet juosta saan, ja sinä istut
+                            kotona kuin pata-ässä, huolimatta mistään.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>No Martta, tämä oli oma tahtos.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Mitäs teen, koska olen ainoa asian-ajaja tässä huoneessa, te toiset
+                            viheliäisiä nahjuja.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Tuleekos kanttoori?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Miksi ei hän tule, kuin toimitetaan?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Kuinka tuumailet siis Eskon matkasta?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Että haarapussi olalla hän tästä lähtee morsius<orig>-<lb/></orig>taloon Mikko
+                            Vilkastuksen seurassa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Jos pistouvaisimme heille hevoisen.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Vasta häistä takaisin tultuansa nuorenmuorin kanssa, ottakoot
+                            kyytihevoisen, mutta tästä sinnen jalkataneissa marssia saavat.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Mutta näetkös, Martta, hän on mestarin poika ja itse kohta samaan arvoon
+                            astuva, ja sentähden ehkä näyttäis <pb n="9"/> tämä jalka-marssinsa
+                            vähän sopimattomaksi ja kenties pistäis turmellun ihmisen sydämmelle
+                            hieman häpeäksi.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Häpeäksi! Hyväpä jos ei häpeätä suurempaa tällä retkellä kohtais häntä,
+                            mutta pelkään, että tusinottain hän pilkkahistorjia peräänsä jättää,
+                            sillä hän on tyhmää alkujuurta, näetkös.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Eskoni tyhmä? Tämä on vale ja vihapuhe kateudesta nousnut. ”Olenko minä
+                            hullu vaikka minä hulluksi huuttaan” lauletaan Sionissa. – Eskoa et
+                            tyhmäksi maininne, yhtä viisas on hän aina kuin isänsäkin, minä
+                            nimittäin; hän on ihan kaltaiseni, niin sielun kuin ruumiin puolesta.
+                            Hän ei ole tyhmä, vaan vähän itsepäinen, ja sen taitaa tukastansakin
+                            nähdä, joka on valkuinen ja harjaskankea, niinkuin ukolla itse tässä.
+                            Sanalla sanoin: hän on oikea isän poika, hän on kuvani elävä. (Esko
+                            tulee puettuna häävaatteisin).</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Aika könsikkä. Mutta tässä ei auta kainostella, koska kosee asia viisi
+                            sataa riksiä. Ja Jaanan hyväksi en niitä laske, en vaikka hame pääni
+                            päälle säkkinä kiinni-sidottaisiin ja minä viskattaisiin syvyyden
+                            kaivoon.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Mitäs mamma nyt tykkää minusta.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Heisaa, Esko! Oikein minun hatussani ja hännystakissani! samassa
+                            hännystakissa, jossa minä vuosia takaisin kakskymmentä ja yksi seisoin
+                            vihillä Martan rinnalla. Tuntuupa minulle kuin sinun muodossas tuossa
+                            nyt itsiäni katselisin yksi ja kakskymmentä vuotta ajassa taaksepäin, ja
+                            sillon olit sinä vasta nyrkin kokoinen, ja viisi kuukautta puuttui vielä
+                            ennenkuin hengen sait. Mutta niin muuttuu mailma; silloin kuin nyljetty
+                            orava, nyt mahdut hädintuskin tähän samaan hännystakkiin; niin muuttuu
+                            mailma, Eskoni.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Mitäs mamma nyt tykkää minusta?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>(istuu pöydän ääressä ja kutoo sukkaa, jonka Jaana jätti). Niin; mitä
+                            minä tykkään. Se vaatetus kelpaa, könsikkä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Kuinka istuu selkäpuoleni käydessäni tänne oven<orig>-<lb/></orig>pieltä kohden?
+                            Katselkaa minua tarkasti taakke. <stage>(Käy ovelle).</stage></p>
+                    </sp>
+                    <pb n="10"/>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Oivallisesti! Sinä käyt komeasti kuin raakuuna<orig>-<lb/></orig>hevoinen.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Mutta kysymys on, näkeekös pappa, kuinka hännys<orig>-<lb/></orig>takki istuu
+                            seljässäni.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Se istuu niinkuin se parhain ilman satulata taitaa, sinä puuhevoinen.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Hyvin istuu, hyvin!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>(kääntyen takaisin ja kiirehtii isän luoksi). Onkos papalla nyt oikein
+                            tietoa ja käsitystä mihen minä lähden?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Oojah! Onnea matkallesi, onnea! sanon minä. Sinä aina kukoistaa mahdat ja
+                            kauvan elää! Jaa, kaiketi ehdit sinä korkean ijän, minä tiedän sen,
+                            sillä ensimäinen sana, jonka lasna ulos suustasi sopersit, oli
+                            ”leipää”.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Pitää myös oleman viimeiseni, toivon. – Minä lähden häihini, pappa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Jumala olkoon kanssas, poikani, ja suokoon sulle menestystä! Me mahdamme
+                            haikki sinun edestäsi rukoilla, sinun, joka nyt käyt sisään uuteen
+                            elämään. Tällä matkalla, johon nyt lähdet, sinua monta vaaraa kohtaa
+                            taitaa, kuolemakin tulla suittaa, ja muista, että sinäkin olet suuri
+                            syntinen.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Me olemme kaikki syntisiä, Jumala paratkoon. – Minä otan tärkeän
+                            askeleen, pappa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Minä ymmärrän.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>En tarkoita tämmöistä konkari-askelta jaloillani, en.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Minä ymmärrän. Sinä tarkoitat sitä suurta muutosta kuin sinulle nyt
+                            tapahtuva on, koska aviosäätyyn rupeet; tämä on se tärkeä askel.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Sitähän minä tarkoitan.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Me ymmärrämme toinen toisemme tarkoitukset, ehkä välisti vähän
+                            haastelemmekin esikuvain ja tunnusmerkkein kautta; emme ole niin
+                            tyhmiä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Tyhmyydelle minä olen vihainen ja äreä kuin rakki<orig>-<lb/></orig>koira; mutta
+                            viisaus ei ole kaikille annettu.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Oikein, poikani! – Kuules, niin tahdon sulle <pb n="11"/> kertoa
+                            tapauksen pipliasta: Oli eräs hurskas mies nimeltä Topias ja hänellä
+                            poika, jonka tuli naimaan lähteä. Malta, Esko, että minäkin olen Topias
+                            ja on minulla poikakin, jonka myös on lähteminen kosioretkelle.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Ihmeellinen yhtäpitäväisyys asiassa! Molemmat olit he suutaria myös?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Sitä en varmaan tiedä, mutta luulen toki, että niin oli laita. – Mutta,
+                            niinkuin sanoin, he olit hurskaita miehiä; ja koska nyt poika naista
+                            kosimaan läksi, jolla jo seitsemän sulhaista ollut oli, mutt’ perkele
+                            heidän kaikki surmannut, että oli rakkautensa tyttöä kohtaan saastainen.
+                            . . .</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Mutta minun rakkauteni on puhdas, vaan ei lihan himo eikä silmäin
+                            pyyntö.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Luulenhan, että niin on laita, mutta saatana taitaa kuitenkin surmakses
+                            tällä retkellä eteesi heittää verkkonsa ja paulansa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Mutta enemmin kuin saatanata verkkoinensa, pelkään puusuutaria samassa
+                            kylässä, jossa Kreeta palvelee. Reppuryssältä, Timoteukselta, olen
+                            kuullut, että on toukalla kerno silmä tyttöä kohtaan. Mutta ompa hän
+                            vaan puusuutari, viheliäinen nakertaja, jolla ei koskaan ole toivoa
+                            mestariksi, johon arvoon minä taidan astua jo ensimäisissä käräjissä.
+                            Niin, hän on hangoittelijani, mutta luullakseni ei aivan
+                            vaarallinen.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Oikein haasteltu ja viisaasti. Yhteen vetävät luontomme aina ja joka
+                            tempussa. Kuraasi kasvaa sinussa, kasvaa! – Mutta missä katkaisin
+                            kertomukseni? – Niin; riettauden henki niitä seitsemää kiusasi ja
+                            sentähden he surmattiin. – Kuuntele hartaudella, Esko, minä haastelen
+                            pipliasta.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Minä vaikenen kuin muuri.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Mutta koska nyt Topiaksen poika naimaan läksi, niin tulipa Herran enkeli.
+                            Kuules, Esko!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Niinkuin muuri.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Enkeli taivaasta tuli ja tarjoi itsensä puhemieheksi nuorelle
+                            Topiakselle, joka kernaasti suostui kauppaan; ja as<pb n="12"/> telit he
+                            tapsuttelit kahdenkesken kivistä tietä myöden, mutta koska ehdeit
+                            viimein erään virran, niin huusi Topiaksen poika peloissaan korkealla
+                            äänellä, sillä suuri kala . . .</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>(Martalle). Panikos mamma silakoita myös eväs<orig>-<lb/></orig>pussiini?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Te narrit, niin isä kuin poika. Lukkari tulee. <stage>(Eskolle).</stage> Sinun silakoita
+                            leiviskä laukkuusi saaman pitää, koska tiedän, ettei vähät sulle riitä.
+                            <stage>(Menee vasemmalle).</stage></p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>(Katsellen ulos akkunasta). Totta sanoi Martta. Kanttoori tulee nummella;
+                            minä otan ja käyn häntä vastaan. <stage>(Menee).</stage></p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p><stage>(Yksin).</stage> ”Niin muuttuu mailma”, sanoi pappa. Varjele
+                            minua! Tärkeä askel’! Jaa, totisesti, jos sitä oikein sydämen pohjasta
+                            mietiskelee; sillä tässä ei ole leikin siaa, ei ole tässä leikin siaa.
+                            Tunteet erinomaiset tällä hetkellä pitkin ruumistani käyvät päästä
+                            kantapäähän ylös alas. Tämä on hää<orig>-<lb/></orig>ilon esimakua. (Käy
+                            edestakaisin). Haa! kuin Nummisuutarin Esko vihitään, niin sillonpa
+                            mailma päällensä mällistelee. Messuttaman ja laulettaman sillon pitää ja
+                            vihkimisen päätettyä alotan minä itse virren ”Koko mailma iloit’
+                            mahtaa”. Minun täytyy itkeä. <stage>(Pyhkii silmiänsä).</stage> Mutta auttaisko itku,
+                            koska asia kerran on näin pitkälle ehtinyt? Ei yhtään; sentähden itseni
+                            miehistää tahdon ja laulaa sen hääveisun, jonka jo lapsena opin. Tämä
+                            veisu on kaunis ja suloinen, sitä ei taida kieltää, mutta mielisinpä
+                            sitä kuitenkin lisätä muutamalla peräkaneetilla antaen sillä kurilla
+                            nuotille enemmin kiivautta ja voimaa. Mutta asiaan.
+                                <stage>(Laulaa)</stage>.</p>
+                        <lg>
+                            <l>Häätoimis’ kaikk’ hyörii ja pyörii,</l>
+                            <l>Mut’ murheissa neitonen käy;</l>
+                            <l>Hän itkee kotoo jättääksens’,</l>
+                            <l>Mut’ vartoo toki sulhaistans’,</l>
+                            <l>Ja portilla pellon on sulhainen,</l>
+                            <l>Jo loistavat leimuvat lyhteet.</l>
+                        </lg>
+                    </sp>
+                    <pb n="13"/>
+                    <sp>
+                        <p>Niin. Mutta tähänpä tahtoisin lisätä tämän. <stage>(Laulaa).</stage> Tilulii, tilulii,
+                            tilulilu lilulii!</p>
+                        <p>Toinen värssy sitten</p>
+                        <lg>
+                            <l>Niin nousee nyt ankara pauhu</l>
+                            <l>Ja riemusta hääsali soi.</l>
+                            <l>Ei itke enään morsian,</l>
+                            <l>Ei muistel’ menneit’ päivii hän,</l>
+                            <l>Vaan väikkyvi tanssissa, kultasuu,</l>
+                            <l>Ja päässään on kunnian kruunu.</l>
+                            <l>Tilulii, tilulii,</l>
+                            <l>Tilulilu lilulii!</l>
+                        </lg>
+                        <p>Kolmas värssy.</p>
+                        <lg>
+                            <l>Mut mennyt on ihana vuosi,</l>
+                            <l>On mennyt, kuin unien maas’.</l>
+                            <l>Ja morsian nyt laulelee</l>
+                            <l>Ja lapsellensa kertoilee</l>
+                            <l>Mis’ löytyvi Onnela kaukainen</l>
+                            <l>Mis’ siintää sen korkeat vuoret.</l>
+                            <l>Tilulilii, tilulii</l>
+                            <l>Tilulilu, lilulii!</l>
+                        </lg>
+                        <p>Ja sitten neljäs värssy . . . </p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>(Sivu-ovelta). Tahdotko pitää kitas kiinni, sinä sammakko, taikka tulenko
+                            taas ja tanssitan patukkaani seljässäs? Katso vaan itses hyvän sään
+                            aikana. Vai sinä tässä keekoilemaan rupeet, könsikkä. <stage>(Katoo).</stage></p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>(Yksin). Kovin tunnen tällä hetkellä itseni liikutetuksi, ja sydämeni on
+                            kuin palava pikipallo ja tämä on siitä, että mieltäni polttaa Kreeta ja
+                            häät. – Kreeta! pääni pyörään käy, koska muistelen, että kohta olen yhtä
+                            kanssas, eli toisin, minä tulen sinuksi ja sinä minuksi, sanalla sanoen,
+                            Esko on Kreeta ja Kreeta on Esko; ja kutsukoot meitä sitten joko
+                            Eskokreetaksi <pb n="14"/> eli Kreetaeskoksi. Niin. – Ijäisen
+                            uskollisuuden sua kohtaan vannon, Kreetani; ja jos se ilkeä saatana,
+                            joka käy ja nuuskii ympärillämme aina tuomio päivään asti, jos hän,
+                            sanon minä, niin riiviöön mun saattais, että sokeudessani toista naista
+                            suutelisin, niin lyö mua vast’ kuonoa, lyö mua vast’ kuonoa, Kreeta,
+                            että hampaat kidassani kalisevat. Sillä hän, joka vapaasta tahdosta on
+                            tehnyt pyhän uskollisuuden valan ja sen rikkonut, hän taivaalta ja
+                            maalta kirottu olkoon ja päänsä survottakoon nuuskaksi; se on sanottu.
+                            <stage>(Topias ja Sepeteus tulevat).</stage></p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>(Avaten oven Sepeteukselle). Tehkäät niin hyvin, kanttoori!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Päivää, poika!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Terve tuloa, kanttoori! Tärkeät ja kiireet asiat huutavat tällä hetkellä
+                            taitoanne tänne, että kaikki laillisesti käytettäis. Minä olen nyt –
+                            Jumala varjelkoon meitä nuoria! – ruvennut vähän hulluttelemaan, minä
+                            kans’, ja tuumailen matkaansaattaa Vilkastuksen Mikolle uuden
+                            paidan.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Kas kuinka kautta rantain poika ilmoittaa aikeensa. Hi hi hi! – Mutta
+                            kanttoori tietää asian juuresta alkaen, hän tietää.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Laita on tämä, näkeekö kanttoori.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Minä asian tunnen, sen olen kuullut isältäsi; niin, tunnen ja olen sen
+                            visusti harkkinut, ja tuumaillut, kuinka lupauskirjan isältäsi
+                            kokoon-panen.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Tässä on päätarkoitus se, että kaikki laillisesti käytetyksi tulee.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Hyvin ymmärretty. Minä kirjoitan täkstin, isäsi pistää puumerkkinsä alle,
+                            joka todistetaan.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Hän pistää puumerkkinsä alle ja minä samoin.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Sinun puumerkkiäs siinä ei tarvita.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Mutta minun tyhmän järkeni mukaan, täytyy se siinä löytyä laillisuuden
+                            tähden.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Poika, tahdotko kinata vanhain ihmisten kanssa?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Esko!</p>
+                    </sp>
+                    <pb n="15"/>
+                    <pb n="25"/>
+                    <sp>
+                        <speaker>Mikko.</speaker>
+                        <p>Sen todistan ja, jos tarvitaan, valallani vahvistaa tahdon. (Piirtää
+                            puumerkkinsä).</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko</speaker>
+                        <stage>(itsekseen).</stage>
+                        <p>Sinne minunki puumerkkini vielä tuleman pitää.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Lupauskirja on niinmuodoin valmis. <stage>(Topiakselle).</stage> Minä annan tämän
+                            sinulle ja sinulla on sitten valta antaa se kelle mielit, se ei koske
+                            enään minua.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Minä annan sen Eskolle. <stage>(Antaa lupaus-kirjan Eskolle).</stage></p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Kanttoorin olisi pitänyt kirjoittaa, että minä otan tämän askeleen
+                            omasta, vapaasta tahdostani.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Mitä minä kirjoitin sen minä kirjoitin.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias</speaker>
+                        <p>Kaikki hyvin; eikä puutu enään, kuin eväänne, ja se on valmis paikalla. –
+                            Että saatte lähteä jalka-taneissa ei ole minun syyni; mutta tulettepa
+                            takaisin aika jyryllä, sen tiedän varmaan. Morsiustalosta tänne teille
+                            kyllä annetaan hevoinen.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Mikko.</speaker>
+                        <p>Minä luulen, että antavat meille sieltä hyvän kyydin.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Ilman epäilystä, Mikko. Ja koska lähdette sieltä, niin lähtekäät kuin
+                            tuulis’ ja pilvis’, että morsiamen kaulaliina liehuu kuin sotalippu; se
+                            näyttää komealta, ylpeältä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Mikko.</speaker>
+                        <p>Lähdemmepä vauhdilla, ettei yhdenkään silmä morsiusparia eroittaman
+                            pidä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Uljaasti lausuttu, poikani. (Esko on istunut pöydän ääreen ja aikoo panna
+                            puumerkkinsä lupauskirjaan). Mitä tekee Esko?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Puumerkkini täytyy löytyä kirjassa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Esko on villitty. (Tempaa kädestänsä valtuus<orig>-<lb/></orig>kirjan).</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Mikä rohkeus, mikä hävyttömyys!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Sinä klöntti, lurjus, juutas! Onko tämä viisaan käytöstä? Sinä pöllö!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Jos et olisi isäni, niin löisin siuua, vasten kuo<pb n="26"/> noa minä
+                            antaisin; mutta että olet isäni, niin en suinkaan sitä tehdä tahdo.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Ynseys kova!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Esko, minä sanon sinulle: katso, etten anna sinulle hääporsaita, ja-a
+                            minä sanon sen.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Hääporsaita. – Vihani rupeaa vähitellen kiehumaan. (Ottaa tuolin ja lyö
+                            sen permantoon). Tämä mies ei huoli mistään. (Menee ulos).</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Herran Kiesus sitä poikaa!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Hävytön ja uppiniskainen poika.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Onpa lasten kanssa tekemistä. Sitä ei usko se, jolla ei heitä ole. –
+                            Kiittäkäät onneanne, kanttoori, että olette jääneet naimattomaksi
+                            mieheksi.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Se onkin minulle parasta, nimittäin siltä kannalta katsottu, että minä
+                            olisin kova isä, ankaran kova.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Kiivas isä on minunki nimeni. Mutta auttaako tässä kiivaus aina? Se on
+                            luonto, joka vetää tikan poikaista puuhun. Ja puut metsässä, ehkä kaikki
+                            yhden ja saman viisaan käsi-alaa, ovat toki yksi oikea, toinen
+                            väärä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Mutta paljon riippuu myös siinä kohdassa, kuinka puu vesasta vääristyä
+                            saa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Oikein haasteltu ja viisaasti. Jaa, kanttoori, niin on laita tässä
+                            mailmassa kuin sanon. Meitä vanhempia pitäisi jokaisen, jolla ei lapsia
+                            ole, katkerasti valittaman ja kunniassa pitämän. Mutta kuinka moni
+                            ajattelee sen päälle? (Esko tulee). Tuletko sisään vielä, juupeli?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko</speaker>
+                        <stage>(itsekseen).</stage>
+                        <p>Mielisinpä osoittaa vihaani kauvemmin; mutta tämä hetki on tärkeä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Mikko</speaker>
+                        <stage>(erittäin Eskolle).</stage>
+                        <p>Käy sovintoon, Esko!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Koetanpa mieltäni murtaa. (Topiakselle). Antakaat minulle anteeksi tämä
+                            tapaus, isä!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Sinä pyydät sitä sydämestäs?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Niin, minä pyydän sydämestäni sitä asiaa.</p>
+                    </sp>
+                    <pb n="30"/>
+                    <sp>
+                        <speaker>Iivari.</speaker>
+                        <p>Lukkari tahtoisi nähdä kauniita, kirjavia kukkaisia selässäni; mutta
+                            säästäkäät hartioitani vielä tämä kerta, muori; minä lupaan itseni
+                            parantaa, niinkuin parhain taidan.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Niin. – Mitä sanot sinä, Mikko?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Mikko.</speaker>
+                        <p>Minä rukoilen Iivarin edestä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Minä rukoilen myös. Ei nyt mitään pahaa menoa tällä hetkellä, joka on
+                            minun jäähyväishetkeni.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Lähtekäät sitten matkaanne. Mitä kuhnailette tässä enään?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Mikko.</speaker>
+                        <p>Nyt lähdemme.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Tulevasta tiistaista kolme viikkoa vartoomme teitä takaisin. Siksi
+                            rakennamme tähän pienen tervetuliais-juhlan. Sillonpa vähän loiskimmeki
+                            raatari Antreksen klaneetin mukaan, ja jos ei tilaa töllissämme, niin
+                            ompa väljyyttä nummella tässä. – Toivomme on myös, että kanttoorikin
+                            meitä sillon läsnä-olollansa kunnioittaa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sepeteus.</speaker>
+                        <p>Minä kiitän.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Ja Iivari pääsee kaupunkiin, ostamaan pidoiksi yhtä ja toista. Mutta
+                            näytä sillon, että olet vielä toimelias mies!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Iivari.</speaker>
+                        <p>Parastani koettaa tahdon.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Niin, kaikki hyvin! Ja nyt, pojat, matkalle.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Sallikaat, että jäähyväisiksi luen edessänne muutaman korpraali-vainaan
+                            sepittämän värsyn.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Ei yhtään jäähyväispuhetta, vaan lähe tiehes.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Kuullaan, Martta, kuullaan! Ne ovat korpraalin tekemät, ja meidän tulee
+                            muistollensa kiitollisuutta osoittaa. – Annappas paukkua, Esko, joku
+                            rakkauden veisu!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Sotalaulu tämä on:</p>
+                        <lg>
+                            <l>Jo sotatorvi pauhaa,</l>
+                            <l>Sieluni ei saa rauhaa;</l>
+                            <l>Vaan sotaan täytyy lähtee,</l>
+                            <l>Koska kapteeni käskee.</l>
+                            <pb n="31"/>
+                            <l>Jo vihan tuli syttyy,</l>
+                            <l>Katsos kuolon rautapyttyy . . .</l>
+                        </lg>
+                        <p>Rautapytty, se on kanuuna . . . Näkikös kanttoori niitä
+                            mitaali<orig>-<lb/></orig>kanuunia, joita Ryssät kiskoivat ohitse kirkon menneellä
+                            viikolla? Mikä solina ja kolina, mikä meteli ja pauhu siinä oli!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Kitasi kiinni, ja marsikaat matkaanne, sanon minä!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Mikko.</speaker>
+                        <p>Nyt lähemme, Esko.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Menkäät siunauksella!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Nyt menemme, kuin saakeli peräänsoittais. – Onko kaikki muassani, mitä
+                            tarvitsen? Jääkö jälkeeni mitään?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Martta.</speaker>
+                        <p>Ei mitään, vaan lähe tästä nyt tavallista vikkelemmin ja käske Jaana
+                            sisään laiskottelemasta perunamurulla!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Minä käsken. – Jaana sanoi minun tarhapöllöksi. – Onko kaikki
+                            tarpeelliset kappaleet muassani?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Topias.</speaker>
+                        <p>Kaikki kaikki, Esko. Hyvästi nyt vaan, poikani!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Esko.</speaker>
+                        <p>Niin, hyvästi! Terveisiä! (Mikko ja Esko lähtevät).</p>
+                    </sp>
+                </div>
+                <gap/>
+                <div type="act" n="2">
+                    <head>Toinen Näytös.</head>
+
+                    <stage>(Avara pirtti Karrin talossa, pirtissä hääväkeä sekä miehiä että naisia.
+                        Jaakon ja Kreetan häitä vietetään. Esiripun noustessa tanssitaan polskaa;
+                        Teemu pelaa. Pirtin ovi on auki ja tanssin aikana näkyy porstuvassa Esko,
+                        pussi olalla, ja Mikko Vilkastus).</stage>
+
+                    <sp>
+                        <speaker>Karri</speaker>
+                        <stage>(tanssin herettyä).</stage>
+                        <p>Kas niin! Nuoret, iloitkaat ja vanhat hauskasti nuorten iloa katselkaat,
+                            tai, jos mieli tekee, niin olkoon menneeksi, antakaat polvenne letkua
+                            myös. Tämä on <pb n="32"/> Jaakon ja Kreetan kunnianpäivä, tämä kirkas
+                            elokuun päivä. (Pari pyssyn paukausta kuuluu ulkoa). Ampukaat pojat,
+                            mutta ampukaat hiljaa. Ei! Ampukaat, että huone jyskyy ja sydän rinnassa
+                            leiskahtelee! Ja katsokaat, tytöt, ettei puutu pojilta olvi siellä
+                            ulkona. (Yksi naisista menee oikealle). No, Jaakko, mille tuntuu sulle
+                            tämä päivä?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaakko.</speaker>
+                        <p>Hääpäiväksi se tuntuu, isäntä; mieleni iloitsee.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Karri.</speaker>
+                        <p>Ja aina toki sama vakaa mies. Mutta tunnenpa luontos. Tämän karhean
+                            kamaran alla asuu toista kuin luulis. Mutta minä sanon sinulle: syy on
+                            sinulla iloita, saatpa oivan vaimon.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Jaakko.</speaker>
+                        <p>Minä toivon niin. –</p>
+                    </sp>
+                    <sp>
+                        <speaker>Karri.</speaker>
+                        <p>Oivan vaimon! – Tuleppas tänne, Kreeta. No, piikaseni, kuinka tuntuu
+                            sinulle akkana olla?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Kreeta.</speaker>
+                        <p>Käypä se laatuun vielä.</p>
+                    </sp>
+                    <gap/>
+
+                    <pb n="63"/>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Sinulla on liian paljon järkeä kalkkuunaksi. – Siis tuli sinusta mies,
+                            ja, niinkuin tuntuu, oiva. Hyvin sinulle! Minä myös yhtä ja toista
+                            kokenut olen, olenpa monessa huhmarissa pehmitetty, josta kaikesta
+                            pitäisi seurauksen oleman: perään-aatus, mutta Jumal’ tiesi toki, missä
+                            nahkani viimein naulitaan! – Kuitenkin, neuvot eivät ole kaikki vielä,
+                            se muuuttumaton, vakaa aika mittailevi vielä sylihiini ijäisestä
+                            langastansa, vielä nousee päivä toisen perään ja sydän raikkaasti
+                            rinnassa lyö; kaikki taitaa hyvin päättyy vielä! Seisonhan taasen
+                            isänmaani kamaralla, ja onneani kiitän tällä hinnalla päästyäni sen
+                            turvetta polkemaan vielä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Eerikki.</speaker>
+                        <p>Sitähän ihmettelen, ettäs pulasta itsesi niin helposti suoritit.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Tämä on asia: Tuli minun kertoa oikeuden edessä retkistäni ja menoistani
+                            karkutiellä, ja kertosinpa tuomarille, ihan samoin kuin äsken sinulle,
+                            matkani merellä, ja tämä ilautti ankarasti koko oikeuskuntaa, ja olenpa
+                            varma siitä, että juuri tämä juoni nahkani pelasti; sillä panipa tuomari
+                            esiin kaikenlaisia lievittäviä kohtia asiassani ja, niinkuin sanoin,
+                            kymmenen päivän vesileipään karkurin tuomitsi vaan.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Eerikki.</speaker>
+                        <p>Nytpä taidat sanoa sitäkin leipää syöneekses, ja likistipä, luulen, nämät
+                            päivät vähän miehen kärsimystä.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Ei yhtään hätää, Eero!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Eerikki.</speaker>
+                        <p>Olethan harras tupakkimies!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Siihenkin seikkaan neuvo pian keksittiin. Palanutta leivänkuorta rikki
+                            jauhettiin, siihen puoliksi tuhkaa sekaan, ja nuuska oli valmis, oiva
+                            vapriikin nuuska. Talvista aikaa taasen ei ensinkään hätää sen, joka
+                            nälliä pureksii; joutuupa sisään haapanen halko, sen kimppuun kohta
+                            miehet niinkuin jänikset, ja pian on jokaisen poskessa aika märepala, ja
+                            käypä se laatuun tupakin puutteissa. Sanalla sanoen, koko elämä
+                            vesikoijussa käy laatuun, vaan että kaasi on joteskin tiukka. Olinpa
+                            valmis toki kärsimään enemmän, paljon enemmän päästäkseni kurjan
+                            tyttäreni <pb n="64"/> luoksi, joka, niinkuin kuullut olen, on nyt
+                            suojaton, ilman äitiä ja isää.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Eerikki.</speaker>
+                        <p>Olet siis kuullut vaimos kuolon?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Albionin rannalla sanoman sain, muistelin, mitä tehnyt olin, ja
+                            kotimaahani kohta purjehdin. – Eerikki, sinä kaiketi tiedät, missä ja
+                            kuinka tyttöni nyt elää!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Eerikki.</speaker>
+                        <p>Äitinsä kuoltua, perintönsä, niin huone kuin irtain tavara, myytiin
+                            huutokaupassa; suutari Topias, lähin naapuri, esimieheksensä joutui, ja
+                            haltuunsa otti hän sekä tyttärenne että tyttären rahat. Kuinka rahat
+                            ovat käytetyt, sitä ei tietä, mutta niinkuin orja on tyttö raiska saanut
+                            työtä tehdä suutarin huoneessa.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Tulenpa kohta ja sun pelastan ja suutarin tilin<orig>-<lb/></orig>tekoon vedän. –
+                            Muistatko jotain kummallista jälkeensäätöstä siltä vanhalta
+                            korpraalilta, säätöstä joko tyttäreni tahi suutarin pojan hyödyksi, aina
+                            ken ensin heistä joutuisi naimisiin?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Eerikki.</speaker>
+                        <p>Asian tiedän! Kaikki näyttää toki käyvän suutarin pojan hyväksi. Hän on
+                            nyt parhaillaan naimaretkellänsä, jonne vanhimpansa kiivaasti joudutit
+                            häntä, estäin tytärtäsi saamasta Kristoa, eräs nuori seppä, oiva mies.
+                            He tiesit, kuinka toimitit.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Sen tiesit; mutta kulta on multa. Sinä Kristos saat; naittajas on tässä.
+                            Sua himoon nähdä, Jaana-kynäsein.</p>
+                    </sp>
+                    <sp>
+                        <speaker>Eerikki.</speaker>
+                        <p>Seuraa minua, niin pääset kyydillä, mutta tiellä viivymme toki kaksi tahi
+                            kolme päivää. Asiaini tähden täytyy mun koukku tehdä!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Suoraan kotokylää kohden koukkuja tekemättä! – Nyt, toverini,
+                            hyvästi!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Eerikki.</speaker>
+                        <p>Pian taasen toinen toisemme kohdataan!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko.</speaker>
+                        <p>Niiden tuttavien mäkien, kivien ja kantoin vaiheilla. – Hyvästi jää!
+                            (Menevät kumpanenkin eri haaralle).</p>
+                    </sp>
+                </div>
+
+                <div type="act" n="3">
+                    <pb n="65"/>
+                    <head>Väliverho.</head>
+
+                    <stage>(Puol’matkan krouvi. Kummallakin sivulla vähäinen pöytä. Oikealla istuu
+                        Sakeri ja Iivari, viinaputelli ja lasit edessä; vasemmalla sivulla Niko
+                        olvihaarikan ääressä).</stage>
+                    <sp>
+                        <speaker>Niko</speaker>
+                        <stage>(itsekseen, juotuansa haarikasta).</stage>
+                        <p>Saakelin väsyksissä vaan; mutta eihän ole merimiehen työ, mäkistä
+                            maantietä mittailla, tomussa ja pöllyssä. – Peijakas! kangistuuhan
+                            miehen kintut kuin ajetun jäniksen, enkäpä tiedä koska matkani päässä
+                            olen, ell’en pääse jonkun maanmoukan reteliin. Mutta meneepä tähän
+                            haarikkaan viimeinen äyrini, ja sitten on puhdas hyvä. – Mutta hätää ei
+                            vielä, ei yhtään; aika neuvoja antaa. (Juo). Mitä narriahan lienevät nuo
+                            kaksi tuossa pöydän ääressä?</p>
+                    </sp>
+                    <sp>
+                        <speaker>Iivari.</speaker>
+                        <p>Aatelkaas perään, eno Sakeri, tänä ehtoona, juuri tänä ehtoona tulee Esko
+                            kotiin naimaretkeltänsä nuoren vaimonsa kanssa, mutta minä, jonka,
+                            niinkuin tiedätte, piti tuoman höystettä jälkihäihin, olen tässä
+                            kahdella tyhjällä kouralla. Kirkas tuli ja leimaus, eno Sakeri!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Sakeri.</speaker>
+                        <p>Kaikki käy hyvin, jos teemme niinkuin olen sanonut. Luota minuun vaan,
+                            Iivari poika! Kaikki käy hyvin! (Iivari ryyppää).</p>
+                    </sp>
+                    <sp>
+                        <speaker>Niko</speaker>
+                        <stage>(itseks.)</stage>
+                        <p>Suutari Topiaksen nuorempi poika ja Martan veli; nyt tunnen seuran! –
+                            Näyttää kuin ei olisi laitansa juuri niinkuin pitäis. (Krouvari
+                            tulee).</p>
+                    </sp>
+                    <sp>
+                        <speaker>Iivari.</speaker>
+                        <p>Mitä sanot, krouvari, sinä hyväntahtoinen ihminen, niin avulias kaikkia
+                            vastaan; mutta saatpa palkkas viimeisenä päivänä sinäkin, täyden palkkas
+                            saat, sillä sinä pientä janovata lähimmäistäs täällä juottanut olet!</p>
+                    </sp>
+                    <sp>
+                        <speaker>Krouvari.</speaker>
+                        <p>Hi hi hi! sinä veitikka.</p>
+                    </sp>
+                </div>
+            </div>
+            <div type="bibliography">
+                <listBibl>
+                <biblStruct xml:id="eas1934">
+                  <monogr>
+                      <title>...</title>
+                      <author>Saarimaa, E. A.</author>
+                      <imprint>
+                          <publisher>...</publisher>
+                          <pubPlace>...</pubPlace>
+                          <date>1934</date>
+                      </imprint>
+                  </monogr>  
+                </biblStruct>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>
