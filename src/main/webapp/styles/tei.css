@@ -27,9 +27,14 @@
 	padding-right: 0.25em;	
 }	
 
-.sp .p {
+.sp {
 	display: inline;	
-}	
+}
+
+.p {
+    display: block;
+    margin-top: 1em;
+}
 
 .listBibl{
 	border: dotted 1px gray;
@@ -95,7 +100,33 @@
 	padding-left: 2.5em;	
 }	
 
-.actor, .camera, .caption, .date, .desc, .docAuthor, .gap, .orig, .ref, .role, .roleDesc, .set, .sound, .speaker, .tech, .view, .persName, .note, .hi, .xref{
+.actor, 
+.camera, 
+.caption, 
+.date, 
+.desc, 
+.docAuthor, 
+.gap, 
+.orig, 
+.ref, 
+.role, 
+.roleDesc, 
+.set, 
+.sound, 
+.speaker, 
+.tech, 
+.view, 
+.persName, 
+.note, 
+.hi, 
+.xref, 
+.placeName,
+.orgName,
+.p .title,
+.unclear,
+.del,
+.add,
+.supplied {
 	display: inline;	
 }	
 
