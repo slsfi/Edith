@@ -3,8 +3,8 @@
       xmlns:p="tapestry:parameter">
   
   <script type="text/javascript">
-  (function($) {
-    $(function() {
+  jQuery(function() {
+    (function($) {
       
       $('#directory-tree').dynatree({
         initAjax: {
@@ -38,8 +38,8 @@
       });
 
       
-    });
-  })(jQuery);
+    })(jQuery);
+  });
   </script>
 
   <p:title>${message:documents}</p:title>  

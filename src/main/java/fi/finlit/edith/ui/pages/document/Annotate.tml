@@ -84,7 +84,33 @@
 		 jQuery('#editAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
 			 create: AccordionState.loadState, change: AccordionState.saveState });
 		 
-		 jQuery("#documentsTree").dynatree();
+		 (function($) {
+
+		   jQuery("#directory-tree").dynatree({
+	       initAjax: {
+	         url: '/documents:json'
+	       },
+	       
+	       onLazyRead: function(node) {
+	         node.appendAjax({
+	           url: '/documents:json/',
+	           data: 'path=' + node.data.path
+	         });
+	       },
+	       
+	       onSelect: function(flag, node) {
+	         if (flag) {
+	           
+	         } else {
+	           
+	         }
+	       },
+	       
+	       checkbox: true
+	       
+		   });
+		   
+		 })(jQuery);
 		 
 	   });
 	</script>
@@ -92,25 +118,7 @@
 	
 	<div id="documentsAccordion">
         <h5><a href="#">${message:documents-label}</a></h5>
-        <div id="documentsTree">
-            <ul>
-                <li>
-                    <span>Kansio 1</span>
-                    <ul>
-                        <li>Dokumentti1</li>
-                        <li>Dokumentti2</li>
-                    </ul>
-                </li>
-                
-                <li>
-                    <span>Kansio 2</span>
-                    <ul>
-                        <li>Dokumentti1</li>
-                        <li>Dokumentti2</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+        <div id="directory-tree"/>
     </div>
     <div id="searchAccordion">
         <h3><a href="#">${message:notesearch}</a></h3>
