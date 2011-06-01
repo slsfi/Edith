@@ -96,7 +96,7 @@ public class SubversionServiceImpl implements SubversionService {
     @SuppressWarnings("deprecation")
     public void checkout(File destination, long revision) {
         try {
-            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, false),
+            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, true),
                     destination, SVNRevision.create(revision), SVNRevision.create(revision), true);
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
@@ -109,7 +109,7 @@ public class SubversionServiceImpl implements SubversionService {
             return clientManager
                     .getCommitClient()
                     .doCommit(new File[] { file }, true, file.getName() + " committed", false,
-                            false).getNewRevision();
+                            true).getNewRevision();
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
@@ -328,7 +328,7 @@ public class SubversionServiceImpl implements SubversionService {
     public void update(File file) {
         try {
             clientManager.getUpdateClient().doUpdate(file, SVNRevision.create(getLatestRevision()),
-                    false);
+                    true);
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
