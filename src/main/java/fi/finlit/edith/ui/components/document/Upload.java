@@ -27,7 +27,7 @@ public class Upload {
     private static final Logger logger = LoggerFactory.getLogger(Upload.class);
 
     @Inject
-    private DocumentRepository documentRepo;
+    private DocumentRepository documentRepository;
 
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
@@ -35,6 +35,9 @@ public class Upload {
 
     @Property
     private UploadedFile file;
+
+    @Property
+    private String path;
 
     @Persist(PersistenceConstants.FLASH)
     @Property
@@ -47,17 +50,18 @@ public class Upload {
 
     void onSuccess() throws IOException {
         File tempFile = File.createTempFile("upload", null);
+        String uploadPath = path == null ? documentRoot : path;
         try {
             file.write(tempFile);
             if (file.getFileName().endsWith(".zip")) {
-                int count = documentRepo.addDocumentsFromZip(documentRoot, tempFile);
+                int count = documentRepository.addDocumentsFromZip(uploadPath, tempFile);
                 message = messages.format("documents-stored-msg", file.getFileName());
             } else {
-                String path = documentRoot + "/" + file.getFileName();
-                documentRepo.addDocument(path, tempFile);
-                message = messages.format("document-stored-msg", file.getFileName());    
+                String path = uploadPath + "/" + file.getFileName();
+                documentRepository.addDocument(path, tempFile);
+                message = messages.format("document-stored-msg", file.getFileName());
             }
-            
+
         } finally {
             if (!tempFile.delete()) {
                 logger.error("Delete of " + tempFile.getAbsolutePath() + " failed");

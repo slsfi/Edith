@@ -12,7 +12,10 @@
         },
         
         onActivate: function(node) {
-          if (!node.data.isFolder) {
+          if (node.data.isFolder) {
+            $('#to_annotate').addClass('disabled');
+            $('#path').val(node.data.path);
+          } else {
             $('#to_annotate').removeClass('disabled');
           }
         },
