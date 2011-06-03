@@ -76,7 +76,7 @@ public class Comments {
     }
 
     Object onSuccessFromCommentForm() {
-        System.err.println("onSuccessFromCommentForm");
+        System.err.println("onSuccessFromCommentForm with comment " + newCommentMessage);
         Concept concept = noteOnEdit.getConcept(page.isSlsMode());
         comments = getSortedComments(concept.getComments());
         if (newCommentMessage != null) {

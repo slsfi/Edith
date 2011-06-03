@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.FileItemWithDocumentId;
-import fi.finlit.edith.ui.services.svn.FileItem;
 
 @SuppressWarnings("unused")
 @Import(library = {

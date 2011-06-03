@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.BeginRender;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
@@ -29,6 +30,7 @@ import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.NoteWithInstances;
 
+@Import(library = {"SearchResults.js"})
 @SuppressWarnings("unused")
 public class SearchResults {
 

@@ -172,6 +172,8 @@ public abstract class AbstractNoteForm {
     Object onSuccessFromNoteEditForm() {
         logger.info("onSuccessFromNoteEditForm begins with " + noteOnEdit);
 
+        logger.info("html edit contents: " + noteOnEdit.getTerm().getMeaning());
+        
         try {
 
             if (getNoteOnEditConcept().getStatus().equals(NoteStatus.INITIAL)) {

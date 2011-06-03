@@ -232,10 +232,6 @@ div.note_edit {
 	border-bottom: solid 1px #D0D0D0;
 }
 
-.note_edit input[type="text"], .note_edit textarea, #commentsAccordion textarea {
-	width: 95%;
-}
-
 ul.notes li span, ul.notes li .notelink {
     margin-right: 5px;	
 }
@@ -349,3 +345,25 @@ ul.dynatree-container {
 .comment-msg {
 
 }
+
+/**
+* Form fields
+*/
+
+.field input[type="text"] { width: 95% } 
+
+/*
+.wysiwyg {
+    height: 3em;
+    	
+}
+
+.note_edit input[type="text"], .note_edit textarea, 
+textarea.wysiwyg {
+    width: 95%;
+}
+
+#commentsAccordion textarea {
+    width: 30em;
+}
+*/

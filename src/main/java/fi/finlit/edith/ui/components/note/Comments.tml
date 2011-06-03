@@ -22,6 +22,24 @@
                   </t:zone>
                   
                   <t:block id="commentsBlock">
+                   <script type="text/javascript">
+              
+                      jQuery(function() {
+                    	  
+                    	  jQuery("#commentsAccordion .wysiwyg").each(
+              	            function() {
+              	              var id = jQuery(this).attr("id");
+              	              //console.debug("found id " + id);
+              	              tinymce.execCommand('mceAddControl', false, id);
+                    	  });
+                    	          
+              	          jQuery(":input[name='save']").click(function(){
+              	              tinymce.triggerSave();
+              	          });
+                        
+                      });
+              
+                   </script>
                   
                    <t:loop source="comments" value="comment">
                         <div class="comment">
@@ -32,7 +50,7 @@
                                 <t:eventlink t:event="deleteComment" t:zone="commentZone" 
                                     context="[noteOnEdit.id,comment.id]">${message:deleteComment}</t:eventlink>
                             </div>
-                            <div class="comment-msg">${comment.message}</div>
+                            <div class="comment-msg"><t:outputRaw value="comment.message"/></div>
                             <div class="cleaner"></div>
                         </div>
                    </t:loop>    
@@ -41,9 +59,9 @@
                   <t:form t:id="commentForm" t:zone="commentZone" t:context="noteOnEdit.id">
                       <div class="field">
                         <t:label for="newCommentMessage">${message:createNewComment-label}</t:label>
-                        <t:textArea t:id="newCommentMessage" value="newCommentMessage" rows="8" />
+                        <t:textArea class="wysiwyg" t:id="newCommentMessage" value="newCommentMessage" rows="8" />
                       </div>
-                      <input type="submit" value="${message:saveComment}" />
+                      <input type="submit" name="save" value="${message:saveComment}" />
                     </t:form>  
                     
                    </t:block>

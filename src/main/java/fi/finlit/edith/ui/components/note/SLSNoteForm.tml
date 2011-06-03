@@ -1,6 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 <t:content>
+
+      
+    <script type="text/javascript">
+      
+      jQuery(function() {
+    	
+    	  //jQuery(".note_edit .wysiwyg").ckeditor(Edith_CKEditorSetup);
+    	  
+          jQuery(".note_edit .wysiwyg").each(
+            function() {
+        	  var id = jQuery(this).attr("id");
+        	  //console.debug("found id " + id);
+        	  tinymce.execCommand('mceAddControl', false, id);
+          });
+          
+          jQuery(":input[name='save']").click(function(){
+        	  tinymce.triggerSave();
+          });
+          
+      });
+  
+    </script>
+  
     
+      
       <fieldset>
     
         <legend>${message:noteEdit}</legend>
@@ -20,7 +46,7 @@
             <t:errors />
     
             <div class="field">
-              <t:label for="lemma">${message:lemma-label}</t:label>
+              <label for="lemma">${message:lemma-label}</label>
               <t:textField t:id="lemma" value="noteOnEdit.lemma" />
             </div>
     
@@ -40,7 +66,7 @@
     
             <div class="field">
               <t:label for="termMeaning">${message:basicFormMeaning-label}</t:label>
-              <t:textArea rows="1" t:id="termMeaning" value="noteOnEdit.term.meaning" />
+              <t:textArea class="wysiwyg" t:id="termMeaning" value="noteOnEdit.term.meaning" />
             </div>
     
             <div class="field">
@@ -50,7 +76,7 @@
     
             <div class="field">
               <t:label for="description">${message:description-label}</t:label>
-              <t:textArea t:id="description" value="description" rows="8" />
+              <t:textArea class="wysiwyg" t:id="description" value="description" />
             </div>
     
             <!-- TODO In the future 
@@ -62,7 +88,7 @@
     
             <div class="field">
               <t:label for="sources">${message:sources-label}</t:label>
-              <t:textField t:id="sources" value="sources" rows="8" />
+              <t:textArea class="wysiwyg" t:id="sources" value="sources" rows="8" />
             </div>
     
             <div class="field">

@@ -49,7 +49,9 @@ import fi.finlit.edith.ui.services.TimeService;
 @Import(library = {
         "classpath:js/jquery-1.5.1.min.js", "classpath:js/TapestryExt.js",
         "classpath:js/jquery-ui-1.8.12.custom.min.js", "classpath:js/jquery.dynatree.min.js",
-        "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js", "classpath:js/jquery.cookie.js" },
+        "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js", 
+        "classpath:js/jquery.cookie.js","context:js/tiny_mce/tiny_mce.js"
+        },
         stylesheet= {"context:styles/tei.css", 
         "context:styles/smoothness/jquery-ui-1.8.12.custom.css",
         "context:styles/dynatree/skin/ui.dynatree.css"})

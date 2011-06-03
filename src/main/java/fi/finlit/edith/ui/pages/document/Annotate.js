@@ -58,10 +58,111 @@ var Annotate = {
 		}
 	},
 	
-
+	
+	
 };
 
+
+var Autoresize = {
+		resizeMinHeight : 30,
+		
+		diff : 20,
+		
+		body : function(editor_id) { return jQuery("#"+editor_id+"_ifr").contents().find("body") },
+		ifr : function(editor_id) { return jQuery("#"+editor_id+"_ifr") },
+		tbl : function(editor_id) { return jQuery("#"+editor_id+"_tbl") },
+		toolbar : function(editor_id) { return jQuery("#" + editor_id + "_tbl .mceToolbar") },
+		
+		initialResize : function(editor_id, h) {
+			this.resizeEditor(editor_id, h);
+			this.body(editor_id).css("overflow","hidden");
+			this.resizeMinHeight = this.ifr(editor_id).height() - this.diff;
+			console.log("min height is " + this.resizeMinHeight);
+		},
+		
+		resizeEditor : function(editor_id, h) {
+	    	this.tbl(editor_id).height(h); 
+	    	this.ifr(editor_id).height(h);
+	    	var cH = this.ifr(editor_id).height();
+	    	//jQuery("#"+editor_id+"_ifr").contents().find("body").height(cH - this.diff);
+	    	console.log("set height of the " + editor_id + " to " + h);
+		},
+		
+		recalculate: function(editor_id) {
+			var editHeight = this.body(editor_id).height();
+			var contHeight = this.ifr(editor_id).height() - this.diff;
+			console.log("recalculate " + editor_id +" edit height = " + editHeight + " cont height " + contHeight);
+			if (editHeight != contHeight) {
+				if (editHeight < this.resizeMinHeight) {
+					editHeight = this.resizeMinHeight;
+				}
+				//this.body(editor_id).scrollTo(0);
+				this.resizeEditor(editor_id, (editHeight+this.diff)+"px");
+			}
+		}		
+};
+/*
+var Edith_CKEditorSetup = {
+	  //, resize
+	  removePlugins : "elementspath",
+	  resize_dir : "vertical",
+	  height: "5em",
+	  skin: "kama",
+	  //extraPlugins: "autogrow",
+	  //autoGrow_minHeight: "100",
+	  toolbarCanCollapse : false,
+	  toolbar : "edith",
+	  toolbar_edith : [
+      { name: 'basicstyles', items : [ 'SpecialChar', 'Bold','Italic','Underline','Subscript','Superscript','-','RemoveFormat' ] },
+      { name: 'links', items : [ 'Link','Unlink' ] },
+      { name: 'document', items : [ 'Source'] },
+	  ],
+};
+*/
+
 jQuery(document).ready(function() {
+	
+	
+	tinymce.init({
+	    //script_url : '/js/tiny_mce/tiny_mce.js',
+		mode: "none",
+	    theme : "advanced",
+	    skin : "default",
+	    width: "95%",
+	    setup: function(ed) {
+	    	ed.onPostRender.add(function(ed, cm) {
+	    		Autoresize.initialResize(ed.id, "2em");
+	    		//Hide all toolbars
+				jQuery(".mceToolbar").hide();
+	            console.log('After render: ' + ed.id);
+	        });
+	    	ed.onSetContent.add(function(ed) { Autoresize.recalculate(ed.id) });
+	    	ed.onKeyUp.add(function(ed){ Autoresize.recalculate(ed.id); Autoresize.toolbar(ed.id).show(); });
+	    	ed.onActivate.add(function(ed) { Autoresize.recalculate(ed.id); Autoresize.toolbar(ed.id).show() });
+	    	ed.onDeactivate.add(function(ed) { Autoresize.toolbar(ed.id).hide(); });
+	    	ed.onClick.add(function(ed) { Autoresize.recalculate(ed.id); Autoresize.toolbar(ed.id).show() });
+	    },
+	    //plugins: "autoresize",
+	    plugins : "inlinepopups, tabfocus",
+	    tabfocus_elements: ":prev,:next",
+	    dialog_type : "modal",
+	    //theme_advanced_layout_manager : "SimpleLayout",
+	    //theme_advanced_resizing : true,
+	    //theme_advanced_resize_horizontal : false,
+	    //theme_advanced_resizing_min_height : 30,
+	    //theme_advanced_path: false,
+	    theme_advanced_toolbar_align : "left",
+	    theme_advanced_toolbar_location: "bottom",
+	    theme_advanced_statusbar_location : "none",
+	    theme_advanced_buttons1 : "charmap, italic, underline, bold, sub, sup, blockquote, link, " +
+	                              "unlink, image, cleanup, code",
+	    theme_advanced_buttons2 : "",
+	    theme_advanced_buttons3 : ""
+	    
+	 });
+	
+	
+	
 	var disableLink = false;
 	jQuery("#normalNotes").removeAttr("href").addClass("disable_link");
 	
@@ -108,6 +209,7 @@ jQuery(document).ready(function() {
     jQuery('body').bind('mouseup', function() { Annotate.updateSelectionLinks() });
     jQuery('body').bind('mousemove', function() { Annotate.clearSelectionLinks() });
     
+    
     /* TODO disable for note editing!
     jQuery(document).keydown(function(event) {
     	if (event.which == 65) {
@@ -124,5 +226,6 @@ jQuery(document).ready(function() {
     jQuery(".jqmClose").click(function() {
     	jQuery("#dialog").jqmHide();
     });
+    
     
 });
