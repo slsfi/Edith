@@ -22,6 +22,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ import fi.finlit.edith.ui.components.note.Comments;
 import fi.finlit.edith.ui.components.note.DocumentNotes;
 import fi.finlit.edith.ui.components.note.NoteEdit;
 import fi.finlit.edith.ui.components.note.SearchResults;
+import fi.finlit.edith.ui.pages.Documents;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
@@ -49,15 +51,15 @@ import fi.finlit.edith.ui.services.TimeService;
 @Import(library = {
         "classpath:js/jquery-1.5.1.min.js", "classpath:js/TapestryExt.js",
         "classpath:js/jquery-ui-1.8.12.custom.min.js", "classpath:js/jquery.dynatree.min.js",
-        "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js", 
+        "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js",
         "classpath:js/jquery.cookie.js","context:js/tiny_mce/tiny_mce.js"
         },
-        stylesheet= {"context:styles/tei.css", 
+        stylesheet= {"context:styles/tei.css",
         "context:styles/smoothness/jquery-ui-1.8.12.custom.css",
         "context:styles/dynatree/skin/ui.dynatree.css"})
 @SuppressWarnings("unused")
 public class Annotate extends AbstractDocumentPage {
-    
+
     private static final String EDIT_ZONE = "editZone";
 
     private static final Logger logger = LoggerFactory.getLogger(Annotate.class);
@@ -74,7 +76,7 @@ public class Annotate extends AbstractDocumentPage {
 
     @Inject
     private DocumentNoteRepository documentNoteRepository;
-  
+
     @Inject
     private Block documentView;
 
@@ -87,14 +89,14 @@ public class Annotate extends AbstractDocumentPage {
 
     @InjectComponent
     private InfoMessage infoMessage;
-    
+
     @Inject
     private Messages messages;
 
     @Property
     private boolean moreThanOneSelectable;
 
-    
+
     @Property
     private DocumentNote note;
 
@@ -103,7 +105,7 @@ public class Annotate extends AbstractDocumentPage {
 
     @Property
     private String noteRevisionId;
-    
+
     @Property
     private String selectedNoteLocalId;
 
@@ -131,36 +133,39 @@ public class Annotate extends AbstractDocumentPage {
 
     @Property
     private String personId;
-    
+
     @Property
     private String noteToLinkId;
 
     @Inject
     @Symbol(EDITH.EXTENDED_TERM)
     private boolean slsMode;
-    
+
     @InjectComponent
     private SearchResults searchResults;
-    
+
     @InjectComponent
     private DocumentNotes documentNotes;
-    
+
     @InjectComponent
     private NoteEdit noteEdit;
-   
+
+    @Inject
+    private PageRenderLinkSource linkSource;
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
         renderSupport.addScript("editLink = '" + link + "';");
     }
 
-   
+
 
     private Term getEditTerm(Note n) {
         return n.getTerm() != null ? n.getTerm() : new Term();
     }
 
-    
+
 
     public DocumentNoteSearchInfo getSearchInfo() {
         if (searchInfo == null) {
@@ -184,7 +189,7 @@ public class Annotate extends AbstractDocumentPage {
             createTermSelection = new SelectedText();
         }
     }
-    
+
     Object onSuccessFromSelectNoteForm() {
 
         //Strip first n from the id
@@ -249,10 +254,10 @@ public class Annotate extends AbstractDocumentPage {
 //        .add("commentZone", commentZone.getBody())
         ;
     }
-    
+
     private MultiZoneUpdate noteHasChanged(DocumentNote documentNote, String msg) {
         getDocumentRevision().setRevision(documentNote.getSVNRevision());
-        
+
         documentNotes.setNoteId(documentNote.getNote().getId());
         documentNotes.setSelectedNote(documentNote);
         noteEdit.setDocumentNoteOnEdit(documentNote);
@@ -294,12 +299,12 @@ public class Annotate extends AbstractDocumentPage {
             } catch (Exception e) {
                 return zoneWithError("note-addition-failed", e);
             }
-            
+
             return noteHasChanged(documentNote, "create-success");
-                
-                
-                
-                
+
+
+
+
                 //            selectedNotes = Collections.singletonList(documentNote);
 //            termOnEdit = getEditTerm(noteOnEdit.getNote());
 //            return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
@@ -309,7 +314,7 @@ public class Annotate extends AbstractDocumentPage {
 //        }
         //return new MultiZoneUpdate("dialogZone", notesForLemma);
     }
-            
+
     private Note createNote() {
         Note n = new Note();
         if (slsMode) {
@@ -317,7 +322,7 @@ public class Annotate extends AbstractDocumentPage {
         }
         return n;
 }
-            
+
 
     public void setSearchInfo(DocumentNoteSearchInfo searchInfo) {
         this.searchInfo = searchInfo;
@@ -361,36 +366,39 @@ public class Annotate extends AbstractDocumentPage {
     public boolean isSlsMode() {
         return slsMode;
     }
-    
+
     public NoteEdit getNoteEdit() {
         return noteEdit;
     }
-    
+
     public InfoMessage getInfoMessage() {
         return infoMessage;
     }
-    
+
     public SearchResults getSearchResults() {
         return searchResults;
     }
-    
+
     public DocumentNotes getDocumentNotes() {
         return documentNotes;
     }
-    
+
     public Block getDocumentView() {
         return documentView;
     }
-    
+
     public MultiZoneUpdate zoneWithInfo(String msg) {
         getInfoMessage().addInfoMsg(msg);
         return new MultiZoneUpdate("infoMessageZone", getInfoMessage().getBlock());
     }
-    
+
     public MultiZoneUpdate zoneWithError(String msg, Throwable e) {
         logger.error(msg, e);
         getInfoMessage().addErrorMsg(msg);
         return new MultiZoneUpdate("infoMessageZone", getInfoMessage().getBlock());
     }
-    
+
+    public String getDocumentsAjaxURL() {
+        return linkSource.createPageRenderLink(Documents.class).toString();
+    }
 }

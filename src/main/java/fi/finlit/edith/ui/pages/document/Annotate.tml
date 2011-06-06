@@ -88,12 +88,12 @@
 
 		   jQuery("#directory-tree").dynatree({
 	       initAjax: {
-	         url: '/documents:json'
+	         url: '${documentsAjaxURL}:json'
 	       },
 	       
 	       onLazyRead: function(node) {
 	         node.appendAjax({
-	           url: '/documents:json/',
+	           url: '${documentsAjaxURL}:json/',
 	           data: 'path=' + node.data.path
 	         });
 	       },

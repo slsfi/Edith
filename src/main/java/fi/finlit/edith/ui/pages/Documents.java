@@ -14,11 +14,13 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.util.TextStreamResponse;
 
 import com.google.gson.Gson;
 
 import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.FileItemWithDocumentId;
 
@@ -50,6 +52,9 @@ public class Documents {
     private Collection<Document> toBeDeleted;
 
     private boolean removeSelected;
+
+    @Inject
+    private PageRenderLinkSource linkSource;
 
     void onActivate(){
         selectedForDeletion = new HashSet<Document>();
@@ -104,4 +109,11 @@ public class Documents {
         return new TextStreamResponse("application/json", gson.toJson(fileItems));
     }
 
+    public String getDocumentsAjaxURL() {
+        return linkSource.createPageRenderLink(Documents.class).toString();
+    }
+
+    public String getAnnotateURL() {
+        return linkSource.createPageRenderLinkWithContext(Annotate.class).toString();
+    }
 }

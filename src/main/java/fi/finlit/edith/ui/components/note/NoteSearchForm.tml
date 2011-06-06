@@ -1,104 +1,99 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
-	<t:content>
-        
-        <script type="text/javascript">
+<t:content>
 
-            jQuery(function() {
-            	
-            	//Open the search results accordion in when 
-                //there is a search action
-            	jQuery("#noteSearchFormSubmit").click( function() {
-            		var acc = jQuery("#searchResultsAccordion"); 
-                     if (acc.accordion("option", "active") === false) {
-                         acc.accordion("activate", 0);
-                     }
-            	});                               
-            });
-        </script>
-		<t:form t:id="noteSearchForm" t:zone="listZone">
-			<t:errors />
-			<div class="left">
-			<div>
-				<div>
-					<t:fmt.message key="selectedDocuments" args="selectedDocumentCount"/>					
-				</div>
-				<div>
-				    <label><t:checkbox value="orphans"/>${message:orphans}</label>					
-				</div>				
-			</div>
-			<div>
-			    <div>
-                    <strong>${message:format-label}</strong>
-                </div>
-                <div>
-                    <t:loop source="formats" value="format">
-                        <div>
-                        <label>
-                            <t:checkbox value="formatSelected" />
-                            <t:fmt.message key="${format}" /></label>
-                        </div>
-                    </t:loop>
-                </div>
-				<div>
-					<strong>${message:type-label}</strong>
-				</div>
-				<div>
-					<t:loop source="types" value="type">
-						<div>
-						<label>
-							<t:checkbox value="typeSelected" />
-							<t:fmt.message key="${type}" /></label>
-						</div>
-					</t:loop>
-				</div>
-			</div>		
-			</div>
-			
-			<div class="left">
-			<div>
-				<div>
-					<strong>${message:creator-label}</strong>
-				</div>
-				<div>
-					<t:loop source="users" value="user">
-						<div>
-						<label>
-							<t:checkbox value="userSelected" />
-							${user.username}
-							</label>
-						</div>
-					</t:loop>
-				</div>
-			</div>
-			<div>
-                <div>
-                    <strong>${message:orderBy-label}</strong>
-                </div>
-                <div>
-                    <t:radiogroup t:id="orderBy">
-                        <t:loop source="orderBys" value="loopedOrderBy">
-                        <div>
-                            <t:radio t:id="loopedOrderBy" value="loopedOrderBy"></t:radio>
-                            <t:label for="loopedOrderBy"><t:fmt.message key="${loopedOrderBy}" /></t:label>
-                        </div>
-                        </t:loop>
-                    </t:radiogroup>
-                    <t:checkbox value="reversed"></t:checkbox>${message:reversed}
-                </div>
-            </div> 	
-			<div>
+  <script type="text/javascript">
+      jQuery(function() {
 
+        //Open the search results accordion in when 
+        //there is a search action
+        jQuery("#noteSearchFormSubmit").click(function() {
+          var acc = jQuery("#searchResultsAccordion");
+          if (acc.accordion("option", "active") === false) {
+            acc.accordion("activate", 0);
+          }
+        });
+      });
+    </script>
 
+  <t:form t:id="noteSearchForm" t:zone="listZone">
+    <t:errors />
+    <div class="left">
+      <div>
+        <div>
+          <t:fmt.message key="selectedDocuments"
+            args="selectedDocumentCount" />
+        </div>
 
+        <div>
+          <label><t:checkbox value="orphans" />${message:orphans}</label>
+        </div>
+      </div>
+      <div>
+        <div>
+          <strong>${message:format-label}</strong>
+        </div>
+        <div>
+          <t:loop source="formats" value="format">
+            <div>
+              <label> <t:checkbox value="formatSelected" /> <t:fmt.message
+                  key="${format}" /> </label>
+            </div>
+          </t:loop>
+        </div>
+        <div>
+          <strong>${message:type-label}</strong>
+        </div>
+        <div>
+          <t:loop source="types" value="type">
+            <div>
+              <label> <t:checkbox value="typeSelected" /> <t:fmt.message
+                  key="${type}" /> </label>
+            </div>
+          </t:loop>
+        </div>
+      </div>
+    </div>
 
-			</div>				
-			</div>
-			
-			<div style="clear:both;"></div>
-			
-			<input id="noteSearchFormSubmit" type="submit" value="${message:query}" />	
-				
-		</t:form>		
-	</t:content>
-</html>	
-			
+    <div class="left">
+      <div>
+        <div>
+          <strong>${message:creator-label}</strong>
+        </div>
+        <div>
+          <t:loop source="users" value="user">
+            <div>
+              <label> <t:checkbox value="userSelected" />
+                ${user.username} </label>
+            </div>
+          </t:loop>
+        </div>
+      </div>
+      <div>
+        <div>
+          <strong>${message:orderBy-label}</strong>
+        </div>
+        <div>
+          <t:radiogroup t:id="orderBy">
+            <t:loop source="orderBys" value="loopedOrderBy">
+              <div>
+                <t:radio t:id="loopedOrderBy" value="loopedOrderBy"></t:radio>
+                <t:label for="loopedOrderBy">
+                  <t:fmt.message key="${loopedOrderBy}" />
+                </t:label>
+              </div>
+            </t:loop>
+          </t:radiogroup>
+          <t:checkbox value="reversed"></t:checkbox>
+          ${message:reversed}
+        </div>
+      </div>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <input id="noteSearchFormSubmit" type="submit"
+      value="${message:query}" />
+
+  </t:form>
+</t:content>
+</html>

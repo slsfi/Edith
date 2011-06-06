@@ -8,7 +8,7 @@
       
       $('#directory-tree').dynatree({
         initAjax: {
-          url: '/documents:json'
+          url: '${documentsAjaxURL}:json'
         },
         
         onActivate: function(node) {
@@ -22,7 +22,7 @@
 
         onLazyRead: function(node) {
           node.appendAjax({
-            url: '/documents:json/',
+            url: '${documentsAjaxURL}:json/',
             data: 'path=' + node.data.path
           });
         }
@@ -33,7 +33,7 @@
         e.preventDefault();
         var node = $("#directory-tree").dynatree("getActiveNode");
         if (node != null) {
-          window.location.href = '/document/annotate/' + node.data.documentId;
+          window.location.href = '${annotateURL}/' + node.data.documentId;
         }
       });
 
