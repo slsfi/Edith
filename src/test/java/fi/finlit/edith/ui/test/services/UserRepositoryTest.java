@@ -29,7 +29,7 @@ public class UserRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void GetByUsername() {
-        for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")) {
+        for (String username : Arrays.asList("timo", "lassi", "sakari", "ossi")) {
             assertNotNull(userRepository.getByUsername(username));
         }
     }
@@ -53,7 +53,7 @@ public class UserRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void GetUserInfoByUsername() {
-        for (String username : Arrays.asList("timo", "lassi", "heli", "sakari", "ossi")) {
+        for (String username : Arrays.asList("timo", "lassi", "sakari", "ossi")) {
             assertNotNull(userRepository.getUserInfoByUsername(username));
         }
     }
