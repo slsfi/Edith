@@ -142,5 +142,5 @@ public interface DocumentRepository extends Repository<Document, String> {
      */
     void removeAll(Collection<Document> documents);
 
-    List<FileItemWithDocumentId> fromPath(String path);
+    List<FileItemWithDocumentId> fromPath(String path, String id);
 }

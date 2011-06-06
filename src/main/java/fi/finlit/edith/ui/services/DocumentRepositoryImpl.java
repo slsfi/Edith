@@ -634,7 +634,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public List<FileItemWithDocumentId> fromPath(String path) {
+    public List<FileItemWithDocumentId> fromPath(String path, String id) {
         List<FileItem> files = StringUtils.isEmpty(path) ? svnService.getFileItems(documentRoot, -1) :
                                                            svnService.getFileItems(path, -1);
         List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
@@ -644,7 +644,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 document = createDocument(file.getPath(), file.getTitle(), null);
             }
             rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.isFolder(),
-                    file.getChildren(), document.getId()));
+                    file.getChildren(), document.getId(), document.getId().equals(id)));
         }
         return rv;
     }

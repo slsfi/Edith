@@ -103,9 +103,10 @@ public class Documents {
         return !documents.isEmpty();
     }
 
-    TextStreamResponse onJson(@RequestParameter(value = "path", allowBlank = true) String path) {
+    TextStreamResponse onJson(@RequestParameter(value = "path", allowBlank = true) String path,
+            @RequestParameter(value = "id", allowBlank = true) String id) {
         Gson gson = new Gson();
-        List<FileItemWithDocumentId> fileItems = documentRepository.fromPath(path);
+        List<FileItemWithDocumentId> fileItems = documentRepository.fromPath(path, id);
         return new TextStreamResponse("application/json", gson.toJson(fileItems));
     }
 

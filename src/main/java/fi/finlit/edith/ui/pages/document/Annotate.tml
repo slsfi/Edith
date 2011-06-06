@@ -86,28 +86,70 @@
 		 
 		 (function($) {
 
-		   jQuery("#directory-tree").dynatree({
+		   var documents = {};
+		   documents['${document.id}'] = true;
+		   
+		   var visualizeNode = function(node) {
+		     if (node.data.isSelected) {
+		       node.select(true);
+		     }
+		   }
+		   
+		   jQuery('#directory-tree').dynatree({
 	       initAjax: {
-	         url: '${documentsAjaxURL}:json'
+	         url: '${documentsAjaxURL}:json',
+	         data: {
+	           id: '${document.id}'
+	         }
 	       },
 	       
 	       onLazyRead: function(node) {
 	         node.appendAjax({
 	           url: '${documentsAjaxURL}:json/',
-	           data: 'path=' + node.data.path
+	           data: {
+	             path: node.data.path,
+	             id: '${document.id}'
+	           },
+	         
+	           success: function(node) {
+	             node.visit(function(child) {
+	               if (node.isSelected()) {
+	                 child.select(true);
+	               }
+	             });
+	             node.visit(visualizeNode);
+	           }
 	         });
+	       },
+	       
+	       onPostInit: function(isReloading, isError) {
+	         this.visit(visualizeNode);
 	       },
 	       
 	       onSelect: function(flag, node) {
 	         if (flag) {
-	           
+	           documents[node.data.documentId] = true;
 	         } else {
-	           
+	           delete documents[node.data.documentId];
 	         }
+           if (node.data.isFolder) {
+             node.visit(function(child) {
+               child.select(flag);
+             });
+           }
 	       },
 	       
 	       checkbox: true
-	       
+		   });
+		   
+		   $('#noteSearchFormSubmit').click(function() {
+		     var documentIds = [];
+		     $.each(documents, function(k, _) {
+		       documentIds.push(k);
+		     });
+		     if (documentIds.length != 0) {
+		       $('#noteSearchForm #documents').val(documentIds.join(','));
+		     }
 		   });
 		   
 		 })(jQuery);

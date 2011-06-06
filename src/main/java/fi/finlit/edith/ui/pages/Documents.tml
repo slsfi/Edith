@@ -56,7 +56,7 @@
       
 	<t:form t:id="documentsForm">
 
-	    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1,null2,selection,deletion">
+	    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1,null2,deletion">
 	        <p:documentCell>
 	          ${document.title}
 	        </p:documentCell>
@@ -72,9 +72,6 @@
 	        <p:null2Cell>
                 <a t:type="pageLink" t:page="document/publish" t:context="${document.id}">${message:publishVersion}</a>
             </p:null2Cell>
-			<p:selectionCell>
-				<t:checkbox value="documentSelected" />			
-			</p:selectionCell>
 			
 			<p:deletionCell>
 				<t:checkbox value="selectedForDeletion" />
@@ -86,13 +83,11 @@
 	    </t:grid>
 		
 		<t:if test="documentsNotEmpty">		
-			<t:submit value="${message:select-documents}" />
-					
 			<input type="button" class="delete_question" style="font-size:80%; margin-left:0.5em;" value="${message:remove-selected}"/>
 			
             <span class="delete_dialog" style="font-size:80%;"> 
             	${message:remove-selected}?
-            	<t:submit t:id="removeSelected" value="${message:yes}"/>  
+            	<t:submit t:id="removeSelected" value="${message:yes}"/>
             	/ 
             	<input type="button" class="delete_decline" value="${message:no}"/> 
             </span> 

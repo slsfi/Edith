@@ -8,12 +8,12 @@
       
       jQuery(function() {
     	
-    	  //jQuery(".note_edit .wysiwyg").ckeditor(Edith_CKEditorSetup);
-    	  
+//     	  jQuery(".note_edit .wysiwyg").ckeditor(Edith_CKEditorSetup);
+//     	  FIXME: Breaks scrollbar on Chrome!
           jQuery(".note_edit .wysiwyg").each(
             function() {
         	  var id = jQuery(this).attr("id");
-        	  //console.debug("found id " + id);
+//         	  console.debug("found id " + id);
         	  tinymce.execCommand('mceAddControl', false, id);
           });
           

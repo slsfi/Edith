@@ -64,9 +64,6 @@ public class Annotate extends AbstractDocumentPage {
 
     private static final Logger logger = LoggerFactory.getLogger(Annotate.class);
 
-    @SessionState(create = false)
-    private Collection<Document> selectedDocuments;
-
     @Property
     @Persist
     private SelectedText createTermSelection;
@@ -159,13 +156,9 @@ public class Annotate extends AbstractDocumentPage {
         renderSupport.addScript("editLink = '" + link + "';");
     }
 
-
-
     private Term getEditTerm(Note n) {
         return n.getTerm() != null ? n.getTerm() : new Term();
     }
-
-
 
     public DocumentNoteSearchInfo getSearchInfo() {
         if (searchInfo == null) {
@@ -173,9 +166,9 @@ public class Annotate extends AbstractDocumentPage {
             searchInfo.getDocuments().add(getDocument());
             searchInfo.setCurrentDocument(getDocument());
         }
-        if (selectedDocuments != null) {
-            searchInfo.getDocuments().addAll(selectedDocuments);
-        }
+//        if (selectedDocuments != null) {
+//            searchInfo.getDocuments().addAll(selectedDocuments);
+//        }
         return searchInfo;
     }
 

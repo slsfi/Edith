@@ -1,13 +1,11 @@
 package fi.finlit.edith.ui.components.note;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.tapestry5.Block;
-import org.apache.tapestry5.ajax.MultiZoneUpdate;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.annotations.InjectPage;
-import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
@@ -25,8 +23,7 @@ public class NoteSearchForm {
     @InjectPage
     private Annotate page;
 
-    @SessionState(create = false)
-    private Collection<Document> selectedDocuments;
+    private final Collection<Document> selectedDocuments = new ArrayList<Document>();
 
     @Property
     private NoteType type;
@@ -130,5 +127,23 @@ public class NoteSearchForm {
     public DocumentNoteSearchInfo getSearchInfo() {
         return page.getSearchInfo();
     }
+
+    public String getDocuments() {
+        Collection<String> documentIds = new ArrayList<String>();
+        for (Document document : getSearchInfo().getDocuments()) {
+            documentIds.add(document.getId());
+        }
+        return StringUtils.join(documentIds, ",");
+    }
+
+    public void setDocuments(String documents) {
+        getSearchInfo().getDocuments().clear();
+        for (String documentId : documents.split(",")) {
+            Document document = new Document();
+            document.setId(documentId);
+            getSearchInfo().getDocuments().add(document);
+        }
+    }
+
 
 }
