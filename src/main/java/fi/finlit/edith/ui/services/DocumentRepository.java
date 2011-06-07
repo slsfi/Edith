@@ -136,6 +136,11 @@ public interface DocumentRepository extends Repository<Document, String> {
     void remove(Document doc);
 
     /**
+     * Remove the document by id.
+     */
+    void remove(String id);
+
+    /**
      * Remove the given documents
      *
      * @param documents

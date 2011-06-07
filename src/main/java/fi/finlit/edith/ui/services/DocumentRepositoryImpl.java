@@ -648,4 +648,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         }
         return rv;
     }
+
+    @Override
+    public void remove(String id) {
+        remove(getById(id));
+    }
 }

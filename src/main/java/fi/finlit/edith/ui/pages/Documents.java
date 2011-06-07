@@ -117,4 +117,13 @@ public class Documents {
     public String getAnnotateURL() {
         return linkSource.createPageRenderLinkWithContext(Annotate.class).toString();
     }
+
+    public String getDeleteDocumentURL() {
+        return linkSource.createPageRenderLink(Documents.class).toString() + ".deletedocument";
+    }
+
+    public void onActionFromDeleteDocument(String id) {
+        documentRepository.remove(id);
+    }
+
 }
