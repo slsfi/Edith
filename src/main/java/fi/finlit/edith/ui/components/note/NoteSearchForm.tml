@@ -2,93 +2,88 @@
 <t:content>
 
   <script type="text/javascript">
-      jQuery(function() {
-
-        //Open the search results accordion in when 
-        //there is a search action
-        jQuery("#noteSearchFormSubmit").click(function() {
-          var acc = jQuery("#searchResultsAccordion");
-          if (acc.accordion("option", "active") === false) {
-            acc.accordion("activate", 0);
-          }
-        });
-      });
-    </script>
+   
+			jQuery(function() {
+				
+				//Open the search results accordion in when 
+                //there is a search action
+			    jQuery("#noteSearchFormSubmit").click(function() {
+					var acc = jQuery("#searchResultsAccordion");
+					if (acc.accordion("option", "active") === false) {
+						acc.accordion("activate", 0);
+					}
+				});
+			});
+				
+  </script>
 
   <t:form t:id="noteSearchForm" t:zone="listZone">
     <t:errors />
-    <div class="left">
-      <div>
+    <div>
+
+      <div class="field">
+        <label><t:checkbox value="orphans" />${message:orphans}</label>
+      </div>
+
+      <div class="field">
+        <label for="types">${message:type-label}</label>
         <div>
-          <label><t:checkbox value="orphans" />${message:orphans}</label>
+          <t:loop source="types" value="type">
+              <label><t:checkbox value="typeSelected" /> <t:fmt.message key="${type}" /> </label>
+          </t:loop>
         </div>
       </div>
-      <div>
+
+      <t:remove>
         <div>
           <strong>${message:format-label}</strong>
         </div>
         <div>
           <t:loop source="formats" value="format">
-            <div>
-              <label> <t:checkbox value="formatSelected" /> <t:fmt.message
-                  key="${format}" /> </label>
-            </div>
+              <label> <t:checkbox value="formatSelected" /> <t:fmt.message key="${format}" /> </label>
           </t:loop>
         </div>
-        <div>
-          <strong>${message:type-label}</strong>
-        </div>
-        <div>
-          <t:loop source="types" value="type">
-            <div>
-              <label> <t:checkbox value="typeSelected" /> <t:fmt.message
-                  key="${type}" /> </label>
-            </div>
-          </t:loop>
-        </div>
-      </div>
-    </div>
+      </t:remove>
 
-    <div class="left">
-      <div>
-        <div>
-          <strong>${message:creator-label}</strong>
-        </div>
+
+
+      <div class="field">
+        <label for="users">${message:creator-label}</label>
         <div>
           <t:loop source="users" value="user">
-            <div>
-              <label> <t:checkbox value="userSelected" />
-                ${user.username} </label>
-            </div>
+              <label> <t:checkbox value="userSelected" /> ${user.username} </label>
           </t:loop>
         </div>
       </div>
-      <div>
-        <div>
-          <strong>${message:orderBy-label}</strong>
-        </div>
+
+      <div class="field">
+        <label for="orderBys">${message:orderBy-label}</label>
         <div>
           <t:radiogroup t:id="orderBy">
             <t:loop source="orderBys" value="loopedOrderBy">
-              <div>
                 <t:radio t:id="loopedOrderBy" value="loopedOrderBy"></t:radio>
-                <t:label for="loopedOrderBy">
-                  <t:fmt.message key="${loopedOrderBy}" />
-                </t:label>
-              </div>
+                <t:label for="loopedOrderBy"> <t:fmt.message key="${loopedOrderBy}" /> </t:label>
             </t:loop>
           </t:radiogroup>
-          <t:checkbox value="reversed"></t:checkbox>
-          ${message:reversed}
         </div>
       </div>
+
+      <div class="field">
+        <label><t:checkbox value="reversed" />${message:reversed}</label>
+      </div>
+
+
+      <div style="clear: both;"></div>
+
+      <t:remove>
+        <t:textField t:id="documents" value="documents"
+          style="display: none;" />
+      </t:remove>
+
+      <input id="noteSearchFormSubmit" type="submit"
+        value="${message:query}" />
+
     </div>
-
-    <div style="clear: both;"></div>
-    <t:textField t:id="documents" value="documents" style="display: none;"/>
-
-    <input id="noteSearchFormSubmit" type="submit"
-      value="${message:query}" />
 
   </t:form>
 </t:content>

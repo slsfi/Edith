@@ -35,7 +35,7 @@
             
                 <div class="notes">    
                   <t:grid source="notes" row="note" exclude="id, format, lemma, lemmaMeaning, editedOn" add="note" 
-                    rowsPerPage="3" pagerPosition="bottom" inPlace="true">
+                    rowsPerPage="20" pagerPosition="bottom" inPlace="true">
                       <p:noteCell>
                         <div class="note">
                           <span>

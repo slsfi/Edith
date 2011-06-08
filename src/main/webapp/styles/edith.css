@@ -312,6 +312,12 @@ ul.dynatree-container {
 }
 
 /**
+* Search results
+*/
+.search-results { margin-top: -15px }
+	
+
+/**
 * Note edit fields
 */
 .field {
