@@ -15,6 +15,7 @@ import java.util.Stack;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,12 +73,20 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
             }
             for (WebElement element : findElements(By.tagName("a"))) {
                 String href = null;
-                if (element.getAttribute("href") == null) {
-                    logger.warn("A-tag without href found: " + element.getText());
+                String text = null;
+                try {
+                    href = element.getAttribute("href");
+                    text = element.getText();
+                } catch(StaleElementReferenceException e) {
+                    continue;
+                }
+                
+                if (href == null) {
+                    logger.warn("A-tag without href found: " + text);
                     continue;
                 }
                 try {
-                    href = URLDecoder.decode(element.getAttribute("href"), "UTF-8");
+                    href = URLDecoder.decode(href, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
                 }

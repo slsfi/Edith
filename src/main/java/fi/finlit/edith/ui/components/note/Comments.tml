@@ -2,14 +2,23 @@
   xmlns:p="tapestry:parameter">
 <t:content>
 
-   
-    
       <t:if test="noteOnEdit">
         <script type="text/javascript">
               
               jQuery(function() {
                   jQuery('#commentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true });
-                  //, create: AccordionState.loadState, change: AccordionState.saveState}); 
+                  
+                  //Empty values need to be filled, otherwise the page
+                  //will jump on load
+                  jQuery(".note_edit textarea.wysiwyg").each( function() { 
+                      if (jQuery(this).val() === "") jQuery(this).val("<p></p>") 
+                  });
+                  jQuery("#commentsAccordion .wysiwyg").ckeditor(Edith_CKEditorSetup);
+                  
+                  jQuery(":input[name='save']").click(function(){
+                      jQuery("#commentsAccordion .wysiwyg").ckeditorGet().updateElement();
+                  });
+                  
               });
               
           </script>
@@ -23,24 +32,10 @@
                   
                   <t:block id="commentsBlock">
                    <script type="text/javascript">
-              
-                      jQuery(function() {
-                    	  
-                    	  jQuery("#commentsAccordion .wysiwyg").each(
-              	            function() {
-              	              var id = jQuery(this).attr("id");
-              	              //console.debug("found id " + id);
-              	              tinymce.execCommand('mceAddControl', false, id);
-                    	  });
-                    	          
-              	          jQuery(":input[name='save']").click(function(){
-              	              tinymce.triggerSave();
-              	          });
-                        
-                      });
-              
+                   jQuery(function() {
+                	   jQuery("#commentsAccordion .wysiwyg").val("");
+                   });
                    </script>
-                  
                    <t:loop source="comments" value="comment">
                         <div class="comment">
                             <div class="comment-metadata"> 
@@ -54,17 +49,17 @@
                             <div class="cleaner"></div>
                         </div>
                    </t:loop>    
-                  
+                    
+                   </t:block>
                   
                   <t:form t:id="commentForm" t:zone="commentZone" t:context="noteOnEdit.id">
                       <div class="field">
                         <t:label for="newCommentMessage">${message:createNewComment-label}</t:label>
-                        <t:textArea class="wysiwyg" t:id="newCommentMessage" value="newCommentMessage" rows="8" />
+                        <t:textArea style="display:none" class="wysiwyg" t:id="newCommentMessage" value="newCommentMessage" rows="8" />
                       </div>
                       <input type="submit" name="save" value="${message:saveComment}" />
                     </t:form>  
-                    
-                   </t:block>
+                  
                       
                   </div>
         </div>

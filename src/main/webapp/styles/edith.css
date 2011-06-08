@@ -132,6 +132,22 @@ label.left {
 }
 
 /* Note search */
+
+div.notes { margin-top: 1em; }
+.notes .t-data-grid { font-family: georgia, serif; }
+.notes div.t-data-grid-pager a, 
+.notes div.t-data-grid-pager span.current { font-size: 100%; background-color: white; border: none; margin-right: 1em; padding: 0 }
+.notes div.t-data-grid-pager span.current { color: black; text-decoration: underline; }
+.notes div.t-data-grid-pager { padding-left: 2px }
+.notes .t-data-grid a.link,
+.notes .t-data-grid a.visited,
+.notes .t-data-grid a.active,
+.notes .t-data-grid a.hover { border:none; }
+.notes table.t-data-grid thead tr { display: none; }
+.notes table.t-data-grid, .notes table.t-data-grid tbody tr td { border: none; }
+
+
+/*
 table.t-data-grid {
 	font-size: 80%;
 }
@@ -149,6 +165,8 @@ table.searchresults td {
 	border-bottom: 1px solid #999999;
 	padding: 0.2em;
 }
+
+*/
 
 .msg {
 	font-weight: bold;

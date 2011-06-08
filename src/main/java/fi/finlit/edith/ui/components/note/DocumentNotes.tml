@@ -11,7 +11,7 @@
             
             //Scroll to selected element on click
             var elem = jQuery("#start"+ jQuery(this).attr("localId"));
-            if (elem.size() != 0) {
+            if (elem.size() == 1) {
                 jQuery("#left").scrollTo(elem);
             }
             
@@ -31,10 +31,10 @@
           jQuery(function() {
         	  
     		//Scroll to the selected document note if found on load
-    		var elem = jQuery("#start${localId}");
-    		if (elem.size() != 0) {
-    			jQuery("#left").scrollTo(elem);
-    		}
+    		//var elem = jQuery("#start${localId}");
+    		//if (elem.size() != 0) {
+    		//	jQuery("#left").scrollTo(elem);
+    		//}
     	  });
   
 		</script>

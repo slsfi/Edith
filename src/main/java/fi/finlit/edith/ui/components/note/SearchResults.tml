@@ -3,6 +3,7 @@
 
         <div class="panel narrow search-results">
         
+        <t:remove>
             <form id="note_filters">
                 <input id="numberOfInstancesInDocument" name="numberOfInstancesInDocument" type="checkbox"/><label for="numberOfInstancesInDocument">${message:numberOfInstancesInDocument-label}</label>
                 <input id="basicForm" name="basicForm" type="checkbox"/><label for="basicForm">${message:basicForm-label}</label>
@@ -15,13 +16,14 @@
                 <input id="edited" name="edited" type="checkbox"/><label for="edited">${message:edited-label}</label>
                 <input id="status" name="status" type="checkbox"/><label for="status">${message:status-label}</label>
             </form>
-                          
+       </t:remove>        
             <t:zone t:id="listZone" update="show">
                 <t:delegate to="notesList"/>
             </t:zone>
 
         <t:block t:id="notesList">                  
             <t:if test="searchResults">
+            <t:remove>
             <script type="text/javascript">
               jQuery(function() {
                   jQuery("#note_filters input").each(function() {
@@ -29,6 +31,48 @@
                   });
               });
             </script>
+            </t:remove>
+            
+                <div class="notes">    
+                  <t:grid source="notes" row="note" exclude="id, format, lemma, lemmaMeaning, editedOn" add="note" 
+                    rowsPerPage="3" pagerPosition="bottom" inPlace="true">
+                      <p:noteCell>
+                        <div class="note">
+                          <span>
+                            <t:actionlink t:id="selectNote" context="note.id" noteId="${note.id}"
+                              class="selectable-note ${noteConcept.status}">
+                              <em>${note.term?.basicForm}</em>
+                            </t:actionlink> 
+                          </span>
+                          
+                          <t:if test="typesString">
+                            <span class="type">, ${typesString}</span>
+                          </t:if>
+                          
+                          <t:if test="note.term.meaning">
+                            <span class="meaning">, "<t:outputRaw value="termMeaning"/>"</span>
+                          </t:if>
+                          
+                          <t:if test="noteConcept.description">
+                            <span class="description">, "<t:outputRaw value="description"/>"</span>
+                          </t:if>
+                          
+                          <span class="creator">, ${noteConcept.lastEditedBy?.username} (${editorsForNote})</span>
+                          <span class="edited">, <t:dateTimeFormat date="note.editedOnDate" format="message:dateformat-compact" />
+                          <span class="status">, ${statusString}</span>
+                          
+                        
+                           
+                          
+                           
+                          </span>
+                        </div>
+                      </p:noteCell>
+              
+                  </t:grid>
+                </div>
+            
+               <t:remove>
           
                 <ul class="notes">
                     <t:loop source="notes" value="note">
@@ -36,11 +80,10 @@
                                 <span>
                                 <t:actionlink t:id="selectNote" context="note.id" noteId="${note.id}"
                                     class="selectable-note ${noteConcept.status}">
-                                    <em>${note.lemma}</em>
+                                    <em>${note.term?.basicForm}</em>
                                 </t:actionlink> 
                                  </span>
                                 
-                                <span class="basicForm">${note.term?.basicForm}; </span>
                                 <span class="meaning">${note.term?.meaning}; </span>
                                 <span class="description">${noteConcept.description}; </span>
                                 <span class="type">${typesString}; </span>
@@ -53,6 +96,7 @@
                             </li>                           
                     </t:loop>
                 </ul>
+                </t:remove>
                 <p:else>${message:no-notes}</p:else>
             </t:if>
             

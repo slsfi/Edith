@@ -24,6 +24,8 @@ public class DocumentNoteSearchInfo {
     private boolean orphans = false;
 
     private Document currentDocument;
+    
+    private String fullText;
 
     public DocumentNoteSearchInfo() {}
     
@@ -93,6 +95,14 @@ public class DocumentNoteSearchInfo {
 
     public Document getCurrentDocument() {
         return currentDocument;
+    }
+    
+    public void setFullText(String fullText) {
+        this.fullText = fullText;
+    }
+    
+    public String getFullText() {
+        return fullText;
     }
 
     @Override

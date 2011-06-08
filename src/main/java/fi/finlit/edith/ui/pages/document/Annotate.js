@@ -62,7 +62,7 @@ var Annotate = {
 	
 };
 
-
+/*
 var Autoresize = {
 		resizeMinHeight : 30,
 		
@@ -101,16 +101,19 @@ var Autoresize = {
 			}
 		}		
 };
-/*
+*/
+
 var Edith_CKEditorSetup = {
-	  //, resize
 	  removePlugins : "elementspath",
-	  resize_dir : "vertical",
-	  height: "5em",
+	  height: "40px",
 	  skin: "kama",
-	  //extraPlugins: "autogrow",
-	  //autoGrow_minHeight: "100",
+	  extraPlugins: "autogrow",
+	  autoGrow_minHeight: "40",
+	  resize_enabled : false, 
+	  startupFocus: false,
+	  //resize_dir : "vertical",
 	  toolbarCanCollapse : false,
+	  //toolbarStartupExpanded: false,
 	  toolbar : "edith",
 	  toolbar_edith : [
       { name: 'basicstyles', items : [ 'SpecialChar', 'Bold','Italic','Underline','Subscript','Superscript','-','RemoveFormat' ] },
@@ -118,10 +121,10 @@ var Edith_CKEditorSetup = {
       { name: 'document', items : [ 'Source'] },
 	  ],
 };
-*/
 
 jQuery(document).ready(function() {
 	
+	/*
 	
 	tinymce.init({
 	    //script_url : '/js/tiny_mce/tiny_mce.js',
@@ -160,7 +163,7 @@ jQuery(document).ready(function() {
 	    theme_advanced_buttons3 : ""
 	    
 	 });
-	
+*/	
 	
 	
 	var disableLink = false;

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
+ * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
  *
  */
@@ -16,10 +17,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.mysema.rdfbean.tapestry.BeanGridDataSource;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.EdithTestConstants;
@@ -285,23 +289,54 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
-    public void Find_Notes_With_Search() {
+    public void Find_All_Notes_With_Search() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         String longText = "two words";
         noteRepository.createDocumentNote(createNote(), document.getRevision(-1), longText);
         DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
         //Empty finds all
-        assertEquals(1, noteRepository.findNotes(search).size());
+        assertEquals(1, noteRepository.findAllNotes(search).size());
 
         //With document we should find our note
         search.setCurrentDocument(document);
-        assertEquals(1, noteRepository.findNotes(search).size());
+        assertEquals(1, noteRepository.findAllNotes(search).size());
 
         //False hit
         userRepository.save(new User("dummy"));
         search.setCreators(Collections.singleton(new UserInfo("dummy")));
-        assertEquals(0, noteRepository.findNotes(search).size());
+        assertEquals(0, noteRepository.findAllNotes(search).size());
 
+    }
+    
+    @Test
+    public void Find_Notes_With_Paged_Search() {
+        Note note1 = createNote("note1");
+        Note note2 = createNote("note2");
+        Note note3 = createNote("note3");
+
+        DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
+        search.setFullText("foo");
+        assertEquals(0, noteRepository.findNotes(search).getAvailableRows());
+        search.setFullText("note");
+        assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
+        search.setOrphans(true);
+        assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
+        
+        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
+        search.setDocuments(Collections.singleton(document));
+        search.setOrphans(false);
+        assertEquals(0, noteRepository.findNotes(search).getAvailableRows());
+        search.setOrphans(true);
+        assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
+        
+        noteRepository.createDocumentNote(note1, document.getRevision(-1), "a");
+        search.setOrphans(false);
+        assertEquals(1, noteRepository.findNotes(search).getAvailableRows());
+        GridDataSource src = noteRepository.findNotes(search);
+        src.prepare(0, 1, Collections.<SortConstraint>emptyList());
+        assertNotNull(src.getRowValue(0));
+        assertEquals(note1.getId(), ((Note)src.getRowValue(0)).getId());
+        
     }
 
 //    If we are using remote permanently, then this test is not necessary
@@ -366,4 +401,11 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         return note;
     }
 
+    private Note createNote(String lemma) {
+       Note note = createNote();
+       note.setLemma(lemma);
+       noteRepository.save(note);
+       return note;
+    }
+    
 }

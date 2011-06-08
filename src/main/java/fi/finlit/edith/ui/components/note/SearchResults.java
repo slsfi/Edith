@@ -3,6 +3,7 @@ package fi.finlit.edith.ui.components.note;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
@@ -14,6 +15,7 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -51,7 +53,7 @@ public class SearchResults {
     private NoteWithInstances noteWithInstances;
 
     @Property
-    private List<Note> notes;
+    private GridDataSource notes;
 
     @Property
     private Note note;
@@ -65,6 +67,9 @@ public class SearchResults {
     public Block getBlock() {
         return notesList;
     }
+    
+    private static Pattern STRIP_TAGS = Pattern.compile("\\<.*?>", Pattern.DOTALL);
+    private static int MAX_STRIPPED_LENGTH = 30;
 
     // XXX Would be nice to get into real workflow
     public boolean getSearchResults() {
@@ -74,8 +79,14 @@ public class SearchResults {
         // TODO Handle SKS case
 
         notes = noteRepository.findNotes(page.getSearchInfo());
-        return notes != null && notes.size() > 0;
+        
+        return notes != null && notes.getAvailableRows() > 0;
     }
+    
+    void onInplaceUpdate() {
+        getSearchResults();
+    }
+    
 
     Object onActionFromSelectNote(String noteId) {
         System.out.println("select note " + noteId);
@@ -99,6 +110,31 @@ public class SearchResults {
             translated.add(messages.get(t.toString()));
         }
         return StringUtils.join(translated, ", ");
+    }
+    
+    public String getStatusString() {
+        return messages.get(getNoteConcept().getStatus().toString());
+    }
+    
+    private String stripTagsAndConcat(String str, int maxSize) {
+        if (str == null) {
+            return null;
+        }
+        String stripped = STRIP_TAGS.matcher(str).replaceAll("");
+        stripped = stripped.trim();
+        if (stripped.length() > maxSize) {
+            return stripped.substring(0, maxSize) + "...";
+        }
+        
+        return stripped;
+    }
+    
+    public String getTermMeaning() {
+        return stripTagsAndConcat(note.getTerm().getMeaning(), MAX_STRIPPED_LENGTH);
+    }
+    
+    public String getDescription() {
+        return stripTagsAndConcat(getNoteConcept().getDescription(), MAX_STRIPPED_LENGTH);
     }
 
     public int getNumberOfInstancesInDocument() {

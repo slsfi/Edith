@@ -48,7 +48,7 @@ public class Comments {
     
     private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
         List<NoteComment> rv = new ArrayList<NoteComment>(c);
-        Collections.sort(rv, NoteCommentComparator.DESC);
+        Collections.sort(rv, NoteCommentComparator.ASC);
         return rv;
     }
 
@@ -71,20 +71,19 @@ public class Comments {
         NoteComment deletedComment = noteRepository.removeComment(commentId);
         noteOnEdit = noteRepository.getById(noteId);
         comments = null;
-        page.getNoteEdit().setNoteOnEdit(noteOnEdit);
         return commentsBlock;
     }
 
     Object onSuccessFromCommentForm() {
-        System.err.println("onSuccessFromCommentForm with comment " + newCommentMessage);
+        System.err.println("onSuccessFromCommentForm with comment " + newCommentMessage + " on note " + noteOnEdit);
         Concept concept = noteOnEdit.getConcept(page.isSlsMode());
-        comments = getSortedComments(concept.getComments());
+        Set<NoteComment> conceptComments = concept.getComments();
         if (newCommentMessage != null) {
-            comments.add(0, noteRepository.createComment(concept, newCommentMessage));
+            conceptComments.add(noteRepository.createComment(concept, newCommentMessage));
             newCommentMessage = null;
         }
+        comments = getSortedComments(conceptComments);
         System.err.println("onSuccessFromCommentForm --");
-        page.getNoteEdit().setNoteOnEdit(noteOnEdit);
         return commentsBlock;
     }
 

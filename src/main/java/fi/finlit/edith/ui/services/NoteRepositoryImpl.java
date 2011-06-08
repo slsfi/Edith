@@ -27,6 +27,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -98,7 +99,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     }
 
     @Override
-    public List<Note> findNotes(DocumentNoteSearchInfo searchInfo) {
+    @Deprecated // Use griddatasource version
+    public List<Note> findAllNotes(DocumentNoteSearchInfo searchInfo) {
         long start = System.currentTimeMillis();
         Assert.notNull(searchInfo);
         BooleanBuilder filters = new BooleanBuilder();
@@ -188,10 +190,86 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         logDuration("NoteRepository.findNotes", start);
         return notes;
     }
+    @Override
+    public GridDataSource findNotes(DocumentNoteSearchInfo search) {
+        BooleanBuilder builder = new BooleanBuilder();
+        BooleanBuilder documentRefs = new BooleanBuilder();
+        
+        // document
+        if (!search.getDocuments().isEmpty()){
+            
+            BeanSubQuery subQuery = sub(documentNote);
+            // create filter condition for non orphan matches
+            subQuery.where(BooleanExpression.allOf(documentNote.note().eq(note),
+                    documentNote.document().in(search.getDocuments()),
+                    documentNote.replacedBy().isNull()));
+            
+            //Remove deleted if orphans is false
+            if (!search.isOrphans()) {
+                subQuery.where(documentNote.deleted.eq(false));
+            }
+            
+            documentRefs.or(subQuery.exists());
+        }
+        
+        // orphans
+        if (search.isOrphans()){
+            // create filter condition for orphan matches
+            // notes which don't have any document notes at all
+            documentRefs.or(sub(documentNote).where(documentNote.note().eq(note)).notExists());
+        }
+        
+        //Add documentrefs to rest of search
+        if(documentRefs.hasValue()) {
+            builder.and(documentRefs);
+        }
+        
+        
+        // fulltext
+        if (StringUtils.isNotBlank(search.getFullText())) {
+            BooleanBuilder filter = new BooleanBuilder();
+            for (StringPath path : Arrays.asList(note.lemma, note.term().basicForm,
+                    note.term().meaning)) {
+                filter.or(path.startsWithIgnoreCase(search.getFullText()));
+            }
+            builder.and(filter);
+        }
+        
+        // creators
+        if (!search.getCreators().isEmpty()) {
+            BooleanBuilder filter = new BooleanBuilder();
+            Collection<String> usernames = new ArrayList<String>(search.getCreators().size());
+            for (UserInfo userInfo : search.getCreators()) {
+                filter.or(note.concept(extendedTerm).allEditors.contains(
+                        userRepository.getUserInfoByUsername(userInfo.getUsername())));
+                usernames.add(userInfo.getUsername());
+            }
+            // FIXME This is kind of useless except that we have broken data in production.
+            filter.or(note.concept(extendedTerm).lastEditedBy().username.in(usernames));
+            builder.and(filter);
+        }
+
+        // formats
+        if (!search.getNoteFormats().isEmpty()) {
+            builder.and(note.format.in(search.getNoteFormats()));
+        }
+
+        // types
+        if (!search.getNoteTypes().isEmpty()) {
+            BooleanBuilder filter = new BooleanBuilder();
+            for (NoteType type : search.getNoteTypes()) {
+                filter.or(note.concept(extendedTerm).types.contains(type));                
+            }
+            builder.and(filter);
+        }
+        
+        
+        return createGridDataSource(note, getOrderBy(search, note), false, builder.getValue());
+    }
     
     @Override
     public List<NoteWithInstances> findNotesWithInstances(DocumentNoteSearchInfo searchInfo) {
-        List<Note> notes = findNotes(searchInfo);
+        List<Note> notes = findAllNotes(searchInfo);
         long start = System.currentTimeMillis();
         if (!notes.isEmpty()){
             // get related document notes
@@ -322,7 +400,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         return createDocumentNote(n, docRevision, String.valueOf(timeService.currentTimeMillis()),
                 longText, 0);
     }
-
+    
     @Override
     public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String localId,
             String longText, int position) {

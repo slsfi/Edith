@@ -8,19 +8,18 @@
       
       jQuery(function() {
     	
-//     	  jQuery(".note_edit .wysiwyg").ckeditor(Edith_CKEditorSetup);
-//     	  FIXME: Breaks scrollbar on Chrome!
-          jQuery(".note_edit .wysiwyg").each(
-            function() {
-        	  var id = jQuery(this).attr("id");
-//         	  console.debug("found id " + id);
-        	  tinymce.execCommand('mceAddControl', false, id);
-          });
-          
+    	  //Empty values need to be filled, otherwise the page
+    	  //will jump on load
+    	  jQuery(".note_edit textarea.wysiwyg").each( function() { 
+    	  	  if (jQuery(this).val() === "") jQuery(this).val("<p></p>") });
+    	  
+    	  jQuery(".note_edit .wysiwyg").ckeditor(Edith_CKEditorSetup);
+    	  
           jQuery(":input[name='save']").click(function(){
-        	  tinymce.triggerSave();
+              jQuery("#.note_edit .wysiwyg").each( function() {
+            	  jQuery(this).ckeditorGet().updateElement();
+              });
           });
-          
       });
   
     </script>
@@ -45,10 +44,10 @@
           <t:form t:id="noteEditForm" t:zone="noteEditZone" t:context="[noteOnEdit.id]">
             <t:errors />
     
-            <div class="field">
+            <!-- div class="field">
               <label for="lemma">${message:lemma-label}</label>
               <t:textField t:id="lemma" value="noteOnEdit.lemma" />
-            </div>
+            </div-->
     
             <div class="field">
               <label for="types">${message:type-label}</label>
@@ -66,7 +65,7 @@
     
             <div class="field">
               <t:label for="termMeaning">${message:basicFormMeaning-label}</t:label>
-              <t:textArea class="wysiwyg" t:id="termMeaning" value="noteOnEdit.term.meaning" />
+              <t:textArea class="wysiwyg" style="display:none" t:id="termMeaning" value="noteOnEdit.term.meaning" />
             </div>
     
             <div class="field">
@@ -76,7 +75,7 @@
     
             <div class="field">
               <t:label for="description">${message:description-label}</t:label>
-              <t:textArea class="wysiwyg" t:id="description" value="description" />
+              <t:textArea class="wysiwyg" style="display:none" t:id="description" value="description" />
             </div>
     
             <!-- TODO In the future 
@@ -88,7 +87,7 @@
     
             <div class="field">
               <t:label for="sources">${message:sources-label}</t:label>
-              <t:textArea class="wysiwyg" t:id="sources" value="sources" rows="8" />
+              <t:textArea class="wysiwyg" style="display:none" t:id="sources" value="sources" rows="8" />
             </div>
     
             <div class="field">

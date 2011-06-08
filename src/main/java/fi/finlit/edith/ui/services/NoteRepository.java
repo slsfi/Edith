@@ -49,7 +49,7 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String longText);
-
+    
     /**
      * @param lemma
      * @return
@@ -141,8 +141,9 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param searchInfo
      * @return
      */
-    List<Note> findNotes(DocumentNoteSearchInfo searchInfo);
+    List<Note> findAllNotes(DocumentNoteSearchInfo searchInfo);
 
+    GridDataSource findNotes(DocumentNoteSearchInfo search);
     
     /**
      * @param editedNote
@@ -168,6 +169,7 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     NoteComment getCommentById(String id);
+
 
 
 

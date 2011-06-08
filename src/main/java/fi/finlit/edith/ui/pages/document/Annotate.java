@@ -52,7 +52,8 @@ import fi.finlit.edith.ui.services.TimeService;
         "classpath:js/jquery-1.5.1.min.js", "classpath:js/TapestryExt.js",
         "classpath:js/jquery-ui-1.8.12.custom.min.js", "classpath:js/jquery.dynatree.min.js",
         "TextSelector.js", "Annotate.js", "classpath:js/jqModal.js",
-        "classpath:js/jquery.cookie.js","context:js/tiny_mce/tiny_mce.js"
+        "classpath:js/jquery.cookie.js",
+        "context:js/ckeditor/ckeditor.js", "context:js/ckeditor/adapters/jquery.js"
         },
         stylesheet= {"context:styles/tei.css",
         "context:styles/smoothness/jquery-ui-1.8.12.custom.css",
