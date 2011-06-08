@@ -14,38 +14,24 @@
 
 	<p:leftPanel>
 	   <div id="document_links">
-	   <div>
-	      <span>${message:to-annotate-document}</span>
-		  <span>
-			 <a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:to-view-document}</a> 
-		  </span>
-		  <span>
-			 <t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
-		  </span>
-		  <span>
-            <t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink>
-          </span>
-          </div>
-          <div>
-		  <span>
-		      <a id="createTermLink" class="disabled" href="#">${message:createTerm}</a> 
-		  </span>
-          <span>
-              <a id="connectTermLink" class="disabled" href="#">${message:connectTerm}</a> 
-          </span>
+	     <div>
+	       <span>${message:to-annotate-document}</span>
+		     <span><a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:to-view-document}</a></span>
+		     <span><t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink></span>
+		     <span><t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink></span>
+         <span><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></span>
+       </div>
+       <div>
+		     <span><a id="createTermLink" class="disabled" href="#">${message:createTerm}</a></span>
+         <span><a id="connectTermLink" class="disabled" href="#">${message:connectTerm}</a></span>
 		  
-		  <t:if test="!slsMode">
-		  <span>
-              <t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink>
-          </span>
-          <span>
-              <t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink>
-          </span>
-          </t:if>
-          <span id="mode_switcher">
-              <a id="normalNotes" href="#">${message:normalNotes}</a> | <a id="innerNotes" href="#">${message:innerNotes}</a> 
-          </span>
-          </div>
+		     <t:if test="!slsMode">
+		     <span><t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink></span>
+         <span><t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink></span>
+         </t:if>
+         
+         <span id="mode_switcher"><a id="normalNotes" href="#">${message:normalNotes}</a> | <a id="innerNotes" href="#">${message:innerNotes}</a></span>
+       </div>
 	   </div>
 	</p:leftPanel>
 

@@ -22,6 +22,7 @@
         <span>
             <t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink>
         </span>
+        <span><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></span>
         </div>
     </p:leftPanel>
 

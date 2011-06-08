@@ -39,6 +39,7 @@
         <span>
            ${message:publishVersion}
         </span>
+        <span><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></span>
         </div>
         <div>
         <span>
