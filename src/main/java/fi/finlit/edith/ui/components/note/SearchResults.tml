@@ -33,9 +33,10 @@
             </script>
             </t:remove>
             
-                <div class="notes">    
+                <div class="notes">
+                  
                   <t:grid source="notes" row="note" exclude="id, format, lemma, lemmaMeaning, editedOn" add="note" 
-                    rowsPerPage="20" pagerPosition="bottom" inPlace="true">
+                    rowsPerPage="pageSize" pagerPosition="bottom" inPlace="true">
                       <p:noteCell>
                         <div class="note">
                           <span>
@@ -70,6 +71,7 @@
                       </p:noteCell>
               
                   </t:grid>
+                  <div class="right">${message:result-size} ${notes.availableRows}</div>
                 </div>
             
                <t:remove>

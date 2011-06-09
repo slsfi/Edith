@@ -78,6 +78,11 @@
         </div>
         
         <div class="field">
+            <t:label for="shortText">${message:shortText-label}</t:label>
+            <t:textField t:id="shortText" value="documentNoteOnEdit.shortText" />
+        </div>
+        
+        <div class="field">
             <t:label for="lemmaPosition">${message:lemmaPosition-label}</t:label>
             <t:textField t:id="lemmaPosition" value="documentNoteOnEdit.lemmaPosition" />
         </div>

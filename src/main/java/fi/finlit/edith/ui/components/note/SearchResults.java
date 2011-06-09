@@ -15,6 +15,7 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -45,6 +46,10 @@ public class SearchResults {
 
     @Inject
     private NoteRepository noteRepository;
+    
+    @InjectComponent
+    @Property
+    private Grid grid;
 
     @Property
     private List<NoteWithInstances> notesWithInstances;
@@ -54,7 +59,7 @@ public class SearchResults {
 
     @Property
     private GridDataSource notes;
-
+    
     @Property
     private Note note;
 
@@ -87,6 +92,19 @@ public class SearchResults {
         getSearchResults();
     }
     
+    public int getPageSize() {
+        //TODO make configurable
+        return 20;
+    }
+    
+//    public String getPagerInfo() {
+//        int start = ((grid.getCurrentPage()-1) * getPageSize()) + 1;
+//        int end = grid.getCurrentPage() * getPageSize();
+//        if (end > notes.getAvailableRows()) {
+//            end = notes.getAvailableRows();
+//        }
+//        return grid.getCurrentPage() + " " + start + " - " + end + " / " + notes.getAvailableRows();
+//    }
 
     Object onActionFromSelectNote(String noteId) {
         System.out.println("select note " + noteId);
@@ -120,13 +138,7 @@ public class SearchResults {
         if (str == null) {
             return null;
         }
-        String stripped = STRIP_TAGS.matcher(str).replaceAll("");
-        stripped = stripped.trim();
-        if (stripped.length() > maxSize) {
-            return stripped.substring(0, maxSize) + "...";
-        }
-        
-        return stripped;
+        return StringUtils.abbreviate(STRIP_TAGS.matcher(str).replaceAll(""), maxSize);
     }
     
     public String getTermMeaning() {

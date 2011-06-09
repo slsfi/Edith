@@ -36,6 +36,7 @@ import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.ui.services.AdminService;
@@ -311,8 +312,8 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Find_Notes_With_Paged_Search() {
         Note note1 = createNote("note1");
-        Note note2 = createNote("note2");
-        Note note3 = createNote("note3");
+        createNote("note2");
+        createNote("note3");
 
         DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
         search.setFullText("foo");
@@ -338,6 +339,27 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals(note1.getId(), ((Note)src.getRowValue(0)).getId());
         
     }
+    
+    @Test
+    public void Find_Notes_With_Paged_Search_By_Language() {
+        Note note1 = createNote("note1");
+        note1.getTerm().setLanguage(TermLanguage.FINNISH);
+        noteRepository.save(note1);
+        Note note2 = createNote("note2");
+        note2.getTerm().setLanguage(TermLanguage.SWEDISH);
+        noteRepository.save(note2);
+        
+        DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
+        assertEquals(2, noteRepository.findNotes(search).getAvailableRows());
+        
+        search.setLanguage(TermLanguage.FINNISH);
+        assertEquals(1, noteRepository.findNotes(search).getAvailableRows());
+        
+        
+        
+    }
+    
+    
 
 //    If we are using remote permanently, then this test is not necessary
 //    @Test
@@ -395,9 +417,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     private Note createNote() {
         Note note = new Note();
-        if (extendedTerm) {
-            note.setTerm(new Term());
-        }
+        note.setTerm(new Term());
         return note;
     }
 

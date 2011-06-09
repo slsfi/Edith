@@ -12,6 +12,7 @@
             //Scroll to selected element on click
             var elem = jQuery("#start"+ jQuery(this).attr("localId"));
             if (elem.size() == 1) {
+            	console.log("scrolling to " + elem);
                 jQuery("#left").scrollTo(elem);
             }
             
@@ -26,6 +27,7 @@
     <t:zone t:id="documentNotesZone" update="show">
       <t:block t:id="documentNotesBlock">
 
+        <t:remove>
         <script type="text/javascript">
           
           jQuery(function() {
@@ -38,6 +40,7 @@
     	  });
   
 		</script>
+        </t:remove>
 
         <ul class="notes">
           <t:loop source="documentNotes" value="documentNote">

@@ -5,7 +5,7 @@
         <t:zone t:id="noteEditZone" update="show" />
 
         <t:block t:id="noteEditBlock">
-
+            <t:remove>
                 <script type="text/javascript">
                   jQuery(".delete_dialog").hide();
 
@@ -21,7 +21,7 @@
                       event.preventDefault();
                   });
                 </script>
-            
+            </t:remove>
                 <div class="panel narrow">
                 
                   <t:if test="documentNoteOnEdit">

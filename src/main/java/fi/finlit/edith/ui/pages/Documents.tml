@@ -83,8 +83,8 @@
 
   <h2>${message:documents}</h2>
       
-  <div id="directory-tree"/>
-      
+  <div id="directory-tree"></div>
+    <t:remove>
 	<t:form t:id="documentsForm">
 
 	    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1,null2,deletion">
@@ -126,7 +126,7 @@
 		</t:if>
 		
 	</t:form>
-
+    </t:remove>
     <p:rightPanel>
         <p>${message:add-document}</p>   
         <t:document.upload/>

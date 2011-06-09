@@ -363,7 +363,8 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo, QNote note) {
         ComparableExpressionBase<?> comparable = null;
-        switch (searchInfo.getOrderBy()) {
+        OrderBy orderBy = searchInfo.getOrderBy() == null ? OrderBy.LEMMA : searchInfo.getOrderBy();
+        switch (orderBy) {
         case DATE:
             comparable = note.editedOn;
             break;
@@ -432,6 +433,10 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         //Extended term version gets the lemma also to basicTerm automatically
         if (extendedTerm && n.getTerm() != null && n.getTerm().getBasicForm() == null) {
             n.getTerm().setBasicForm(createdLemma);
+        }
+        //And to the short version
+        if (extendedTerm && documentNote.getShortText() == null) {
+            documentNote.setShortText(createdLemma);
         }
         
         documentNote.setDocument(docRevision.getDocument());

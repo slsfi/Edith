@@ -23,6 +23,9 @@ public class Term extends Identifiable {
 
     @Predicate
     private TermLanguage language;
+    
+    @Predicate
+    private String otherLanguage;
 
     public String getBasicForm() {
         return basicForm;
@@ -61,10 +64,18 @@ public class Term extends Identifiable {
         term.setBasicForm(basicForm);
         term.setMeaning(meaning);
         term.setLanguage(language);
+        term.setOtherLanguage(otherLanguage);
         term.setConcept(concept.createCopy());
         return term;
     }
     
+    public void setOtherLanguage(String otherLanguage) {
+        this.otherLanguage = otherLanguage;
+    }
+    
+    public String getOtherLanguage() {
+        return otherLanguage;
+    }
     
 
 }

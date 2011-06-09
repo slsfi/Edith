@@ -1,6 +1,7 @@
 package fi.finlit.edith.ui.components.note;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +14,7 @@ import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.domain.OrderBy;
+import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.UserRepository;
@@ -101,11 +103,17 @@ public class NoteSearchForm {
     }
 
     public OrderBy getOrderBy() {
+        //SLS spesific
+        if (getSearchInfo().getOrderBy() == null) {
+            getSearchInfo().setOrderBy(OrderBy.KEYTERM);
+        }
         return getSearchInfo().getOrderBy();
     }
 
     public OrderBy[] getOrderBys() {
-        return OrderBy.values();
+
+        //SLS Spesific set
+        return new OrderBy[] {OrderBy.KEYTERM, OrderBy.USER, OrderBy.STATUS, OrderBy.DATE};
     }
 
     public boolean isReversed() {
@@ -122,6 +130,14 @@ public class NoteSearchForm {
 
     public void setOrphans(boolean orphans) {
         getSearchInfo().setOrphans(orphans);
+    }
+    
+    public TermLanguage getLanguage() {
+        return getSearchInfo().getLanguage();
+    }
+    
+    public void setLanguage(TermLanguage lang) {
+        getSearchInfo().setLanguage(lang);
     }
 
     public DocumentNoteSearchInfo getSearchInfo() {

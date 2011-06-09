@@ -58,7 +58,13 @@ var Annotate = {
 		}
 	},
 	
-	
+	freeResources : function() {
+    	//Remove all CKEditor instances
+  	  for(var i in CKEDITOR.instances) {
+  		  CKEDITOR.instances[i].destroy();
+  		  console.debug("Removed ckeditor instance");
+  	  }
+    }
 	
 };
 
@@ -164,7 +170,13 @@ jQuery(document).ready(function() {
 	    
 	 });
 */	
-	
+
+		
+	jQuery("body").bind(TapestryExt.EVT_BEFORE_ZONE_UPDATE, function() {
+		//Remove ckeditor before ajax update
+		Annotate.freeResources();
+		console.log("before zone update");
+	});
 	
 	var disableLink = false;
 	jQuery("#normalNotes").removeAttr("href").addClass("disable_link");

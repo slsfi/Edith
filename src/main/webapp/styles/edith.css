@@ -133,7 +133,7 @@ label.left {
 
 /* Note search */
 
-div.notes { margin-top: 1em; }
+div.notes { /*margin-top: 1em; */ }
 .notes .t-data-grid { font-family: georgia, serif; }
 .notes div.t-data-grid-pager a, 
 .notes div.t-data-grid-pager span.current { font-size: 100%; background-color: white; border: none; margin-right: 1em; padding: 0 }
@@ -310,22 +310,18 @@ a.ELSEWHERE {
 ul.dynatree-container {
     border: none;	
 }
-
-/**
-* Search results
-*/
-.search-results { margin-top: -15px }
 	
 
 /**
 * Note edit fields
 */
 .field {
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
 }
 .field > label {
 	font-weight: bold;
-	display: block;	
+	display: block;
+	margin-bottom: 3px;
 }
 
 /**

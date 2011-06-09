@@ -29,9 +29,25 @@
         <label for="types">${message:type-label}</label>
         <div>
           <t:loop source="types" value="type">
-              <label><t:checkbox value="typeSelected" /> <t:fmt.message key="${type}" /> </label>
+              <label><t:checkbox value="typeSelected" /><t:fmt.message key="${type}" /></label>
           </t:loop>
         </div>
+      </div>
+
+      <t:remove>
+        <div>
+          <strong>${message:format-label}</strong>
+        </div>
+        <div>
+          <t:loop source="formats" value="format">
+              <label><t:checkbox value="formatSelected" /><t:fmt.message key="${format}" /></label>
+          </t:loop>
+        </div>
+      </t:remove>
+      
+      <div class="field">
+         <t:label for="language">${message:basicFormLanguage-label}</t:label>
+         <t:select t:id="language" blankOption="ALWAYS"/>
       </div>
 
       <t:remove>
@@ -44,14 +60,12 @@
           </t:loop>
         </div>
       </t:remove>
-
-
-
+      
       <div class="field">
         <label for="users">${message:creator-label}</label>
         <div>
           <t:loop source="users" value="user">
-              <label> <t:checkbox value="userSelected" /> ${user.username} </label>
+              <label><t:checkbox value="userSelected" />${user.username}</label>
           </t:loop>
         </div>
       </div>

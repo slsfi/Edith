@@ -16,8 +16,10 @@ public class DocumentNoteSearchInfo {
     private Set<NoteFormat> noteFormats = new HashSet<NoteFormat>();
 
     private Set<UserInfo> creators = new HashSet<UserInfo>();
+    
+    private TermLanguage language;
 
-    private OrderBy orderBy = OrderBy.LEMMA;
+    private OrderBy orderBy;
 
     private boolean ascending = true;
 
@@ -104,14 +106,21 @@ public class DocumentNoteSearchInfo {
     public String getFullText() {
         return fullText;
     }
+    
+    public TermLanguage getLanguage() {
+        return language;
+    }
+    
+    public void setLanguage(TermLanguage language) {
+        this.language = language;
+    }
 
     @Override
     public String toString() {
-        return "DocumentNoteSearchInfo [documents=" + documents + ", noteTypes=" + noteTypes
-                + ", noteFormats=" + noteFormats + ", creators=" + creators + ", orderBy="
-                + orderBy + ", ascending=" + ascending + ", orphans=" + orphans
-                + ", currentDocument=" + currentDocument + "]";
+        return "DocumentNoteSearchInfo [noteTypes=" + noteTypes + ", noteFormats=" + noteFormats
+                + ", creators=" + creators + ", language=" + language + ", orderBy=" + orderBy
+                + ", ascending=" + ascending + ", orphans=" + orphans + ", fullText=" + fullText
+                + "]";
     }
-    
     
 }

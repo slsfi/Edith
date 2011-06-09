@@ -3,8 +3,12 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 <t:content>
 
+
+    
+    
       
     <script type="text/javascript">
+      
       
       jQuery(function() {
     	
@@ -13,6 +17,7 @@
     	  jQuery(".note_edit textarea.wysiwyg").each( function() { 
     	  	  if (jQuery(this).val() === "") jQuery(this).val("<p></p>") });
     	  
+    	  
     	  jQuery(".note_edit .wysiwyg").ckeditor(Edith_CKEditorSetup);
     	  
           jQuery(":input[name='save']").click(function(){
@@ -20,6 +25,13 @@
             	  jQuery(this).ckeditorGet().updateElement();
               });
           });
+          
+          SLSNoteForm.toggleOtherLanguage();
+          
+          jQuery("select[name='language']").change(function() { 
+        	  SLSNoteForm.toggleOtherLanguage();
+           });
+          
       });
   
     </script>
@@ -71,6 +83,7 @@
             <div class="field">
               <t:label for="language">${message:basicFormLanguage-label}</t:label>
               <t:select t:id="language" />
+              <t:textField style="margin-left: 1em; width: 10em" t:id="otherLanguage" value="noteOnEdit.term.otherLanguage" />
             </div>
     
             <div class="field">

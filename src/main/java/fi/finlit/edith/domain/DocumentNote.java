@@ -25,6 +25,9 @@ public class DocumentNote extends Identifiable {
 
     @Predicate
     private String longText;
+    
+    @Predicate
+    private String shortText;
 
     @Predicate
     private Long svnRevision;
@@ -56,6 +59,7 @@ public class DocumentNote extends Identifiable {
     public DocumentNote createCopy() {
         DocumentNote copy = new DocumentNote();
         copy.setLongText(longText);
+        copy.setShortText(shortText);
         copy.setDocument(document);
         copy.setNote(note);
         copy.setDocument(document);
@@ -66,6 +70,7 @@ public class DocumentNote extends Identifiable {
         copy.setLocalId(localId);
         copy.setLemmaPosition(lemmaPosition);
         copy.setPublishable(publishable);
+        copy.setPosition(position);
         
         return copy;
     }
@@ -99,6 +104,14 @@ public class DocumentNote extends Identifiable {
 
     public String getLongText() {
         return longText;
+    }
+    
+    public void setShortText(String shortText) {
+        this.shortText = shortText;
+    }
+    
+    public String getShortText() {
+        return shortText;
     }
 
     public Note getNote() {
