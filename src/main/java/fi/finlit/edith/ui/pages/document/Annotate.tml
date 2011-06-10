@@ -33,7 +33,7 @@
          <span id="mode_switcher"><a id="normalNotes" href="#">${message:normalNotes}</a> | <a id="innerNotes" href="#">${message:innerNotes}</a></span>
        </div>
 	   </div>
-       <div id="document-path">${documentPath} ${documentRevision}</div>
+       <div id="document-path">${documentPath}</div>
 	</p:leftPanel>
 
 	<p:rightPanel>

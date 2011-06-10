@@ -61,8 +61,6 @@
     <div class="document-note-form">
     
      
-      ${documentNoteOnEdit.id} ${documentNoteOnEdit.localId} ${documentNoteOnEdit.svnRevision} 
-        
       <t:form t:id="documentNoteForm" t:context="documentNoteOnEdit.id" t:zone="noteEditZone">
         <fieldset>
         <legend>${message:document-note}</legend>
