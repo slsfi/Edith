@@ -198,7 +198,7 @@ jQuery(document).ready(function() {
         function(event) {
             if (!disableLink) {
             	var classes = jQuery(this).attr('class').replace(/notecontent\ /g,'').replace(/\ /g, '/');
-            	jQuery(":input[name='selectedNoteLocalId']").val(classes);
+            	jQuery(":input[name='selectedNoteId']").val(classes);
     			TapestryExt.submitZoneForm(jQuery("#selectNoteForm").get(0));
             }
         }    
