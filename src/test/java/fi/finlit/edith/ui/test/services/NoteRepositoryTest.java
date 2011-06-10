@@ -208,7 +208,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
                 lemma, 0);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
-        assertNotNull(documentNoteRepository.getByLocalId(document.getRevision(-1), "123456")
+        assertNotNull(documentNoteRepository.getById(documentNote.getId())
                 .getNote());
         assertEquals(1, documentNoteRepository.queryNotes(lemma).getAvailableRows());
     }
@@ -225,9 +225,9 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
         assertEquals(note.getConcept(extendedTerm).getDescription(),
-                documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getConcept(extendedTerm).getDescription());
+                documentNoteRepository.getById(documentNote.getId()).getConcept(extendedTerm).getDescription());
         assertEquals(note.getConcept(extendedTerm).getSources(),
-                documentNoteRepository.getByLocalId(document.getRevision(-1), "123456").getConcept(extendedTerm).getSources());
+                documentNoteRepository.getById(documentNote.getId()).getConcept(extendedTerm).getSources());
     }
 
     @Test
@@ -308,7 +308,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals(0, noteRepository.findAllNotes(search).size());
 
     }
-    
+
     @Test
     public void Find_Notes_With_Paged_Search() {
         Note note1 = createNote("note1");
@@ -322,14 +322,14 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
         search.setOrphans(true);
         assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
-        
+
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         search.setDocuments(Collections.singleton(document));
         search.setOrphans(false);
         assertEquals(0, noteRepository.findNotes(search).getAvailableRows());
         search.setOrphans(true);
         assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
-        
+
         noteRepository.createDocumentNote(note1, document.getRevision(-1), "a");
         search.setOrphans(false);
         assertEquals(1, noteRepository.findNotes(search).getAvailableRows());
@@ -337,7 +337,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         src.prepare(0, 1, Collections.<SortConstraint>emptyList());
         assertNotNull(src.getRowValue(0));
         assertEquals(note1.getId(), ((Note)src.getRowValue(0)).getId());
-        
+
     }
     
     @Test
@@ -427,5 +427,5 @@ public class NoteRepositoryTest extends AbstractServiceTest {
        noteRepository.save(note);
        return note;
     }
-    
+
 }

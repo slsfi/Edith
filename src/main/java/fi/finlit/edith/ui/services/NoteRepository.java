@@ -40,7 +40,9 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String localId, String longText, int position);
-    
+
+    DocumentNote createDocumentNote(DocumentNote documentNote, Note note, DocumentRevision docRevision, String localId, String longText, int position);
+
     /**
      * A create new document not variant where local id is from current time
      * @param note
@@ -49,7 +51,7 @@ public interface NoteRepository extends Repository<Note, String> {
      * @return
      */
     DocumentNote createDocumentNote(Note note, DocumentRevision docRevision, String longText);
-    
+
     /**
      * @param lemma
      * @return
@@ -144,7 +146,7 @@ public interface NoteRepository extends Repository<Note, String> {
     List<Note> findAllNotes(DocumentNoteSearchInfo searchInfo);
 
     GridDataSource findNotes(DocumentNoteSearchInfo search);
-    
+
     /**
      * @param editedNote
      */
@@ -152,14 +154,14 @@ public interface NoteRepository extends Repository<Note, String> {
 
     /**
      * Remove notes
-     * 
+     *
      * @param notes
      */
     void removeNotes(Collection<Note> notes);
 
     /**
      * Remove note
-     * 
+     *
      * @param note
      */
     void removeNote(Note note);

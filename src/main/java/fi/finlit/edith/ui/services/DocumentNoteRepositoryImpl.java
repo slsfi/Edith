@@ -7,17 +7,9 @@ package fi.finlit.edith.ui.services;
 
 import static fi.finlit.edith.domain.QDocumentNote.documentNote;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -25,10 +17,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.EntityPath;
-import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.path.StringPath;
-import com.mysema.rdfbean.object.BeanSubQuery;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
@@ -39,47 +28,26 @@ import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.ui.services.svn.SubversionService;
 
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
         DocumentNoteRepository {
-
-    private final QDocumentNote otherNote = new QDocumentNote("other");
 
     private final TimeService timeService;
 
     private final UserRepository userRepository;
 
-    private final SubversionService subversionService;
-    
     private final boolean extendedTerm;
 
     public DocumentNoteRepositoryImpl(
             @Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository, 
+            @Inject UserRepository userRepository,
             @Inject TimeService timeService,
-            @Inject SubversionService subversionService,
             @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
         super(sessionFactory, documentNote);
         this.userRepository = userRepository;
         this.timeService = timeService;
-        this.subversionService = subversionService;
         this.extendedTerm = extendedTerm;
         System.err.println(extendedTerm);
-    }
-
-    @Override
-    public DocumentNote getByLocalId(DocumentRevision docRevision, String localId) {
-        Assert.notNull(docRevision);
-        Assert.notNull(localId);
-        return getSession()
-                .from(documentNote)
-                .where(documentNote.document().eq(docRevision.getDocument()),
-                       documentNote.localId.eq(localId),
-                       documentNote.svnRevision.loe(docRevision.getRevision()),
-                       documentNote.deleted.eq(false),
-                       latestFor(documentNote, docRevision.getRevision()))
-                .uniqueResult(documentNote);
     }
 
     @Override
@@ -89,63 +57,19 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.document().eq(docRevision.getDocument()),
                        documentNote.svnRevision.loe(docRevision.getRevision()),
-                       documentNote.deleted.eq(false),
-                       latestFor(documentNote, docRevision.getRevision()))
+                       documentNote.deleted.eq(false))
                 .orderBy(documentNote.createdOn.asc()).list(documentNote);
     }
 
     @Override
     public List<DocumentNote> getPublishableNotesOfDocument(DocumentRevision docRevision) {
-        List<DocumentNote> result = new ArrayList<DocumentNote>();
-
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = null;
-        try {
-            reader = factory.createXMLStreamReader(subversionService.getStream(
-                    docRevision.getSvnPath(), docRevision.getRevision()));
-        } catch (XMLStreamException e) {
-            throw new ServiceException(e);
-        } catch (FileNotFoundException e) {
-            throw new ServiceException(e);
-        } catch (IOException e) {
-            throw new ServiceException(e);
-        }
-
-        while (true) {
-            int event = -1;
-            try {
-                event = reader.next();
-            } catch (XMLStreamException e) {
-                throw new ServiceException(e);
-            }
-            if (event == XMLStreamConstants.START_ELEMENT) {
-                if (reader.getLocalName().equals("anchor")
-                        && reader.getAttributeValue(0).startsWith("start")) {
-                    String attr = reader.getAttributeValue(0).replace("start", "");
-                    DocumentNote current = getByLocalId(docRevision, attr);
-                    if (current != null && current.isPublishable()) {
-                        result.add(current);
-                    }
-                }
-            } else if (event == XMLStreamConstants.END_DOCUMENT) {
-                try {
-                    reader.close();
-                } catch (XMLStreamException e) {
-                    throw new ServiceException(e);
-                }
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    private BooleanExpression latestFor(QDocumentNote docNote, long svnRevision) {
-        return sub(otherNote).where(otherNote.ne(docNote),
-                // otherNote.note().eq(documentNote.note()),
-                otherNote.localId.eq(docNote.localId),
-                otherNote.svnRevision.loe(svnRevision),
-                otherNote.createdOn.gt(docNote.createdOn)).notExists();
+        return getSession()
+            .from(documentNote)
+            .where(documentNote.document().eq(docRevision.getDocument()),
+                   documentNote.svnRevision.loe(docRevision.getRevision()),
+                   documentNote.deleted.isFalse(),
+                   documentNote.publishable.isTrue())
+            .orderBy(documentNote.position.asc()).list(documentNote);
     }
 
     @Override
@@ -167,7 +91,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
             }
         }
         builder.and(documentNote.deleted.eq(false));
-        builder.and(documentNote.replacedBy().isNull());
 
         return createGridDataSource(documentNote, note.term().basicForm.lower().asc(), false, builder.getValue());
     }
@@ -206,7 +129,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 getSession().save(comment);
             }
         }
-        
+
         return docNote;
     }
 
@@ -219,16 +142,12 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return save(docNote);
     }
 
-    private BeanSubQuery sub(EntityPath<?> entity) {
-        return new BeanSubQuery().from(entity);
-    }
-
+    @Override
     public List<DocumentNote> getOfNotes(Collection<Note> notes){
         return getSession()
         .from(documentNote)
         .where(documentNote.note().in(notes),
-               documentNote.deleted.eq(false),
-               documentNote.replacedBy().isNull()).list(documentNote);
+               documentNote.deleted.eq(false)).list(documentNote);
     }
 
     @Override
@@ -237,8 +156,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession()
                 .from(documentNote)
                 .where(documentNote.note().id.eq(noteId),
-                       documentNote.deleted.eq(false),
-                       documentNote.replacedBy().isNull()).list(documentNote);
+                       documentNote.deleted.eq(false)).list(documentNote);
     }
 
 
@@ -247,8 +165,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return (int)getSession()
             .from(documentNote)
             .where(documentNote.note().eq(note),
-               documentNote.deleted.eq(false),
-               documentNote.replacedBy().isNull()).count();
+               documentNote.deleted.eq(false)).count();
     }
 
 
@@ -260,8 +177,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                 .from(documentNote)
                 .where(documentNote.note().id.eq(noteId),
                        documentNote.document().id.eq(documentId),
-                       documentNote.deleted.eq(false),
-                       documentNote.replacedBy().isNull()).list(documentNote);
+                       documentNote.deleted.eq(false)).list(documentNote);
     }
 
     @Override
@@ -270,8 +186,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession()
                 .from(documentNote)
                 .where(documentNote.note().term().id.eq(termId),
-                       documentNote.deleted.eq(false),
-                       documentNote.replacedBy().isNull()).list(documentNote);
+                       documentNote.deleted.eq(false)).list(documentNote);
     }
 
     @Override
@@ -280,8 +195,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession()
                 .from(documentNote)
                 .where(documentNote.note().person().id.eq(personId),
-                       documentNote.deleted.eq(false),
-                       documentNote.replacedBy().isNull()).list(documentNote);
+                       documentNote.deleted.eq(false)).list(documentNote);
     }
 
     @Override
@@ -290,8 +204,7 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         return getSession()
                 .from(documentNote)
                 .where(documentNote.note().place().id.eq(placeId),
-                       documentNote.deleted.eq(false),
-                       documentNote.replacedBy().isNull()).list(documentNote);
+                       documentNote.deleted.eq(false)).list(documentNote);
     }
 
     @Override

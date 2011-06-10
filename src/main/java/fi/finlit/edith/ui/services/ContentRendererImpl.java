@@ -68,7 +68,7 @@ public class ContentRendererImpl implements ContentRenderer {
     private final String bibliographUrl;
 
     private final boolean extendedTerm;
-    
+
     public ContentRendererImpl(@Inject DocumentRepository documentRepository,
             @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl,
             @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
@@ -200,7 +200,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
           writer.element("documentNotes");
           for (DocumentNote dn : entry.getValue()){
-              writer.element("documentNote", "xml:id", "end"+dn.getLocalId());
+              writer.element("documentNote", "xml:id", "end"+dn.getId());
               write(writer, "longText", dn.getLongText());
               write(writer, "svnRevision", dn.getSVNRevision());
               write(writer, "createdOn", dn.getCreatedOnDate());
@@ -240,13 +240,13 @@ public class ContentRendererImpl implements ContentRenderer {
         for (DocumentNote documentNote : documentNotes) {
             Note note = documentNote.getNote();
             Concept concept = documentNote.getConcept(extendedTerm);
-            
+
             if (note == null){
                 throw new IllegalStateException("Got no note for documentNote " + documentNote);
             }
 
             writer.element("li");
-            writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getLocalId());
+            writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getId());
             writer.element("em");
             writer.write(note.getLemma());
             writer.end();
@@ -403,7 +403,7 @@ public class ContentRendererImpl implements ContentRenderer {
         if (documentNotes != null) {
             publishIds = new HashSet<String>();
             for (DocumentNote documentNote : documentNotes) {
-                publishIds.add(documentNote.getLocalId());
+                publishIds.add(documentNote.getId());
             }
         }
         InputStream is = documentRepository.getDocumentStream(document);

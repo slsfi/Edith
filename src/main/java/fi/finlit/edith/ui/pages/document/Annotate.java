@@ -105,7 +105,7 @@ public class Annotate extends AbstractDocumentPage {
     private String noteRevisionId;
 
     @Property
-    private String selectedNoteLocalId;
+    private String selectedNoteId;
 
     @Inject
     @Property
@@ -187,9 +187,8 @@ public class Annotate extends AbstractDocumentPage {
     Object onSuccessFromSelectNoteForm() {
 
         //Strip first n from the id
-        String localId = selectedNoteLocalId.substring(1);
-        DocumentNote documentNote = documentNoteRepository.getByLocalId(getDocumentRevision(),
-                localId);
+        String id = selectedNoteId.substring(1);
+        DocumentNote documentNote = documentNoteRepository.getById(id);
         documentNotes.setNoteId(documentNote.getNote().getId());
         documentNotes.setSelectedNote(documentNote);
         noteEdit.setDocumentNoteOnEdit(documentNote);

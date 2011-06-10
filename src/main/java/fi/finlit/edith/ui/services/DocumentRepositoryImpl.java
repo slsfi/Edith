@@ -99,8 +99,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         final Set<String> anchors = new HashSet<String>(notes.length * 2);
 
         for (DocumentNote note : notes) {
-            anchors.add("start" + note.getLocalId());
-            anchors.add("end" + note.getLocalId());
+            anchors.add("start" + note.getId());
+            anchors.add("end" + note.getId());
         }
 
         return new EventFilter() {
@@ -220,7 +220,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Override
     public DocumentNote addNote(Note note, DocumentRevision docRevision, final SelectedText selection) throws IOException, NoteAdditionFailedException{
-        final String localId = String.valueOf(timeService.currentTimeMillis());
+//        final String localId = String.valueOf(timeService.currentTimeMillis());
+        final DocumentNote documentNote = new DocumentNote();
+        getSession().save(documentNote);
+        getSession().flush();
+        System.err.println("AFTER FLUSH: " + documentNote.getId());
         long newRevision;
         final MutableInt position = new MutableInt(0);
         newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
@@ -229,7 +233,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     public void update(InputStream source, OutputStream target) throws IOException {
                         try {
                             position.setValue(addNote(inFactory.createXMLEventReader(source), outFactory
-                                    .createXMLEventWriter(target), selection, localId));
+                                    .createXMLEventWriter(target), selection, documentNote.getId()));
                         } catch (XMLStreamException e) {
                             throw new ServiceException(e);
                         } catch (NoteAdditionFailedException e) {
@@ -239,8 +243,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 });
 
         // persisted noteRevision has svnRevision of newly created commit
-        DocumentNote docNote =  noteRepository.createDocumentNote(note, new DocumentRevision(docRevision, newRevision),
-                localId, selection.getSelection(), position.intValue());
+        DocumentNote docNote =  noteRepository.createDocumentNote(documentNote, note, new DocumentRevision(docRevision, newRevision),
+                "-1", selection.getSelection(), position.intValue());
+        System.err.println("ACTUAL: " + docNote.getId());
         return docNote;
     }
 
@@ -592,9 +597,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public DocumentNote updateNote(final DocumentNote note, final SelectedText selection) throws IOException {
         Document doc = note.getDocument();
-        if (note.getLocalId() == null) {
-            note.setLocalId(String.valueOf(timeService.currentTimeMillis()));
-        }
         long newRevision;
         final MutableInt position = new MutableInt(0);
         newRevision = svnService.commit(doc.getSvnPath(), note.getSVNRevision(), authService
@@ -605,7 +607,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     XMLEventReader eventReader = inFactory.createFilteredReader(inFactory
                             .createXMLEventReader(source), createRemoveFilter(new DocumentNote [] { note }));
                     position.setValue(
-                            addNote(eventReader, outFactory.createXMLEventWriter(target), selection, note.getLocalId())
+                            addNote(eventReader, outFactory.createXMLEventWriter(target), selection, note.getId())
                     );
                 } catch (XMLStreamException e) {
                     throw new ServiceException(e);
@@ -616,15 +618,15 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         });
 
         // FIXME This logic might be broken.
-        DocumentNote copy = note.createCopy();
-        copy.setLongText(selection.getSelection());
-        copy.setSVNRevision(newRevision);
-        copy.setPosition(position.intValue());
+//        DocumentNote copy = note.createCopy();
+        note.setLongText(selection.getSelection());
+        note.setSVNRevision(newRevision);
+        note.setPosition(position.intValue());
 //        documentNoteRepository.save(copy);
-        note.setReplacedBy(copy);
+//        note.setReplacedBy(copy);
         documentNoteRepository.save(note);
 
-        return copy;
+        return note;
     }
 
     private void writeAnchor(XMLEventWriter writer, String anchorId) throws XMLStreamException{

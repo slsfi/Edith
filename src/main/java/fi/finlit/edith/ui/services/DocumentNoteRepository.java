@@ -39,16 +39,16 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      */
     DocumentNote save(DocumentNote docNote);
 
-    /**
-     * Get the NoteRevision with the given local id in the scope of the given document revision
-     *
-     * @param document
-     * @param documentRevision
-     * @param localId
-     * @return
-     */
-    @Nullable
-    DocumentNote getByLocalId(DocumentRevision docRevision, String localId);
+//    /**
+//     * Get the NoteRevision with the given local id in the scope of the given document revision
+//     *
+//     * @param document
+//     * @param documentRevision
+//     * @param localId
+//     * @return
+//     */
+//    @Nullable
+//    DocumentNote getByLocalId(DocumentRevision docRevision, String localId);
 
     /**
      * Get the note revisions of the given document revision

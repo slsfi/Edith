@@ -114,14 +114,13 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             // create filter condition for non orphan matches
             BooleanBuilder builder = new BooleanBuilder();
             builder.and(BooleanExpression.allOf(documentNote.note().eq(note),
-                    documentNote.document().in(searchInfo.getDocuments()),
-                    documentNote.replacedBy().isNull()));
-            
+                    documentNote.document().in(searchInfo.getDocuments())));
+
             //Remove deleted if orphans is false
             //XXX Would be better if the orphan search could be done without
             // using document references
             if (!searchInfo.isOrphans()) {
-                builder.and(documentNote.deleted.eq(false));
+                builder.and(documentNote.deleted.isFalse());
             }
             nonOrphan = builder.getValue();
         }
@@ -155,7 +154,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (!searchInfo.getNoteTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : searchInfo.getNoteTypes()) {
-                filter.or(note.concept(extendedTerm).types.contains(type));                
+                filter.or(note.concept(extendedTerm).types.contains(type));
             }
             filters.and(filter);
         }
@@ -166,26 +165,26 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         OrderSpecifier<?> order = getOrderBy(searchInfo, note);
         if (nonOrphan != null){
             if (filters.getValue() != null){ // TODO : simplify after next Querydsl release
-                notes.addAll(session.from(note, documentNote).where(nonOrphan, filters.getValue()).orderBy(order).listDistinct(note));    
+                notes.addAll(session.from(note, documentNote).where(nonOrphan, filters.getValue()).orderBy(order).listDistinct(note));
             }else{
                 notes.addAll(session.from(note, documentNote).where(nonOrphan).orderBy(order).listDistinct(note));
-            }            
+            }
         }
         if (orphan != null){
             if (filters.getValue() != null){ // TODO : simplify after next Querydsl release
-                notes.addAll(session.from(note).where(orphan, filters.getValue()).orderBy(order).list(note));    
+                notes.addAll(session.from(note).where(orphan, filters.getValue()).orderBy(order).list(note));
             }else{
                 notes.addAll(session.from(note).where(orphan).orderBy(order).list(note));
             }
-            
+
         }
         if (orphan == null && nonOrphan == null){
             if (filters.getValue() != null){ // TODO : simplify after next Querydsl release
-                notes.addAll(session.from(note).where(filters.getValue()).orderBy(order).list(note));    
+                notes.addAll(session.from(note).where(filters.getValue()).orderBy(order).list(note));
             }else{
                 notes.addAll(session.from(note).orderBy(order).list(note));
             }
-            
+
         }
         logDuration("NoteRepository.findNotes", start);
         return notes;
@@ -194,37 +193,36 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     public GridDataSource findNotes(DocumentNoteSearchInfo search) {
         BooleanBuilder builder = new BooleanBuilder();
         BooleanBuilder documentRefs = new BooleanBuilder();
-        
+
         // document
         if (!search.getDocuments().isEmpty()){
-            
+
             BeanSubQuery subQuery = sub(documentNote);
             // create filter condition for non orphan matches
             subQuery.where(BooleanExpression.allOf(documentNote.note().eq(note),
-                    documentNote.document().in(search.getDocuments()),
-                    documentNote.replacedBy().isNull()));
-            
+                    documentNote.document().in(search.getDocuments())));
+
             //Remove deleted if orphans is false
             if (!search.isOrphans()) {
                 subQuery.where(documentNote.deleted.eq(false));
             }
-            
+
             documentRefs.or(subQuery.exists());
         }
-        
+
         // orphans
         if (search.isOrphans()){
             // create filter condition for orphan matches
             // notes which don't have any document notes at all
             documentRefs.or(sub(documentNote).where(documentNote.note().eq(note)).notExists());
         }
-        
+
         //Add documentrefs to rest of search
         if(documentRefs.hasValue()) {
             builder.and(documentRefs);
         }
-        
-        
+
+
         // fulltext
         if (StringUtils.isNotBlank(search.getFullText())) {
             BooleanBuilder filter = new BooleanBuilder();
@@ -234,7 +232,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             }
             builder.and(filter);
         }
-        
+
         // creators
         if (!search.getCreators().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
@@ -258,15 +256,15 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (!search.getNoteTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : search.getNoteTypes()) {
-                filter.or(note.concept(extendedTerm).types.contains(type));                
+                filter.or(note.concept(extendedTerm).types.contains(type));
             }
             builder.and(filter);
         }
-        
-        
+
+
         return createGridDataSource(note, getOrderBy(search, note), false, builder.getValue());
     }
-    
+
     @Override
     public List<NoteWithInstances> findNotesWithInstances(DocumentNoteSearchInfo searchInfo) {
         List<Note> notes = findAllNotes(searchInfo);
@@ -325,9 +323,6 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         // not deleted
         query.where(documentNote.deleted.eq(false));
 
-        // latest revision
-        query.where(documentNote.replacedBy().isNull());
-
         List<DocumentNote> rv = query.list(documentNote);
 
         logDuration("NoteRepository.getActiveDocumentNotes", start);
@@ -353,7 +348,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
         return createGridDataSource(note, note.term().basicForm.lower().asc(), false, builder.getValue());
     }
-    
+
 
     @Override
     public NoteComment getCommentById(String id) {
@@ -394,24 +389,30 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 .where(sub(documentNote).where(documentNote.note().eq(note)).notExists())
                 .list(note.id);
     }
-    
-    
+
+
     @Override
     public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String longText) {
         return createDocumentNote(n, docRevision, String.valueOf(timeService.currentTimeMillis()),
                 longText, 0);
     }
-    
+
     @Override
     public DocumentNote createDocumentNote(Note n, DocumentRevision docRevision, String localId,
             String longText, int position) {
+        return createDocumentNote(new DocumentNote(), n, docRevision, localId,
+                longText, position);
+    }
+
+    @Override
+    public DocumentNote createDocumentNote(DocumentNote documentNote, Note n, DocumentRevision docRevision, String localId,
+            String longText, int position) {
         UserInfo createdBy = userRepository.getCurrentUser();
 
-        DocumentNote documentNote = new DocumentNote();
         long currentTime = timeService.currentTimeMillis();
         documentNote.setCreatedOn(currentTime);
         n.setEditedOn(currentTime);
-        
+
         Concept concept = n.getConcept(extendedTerm);
         if (concept != null) {
             concept.setLastEditedBy(createdBy);
@@ -419,17 +420,17 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
                 concept.setAllEditors(new HashSet<UserInfo>());
             }
             concept.getAllEditors().add(createdBy);
-            
-        }   
-        
+
+        }
+
         documentNote.setSVNRevision(docRevision.getRevision());
         documentNote.setLongText(longText);
 
-        String createdLemma = Note.createLemmaFromLongText(longText); 
+        String createdLemma = Note.createLemmaFromLongText(longText);
         if (n.getLemma() == null) {
             n.setLemma(createdLemma);
         }
-        
+
         //Extended term version gets the lemma also to basicTerm automatically
         if (extendedTerm && n.getTerm() != null && n.getTerm().getBasicForm() == null) {
             n.getTerm().setBasicForm(createdLemma);
@@ -438,10 +439,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (extendedTerm && documentNote.getShortText() == null) {
             documentNote.setShortText(createdLemma);
         }
-        
+
         documentNote.setDocument(docRevision.getDocument());
         documentNote.setDocRevision(docRevision);
-        documentNote.setLocalId(localId);
         documentNote.setNote(n);
         documentNote.setPosition(position);
         getSession().save(n);
@@ -610,13 +610,9 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     public void remove(DocumentNote documentNoteToBeRemoved, long revision) {
         Assert.notNull(documentNoteToBeRemoved, "note was null");
 
-        DocumentNote documentNote = documentNoteToBeRemoved.createCopy();
-        documentNote.setCreatedOn(timeService.currentTimeMillis());
-        documentNote.setSVNRevision(revision);
-        documentNote.setDeleted(true);
-        getSession().save(documentNote);
+        documentNoteToBeRemoved.setSVNRevision(revision);
+        documentNoteToBeRemoved.setDeleted(true);
 
-        documentNoteToBeRemoved.setReplacedBy(documentNote);
         getSession().save(documentNoteToBeRemoved);
     }
 
@@ -650,7 +646,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     public void removeNote(Note note) {
         getSession().delete(note);
     }
-    
+
     @Override
     public void removeNotes(Collection<Note> notes) {
         for (Note note : notes){

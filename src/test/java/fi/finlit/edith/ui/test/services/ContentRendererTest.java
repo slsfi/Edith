@@ -38,8 +38,8 @@ public class ContentRendererTest extends AbstractServiceTest {
 
     @Inject
     private DocumentRepository documentRepository;
-    
-    @Inject @Symbol(EDITH.EXTENDED_TERM) 
+
+    @Inject @Symbol(EDITH.EXTENDED_TERM)
     private boolean extendedTerm;
 
     private final MarkupWriter writer = new MarkupWriterImpl();
@@ -76,7 +76,7 @@ public class ContentRendererTest extends AbstractServiceTest {
     private DocumentNote createDocumentNote(NoteFormat noteFormat) {
         Note note = new Note();
         Concept concept = note.getConcept(extendedTerm);
-        
+
         note.setLemma("taloon");
         note.setLemmaMeaning("johonkin ineen");
         Paragraph paragraph = new Paragraph();
@@ -89,7 +89,7 @@ public class ContentRendererTest extends AbstractServiceTest {
         note.setFormat(noteFormat);
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
-        documentNote.setLocalId("1234");
+        documentNote.setId("1234");
         return documentNote;
     }
 
@@ -138,7 +138,7 @@ public class ContentRendererTest extends AbstractServiceTest {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
         DocumentNote documentNote = createDocumentNote(NoteFormat.PLACE);
         Concept concept = documentNote.getConcept(extendedTerm);
-        
+
         Paragraph description = Paragraph.parseSafe(concept.getDescription());
         description.addElement(new StringElement(" foo "));
         UrlElement urlElement = new UrlElement("Google");

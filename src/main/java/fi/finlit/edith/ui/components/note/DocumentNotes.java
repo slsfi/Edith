@@ -41,8 +41,9 @@ public class DocumentNotes {
     public Block getBlock() {
         return documentNotesBlock;
     }
-    
-    private Comparator<DocumentNote> byPosition = new Comparator<DocumentNote>() {
+
+    private final Comparator<DocumentNote> byPosition = new Comparator<DocumentNote>() {
+        @Override
         public int compare(DocumentNote n1, DocumentNote n2) {
             return n1.getPosition() - n2.getPosition();
         }
@@ -66,30 +67,26 @@ public class DocumentNotes {
     }
 
     public void setSelectedNote(DocumentNote selectedNote) {
-        this.selectedNote = selectedNote; 
+        this.selectedNote = selectedNote;
     }
 
     public String getSelectedCssClass() {
         return documentNote.getId().equals(getSelectedNote().getId()) ? "selected-note" : "";
     }
-    
+
     Object onActionFromSelectDocumentNote(String documentNoteId) {
         System.out.println("select documentNote " + documentNoteId);
 
         selectedNote = documentNoteRepository.getById(documentNoteId);
 
         page.getNoteEdit().setDocumentNoteOnEdit(selectedNote);
-        
+
         return page.getNoteEdit().getBlock();
     }
 
     public void setNoteId(String noteId) {
         System.out.println("Setting noteid to " + noteId);
         this.noteId = noteId;
-    }
-    
-    public String getLocalId() {
-        return getSelectedNote() != null ? getSelectedNote().getLocalId() : "";
     }
 
 

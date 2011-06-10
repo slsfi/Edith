@@ -40,25 +40,25 @@ public class ReplacedByAdditionTask implements Task{
     }
 
     private void runInternal(Session session){
-        QDocumentNote documentNote = QDocumentNote.documentNote;
-        List<DocumentNote> documentNotes = session.from(documentNote)
-            .orderBy(
-                    documentNote.localId.asc(),
-                    documentNote.createdOn.asc())
-            .list(documentNote);
-
-        for (int i = 0; i < documentNotes.size() -1; i++){
-            DocumentNote current = documentNotes.get(i);
-            DocumentNote following = documentNotes.get(i+1);
-            if (current.getNote() != null
-                && current.getNote().equals(following.getNote())
-                && current.getLocalId().equals(following.getLocalId())){
-                current.setReplacedBy(following);
-                session.save(current);
-            }
-        }
-
-        session.flush();
+//        QDocumentNote documentNote = QDocumentNote.documentNote;
+//        List<DocumentNote> documentNotes = session.from(documentNote)
+//            .orderBy(
+//                    documentNote.localId.asc(),
+//                    documentNote.createdOn.asc())
+//            .list(documentNote);
+//
+//        for (int i = 0; i < documentNotes.size() -1; i++){
+//            DocumentNote current = documentNotes.get(i);
+//            DocumentNote following = documentNotes.get(i+1);
+//            if (current.getNote() != null
+//                && current.getNote().equals(following.getNote())
+//                && current.getLocalId().equals(following.getLocalId())){
+//                current.setReplacedBy(following);
+//                session.save(current);
+//            }
+//        }
+//
+//        session.flush();
     }
 
 }

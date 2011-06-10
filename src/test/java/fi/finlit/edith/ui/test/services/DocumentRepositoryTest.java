@@ -108,7 +108,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         DocumentNote note = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
 
         String content = getContent(document.getSvnPath(), -1);
-        String localId = note.getLocalId();
+        String localId = note.getId();
+        System.err.println("ID: " + localId);
+        System.err.println(content);
         assertTrue(content.contains(start(localId) + text + end(localId)));
     }
 
@@ -125,8 +127,8 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         assertEquals(count+1, documentNoteRepository.queryNotes("*").getAvailableRows());
         // remove
         documentRepository.removeNotes(document.getRevision(documentNote.getSVNRevision()), documentNote);
-        DocumentNote deletedDocumentNote = documentNoteRepository.getByLocalId(document.getRevision(documentNote.getSVNRevision() + 1), documentNote.getLocalId());
-        assertNull(deletedDocumentNote);
+        DocumentNote deletedDocumentNote = documentNoteRepository.getById(documentNote.getId());
+        assertTrue(deletedDocumentNote.isDeleted());
 
         GridDataSource dataSource = documentNoteRepository.queryNotes("*");
         int available = dataSource.getAvailableRows();
@@ -140,8 +142,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "s";
 
-        documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, 1, 1, text));
+        DocumentNote note1 = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, 1, 1, text));
         DocumentNote note2 = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, 2, 2, text));
+        assertEquals(2, documentNoteRepository.getAll().size());
         List<DocumentNote> documentNotes = documentNoteRepository.getOfDocument(note2.getDocRevision());
         assertEquals(2, documentNotes.size());
     }
@@ -202,7 +205,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
         docRevision = documentRepository.removeAllNotes(document);
         revs = documentNoteRepository.getOfDocument(docRevision);
-        assertTrue(revs.isEmpty());
+        assertEquals(0, revs.size());
     }
 
     @Test
@@ -211,11 +214,11 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote noteRev = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
-        documentRepository.removeNotes(document.getRevision(-1), new DocumentNote[] { noteRev });
+        DocumentNote documentNote = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
+        documentRepository.removeNotes(document.getRevision(-1), new DocumentNote[] { documentNote });
 
         String content = getContent(document.getSvnPath(), -1);
-        assertFalse(content.contains(start(noteRev.getLocalId()) + text + end(noteRev.getLocalId())));
+        assertFalse(content.contains(start(documentNote.getId()) + text + end(documentNote.getId())));
     }
 
     @Test
@@ -233,9 +236,9 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         documentRepository.removeNotes(document.getRevision(-1), new DocumentNote[] { noteRev, noteRev3 });
 
         String content = getContent(document.getSvnPath(), -1);
-        assertFalse(content.contains(start(noteRev.getLocalId()) + text + end(noteRev.getLocalId())));
-        assertTrue(content.contains(start(noteRev2.getLocalId()) + text2 + end(noteRev2.getLocalId())));
-        assertFalse(content.contains(start(noteRev3.getLocalId()) + text3 + end(noteRev3.getLocalId())));
+        assertFalse(content.contains(start(noteRev.getId()) + text + end(noteRev.getId())));
+        assertTrue(content.contains(start(noteRev2.getId()) + text2 + end(noteRev2.getId())));
+        assertFalse(content.contains(start(noteRev3.getId()) + text3 + end(noteRev3.getId())));
     }
 
     @Test
@@ -250,7 +253,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         documentRepository.updateNote(noteRevision, new SelectedText(element, element, newText));
 
         String content = getContent(document.getSvnPath(), -1);
-        String localId = noteRevision.getLocalId();
+        String localId = noteRevision.getId();
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));
     }
@@ -268,7 +271,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         documentRepository.updateNote(noteRevision, new SelectedText(element, element, newText));
 
         String content = getContent(document.getSvnPath(), -1);
-        String localId = noteRevision.getLocalId();
+        String localId = noteRevision.getId();
 //        System.out.println(content);
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));

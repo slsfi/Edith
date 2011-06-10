@@ -6,7 +6,7 @@
     
     <h3>Document notes</h3>
 	
-	<t:grid source="documentNotes" row="documentNote"  include="localId,longText" add="actions">        
+	<t:grid source="documentNotes" row="documentNote" include="id,longText" add="actions">        
         <p:actionsCell>
         	<span class="delete_note">
         		<a href="" class="delete_question">${message:delete}</a>

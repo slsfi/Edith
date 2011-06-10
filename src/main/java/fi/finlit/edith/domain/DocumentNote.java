@@ -13,19 +13,13 @@ import com.mysema.rdfbean.annotations.Predicate;
 
 @ClassMapping
 public class DocumentNote extends Identifiable {
-    
+
     @Predicate
     private Document document;
 
-    /**
-     * the id of the note in the context of the TEI document
-     */
-    @Predicate
-    private String localId;
-
     @Predicate
     private String longText;
-    
+
     @Predicate
     private String shortText;
 
@@ -48,32 +42,10 @@ public class DocumentNote extends Identifiable {
     private boolean publishable;
 
     @Predicate
-    private DocumentNote replacedBy;
-    
-    @Predicate
     private String lemmaPosition;
-    
+
     @Predicate
     private int position;
-
-    public DocumentNote createCopy() {
-        DocumentNote copy = new DocumentNote();
-        copy.setLongText(longText);
-        copy.setShortText(shortText);
-        copy.setDocument(document);
-        copy.setNote(note);
-        copy.setDocument(document);
-        copy.setDocRevision(docRevision);
-        copy.setCreatedOn(createdOn);
-        copy.setSVNRevision(svnRevision);
-        copy.setDeleted(deleted);
-        copy.setLocalId(localId);
-        copy.setLemmaPosition(lemmaPosition);
-        copy.setPublishable(publishable);
-        copy.setPosition(position);
-        
-        return copy;
-    }
 
     public long getCreatedOn() {
         return createdOn;
@@ -98,18 +70,14 @@ public class DocumentNote extends Identifiable {
         return docRevision;
     }
 
-    public String getLocalId() {
-        return localId;
-    }
-
     public String getLongText() {
         return longText;
     }
-    
+
     public void setShortText(String shortText) {
         this.shortText = shortText;
     }
-    
+
     public String getShortText() {
         return shortText;
     }
@@ -142,10 +110,6 @@ public class DocumentNote extends Identifiable {
         this.document = document;
     }
 
-    public void setLocalId(String localId) {
-        this.localId = localId;
-    }
-
     public void setLongText(String longText) {
         this.longText = longText;
     }
@@ -166,14 +130,6 @@ public class DocumentNote extends Identifiable {
         return publishable;
     }
 
-    public DocumentNote getReplacedBy() {
-        return replacedBy;
-    }
-
-    public void setReplacedBy(DocumentNote replacedBy) {
-        this.replacedBy = replacedBy;
-    }
-    
     public String getLemmaPosition() {
         return lemmaPosition;
     }
@@ -186,17 +142,17 @@ public class DocumentNote extends Identifiable {
     public String toString() {
         return "DocumentNote: " + StringUtils.abbreviate(longText, 30);
     }
-    
+
     public Concept getConcept(boolean extendedTerm) {
         return note.getConcept(extendedTerm);
     }
-    
+
     public void setPosition(int position) {
         this.position = position;
     }
-    
+
     public int getPosition() {
         return position;
     }
-    
+
 }

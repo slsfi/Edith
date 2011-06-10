@@ -20,27 +20,27 @@ public class AddNote {
 
     @Inject
     private DocumentRepository documentRepository;
-    
-    @Inject 
+
+    @Inject
     @Symbol(EDITH.EXTENDED_TERM)
     private boolean slsMode;
-    
+
     @InjectPage
     private Index index;
-    
+
     Index onActivate(EventContext context) throws IOException, NoteAdditionFailedException{
         String docId = context.get(String.class, 0);
         String startElement = context.get(String.class, 1);
         String endElement = context.get(String.class, 2);
         String text = context.get(String.class, 3);
-        
+
         Document document = documentRepository.getById(docId);
         DocumentNote documentNote = documentRepository.addNote(createNote(), document.getRevision(-1), new SelectedText(startElement, endElement, text));
-        
-        System.err.println("Added note with local id " + documentNote.getLocalId() + " and revision " + documentNote.getSVNRevision());
+
+        System.err.println("Added note with local id " + documentNote.getId() + " and revision " + documentNote.getSVNRevision());
         return index;
     }
- 
+
     private Note createNote() {
         Note note = new Note();
         if (slsMode) {

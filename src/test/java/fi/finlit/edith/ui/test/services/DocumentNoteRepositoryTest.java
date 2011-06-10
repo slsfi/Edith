@@ -69,10 +69,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     @Inject
     private SessionFactory sessionFactory;
 
-    @Inject 
+    @Inject
     @Symbol(EDITH.EXTENDED_TERM)
     private boolean extendedTerm;
-    
+
     private Document document;
 
     private DocumentRevision docRev;
@@ -80,6 +80,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     private long latestRevision;
 
     private DocumentNoteSearchInfo searchInfo;
+
+    private DocumentNote documentNote1;
+
+    private DocumentNote documentNote2;
+
+    private DocumentNote documentNote3;
+
+    private DocumentNote documentNote4;
 
     @Inject
     @Symbol(EdithTestConstants.NOTE_TEST_DATA_KEY)
@@ -93,7 +101,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         }
         return count;
     }
-    
+
     @Before
     public void setUp() {
         adminService.removeNotesAndTerms();
@@ -103,10 +111,10 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         latestRevision = revisions.get(revisions.size() - 1).getSvnRevision();
 
         docRev = document.getRevision(latestRevision);
-        noteRepository.createDocumentNote(createNote(), docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen", 0);
-        noteRepository.createDocumentNote(createNote(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.", 0);
-        noteRepository.createDocumentNote(createNote(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.", 0);
-        noteRepository.createDocumentNote(createNote(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4", 0);
+        documentNote1 = noteRepository.createDocumentNote(createNote(), docRev, "1", "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen", 0);
+        documentNote2 = noteRepository.createDocumentNote(createNote(), docRev, "2", "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.", 0);
+        documentNote3 = noteRepository.createDocumentNote(createNote(), docRev, "3", "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.", 0);
+        documentNote4 = noteRepository.createDocumentNote(createNote(), docRev, "4", "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4", 0);
 
         searchInfo = new DocumentNoteSearchInfo();
         searchInfo.setCurrentDocument(document);
@@ -115,58 +123,12 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         addExtraNote("testo2");
     }
 
-    // TODO Is this desired behavior?
-    @Test
-    @Ignore
-    public void Change_Backing_Note_To_Another_Note() {
-        final String lemmaMeaning = "a legendary placeholder";
-        final String lemma = "foobar";
-        Document doc = new Document();
-
-        DocumentNote dn1 = new DocumentNote();
-        dn1.setDocument(doc);
-        dn1.setLocalId("1");
-        Note n1 = createNote();
-        n1.setLemma(lemma);
-        n1.setLemmaMeaning(lemmaMeaning);
-        dn1.setNote(n1);
-
-        DocumentNote dn2 = new DocumentNote();
-        dn2.setDocument(doc);
-        dn2.setLocalId("2");
-        Note n2 = createNote();
-        n2.setLemma("barfoo");
-        dn2.setNote(n2);
-
-        documentNoteRepository.save(dn1);
-        documentNoteRepository.save(dn2);
-
-        DocumentNote persisted1 = documentNoteRepository.getById(dn1.getId());
-        DocumentNote persisted2 = documentNoteRepository.getById(dn2.getId());
-
-        persisted2.getNote().setLemma(lemma);
-
-        documentNoteRepository.save(persisted2);
-
-        persisted2 = documentNoteRepository.getById(persisted2.getId());
-
-        assertEquals(lemma, persisted1.getNote().getLemma());
-        assertEquals(lemma, persisted2.getNote().getLemma());
-        assertEquals(lemmaMeaning, persisted1.getNote().getLemmaMeaning());
-        assertEquals(lemmaMeaning, persisted2.getNote().getLemmaMeaning());
-        assertEquals("1", persisted1.getLocalId());
-        assertEquals("2", persisted2.getLocalId());
-
-        assertEquals(2, documentNoteRepository.getOfDocument(persisted2.getDocumentRevision())
-                .size());
-    }
-
     @Test
     public void GetByLocalId_Returns_NonNull_Result() {
-        assertNotNull(documentNoteRepository.getByLocalId(docRev, "1"));
-        assertNotNull(documentNoteRepository.getByLocalId(docRev, "2"));
-        assertNotNull(documentNoteRepository.getByLocalId(docRev, "3"));
-        assertNotNull(documentNoteRepository.getByLocalId(docRev, "4"));
+        assertNotNull(documentNoteRepository.getById(documentNote1.getId()));
+        assertNotNull(documentNoteRepository.getById(documentNote2.getId()));
+        assertNotNull(documentNoteRepository.getById(documentNote3.getId()));
+        assertNotNull(documentNoteRepository.getById(documentNote4.getId()));
     }
 
     @Test
@@ -179,7 +141,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(4, documentNoteRepository.getOfDocument(docRev).size());
 
         for (DocumentNote documentNote : documentNoteRepository.getOfDocument(docRev)) {
-            documentNote = documentNote.createCopy();
+//            documentNote = documentNote.createCopy();
             documentNote.getNote().setLemma(documentNote.getNote().getLemma() + "XXX");
             documentNoteRepository.save(documentNote);
         }
@@ -216,14 +178,14 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
 
     @Test
     public void Remove_Sets_Deleted_Flag() {
-        DocumentNote documentNote = documentNoteRepository.getByLocalId(docRev, "1");
+        DocumentNote documentNote = documentNoteRepository.getById(documentNote1.getId());
         documentNoteRepository.remove(documentNote);
         assertTrue(documentNoteRepository.getById(documentNote.getId()).isDeleted());
     }
-    
+
     @Test
     public void Remove_By_Id() {
-        DocumentNote documentNote = documentNoteRepository.getByLocalId(docRev, "1");
+        DocumentNote documentNote = documentNoteRepository.getById(documentNote1.getId());
         documentNoteRepository.remove(documentNote.getId());
         assertTrue(documentNoteRepository.getById(documentNote.getId()).isDeleted());
     }
@@ -253,11 +215,11 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         assertEquals(note.getPerson().getNormalizedForm().getDescription(), persistedNote
                 .getPerson().getNormalizedForm().getDescription());
         assertEquals(note.getFormat(), persistedNote.getFormat());
-        
+
         assertEquals(note.getPerson().getTimeOfBirth().getStart(), persistedNote.getPerson().getTimeOfBirth().getStart());
         assertEquals(note.getPerson().getTimeOfBirth().getEnd(),   persistedNote.getPerson().getTimeOfBirth().getEnd());
         assertEquals(note.getPerson().getTimeOfBirth().getDate(), persistedNote.getPerson().getTimeOfBirth().getDate());
-        
+
         assertEquals(note.getPerson().getTimeOfDeath().getStart(), persistedNote.getPerson().getTimeOfDeath().getStart());
         assertEquals(note.getPerson().getTimeOfDeath().getEnd(), persistedNote.getPerson().getTimeOfDeath().getEnd());
         assertEquals(note.getPerson().getTimeOfDeath().getDate(), persistedNote.getPerson().getTimeOfDeath().getDate());
@@ -480,7 +442,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
         DocumentNote documentNote = documentNoteRepository.getOfDocument(docRev).get(0);
         Note initialNote = noteRepository.getById(documentNote.getNote().getId());
         Concept concept = initialNote.getConcept(extendedTerm);
-        
+
         concept.setDescription(new Paragraph().toString());
         initialNote.setFormat(NoteFormat.PLACE);
         initialNote.setLemmaMeaning("fajflkjsalj");
@@ -649,7 +611,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
             }
         }
     }
-    
+
     private Note createNote() {
         Note note = new Note();
         if (extendedTerm) {

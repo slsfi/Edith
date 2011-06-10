@@ -174,7 +174,7 @@
 	
 	               <t:loop source="selectedNotes" value="note">
 	                   <li>
-	                       <t:eventlink t:event="edit" context="e${note.localId}" t:zone="editZone" class="notelink">
+	                       <t:eventlink t:event="edit" context="e${note.id}" t:zone="editZone" class="notelink">
 	                           <em>${note.note.lemma}</em>
 	                       </t:eventlink>
 	                   </li>
@@ -212,7 +212,7 @@
     </t:form>
     
     <t:form t:id="selectNoteForm" t:zone="noteEditZone">
-        <t:hidden t:id="selectedNoteLocalId" value="selectedNoteLocalId" />
+        <t:hidden t:id="selectedNoteId" value="selectedNoteId" />
     </t:form>
     
 	<t:block id="emptyBlock">

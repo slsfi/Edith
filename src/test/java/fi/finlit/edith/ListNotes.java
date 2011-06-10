@@ -57,7 +57,8 @@ public class ListNotes {
                 documentNote.deleted.eq(false),
                 sub(otherNote).where(otherNote.ne(documentNote),
                         otherNote.note().eq(documentNote.note()),
-                        otherNote.localId.eq(documentNote.localId),
+                        // FIXME: I commented this line out, is this a problem? -Vesa
+//                        otherNote.localId.eq(documentNote.localId),
                         otherNote.createdOn.gt(documentNote.createdOn)).notExists()
                 ).exists());
 
@@ -76,7 +77,8 @@ public class ListNotes {
                 documentNote.deleted.eq(false),
                 sub(otherNote).where(otherNote.ne(documentNote),
                         otherNote.note().eq(note),
-                        otherNote.localId.eq(documentNote.localId),
+                     // FIXME: I commented this line out, is this a problem? -Vesa
+//                        otherNote.localId.eq(documentNote.localId),
                         otherNote.createdOn.gt(documentNote.createdOn)).notExists()
                 );
 
