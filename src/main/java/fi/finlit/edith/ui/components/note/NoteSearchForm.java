@@ -161,5 +161,12 @@ public class NoteSearchForm {
         }
     }
 
+    public String getFullText() {
+        return getSearchInfo().getFullText();
+    }
+    
+    public void setFullText(String fullText) {
+        getSearchInfo().setFullText(fullText);
+    }
 
 }

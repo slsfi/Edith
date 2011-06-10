@@ -12,10 +12,12 @@ import java.util.List;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.Response;
 
 import com.mysema.tapestry.core.Context;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.ui.pages.HttpError;
@@ -42,6 +44,10 @@ public class AbstractDocumentPage {
 
     @Inject
     private Response response;
+    
+    @Inject
+    @Symbol(EDITH.SVN_DOCUMENT_ROOT)
+    private String documentRoot;
 
     public void onActivate(EventContext ctx) throws IOException {
         context = new Context(ctx);
@@ -80,6 +86,11 @@ public class AbstractDocumentPage {
 
     public Document getDocument() {
         return document;
+    }
+    
+    public String getDocumentPath() {
+        String svnPath = document.getSvnPath();
+        return svnPath.substring(documentRoot.length(), svnPath.length());
     }
 
     public DocumentRevision getDocumentRevision() {

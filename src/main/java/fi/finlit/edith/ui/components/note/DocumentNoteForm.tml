@@ -59,6 +59,9 @@
     </script>
     
     <div class="document-note-form">
+    
+     
+      ${documentNoteOnEdit.id} ${documentNoteOnEdit.localId} ${documentNoteOnEdit.svnRevision} 
         
       <t:form t:id="documentNoteForm" t:context="documentNoteOnEdit.id" t:zone="noteEditZone">
         <fieldset>
@@ -85,6 +88,9 @@
         <div class="field">
             <t:label for="lemmaPosition">${message:lemmaPosition-label}</t:label>
             <t:textField t:id="lemmaPosition" value="documentNoteOnEdit.lemmaPosition" />
+        </div>
+       <div class="field">
+          <label><t:checkbox value="documentNoteOnEdit.publishable" />${message:publishable-label}</label>
         </div>
         
         <t:hidden t:id="noteOnEditId" value="documentNoteOnEdit.id" />

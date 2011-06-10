@@ -60,6 +60,7 @@ public class DocumentNotes {
 
     public DocumentNote getSelectedNote() {
         if (selectedNote == null) {
+            System.err.println("selectednote null, selecting first");
             getDocumentNotes();
             selectedNote = documentNotes.size() > 0 ? documentNotes.get(0) : null;
         }
@@ -71,6 +72,7 @@ public class DocumentNotes {
     }
 
     public String getSelectedCssClass() {
+        System.out.println("selecting" + documentNote.getId() + " == " + getSelectedNote().getId() );
         return documentNote.getId().equals(getSelectedNote().getId()) ? "selected-note" : "";
     }
 

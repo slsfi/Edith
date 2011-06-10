@@ -23,7 +23,7 @@
               
           </script>
         <div id="commentsAccordion">
-                  <h5><a href="#">${message:comments}</a></h5>
+                  <h5><a href="#">${message:comments} ${commentsSize}</a></h5>
                   <div>
                   
                   <t:zone id="commentZone" update="show">

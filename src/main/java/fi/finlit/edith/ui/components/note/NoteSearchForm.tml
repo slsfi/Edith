@@ -20,6 +20,11 @@
   <t:form t:id="noteSearchForm" t:zone="listZone">
     <t:errors />
     <div>
+    
+      <div class="field">
+        <label for="fullText">${message:fullText-label}</label>
+        <t:textField t:id="fullText" value="fullText"/>
+      </div>
 
       <div class="field">
         <label><t:checkbox value="orphans" />${message:orphans}</label>

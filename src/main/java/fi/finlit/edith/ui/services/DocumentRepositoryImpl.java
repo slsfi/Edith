@@ -616,16 +616,10 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                 }
             }
         });
-
-        // FIXME This logic might be broken.
-//        DocumentNote copy = note.createCopy();
         note.setLongText(selection.getSelection());
         note.setSVNRevision(newRevision);
         note.setPosition(position.intValue());
-//        documentNoteRepository.save(copy);
-//        note.setReplacedBy(copy);
         documentNoteRepository.save(note);
-
         return note;
     }
 

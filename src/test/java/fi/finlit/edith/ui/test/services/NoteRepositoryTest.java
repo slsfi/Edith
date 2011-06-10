@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -312,32 +313,60 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     @Test
     public void Find_Notes_With_Paged_Search() {
         Note note1 = createNote("note1");
-        createNote("note2");
-        createNote("note3");
+        Note note2 = createNote("note2");
+        Note note3 = createNote("note3");
 
         DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
         search.setFullText("foo");
-        assertEquals(0, noteRepository.findNotes(search).getAvailableRows());
+        assertRowCount(0, search);
+ 
         search.setFullText("note");
-        assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
+        assertRowCount(3, search);
+
         search.setOrphans(true);
-        assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
+        assertRowCount(3, search);
 
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         search.setDocuments(Collections.singleton(document));
         search.setOrphans(false);
-        assertEquals(0, noteRepository.findNotes(search).getAvailableRows());
+        assertRowCount(0, search);
         search.setOrphans(true);
-        assertEquals(3, noteRepository.findNotes(search).getAvailableRows());
+        assertRowCount(3, search);
 
+        //Adding note to document
         noteRepository.createDocumentNote(note1, document.getRevision(-1), "a");
         search.setOrphans(false);
-        assertEquals(1, noteRepository.findNotes(search).getAvailableRows());
-        GridDataSource src = noteRepository.findNotes(search);
-        src.prepare(0, 1, Collections.<SortConstraint>emptyList());
-        assertNotNull(src.getRowValue(0));
-        assertEquals(note1.getId(), ((Note)src.getRowValue(0)).getId());
+        assertRowCount(1, search);
+        assertRowValues(search, note1);
 
+        //Create different document
+        Document otherDoc = documentRepository.getOrCreateDocumentForPath("/documents/nummi.xml");
+        noteRepository.createDocumentNote(note2, otherDoc.getRevision(-1), "b");
+        
+        //notes 1 and 2 should be found
+        search.addDocument(otherDoc);
+        assertRowCount(2, search);
+        assertRowValues(search, note1, note2);
+        
+        
+        
+        
+    }
+    
+    private void assertRowCount(int expected, DocumentNoteSearchInfo search) {
+        assertEquals(expected, noteRepository.findNotes(search).getAvailableRows());
+    }
+    
+    private void assertRowValues(DocumentNoteSearchInfo search, Note ... notes ) {
+        GridDataSource src = noteRepository.findNotes(search);
+        assertTrue(src.getAvailableRows() >= notes.length );
+        src.prepare(0, notes.length+1, Collections.<SortConstraint>emptyList());
+        int i = 0;
+        for(Note note : notes) {
+            Note val = (Note)src.getRowValue(i++);
+            assertNotNull(val);
+            assertEquals(note.getId(), val.getId());
+        }
     }
     
     @Test
@@ -359,6 +388,50 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         
     }
     
+    @Test
+    public void Find_Notes_With_Paged_Search_By_Fulltext() {
+        Note note1 = createNote("a");
+        
+        assertFullText("foo",0);
+        assertFullText("a", 1);
+        assertFullText("b", 0);
+        
+        note1.getTerm().setBasicForm("b");
+        noteRepository.save(note1);
+        
+        assertFullText("b", 1);
+        assertFullText("c", 0);
+        
+        note1.getTerm().setMeaning("c");
+        noteRepository.save(note1);
+        assertFullText("c", 1);
+        assertFullText("d", 0);
+        
+        note1.getConcept(extendedTerm).setDescription("d");
+        noteRepository.save(note1);
+        
+        Note note2 = noteRepository.getById(note1.getId());
+        assertEquals("d", note2.getConcept(extendedTerm).getDescription());
+        
+        assertFullText("d", 1);
+        assertFullText("e", 0);
+        
+        note1.getConcept(extendedTerm).setSources("e");
+        noteRepository.save(note1);
+        assertFullText("e", 1);
+        assertFullText("f", 0);
+        
+        noteRepository.createComment(note1.getConcept(extendedTerm), "f");
+        assertFullText("f", 1);
+        
+    }
+    
+    private void assertFullText(String fulltext, int expected) {
+        DocumentNoteSearchInfo search = new DocumentNoteSearchInfo();
+        search.setFullText(fulltext);
+        assertEquals(expected, noteRepository.findNotes(search).getAvailableRows());
+    }
+    
     
 
 //    If we are using remote permanently, then this test is not necessary
@@ -372,17 +445,32 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 //        assertEquals(1, noteRepository.findNotes(search).size());
 //
 //    }
-
+    
+    @Test
+    public void Increment_Note_DocumentNote_Count() {
+        Note note = createNote("a");
+        assertEquals(0, noteRepository.getById(note.getId()).getDocumentNoteCount());
+        note.incDocumentNoteCount();
+        noteRepository.save(note);
+        assertEquals(1, noteRepository.getById(note.getId()).getDocumentNoteCount());
+        
+    }
+    
     @Test
     public void Remove_Based_On_Revision() {
         Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
         String longText = "two words";
-        DocumentNote documentNote = noteRepository.createDocumentNote(createNote(), document.getRevision(-1), longText);
+        Note note = createNote();
+        DocumentNote documentNote = noteRepository.createDocumentNote(note, document.getRevision(-1), longText);
+        assertEquals(1, noteRepository.getById(note.getId()).getDocumentNoteCount());
         List<NoteWithInstances> notes = noteRepository.findNotesWithInstances(new DocumentNoteSearchInfo(document));
         assertTrue(countDocumentNotes(notes) > 0);
         noteRepository.remove(documentNote, documentNote.getSVNRevision());
+        assertEquals(0, noteRepository.getById(note.getId()).getDocumentNoteCount());
+        
         notes = noteRepository.findNotesWithInstances(new DocumentNoteSearchInfo(document));
         assertEquals(0, countDocumentNotes(notes));
+        
     }
 
     @Test

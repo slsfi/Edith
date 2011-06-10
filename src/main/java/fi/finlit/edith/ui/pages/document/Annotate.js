@@ -62,7 +62,7 @@ var Annotate = {
     	//Remove all CKEditor instances
   	  for(var i in CKEDITOR.instances) {
   		  CKEDITOR.instances[i].destroy();
-  		  console.debug("Removed ckeditor instance");
+  		  //console.debug("Removed ckeditor instance");
   	  }
     }
 	
@@ -113,6 +113,7 @@ var Edith_CKEditorSetup = {
 	  removePlugins : "elementspath",
 	  height: "40px",
 	  skin: "kama",
+	  entities: false,
 	  extraPlugins: "autogrow",
 	  autoGrow_minHeight: "40",
 	  resize_enabled : false, 
@@ -175,7 +176,7 @@ jQuery(document).ready(function() {
 	jQuery("body").bind(TapestryExt.EVT_BEFORE_ZONE_UPDATE, function() {
 		//Remove ckeditor before ajax update
 		Annotate.freeResources();
-		console.log("before zone update");
+		//console.log("before zone update");
 	});
 	
 	var disableLink = false;

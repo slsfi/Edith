@@ -96,10 +96,12 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     @Override
+    //XXX This is not really used anywhere?
     public void remove(DocumentNote docNote) {
         Assert.notNull(docNote, "note was null");
         // XXX What was the point in having .createCopy?
         docNote.setDeleted(true);
+        docNote.getNote().decDocumentNoteCount();
         getSession().save(docNote);
     }
 
@@ -134,11 +136,13 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
     }
 
     @Override
+    //XXX Not really used
     public DocumentNote saveAsCopy(DocumentNote docNote) {
         if (docNote.getNote() == null) {
             throw new ServiceException("Note was null for " + docNote);
         }
         docNote.setNote(docNote.getNote().createCopy());
+        docNote.getNote().incDocumentNoteCount();
         return save(docNote);
     }
 

@@ -82,7 +82,7 @@
     
             <div class="field">
               <t:label for="language">${message:basicFormLanguage-label}</t:label>
-              <t:select t:id="language" />
+              <t:select t:id="language" value="language" blankOption="ALWAYS"/>
               <t:textField style="margin-left: 1em; width: 10em" t:id="otherLanguage" value="noteOnEdit.term.otherLanguage" />
             </div>
     
@@ -107,7 +107,7 @@
               <t:label for="status">${message:status-label}</t:label>
               <t:select t:id="status" model="statusModel" value="status" />
             </div>
-    
+            
             <div class="field">
               <label><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</label>
             </div>

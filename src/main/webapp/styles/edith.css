@@ -387,3 +387,14 @@ textarea.wysiwyg {
     width: 30em;
 }
 */
+
+/**
+* Document path
+*/
+
+#document-path {
+    text-align: center; 
+    width: 100%;
+    font-size: 0.875em;
+    font-weight: bold;
+}

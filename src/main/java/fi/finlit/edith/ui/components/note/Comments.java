@@ -60,6 +60,10 @@ public class Comments {
         return comments;
     }
     
+    public String getCommentsSize() {
+        return getComments() != null ? "(" + getComments().size() + ")" : "";
+    }
+    
     void onPrepareFromCommentForm(String noteId) {
         if (noteOnEdit == null) {
             System.err.println("onPrepareFromCommentForm with noteid " + noteId);

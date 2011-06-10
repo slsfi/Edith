@@ -61,6 +61,9 @@ public class Note extends Identifiable {
 
     @Predicate
     private long editedOn;
+    
+    @Predicate
+    private int documentNoteCount = 0;
 
     public Note createCopy(){
         Note copy = new Note();
@@ -172,5 +175,22 @@ public class Note extends Identifiable {
         return StringUtils.join(result, ", ");
     }
     
+    public void setDocumentNoteCount(int documentNoteCount) {
+        this.documentNoteCount = documentNoteCount;
+    }
+    
+    public int getDocumentNoteCount() {
+        return documentNoteCount;
+    }
 
+    public void decDocumentNoteCount() {
+        if (this.documentNoteCount > 0) {
+            this.documentNoteCount--;
+        }
+    }
+    
+    public void incDocumentNoteCount() {
+        this.documentNoteCount++;
+    }
+    
 }

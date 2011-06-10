@@ -122,5 +122,11 @@ public class DocumentNoteSearchInfo {
                 + ", ascending=" + ascending + ", orphans=" + orphans + ", fullText=" + fullText
                 + "]";
     }
+
+    public void addDocument(Document otherDoc) {
+       HashSet<Document> newSet = new HashSet<Document>(this.documents);
+       newSet.add(otherDoc);
+       this.documents = newSet;
+    }
     
 }
