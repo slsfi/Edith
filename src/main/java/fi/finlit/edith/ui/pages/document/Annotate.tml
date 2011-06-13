@@ -29,8 +29,6 @@
 		     <span><t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink></span>
          <span><t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink></span>
          </t:if>
-         
-         <span id="mode_switcher"><a id="normalNotes" href="#">${message:normalNotes}</a> | <a id="innerNotes" href="#">${message:innerNotes}</a></span>
        </div>
 	   </div>
        <div id="document-path">${documentPath}</div>
