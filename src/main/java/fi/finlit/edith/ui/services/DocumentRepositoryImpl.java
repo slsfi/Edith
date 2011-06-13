@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -185,6 +187,11 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     @Override
     public void addDocument(String svnPath, File file) {
         svnService.importFile(svnPath, file);
+    }
+
+    @Override
+    public void move(Document document, String newPath) {
+        svnService.move(document.getSvnPath(), newPath);
     }
 
     @Override
@@ -635,13 +642,24 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                                                            svnService.getFileItems(path, -1);
         List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
         for (FileItem file : files) {
-            Document document = getDocumentForPath(file.getPath());
-            if (document == null) {
-                document = createDocument(file.getPath(), file.getTitle(), null);
+            Document doc = getDocumentForPath(file.getPath());
+            if (doc == null) {
+                doc = createDocument(file.getPath(), file.getTitle(), null);
             }
             rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.isFolder(),
-                    file.getChildren(), document.getId(), document.getId().equals(id)));
+                    file.getChildren(), doc.getId(), doc.getId().equals(id)));
         }
+        Collections.sort(rv, new Comparator<FileItemWithDocumentId>() {
+            @Override
+            public int compare(FileItemWithDocumentId o1, FileItemWithDocumentId o2) {
+                if (o1.isFolder() && !o2.isFolder()) {
+                    return -1;
+                } else if (!o1.isFolder() && o2.isFolder()) {
+                    return 1;
+                }
+                return o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase());
+            }
+        });
         return rv;
     }
 

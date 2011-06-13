@@ -102,6 +102,14 @@
 	         }
 	       },
 	       
+	       onActivate: function(node) {
+	         if (node.data.isFolder) {
+	           $('#to_annotate').addClass('disabled');
+	         } else {
+	           $('#to_annotate').removeClass('disabled');
+	         }
+	       },
+	       
 	       onLazyRead: function(node) {
 	         node.appendAjax({
 	           url: '${documentsAjaxURL}:json/',
@@ -159,7 +167,10 @@
 	
 	<div id="documentsAccordion">
         <h5><a href="#">${message:documents-label}</a></h5>
-        <div id="directory-tree"/>
+        <div>
+          <span><a id="to_annotate" href="#" class="disabled">${message:to-annotate-document}</a></span>
+          <div id="directory-tree"/>
+        </div>
     </div>
     <div id="searchAccordion">
         <h3><a href="#">${message:notesearch}</a></h3>

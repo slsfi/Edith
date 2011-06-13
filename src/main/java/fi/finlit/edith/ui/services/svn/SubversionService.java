@@ -8,7 +8,6 @@ package fi.finlit.edith.ui.services.svn;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -103,4 +102,5 @@ public interface SubversionService {
 
     List<FileItem> getFileItems(String path, int revision);
 
+    long move(String oldPath, String newPath);
 }

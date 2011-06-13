@@ -8,14 +8,15 @@ package fi.finlit.edith.ui.test.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +41,7 @@ import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
+import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
 public class DocumentRepositoryTest extends AbstractServiceTest {
@@ -310,4 +312,35 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         return note;
     }
 
+    @Test
+    public void Move_Updates_Document_Location_And_Title() {
+        String newTitle = "Pummisuutarit rakeistettuna.xml";
+        String oldTitle = "Nummisuutarit rakenteistettuna.xml";
+        documentRepository.move(getDocument("/" + oldTitle), "/" + newTitle);
+        boolean found = false;
+        for (Document document : documentRepository.getAll()) {
+            if (newTitle.equals(document.getTitle()) && ("/documents/trunk/" + newTitle).equals(document.getSvnPath())) {
+                found = true;
+            }
+            if (oldTitle.equals(document.getTitle()) || ("/documents/trunk/" + oldTitle).equals(document.getSvnPath())) {
+                fail("Old document was still available!");
+            }
+        }
+        assertTrue(found);
+    }
+
+    @Test(expected = SubversionException.class)
+    public void Moved_File_Is_No_Longer_Available_In_Old_Location() throws IOException {
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        documentRepository.move(document, "/Pummisuutarit rakeistettuna.xml");
+        documentRepository.getDocumentStream(new DocumentRevision(document, -1));
+    }
+
+    @Test
+    public void Moved_File_Is_Available_In_New_Location() throws IOException {
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        documentRepository.move(document, "/Pummisuutarit rakeistettuna.xml");
+        Document movedDocument = getDocument("/Pummisuutarit rakeistettuna.xml");
+        assertNotNull(documentRepository.getDocumentStream(new DocumentRevision(movedDocument, -1)));
+    }
 }

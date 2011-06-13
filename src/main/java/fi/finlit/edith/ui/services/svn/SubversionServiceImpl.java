@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -351,5 +352,26 @@ public class SubversionServiceImpl implements SubversionService {
         } catch (SVNException s) {
             throw new SubversionException(s.getMessage(), s);
         }
+    }
+
+    @Override
+    public long move(String oldPath, String newPath) {
+        try {
+            File userCheckout = new File(workingCopies + "/" + "timo");
+            String path = oldPath.substring(documentRoot.length());
+            if (userCheckout.exists()) {
+                update(userCheckout);
+            } else {
+                checkout(userCheckout, -1);
+            }
+            File oldFile = new File(userCheckout + "/" + path);
+            File newFile = new File(userCheckout + "/" + newPath);
+            clientManager.getMoveClient().doMove(oldFile, newFile);
+            commit(newFile);
+            commit(oldFile);
+        } catch (SVNException e) {
+            throw new SubversionException(e.getMessage(), e);
+        }
+        return getLatestRevision();
     }
 }
