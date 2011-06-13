@@ -122,8 +122,16 @@ public class Documents {
         return linkSource.createPageRenderLink(Documents.class).toString() + ".deletedocument";
     }
 
+    public String getRenameDocumentURL() {
+        return linkSource.createPageRenderLink(Documents.class).toString() + ".renamedocument";
+    }
+
     public void onActionFromDeleteDocument(String id) {
         documentRepository.remove(id);
+    }
+
+    public void onActionFromRenameDocument(String id, String newName) {
+        documentRepository.rename(id, newName);
     }
 
 }

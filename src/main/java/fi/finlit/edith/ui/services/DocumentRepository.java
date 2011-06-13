@@ -147,9 +147,10 @@ public interface DocumentRepository extends Repository<Document, String> {
      */
     void removeAll(Collection<Document> documents);
 
-    void move(Document document, String newPath);
+    void move(String id, String newPath);
+
+    void rename(String id, String newPath);
 
     List<FileItemWithDocumentId> fromPath(String path, String id);
-
 
 }

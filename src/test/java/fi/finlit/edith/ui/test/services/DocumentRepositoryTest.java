@@ -316,7 +316,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     public void Move_Updates_Document_Location_And_Title() {
         String newTitle = "Pummisuutarit rakeistettuna.xml";
         String oldTitle = "Nummisuutarit rakenteistettuna.xml";
-        documentRepository.move(getDocument("/" + oldTitle), "/" + newTitle);
+        documentRepository.move(getDocument("/" + oldTitle).getId(), "/" + newTitle);
         boolean found = false;
         for (Document document : documentRepository.getAll()) {
             if (newTitle.equals(document.getTitle()) && ("/documents/trunk/" + newTitle).equals(document.getSvnPath())) {
@@ -332,15 +332,30 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @Test(expected = SubversionException.class)
     public void Moved_File_Is_No_Longer_Available_In_Old_Location() throws IOException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        documentRepository.move(document, "/Pummisuutarit rakeistettuna.xml");
+        documentRepository.move(document.getId(), "/Pummisuutarit rakeistettuna.xml");
         documentRepository.getDocumentStream(new DocumentRevision(document, -1));
     }
 
     @Test
     public void Moved_File_Is_Available_In_New_Location() throws IOException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        documentRepository.move(document, "/Pummisuutarit rakeistettuna.xml");
+        documentRepository.move(document.getId(), "/Pummisuutarit rakeistettuna.xml");
         Document movedDocument = getDocument("/Pummisuutarit rakeistettuna.xml");
+        assertNotNull(documentRepository.getDocumentStream(new DocumentRevision(movedDocument, -1)));
+    }
+
+    @Test(expected = SubversionException.class)
+    public void Renamed_File_Is_No_Longer_Available_With_Old_Name() throws IOException {
+        Document document = getDocument("/letters/letter_to_the_editor.xml");
+        documentRepository.move(document.getId(), "/letters/letter_to_the_reader.xml");
+        documentRepository.getDocumentStream(new DocumentRevision(document, -1));
+    }
+
+    @Test
+    public void Renamed_File_Is_Available_In_New_Location() throws IOException {
+        Document document = getDocument("/letters/letter_to_the_editor.xml");
+        documentRepository.move(document.getId(), "/letters/letter_to_the_reader.xml");
+        Document movedDocument = getDocument("/letters/letter_to_the_reader.xml");
         assertNotNull(documentRepository.getDocumentStream(new DocumentRevision(movedDocument, -1)));
     }
 }

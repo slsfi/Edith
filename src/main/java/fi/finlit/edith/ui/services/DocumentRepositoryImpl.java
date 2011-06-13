@@ -190,8 +190,15 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
     }
 
     @Override
-    public void move(Document document, String newPath) {
-        svnService.move(document.getSvnPath(), newPath);
+    public void move(String id, String newPath) {
+        svnService.move(getById(id).getSvnPath(), newPath);
+    }
+
+    @Override
+    public void rename(String id, String newPath) {
+        String fullPath = getById(id).getSvnPath();
+        String directoryPath = fullPath.substring(0, fullPath.lastIndexOf("/") + 1);
+        svnService.move(fullPath, directoryPath + newPath);
     }
 
     @Override

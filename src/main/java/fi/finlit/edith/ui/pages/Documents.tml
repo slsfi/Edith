@@ -49,6 +49,7 @@
           } else {
             $('#to_annotate').removeClass('disabled');
           }
+          $('#to_rename').removeClass('disabled');
           $('#to_delete').removeClass('disabled');
         },
 
@@ -76,6 +77,17 @@
           deleteFileDialog(node);
         }
       });
+      
+      $('#to_rename').click(function(e) {
+        e.preventDefault();
+        var node = $("#directory-tree").dynatree("getActiveNode");
+        if (node != null) {
+          var response = prompt('${message:rename-file}', node.data.title);
+          if (response) {
+            window.location.href = '${renameDocumentURL}/' + node.data.documentId + '/' + escape(response);
+          }
+        }
+      });
 
       
     })(jQuery);
@@ -87,6 +99,7 @@
   <p:leftPanel>
     <div class="top_links">
       <span><a id="to_annotate" href="#" class="disabled">${message:to-annotate-document}</a></span>
+      <span><t:actionlink id="to_rename" t:id="renameDocument" class="disabled">${message:rename-file}</t:actionlink></span>
       <span><t:actionlink id="to_delete" t:id="deleteDocument" class="disabled">${message:remove-file}</t:actionlink></span>
     </div>
   </p:leftPanel>
