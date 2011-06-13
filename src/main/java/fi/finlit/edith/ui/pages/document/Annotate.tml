@@ -82,11 +82,25 @@
 		     }
 		   }
 		   
+	     $('#to_annotate').click(function(e) {
+	       e.preventDefault();
+	       var node = $("#directory-tree").dynatree("getActiveNode");
+	       if (node != null) {
+	         window.location.href = node.data.documentId;
+	       }
+	     });
+		   
 		   jQuery('#directory-tree').dynatree({
 	       initAjax: {
 	         url: '${documentsAjaxURL}:json',
 	         data: {
 	           id: '${document.id}'
+	         }
+	       },
+	       
+	       onDblClick: function(node, event) {
+	         if (!node.data.isFolder) {
+	           window.location.href = node.data.documentId;
 	         }
 	       },
 	       
