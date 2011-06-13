@@ -157,10 +157,6 @@ public class Annotate extends AbstractDocumentPage {
         renderSupport.addScript("editLink = '" + link + "';");
     }
 
-    private Term getEditTerm(Note n) {
-        return n.getTerm() != null ? n.getTerm() : new Term();
-    }
-
     public DocumentNoteSearchInfo getSearchInfo() {
         if (searchInfo == null) {
             searchInfo = new DocumentNoteSearchInfo();
@@ -265,13 +261,12 @@ public class Annotate extends AbstractDocumentPage {
         logger.info("connect term with note id " + noteToLinkId);
 
         try {
-            Note note = noteRepository.getById(noteToLinkId);
-            DocumentNote documentNote = noteRepository.createDocumentNote(note,
+            Note n = noteRepository.getById(noteToLinkId);
+            DocumentNote documentNote = noteRepository.createDocumentNote(n,
                     getDocumentRevision(), createTermSelection.getSelection());
             documentNote = getDocumentRepository().updateNote(documentNote, createTermSelection);
 
             return noteHasChanged(documentNote, "note-connect-success");
-
         } catch (Exception e) {
             return zoneWithError("note-connect-failed", e);
         }

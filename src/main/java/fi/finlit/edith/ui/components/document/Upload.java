@@ -54,14 +54,12 @@ public class Upload {
         try {
             file.write(tempFile);
             if (file.getFileName().endsWith(".zip")) {
-                int count = documentRepository.addDocumentsFromZip(uploadPath, tempFile);
+                documentRepository.addDocumentsFromZip(uploadPath, tempFile);
                 message = messages.format("documents-stored-msg", file.getFileName());
             } else {
-                String path = uploadPath + "/" + file.getFileName();
-                documentRepository.addDocument(path, tempFile);
+                documentRepository.addDocument(uploadPath + "/" + file.getFileName(), tempFile);
                 message = messages.format("document-stored-msg", file.getFileName());
             }
-
         } finally {
             if (!tempFile.delete()) {
                 logger.error("Delete of " + tempFile.getAbsolutePath() + " failed");

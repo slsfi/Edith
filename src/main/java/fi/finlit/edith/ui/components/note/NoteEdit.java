@@ -30,10 +30,10 @@ import fi.finlit.edith.ui.services.NoteRepository;
 
 @SuppressWarnings("unused")
 public class NoteEdit {
-    
+
     @InjectPage
     private Annotate page;
-    
+
     @Inject
     private Block noteEditBlock;
 
@@ -44,7 +44,7 @@ public class NoteEdit {
     private DocumentNoteRepository documentNoteRepository;
 
     private DocumentNote documentNoteOnEdit;
-    
+
     private Note noteOnEdit;
 
     @Property
@@ -52,10 +52,10 @@ public class NoteEdit {
 
     @Property
     private List<DocumentNote> selectedNotes;
-    
+
     @InjectComponent
     private Comments comments;
-    
+
     public String getNoteId() {
         return documentNoteOnEdit != null ? documentNoteOnEdit.getId() : null;
     }
@@ -63,16 +63,7 @@ public class NoteEdit {
     public Block getBlock() {
         return noteEditBlock;
     }
-    
-    
-    private Note createNote() {
-        Note n = new Note();
-        if (isSlsMode()) {
-            n.setTerm(new Term());
-        }
-        return n;
-    }
-    
+
     public boolean isSlsMode() {
         return page.isSlsMode();
     }
@@ -81,11 +72,11 @@ public class NoteEdit {
         return loopNote.getConcept(page.isSlsMode());
     }
 
-    
+
     public int getLemmaInstances() {
         return documentNoteRepository.getDocumentNoteCount(documentNoteOnEdit.getNote());
     }
-        
+
     public void setNoteOnEdit(Note noteOnEdit) {
         this.noteOnEdit = noteOnEdit;
     }
@@ -93,20 +84,20 @@ public class NoteEdit {
     public Note getNoteOnEdit() {
         return noteOnEdit;
     }
-    
+
     public void setDocumentNoteOnEdit(DocumentNote documentNoteOnEdit) {
         this.documentNoteOnEdit = documentNoteOnEdit;
         if (documentNoteOnEdit != null) {
             setNoteOnEdit(documentNoteOnEdit.getNote());
         }
     }
-    
+
     public DocumentNote getDocumentNoteOnEdit() {
         return documentNoteOnEdit;
     }
-    
+
     public Comments getComments() {
         return comments;
     }
-    
+
 }

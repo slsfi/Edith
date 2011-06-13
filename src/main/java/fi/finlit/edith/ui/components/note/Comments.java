@@ -26,7 +26,7 @@ public class Comments {
 
     @InjectPage
     private Annotate page;
-    
+
     @Parameter
     @Property
     private Note noteOnEdit;
@@ -38,14 +38,14 @@ public class Comments {
     private String newCommentMessage;
 
     private List<NoteComment> comments;
-    
+
     @Inject
     @Property
     private Block commentsBlock;
 
     @Inject
     private NoteRepository noteRepository;
-    
+
     private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
         List<NoteComment> rv = new ArrayList<NoteComment>(c);
         Collections.sort(rv, NoteCommentComparator.ASC);
@@ -59,11 +59,11 @@ public class Comments {
 
         return comments;
     }
-    
+
     public String getCommentsSize() {
         return getComments() != null ? "(" + getComments().size() + ")" : "";
     }
-    
+
     void onPrepareFromCommentForm(String noteId) {
         if (noteOnEdit == null) {
             System.err.println("onPrepareFromCommentForm with noteid " + noteId);
@@ -72,7 +72,7 @@ public class Comments {
     }
 
     Object onDeleteComment(String noteId, String commentId) {
-        NoteComment deletedComment = noteRepository.removeComment(commentId);
+        noteRepository.removeComment(commentId);
         noteOnEdit = noteRepository.getById(noteId);
         comments = null;
         return commentsBlock;
