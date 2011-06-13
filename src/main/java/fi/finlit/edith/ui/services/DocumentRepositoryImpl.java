@@ -646,8 +646,15 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             if (doc == null) {
                 doc = createDocument(file.getPath(), file.getTitle(), null);
             }
-            rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.isFolder(),
-                    file.getChildren(), doc.getId(), doc.getId().equals(id)));
+            rv.add(new FileItemWithDocumentId(
+                    file.getTitle(),
+                    file.getPath(),
+                    file.isFolder(),
+                    file.getChildren(),
+                    file.hasChildren(),
+                    doc.getId(),
+                    doc.getId().equals(id),
+                    documentNoteRepository.getNoteCountForDocument(doc.getId())));
         }
         Collections.sort(rv, new Comparator<FileItemWithDocumentId>() {
             @Override

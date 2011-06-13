@@ -343,9 +343,11 @@ public class SubversionServiceImpl implements SubversionService {
             List<FileItem> fileItems = new ArrayList<FileItem>();
             for (SVNDirEntry entry : entries) {
                 if (entry.getKind().equals(SVNNodeKind.DIR)) {
-                    fileItems.add(new FileItem(entry.getName(), path + "/" + entry.getRelativePath(), true, new ArrayList<FileItem>()));
+                    List<SVNDirEntry> children = new ArrayList<SVNDirEntry>();
+                    svnRepository.getDir(path + "/" + entry.getRelativePath(), revision, false, children);
+                    fileItems.add(new FileItem(entry.getName(), path + "/" + entry.getRelativePath(), true, new ArrayList<FileItem>(), !children.isEmpty()));
                 } else {
-                    fileItems.add(new FileItem(entry.getName(), path + "/" + entry.getRelativePath(), false, null));
+                    fileItems.add(new FileItem(entry.getName(), path + "/" + entry.getRelativePath(), false, null, false));
                 }
             }
            return fileItems;

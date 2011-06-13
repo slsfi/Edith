@@ -172,6 +172,15 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
                documentNote.deleted.eq(false)).count();
     }
 
+    @Override
+    public long getNoteCountForDocument(String id) {
+        return getSession()
+            .from(documentNote)
+            .where(documentNote.document().id.eq(id),
+                   documentNote.deleted.isFalse())
+            .count();
+    }
+
 
     @Override
     public List<DocumentNote> getOfNoteInDocument(String noteId, String documentId) {

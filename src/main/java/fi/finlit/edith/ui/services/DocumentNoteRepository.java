@@ -139,4 +139,6 @@ public interface DocumentNoteRepository extends Repository<DocumentNote, String>
      */
     int getDocumentNoteCount(Note note);
 
+    long getNoteCountForDocument(String id);
+
 }

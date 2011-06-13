@@ -5,10 +5,20 @@
   <script type="text/javascript">
   jQuery(function() {
     (function($) {
-      
+
       var deleteFileDialog = function(node) {
-        // TODO: localize!
-        var response = confirm('${message:remove-file}?');
+        var text = [];
+        if (node.data.isFolder) {
+          if (node.data.hasChildren) {
+            text.push('${message:has-children}');
+          }
+        } else {
+          text.push('${message:document-has}');
+          text.push(node.data.noteCount);
+          text.push('${message:notes-exclamation}');
+        }
+        text.push('${message:remove-file}');
+        var response = confirm(text.join(' '));
         if (response) {
           window.location.href = '${deleteDocumentURL}/' + node.data.documentId;
         }

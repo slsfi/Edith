@@ -8,17 +8,20 @@ public class FileItem {
     private final boolean isFolder;
     private final boolean isLazy;
     private final List<FileItem> children;
+    private final boolean hasChildren;
 
     public FileItem(
             String title,
             String path,
             boolean isFolder,
-            List<FileItem> children) {
+            List<FileItem> children,
+            boolean hasChildren) {
         this.title = title;
         this.path = path;
         this.isFolder = isFolder;
         this.isLazy = isFolder;
         this.children = children;
+        this.hasChildren = hasChildren;
     }
 
     public List<FileItem> getChildren() {
@@ -39,6 +42,10 @@ public class FileItem {
 
     public String getPath() {
         return path;
+    }
+
+    public boolean hasChildren() {
+        return hasChildren;
     }
 
 }
