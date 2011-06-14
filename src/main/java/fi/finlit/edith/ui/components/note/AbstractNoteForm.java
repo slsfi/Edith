@@ -29,7 +29,7 @@ import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.components.InfoMessage;
 import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.TermDao;
 import fi.finlit.edith.ui.services.TimeService;
@@ -55,7 +55,7 @@ public abstract class AbstractNoteForm {
     private TimeService timeService;
 
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
 
     @Inject
     private Messages messages;

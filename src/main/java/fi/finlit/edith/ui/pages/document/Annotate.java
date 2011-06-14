@@ -43,7 +43,7 @@ import fi.finlit.edith.ui.components.note.NoteEdit;
 import fi.finlit.edith.ui.components.note.SearchResults;
 import fi.finlit.edith.ui.pages.Documents;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.TermDao;
 import fi.finlit.edith.ui.services.TimeService;

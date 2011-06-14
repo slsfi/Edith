@@ -32,7 +32,7 @@ public final class DataModule {
             OrderedConfiguration<Object> configuration,
             SaltSource saltSource,
             PasswordEncoder passwordEncoder,
-            @Inject DocumentDao documentRepository,
+            @Inject DocumentRepository documentRepository,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject SubversionService subversionService,
             @Inject UserDao userRepository) throws IOException {
@@ -42,7 +42,7 @@ public final class DataModule {
         subversionService.initialize();
 
         //documentRepository.getDocumentsOfFolder(documentRoot);
-        
+
         addUsers(userRepository, saltSource, passwordEncoder);
     }
 

@@ -11,7 +11,7 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.dto.DocumentRevision;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -21,7 +21,7 @@ public class AddDummyData {
     private NoteDao noteRepository;
     
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
     
     @Inject 
     @Symbol(EDITH.EXTENDED_TERM)

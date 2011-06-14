@@ -44,7 +44,7 @@ import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.UserDao;
@@ -68,7 +68,7 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     private DocumentNoteDao documentNoteRepository;
 
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
 
     @Inject
     private SessionFactory sessionFactory;

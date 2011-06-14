@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 
 @SuppressWarnings("unused")
@@ -36,7 +36,7 @@ import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 public class Documents {
 
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
 
     @Property
     private Collection<Document> documents;

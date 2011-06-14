@@ -41,7 +41,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
 import fi.finlit.edith.dto.DocumentRevision;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.util.ElementContext;
 
 public class ContentRendererImpl implements ContentRenderer {
@@ -60,7 +60,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private static final String DIV = "div";
 
-    private final DocumentDao documentRepository;
+    private final DocumentRepository documentRepository;
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
@@ -72,7 +72,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private final boolean extendedTerm;
 
-    public ContentRendererImpl(@Inject DocumentDao documentRepository,
+    public ContentRendererImpl(@Inject DocumentRepository documentRepository,
             @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl,
             @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
         this.documentRepository = documentRepository;

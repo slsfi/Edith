@@ -13,15 +13,16 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
-import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @Transactional
-public interface DocumentDao extends Dao<Document, String> {
+public interface DocumentRepository extends Dao<Document, String> {
 
     /**
      * Import the given File to the given svnPath
@@ -49,7 +50,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @throws IOException
      * @throws NoteAdditionFailedException
      */
-    DocumentNote addNote(Note note, Document document, SelectedText selection) throws IOException, NoteAdditionFailedException;
+    DocumentNote addNote(Note note, DocumentRevision docRevision, SelectedText selection) throws IOException, NoteAdditionFailedException;
 
     /**
      * Get a Document handle for the given path or create a new one if none could be found
@@ -82,7 +83,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @return
      * @throws IOException
      */
-    InputStream getDocumentStream(Document document) throws IOException;
+    InputStream getDocumentStream(DocumentRevision docRevision) throws IOException;
 
     /**
      * Get the SVN revisions for the given document in ascending order
@@ -100,7 +101,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @throws IOException
      */
     @Deprecated //Move to service
-    void removeAllNotes(Document document);
+    DocumentRevision removeAllNotes(Document document);
 
     /**
      * Remove the given anchors from the given Document
@@ -110,7 +111,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @throws IOException
      */
     @Deprecated //Move to service
-    void removeNotes(Document document, DocumentNote... notes);
+    DocumentRevision removeNotes(DocumentRevision docRevision, DocumentNote... notes);
 
     /**
      * Permanently removes document notes and their anchors.
@@ -120,7 +121,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @return
      */
     @Deprecated //Move to service
-    void removeNotesPermanently(Document document, DocumentNote... notes);
+    DocumentRevision removeNotesPermanently(DocumentRevision docRevision, DocumentNote... notes);
 
     /**
      * Update the boundaries of the given note
@@ -142,7 +143,7 @@ public interface DocumentDao extends Dao<Document, String> {
     /**
      * Remove the document by id.
      */
-    void remove(Long id);
+    void remove(String id);
 
     /**
      * Remove the given documents
@@ -151,10 +152,10 @@ public interface DocumentDao extends Dao<Document, String> {
      */
     void removeAll(Collection<Document> documents);
 
-    void move(Long id, String newPath);
+    void move(String id, String newPath);
 
-    void rename(Long id, String newPath);
+    void rename(String id, String newPath);
 
-    List<FileItemWithDocumentId> fromPath(String path, Long id);
+    List<FileItemWithDocumentId> fromPath(String path, String id);
 
 }

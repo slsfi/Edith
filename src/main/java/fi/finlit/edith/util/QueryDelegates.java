@@ -9,8 +9,8 @@ import fi.finlit.edith.qtype.QDocumentNote;
 import fi.finlit.edith.qtype.QNote;
 
 public class QueryDelegates {
-    
-    @QueryDelegate(DocumentNote.class)
+
+//    @QueryDelegate(DocumentNote.class)
     public static QConcept concept(QDocumentNote documentNote, boolean extendedTerm) {
         if (extendedTerm) {
             return documentNote.note().term().concept();
@@ -18,8 +18,8 @@ public class QueryDelegates {
             return documentNote.note().concept();
         }
     }
-    
-    @QueryDelegate(Note.class)
+
+//    @QueryDelegate(Note.class)
     public static QConcept concept(QNote note, boolean extendedTerm) {
         if (extendedTerm) {
             return note.term().concept();

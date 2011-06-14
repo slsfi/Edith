@@ -1,80 +1,38 @@
-/*
- * Copyright (c) 2009 Mysema Ltd.
- * All rights reserved.
- *
- */
 package fi.finlit.edith.sql.domain;
 
-import com.mysema.rdfbean.annotations.ClassMapping;
-import com.mysema.rdfbean.annotations.Predicate;
-import com.mysema.rdfbean.annotations.Unique;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@ClassMapping
-public class Document extends Identifiable implements Comparable<Document>{
+@Entity
+public class Document {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Predicate
-    private String description;
+    private String path;
 
-    @Predicate
-    @Unique
-    private String svnPath;
-
-    @Predicate
     private String title;
 
-    @Override
-    public int compareTo(Document doc) {
-        return svnPath.compareTo(doc.svnPath);
+    public Long getId() {
+        return id;
     }
 
-    public String getDescription() {
-        return description;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getSvnPath() {
-        return svnPath;
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getTitle() {
         return title;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 0;
-        result = prime * result + (svnPath == null ? 0 : svnPath.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Document other = (Document) obj;
-        if (svnPath == null) {
-            if (other.svnPath != null) {
-                return false;
-            }
-        } else if (!svnPath.equals(other.svnPath)) {
-            return false;
-        }
-        return true;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setSvnPath(String svnPath) {
-        this.svnPath = svnPath;
     }
 
     public void setTitle(String title) {

@@ -42,7 +42,7 @@ import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.PersonDao;
@@ -62,7 +62,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     private UserDao userRepository;
 
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
 
     @Inject
     private DocumentNoteDao documentNoteRepository;

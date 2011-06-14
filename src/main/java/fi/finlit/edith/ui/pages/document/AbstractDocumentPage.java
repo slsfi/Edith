@@ -21,14 +21,14 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.pages.HttpError;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @SuppressWarnings("unused")
 public class AbstractDocumentPage {
 
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
 
     private Document document;
 
@@ -97,7 +97,7 @@ public class AbstractDocumentPage {
         return documentRevision;
     }
 
-    protected DocumentDao getDocumentRepository() {
+    protected DocumentRepository getDocumentRepository() {
         return documentRepository;
     }
 

@@ -1,4 +1,9 @@
-package fi.finlit.edith.ui.test.services;
+/*
+ * Copyright (c) 2009 Mysema Ltd.
+ * All rights reserved.
+ *
+ */
+package fi.finlit.edith.ui.services.hibernate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,14 +15,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.tapestry5.grid.GridDataSource;
-import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
@@ -25,32 +26,29 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
-import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
-public class DocumentRepositoryTest extends AbstractServiceTest {
+public class DocumentDaoTest extends AbstractHibernateTest {
 
     @Inject
-    private DocumentRepository documentDao;
+    private DocumentDao documentDao;
 
-    @Inject
-    private DocumentNoteDao documentNoteRepository;
+//    @Inject
+//    private DocumentNoteDao documentNoteRepository;
 
     @Inject
     private SubversionService subversionService;
 
-    @Inject
-    private AdminService adminService;
+//    @Inject
+//    private AdminService adminService;
 
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
@@ -66,8 +64,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @After
     public void tearDown() {
-        closeStreams();
-        adminService.removeNotesAndTermsAndDocuments();
+//        adminService.removeNotesAndTermsAndDocuments();
         subversionService.destroy();
         subversionService.initialize();
     }
@@ -101,52 +98,54 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote note = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote note = documentDao.addNote(createNote(), document, new SelectedText(element, element, text));
 
-        String content = getContent(document.getSvnPath(), -1);
+        String content = getContent(document.getPath(), -1);
         String localId = note.getId();
         System.err.println("ID: " + localId);
         System.err.println(content);
         assertTrue(content.contains(start(localId) + text + end(localId)));
     }
 
+    // FIXME
+//    @Test
+//    public void AddRemoveNote() throws IOException, NoteAdditionFailedException{
+//        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+//        int count = documentNoteRepository.queryNotes("*").getAvailableRows();
+//
+//        // add
+//        String element = "play-act-sp4-p";
+//        String text = "min\u00E4; ja nytp\u00E4, luulen,";
+//        DocumentNote documentNote = documentRepository.addNote(createNote(), document, new SelectedText(element, element, text));
+//
+//        assertEquals(count+1, documentNoteRepository.queryNotes("*").getAvailableRows());
+//        // remove
+//        documentRepository.removeNotes(document.getRevision(documentNote.getSVNRevision()), documentNote);
+//        DocumentNote deletedDocumentNote = documentNoteRepository.getById(documentNote.getId());
+//        assertTrue(deletedDocumentNote.isDeleted());
+//
+//        GridDataSource dataSource = documentNoteRepository.queryNotes("*");
+//        int available = dataSource.getAvailableRows();
+//        dataSource.prepare(0, 1000, new ArrayList<SortConstraint>());
+//        assertEquals(0, available);
+//    }
+
+    // FIXME
+//    @Test
+//    public void Add_Note_With_The_Same_Lemma() throws IOException, NoteAdditionFailedException {
+//        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+//        String element = "play-act-sp2-p";
+//        String text = "s";
+//
+//        DocumentNote note1 = documentRepository.addNote(createNote(), document, new SelectedText(element, element, 1, 1, text));
+//        DocumentNote note2 = documentRepository.addNote(createNote(), document, new SelectedText(element, element, 2, 2, text));
+//        assertEquals(2, documentNoteRepository.getAll().size());
+//        List<DocumentNote> documentNotes = documentNoteRepository.getOfDocument(note2.getDocRevision());
+//        assertEquals(2, documentNotes.size());
+//    }
+
     @Test
-    public void AddRemoveNote() throws IOException, NoteAdditionFailedException{
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        int count = documentNoteRepository.queryNotes("*").getAvailableRows();
-
-        // add
-        String element = "play-act-sp4-p";
-        String text = "min\u00E4; ja nytp\u00E4, luulen,";
-        DocumentNote documentNote = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
-
-        assertEquals(count+1, documentNoteRepository.queryNotes("*").getAvailableRows());
-        // remove
-        documentDao.removeNotes(document.getRevision(documentNote.getSVNRevision()), documentNote);
-        DocumentNote deletedDocumentNote = documentNoteRepository.getById(documentNote.getId());
-        assertTrue(deletedDocumentNote.isDeleted());
-
-        GridDataSource dataSource = documentNoteRepository.queryNotes("*");
-        int available = dataSource.getAvailableRows();
-        dataSource.prepare(0, 1000, new ArrayList<SortConstraint>());
-        assertEquals(0, available);
-    }
-
-    @Test
-    public void Add_Note_With_The_Same_Lemma() throws IOException, NoteAdditionFailedException {
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp2-p";
-        String text = "s";
-
-        DocumentNote note1 = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, 1, 1, text));
-        DocumentNote note2 = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, 2, 2, text));
-        assertEquals(2, documentNoteRepository.getAll().size());
-        List<DocumentNote> documentNotes = documentNoteRepository.getOfDocument(note2.getDocRevision());
-        assertEquals(2, documentNotes.size());
-    }
-
-    @Test
-    public void GetAll() {
+    public void Get_All_Returns_All_Documents() {
         assertEquals(10, documentDao.getAll().size());
     }
 
@@ -176,7 +175,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @Test
     public void GetDocumentStream() throws IOException {
         for (Document document : documentDao.getAll()) {
-            register(documentDao.getDocumentStream(new DocumentRevision(document, -1)));
+            register(documentDao.getDocumentStream(document));
         }
     }
 
@@ -187,22 +186,23 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         }
     }
 
-    @Test
-    public void RemoveAllNotes() throws Exception{
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp2-p";
-        String text = "sun ullakosta ottaa";
-
-        DocumentNote noteRevision = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
-        DocumentRevision docRevision = noteRevision.getDocumentRevision();
-
-        List<DocumentNote> revs = documentNoteRepository.getOfDocument(docRevision);
-        assertTrue(revs.size() > 0);
-
-        docRevision = documentDao.removeAllNotes(document);
-        revs = documentNoteRepository.getOfDocument(docRevision);
-        assertEquals(0, revs.size());
-    }
+    // FIXME
+//    @Test
+//    public void RemoveAllNotes() throws Exception{
+//        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+//        String element = "play-act-sp2-p";
+//        String text = "sun ullakosta ottaa";
+//
+//        DocumentNote noteRevision = documentRepository.addNote(createNote(), document, new SelectedText(element, element, text));
+//        DocumentRevision docRevision = noteRevision.getDocumentRevision();
+//
+//        List<DocumentNote> revs = documentNoteRepository.getOfDocument(docRevision);
+//        assertTrue(revs.size() > 0);
+//
+//        docRevision = documentRepository.removeAllNotes(document);
+//        revs = documentNoteRepository.getOfDocument(docRevision);
+//        assertEquals(0, revs.size());
+//    }
 
     @Test
     public void RemoveNotes() throws Exception {
@@ -210,10 +210,10 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote documentNote = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
-        documentDao.removeNotes(document.getRevision(-1), new DocumentNote[] { documentNote });
+        DocumentNote documentNote = documentDao.addNote(createNote(), document, new SelectedText(element, element, text));
+        documentDao.removeNotes(document, new DocumentNote[] { documentNote });
 
-        String content = getContent(document.getSvnPath(), -1);
+        String content = getContent(document.getPath(), -1);
         assertFalse(content.contains(start(documentNote.getId()) + text + end(documentNote.getId())));
     }
 
@@ -225,13 +225,13 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String text2 = "ottaa";
         String text3 = "ullakosta";
 
-        DocumentNote noteRev = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRev = documentDao.addNote(createNote(), document, new SelectedText(element, element, text));
         // note2 won't be removed
-        DocumentNote noteRev2 = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText( element, element, text2));
-        DocumentNote noteRev3 = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text3));
-        documentDao.removeNotes(document.getRevision(-1), new DocumentNote[] { noteRev, noteRev3 });
+        DocumentNote noteRev2 = documentDao.addNote(createNote(), document, new SelectedText( element, element, text2));
+        DocumentNote noteRev3 = documentDao.addNote(createNote(), document, new SelectedText(element, element, text3));
+        documentDao.removeNotes(document, new DocumentNote[] { noteRev, noteRev3 });
 
-        String content = getContent(document.getSvnPath(), -1);
+        String content = getContent(document.getPath(), -1);
         assertFalse(content.contains(start(noteRev.getId()) + text + end(noteRev.getId())));
         assertTrue(content.contains(start(noteRev2.getId()) + text2 + end(noteRev2.getId())));
         assertFalse(content.contains(start(noteRev3.getId()) + text3 + end(noteRev3.getId())));
@@ -243,12 +243,12 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp2-p";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote noteRevision = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRevision = documentDao.addNote(createNote(), document, new SelectedText(element, element, text));
 
         String newText = "sun ullakosta";
         documentDao.updateNote(noteRevision, new SelectedText(element, element, newText));
 
-        String content = getContent(document.getSvnPath(), -1);
+        String content = getContent(document.getPath(), -1);
         String localId = noteRevision.getId();
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));
@@ -260,13 +260,13 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp3-p";
         String text = "\u00E4st";
 
-        DocumentNote noteRevision = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRevision = documentDao.addNote(createNote(), document, new SelectedText(element, element, text));
 
         //T-äst-ä
         String newText = "T\u00E4st\u00E4";
         documentDao.updateNote(noteRevision, new SelectedText(element, element, newText));
 
-        String content = getContent(document.getSvnPath(), -1);
+        String content = getContent(document.getPath(), -1);
         String localId = noteRevision.getId();
 //        System.out.println(content);
         assertFalse(content.contains(start(localId) + text + end(localId)));
@@ -280,7 +280,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         String element = "play-act-sp3-p";
         String text = "\u00E4st";
 
-        DocumentNote noteRevision = documentDao.addNote(createNote(), document.getRevision(-1), new SelectedText(element, element, text));
+        DocumentNote noteRevision = documentDao.addNote(createNote(), document, new SelectedText(element, element, text));
         noteRevision.setPublishable(true);
 
         String newText = "T\u00E4st\u00E4";
@@ -291,11 +291,11 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @Test(expected = RuntimeException.class)
     public void Remove() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        InputStream stream = documentDao.getDocumentStream(document.getRevision(-1));
+        InputStream stream = documentDao.getDocumentStream(document);
         assertNotNull(stream);
         IOUtils.closeQuietly(stream);
         documentDao.remove(document);
-        documentDao.getDocumentStream(document.getRevision(-1));
+        documentDao.getDocumentStream(document);
     }
 
     private Note createNote() {
@@ -313,10 +313,10 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         documentDao.move(getDocument("/" + oldTitle).getId(), "/" + newTitle);
         boolean found = false;
         for (Document document : documentDao.getAll()) {
-            if (newTitle.equals(document.getTitle()) && ("/documents/trunk/" + newTitle).equals(document.getSvnPath())) {
+            if (newTitle.equals(document.getTitle()) && ("/documents/trunk/" + newTitle).equals(document.getPath())) {
                 found = true;
             }
-            if (oldTitle.equals(document.getTitle()) || ("/documents/trunk/" + oldTitle).equals(document.getSvnPath())) {
+            if (oldTitle.equals(document.getTitle()) || ("/documents/trunk/" + oldTitle).equals(document.getPath())) {
                 fail("Old document was still available!");
             }
         }
@@ -327,7 +327,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     public void Moved_File_Is_No_Longer_Available_In_Old_Location() throws IOException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         documentDao.move(document.getId(), "/Pummisuutarit rakeistettuna.xml");
-        documentDao.getDocumentStream(document.getRevision(-1));
+        documentDao.getDocumentStream(document);
     }
 
     @Test
@@ -335,14 +335,14 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         documentDao.move(document.getId(), "/Pummisuutarit rakeistettuna.xml");
         Document movedDocument = getDocument("/Pummisuutarit rakeistettuna.xml");
-        assertNotNull(documentDao.getDocumentStream(movedDocument.getRevision(-1)));
+        assertNotNull(documentDao.getDocumentStream(movedDocument));
     }
 
     @Test(expected = SubversionException.class)
     public void Renamed_File_Is_No_Longer_Available_With_Old_Name() throws IOException {
         Document document = getDocument("/letters/letter_to_the_editor.xml");
         documentDao.move(document.getId(), "/letters/letter_to_the_reader.xml");
-        documentDao.getDocumentStream(document.getRevision(-1));
+        documentDao.getDocumentStream(document);
     }
 
     @Test
@@ -350,6 +350,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = getDocument("/letters/letter_to_the_editor.xml");
         documentDao.move(document.getId(), "/letters/letter_to_the_reader.xml");
         Document movedDocument = getDocument("/letters/letter_to_the_reader.xml");
-        assertNotNull(documentDao.getDocumentStream(movedDocument.getRevision(-1)));
+        assertNotNull(documentDao.getDocumentStream(movedDocument));
     }
 }

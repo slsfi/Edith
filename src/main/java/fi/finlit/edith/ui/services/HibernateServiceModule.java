@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2009 Mysema Ltd.
- * All rights reserved.
- *
- */
 package fi.finlit.edith.ui.services;
 
 import java.io.IOException;
@@ -31,56 +26,40 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.ui.services.content.ContentRendererImpl;
-import fi.finlit.edith.ui.services.repository.AdminServiceImpl;
-import fi.finlit.edith.ui.services.repository.DocumentNoteRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.NoteRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.PersonRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.PlaceRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.TermRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.UserRepositoryImpl;
+import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
 import fi.finlit.edith.ui.services.tasks.ReplacedByAdditionTask;
 import fi.finlit.edith.ui.services.tasks.TasksService;
 
-/**
- * ServiceModule provides service bindings and RDFBean configuration elements
- *
- * @author tiwe
- * @version $Id$
- *
- */
-public final class ServiceModule {
-
-    // TODO : get rid of match
-    @Match({ "AdminService", "DocumentRepository", "NoteDao", "UserDao",
-            "DocumentNoteDao", "TermDao", "PersonDao", "PlaceDao" })
-    public static void adviseTransactions(TransactionalAdvisor advisor,
-            MethodAdviceReceiver receiver) {
-        advisor.addTransactionCommitAdvice(receiver);
-    }
+public final class HibernateServiceModule {
+    @Match({ "AdminService", "DocumentDao", "NoteDao", "UserDao", "DocumentNoteDao", "TermDao",
+            "PersonDao", "PlaceDao" })
+//    public static void adviseTransactions(TransactionalAdvisor advisor,
+//            MethodAdviceReceiver receiver) {
+//        advisor.addTransactionCommitAdvice(receiver);
+//    }
 
     public static void bind(ServiceBinder binder) {
         // services
         binder.bind(SubversionService.class, SubversionServiceImpl.class);
-        binder.bind(ContentRenderer.class, ContentRendererImpl.class);
-        binder.bind(AuthService.class, SpringSecurityAuthService.class);
-        binder.bind(TimeService.class, SimpleTimeService.class);
-        binder.bind(TasksService.class);
+//        binder.bind(ContentRenderer.class, ContentRendererImpl.class);
+//        binder.bind(AuthService.class, SpringSecurityAuthService.class);
+//        binder.bind(TimeService.class, SimpleTimeService.class);
+//        binder.bind(TasksService.class);
 
         // repositories
-        binder.bind(AdminService.class, AdminServiceImpl.class);
-        binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
-        binder.bind(NoteDao.class, NoteRepositoryImpl.class);
-        binder.bind(DocumentNoteDao.class, DocumentNoteRepositoryImpl.class);
-        binder.bind(TermDao.class, TermRepositoryImpl.class);
-        binder.bind(PersonDao.class, PersonRepositoryImpl.class);
-        binder.bind(PlaceDao.class, PlaceRepositoryImpl.class);
-        binder.bind(UserDao.class, UserRepositoryImpl.class);
+        // binder.bind(AdminService.class, AdminServiceImpl.class);
+        binder.bind(DocumentDao.class, DocumentDaoImpl.class);
+        // binder.bind(NoteDao.class, NoteRepositoryImpl.class);
+        // binder.bind(DocumentNoteDao.class, DocumentNoteRepositoryImpl.class);
+        // binder.bind(TermDao.class, TermRepositoryImpl.class);
+        // binder.bind(PersonDao.class, PersonRepositoryImpl.class);
+        // binder.bind(PlaceDao.class, PlaceRepositoryImpl.class);
+        // binder.bind(UserDao.class, UserRepositoryImpl.class);
 
         // tasks
-        binder.bind(ReplacedByAdditionTask.class);
+//        binder.bind(ReplacedByAdditionTask.class);
     }
 
     public static Configuration buildConfiguration() {
@@ -89,21 +68,20 @@ public final class ServiceModule {
         return configuration;
     }
 
-    public static Repository buildRepository(
-            @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
-        final NativeRepository repository = new NativeRepository();
-        repository.setIndexes("spoc,posc,opsc");
-        repository.setDataDirName(rdfbeanDataDir);
-
-
-        hub.addRegistryShutdownListener(new RegistryShutdownListener() {
-            @Override
-            public void registryDidShutdown() {
-                repository.close();
-            }
-        });
-        return repository;
-    }
+//    public static Repository buildRepository(
+//            @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
+//        final NativeRepository repository = new NativeRepository();
+//        repository.setIndexes("spoc,posc,opsc");
+//        repository.setDataDirName(rdfbeanDataDir);
+//
+//        hub.addRegistryShutdownListener(new RegistryShutdownListener() {
+//            @Override
+//            public void registryDidShutdown() {
+//                repository.close();
+//            }
+//        });
+//        return repository;
+//    }
 
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {
@@ -128,6 +106,6 @@ public final class ServiceModule {
         }
     }
 
-    private ServiceModule() {
+    private HibernateServiceModule() {
     }
 }

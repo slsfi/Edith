@@ -10,7 +10,7 @@ import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 
 public class DocumentNoteForm {
 
@@ -29,7 +29,7 @@ public class DocumentNoteForm {
     private DocumentNoteDao documentNoteRepository;
 
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
 
     private boolean delete;
 

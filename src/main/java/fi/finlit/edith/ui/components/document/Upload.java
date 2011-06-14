@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 
 @SuppressWarnings("unused")
 public class Upload {
@@ -27,7 +27,7 @@ public class Upload {
     private static final Logger logger = LoggerFactory.getLogger(Upload.class);
 
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
 
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)

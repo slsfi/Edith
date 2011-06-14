@@ -57,7 +57,7 @@ import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.qtype.QDocumentNote;
 import fi.finlit.edith.ui.services.AuthService;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.NoteDao;
@@ -71,7 +71,7 @@ import fi.finlit.edith.ui.services.svn.UpdateCallback;
 import fi.finlit.edith.util.ElementContext;
 
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements
-        DocumentDao {
+        DocumentRepository {
 
     private static class Matched {
 

@@ -21,7 +21,7 @@
     <failIfNoTests>false</failIfNoTests>
     <tapestry.version>5.2.5</tapestry.version>
     <jetty.version>6.1.15</jetty.version>
-	  <rdfbean.version>1.5.4</rdfbean.version>
+    <rdfbean.version>1.5.4</rdfbean.version>
     <querydsl.version>2.2.0-beta4</querydsl.version>
     <commons.tapestry.version>0.2.0</commons.tapestry.version>
   </properties>
@@ -90,19 +90,14 @@
 
     <!-- services -->
 
-<!-- 
+    <!-- <dependency> <groupId>stax</groupId> <artifactId>stax</artifactId> 
+      <version>1.2.0</version> </dependency> -->
     <dependency>
-      <groupId>stax</groupId>
-      <artifactId>stax</artifactId>
-      <version>1.2.0</version>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>woodstox-core-asl</artifactId>
+      <version>4.1.1</version>
     </dependency>
- -->
-	 <dependency>
-	    <groupId>org.codehaus.woodstox</groupId>
-	    <artifactId>woodstox-core-asl</artifactId>
-	    <version>4.1.1</version>
-	</dependency>
-	  
+
     <!-- persistence -->
     <dependency>
       <groupId>org.tmatesoft.svnkit</groupId>
@@ -135,6 +130,17 @@
       <artifactId>querydsl-jpa</artifactId>
       <version>${querydsl.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.mysema.querydsl</groupId>
+      <artifactId>querydsl-apt</artifactId>
+      <version>${querydsl.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tapestry</groupId>
+      <artifactId>tapestry-hibernate</artifactId>
+      <version>${tapestry.version}</version>
+    </dependency>
+
 
     <!-- TEST dependencies -->
 
@@ -163,9 +169,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>org.hamcrest</groupId>
-        <artifactId>hamcrest-all</artifactId>
-        <version>1.1</version>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.easymock</groupId>
@@ -173,11 +179,16 @@
       <version>2.5.2</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymockclassextension</artifactId>
       <version>2.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.8.0.7</version>
       <scope>test</scope>
     </dependency>
 
@@ -311,14 +322,6 @@
             </configuration>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <version>${querydsl.version}</version>
-            <scope>provided</scope>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>

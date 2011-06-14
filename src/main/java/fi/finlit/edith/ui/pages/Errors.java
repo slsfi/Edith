@@ -10,7 +10,7 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
-import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -25,7 +25,7 @@ public class Errors {
     private DocumentNoteDao documentNoteRepository;
     
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentRepository documentRepository;
     
     @Property
     private DocumentNote documentNote;
