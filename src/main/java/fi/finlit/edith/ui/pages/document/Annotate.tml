@@ -166,7 +166,7 @@
 	
 	
 	<div id="documentsAccordion">
-        <h5><a href="#">${message:documents-label}</a></h5>
+        <h5><a href="#">${message:search-from-documents}</a></h5>
         <div>
           <span><a id="to_annotate" href="#" class="disabled">${message:to-annotate-document}</a></span>
           <div id="directory-tree"/>
