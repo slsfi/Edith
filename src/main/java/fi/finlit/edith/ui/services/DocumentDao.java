@@ -100,6 +100,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @return
      * @throws IOException
      */
+    @Deprecated //Move to service
     DocumentRevision removeAllNotes(Document document);
 
     /**
@@ -109,6 +110,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @param notes
      * @throws IOException
      */
+    @Deprecated //Move to service
     DocumentRevision removeNotes(DocumentRevision docRevision, DocumentNote... notes);
 
     /**
@@ -118,6 +120,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @param notes
      * @return
      */
+    @Deprecated //Move to service
     DocumentRevision removeNotesPermanently(DocumentRevision docRevision, DocumentNote... notes);
 
     /**
@@ -127,6 +130,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @param selection
      * @throws IOException
      */
+    @Deprecated //Move to service
     DocumentNote updateNote(DocumentNote note, SelectedText selection) throws IOException;
 
     /**
