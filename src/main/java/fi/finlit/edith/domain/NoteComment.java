@@ -10,6 +10,8 @@ import org.joda.time.DateTime;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
+import fi.finlit.edith.dto.NoteCommentComparator;
+
 @ClassMapping
 public class NoteComment extends Identifiable {
 

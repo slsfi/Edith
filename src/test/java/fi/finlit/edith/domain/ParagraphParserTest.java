@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.domain.Paragraph;
-import fi.finlit.edith.domain.ParagraphParser;
 import fi.finlit.edith.domain.StringElement;
+import fi.finlit.edith.util.ParagraphParser;
 
 public class ParagraphParserTest {
 

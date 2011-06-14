@@ -1,7 +1,13 @@
-package fi.finlit.edith.domain;
+package fi.finlit.edith.dto;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.NoteFormat;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.TermLanguage;
+import fi.finlit.edith.domain.UserInfo;
 
 /**
  * @author tiwe

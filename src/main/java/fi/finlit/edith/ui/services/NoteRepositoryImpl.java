@@ -49,6 +49,9 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
+import fi.finlit.edith.dto.DocumentNoteSearchInfo;
+import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.dto.OrderBy;
 
 public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
 

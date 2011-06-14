@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.EdithTestConstants;
-import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 
 public class NoteAddition2Test extends AbstractServiceTest {

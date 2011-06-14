@@ -8,9 +8,9 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;

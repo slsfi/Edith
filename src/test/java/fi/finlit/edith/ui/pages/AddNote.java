@@ -11,8 +11,8 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.SelectedText;
 import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 

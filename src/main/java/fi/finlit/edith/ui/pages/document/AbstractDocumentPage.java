@@ -19,7 +19,7 @@ import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.pages.HttpError;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;

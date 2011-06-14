@@ -23,7 +23,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.services.ContentRenderer;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.svn.SubversionService;

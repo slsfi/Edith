@@ -7,8 +7,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.DocumentRepository;
 import fi.finlit.edith.ui.services.NoteRepository;

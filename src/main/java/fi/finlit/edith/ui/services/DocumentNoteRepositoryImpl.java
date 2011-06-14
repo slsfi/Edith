@@ -22,12 +22,12 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.dto.DocumentRevision;
 
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
         DocumentNoteRepository {

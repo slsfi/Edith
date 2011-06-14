@@ -5,7 +5,7 @@
  */
 package fi.finlit.edith.ui.services;
 
-import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.dto.SelectedText;
 
 @SuppressWarnings("serial")
 public class NoteAdditionFailedException extends Exception{

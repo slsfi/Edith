@@ -1,7 +1,7 @@
 /**
  *
  */
-package fi.finlit.edith.domain;
+package fi.finlit.edith.dto;
 
 import java.util.regex.Pattern;
 

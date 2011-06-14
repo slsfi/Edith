@@ -10,12 +10,12 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
 import fi.finlit.edith.domain.NoteFormat;
 import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.OrderBy;
 import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.dto.DocumentNoteSearchInfo;
+import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.UserRepository;
 

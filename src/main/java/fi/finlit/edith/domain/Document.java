@@ -9,6 +9,8 @@ import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 import com.mysema.rdfbean.annotations.Unique;
 
+import fi.finlit.edith.dto.DocumentRevision;
+
 @ClassMapping
 public class Document extends Identifiable implements Comparable<Document>{
 

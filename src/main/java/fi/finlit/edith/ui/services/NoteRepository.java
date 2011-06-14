@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fi.finlit.edith.domain.Concept;
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentNoteSearchInfo;
-import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.dto.DocumentNoteSearchInfo;
+import fi.finlit.edith.dto.DocumentRevision;
 
 // TODO createNote and remove could be in DocumentRepository.
 @Transactional

@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentRevision;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.SelectedText;
+import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @Transactional

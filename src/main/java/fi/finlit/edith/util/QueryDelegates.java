@@ -1,6 +1,12 @@
-package fi.finlit.edith.domain;
+package fi.finlit.edith.util;
 
 import com.mysema.query.annotations.QueryDelegate;
+
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.QConcept;
+import fi.finlit.edith.domain.QDocumentNote;
+import fi.finlit.edith.domain.QNote;
 
 public class QueryDelegates {
     

@@ -14,7 +14,7 @@ import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.util.TextStreamResponse;
 
 import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.pages.HttpError;
 import fi.finlit.edith.ui.services.DocumentRepository;
 

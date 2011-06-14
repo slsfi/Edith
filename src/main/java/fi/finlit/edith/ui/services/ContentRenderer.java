@@ -14,7 +14,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.tapestry5.MarkupWriter;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.DocumentRevision;
+import fi.finlit.edith.dto.DocumentRevision;
 
 /**
  * @author tiwe

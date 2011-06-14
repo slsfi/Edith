@@ -1,4 +1,4 @@
-package fi.finlit.edith.domain;
+package fi.finlit.edith.dto;
 
 public enum OrderBy {
     KEYTERM,

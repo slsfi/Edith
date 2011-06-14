@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.finlit.edith.dto.SelectedText;
+
 public class SelectedTextTest {
     private static final String START_ID = "start";
     private static final String END_ID = "end";

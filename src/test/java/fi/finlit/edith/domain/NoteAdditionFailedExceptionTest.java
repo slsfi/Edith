@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
 public class NoteAdditionFailedExceptionTest {

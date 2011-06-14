@@ -3,7 +3,9 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.domain;
+package fi.finlit.edith.dto;
+
+import fi.finlit.edith.domain.Document;
 
 
 public class DocumentRevision {

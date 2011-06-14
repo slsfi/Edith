@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
+import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.components.InfoMessage;
 import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.DocumentNoteRepository;

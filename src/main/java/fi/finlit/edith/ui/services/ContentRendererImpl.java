@@ -40,6 +40,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
+import fi.finlit.edith.dto.DocumentRevision;
 
 public class ContentRendererImpl implements ContentRenderer {
 

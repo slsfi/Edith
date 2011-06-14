@@ -17,7 +17,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.domain.Concept;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.NoteCommentComparator;
+import fi.finlit.edith.dto.NoteCommentComparator;
 import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.NoteRepository;
 

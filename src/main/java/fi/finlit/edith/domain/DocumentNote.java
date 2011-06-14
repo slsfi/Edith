@@ -11,6 +11,8 @@ import org.joda.time.DateTime;
 import com.mysema.rdfbean.annotations.ClassMapping;
 import com.mysema.rdfbean.annotations.Predicate;
 
+import fi.finlit.edith.dto.DocumentRevision;
+
 @ClassMapping
 public class DocumentNote extends Identifiable {
 

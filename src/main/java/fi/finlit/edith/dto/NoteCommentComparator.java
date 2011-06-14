@@ -1,6 +1,8 @@
-package fi.finlit.edith.domain;
+package fi.finlit.edith.dto;
 
 import java.util.Comparator;
+
+import fi.finlit.edith.domain.NoteComment;
 
 public final class NoteCommentComparator implements Comparator<NoteComment> {
 
