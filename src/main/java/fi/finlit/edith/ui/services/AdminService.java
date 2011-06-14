@@ -13,4 +13,6 @@ public interface AdminService {
 
     void removeNotesAndTerms();
 
+    void removeNotesAndTermsAndDocuments();
+
 }

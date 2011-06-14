@@ -10,6 +10,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
+import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Person;
@@ -49,4 +50,15 @@ public class AdminServiceImpl extends AbstractService implements AdminService{
         }
     }
 
+    @Override
+    public void removeNotesAndTermsAndDocuments() {
+        Session session = getSession();
+        removeAll(session, Document.class);
+        removeAll(session, DocumentNote.class);
+        removeAll(session, Note.class);
+        removeAll(session, Term.class);
+        removeAll(session, Person.class);
+        removeAll(session, Place.class);
+        session.flush();
+    }
 }

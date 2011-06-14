@@ -203,6 +203,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         Document document = getById(id);
         svnService.move(document.getSvnPath(), newPath);
         document.setSvnPath(newPath);
+        document.setTitle(newPath.substring(newPath.lastIndexOf("/") + 1));
         getSession().save(document);
     }
 
@@ -213,6 +214,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         String directoryPath = fullPath.substring(0, fullPath.lastIndexOf("/") + 1);
         svnService.move(fullPath, directoryPath + newPath);
         document.setSvnPath(directoryPath + newPath);
+        document.setTitle(newPath.substring(newPath.lastIndexOf("/") + 1));
         getSession().save(document);
     }
 

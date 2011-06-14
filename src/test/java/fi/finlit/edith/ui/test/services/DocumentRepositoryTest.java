@@ -73,7 +73,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     @After
     public void tearDown() {
         closeStreams();
-        adminService.removeNotesAndTerms();
+        adminService.removeNotesAndTermsAndDocuments();
         subversionService.destroy();
         subversionService.initialize();
     }
@@ -333,7 +333,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     public void Moved_File_Is_No_Longer_Available_In_Old_Location() throws IOException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         documentRepository.move(document.getId(), "/Pummisuutarit rakeistettuna.xml");
-        documentRepository.getDocumentStream(new DocumentRevision(document, -1));
+        documentRepository.getDocumentStream(document.getRevision(-1));
     }
 
     @Test
@@ -341,14 +341,14 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         documentRepository.move(document.getId(), "/Pummisuutarit rakeistettuna.xml");
         Document movedDocument = getDocument("/Pummisuutarit rakeistettuna.xml");
-        assertNotNull(documentRepository.getDocumentStream(new DocumentRevision(movedDocument, -1)));
+        assertNotNull(documentRepository.getDocumentStream(movedDocument.getRevision(-1)));
     }
 
     @Test(expected = SubversionException.class)
     public void Renamed_File_Is_No_Longer_Available_With_Old_Name() throws IOException {
         Document document = getDocument("/letters/letter_to_the_editor.xml");
         documentRepository.move(document.getId(), "/letters/letter_to_the_reader.xml");
-        documentRepository.getDocumentStream(new DocumentRevision(document, -1));
+        documentRepository.getDocumentStream(document.getRevision(-1));
     }
 
     @Test
@@ -356,6 +356,6 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         Document document = getDocument("/letters/letter_to_the_editor.xml");
         documentRepository.move(document.getId(), "/letters/letter_to_the_reader.xml");
         Document movedDocument = getDocument("/letters/letter_to_the_reader.xml");
-        assertNotNull(documentRepository.getDocumentStream(new DocumentRevision(movedDocument, -1)));
+        assertNotNull(documentRepository.getDocumentStream(movedDocument.getRevision(-1)));
     }
 }
