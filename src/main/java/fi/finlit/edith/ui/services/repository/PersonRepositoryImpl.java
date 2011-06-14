@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.repository;
 
 import static fi.finlit.edith.domain.QPerson.person;
 
@@ -14,7 +14,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.ui.services.repository.AbstractRepository;
+import fi.finlit.edith.ui.services.PersonDao;
 
 public class PersonRepositoryImpl extends AbstractRepository<Person> implements PersonDao {
     public PersonRepositoryImpl(@Inject SessionFactory sessionFactory) {

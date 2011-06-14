@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.dto.SelectedText;
-import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
+import fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl;
 
 public class NoteAddition2Test extends AbstractServiceTest {
     @Inject

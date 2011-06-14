@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.repository;
 
 import static fi.finlit.edith.domain.QPlace.place;
 
@@ -14,7 +14,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.ui.services.repository.AbstractRepository;
+import fi.finlit.edith.ui.services.PlaceDao;
 
 public class PlaceRepositoryImpl extends AbstractRepository<Place> implements PlaceDao {
     public PlaceRepositoryImpl(@Inject SessionFactory sessionFactory) {

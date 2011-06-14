@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.repository;
 
 import static fi.finlit.edith.domain.QDocumentNote.documentNote;
 
@@ -28,7 +28,10 @@ import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.dto.DocumentRevision;
-import fi.finlit.edith.ui.services.repository.AbstractRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.ServiceException;
+import fi.finlit.edith.ui.services.TimeService;
+import fi.finlit.edith.ui.services.UserDao;
 
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
         DocumentNoteDao {

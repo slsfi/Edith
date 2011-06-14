@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.repository;
 
 import static fi.finlit.edith.domain.QTerm.term;
 
@@ -14,7 +14,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.ui.services.repository.AbstractRepository;
+import fi.finlit.edith.ui.services.TermDao;
 
 public class TermRepositoryImpl extends AbstractRepository<Term> implements TermDao {
 

@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.repository;
 
 import static fi.finlit.edith.domain.QDocument.document;
 
@@ -56,7 +56,13 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
-import fi.finlit.edith.ui.services.repository.AbstractRepository;
+import fi.finlit.edith.ui.services.AuthService;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.NoteAdditionFailedException;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.ServiceException;
+import fi.finlit.edith.ui.services.TimeService;
 import fi.finlit.edith.ui.services.svn.FileItem;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;

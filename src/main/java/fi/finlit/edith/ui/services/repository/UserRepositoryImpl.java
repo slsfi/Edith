@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.repository;
 
 import static fi.finlit.edith.domain.QUser.user;
 import static fi.finlit.edith.domain.QUserInfo.userInfo;
@@ -17,7 +17,8 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.ui.services.repository.AbstractRepository;
+import fi.finlit.edith.ui.services.AuthService;
+import fi.finlit.edith.ui.services.UserDao;
 
 public class UserRepositoryImpl extends AbstractRepository<User> implements UserDao {
     

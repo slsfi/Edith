@@ -5,7 +5,7 @@
  */
 package fi.finlit.edith.ui.test.services;
 
-import static fi.finlit.edith.ui.services.DocumentRepositoryImpl.extractName;
+import static fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl.extractName;
 import static org.junit.Assert.fail;
 
 import java.io.Reader;
@@ -34,8 +34,8 @@ import org.junit.Test;
 
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.dto.SelectedText;
-import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
+import fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl;
 import fi.finlit.edith.util.ElementContext;
 
 public class NoteAdditionTest extends AbstractServiceTest{

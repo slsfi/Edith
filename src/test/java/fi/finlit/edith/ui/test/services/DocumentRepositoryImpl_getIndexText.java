@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import fi.finlit.edith.ui.services.DocumentRepositoryImpl;
+import fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl;
 
 public class DocumentRepositoryImpl_getIndexText {
 

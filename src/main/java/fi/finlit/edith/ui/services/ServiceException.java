@@ -4,15 +4,15 @@ public class ServiceException extends RuntimeException{
 
     private static final long serialVersionUID = -5426150520106835552L;
 
-    ServiceException(String msg){
+    public ServiceException(String msg){
         super(msg);
     }
 
-    ServiceException(Throwable t) {
+    public ServiceException(Throwable t) {
         super(t);
     }
 
-    ServiceException(String msg, Throwable t) {
+    public ServiceException(String msg, Throwable t) {
         super(msg,t);
     }
 

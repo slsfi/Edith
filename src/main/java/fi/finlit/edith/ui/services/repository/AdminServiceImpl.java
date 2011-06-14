@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.repository;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -15,6 +15,8 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.ui.services.AbstractService;
+import fi.finlit.edith.ui.services.AdminService;
 
 public class AdminServiceImpl extends AbstractService implements AdminService{
 
