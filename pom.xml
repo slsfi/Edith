@@ -21,7 +21,8 @@
     <failIfNoTests>false</failIfNoTests>
     <tapestry.version>5.2.5</tapestry.version>
     <jetty.version>6.1.15</jetty.version>
-	<rdfbean.version>1.5.4</rdfbean.version>
+	  <rdfbean.version>1.5.4</rdfbean.version>
+    <querydsl.version>2.2.0-beta4</querydsl.version>
     <commons.tapestry.version>0.2.0</commons.tapestry.version>
   </properties>
 
@@ -112,16 +113,27 @@
       <groupId>com.mysema.rdf</groupId>
       <artifactId>rdfbean-sesame</artifactId>
       <version>${rdfbean.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mysema.rdf</groupId>
-      <artifactId>rdfbean-virtuoso</artifactId>
-      <version>${rdfbean.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.mysema.querydsl</groupId>
+          <artifactId>querydsl-apt</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.mysema.rdf</groupId>
       <artifactId>rdfbean-tapestry</artifactId>
       <version>${rdfbean.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>3.6.4.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mysema.querydsl</groupId>
+      <artifactId>querydsl-jpa</artifactId>
+      <version>${querydsl.version}</version>
     </dependency>
 
     <!-- TEST dependencies -->
@@ -261,24 +273,6 @@
           <useTurtle>true</useTurtle>
         </configuration>
       </plugin>
-
-      <!-- Querydsl code generation -->
-      <plugin>
-        <groupId>com.mysema.maven</groupId>
-        <artifactId>maven-apt-plugin</artifactId>
-        <version>0.3.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>process</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>target/generated-sources/java</outputDirectory>
-              <processor>com.mysema.rdfbean.query.BeanAnnotationProcessor</processor>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -301,6 +295,30 @@
             </property>
           </systemProperties>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.mysema.maven</groupId>
+        <artifactId>maven-apt-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/generated-sources/java</outputDirectory>
+              <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
