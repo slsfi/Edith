@@ -47,7 +47,6 @@ public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote>
         this.userRepository = userRepository;
         this.timeService = timeService;
         this.extendedTerm = extendedTerm;
-        System.err.println(extendedTerm);
     }
 
     @Override
