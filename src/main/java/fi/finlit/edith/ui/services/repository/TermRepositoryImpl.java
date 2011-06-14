@@ -5,7 +5,7 @@
  */
 package fi.finlit.edith.ui.services.repository;
 
-import static fi.finlit.edith.domain.QTerm.term;
+import static fi.finlit.edith.qtype.QTerm.term;
 
 import java.util.List;
 

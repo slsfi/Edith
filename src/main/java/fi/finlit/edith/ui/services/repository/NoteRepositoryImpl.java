@@ -5,9 +5,9 @@
  */
 package fi.finlit.edith.ui.services.repository;
 
-import static fi.finlit.edith.domain.QDocumentNote.documentNote;
-import static fi.finlit.edith.domain.QNote.note;
-import static fi.finlit.edith.domain.QTermWithNotes.termWithNotes;
+import static fi.finlit.edith.qtype.QDocumentNote.documentNote;
+import static fi.finlit.edith.qtype.QNote.note;
+import static fi.finlit.edith.qtype.QTermWithNotes.termWithNotes;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +52,10 @@ import fi.finlit.edith.domain.*;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.OrderBy;
+import fi.finlit.edith.qtype.QDocumentNote;
+import fi.finlit.edith.qtype.QNote;
+import fi.finlit.edith.qtype.QPerson;
+import fi.finlit.edith.qtype.QPlace;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteWithInstances;

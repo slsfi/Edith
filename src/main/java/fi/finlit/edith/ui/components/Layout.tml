@@ -7,9 +7,7 @@
 	<body>
 		<div id="header">
 			<div class="content">
-				<a t:type="pagelink" t:page="index" id="homeLink">
-					<img src="${context:images/logo.jpg}" />
-				</a>
+				<div id="title-bar">${message:application-name}</div>
 				<t:dashboard />
 				<div id="auth">
 					<t:authPanel />
@@ -35,7 +33,8 @@
 			<div class="cleaner">
 			</div>
 		</div>
-
+        
+        <t:remove>
 		<div id="bottom">
 			<div class="content">
 				<ul class="actions">
@@ -48,6 +47,7 @@
 				</ul>
 			</div>
 		</div>
+        </t:remove>
 	</body>
 </html>
 

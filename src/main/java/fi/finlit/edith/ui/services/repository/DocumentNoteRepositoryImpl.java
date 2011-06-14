@@ -5,7 +5,7 @@
  */
 package fi.finlit.edith.ui.services.repository;
 
-import static fi.finlit.edith.domain.QDocumentNote.documentNote;
+import static fi.finlit.edith.qtype.QDocumentNote.documentNote;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,10 +24,10 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.domain.QDocumentNote;
-import fi.finlit.edith.domain.QNote;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.qtype.QDocumentNote;
+import fi.finlit.edith.qtype.QNote;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.TimeService;

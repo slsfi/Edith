@@ -11,7 +11,7 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.QDocumentNote;
+import fi.finlit.edith.qtype.QDocumentNote;
 
 public class ReplacedByAdditionTask implements Task{
 

@@ -5,8 +5,8 @@
  */
 package fi.finlit.edith.ui.services.repository;
 
-import static fi.finlit.edith.domain.QUser.user;
-import static fi.finlit.edith.domain.QUserInfo.userInfo;
+import static fi.finlit.edith.qtype.QUser.user;
+import static fi.finlit.edith.qtype.QUserInfo.userInfo;
 
 import java.util.Collection;
 import java.util.List;

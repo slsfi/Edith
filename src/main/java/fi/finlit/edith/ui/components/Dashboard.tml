@@ -2,7 +2,7 @@
     <t:content>
         <t:if test="loggedIn">
         <div class="dashboard panel">
-            <ul>
+            <ul class="actions">
                 <li>
                     <a t:type="pageLink" t:page="documents" t:disabled="isOnPage('documents')">${message:documents}</a>
                 </li>                                

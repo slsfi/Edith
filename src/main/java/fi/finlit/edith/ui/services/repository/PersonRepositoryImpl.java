@@ -5,7 +5,7 @@
  */
 package fi.finlit.edith.ui.services.repository;
 
-import static fi.finlit.edith.domain.QPerson.person;
+import static fi.finlit.edith.qtype.QPerson.person;
 
 import java.util.Collection;
 

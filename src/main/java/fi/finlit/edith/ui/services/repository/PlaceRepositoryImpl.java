@@ -5,7 +5,7 @@
  */
 package fi.finlit.edith.ui.services.repository;
 
-import static fi.finlit.edith.domain.QPlace.place;
+import static fi.finlit.edith.qtype.QPlace.place;
 
 import java.util.Collection;
 

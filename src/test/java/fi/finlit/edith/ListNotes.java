@@ -12,8 +12,8 @@ import com.mysema.rdfbean.object.SessionFactoryImpl;
 import com.mysema.rdfbean.sesame.NativeRepository;
 
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.QDocumentNote;
-import fi.finlit.edith.domain.QNote;
+import fi.finlit.edith.qtype.QDocumentNote;
+import fi.finlit.edith.qtype.QNote;
 
 public class ListNotes {
 

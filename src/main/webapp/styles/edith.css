@@ -19,13 +19,31 @@
 	margin-top: 1em;
 }
 
+
+/**
+* Header
+*/
+
+
 #top .content,#header .content {
 	padding: 0.2em;
+	padding-left: 2em;
 }
 
 #header .content {
-	font-size: 1em;
+	font-size: 0.75em;
+	font-family: verdana, serif;
 	border-bottom: solid 1px #D0D0D0;
+}
+
+#header a:link, #header a:visited, 
+#header a:hover, #header a:active {
+    text-decoration: underline;
+    color: #000;
+}
+
+#header a.disabled {
+	
 }
 
 #top .content {
@@ -176,7 +194,7 @@ table.searchresults td {
 * Disabled link
 */
 a.disabled:link,a.disabled:visited,a.disabled:hover,a.disabled:active {
-	color: #aaaaaa;
+	color: #919191;
 }
 
 /*

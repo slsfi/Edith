@@ -4,9 +4,9 @@ import com.mysema.query.annotations.QueryDelegate;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.QConcept;
-import fi.finlit.edith.domain.QDocumentNote;
-import fi.finlit.edith.domain.QNote;
+import fi.finlit.edith.qtype.QConcept;
+import fi.finlit.edith.qtype.QDocumentNote;
+import fi.finlit.edith.qtype.QNote;
 
 public class QueryDelegates {
     

@@ -5,7 +5,7 @@
  */
 package fi.finlit.edith.ui.services.hibernate;
 
-import static fi.finlit.edith.domain.QDocument.document;
+import static fi.finlit.edith.qtype.QDocument.document;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,9 +53,9 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
+import fi.finlit.edith.qtype.QDocumentNote;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
