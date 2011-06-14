@@ -16,12 +16,12 @@ import org.apache.tapestry5.util.TextStreamResponse;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.pages.HttpError;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
 
 public class RawDocument {
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Inject
     private Response response;

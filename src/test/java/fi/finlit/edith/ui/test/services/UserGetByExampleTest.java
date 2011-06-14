@@ -11,12 +11,12 @@ import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.User;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.ui.services.UserDao;
 
 public class UserGetByExampleTest extends AbstractServiceTest{
 
     @Inject
-    private UserRepository userRepo;
+    private UserDao userRepo;
 
     @Inject
     private SessionFactory sessionFactory;

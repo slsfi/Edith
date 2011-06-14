@@ -19,16 +19,16 @@ import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.TermRepository;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.TermDao;
 
 public class AdminServiceTest extends AbstractServiceTest{
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Inject
-    private TermRepository termRepository;
+    private TermDao termRepository;
 
     @Inject
     private AdminService adminService;

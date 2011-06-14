@@ -18,9 +18,9 @@ public class PrimaryKeyEncoder<T extends Identifiable> implements ValueEncoder<T
 
     private final Map<String, T> keyToValue = new HashMap<String, T>();
 
-    private final Repository<T,String> repository;
+    private final Dao<T,String> repository;
 
-    public PrimaryKeyEncoder( Repository<T,String> repository) {
+    public PrimaryKeyEncoder( Dao<T,String> repository) {
         this.repository = repository;
     }
 

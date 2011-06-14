@@ -13,13 +13,13 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.dto.SelectedText;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 
 public class AddNote {
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Inject
     @Symbol(EDITH.EXTENDED_TERM)

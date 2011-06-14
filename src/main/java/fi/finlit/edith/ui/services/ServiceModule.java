@@ -29,6 +29,8 @@ import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.ui.services.content.ContentRenderer;
+import fi.finlit.edith.ui.services.content.ContentRendererImpl;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
 import fi.finlit.edith.ui.services.tasks.ReplacedByAdditionTask;
@@ -44,8 +46,8 @@ import fi.finlit.edith.ui.services.tasks.TasksService;
 public final class ServiceModule {
 
     // TODO : get rid of match
-    @Match({ "AdminService", "DocumentRepository", "NoteRepository", "UserRepository",
-            "DocumentNoteRepository", "TermRepository", "PersonRepository", "PlaceRepository" })
+    @Match({ "AdminService", "DocumentDao", "NoteDao", "UserDao",
+            "DocumentNoteDao", "TermDao", "PersonDao", "PlaceDao" })
     public static void adviseTransactions(TransactionalAdvisor advisor,
             MethodAdviceReceiver receiver) {
         advisor.addTransactionCommitAdvice(receiver);
@@ -61,13 +63,13 @@ public final class ServiceModule {
 
         // repositories
         binder.bind(AdminService.class, AdminServiceImpl.class);
-        binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
-        binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
-        binder.bind(DocumentNoteRepository.class, DocumentNoteRepositoryImpl.class);
-        binder.bind(TermRepository.class, TermRepositoryImpl.class);
-        binder.bind(PersonRepository.class, PersonRepositoryImpl.class);
-        binder.bind(PlaceRepository.class, PlaceRepositoryImpl.class);
-        binder.bind(UserRepository.class, UserRepositoryImpl.class);
+        binder.bind(DocumentDao.class, DocumentRepositoryImpl.class);
+        binder.bind(NoteDao.class, NoteRepositoryImpl.class);
+        binder.bind(DocumentNoteDao.class, DocumentNoteRepositoryImpl.class);
+        binder.bind(TermDao.class, TermRepositoryImpl.class);
+        binder.bind(PersonDao.class, PersonRepositoryImpl.class);
+        binder.bind(PlaceDao.class, PlaceRepositoryImpl.class);
+        binder.bind(UserDao.class, UserRepositoryImpl.class);
 
         // tasks
         binder.bind(ReplacedByAdditionTask.class);

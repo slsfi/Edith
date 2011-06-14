@@ -16,7 +16,7 @@ import org.junit.Test;
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.components.document.Pages;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
 public class PagesTest extends AbstractServiceTest{
@@ -26,7 +26,7 @@ public class PagesTest extends AbstractServiceTest{
     private String testDocument;
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Autobuild
     @Inject

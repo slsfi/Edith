@@ -21,7 +21,7 @@ import org.junit.Test;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
 
 public class DocumentNoteQueryTest extends AbstractServiceTest{
 
@@ -29,7 +29,7 @@ public class DocumentNoteQueryTest extends AbstractServiceTest{
     private AdminService adminService;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Before
     public void setUp() throws Exception {

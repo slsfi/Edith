@@ -27,8 +27,8 @@ import com.mysema.tapestry.core.Context;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Concept;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 
 @SuppressWarnings("unused")
@@ -50,10 +50,10 @@ public class NoteSearch {
     private Note note;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Property
     private PrimaryKeyEncoder<Note> encoder;

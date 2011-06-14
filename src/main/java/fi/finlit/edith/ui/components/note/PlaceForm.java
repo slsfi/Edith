@@ -12,7 +12,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.ui.services.PlaceRepository;
+import fi.finlit.edith.ui.services.PlaceDao;
 
 @SuppressWarnings("unused")
 public class PlaceForm {
@@ -25,7 +25,7 @@ public class PlaceForm {
     private Block closeDialog;
 
     @Inject
-    private PlaceRepository placeRepository;
+    private PlaceDao placeRepository;
 
     @Property
     private String newName;

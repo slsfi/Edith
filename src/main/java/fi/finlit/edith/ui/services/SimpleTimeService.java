@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.services;
 
+@Deprecated //Local id is not used anymore
 public class SimpleTimeService implements TimeService{
 
     private volatile long last = System.currentTimeMillis();

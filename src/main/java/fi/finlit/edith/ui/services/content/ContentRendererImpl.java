@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.content;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +41,8 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
 import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.util.ElementContext;
 
 public class ContentRendererImpl implements ContentRenderer {
 
@@ -58,7 +60,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private static final String DIV = "div";
 
-    private final DocumentRepository documentRepository;
+    private final DocumentDao documentRepository;
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
@@ -70,7 +72,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private final boolean extendedTerm;
 
-    public ContentRendererImpl(@Inject DocumentRepository documentRepository,
+    public ContentRendererImpl(@Inject DocumentDao documentRepository,
             @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl,
             @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
         this.documentRepository = documentRepository;

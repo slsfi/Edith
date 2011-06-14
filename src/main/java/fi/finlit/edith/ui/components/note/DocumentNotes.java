@@ -14,7 +14,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
 
 @Import(library = { "classpath:js/jquery.scrollTo-min.js" })
 @SuppressWarnings("unused")
@@ -31,7 +31,7 @@ public class DocumentNotes {
     private String noteId;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Property
     private DocumentNote documentNote;

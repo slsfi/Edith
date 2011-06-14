@@ -42,10 +42,10 @@ import fi.finlit.edith.ui.components.note.DocumentNotes;
 import fi.finlit.edith.ui.components.note.NoteEdit;
 import fi.finlit.edith.ui.components.note.SearchResults;
 import fi.finlit.edith.ui.pages.Documents;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.TermRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.TermDao;
 import fi.finlit.edith.ui.services.TimeService;
 
 @Import(library = {
@@ -73,7 +73,7 @@ public class Annotate extends AbstractDocumentPage {
     private TimeService timeService;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Inject
     private Block documentView;
@@ -99,7 +99,7 @@ public class Annotate extends AbstractDocumentPage {
     private DocumentNote note;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Property
     private String noteRevisionId;
@@ -121,7 +121,7 @@ public class Annotate extends AbstractDocumentPage {
     private DocumentNoteSearchInfo searchInfo;
 
     @Inject
-    private TermRepository termRepository;
+    private TermDao termRepository;
 
     @Property
     private NoteType type;

@@ -17,12 +17,12 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.ui.services.AuthService;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.ui.services.UserDao;
 
 public class UserRepositoryTest extends AbstractServiceTest {
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userRepository;
 
     @Inject
     private AuthService authService;

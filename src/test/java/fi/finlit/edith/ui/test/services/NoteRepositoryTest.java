@@ -41,13 +41,13 @@ import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteWithInstances;
-import fi.finlit.edith.ui.services.PersonRepository;
-import fi.finlit.edith.ui.services.PlaceRepository;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.ui.services.PersonDao;
+import fi.finlit.edith.ui.services.PlaceDao;
+import fi.finlit.edith.ui.services.UserDao;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 public class NoteRepositoryTest extends AbstractServiceTest {
@@ -56,22 +56,22 @@ public class NoteRepositoryTest extends AbstractServiceTest {
     private AdminService adminService;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userRepository;
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Inject
-    private PersonRepository personRepository;
+    private PersonDao personRepository;
 
     @Inject
-    private PlaceRepository placeRepository;
+    private PlaceDao placeRepository;
 
     @Inject
     @Symbol(EdithTestConstants.NOTE_TEST_DATA_KEY)

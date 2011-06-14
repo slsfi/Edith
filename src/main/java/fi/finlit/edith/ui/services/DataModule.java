@@ -31,10 +31,10 @@ public final class DataModule {
             OrderedConfiguration<Object> configuration,
             SaltSource saltSource,
             PasswordEncoder passwordEncoder,
-            @Inject DocumentRepository documentRepository,
+            @Inject DocumentDao documentRepository,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject SubversionService subversionService,
-            @Inject UserRepository userRepository) throws IOException {
+            @Inject UserDao userRepository) throws IOException {
 
         logger.info("Initializing DataModule");
 
@@ -46,7 +46,7 @@ public final class DataModule {
     }
 
     @SuppressWarnings("unchecked")
-    private static void addUsers(UserRepository userRepository,
+    private static void addUsers(UserDao userRepository,
             SaltSource saltSource,
             PasswordEncoder passwordEncoder) throws IOException {
         List<String> lines = IOUtils.readLines(DataModule.class.getResourceAsStream("/users.csv"), "ISO-8859-1");

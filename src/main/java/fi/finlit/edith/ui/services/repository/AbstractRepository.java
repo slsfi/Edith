@@ -1,9 +1,12 @@
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.repository;
 
 import java.util.Collection;
 
 import com.mysema.query.types.EntityPath;
 import com.mysema.rdfbean.object.SessionFactory;
+
+import fi.finlit.edith.ui.services.AbstractService;
+import fi.finlit.edith.ui.services.Dao;
 
 /**
  * AbstractRepository provides a basic stub for Repository implementations
@@ -12,7 +15,7 @@ import com.mysema.rdfbean.object.SessionFactory;
  * @version $Id$
  */
 public abstract class AbstractRepository<T> extends AbstractService
-    implements Repository<T,String>{
+    implements Dao<T,String>{
 
     private final EntityPath<T> entityPath;
 

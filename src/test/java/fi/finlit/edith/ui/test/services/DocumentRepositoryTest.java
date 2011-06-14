@@ -38,8 +38,8 @@ import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionService;
@@ -47,10 +47,10 @@ import fi.finlit.edith.ui.services.svn.SubversionService;
 public class DocumentRepositoryTest extends AbstractServiceTest {
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Inject
     private SubversionService subversionService;

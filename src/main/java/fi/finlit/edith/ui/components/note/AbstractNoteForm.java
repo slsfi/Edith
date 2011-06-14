@@ -28,10 +28,10 @@ import fi.finlit.edith.domain.*;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.components.InfoMessage;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.TermRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.TermDao;
 import fi.finlit.edith.ui.services.TimeService;
 
 @SuppressWarnings("unused")
@@ -49,13 +49,13 @@ public abstract class AbstractNoteForm {
     private SelectedText createTermSelection;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Inject
     private TimeService timeService;
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Inject
     private Messages messages;
@@ -64,7 +64,7 @@ public abstract class AbstractNoteForm {
     private Note noteOnEdit;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Property
     private boolean saveAsNew;
@@ -76,7 +76,7 @@ public abstract class AbstractNoteForm {
     private List<DocumentNote> selectedNotes;
 
     @Inject
-    private TermRepository termRepository;
+    private TermDao termRepository;
 
     @Property
     private NoteType type;
@@ -112,7 +112,7 @@ public abstract class AbstractNoteForm {
         this.noteOnEdit = noteOnEdit;
     }
 
-    protected DocumentNoteRepository getDocumentNoteRepository() {
+    protected DocumentNoteDao getDocumentNoteRepository() {
         return documentNoteRepository;
     }
 

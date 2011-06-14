@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import fi.finlit.edith.ui.services.ElementContext;
+import fi.finlit.edith.util.ElementContext;
 
 public class ElementContextTest {
 

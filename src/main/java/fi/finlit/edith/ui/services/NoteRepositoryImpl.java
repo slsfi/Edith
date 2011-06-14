@@ -52,8 +52,9 @@ import fi.finlit.edith.domain.*;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.OrderBy;
+import fi.finlit.edith.ui.services.repository.AbstractRepository;
 
-public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
+public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteDao {
 
     private static final Logger logger = LoggerFactory.getLogger(NoteRepositoryImpl.class);
 
@@ -76,14 +77,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private final TimeService timeService;
 
-    private final UserRepository userRepository;
+    private final UserDao userRepository;
 
     private final AuthService authService;
 
     private final boolean extendedTerm;
 
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserRepository userRepository,
+            @Inject UserDao userRepository,
             @Inject TimeService timeService,
             @Inject AuthService authService,
             @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {

@@ -24,8 +24,8 @@ import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.*;
-import fi.finlit.edith.ui.services.ContentRenderer;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.content.ContentRenderer;
 
 public class ContentRendererTest extends AbstractServiceTest {
 
@@ -37,7 +37,7 @@ public class ContentRendererTest extends AbstractServiceTest {
     private ContentRenderer renderer;
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Inject @Symbol(EDITH.EXTENDED_TERM)
     private boolean extendedTerm;

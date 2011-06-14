@@ -24,15 +24,15 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.dto.DocumentRevision;
-import fi.finlit.edith.ui.services.ContentRenderer;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
 @Import(stylesheet = { "context:styles/tei.css" }, library = { "classpath:js/jquery-1.4.1.js" })
 @SuppressWarnings("unused")
 public class Publish extends AbstractDocumentPage {
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Property
     private DocumentNote documentNote;

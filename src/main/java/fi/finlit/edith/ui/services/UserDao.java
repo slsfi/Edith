@@ -16,7 +16,7 @@ import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
 
 @Transactional
-public interface UserRepository extends Repository<User,String>{
+public interface UserDao extends Dao<User,String>{
 
     /**
      * Get the user with the given username

@@ -10,6 +10,7 @@ import fi.finlit.edith.domain.Note;
  * @author tiwe
  *
  */
+@Deprecated //This probaly can be removed
 public class NoteWithInstances {
     
     private final Note note;

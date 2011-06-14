@@ -9,9 +9,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.dto.DocumentRevision;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @SuppressWarnings("unused")
@@ -19,13 +19,13 @@ import fi.finlit.edith.ui.services.svn.RevisionInfo;
 public class Errors {
     
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
     
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
     
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
     
     @Property
     private DocumentNote documentNote;

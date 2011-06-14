@@ -26,9 +26,9 @@ import com.mysema.tapestry.core.Context;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.TermWithNotes;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.TermRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.TermDao;
 
 @SuppressWarnings("unused")
 @Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
@@ -52,13 +52,13 @@ public class DictionarySearch {
     private Note note;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Inject
-    private TermRepository termRepository;
+    private TermDao termRepository;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     private Map<Note, Collection<DocumentNote>> documentNotes;
 

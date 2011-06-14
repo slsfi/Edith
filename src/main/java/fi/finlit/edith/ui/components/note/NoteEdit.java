@@ -25,8 +25,8 @@ import fi.finlit.edith.dto.NoteCommentComparator;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.components.InfoMessage;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.NoteDao;
 
 @SuppressWarnings("unused")
 public class NoteEdit {
@@ -38,10 +38,10 @@ public class NoteEdit {
     private Block noteEditBlock;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     private DocumentNote documentNoteOnEdit;
 

@@ -15,12 +15,12 @@ import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.ui.services.UserDetailsImpl;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.ui.services.UserDao;
 
 public class UserEncodingTest extends AbstractServiceTest {
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userRepository;
 
     @Test
     @Ignore

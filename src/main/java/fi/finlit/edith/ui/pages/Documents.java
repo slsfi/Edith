@@ -21,8 +21,8 @@ import com.google.gson.Gson;
 
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.FileItemWithDocumentId;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 
 @SuppressWarnings("unused")
 @Import(library = {
@@ -36,7 +36,7 @@ import fi.finlit.edith.ui.services.FileItemWithDocumentId;
 public class Documents {
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Property
     private Collection<Document> documents;

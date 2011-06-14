@@ -21,7 +21,7 @@ import fi.finlit.edith.dto.DocumentRevision;
 
 // TODO createNote and remove could be in DocumentRepository.
 @Transactional
-public interface NoteRepository extends Repository<Note, String> {
+public interface NoteDao extends Dao<Note, String> {
 
     /**
      * Creates a comment for the given note.
@@ -137,6 +137,7 @@ public interface NoteRepository extends Repository<Note, String> {
      * @param searchInfo
      * @return
      */
+    @Deprecated //Use GridDataSource findNotes version
     List<NoteWithInstances> findNotesWithInstances(DocumentNoteSearchInfo searchInfo);
 
     /**

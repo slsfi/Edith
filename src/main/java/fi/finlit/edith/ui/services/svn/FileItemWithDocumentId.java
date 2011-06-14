@@ -1,8 +1,7 @@
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.services.svn;
 
 import java.util.List;
 
-import fi.finlit.edith.ui.services.svn.FileItem;
 
 public class FileItemWithDocumentId extends FileItem {
     private final String documentId;

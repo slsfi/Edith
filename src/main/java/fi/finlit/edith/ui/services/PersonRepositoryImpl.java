@@ -14,8 +14,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.ui.services.repository.AbstractRepository;
 
-public class PersonRepositoryImpl extends AbstractRepository<Person> implements PersonRepository {
+public class PersonRepositoryImpl extends AbstractRepository<Person> implements PersonDao {
     public PersonRepositoryImpl(@Inject SessionFactory sessionFactory) {
         super(sessionFactory, person);
     }

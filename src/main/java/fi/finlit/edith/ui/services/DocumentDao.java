@@ -18,10 +18,11 @@ import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
+import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @Transactional
-public interface DocumentRepository extends Repository<Document, String> {
+public interface DocumentDao extends Dao<Document, String> {
 
     /**
      * Import the given File to the given svnPath

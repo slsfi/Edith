@@ -17,8 +17,9 @@ import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.ui.services.repository.AbstractRepository;
 
-public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository {
+public class UserRepositoryImpl extends AbstractRepository<User> implements UserDao {
     
     private final AuthService authService;
 

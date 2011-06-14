@@ -5,6 +5,7 @@
  */
 package fi.finlit.edith.ui.services;
 
+@Deprecated
 public interface TimeService {
 
     /**

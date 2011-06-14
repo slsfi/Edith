@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fi.finlit.edith.domain.Term;
 
 @Transactional
-public interface TermRepository extends Repository<Term,String>{
+public interface TermDao extends Dao<Term,String>{
 
     /**
      * Find matching terms by searching matches from basicForm -property.

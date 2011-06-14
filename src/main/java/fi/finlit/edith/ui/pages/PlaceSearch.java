@@ -14,8 +14,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.PlaceRepository;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.PlaceDao;
 
 @SuppressWarnings("unused")
 @Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
@@ -33,10 +33,10 @@ public class PlaceSearch {
     private Place place;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Inject
-    private PlaceRepository placeRepository;
+    private PlaceDao placeRepository;
 
     void onActivate(EventContext ctx) {
         if (ctx.getCount() >= 1) {

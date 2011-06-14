@@ -29,8 +29,8 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteType;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteWithInstances;
 
 @Import(library = {"SearchResults.js"})
@@ -45,7 +45,7 @@ public class SearchResults {
     private Block notesList;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
     
     @InjectComponent
     @Property

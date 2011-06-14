@@ -14,8 +14,8 @@ import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Person;
 import fi.finlit.edith.domain.Place;
 import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.ui.services.PersonRepository;
-import fi.finlit.edith.ui.services.PlaceRepository;
+import fi.finlit.edith.ui.services.PersonDao;
+import fi.finlit.edith.ui.services.PlaceDao;
 
 @SuppressWarnings("unused")
 public class SKSNoteForm extends AbstractNoteForm {
@@ -52,7 +52,7 @@ public class SKSNoteForm extends AbstractNoteForm {
     private String placeId;
 
     @Inject
-    private PlaceRepository placeRepository;
+    private PlaceDao placeRepository;
 
     private Person person;
 
@@ -60,7 +60,7 @@ public class SKSNoteForm extends AbstractNoteForm {
     private String personId;
 
     @Inject
-    private PersonRepository personRepository;
+    private PersonDao personRepository;
 
     void onPrepareFromNoteEditForm(String noteId) {
 

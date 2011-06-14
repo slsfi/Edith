@@ -13,13 +13,13 @@ import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 
 import fi.finlit.edith.ui.services.UserDetailsServiceImpl;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.ui.services.UserDao;
 
 public class UserDetailsServiceImplTest extends AbstractServiceTest {
     private UserDetailsServiceImpl service;
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userRepository;
 
     @Before
     public void setUp() throws Exception {

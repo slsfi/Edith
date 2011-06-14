@@ -14,8 +14,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.PersonRepository;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.PersonDao;
 
 @SuppressWarnings("unused")
 @Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
@@ -33,10 +33,10 @@ public class PersonSearch {
     private Person person;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Inject
-    private PersonRepository personRepository;
+    private PersonDao personRepository;
 
     void onActivate(EventContext ctx) {
         if (ctx.getCount() >= 1) {

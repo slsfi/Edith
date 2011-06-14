@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.util;
 
 import java.util.HashMap;
 import java.util.Map;

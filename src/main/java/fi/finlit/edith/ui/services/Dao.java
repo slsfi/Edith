@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
  * @param <Entity>
  * @param <Id>
  */
-public interface Repository<Entity, Id extends Serializable> {
+public interface Dao<Entity, Id extends Serializable> {
 
     /**
      * Get all persisted instances

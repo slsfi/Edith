@@ -43,11 +43,11 @@ import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.AdminService;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteWithInstances;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.ui.services.UserDao;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 public class DocumentNoteRepositoryTest extends AbstractServiceTest {
@@ -56,19 +56,19 @@ public class DocumentNoteRepositoryTest extends AbstractServiceTest {
     private String testDocument;
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userRepository;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Inject
     private AdminService adminService;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Inject
     private SessionFactory sessionFactory;

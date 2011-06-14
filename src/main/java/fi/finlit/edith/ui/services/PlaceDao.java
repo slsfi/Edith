@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fi.finlit.edith.domain.Place;
 
 @Transactional
-public interface PlaceRepository extends Repository<Place, String> {
+public interface PlaceDao extends Dao<Place, String> {
 
     Collection<Place> findByStartOfName(String partial, int limit);
 

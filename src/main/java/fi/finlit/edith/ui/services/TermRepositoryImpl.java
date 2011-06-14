@@ -14,8 +14,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.ui.services.repository.AbstractRepository;
 
-public class TermRepositoryImpl extends AbstractRepository<Term> implements TermRepository {
+public class TermRepositoryImpl extends AbstractRepository<Term> implements TermDao {
 
     public TermRepositoryImpl(@Inject SessionFactory sessionFactory) {
         super(sessionFactory, term);

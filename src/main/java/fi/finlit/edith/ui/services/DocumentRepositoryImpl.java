@@ -56,13 +56,16 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.QDocumentNote;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
+import fi.finlit.edith.ui.services.repository.AbstractRepository;
 import fi.finlit.edith.ui.services.svn.FileItem;
+import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.UpdateCallback;
+import fi.finlit.edith.util.ElementContext;
 
 public class DocumentRepositoryImpl extends AbstractRepository<Document> implements
-        DocumentRepository {
+        DocumentDao {
 
     private static class Matched {
 
@@ -155,9 +158,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
-    private final NoteRepository noteRepository;
+    private final NoteDao noteRepository;
 
-    private final DocumentNoteRepository documentNoteRepository;
+    private final DocumentNoteDao documentNoteRepository;
 
     private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
@@ -171,8 +174,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject SubversionService svnService,
-            @Inject NoteRepository noteRepository,
-            @Inject DocumentNoteRepository documentNoteRepository,
+            @Inject NoteDao noteRepository,
+            @Inject DocumentNoteDao documentNoteRepository,
             @Inject TimeService timeService,
             @Inject AuthService authService) {
         super(sessionFactory, document);
