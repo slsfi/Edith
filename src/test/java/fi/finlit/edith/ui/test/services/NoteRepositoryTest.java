@@ -330,8 +330,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         search.setDocuments(Collections.singleton(document));
         search.setOrphans(false);
         assertRowCount(0, search);
-        search.setOrphans(true);
-        assertRowCount(3, search);
+        
 
         //Adding note to document
         noteRepository.createDocumentNote(note1, document.getRevision(-1), "a");
@@ -348,7 +347,19 @@ public class NoteRepositoryTest extends AbstractServiceTest {
         assertRowCount(2, search);
         assertRowValues(search, note1, note2);
         
+        //with orphans the result is the only orphan
+        search.setOrphans(true);
+        assertRowCount(1, search);
+        assertRowValues(search, note3);
         
+        //with all, we get all + orphans
+        search.setDocuments(Collections.<Document>emptySet());
+        search.setIncludeAllDocs(true);
+        assertRowCount(3, search);
+        
+        //with all - orphans
+        search.setOrphans(false);
+        assertRowCount(2, search);
         
         
     }

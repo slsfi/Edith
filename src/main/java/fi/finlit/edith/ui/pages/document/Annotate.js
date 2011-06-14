@@ -61,8 +61,12 @@ var Annotate = {
 	freeResources : function() {
     	//Remove all CKEditor instances
   	  for(var i in CKEDITOR.instances) {
-  		  CKEDITOR.instances[i].destroy();
-  		  //console.debug("Removed ckeditor instance");
+  		  try {
+  			  CKEDITOR.instances[i].destroy();
+  		  }catch(e) {
+  			  alert("Got exception " + e);
+  		  }
+  		  // console.debug("Removed ckeditor instance");
   	  }
     }
 	

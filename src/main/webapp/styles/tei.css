@@ -1,3 +1,6 @@
+div.body {
+	max-width: 600px;
+}
 .tei .head{
 	font-weight: bold;
 	font-size: 1.2em;
@@ -14,7 +17,7 @@
 	font-style: italic;
 }
 
-.orig{
+.orig, .sic {
 	font-style: italic;
 	color: #D0D0D0;
 }
@@ -26,10 +29,6 @@
 .sp .speaker {
 	padding-right: 0.25em;	
 }	
-
-.sp {
-	display: inline;	
-}
 
 .p {
     display: block;
@@ -86,6 +85,18 @@
 	border-top: dotted 1px gray;
 }
 
+.p .page {
+	display: inline;
+	padding: 0px !important;
+	border-top: none !important;
+}
+.p .page:before {
+	content: "|";
+}
+.p .page:after {
+	content: "|";
+}
+
 .pages li{
 	display: block;
 	float: left;
@@ -107,7 +118,9 @@
 .desc, 
 .docAuthor, 
 .gap, 
-.orig, 
+.orig,
+.sic,
+.corr,
 .ref, 
 .role, 
 .roleDesc, 
@@ -126,13 +139,22 @@
 .unclear,
 .del,
 .add,
-.supplied {
+.supplied,
+.subst,
+.reg,
+.choice,
+.figure,
+.sp,
+.emph,
+.foreign,
+.rs,
+.cell
+{
 	display: inline;	
 }	
 
-
 .notecontent{
-	color: #40D040;
+	color: #990202;
 	cursor: pointer;
 }
 
@@ -140,6 +162,49 @@
 	border-bottom: solid 2px;
 }
 
+.hi, .emph {
+	font-style: italic;
+}
+
+.unclear {
+	color: #494949;
+	font-style: italic;
+}
+
+.del {
+	text-decoration: line-through;
+}
+
+.gap:before {
+	color: #494949;
+	content: "[oläsligt]";
+}
+
+.cell {
+	margin-right: 15px;
+}
+
+.list .item {
+	display: block;
+}
+
+
+/* I insterted these if they are going to be used in the future */
+/*.placeName {
+    background-color: #B5D58C;
+}
+
+.persName {
+	background-color: #E5BB71;
+}
+
+.foreign {
+    background-color: #A0CBD4;
+}
+
+.body .title {
+    background-color: #F6E65B;
+}*/
 
 
 

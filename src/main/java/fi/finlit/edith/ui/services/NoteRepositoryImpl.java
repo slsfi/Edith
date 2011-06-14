@@ -192,49 +192,29 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     @Override
     public GridDataSource findNotes(DocumentNoteSearchInfo search) {
         BooleanBuilder builder = new BooleanBuilder();
-        BooleanBuilder documentRefs = new BooleanBuilder();
-
-        // document
-        if (!search.getDocuments().isEmpty()){
+        
+        // only orphans
+        if (search.isOrphans() && !search.isIncludeAllDocs()) {
+            builder.and(note.documentNoteCount.eq(0));
+        }
+        // or all, including orphans
+        else if (search.isOrphans() && search.isIncludeAllDocs()) {
+            builder.and(note.documentNoteCount.goe(0));
+        }
+        // or all, without orphans
+        else if (!search.isOrphans() && search.isIncludeAllDocs()) {
+            builder.and(note.documentNoteCount.gt(0));
+        }
+        // or documents from selection
+        else if (!search.getDocuments().isEmpty() && !search.isIncludeAllDocs()) {
 
             BeanSubQuery subQuery = sub(documentNote);
-            
-            //BooleanBuilder filter = new BooleanBuilder();
-            
             subQuery.where(documentNote.note().eq(note),
-                        documentNote.document().in(search.getDocuments()),
-                        documentNote.deleted.eq(false));
-            
-            //builder.and(subQuery.where(filter).exists());
-
-//            // create filter condition for non orphan matches
-//            if (!search.isOrphans()) {
-//                subQuery.where(BooleanExpression.allOf(documentNote.note().eq(note),
-//                    documentNote.document().in(search.getDocuments()),
-//                    documentNote.replacedBy().isNull(),
-//                    documentNote.deleted.eq(false)));
-//            } else {
-//                subQuery.where(BooleanExpression.allOf(documentNote.note().eq(note),
-//                        documentNote.document().in(search.getDocuments()),
-//                        documentNote.replacedBy().isNull()));
-//            }
-//            
-            documentRefs.or(subQuery.exists());
+                    documentNote.document().in(search.getDocuments()),
+                    documentNote.deleted.eq(false));
+            builder.and(subQuery.exists());
         }
 
-        // orphans
-        if (search.isOrphans()){
-            // create filter condition for orphan matches
-            // notes which don't have any document notes at all
-            //documentRefs.or(sub(documentNote).where(documentNote.note().isNull()).exists());
-            documentRefs.or(note.documentNoteCount.eq(0));
-        }
-
-        //Add documentrefs to rest of search
-        if(documentRefs.hasValue()) {
-            builder.and(documentRefs);
-        }
-        
         //language
         if (search.getLanguage() != null) {
             builder.and(note.term().language.eq(search.getLanguage()));

@@ -24,6 +24,8 @@ public class DocumentNoteSearchInfo {
     private boolean ascending = true;
 
     private boolean orphans = false;
+    
+    private boolean includeAllDocs = false;
 
     private Document currentDocument;
     
@@ -114,13 +116,21 @@ public class DocumentNoteSearchInfo {
     public void setLanguage(TermLanguage language) {
         this.language = language;
     }
+    
+    public void setIncludeAllDocs(boolean includeAllDocs) {
+        this.includeAllDocs = includeAllDocs;
+    }
+    
+    public boolean isIncludeAllDocs() {
+        return includeAllDocs;
+    }
 
     @Override
     public String toString() {
         return "DocumentNoteSearchInfo [noteTypes=" + noteTypes + ", noteFormats=" + noteFormats
                 + ", creators=" + creators + ", language=" + language + ", orderBy=" + orderBy
-                + ", ascending=" + ascending + ", orphans=" + orphans + ", fullText=" + fullText
-                + "]";
+                + ", ascending=" + ascending + ", orphans=" + orphans + ", includeAllDocs="
+                + includeAllDocs + ", fullText=" + fullText + "]";
     }
 
     public void addDocument(Document otherDoc) {

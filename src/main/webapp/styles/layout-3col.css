@@ -39,7 +39,7 @@ body {
     top: 0em;
     left: 0em;
     bottom: 0em;
-    width: 60%;
+    width: 50%;
     overflow: auto;
 }
 
@@ -48,7 +48,7 @@ body {
     top: 0em;
     right: 0em; 
     bottom: 0em;
-    width: 40%;  
+    width: 50%;  
     overflow: auto;
 }
 

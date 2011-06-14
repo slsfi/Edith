@@ -27,6 +27,10 @@
       </div>
 
       <div class="field">
+        <label><t:checkbox value="includeAllDocs" />${message:includeAllDocs}</label>
+      </div>
+
+      <div class="field">
         <label><t:checkbox value="orphans" />${message:orphans}</label>
       </div>
 

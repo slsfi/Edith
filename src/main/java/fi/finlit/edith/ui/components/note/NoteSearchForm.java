@@ -168,5 +168,14 @@ public class NoteSearchForm {
     public void setFullText(String fullText) {
         getSearchInfo().setFullText(fullText);
     }
+    
+    public boolean getIncludeAllDocs() {
+        return getSearchInfo().isIncludeAllDocs();
+    }
+    
+    public void setIncludeAllDocs(boolean value) {
+        getSearchInfo().setIncludeAllDocs(value);
+    }
+    
 
 }
