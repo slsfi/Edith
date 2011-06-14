@@ -244,7 +244,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         final DocumentNote documentNote = new DocumentNote();
         getSession().save(documentNote);
         getSession().flush();
-        System.err.println("AFTER FLUSH: " + documentNote.getId());
         long newRevision;
         final MutableInt position = new MutableInt(0);
         newRevision = svnService.commit(docRevision.getSvnPath(), docRevision.getRevision(),
@@ -265,7 +264,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
         // persisted noteRevision has svnRevision of newly created commit
         DocumentNote docNote =  noteRepository.createDocumentNote(documentNote, note, new DocumentRevision(docRevision, newRevision),
                 "-1", selection.getSelection(), position.intValue());
-        System.err.println("ACTUAL: " + docNote.getId());
         return docNote;
     }
 
