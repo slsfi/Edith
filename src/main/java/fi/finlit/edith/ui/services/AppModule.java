@@ -36,9 +36,9 @@ import fi.finlit.edith.domain.UserInfo;
  * @author tiwe
  * @version $Id$
  */
-@SubModule( { DataModule.class, ServiceModule.class })
+@SubModule( { DataModule.class, ServiceModule.class, HibernateServiceModule.class })
 public final class AppModule {
-    
+
     private AppModule() {}
 
     public static void contributeApplicationDefaults(
@@ -46,7 +46,7 @@ public final class AppModule {
         // general config
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "fi,en,sv,de");
         configuration.add(SymbolConstants.PRODUCTION_MODE, System.getProperty("production.mode", "false"));
-        
+
         //Disable automatic form autofocus
         configuration.add(SymbolConstants.FORM_CLIENT_LOGIC_ENABLED, "false");
 
@@ -77,7 +77,7 @@ public final class AppModule {
     public static void contributeServiceOverride(MappedConfiguration<Class<?>,Object> configuration) {
       configuration.add(PasswordEncoder.class, new ShaPasswordEncoder());
     }
-    
+
     public static void contributeProviderManager(
             OrderedConfiguration<AuthenticationProvider> configuration,
             @InjectService("DaoAuthenticationProvider") AuthenticationProvider daoAuthenticationProvider) {
@@ -89,7 +89,7 @@ public final class AppModule {
         //Javascript
         configuration.add("js", "js");
     }
-    
+
     @SuppressWarnings("unchecked")
     public static void contributeValueEncoderSource(
             MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,

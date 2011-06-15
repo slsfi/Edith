@@ -19,9 +19,9 @@ import org.apache.tapestry5.util.TextStreamResponse;
 
 import com.google.gson.Gson;
 
-import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 
 @SuppressWarnings("unused")
@@ -36,7 +36,7 @@ import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 public class Documents {
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentDao;
 
     @Property
     private Collection<Document> documents;
@@ -62,7 +62,7 @@ public class Documents {
             selectedDocuments = new HashSet<Document>();
         }
         toBeDeleted = new HashSet<Document>();
-        documents = documentRepository.getAll();
+        documents = documentDao.getAll();
     }
 
     public boolean isDocumentSelected() {
@@ -83,7 +83,7 @@ public class Documents {
 
     void onSuccessFromDocumentsForm() {
         if (removeSelected){
-            documentRepository.removeAll(selectedForDeletion);
+            documentDao.removeAll(selectedForDeletion);
         }
     }
 
@@ -104,9 +104,9 @@ public class Documents {
     }
 
     TextStreamResponse onJson(@RequestParameter(value = "path", allowBlank = true) String path,
-            @RequestParameter(value = "id", allowBlank = true) String id) {
+            @RequestParameter(value = "id", allowBlank = true) Long id) {
         Gson gson = new Gson();
-        List<FileItemWithDocumentId> fileItems = documentRepository.fromPath(path, id);
+        List<FileItemWithDocumentId> fileItems = documentDao.fromPath(path, id);
         return new TextStreamResponse("application/json", gson.toJson(fileItems));
     }
 
@@ -126,12 +126,12 @@ public class Documents {
         return linkSource.createPageRenderLink(Documents.class).toString() + ".renamedocument";
     }
 
-    public void onActionFromDeleteDocument(String id) {
-        documentRepository.remove(id);
+    public void onActionFromDeleteDocument(Long id) {
+        documentDao.remove(id);
     }
 
-    public void onActionFromRenameDocument(String id, String newName) {
-        documentRepository.rename(id, newName);
+    public void onActionFromRenameDocument(Long id, String newName) {
+        documentDao.rename(id, newName);
     }
 
 }

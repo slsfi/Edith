@@ -15,14 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.ui.services.TermDao;
+import fi.finlit.edith.ui.services.TermRepository;
 
 @SuppressWarnings("unused")
 @Import(library="classpath:jquery-1.4.1.js" )
 public class AutocompleteTestPage {
 
     @Inject
-    private TermDao termRepo;
+    private TermRepository termRepo;
 
     @Property
     private Term term;

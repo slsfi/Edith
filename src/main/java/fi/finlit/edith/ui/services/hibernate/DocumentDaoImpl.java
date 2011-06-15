@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +39,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -53,7 +56,6 @@ import com.mysema.query.jpa.hibernate.HibernateUpdateClause;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
@@ -61,7 +63,7 @@ import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.ServiceException;
-import fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl;
+import fi.finlit.edith.ui.services.svn.FileItem;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
@@ -472,8 +474,8 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public Document getDocumentForPath(String svnPath) {
-        // TODO Auto-generated method stub
-        return null;
+        Assert.notNull(svnPath, "svnPath was null");
+        return getDocumentMetadata(svnPath);
     }
 
     @Override
@@ -594,8 +596,7 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public void removeNotesPermanently(Document document, DocumentNote... notes) {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
@@ -641,14 +642,12 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public void remove(Long id) {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
     public void removeAll(Collection<Document> documents) {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
@@ -672,8 +671,38 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public List<FileItemWithDocumentId> fromPath(String path, Long id) {
-        // TODO Auto-generated method stub
-        return null;
+        List<FileItem> files = StringUtils.isEmpty(path) ? versioningService
+                .getFileItems(documentRoot, -1) : versioningService.getFileItems(path, -1);
+        List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
+        for (FileItem file : files) {
+            Document doc = getDocumentForPath(file.getPath());
+            if (doc == null) {
+                doc = createDocument(file.getPath(), file.getTitle());
+            }
+            rv.add(new FileItemWithDocumentId(
+                    file.getTitle(),
+                    file.getPath(),
+                    file.isFolder(),
+                    file.getChildren(),
+                    file.hasChildren(),
+                    doc.getId(),
+                    doc.getId().equals(id),
+                    100l));
+            // FIXME: An actual value should be retrieved.
+            // documentNoteRepository.getNoteCountForDocument(doc.getId())));
+        }
+        Collections.sort(rv, new Comparator<FileItemWithDocumentId>() {
+            @Override
+            public int compare(FileItemWithDocumentId o1, FileItemWithDocumentId o2) {
+                if (o1.isFolder() && !o2.isFolder()) {
+                    return -1;
+                } else if (!o1.isFolder() && o2.isFolder()) {
+                    return 1;
+                }
+                return o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase());
+            }
+        });
+        return rv;
     }
 
 }

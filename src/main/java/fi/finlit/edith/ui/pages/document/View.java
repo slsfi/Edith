@@ -12,14 +12,14 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
 
 @Import(stylesheet="context:styles/tei.css")
 @SuppressWarnings("unused")
 public class View extends AbstractDocumentPage {
 
     @Inject
-    private DocumentNoteDao documentNoteRepository;
+    private DocumentNoteRepository documentNoteRepository;
 
     @Property
     private DocumentNote documentNote;

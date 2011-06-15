@@ -10,14 +10,14 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.domain.Profile;
 import fi.finlit.edith.domain.User;
-import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.ui.services.UserRepository;
 
 public class Register extends Base{
 
     private User user;
 
     @Inject
-    private UserDao userRepository;
+    private UserRepository userRepository;
 
     @InjectPage
     private Login loginPage;

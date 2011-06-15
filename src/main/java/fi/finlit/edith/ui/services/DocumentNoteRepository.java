@@ -21,7 +21,7 @@ import fi.finlit.edith.dto.DocumentRevision;
  * The Interface DocumentNoteRepository.
  */
 @Transactional
-public interface DocumentNoteDao extends Dao<DocumentNote, String> {
+public interface DocumentNoteRepository extends Dao<DocumentNote, String> {
 
     /**
      * @param docNote

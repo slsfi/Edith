@@ -15,9 +15,9 @@ import fi.finlit.edith.ui.services.repository.UserDetailsImpl;
 
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Inject
-    private final UserDao userRepository;
+    private final UserRepository userRepository;
 
-    public UserDetailsServiceImpl(UserDao userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

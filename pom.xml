@@ -126,6 +126,11 @@
       <version>3.6.4.Final</version>
     </dependency>
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>4.1.0.Final</version>
+    </dependency>
+    <dependency>
       <groupId>com.mysema.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
       <version>${querydsl.version}</version>

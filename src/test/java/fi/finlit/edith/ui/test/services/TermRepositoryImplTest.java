@@ -13,11 +13,11 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.domain.TermLanguage;
-import fi.finlit.edith.ui.services.TermDao;
+import fi.finlit.edith.ui.services.TermRepository;
 
 public class TermRepositoryImplTest extends AbstractServiceTest {
     @Inject
-    private TermDao repository;
+    private TermRepository repository;
 
     @Test
     public void Find_By_Basic_Form_No_Results() {

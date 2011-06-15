@@ -57,13 +57,13 @@ import fi.finlit.edith.qtype.QNote;
 import fi.finlit.edith.qtype.QPerson;
 import fi.finlit.edith.qtype.QPlace;
 import fi.finlit.edith.ui.services.AuthService;
-import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.TimeService;
-import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.ui.services.UserRepository;
 
-public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteDao {
+public class NoteRepositoryImpl extends AbstractRepository<Note> implements NoteRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(NoteRepositoryImpl.class);
 
@@ -86,14 +86,14 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
 
     private final TimeService timeService;
 
-    private final UserDao userRepository;
+    private final UserRepository userRepository;
 
     private final AuthService authService;
 
     private final boolean extendedTerm;
 
     public NoteRepositoryImpl(@Inject SessionFactory sessionFactory,
-            @Inject UserDao userRepository,
+            @Inject UserRepository userRepository,
             @Inject TimeService timeService,
             @Inject AuthService authService,
             @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {

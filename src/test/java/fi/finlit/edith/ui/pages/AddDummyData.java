@@ -12,13 +12,13 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 public class AddDummyData {
 
     @Inject
-    private NoteDao noteRepository;
+    private NoteRepository noteRepository;
     
     @Inject
     private DocumentRepository documentRepository;

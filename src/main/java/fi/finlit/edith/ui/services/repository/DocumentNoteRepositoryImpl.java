@@ -28,23 +28,23 @@ import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.qtype.QDocumentNote;
 import fi.finlit.edith.qtype.QNote;
-import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.TimeService;
-import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.ui.services.UserRepository;
 
 public class DocumentNoteRepositoryImpl extends AbstractRepository<DocumentNote> implements
-        DocumentNoteDao {
+        DocumentNoteRepository {
 
     private final TimeService timeService;
 
-    private final UserDao userRepository;
+    private final UserRepository userRepository;
 
     private final boolean extendedTerm;
 
     public DocumentNoteRepositoryImpl(
             @Inject SessionFactory sessionFactory,
-            @Inject UserDao userRepository,
+            @Inject UserRepository userRepository,
             @Inject TimeService timeService,
             @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
         super(sessionFactory, documentNote);

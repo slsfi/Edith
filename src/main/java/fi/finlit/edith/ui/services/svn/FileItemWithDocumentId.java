@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public class FileItemWithDocumentId extends FileItem {
-    private final String documentId;
+    private final Long documentId;
 
     private final boolean isSelected;
 
@@ -16,7 +16,7 @@ public class FileItemWithDocumentId extends FileItem {
             boolean isFolder,
             List<FileItem> children,
             boolean hasChildren,
-            String documentId,
+            Long documentId,
             boolean isSelected,
             long noteCount) {
         super(title, path, isFolder, children, hasChildren);
@@ -25,7 +25,7 @@ public class FileItemWithDocumentId extends FileItem {
         this.noteCount = noteCount;
     }
 
-    public String getDocumentId() {
+    public Long getDocumentId() {
         return documentId;
     }
 

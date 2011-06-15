@@ -15,11 +15,11 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.ui.services.PersonDao;
+import fi.finlit.edith.ui.services.PersonRepository;
 
 public class PersonRepositoryTest extends AbstractServiceTest {
     @Inject
-    private PersonDao personRepository;
+    private PersonRepository personRepository;
 
     private Person person;
 

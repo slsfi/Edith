@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentRepository;
 
 @SuppressWarnings("unused")
@@ -27,7 +28,7 @@ public class Upload {
     private static final Logger logger = LoggerFactory.getLogger(Upload.class);
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentDao;
 
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
@@ -54,10 +55,10 @@ public class Upload {
         try {
             file.write(tempFile);
             if (file.getFileName().endsWith(".zip")) {
-                documentRepository.addDocumentsFromZip(uploadPath, tempFile);
+                documentDao.addDocumentsFromZip(uploadPath, tempFile);
                 message = messages.format("documents-stored-msg", file.getFileName());
             } else {
-                documentRepository.addDocument(uploadPath + "/" + file.getFileName(), tempFile);
+                documentDao.addDocument(uploadPath + "/" + file.getFileName(), tempFile);
                 message = messages.format("document-stored-msg", file.getFileName());
             }
         } finally {

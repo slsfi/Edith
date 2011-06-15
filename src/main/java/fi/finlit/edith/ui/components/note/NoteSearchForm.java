@@ -17,7 +17,7 @@ import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.ui.services.UserRepository;
 
 @SuppressWarnings("unused")
 public class NoteSearchForm {
@@ -37,7 +37,7 @@ public class NoteSearchForm {
     private UserInfo user;
 
     @Inject
-    private UserDao userRepository;
+    private UserRepository userRepository;
 
     @Property
     private OrderBy loopedOrderBy;

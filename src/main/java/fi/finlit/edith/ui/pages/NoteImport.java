@@ -17,7 +17,7 @@ import org.apache.tapestry5.upload.services.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.NoteRepository;
 
 @SuppressWarnings("unused")
 public class NoteImport {
@@ -25,7 +25,7 @@ public class NoteImport {
     private static final Logger logger = LoggerFactory.getLogger(NoteImport.class);
 
     @Inject
-    private NoteDao noteRepository;
+    private NoteRepository noteRepository;
 
     @Property
     private UploadedFile file;

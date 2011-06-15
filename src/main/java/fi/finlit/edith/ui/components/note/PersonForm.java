@@ -13,7 +13,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.domain.Interval;
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.ui.services.PersonDao;
+import fi.finlit.edith.ui.services.PersonRepository;
 
 @SuppressWarnings("unused")
 public class PersonForm {
@@ -26,7 +26,7 @@ public class PersonForm {
     private Block closeDialog;
 
     @Inject
-    private PersonDao personRepository;
+    private PersonRepository personRepository;
 
     @Property
     private String newFirst;

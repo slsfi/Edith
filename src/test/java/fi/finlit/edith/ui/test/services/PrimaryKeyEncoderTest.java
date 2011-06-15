@@ -10,12 +10,12 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.User;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
-import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.ui.services.UserRepository;
 
 public class PrimaryKeyEncoderTest extends AbstractServiceTest {
 
     @Inject
-    private UserDao userRepository;
+    private UserRepository userRepository;
 
     private PrimaryKeyEncoder<User> encoder;
 

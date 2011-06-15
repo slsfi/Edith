@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fi.finlit.edith.domain.Person;
 
 @Transactional
-public interface PersonDao extends Dao<Person, String> {
+public interface PersonRepository extends Dao<Person, String> {
 
     Collection<Person> findByStartOfFirstAndLastName(String partial, int limit);
 

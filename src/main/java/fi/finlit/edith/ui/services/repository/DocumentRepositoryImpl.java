@@ -58,9 +58,9 @@ import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.qtype.QDocumentNote;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
-import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.TimeService;
 import fi.finlit.edith.ui.services.svn.FileItem;
@@ -164,9 +164,9 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
-    private final NoteDao noteRepository;
+    private final NoteRepository noteRepository;
 
-    private final DocumentNoteDao documentNoteRepository;
+    private final DocumentNoteRepository documentNoteRepository;
 
     private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
@@ -180,8 +180,8 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
             @Inject SessionFactory sessionFactory,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Inject SubversionService svnService,
-            @Inject NoteDao noteRepository,
-            @Inject DocumentNoteDao documentNoteRepository,
+            @Inject NoteRepository noteRepository,
+            @Inject DocumentNoteRepository documentNoteRepository,
             @Inject TimeService timeService,
             @Inject AuthService authService) {
         super(sessionFactory, document);
@@ -672,7 +672,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     file.isFolder(),
                     file.getChildren(),
                     file.hasChildren(),
-                    doc.getId(),
+                    Long.parseLong(doc.getId()),
                     doc.getId().equals(id),
                     documentNoteRepository.getNoteCountForDocument(doc.getId())));
         }

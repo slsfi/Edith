@@ -31,6 +31,7 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.ui.services.content.ContentRendererImpl;
+import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
 import fi.finlit.edith.ui.services.repository.AdminServiceImpl;
 import fi.finlit.edith.ui.services.repository.DocumentNoteRepositoryImpl;
 import fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl;
@@ -54,8 +55,8 @@ import fi.finlit.edith.ui.services.tasks.TasksService;
 public final class ServiceModule {
 
     // TODO : get rid of match
-    @Match({ "AdminService", "DocumentRepository", "NoteDao", "UserDao",
-            "DocumentNoteDao", "TermDao", "PersonDao", "PlaceDao" })
+    @Match({ "AdminService", "DocumentRepository", "NoteRepository", "UserRepository",
+            "DocumentNoteRepository", "TermRepository", "PersonRepository", "PlaceRepository" })
     public static void adviseTransactions(TransactionalAdvisor advisor,
             MethodAdviceReceiver receiver) {
         advisor.addTransactionCommitAdvice(receiver);
@@ -67,17 +68,18 @@ public final class ServiceModule {
         binder.bind(ContentRenderer.class, ContentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
         binder.bind(TimeService.class, SimpleTimeService.class);
-        binder.bind(TasksService.class);
+//        binder.bind(TasksService.class);
 
         // repositories
         binder.bind(AdminService.class, AdminServiceImpl.class);
         binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
-        binder.bind(NoteDao.class, NoteRepositoryImpl.class);
-        binder.bind(DocumentNoteDao.class, DocumentNoteRepositoryImpl.class);
-        binder.bind(TermDao.class, TermRepositoryImpl.class);
-        binder.bind(PersonDao.class, PersonRepositoryImpl.class);
-        binder.bind(PlaceDao.class, PlaceRepositoryImpl.class);
-        binder.bind(UserDao.class, UserRepositoryImpl.class);
+        binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
+        binder.bind(DocumentNoteRepository.class, DocumentNoteRepositoryImpl.class);
+        binder.bind(TermRepository.class, TermRepositoryImpl.class);
+        binder.bind(PersonRepository.class, PersonRepositoryImpl.class);
+        binder.bind(PlaceRepository.class, PlaceRepositoryImpl.class);
+        binder.bind(UserRepository.class, UserRepositoryImpl.class);
+        binder.bind(DocumentDao.class, DocumentDaoImpl.class);
 
         // tasks
         binder.bind(ReplacedByAdditionTask.class);

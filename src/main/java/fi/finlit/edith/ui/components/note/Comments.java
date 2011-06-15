@@ -19,7 +19,7 @@ import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.NoteComment;
 import fi.finlit.edith.dto.NoteCommentComparator;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.NoteRepository;
 
 @SuppressWarnings("unused")
 public class Comments {
@@ -44,7 +44,7 @@ public class Comments {
     private Block commentsBlock;
 
     @Inject
-    private NoteDao noteRepository;
+    private NoteRepository noteRepository;
 
     private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
         List<NoteComment> rv = new ArrayList<NoteComment>(c);

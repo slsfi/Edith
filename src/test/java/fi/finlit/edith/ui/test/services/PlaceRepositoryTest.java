@@ -14,11 +14,11 @@ import org.junit.Test;
 
 import fi.finlit.edith.domain.NameForm;
 import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.ui.services.PlaceDao;
+import fi.finlit.edith.ui.services.PlaceRepository;
 
 public class PlaceRepositoryTest extends AbstractServiceTest {
     @Inject
-    private PlaceDao placeRepository;
+    private PlaceRepository placeRepository;
 
     private Place place;
 

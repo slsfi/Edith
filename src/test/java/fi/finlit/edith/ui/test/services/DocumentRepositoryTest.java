@@ -33,7 +33,7 @@ import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.DocumentNoteRepository;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionService;
@@ -44,7 +44,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     private DocumentRepository documentDao;
 
     @Inject
-    private DocumentNoteDao documentNoteRepository;
+    private DocumentNoteRepository documentNoteRepository;
 
     @Inject
     private SubversionService subversionService;
@@ -351,5 +351,10 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
         documentDao.move(document.getId(), "/letters/letter_to_the_reader.xml");
         Document movedDocument = getDocument("/letters/letter_to_the_reader.xml");
         assertNotNull(documentDao.getDocumentStream(movedDocument.getRevision(-1)));
+    }
+
+    @Test
+    public void From_Path() {
+        fail("not yet implemented!");
     }
 }

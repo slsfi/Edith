@@ -20,7 +20,6 @@ import javax.xml.stream.XMLOutputFactory;
 import org.apache.tapestry5.hibernate.HibernateCoreModule;
 import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.hibernate.HibernateSessionSource;
-import org.apache.tapestry5.ioc.Registry;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
@@ -31,13 +30,12 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
 import fi.finlit.edith.testutil.Modules;
 import fi.finlit.edith.testutil.TapestryTestRunner;
-import fi.finlit.edith.ui.services.HibernateDataModule;
 import fi.finlit.edith.ui.services.HibernateServiceModule;
+import fi.finlit.edith.ui.services.ServiceModule;
 import fi.finlit.edith.ui.test.services.SKSServiceTestModule;
 
 @RunWith(TapestryTestRunner.class)
-@Modules({ SKSServiceTestModule.class, HibernateServiceModule.class, HibernateDataModule.class,
-        HibernateCoreModule.class })
+@Modules({ SKSServiceTestModule.class, ServiceModule.class, HibernateServiceModule.class, HibernateCoreModule.class })
 public abstract class AbstractHibernateTest {
     @Inject
     private HibernateSessionManager sessionManager;
