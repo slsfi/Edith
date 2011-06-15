@@ -23,17 +23,14 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
-
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.svn.SubversionException;
@@ -106,9 +103,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
                 element, text));
 
         String content = getContent(document.getPath(), -1);
-        String localId = note.getId();
-        System.err.println("ID: " + localId);
-        System.err.println(content);
+        Long localId = note.getId();
         assertTrue(content.contains(start(localId) + text + end(localId)));
     }
 
@@ -267,7 +262,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         documentDao.updateNote(noteRevision, new SelectedText(element, element, newText));
 
         String content = getContent(document.getPath(), -1);
-        String localId = noteRevision.getId();
+        Long localId = noteRevision.getId();
         assertFalse(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains(start(localId) + newText + end(localId)));
     }
@@ -278,18 +273,18 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String element = "play-act-sp3-p";
         String text = "\u00E4st";
 
-        DocumentNote noteRevision = documentDao.addNote(createNote(), document, new SelectedText(
+        DocumentNote documentNote = documentDao.addNote(createNote(), document, new SelectedText(
                 element, element, text));
 
         // T-äst-ä
         String newText = "T\u00E4st\u00E4";
-        documentDao.updateNote(noteRevision, new SelectedText(element, element, newText));
+        documentDao.updateNote(documentNote, new SelectedText(element, element, newText));
 
         String content = getContent(document.getPath(), -1);
-        String localId = noteRevision.getId();
+        Long id = documentNote.getId();
         // System.out.println(content);
-        assertFalse(content.contains(start(localId) + text + end(localId)));
-        assertTrue(content.contains(start(localId) + newText + end(localId)));
+        assertFalse(content.contains(start(id) + text + end(id)));
+        assertTrue(content.contains(start(id) + newText + end(id)));
         // Täst<anchor xml:id="start1266836640612"/>ä<anchor xml:id="end1266836640612"/> rientää
     }
 
@@ -299,12 +294,12 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String element = "play-act-sp3-p";
         String text = "\u00E4st";
 
-        DocumentNote noteRevision = documentDao.addNote(createNote(), document, new SelectedText(
+        DocumentNote documentNote = documentDao.addNote(createNote(), document, new SelectedText(
                 element, element, text));
-        noteRevision.setPublishable(true);
+        documentNote.setPublishable(true);
 
         String newText = "T\u00E4st\u00E4";
-        DocumentNote updatedRevision = documentDao.updateNote(noteRevision, new SelectedText(
+        DocumentNote updatedRevision = documentDao.updateNote(documentNote, new SelectedText(
                 element, element, newText));
         assertTrue(updatedRevision.isPublishable());
     }

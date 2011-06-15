@@ -14,5 +14,6 @@
     <property name="hibernate.format_sql">true</property>
 <!--     <mapping package="fi.finlit.edith.sql.domain"/>  -->
     <mapping class="fi.finlit.edith.sql.domain.Document"/>
+    <mapping class="fi.finlit.edith.sql.domain.DocumentNote"/>
   </session-factory>
 </hibernate-configuration>

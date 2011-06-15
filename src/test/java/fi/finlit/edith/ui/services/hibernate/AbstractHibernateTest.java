@@ -72,11 +72,11 @@ public abstract class AbstractHibernateTest {
         }
     }
 
-    protected static final String start(String localId) {
+    protected static final String start(Long localId) {
         return "<anchor xml:id=\"start" + localId + "\"/>";
     }
 
-    protected static final String end(String localId) {
+    protected static final String end(Long localId) {
         return "<anchor xml:id=\"end" + localId + "\"/>";
     }
 
@@ -99,7 +99,7 @@ public abstract class AbstractHibernateTest {
             }
         });
         sessionManager.commit();
-        TapestryTestRunner.getRegistries().values().iterator().next().cleanupThread();
+        TapestryTestRunner.getRegistry(getClass()).cleanupThread();
     }
 
     private String[] getTruncateAllTablesSql() {

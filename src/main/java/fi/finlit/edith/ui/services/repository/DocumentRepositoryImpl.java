@@ -251,7 +251,6 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
 
     @Override
     public DocumentNote addNote(Note note, DocumentRevision docRevision, final SelectedText selection) throws IOException, NoteAdditionFailedException{
-//        final String localId = String.valueOf(timeService.currentTimeMillis());
         final DocumentNote documentNote = new DocumentNote();
         getSession().save(documentNote);
         getSession().flush();
@@ -272,8 +271,7 @@ public class DocumentRepositoryImpl extends AbstractRepository<Document> impleme
                     }
                 });
 
-        // persisted noteRevision has svnRevision of newly created commit
-        DocumentNote docNote =  noteRepository.createDocumentNote(documentNote, note, new DocumentRevision(docRevision, newRevision),
+        DocumentNote docNote = noteRepository.createDocumentNote(documentNote, note, new DocumentRevision(docRevision, newRevision),
                 "-1", selection.getSelection(), position.intValue());
         return docNote;
     }

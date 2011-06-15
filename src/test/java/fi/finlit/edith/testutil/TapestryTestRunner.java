@@ -29,7 +29,7 @@ public class TapestryTestRunner extends BlockJUnit4ClassRunner {
         super(klass);
     }
 
-    private static Registry getRegistry(Class<?> testClass){
+    public static Registry getRegistry(Class<?> testClass){
         Class<?>[] classes = testClass.getAnnotation(Modules.class).value();
         Set<Class<?>> modules = new HashSet<Class<?>>(Arrays.asList(classes));
         Registry registry;
@@ -47,9 +47,5 @@ public class TapestryTestRunner extends BlockJUnit4ClassRunner {
     protected Object createTest() throws Exception {
         Class<?> testClass = getTestClass().getJavaClass();
         return getRegistry(testClass).autobuild(testClass);
-    }
-
-    public static Map<Set<Class<?>>, Registry> getRegistries() {
-        return registries;
     }
 }

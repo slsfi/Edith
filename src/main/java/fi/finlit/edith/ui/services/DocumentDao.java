@@ -13,14 +13,14 @@ import java.util.List;
 
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
-import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
-public interface DocumentDao extends Dao<Document, String> {
+public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Import the given File to the given svnPath
