@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith.testutil;
 
@@ -17,14 +17,14 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 
 /**
  * TapestryTestRunner provides Tapestry IoC injection functionality for tests
- * 
+ *
  * @author tiwe
  * @version $Id$
  */
 public class TapestryTestRunner extends BlockJUnit4ClassRunner {
-    
+
     private static final Map<Set<Class<?>>, Registry> registries = new HashMap<Set<Class<?>>,Registry>();
-            
+
     public TapestryTestRunner(Class<?> klass) throws org.junit.runners.model.InitializationError {
         super(klass);
     }
@@ -34,7 +34,7 @@ public class TapestryTestRunner extends BlockJUnit4ClassRunner {
         Set<Class<?>> modules = new HashSet<Class<?>>(Arrays.asList(classes));
         Registry registry;
         if (!registries.containsKey(modules)){
-            registry = new RegistryBuilder().add(classes).build();    
+            registry = new RegistryBuilder().add(classes).build();
             registry.performRegistryStartup();
             registries.put(modules, registry);
         }else{
@@ -42,10 +42,14 @@ public class TapestryTestRunner extends BlockJUnit4ClassRunner {
         }
         return registry;
     }
-    
+
     @Override
     protected Object createTest() throws Exception {
-        Class<?> testClass = getTestClass().getJavaClass();        
+        Class<?> testClass = getTestClass().getJavaClass();
         return getRegistry(testClass).autobuild(testClass);
+    }
+
+    public static Map<Set<Class<?>>, Registry> getRegistries() {
+        return registries;
     }
 }

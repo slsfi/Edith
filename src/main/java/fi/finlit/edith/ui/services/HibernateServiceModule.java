@@ -7,46 +7,40 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
-import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
-import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
 
-import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.object.Configuration;
 import com.mysema.rdfbean.object.DefaultConfiguration;
-import com.mysema.rdfbean.sesame.NativeRepository;
-import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.ui.services.content.ContentRenderer;
-import fi.finlit.edith.ui.services.content.ContentRendererImpl;
 import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
-import fi.finlit.edith.ui.services.tasks.ReplacedByAdditionTask;
-import fi.finlit.edith.ui.services.tasks.TasksService;
 
 public final class HibernateServiceModule {
-    @Match({ "AdminService", "DocumentDao", "NoteDao", "UserDao", "DocumentNoteDao", "TermDao",
-            "PersonDao", "PlaceDao" })
-//    public static void adviseTransactions(TransactionalAdvisor advisor,
-//            MethodAdviceReceiver receiver) {
-//        advisor.addTransactionCommitAdvice(receiver);
-//    }
+    // public static void adviseTransactions(TransactionalAdvisor advisor,
+    // MethodAdviceReceiver receiver) {
+    // advisor.addTransactionCommitAdvice(receiver);
+    // }
+
+    @Match("*Dao")
+    public static void adviseTransactions(HibernateTransactionAdvisor advisor,
+            MethodAdviceReceiver receiver) {
+        advisor.addTransactionCommitAdvice(receiver);
+    }
 
     public static void bind(ServiceBinder binder) {
         // services
         binder.bind(SubversionService.class, SubversionServiceImpl.class);
-//        binder.bind(ContentRenderer.class, ContentRendererImpl.class);
-//        binder.bind(AuthService.class, SpringSecurityAuthService.class);
-//        binder.bind(TimeService.class, SimpleTimeService.class);
-//        binder.bind(TasksService.class);
+        // binder.bind(ContentRenderer.class, ContentRendererImpl.class);
+        // binder.bind(AuthService.class, SpringSecurityAuthService.class);
+        // binder.bind(TimeService.class, SimpleTimeService.class);
+        // binder.bind(TasksService.class);
 
         // repositories
         // binder.bind(AdminService.class, AdminServiceImpl.class);
@@ -59,7 +53,7 @@ public final class HibernateServiceModule {
         // binder.bind(UserDao.class, UserRepositoryImpl.class);
 
         // tasks
-//        binder.bind(ReplacedByAdditionTask.class);
+        // binder.bind(ReplacedByAdditionTask.class);
     }
 
     public static Configuration buildConfiguration() {
@@ -68,20 +62,20 @@ public final class HibernateServiceModule {
         return configuration;
     }
 
-//    public static Repository buildRepository(
-//            @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
-//        final NativeRepository repository = new NativeRepository();
-//        repository.setIndexes("spoc,posc,opsc");
-//        repository.setDataDirName(rdfbeanDataDir);
-//
-//        hub.addRegistryShutdownListener(new RegistryShutdownListener() {
-//            @Override
-//            public void registryDidShutdown() {
-//                repository.close();
-//            }
-//        });
-//        return repository;
-//    }
+    // public static Repository buildRepository(
+    // @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
+    // final NativeRepository repository = new NativeRepository();
+    // repository.setIndexes("spoc,posc,opsc");
+    // repository.setDataDirName(rdfbeanDataDir);
+    //
+    // hub.addRegistryShutdownListener(new RegistryShutdownListener() {
+    // @Override
+    // public void registryDidShutdown() {
+    // repository.close();
+    // }
+    // });
+    // return repository;
+    // }
 
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, String> configuration) throws IOException {

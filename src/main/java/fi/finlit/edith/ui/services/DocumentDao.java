@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
@@ -20,7 +20,6 @@ import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
-@Transactional
 public interface DocumentDao extends Dao<Document, String> {
 
     /**
@@ -29,6 +28,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @param svnPath
      * @param file
      */
+    @CommitAfter
     void addDocument(String svnPath, File file);
 
     /**
@@ -38,6 +38,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @param file
      * @return amount of imported documents
      */
+    @CommitAfter
     int addDocumentsFromZip(String parentSvnPath, File file);
 
     /**
@@ -49,6 +50,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @throws IOException
      * @throws NoteAdditionFailedException
      */
+    @CommitAfter
     DocumentNote addNote(Note note, Document document, SelectedText selection) throws IOException, NoteAdditionFailedException;
 
     /**
@@ -57,6 +59,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @param svnPath
      * @return
      */
+    @CommitAfter
     Document getOrCreateDocumentForPath(String svnPath);
 
     /**
@@ -65,6 +68,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @param svnPath
      * @return
      */
+    @CommitAfter
     Document getDocumentForPath(String svnPath);
 
     /**
@@ -73,6 +77,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @param svnFolder
      * @return
      */
+    @CommitAfter
     List<Document> getDocumentsOfFolder(String svnFolder);
 
     /**
@@ -100,6 +105,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @throws IOException
      */
     @Deprecated //Move to service
+    @CommitAfter
     void removeAllNotes(Document document);
 
     /**
@@ -110,6 +116,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @throws IOException
      */
     @Deprecated //Move to service
+    @CommitAfter
     void removeNotes(Document document, DocumentNote... notes);
 
     /**
@@ -130,6 +137,7 @@ public interface DocumentDao extends Dao<Document, String> {
      * @throws IOException
      */
     @Deprecated //Move to service
+    @CommitAfter
     DocumentNote updateNote(DocumentNote note, SelectedText selection) throws IOException;
 
     /**
@@ -137,11 +145,13 @@ public interface DocumentDao extends Dao<Document, String> {
      *
      * @param doc
      */
+    @CommitAfter
     void remove(Document doc);
 
     /**
      * Remove the document by id.
      */
+    @CommitAfter
     void remove(Long id);
 
     /**
@@ -149,12 +159,16 @@ public interface DocumentDao extends Dao<Document, String> {
      *
      * @param documents
      */
+    @CommitAfter
     void removeAll(Collection<Document> documents);
 
+    @CommitAfter
     void move(Long id, String newPath);
 
+    @CommitAfter
     void rename(Long id, String newPath);
 
+    @CommitAfter
     List<FileItemWithDocumentId> fromPath(String path, Long id);
 
 }
