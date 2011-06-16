@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.test.services;
+package fi.finlit.edith.ui.services.hibernate;
 
 import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
@@ -13,14 +13,14 @@ import org.junit.Test;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 
-import fi.finlit.edith.domain.User;
 import fi.finlit.edith.dto.UserDetailsImpl;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.sql.domain.User;
+import fi.finlit.edith.ui.services.UserDao;
 
-public class UserEncodingTest extends AbstractServiceTest {
+public class UserEncodingTest extends AbstractHibernateTest {
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userDao;
 
     @Test
     @Ignore
@@ -31,7 +31,7 @@ public class UserEncodingTest extends AbstractServiceTest {
         saltSource.setSystemWideSalt("DEADBEEF");
         saltSource.afterPropertiesSet();
 
-        for (User user : userRepository.getOrderedByName()) {
+        for (User user : userDao.getOrderedByName()) {
             UserDetailsImpl userDetails = new UserDetailsImpl(user.getUsername(), user
                     .getPassword(), user.getProfile().getAuthorities());
             passwordEncoder.encodePassword(user.getUsername(), saltSource.getSalt(userDetails));

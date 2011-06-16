@@ -5,19 +5,22 @@
  */
 package fi.finlit.edith.ui.services;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import fi.finlit.edith.sql.domain.User;
-import fi.finlit.edith.sql.domain.UserInfo;
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
-public interface UserDao extends Dao<User,String>{
+import fi.finlit.edith.dto.UserInfo;
+import fi.finlit.edith.sql.domain.User;
+
+public interface UserDao extends Dao<User, Long> {
 
     /**
      * Get the user with the given username
-     *
+     * 
      * @param shortName
      * @return
      */
@@ -26,7 +29,7 @@ public interface UserDao extends Dao<User,String>{
 
     /**
      * Get the current user
-     *
+     * 
      * @param username
      * @return
      */
@@ -35,6 +38,7 @@ public interface UserDao extends Dao<User,String>{
 
     /**
      * FIXME TEST AND DOCUMENT
+     * 
      * @param username
      * @return
      */
@@ -43,20 +47,20 @@ public interface UserDao extends Dao<User,String>{
 
     /**
      * Get the users with asceding username order
-     *
+     * 
      * @return
      */
     List<User> getOrderedByName();
 
     /**
-     * @param user
-     * @return
-     */
-    User save(User user);
-
-    /**
      * @return
      */
     Collection<UserInfo> getAllUserInfos();
+
+    @CommitAfter
+    List<User> addUsersFromCsvFile(String filePath, String encoding) throws IOException;
+    
+    @CommitAfter
+    void save(User user);
 
 }

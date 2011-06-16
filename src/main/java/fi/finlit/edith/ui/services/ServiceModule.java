@@ -32,6 +32,7 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.ui.services.content.ContentRendererImpl;
 import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
+import fi.finlit.edith.ui.services.hibernate.UserDaoImpl;
 import fi.finlit.edith.ui.services.repository.AdminServiceImpl;
 import fi.finlit.edith.ui.services.repository.DocumentNoteRepositoryImpl;
 import fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl;
@@ -79,7 +80,7 @@ public final class ServiceModule {
         binder.bind(PersonRepository.class, PersonRepositoryImpl.class);
         binder.bind(PlaceRepository.class, PlaceRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
-        binder.bind(DocumentDao.class, DocumentDaoImpl.class);
+        //binder.bind(DocumentDao.class, DocumentDaoImpl.class);
 
         // tasks
         binder.bind(ReplacedByAdditionTask.class);

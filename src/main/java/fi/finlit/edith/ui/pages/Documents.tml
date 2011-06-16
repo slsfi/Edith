@@ -97,14 +97,14 @@
   <p:title>${message:documents}</p:title>  
 
   <p:leftPanel>
-    <div class="top_links">
-      <span><a id="to_annotate" href="#" class="disabled">${message:to-annotate-document}</a></span>
-      <span><t:actionlink id="to_rename" t:id="renameDocument" class="disabled">${message:rename-file}</t:actionlink></span>
-      <span><t:actionlink id="to_delete" t:id="deleteDocument" class="disabled">${message:remove-file}</t:actionlink></span>
-    </div>
+    <ul class="actions">
+      <li><a id="to_annotate" href="#" class="disabled">${message:to-annotate-document}</a></li>
+      <li><t:actionlink id="to_rename" t:id="renameDocument" class="disabled">${message:rename-file}</t:actionlink></li>
+      <li><t:actionlink id="to_delete" t:id="deleteDocument" class="disabled">${message:remove-file}</t:actionlink></li>
+    </ul>
   </p:leftPanel>
 
-  <h2>${message:documents}</h2>
+  <h3>${message:documents}</h3>
       
   <div id="directory-tree"></div>
     <t:remove>

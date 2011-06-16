@@ -25,34 +25,20 @@
     </div>
         
     <p:leftPanel>
-    <div id="document_links">
-        <div>
-            <span>
-            <a t:type="pageLink" t:page="document/annotate" t:context="document.id">${message:to-annotate-document}</a>
-        </span>
-        <span>
-            <a t:type="pageLink" t:page="document/view" t:context="document.id">${message:to-view-document}</a> 
-        </span>
-        <span>
-            <t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink>
-        </span>
-        <span>
-           ${message:publishVersion}
-        </span>
-        <span><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></span>
-        </div>
-        <div>
-        <span>
-            <a href="#" class="question">${message:publish}</a>
-                            <span class="dialog">
-                                ${message:publish}
-                               <t:actionlink t:id="publish" t:context="[document.id,documentRevision.revision]">${message:yes}</t:actionlink>
-                                /
-                                <a href="" class="decline">${message:no}</a>
-                                </span>
-        </span>
-        </div>
-        </div>
+        <ul class="actions">
+            <li><a t:type="pageLink" t:page="document/annotate" t:context="document.id">${message:to-annotate-document}</a></li>
+            <li><a t:type="pageLink" t:page="document/view" t:context="document.id">${message:to-view-document}</a></li>
+            <li><t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink></li>
+            <li>${message:publishVersion}</li>
+            <li><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></li>
+        </ul>
+        <ul class="actions">
+            <li><a href="#" class="question">${message:publish}</a>
+                <span class="dialog">${message:publish}
+                <t:actionlink t:id="publish" t:context="[document.id,documentRevision.revision]">${message:yes}</t:actionlink>
+                / <a href="" class="decline">${message:no}</a></span>
+            </li>
+        </ul>
     </p:leftPanel>
 
     <p:rightPanel>

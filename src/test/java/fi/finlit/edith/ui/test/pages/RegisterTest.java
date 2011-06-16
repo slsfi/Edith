@@ -4,7 +4,7 @@ import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Test;
 
-import fi.finlit.edith.domain.User;
+import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.pages.Register;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 

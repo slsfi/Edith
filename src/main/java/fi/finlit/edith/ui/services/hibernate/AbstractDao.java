@@ -1,5 +1,7 @@
 package fi.finlit.edith.ui.services.hibernate;
 
+import java.util.Collection;
+
 import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Session;
@@ -20,4 +22,5 @@ public abstract class AbstractDao<T> implements Dao<T, Long> {
     protected Session getSession() {
         return sessionManager.getSession();
     }
+    
 }

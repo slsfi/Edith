@@ -15,5 +15,11 @@
 <!--     <mapping package="fi.finlit.edith.sql.domain"/>  -->
     <mapping class="fi.finlit.edith.sql.domain.Document"/>
     <mapping class="fi.finlit.edith.sql.domain.DocumentNote"/>
+    <mapping class="fi.finlit.edith.sql.domain.Note"/>
+    <mapping class="fi.finlit.edith.sql.domain.User"/>
+    <mapping class="fi.finlit.edith.sql.domain.Term"/>
+    <mapping class="fi.finlit.edith.sql.domain.Person"/>
+    <mapping class="fi.finlit.edith.sql.domain.Place"/>
+    <mapping class="fi.finlit.edith.sql.domain.NoteComment"/>
   </session-factory>
 </hibernate-configuration>

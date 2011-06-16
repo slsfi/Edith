@@ -29,6 +29,7 @@ import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.UserInfo;
+import fi.finlit.edith.ui.services.hibernate.UserDetailsServiceImpl;
 
 /**
  * AppModule is the main Tapestry module for the Edith application
@@ -36,7 +37,7 @@ import fi.finlit.edith.domain.UserInfo;
  * @author tiwe
  * @version $Id$
  */
-@SubModule( { DataModule.class, ServiceModule.class, HibernateServiceModule.class })
+@SubModule( { HibernateDataModule.class, ServiceModule.class, HibernateServiceModule.class })
 public final class AppModule {
 
     private AppModule() {}
@@ -71,6 +72,7 @@ public final class AppModule {
     }
 
     public static void bind(ServiceBinder binder){
+        //binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
         binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
     }
 

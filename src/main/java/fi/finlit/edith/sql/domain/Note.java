@@ -29,30 +29,31 @@ public class Note {
     private Long editedOn;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private Set<UserInfo> allEditors = new HashSet<UserInfo>();
+    private Set<User> allEditors = new HashSet<User>();
 
     @OneToMany(fetch = FetchType.LAZY)
     private Set<NoteComment> comments = new HashSet<NoteComment>();
 
-    private UserInfo lastEditedBy;
+    @ManyToOne
+    private User lastEditedBy;
 
     private String sources;
 
     private String subtextSources;
 
     private String description;
-
-    private NoteStatus status = NoteStatus.INITIAL;
-
-    private Set<NoteType> types = new HashSet<NoteType>();
-
-    private NoteFormat format;
+//
+//    private NoteStatus status = NoteStatus.INITIAL;
+//
+//    private Set<NoteType> types = new HashSet<NoteType>();
+//
+//    private NoteFormat format;
 
     private String lemmaMeaning;
 
-    private Person person;
-
-    private Place place;
+//    private Person person;
+//
+//    private Place place;
 
     private int documentNoteCount = 0;
 
@@ -88,11 +89,11 @@ public class Note {
         this.editedOn = editedOn;
     }
 
-    public Set<UserInfo> getAllEditors() {
+    public Set<User> getAllEditors() {
         return allEditors;
     }
 
-    public void setAllEditors(Set<UserInfo> allEditors) {
+    public void setAllEditors(Set<User> allEditors) {
         this.allEditors = allEditors;
     }
 
@@ -104,11 +105,11 @@ public class Note {
         this.comments = comments;
     }
 
-    public UserInfo getLastEditedBy() {
+    public User getLastEditedBy() {
         return lastEditedBy;
     }
 
-    public void setLastEditedBy(UserInfo lastEditedBy) {
+    public void setLastEditedBy(User lastEditedBy) {
         this.lastEditedBy = lastEditedBy;
     }
 
@@ -136,29 +137,29 @@ public class Note {
         this.description = description;
     }
 
-    public NoteStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(NoteStatus status) {
-        this.status = status;
-    }
-
-    public Set<NoteType> getTypes() {
-        return types;
-    }
-
-    public void setTypes(Set<NoteType> types) {
-        this.types = types;
-    }
-
-    public NoteFormat getFormat() {
-        return format;
-    }
-
-    public void setFormat(NoteFormat format) {
-        this.format = format;
-    }
+//    public NoteStatus getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(NoteStatus status) {
+//        this.status = status;
+//    }
+//
+//    public Set<NoteType> getTypes() {
+//        return types;
+//    }
+//
+//    public void setTypes(Set<NoteType> types) {
+//        this.types = types;
+//    }
+//
+//    public NoteFormat getFormat() {
+//        return format;
+//    }
+//
+//    public void setFormat(NoteFormat format) {
+//        this.format = format;
+//    }
 
     public String getLemmaMeaning() {
         return lemmaMeaning;

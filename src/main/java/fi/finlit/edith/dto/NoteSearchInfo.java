@@ -7,7 +7,6 @@ import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.NoteFormat;
 import fi.finlit.edith.sql.domain.NoteType;
 import fi.finlit.edith.sql.domain.TermLanguage;
-import fi.finlit.edith.sql.domain.UserInfo;
 
 public class NoteSearchInfo {
 

@@ -20,7 +20,7 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Profile;
 import fi.finlit.edith.domain.User;
-import fi.finlit.edith.ui.services.repository.UserDetailsImpl;
+import fi.finlit.edith.dto.UserDetailsImpl;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
 public final class DataModule {
@@ -78,4 +78,5 @@ public final class DataModule {
         }
     }
 
+    
 }

@@ -35,7 +35,8 @@ import fi.finlit.edith.ui.services.ServiceModule;
 import fi.finlit.edith.ui.test.services.SKSServiceTestModule;
 
 @RunWith(TapestryTestRunner.class)
-@Modules({ SKSServiceTestModule.class, ServiceModule.class, HibernateServiceModule.class, HibernateCoreModule.class })
+@Modules({ SKSServiceTestModule.class, ServiceModule.class, HibernateServiceModule.class,
+        HibernateCoreModule.class})
 public abstract class AbstractHibernateTest {
     @Inject
     private HibernateSessionManager sessionManager;

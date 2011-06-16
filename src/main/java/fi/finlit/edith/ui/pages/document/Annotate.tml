@@ -13,24 +13,21 @@
 	</div>
 
 	<p:leftPanel>
-	   <div id="document_links">
-	     <div>
-	       <span>${message:to-annotate-document}</span>
-		     <span><a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:to-view-document}</a></span>
-		     <span><t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink></span>
-		     <span><t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink></span>
-         <span><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></span>
-       </div>
-       <div>
-		     <span><a id="createTermLink" class="disabled" href="#">${message:createTerm}</a></span>
-         <span><a id="connectTermLink" class="disabled" href="#">${message:connectTerm}</a></span>
-		  
-		     <t:if test="!slsMode">
-		     <span><t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink></span>
-         <span><t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink></span>
+	   <ul class="actions">
+          <li>${message:to-annotate-document}</li>
+		     <li><a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:to-view-document}</a></li>
+		     <li><t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink></li>
+		     <li><t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink></li>
+         <li><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></li>
+       </ul>
+       <ul class="actions">
+		 <li><a id="createTermLink" class="disabled" href="#">${message:createTerm}</a></li>
+         <li><a id="connectTermLink" class="disabled" href="#">${message:connectTerm}</a></li> 
+		 <t:if test="!slsMode">
+		   <li><t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink></li>
+           <li><t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink></li>
          </t:if>
-       </div>
-	   </div>
+       </ul>
        <div id="document-path">${documentPath}</div>
 	</p:leftPanel>
 
