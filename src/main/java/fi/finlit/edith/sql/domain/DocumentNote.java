@@ -25,6 +25,13 @@ public class DocumentNote {
 
     private int position;
 
+    private long createdOn;
+
+    private String shortenedSelection;
+
+    @ManyToOne
+    private Note note;
+
     public Long getId() {
         return id;
     }
@@ -79,5 +86,29 @@ public class DocumentNote {
 
     public String getFullSelection() {
         return fullSelection;
+    }
+
+    public Note getNote() {
+        return note;
+    }
+
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
+    public long getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(long createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getShortenedSelection() {
+        return shortenedSelection;
+    }
+
+    public void setShortenedSelection(String shortenedSelection) {
+        this.shortenedSelection = shortenedSelection;
     }
 }

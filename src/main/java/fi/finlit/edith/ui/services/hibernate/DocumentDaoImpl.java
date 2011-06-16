@@ -41,7 +41,6 @@ import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
-import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.hibernate.Session;
@@ -49,9 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mysema.commons.lang.Assert;
-import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
-import com.mysema.query.jpa.hibernate.HibernateQuery;
 import com.mysema.query.jpa.hibernate.HibernateUpdateClause;
 
 import fi.finlit.edith.EDITH;
@@ -73,7 +70,7 @@ import fi.finlit.edith.util.ElementContext;
 // TODO: It would make sense to move XML parsing and all SVN operations
 // to other low-level classes and use a service to achieve what this
 // class currently does.
-public class DocumentDaoImpl implements DocumentDao {
+public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDao {
     private static final Logger logger = LoggerFactory.getLogger(DocumentDaoImpl.class);
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
@@ -83,18 +80,6 @@ public class DocumentDaoImpl implements DocumentDao {
     private static final QName XML_ID_QNAME = new QName(XML_NS, "id");
 
     private static final QName TEI_TYPE_QNAME = new QName(null, "type");
-
-    // TODO: Move to abstract super class!
-    private JPQLQuery query() {
-        return new HibernateQuery(getSession());
-    }
-
-    // TODO: Move to abstract super class!
-    private Session getSession() {
-        return sessionManager.getSession();
-    }
-
-    private final HibernateSessionManager sessionManager;
 
     private final String documentRoot;
 
@@ -108,10 +93,10 @@ public class DocumentDaoImpl implements DocumentDao {
 
     private final XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
 
-    public DocumentDaoImpl(@Inject Session session, @Inject SubversionService versioningService,
-            @Inject HibernateSessionManager sessionManager, @Inject AuthService authService,
+    public DocumentDaoImpl(
+            @Inject SubversionService versioningService,
+            @Inject AuthService authService,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot) {
-        this.sessionManager = sessionManager;
         this.documentRoot = documentRoot;
         this.versioningService = versioningService;
         this.authService = authService;
@@ -671,22 +656,16 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public List<FileItemWithDocumentId> fromPath(String path, Long id) {
-        List<FileItem> files = StringUtils.isEmpty(path) ? versioningService
-                .getFileItems(documentRoot, -1) : versioningService.getFileItems(path, -1);
+        List<FileItem> files = StringUtils.isEmpty(path) ? versioningService.getFileItems(
+                documentRoot, -1) : versioningService.getFileItems(path, -1);
         List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
         for (FileItem file : files) {
             Document doc = getDocumentForPath(file.getPath());
             if (doc == null) {
                 doc = createDocument(file.getPath(), file.getTitle());
             }
-            rv.add(new FileItemWithDocumentId(
-                    file.getTitle(),
-                    file.getPath(),
-                    file.isFolder(),
-                    file.getChildren(),
-                    file.hasChildren(),
-                    doc.getId(),
-                    doc.getId().equals(id),
+            rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.isFolder(),
+                    file.getChildren(), file.hasChildren(), doc.getId(), doc.getId().equals(id),
                     100l));
             // FIXME: An actual value should be retrieved.
             // documentNoteRepository.getNoteCountForDocument(doc.getId())));

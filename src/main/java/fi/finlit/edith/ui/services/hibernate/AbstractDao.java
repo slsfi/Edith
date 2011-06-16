@@ -1,40 +1,23 @@
 package fi.finlit.edith.ui.services.hibernate;
 
-import java.util.Collection;
+import org.apache.tapestry5.hibernate.HibernateSessionManager;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.hibernate.Session;
 
-import com.mysema.query.types.EntityPath;
-import com.mysema.rdfbean.object.Session;
-import com.mysema.rdfbean.object.SessionFactory;
+import com.mysema.query.jpa.JPQLQuery;
+import com.mysema.query.jpa.hibernate.HibernateQuery;
 
-import fi.finlit.edith.ui.services.AbstractService;
 import fi.finlit.edith.ui.services.Dao;
 
-/**
- * AbstractRepository provides a basic stub for Repository implementations
- * 
- * @author tiwe
- * @version $Id$
- */
-public abstract class AbstractDao<T> implements Dao<T, String> {
+public abstract class AbstractDao<T> implements Dao<T, Long> {
+    @Inject
+    private HibernateSessionManager sessionManager;
 
-
-    protected Session getSession() {return null;}
-
-    @SuppressWarnings("unchecked")
-    protected Class<T> getType() {
-//        return (Class<T>) entityPath.getType();
-        return null;
+    protected JPQLQuery query() {
+        return new HibernateQuery(getSession());
     }
 
-    @Override
-    public Collection<T> getAll() {
-        return getSession().findInstances(getType());
+    protected Session getSession() {
+        return sessionManager.getSession();
     }
-
-    @Override
-    public T getById(String id) {
-  //      return getSession().getById(id, entityPath.getType());
-        return null;
-    }
-
 }
