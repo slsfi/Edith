@@ -45,6 +45,7 @@ import com.mysema.rdfbean.object.BeanSubQuery;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
@@ -109,6 +110,17 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
+    public Collection<Note> getAll() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Note getById(Long id) {
+        return (Note) getSession().get(Note.class, id);
+    }
+
+    @Override
     public NoteComment createComment(Note note, String message) {
         NoteComment comment = new NoteComment(note, message, authService.getUsername());
         getSession().save(comment);
@@ -120,7 +132,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
-    public GridDataSource findNotes(DocumentNoteSearchInfo search) {
+    public GridDataSource findNotes(NoteSearchInfo search) {
         BooleanBuilder builder = new BooleanBuilder();
 
         // only orphans
@@ -221,7 +233,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
 
-    private OrderSpecifier<?> getOrderBy(DocumentNoteSearchInfo searchInfo, QNote note) {
+    private OrderSpecifier<?> getOrderBy(NoteSearchInfo searchInfo, QNote note) {
         ComparableExpressionBase<?> comparable = null;
         OrderBy orderBy = searchInfo.getOrderBy() == null ? OrderBy.LEMMA : searchInfo.getOrderBy();
         switch (orderBy) {

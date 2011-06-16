@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
 
-import fi.finlit.edith.dto.DocumentNoteSearchInfo;
+import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
@@ -115,7 +115,7 @@ public interface NoteDao extends Dao<Note, Long> {
      */
     List<Long> getOrphanIds();
 
-    GridDataSource findNotes(DocumentNoteSearchInfo search);
+    GridDataSource findNotes(NoteSearchInfo search);
 
     /**
      * @param editedNote
