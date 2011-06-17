@@ -96,8 +96,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     @Override
     public Collection<Note> getAll() {
-        // TODO Auto-generated method stub
-        return null;
+        return query().from(note).list(note);
     }
 
     @Override

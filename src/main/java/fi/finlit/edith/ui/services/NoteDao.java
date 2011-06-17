@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
 import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.sql.domain.Document;
@@ -20,6 +21,7 @@ public interface NoteDao extends Dao<Note, Long> {
      * @param concept
      * @param message
      */
+    @CommitAfter
     NoteComment createComment(Note note, String message);
 
     /**
@@ -30,8 +32,10 @@ public interface NoteDao extends Dao<Note, Long> {
      * @param longText
      * @return
      */
+    @CommitAfter
     DocumentNote createDocumentNote(Note note, Document document, String longText, int position);
 
+    @CommitAfter
     DocumentNote createDocumentNote(DocumentNote documentNote, Note note, Document document, String longText, int position);
 
     /**
@@ -46,6 +50,7 @@ public interface NoteDao extends Dao<Note, Long> {
      * @param file
      * @throws Exception
      */
+    @CommitAfter
     int importNotes(File file);
 
     /**
@@ -61,6 +66,7 @@ public interface NoteDao extends Dao<Note, Long> {
      *
      * @param note
      */
+    @CommitAfter
     void removePermanently(DocumentNote note);
 
     /**
@@ -69,6 +75,7 @@ public interface NoteDao extends Dao<Note, Long> {
      * @param commentId
      * @return
      */
+    @CommitAfter
     NoteComment removeComment(Long commentId);
 
     /**
@@ -111,6 +118,7 @@ public interface NoteDao extends Dao<Note, Long> {
     /**
      * @param editedNote
      */
+    @CommitAfter
     void save(Note editedNote);
 
     /**
@@ -118,6 +126,7 @@ public interface NoteDao extends Dao<Note, Long> {
      *
      * @param notes
      */
+    @CommitAfter
     void removeNotes(Collection<Note> notes);
 
     /**
@@ -125,6 +134,7 @@ public interface NoteDao extends Dao<Note, Long> {
      *
      * @param note
      */
+    @CommitAfter
     void removeNote(Note note);
 
     /**
@@ -133,6 +143,7 @@ public interface NoteDao extends Dao<Note, Long> {
      */
     NoteComment getCommentById(Long id);
 
+    @CommitAfter
     DocumentNote createDocumentNote(Note note, Document document, String longText);
 
 }

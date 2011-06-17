@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +33,6 @@ import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteComment;
 import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.sql.domain.Place;
-import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.sql.domain.TermLanguage;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentDao;
@@ -41,6 +41,7 @@ import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.PersonDao;
 import fi.finlit.edith.ui.services.PlaceDao;
+import fi.finlit.edith.ui.services.UserDao;
 
 public class NoteDaoTest extends AbstractHibernateTest {
 
@@ -63,6 +64,9 @@ public class NoteDaoTest extends AbstractHibernateTest {
     private PlaceDao placeDao;
 
     @Inject
+    private UserDao userDao;
+
+    @Inject
     @Symbol(EdithTestConstants.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
@@ -75,8 +79,10 @@ public class NoteDaoTest extends AbstractHibernateTest {
     private boolean extendedTerm;
 
     @Before
-    public void setUp() {
-        adminService.removeNotesAndTerms();
+    public void setUp() throws IOException {
+        userDao.addUsersFromCsvFile("/users.csv", "ISO-8859-1");
+        // FIXME!
+//        adminService.removeNotesAndTerms();
     }
 
     private int countDocumentNotes(List<NoteWithInstances> notes){
@@ -455,7 +461,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
 
     private Note createNote() {
         Note note = new Note();
-        note.setTerm(new Term());
+//        note.setTerm(new Term());
         return note;
     }
 

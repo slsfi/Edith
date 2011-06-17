@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -45,6 +46,8 @@ public class Note {
 
     private String subtextSources;
 
+    // FIXME: We should agree on some limits.
+    @Column(length = 1024)
     private String description;
 
     @Enumerated(EnumType.STRING)

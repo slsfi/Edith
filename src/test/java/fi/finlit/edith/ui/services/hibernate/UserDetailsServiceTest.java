@@ -15,7 +15,7 @@ import org.springframework.security.userdetails.UsernameNotFoundException;
 import fi.finlit.edith.ui.services.UserDao;
 
 
-public class UserDetailsServiceImplTest extends AbstractHibernateTest {
+public class UserDetailsServiceTest extends AbstractHibernateTest {
     private UserDetailsServiceImpl service;
 
     @Inject
@@ -24,6 +24,7 @@ public class UserDetailsServiceImplTest extends AbstractHibernateTest {
     @Before
     public void setUp() throws Exception {
         service = new UserDetailsServiceImpl(userDao);
+        userDao.addUsersFromCsvFile("/users.csv", "ISO-8859-1");
     }
 
     @After
