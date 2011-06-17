@@ -11,6 +11,7 @@ import fi.finlit.edith.ui.services.hibernate.DocumentNoteDaoImpl;
 import fi.finlit.edith.ui.services.hibernate.NoteDaoImpl;
 import fi.finlit.edith.ui.services.hibernate.PersonDaoImpl;
 import fi.finlit.edith.ui.services.hibernate.PlaceDaoImpl;
+import fi.finlit.edith.ui.services.hibernate.TermDaoImpl;
 import fi.finlit.edith.ui.services.hibernate.UserDaoImpl;
 
 public final class HibernateServiceModule {
@@ -27,6 +28,7 @@ public final class HibernateServiceModule {
         binder.bind(DocumentNoteDao.class, DocumentNoteDaoImpl.class);
         binder.bind(PersonDao.class, PersonDaoImpl.class);
         binder.bind(PlaceDao.class, PlaceDaoImpl.class);
+        binder.bind(TermDao.class, TermDaoImpl.class);
     }
 
     public static void contributeHibernateEntityPackageManager(Configuration<String> configuration)
