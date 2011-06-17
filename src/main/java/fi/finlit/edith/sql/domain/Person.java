@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Person {
@@ -12,8 +13,11 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToOne
+    private NameForm normalizedForm;
+
     public Person(NameForm nameForm, Object object) {
-        // TODO Auto-generated constructor stub
+        this.normalizedForm = nameForm;
     }
 
     public Person() {
@@ -26,5 +30,13 @@ public class Person {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setNormalizedForm(NameForm normalizedForm) {
+        this.normalizedForm = normalizedForm;
+    }
+
+    public NameForm getNormalizedForm() {
+        return normalizedForm;
     }
 }

@@ -454,7 +454,8 @@ public class NoteDaoTest extends AbstractHibernateTest {
     @Test
     public void Query_Places_Based_On_Name() throws Exception {
         assertEquals(0, noteDao.queryPlaces("Helsin").getAvailableRows());
-        placeDao.save(new Place(new NameForm("Helsinki", null), null));
+        NameForm normalizedForm = new NameForm("Helsinki", null);
+        placeDao.save(new Place(normalizedForm, null));
         assertEquals(0, noteDao.queryPlaces("Helssin").getAvailableRows());
         assertEquals(1, noteDao.queryPlaces("Helsin").getAvailableRows());
     }

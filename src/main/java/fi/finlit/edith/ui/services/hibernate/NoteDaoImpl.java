@@ -1,12 +1,10 @@
-/*
- * Copyright (c) 2009 Mysema Ltd.
- * All rights reserved.
- *
- */
 package fi.finlit.edith.ui.services.hibernate;
 
 import static fi.finlit.edith.sql.domain.QDocumentNote.documentNote;
 import static fi.finlit.edith.sql.domain.QNote.note;
+import static fi.finlit.edith.sql.domain.QPerson.person;
+import static fi.finlit.edith.sql.domain.QPlace.place;
+import static fi.finlit.edith.sql.domain.QTerm.term;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +22,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
@@ -31,10 +30,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.JPQLSubQuery;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.Predicate;
+import com.mysema.query.types.expr.ComparableExpression;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
 
@@ -193,8 +194,41 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return createGridDataSource(note, getOrderBy(search), false, builder.getValue());
     }
 
-    private GridDataSource createGridDataSource(EntityPath<Note> path, OrderSpecifier<?> order, boolean caseSensitive, Predicate filters) {
-        return null;
+    private GridDataSource createGridDataSource(
+            final EntityPath<?> path,
+            final OrderSpecifier<?> order,
+            final boolean caseSensitive,
+            final Predicate... filters) {
+        return new GridDataSource() {
+            private List<?> preparedResults;
+
+            @Override
+            public void prepare(int startIndex, int endIndex, List<SortConstraint> sortConstraints) {
+                JPQLQuery query = query().from(path);
+                if (filters != null){
+                    query.where(filters);
+                }
+                preparedResults = query.list(path);
+            }
+
+            @Override
+            public Object getRowValue(int index) {
+                return preparedResults.get(index);
+            }
+
+            @Override
+            public Class getRowType() {
+                return path.getType();
+            }
+
+            @Override
+            public int getAvailableRows() {
+//                if (filters.length > 0) {
+                    return (int) query().from(path).where(filters).count();
+//                }
+//                return (int) query().from(path).count();
+            }
+        };
     }
 
     @Override
@@ -434,48 +468,41 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     @Override
     public GridDataSource queryDictionary(String searchTerm) {
         // FIXME!!!!
-//        Assert.notNull(searchTerm);
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(termWithNotes.basicForm.containsIgnoreCase(searchTerm));
-//            builder.or(termWithNotes.meaning.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(),
-//                    false, builder.getValue());
-//        }
-//        return createGridDataSource(termWithNotes, termWithNotes.basicForm.lower().asc(), false);
-//        return null;
-        throw new UnsupportedOperationException("hi, i am not implemented");
+        Assert.notNull(searchTerm);
+        if (!searchTerm.equals("*")) {
+            BooleanBuilder builder = new BooleanBuilder();
+            builder.or(term.basicForm.containsIgnoreCase(searchTerm));
+            builder.or(term.meaning.containsIgnoreCase(searchTerm));
+            return createGridDataSource(term, term.basicForm.lower().asc(),
+                    false, builder.getValue());
+        }
+        return createGridDataSource(term, term.basicForm.lower().asc(), false);
+//        throw new UnsupportedOperationException("hi, i am not implemented");
     }
 
     @Override
     public GridDataSource queryPersons(String searchTerm) {
-        // FIXME!!!!!1111111
-//        Assert.notNull(searchTerm);
-//        QPerson person = QPerson.person;
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(person.normalizedForm().first.containsIgnoreCase(searchTerm));
-//            builder.or(person.normalizedForm().last.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(person, person.normalizedForm().last.lower().asc(), false,
-//                    builder.getValue());
-//        }
-//        return createGridDataSource(person, person.normalizedForm().last.asc(), false);
-        throw new UnsupportedOperationException("hi, i am not implemented");
+        Assert.notNull(searchTerm);
+        if (!searchTerm.equals("*")) {
+            BooleanBuilder builder = new BooleanBuilder();
+            builder.or(person.normalizedForm.first.containsIgnoreCase(searchTerm));
+            builder.or(person.normalizedForm.last.containsIgnoreCase(searchTerm));
+            return createGridDataSource(person, person.normalizedForm.last.lower().asc(), false,
+                    builder.getValue());
+        }
+        return createGridDataSource(person, person.normalizedForm.last.asc(), false);
     }
 
     @Override
     public GridDataSource queryPlaces(String searchTerm) {
-        //FIXME!!!!!
-//        Assert.notNull(searchTerm);
-//        QPlace place = QPlace.place;
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(place.normalizedForm().last.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(place, place.normalizedForm().last.lower().asc(), false,
-//                    builder.getValue());
-//        }
-//        return createGridDataSource(place, place.normalizedForm().last.asc(), false);
-        throw new UnsupportedOperationException("hi, i am not implemented");
+        Assert.notNull(searchTerm);
+        if (!searchTerm.equals("*")) {
+            BooleanBuilder builder = new BooleanBuilder();
+            builder.or(place.normalizedForm.last.containsIgnoreCase(searchTerm));
+            return createGridDataSource(place, place.normalizedForm.last.lower().asc(), false,
+                    builder.getValue());
+        }
+        return createGridDataSource(place, place.normalizedForm.last.asc(), false);
     }
 
     @Override
