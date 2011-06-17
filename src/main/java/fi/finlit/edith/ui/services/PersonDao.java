@@ -8,7 +8,7 @@ public interface PersonDao extends Dao<Person, Long> {
 
     Collection<Person> findByStartOfFirstAndLastName(String partial, int limit);
 
-    void remove(String personId);
+    void remove(Long personId);
 
     void remove(Person person);
 

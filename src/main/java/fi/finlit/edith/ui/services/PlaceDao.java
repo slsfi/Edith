@@ -8,7 +8,7 @@ public interface PlaceDao extends Dao<Place, Long> {
 
     Collection<Place> findByStartOfName(String partial, int limit);
 
-    void remove(String placeId);
+    void remove(Long placeId);
 
     void save(Place place);
 
