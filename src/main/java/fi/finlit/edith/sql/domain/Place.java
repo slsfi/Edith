@@ -12,6 +12,14 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public Place(NameForm nameForm, Object object) {
+        // TODO Auto-generated constructor stub
+    }
+
+    public Place() {
+        // TODO Auto-generated constructor stub
+    }
+
     public Long getId() {
         return id;
     }

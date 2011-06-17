@@ -55,7 +55,7 @@ public class Note {
 //
 //    private Place place;
 
-    private int documentNoteCount = 0;
+//    private int documentNoteCount = 0;
 
     public Long getId() {
         return id;
@@ -169,13 +169,13 @@ public class Note {
         this.lemmaMeaning = lemmaMeaning;
     }
 
-    public int getDocumentNoteCount() {
-        return documentNoteCount;
-    }
-
-    public void setDocumentNoteCount(int documentNoteCount) {
-        this.documentNoteCount = documentNoteCount;
-    }
+//    public int getDocumentNoteCount() {
+//        return documentNoteCount;
+//    }
+//
+//    public void setDocumentNoteCount(int documentNoteCount) {
+//        this.documentNoteCount = documentNoteCount;
+//    }
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
