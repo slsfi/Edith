@@ -48,7 +48,18 @@ import com.mysema.rdfbean.object.Session;
 import com.mysema.rdfbean.object.SessionFactory;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.*;
+import fi.finlit.edith.domain.Concept;
+import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.domain.LinkElement;
+import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.domain.NoteComment;
+import fi.finlit.edith.domain.NoteType;
+import fi.finlit.edith.domain.Paragraph;
+import fi.finlit.edith.domain.StringElement;
+import fi.finlit.edith.domain.Term;
+import fi.finlit.edith.domain.UrlElement;
+import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.OrderBy;
@@ -205,7 +216,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
     @Override
     public GridDataSource findNotes(DocumentNoteSearchInfo search) {
         BooleanBuilder builder = new BooleanBuilder();
-        
+
         // only orphans
         if (search.isOrphans() && !search.isIncludeAllDocs()) {
             builder.and(note.documentNoteCount.eq(0));
@@ -232,7 +243,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
         if (search.getLanguage() != null) {
             builder.and(note.term().language.eq(search.getLanguage()));
         }
-        
+
         // fulltext
         if (StringUtils.isNotBlank(search.getFullText())) {
             BooleanBuilder filter = new BooleanBuilder();
@@ -272,7 +283,7 @@ public class NoteRepositoryImpl extends AbstractRepository<Note> implements Note
             }
             builder.and(filter);
         }
-        
+
         //TODO We need datasource parameter to get distinct results from here
         return createGridDataSource(note, getOrderBy(search, note), false, builder.getValue());
     }

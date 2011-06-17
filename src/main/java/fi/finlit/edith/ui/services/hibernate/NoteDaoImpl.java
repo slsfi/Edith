@@ -47,6 +47,7 @@ import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
+import fi.finlit.edith.dto.UserInfo;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.LinkElement;
@@ -61,7 +62,6 @@ import fi.finlit.edith.sql.domain.QPlace;
 import fi.finlit.edith.sql.domain.StringElement;
 import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.sql.domain.UrlElement;
-import fi.finlit.edith.sql.domain.UserInfo;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteWithInstances;
@@ -135,20 +135,22 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     public GridDataSource findNotes(NoteSearchInfo search) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        // only orphans
-        if (search.isOrphans() && !search.isIncludeAllDocs()) {
-            builder.and(note.documentNoteCount.eq(0));
-        }
+        // FIXME!
+//        // only orphans
+//        if (search.isOrphans() && !search.isIncludeAllDocs()) {
+//            builder.and(note.documentNoteCount.eq(0));
+//        }
         // or all, including orphans
-        else if (search.isOrphans() && search.isIncludeAllDocs()) {
-            builder.and(note.documentNoteCount.goe(0));
-        }
+//        else if (search.isOrphans() && search.isIncludeAllDocs()) {
+//            builder.and(note.documentNoteCount.goe(0));
+//        }
         // or all, without orphans
-        else if (!search.isOrphans() && search.isIncludeAllDocs()) {
-            builder.and(note.documentNoteCount.gt(0));
-        }
+//        else if (!search.isOrphans() && search.isIncludeAllDocs()) {
+//            builder.and(note.documentNoteCount.gt(0));
+//        }
         // or documents from selection
-        else if (!search.getDocuments().isEmpty() && !search.isIncludeAllDocs()) {
+        //else
+            if (!search.getDocuments().isEmpty() && !search.isIncludeAllDocs()) {
             JPQLSubQuery subQuery = sub(documentNote);
             subQuery.where(documentNote.note.eq(note),
                     documentNote.document.in(search.getDocuments()),
@@ -204,7 +206,11 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
 
         //TODO We need datasource parameter to get distinct results from here
-        return createGridDataSource(note, getOrderBy(search, note), false, builder.getValue());
+        return createGridDataSource(note, getOrderBy(search), false, builder.getValue());
+    }
+
+    private GridDataSource createGridDataSource(EntityPath<Note> path, OrderSpecifier<?> order, boolean caseSensitive, Predicate filters) {
+        return null;
     }
 
     @Override
@@ -233,7 +239,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
 
-    private OrderSpecifier<?> getOrderBy(NoteSearchInfo searchInfo, QNote note) {
+    private OrderSpecifier<?> getOrderBy(NoteSearchInfo searchInfo) {
         ComparableExpressionBase<?> comparable = null;
         OrderBy orderBy = searchInfo.getOrderBy() == null ? OrderBy.LEMMA : searchInfo.getOrderBy();
         switch (orderBy) {
@@ -268,6 +274,13 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return query().from(note)
                 .where(sub(documentNote).where(documentNote.note.eq(note)).notExists())
                 .list(note.id);
+    }
+
+    @Override
+    public DocumentNote createDocumentNote(Note n, Document document,
+            String longText) {
+        return createDocumentNote(new DocumentNote(), n, document,
+                longText, 0);
     }
 
     @Override
@@ -479,20 +492,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 //        }
 //        return createGridDataSource(place, place.normalizedForm().last.asc(), false);
         throw new UnsupportedOperationException("hi, i am not implemented");
-    }
-
-    @Override
-    public void remove(DocumentNote documentNoteToBeRemoved, long revision) {
-        Assert.notNull(documentNoteToBeRemoved, "note was null");
-
-        // XXX Is this still necessary?
-//        documentNoteToBeRemoved.getNote().decDocumentNoteCount();
-
-        documentNoteToBeRemoved.setRevision(revision);
-        documentNoteToBeRemoved.setDeleted(true);
-
-        getSession().save(documentNoteToBeRemoved);
-
     }
 
     @Override

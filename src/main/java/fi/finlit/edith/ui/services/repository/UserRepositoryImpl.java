@@ -21,7 +21,7 @@ import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.UserRepository;
 
 public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository {
-    
+
     private final AuthService authService;
 
     public UserRepositoryImpl(@Inject SessionFactory sessionFactory, @Inject AuthService authService) {

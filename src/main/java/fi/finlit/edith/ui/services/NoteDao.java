@@ -57,15 +57,6 @@ public interface NoteDao extends Dao<Note, Long> {
     GridDataSource queryDictionary(String searchTerm);
 
     /**
-     * Remove the give Note in the given revision. This don't remove data, it just set DocumentNote to a
-     * deleted state
-     *
-     * @param note
-     * @param newRevision
-     */
-    void remove(DocumentNote note, long revision);
-
-    /**
      * Removes the document note permanently
      *
      * @param note
@@ -141,5 +132,7 @@ public interface NoteDao extends Dao<Note, Long> {
      * @return
      */
     NoteComment getCommentById(Long id);
+
+    DocumentNote createDocumentNote(Note note, Document document, String longText);
 
 }

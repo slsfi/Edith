@@ -42,18 +42,18 @@ public class Note {
     private String subtextSources;
 
     private String description;
-//
-//    private NoteStatus status = NoteStatus.INITIAL;
-//
-//    private Set<NoteType> types = new HashSet<NoteType>();
-//
-//    private NoteFormat format;
+
+    private NoteStatus status = NoteStatus.INITIAL;
+
+    private Set<NoteType> types = new HashSet<NoteType>();
+
+    private NoteFormat format;
 
     private String lemmaMeaning;
 
-//    private Person person;
-//
-//    private Place place;
+    private Person person;
+
+    private Place place;
 
 //    private int documentNoteCount = 0;
 
@@ -137,29 +137,29 @@ public class Note {
         this.description = description;
     }
 
-//    public NoteStatus getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(NoteStatus status) {
-//        this.status = status;
-//    }
-//
-//    public Set<NoteType> getTypes() {
-//        return types;
-//    }
-//
-//    public void setTypes(Set<NoteType> types) {
-//        this.types = types;
-//    }
-//
-//    public NoteFormat getFormat() {
-//        return format;
-//    }
-//
-//    public void setFormat(NoteFormat format) {
-//        this.format = format;
-//    }
+    public NoteStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(NoteStatus status) {
+        this.status = status;
+    }
+
+    public Set<NoteType> getTypes() {
+        return types;
+    }
+
+    public void setTypes(Set<NoteType> types) {
+        this.types = types;
+    }
+
+    public NoteFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(NoteFormat format) {
+        this.format = format;
+    }
 
     public String getLemmaMeaning() {
         return lemmaMeaning;
