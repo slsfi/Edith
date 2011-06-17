@@ -4,7 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -31,7 +35,7 @@ public class Note {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> allEditors = new HashSet<User>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="note")
     private Set<NoteComment> comments = new HashSet<NoteComment>();
 
     @ManyToOne
@@ -43,16 +47,22 @@ public class Note {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
     private NoteStatus status = NoteStatus.INITIAL;
 
+    @ElementCollection(fetch=FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
     private Set<NoteType> types = new HashSet<NoteType>();
 
+    @Enumerated(EnumType.STRING)
     private NoteFormat format;
 
     private String lemmaMeaning;
 
+    @ManyToOne
     private Person person;
 
+    @ManyToOne
     private Place place;
 
 //    private int documentNoteCount = 0;
