@@ -1,6 +1,7 @@
 package fi.finlit.edith.ui.services;
 
 import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
@@ -16,6 +17,11 @@ public final class HibernateServiceModule {
 
     public static void bind(ServiceBinder binder) {
         binder.bind(UserDao.class, UserDaoImpl.class);
+    }
+    
+    public static void contributeHibernateEntityPackageManager(Configuration<String> configuration)
+    {
+      configuration.add("fi.finlit.edith.sql.domain");
     }
 
     private HibernateServiceModule() {
