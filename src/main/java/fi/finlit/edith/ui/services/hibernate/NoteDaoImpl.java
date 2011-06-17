@@ -5,18 +5,17 @@
  */
 package fi.finlit.edith.ui.services.hibernate;
 
+import static fi.finlit.edith.sql.domain.QDocumentNote.documentNote;
+import static fi.finlit.edith.sql.domain.QNote.note;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -32,19 +31,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.JPQLSubQuery;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.Predicate;
-import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
-import com.mysema.rdfbean.object.BeanSubQuery;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.dto.DocumentNoteSearchInfo;
-import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.dto.UserInfo;
@@ -55,23 +49,14 @@ import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteComment;
 import fi.finlit.edith.sql.domain.NoteType;
 import fi.finlit.edith.sql.domain.Paragraph;
-import fi.finlit.edith.sql.domain.QDocumentNote;
-import fi.finlit.edith.sql.domain.QNote;
-import fi.finlit.edith.sql.domain.QPerson;
-import fi.finlit.edith.sql.domain.QPlace;
 import fi.finlit.edith.sql.domain.StringElement;
 import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.sql.domain.UrlElement;
+import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.NoteDao;
-import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.ServiceException;
-import fi.finlit.edith.ui.services.TimeService;
 import fi.finlit.edith.ui.services.UserDao;
-import fi.finlit.edith.ui.services.UserRepository;
-
-import static fi.finlit.edith.sql.domain.QNote.note;
-import static fi.finlit.edith.sql.domain.QDocumentNote.documentNote;
 
 public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
@@ -183,7 +168,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             Collection<String> usernames = new ArrayList<String>(search.getCreators().size());
             for (UserInfo userInfo : search.getCreators()) {
                 filter.or(note.allEditors.contains(
-                        userDao.getUserInfoByUsername(userInfo.getUsername())));
+                        userDao.getByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
             }
             // FIXME This is kind of useless except that we have broken data in production.
@@ -293,7 +278,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     @Override
     public DocumentNote createDocumentNote(DocumentNote documentNote, Note n, Document document,
             String longText, int position) {
-        UserInfo createdBy = userDao.getCurrentUser();
+        User createdBy = userDao.getCurrentUser();
 
         long currentTime = System.currentTimeMillis();
         documentNote.setCreatedOn(currentTime);
@@ -301,7 +286,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
         n.setLastEditedBy(createdBy);
         if (n.getAllEditors() == null) {
-            n.setAllEditors(new HashSet<UserInfo>());
+            n.setAllEditors(new HashSet<User>());
         }
         n.getAllEditors().add(createdBy);
 

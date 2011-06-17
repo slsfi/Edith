@@ -63,8 +63,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public UserInfo getCurrentUser() {
-        return getUserInfoByUsername(authService.getUsername());
+    public User getCurrentUser() {
+        return getByUsername(authService.getUsername());
     }
 
     @Override

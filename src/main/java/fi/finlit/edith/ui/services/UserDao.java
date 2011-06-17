@@ -34,7 +34,7 @@ public interface UserDao extends Dao<User, Long> {
      * @return
      */
     @Nullable
-    UserInfo getCurrentUser();
+    User getCurrentUser();
 
     /**
      * FIXME TEST AND DOCUMENT
