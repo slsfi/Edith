@@ -93,13 +93,13 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
      */
     List<DocumentNote> getOfTerm(Long termId);
 
-    /**
-     * Saves the document note with the backing note copied as a new one.
-     *
-     * @param docNote
-     * @return
-     */
-    DocumentNote saveAsCopy(DocumentNote docNote);
+//    /**
+//     * Saves the document note with the backing note copied as a new one.
+//     *
+//     * @param docNote
+//     * @return
+//     */
+//    DocumentNote saveAsCopy(DocumentNote docNote);
 
     /**
      * Returns the DocumentNotes with the same given Note in the given Document.
@@ -128,6 +128,6 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
      */
     int getDocumentNoteCount(Note note);
 
-    long getNoteCountForDocument(String id);
+    long getNoteCountForDocument(Long id);
 
 }
