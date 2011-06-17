@@ -6,15 +6,15 @@ import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.ui.services.PersonDao;
 
 import static fi.finlit.edith.sql.domain.QPerson.person;
+import static fi.finlit.edith.sql.domain.QPlace.place;
 
 public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
     @Override
     public Collection<Person> findByStartOfFirstAndLastName(String partial, int limit) {
         return query()
                 .from(person)
-                // FIXME!!!
-//                .where(person.normalizedForm().first.startsWithIgnoreCase(partial).or(
-//                        person.normalizedForm().last.startsWithIgnoreCase(partial))).limit(limit)
+                .where(person.normalizedForm.first.startsWithIgnoreCase(partial).or(
+                        person.normalizedForm.last.startsWithIgnoreCase(partial))).limit(limit)
                 .list(person);
     }
 
@@ -22,7 +22,7 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
     public void remove(Long personId) {
         // FIXME: Hibernatify!
         Person entity = getById(personId);
-        if (entity != null){
+        if (entity != null) {
             getSession().delete(entity);
         }
     }
@@ -39,12 +39,12 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
     @Override
     public Collection<Person> getAll() {
-        throw new UnsupportedOperationException("not yet implemented");
+        return query().from(person).list(person);
     }
 
     @Override
     public Person getById(Long id) {
-        throw new UnsupportedOperationException("not yet implemented");
+        return query().from(person).where(person.id.eq(id)).uniqueResult(person);
     }
 
 }

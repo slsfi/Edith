@@ -18,6 +18,8 @@ public class NoteComment {
     private String message;
 
     private String username;
+    
+    public NoteComment() { }
 
     public NoteComment(Note note, String message, String username) {
         this.note = note;

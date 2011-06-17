@@ -31,8 +31,9 @@ public final class HibernateServiceModule {
         binder.bind(TermDao.class, TermDaoImpl.class);
     }
 
-    public static void contributeHibernateEntityPackageManager(Configuration<String> configuration) {
-      configuration.add("fi.finlit.edith.sql.domain");
+    public static void contributeHibernateEntityPackageManager(Configuration<String> configuration)
+    {
+        configuration.add("fi.finlit.edith.sql.domain");
     }
 
     private HibernateServiceModule() {

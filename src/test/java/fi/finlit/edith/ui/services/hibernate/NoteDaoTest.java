@@ -34,6 +34,7 @@ import fi.finlit.edith.sql.domain.NoteComment;
 import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.sql.domain.Place;
 import fi.finlit.edith.sql.domain.TermLanguage;
+import fi.finlit.edith.testutil.TapestryTestRunner;
 import fi.finlit.edith.ui.services.AdminService;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentNoteDao;

@@ -5,13 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-// FIXME: Embedded?
 @Entity
 public class NameForm {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+   
     private String description;
 
     private String first;
@@ -74,16 +74,12 @@ public class NameForm {
         this.first = first;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "NameForm [description=" + description + ", name=" + getName() + "]";
+    }
+    
+    public Long getId() {
+        return id;
     }
 }

@@ -15,13 +15,14 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
     public Collection<Place> findByStartOfName(String partial, int limit) {
         return query()
             .from(place)
-            //.where(place.normalizedForm().last.startsWithIgnoreCase(partial)).limit(limit)
+            .where(place.normalizedForm.last.startsWithIgnoreCase(partial)).limit(limit)
             .list(place);
     }
 
     @Override
     public void remove(Long placeId) {
-        new HibernateDeleteClause(getSession(), place).where(term.id.eq(placeId)).execute();
+        Place place = getById(placeId);
+        getSession().delete(place);
     }
 
     @Override

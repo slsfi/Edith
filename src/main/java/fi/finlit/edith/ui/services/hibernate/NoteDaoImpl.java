@@ -108,6 +108,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     @Override
     public NoteComment createComment(Note note, String message) {
         NoteComment comment = new NoteComment(note, message, authService.getUsername());
+        note.addComment(comment);
         getSession().save(comment);
         return comment;
     }

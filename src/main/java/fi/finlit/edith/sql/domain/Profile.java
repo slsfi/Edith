@@ -3,8 +3,6 @@ package fi.finlit.edith.sql.domain;
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.GrantedAuthorityImpl;
 
-import com.mysema.rdfbean.annotations.ClassMapping;
-
 public enum Profile {
     Admin("ROLE_USER","ROLE_ADMIN"),
     User("ROLE_USER");

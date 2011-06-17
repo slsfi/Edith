@@ -30,7 +30,8 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
 
     @Override
     public void remove(Long id) {
-        new HibernateDeleteClause(getSession(), term).where(term.id.eq(id)).execute();
+        Term term = getById(id);
+        getSession().delete(term);
     }
 
     @Override

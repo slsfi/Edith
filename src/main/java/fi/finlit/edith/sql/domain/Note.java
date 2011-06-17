@@ -46,8 +46,7 @@ public class Note {
 
     private String subtextSources;
 
-    // FIXME: We should agree on some limits.
-    @Column(length = 1024)
+    @Column(columnDefinition="TEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -118,6 +117,10 @@ public class Note {
         this.comments = comments;
     }
 
+    public void addComment(NoteComment comment) {
+        this.comments.add(comment);
+    }
+    
     public User getLastEditedBy() {
         return lastEditedBy;
     }

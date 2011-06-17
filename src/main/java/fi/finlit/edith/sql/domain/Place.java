@@ -1,10 +1,17 @@
 package fi.finlit.edith.sql.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Place {
@@ -12,15 +19,20 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
+    @Cascade(value = CascadeType.SAVE_UPDATE)
     private NameForm normalizedForm;
 
-    public Place(NameForm nameForm, Object object) {
-        this.normalizedForm = nameForm;
-    }
+    @ManyToMany
+    @Cascade(value = CascadeType.SAVE_UPDATE)
+    private Set<NameForm> otherForms = new HashSet<NameForm>();
 
     public Place() {
-        // TODO Auto-generated constructor stub
+    }
+
+    public Place(NameForm normalizedForm, Set<NameForm> otherForms) {
+        this.normalizedForm = normalizedForm;
+        this.otherForms = otherForms;
     }
 
     public Long getId() {
@@ -31,11 +43,20 @@ public class Place {
         this.id = id;
     }
 
+    public NameForm getNormalizedForm() {
+        return normalizedForm;
+    }
+
+    public Set<NameForm> getOtherForms() {
+        return otherForms;
+    }
+
     public void setNormalizedForm(NameForm normalizedForm) {
         this.normalizedForm = normalizedForm;
     }
 
-    public NameForm getNormalizedForm() {
-        return normalizedForm;
+    public void setOtherForms(Set<NameForm> otherForms) {
+        this.otherForms = otherForms;
     }
+
 }
