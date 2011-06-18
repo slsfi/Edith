@@ -13,10 +13,10 @@ import java.util.List;
 
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
@@ -117,7 +117,7 @@ public interface DocumentDao extends Dao<Document, Long> {
      */
     @Deprecated //Move to service
     @CommitAfter
-    void removeNotes(Document document, DocumentNote... notes);
+    void removeDocumentNotes(Document document, DocumentNote... notes);
 
     /**
      * Permanently removes document notes and their anchors.

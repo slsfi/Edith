@@ -114,6 +114,8 @@ public interface NoteDao extends Dao<Note, Long> {
     List<Long> getOrphanIds();
 
     GridDataSource findNotes(NoteSearchInfo search);
+    
+    List<Note> listNotes(NoteSearchInfo search);
 
     /**
      * @param editedNote

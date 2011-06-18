@@ -22,8 +22,6 @@ public final class HibernateDataModule {
     @Startup
     public static void initData(SubversionService subversionService, UserDao userDao)
             throws IOException {
-        logger.info("Starting up subversion");
-        subversionService.initialize();
         logger.info("Creating users");
         userDao.addUsersFromCsvFile("/users.csv", "ISO-8859-1");
     }

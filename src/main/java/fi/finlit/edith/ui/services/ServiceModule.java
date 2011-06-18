@@ -17,9 +17,12 @@ import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
+import org.apache.tapestry5.ioc.annotations.Startup;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
 import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mysema.rdfbean.model.Repository;
 import com.mysema.rdfbean.object.Configuration;
@@ -54,6 +57,8 @@ import fi.finlit.edith.ui.services.tasks.TasksService;
  *
  */
 public final class ServiceModule {
+    
+    private static final Logger logger = LoggerFactory.getLogger(HibernateDataModule.class);
 
     // TODO : get rid of match
     @Match({ "AdminService", "DocumentRepository", "NoteRepository", "UserRepository",
@@ -80,10 +85,16 @@ public final class ServiceModule {
         binder.bind(PersonRepository.class, PersonRepositoryImpl.class);
         binder.bind(PlaceRepository.class, PlaceRepositoryImpl.class);
         binder.bind(UserRepository.class, UserRepositoryImpl.class);
-        //binder.bind(DocumentDao.class, DocumentDaoImpl.class);
 
         // tasks
         binder.bind(ReplacedByAdditionTask.class);
+    }
+    
+    @Startup
+    public static void initData(SubversionService subversionService)
+            throws IOException {
+        logger.info("Starting up subversion");
+        subversionService.initialize();
     }
 
     public static Configuration buildConfiguration() {

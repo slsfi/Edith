@@ -29,7 +29,7 @@ public class Note {
 
     private String lemma;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @Cascade(value = CascadeType.SAVE_UPDATE)
     private Term term;
 
@@ -64,9 +64,11 @@ public class Note {
     private String lemmaMeaning;
 
     @ManyToOne
+    @Cascade(value=CascadeType.SAVE_UPDATE)
     private Person person;
 
     @ManyToOne
+    @Cascade(value=CascadeType.SAVE_UPDATE)
     private Place place;
 
     private int documentNoteCount = 0;
@@ -198,15 +200,31 @@ public class Note {
     public void setDocumentNoteCount(int documentNoteCount) {
         this.documentNoteCount = documentNoteCount;
     }
-    
+
     public void decDocumentNoteCount() {
         if (this.documentNoteCount > 0) {
             this.documentNoteCount--;
         }
     }
-    
+
     public void incDocumentNoteCount() {
         this.documentNoteCount++;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public Place getPlace() {
+        return place;
     }
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
@@ -226,6 +244,10 @@ public class Note {
             result = text;
         }
         return result;
+    }
+
+    public void addEditor(User user) {
+       allEditors.add(user); 
     }
 
 }

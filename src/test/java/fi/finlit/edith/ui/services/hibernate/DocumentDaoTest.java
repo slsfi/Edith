@@ -26,11 +26,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.svn.SubversionException;
@@ -219,7 +219,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
 
         DocumentNote documentNote = documentDao.addNote(createNote(), document, new SelectedText(
                 element, element, text));
-        documentDao.removeNotes(document, new DocumentNote[] { documentNote });
+        documentDao.removeDocumentNotes(document, new DocumentNote[] { documentNote });
 
         String content = getContent(document.getPath(), -1);
         assertFalse(content
@@ -241,7 +241,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
                 element, element, text2));
         DocumentNote noteRev3 = documentDao.addNote(createNote(), document, new SelectedText(
                 element, element, text3));
-        documentDao.removeNotes(document, new DocumentNote[] { noteRev, noteRev3 });
+        documentDao.removeDocumentNotes(document, new DocumentNote[] { noteRev, noteRev3 });
 
         String content = getContent(document.getPath(), -1);
         assertFalse(content.contains(start(noteRev.getId()) + text + end(noteRev.getId())));

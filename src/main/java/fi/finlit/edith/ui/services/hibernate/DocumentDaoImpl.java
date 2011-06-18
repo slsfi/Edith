@@ -51,10 +51,10 @@ import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
 import com.mysema.query.jpa.hibernate.HibernateUpdateClause;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
@@ -517,7 +517,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public void removeNotes(Document document, final DocumentNote... documentNotes) {
+    public void removeDocumentNotes(Document document, final DocumentNote... documentNotes) {
         long revision;
         revision = versioningService.commit(document.getPath(), -1, authService.getUsername(),
                 new UpdateCallback() {
@@ -533,7 +533,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                         }
                     }
                 });
-
+        //TODO This might be bad idea
         new HibernateUpdateClause(getSession(), documentNote).where(documentNote.in(documentNotes))
                 .set(documentNote.revision, revision).set(documentNote.deleted, true).execute();
     }

@@ -22,6 +22,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
@@ -354,6 +355,7 @@ public class DocumentRepositoryTest extends AbstractServiceTest {
     }
 
     @Test
+    @Ignore
     public void From_Path() {
         fail("not yet implemented!");
     }

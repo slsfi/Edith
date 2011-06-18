@@ -36,7 +36,7 @@ import fi.finlit.edith.ui.test.services.SKSServiceTestModule;
 
 @RunWith(TapestryTestRunner.class)
 @Modules({ SKSServiceTestModule.class, ServiceModule.class, HibernateServiceModule.class,
-        HibernateCoreModule.class})
+        HibernateCoreModule.class })
 public abstract class AbstractHibernateTest {
     @Inject
     private HibernateSessionManager sessionManager;
@@ -85,16 +85,19 @@ public abstract class AbstractHibernateTest {
 
     @After
     public final void clearTestData() {
+        // Clear session test method used
+        TapestryTestRunner.getRegistry(getClass()).cleanupThread();
+        // And start a new session to clear the database
         getSession().doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
                 Statement stmt = connection.createStatement();
-                stmt.addBatch("set foreign_key_checks=0");
+                stmt.execute("set foreign_key_checks=0");
                 for (String sql : getTruncateAllTablesSql()) {
-                    stmt.addBatch(sql);
+                    stmt.execute(sql);
                 }
-                stmt.addBatch("set foreign_key_checks=1");
-                stmt.executeBatch();
+                stmt.execute("set foreign_key_checks=1");
+
             }
         });
         sessionManager.commit();

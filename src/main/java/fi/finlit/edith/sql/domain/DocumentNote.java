@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.mysema.query.annotations.QueryInit;
+
 @Entity
 public class DocumentNote {
     @Id
@@ -30,6 +32,7 @@ public class DocumentNote {
     private String shortenedSelection;
 
     @ManyToOne
+    @QueryInit("*")
     private Note note;
 
     public Long getId() {

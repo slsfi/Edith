@@ -9,30 +9,20 @@ package fi.finlit.edith.ui.services.hibernate;
 import static fi.finlit.edith.sql.domain.QDocumentNote.documentNote;
 import static fi.finlit.edith.sql.domain.QTerm.term;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
-import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tools.ant.taskdefs.SubAnt;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.JPQLQuery;
-import com.mysema.query.jpa.hibernate.HibernateSubQuery;
-import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.Predicate;
-import com.mysema.query.types.path.StringPath;
 
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteComment;
-import fi.finlit.edith.sql.domain.QDocumentNote;
-import fi.finlit.edith.sql.domain.QNote;
-import fi.finlit.edith.sql.domain.QTerm;
 import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
@@ -108,38 +98,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
         builder.and(documentNote.deleted.eq(false));
 
         return createGridDataSource(documentNote, term.basicForm.lower().asc(), false, builder.getValue());
-    }
-
-
-
-    private GridDataSource createGridDataSource(final QDocumentNote entity,
-            OrderSpecifier<String> asc, boolean b, final Predicate value) {
-        return new GridDataSource() {
-
-            @Override
-            public int getAvailableRows() {
-                return (int)query().from(entity).where(value).count();
-            }
-
-            @Override
-            public void prepare(int startIndex, int endIndex, List<SortConstraint> sortConstraints) {
-                // TODO Auto-generated method stub
-                
-            }
-
-            @Override
-            public Object getRowValue(int index) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Class getRowType() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-            
-        };
     }
 
     @Override

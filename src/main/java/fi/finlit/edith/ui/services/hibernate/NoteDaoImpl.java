@@ -22,7 +22,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.grid.GridDataSource;
-import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
@@ -30,12 +29,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.JPQLSubQuery;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.Predicate;
-import com.mysema.query.types.expr.ComparableExpression;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
 
@@ -58,7 +54,6 @@ import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.UserDao;
-import fi.finlit.edith.util.JPQLGridDataSource;
 
 public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
@@ -119,7 +114,17 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
+    public List<Note> listNotes(NoteSearchInfo search) {
+        return query().from(note).where(notesQuery(search)).orderBy(getOrderBy(search)).list(note);
+    }
+    
+    @Override
     public GridDataSource findNotes(NoteSearchInfo search) {
+        return createGridDataSource(note, getOrderBy(search), false, notesQuery(search).getValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    private BooleanBuilder notesQuery(NoteSearchInfo search) {
         BooleanBuilder builder = new BooleanBuilder();
 
         // only orphans
@@ -190,8 +195,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             builder.and(filter);
         }
 
-        //TODO We need datasource parameter to get distinct results from here
-        return createGridDataSource(note, getOrderBy(search), false, builder.getValue());
+        return builder;
     }
 
     @Override
@@ -233,7 +237,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             comparable = note.lastEditedBy.username.toLowerCase();
             break;
         case STATUS:
-            comparable = note.status.ordinal();
+            comparable = note.status;//.ordinal();
             break;
         default:
             comparable = note.lemma.toLowerCase();
@@ -281,10 +285,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         n.setEditedOn(currentTime);
 
         n.setLastEditedBy(createdBy);
-        if (n.getAllEditors() == null) {
-            n.setAllEditors(new HashSet<User>());
-        }
-        n.getAllEditors().add(createdBy);
+        n.addEditor(createdBy);
 
         documentNote.setFullSelection(longText);
 
@@ -308,7 +309,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         documentNote.setPosition(position);
         getSession().save(n);
         getSession().save(documentNote);
-        getSession().flush();
+        //getSession().flush();
 
 //        documentNoteRepository.removeOrphans(documentNote.getNote().getId());
 
