@@ -33,6 +33,7 @@ import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteComment;
 import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.sql.domain.Place;
+import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.sql.domain.TermLanguage;
 import fi.finlit.edith.testutil.TapestryTestRunner;
 import fi.finlit.edith.ui.services.AdminService;
@@ -463,7 +464,8 @@ public class NoteDaoTest extends AbstractHibernateTest {
 
     private Note createNote() {
         Note note = new Note();
-//        note.setTerm(new Term());
+        //XXX Whats best way to deal with this, we always going to have this
+        note.setTerm(new Term());
         return note;
     }
 

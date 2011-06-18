@@ -58,6 +58,7 @@ import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.util.JPQLGridDataSource;
 
 public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
@@ -121,22 +122,20 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     public GridDataSource findNotes(NoteSearchInfo search) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        // FIXME!
-//        // only orphans
-//        if (search.isOrphans() && !search.isIncludeAllDocs()) {
-//            builder.and(note.documentNoteCount.eq(0));
-//        }
+        // only orphans
+        if (search.isOrphans() && !search.isIncludeAllDocs()) {
+            builder.and(note.documentNoteCount.eq(0));
+        }
         // or all, including orphans
-//        else if (search.isOrphans() && search.isIncludeAllDocs()) {
-//            builder.and(note.documentNoteCount.goe(0));
-//        }
+        else if (search.isOrphans() && search.isIncludeAllDocs()) {
+            builder.and(note.documentNoteCount.goe(0));
+        }
         // or all, without orphans
-//        else if (!search.isOrphans() && search.isIncludeAllDocs()) {
-//            builder.and(note.documentNoteCount.gt(0));
-//        }
+        else if (!search.isOrphans() && search.isIncludeAllDocs()) {
+            builder.and(note.documentNoteCount.gt(0));
+        }
         // or documents from selection
-        //else
-            if (!search.getDocuments().isEmpty() && !search.isIncludeAllDocs()) {
+        else if (!search.getDocuments().isEmpty() && !search.isIncludeAllDocs()) {
             JPQLSubQuery subQuery = sub(documentNote);
             subQuery.where(documentNote.note.eq(note),
                     documentNote.document.in(search.getDocuments()),
@@ -193,43 +192,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
         //TODO We need datasource parameter to get distinct results from here
         return createGridDataSource(note, getOrderBy(search), false, builder.getValue());
-    }
-
-    private GridDataSource createGridDataSource(
-            final EntityPath<?> path,
-            final OrderSpecifier<?> order,
-            final boolean caseSensitive,
-            final Predicate... filters) {
-        return new GridDataSource() {
-            private List<?> preparedResults;
-
-            @Override
-            public void prepare(int startIndex, int endIndex, List<SortConstraint> sortConstraints) {
-                JPQLQuery query = query().from(path);
-                if (filters != null){
-                    query.where(filters);
-                }
-                preparedResults = query.list(path);
-            }
-
-            @Override
-            public Object getRowValue(int index) {
-                return preparedResults.get(index);
-            }
-
-            @Override
-            public Class getRowType() {
-                return path.getType();
-            }
-
-            @Override
-            public int getAvailableRows() {
-//                if (filters.length > 0) {
-                    return (int) query().from(path).where(filters).count();
-//                }
-//                return (int) query().from(path).count();
-            }
-        };
     }
 
     @Override
@@ -342,7 +304,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
         documentNote.setDocument(document);
         documentNote.setNote(n);
-//        n.incDocumentNoteCount();
+        n.incDocumentNoteCount();
         documentNote.setPosition(position);
         getSession().save(n);
         getSession().save(documentNote);
@@ -477,8 +439,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             return createGridDataSource(term, term.basicForm.lower().asc(),
                     false, builder.getValue());
         }
-        return createGridDataSource(term, term.basicForm.lower().asc(), false);
-//        throw new UnsupportedOperationException("hi, i am not implemented");
+        return createGridDataSource(term, term.basicForm.lower().asc(), false, null);
     }
 
     @Override
@@ -491,7 +452,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             return createGridDataSource(person, person.normalizedForm.last.lower().asc(), false,
                     builder.getValue());
         }
-        return createGridDataSource(person, person.normalizedForm.last.asc(), false);
+        return createGridDataSource(person, person.normalizedForm.last.asc(), false, null);
     }
 
     @Override
@@ -503,15 +464,14 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             return createGridDataSource(place, place.normalizedForm.last.lower().asc(), false,
                     builder.getValue());
         }
-        return createGridDataSource(place, place.normalizedForm.last.asc(), false);
+        return createGridDataSource(place, place.normalizedForm.last.asc(), false, null);
     }
 
     @Override
     public void removePermanently(DocumentNote documentNote) {
         Note n = documentNote.getNote();
         getSession().delete(documentNote);
-        // XXX Is this still necessary?
-//        n.decDocumentNoteCount();
+        n.decDocumentNoteCount();
         save(n);
     }
 
@@ -520,6 +480,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         // FIXME: Do differently with Hibernate!
         NoteComment comment = (NoteComment) getSession().get(NoteComment.class, commentId);
         getSession().delete(comment);
+        comment.getNote().removeComment(comment);
         return comment;
     }
 

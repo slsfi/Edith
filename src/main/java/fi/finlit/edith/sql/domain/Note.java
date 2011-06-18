@@ -16,9 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Note {
@@ -28,7 +29,8 @@ public class Note {
 
     private String lemma;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @Cascade(value = CascadeType.SAVE_UPDATE)
     private Term term;
 
     private Long editedOn;
@@ -36,7 +38,7 @@ public class Note {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> allEditors = new HashSet<User>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="note")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "note")
     private Set<NoteComment> comments = new HashSet<NoteComment>();
 
     @ManyToOne
@@ -46,13 +48,13 @@ public class Note {
 
     private String subtextSources;
 
-    @Column(columnDefinition="TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
     private NoteStatus status = NoteStatus.INITIAL;
 
-    @ElementCollection(fetch=FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
     private Set<NoteType> types = new HashSet<NoteType>();
 
@@ -67,7 +69,7 @@ public class Note {
     @ManyToOne
     private Place place;
 
-//    private int documentNoteCount = 0;
+    private int documentNoteCount = 0;
 
     public Long getId() {
         return id;
@@ -120,7 +122,11 @@ public class Note {
     public void addComment(NoteComment comment) {
         this.comments.add(comment);
     }
-    
+
+    public void removeComment(NoteComment comment) {
+        this.comments.remove(comment);
+    }
+
     public User getLastEditedBy() {
         return lastEditedBy;
     }
@@ -185,13 +191,23 @@ public class Note {
         this.lemmaMeaning = lemmaMeaning;
     }
 
-//    public int getDocumentNoteCount() {
-//        return documentNoteCount;
-//    }
-//
-//    public void setDocumentNoteCount(int documentNoteCount) {
-//        this.documentNoteCount = documentNoteCount;
-//    }
+    public int getDocumentNoteCount() {
+        return documentNoteCount;
+    }
+
+    public void setDocumentNoteCount(int documentNoteCount) {
+        this.documentNoteCount = documentNoteCount;
+    }
+    
+    public void decDocumentNoteCount() {
+        if (this.documentNoteCount > 0) {
+            this.documentNoteCount--;
+        }
+    }
+    
+    public void incDocumentNoteCount() {
+        this.documentNoteCount++;
+    }
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 

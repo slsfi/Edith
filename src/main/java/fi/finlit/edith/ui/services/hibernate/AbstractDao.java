@@ -1,7 +1,6 @@
 package fi.finlit.edith.ui.services.hibernate;
 
-import java.util.Collection;
-
+import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Session;
@@ -9,8 +8,12 @@ import org.hibernate.Session;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 import com.mysema.query.jpa.hibernate.HibernateSubQuery;
+import com.mysema.query.types.EntityPath;
+import com.mysema.query.types.OrderSpecifier;
+import com.mysema.query.types.Predicate;
 
 import fi.finlit.edith.ui.services.Dao;
+import fi.finlit.edith.util.JPQLGridDataSource;
 
 public abstract class AbstractDao<T> implements Dao<T, Long> {
     @Inject
@@ -23,9 +26,18 @@ public abstract class AbstractDao<T> implements Dao<T, Long> {
     protected Session getSession() {
         return sessionManager.getSession();
     }
-    
+
+    protected HibernateSessionManager getSessionManager() {
+        return sessionManager;
+    }
+
     protected HibernateSubQuery sub() {
         return new HibernateSubQuery();
     }
-    
+
+    protected <K> GridDataSource createGridDataSource(final EntityPath<K> path,
+            final OrderSpecifier<?> order, final boolean caseSensitive, final Predicate filters) {
+        return new JPQLGridDataSource<K>(getSessionManager(), path, order, caseSensitive, filters);
+    }
+
 }

@@ -148,7 +148,7 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
         Assert.notNull(docNote, "note was null");
         // XXX What was the point in having .createCopy?
         docNote.setDeleted(true);
-//        docNote.getNote().decDocumentNoteCount();
+        docNote.getNote().decDocumentNoteCount();
         getSession().save(docNote);
     }
 
@@ -212,10 +212,11 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
 
     @Override
     public int getDocumentNoteCount(Note note) {
-        return (int)query()
-            .from(documentNote)
-            .where(documentNote.note.eq(note),
-               documentNote.deleted.isFalse()).count();
+//        return (int)query()
+//            .from(documentNote)
+//            .where(documentNote.note.eq(note),
+//               documentNote.deleted.isFalse()).count();
+        return note.getDocumentNoteCount();
     }
 
     @Override
