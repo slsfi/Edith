@@ -15,8 +15,8 @@ import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 
 public class View {
@@ -25,7 +25,7 @@ public class View {
     private ContentRenderer renderer;
 
     @Parameter
-    private DocumentRevision document;
+    private Document document;
 
     @Parameter
     private List<DocumentNote> documentNotes;

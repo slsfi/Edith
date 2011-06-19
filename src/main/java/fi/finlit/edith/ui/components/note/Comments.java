@@ -6,20 +6,16 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.tapestry5.Block;
-import org.apache.tapestry5.ajax.MultiZoneUpdate;
-import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.Concept;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteComment;
-import fi.finlit.edith.dto.NoteCommentComparator;
+import fi.finlit.edith.dto.SqlNoteCommentComparator;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.sql.domain.NoteComment;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.ui.services.NoteDao;
 
 @SuppressWarnings("unused")
 public class Comments {
@@ -44,17 +40,17 @@ public class Comments {
     private Block commentsBlock;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteDao;
 
     private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
         List<NoteComment> rv = new ArrayList<NoteComment>(c);
-        Collections.sort(rv, NoteCommentComparator.ASC);
+        Collections.sort(rv, SqlNoteCommentComparator.ASC);
         return rv;
     }
 
     public List<NoteComment> getComments() {
         if (noteOnEdit != null && comments == null) {
-            comments = getSortedComments(noteOnEdit.getConcept(page.isSlsMode()).getComments());
+            comments = getSortedComments(noteOnEdit.getComments());
         }
 
         return comments;
@@ -64,26 +60,26 @@ public class Comments {
         return getComments() != null ? "(" + getComments().size() + ")" : "";
     }
 
-    void onPrepareFromCommentForm(String noteId) {
+    void onPrepareFromCommentForm(long noteId) {
         if (noteOnEdit == null) {
             System.err.println("onPrepareFromCommentForm with noteid " + noteId);
-            noteOnEdit = noteRepository.getById(noteId);
+            noteOnEdit = noteDao.getById(noteId);
         }
     }
 
-    Object onDeleteComment(String noteId, String commentId) {
-        noteRepository.removeComment(commentId);
-        noteOnEdit = noteRepository.getById(noteId);
+    Object onDeleteComment(long noteId, long commentId) {
+        noteDao.removeComment(commentId);
+        noteOnEdit = noteDao.getById(noteId);
         comments = null;
         return commentsBlock;
     }
 
     Object onSuccessFromCommentForm() {
-        System.err.println("onSuccessFromCommentForm with comment " + newCommentMessage + " on note " + noteOnEdit);
-        Concept concept = noteOnEdit.getConcept(page.isSlsMode());
-        Set<NoteComment> conceptComments = concept.getComments();
+        System.err.println("onSuccessFromCommentForm with comment " + newCommentMessage
+                + " on note " + noteOnEdit);
+        Set<NoteComment> conceptComments = noteOnEdit.getComments();
         if (newCommentMessage != null) {
-            conceptComments.add(noteRepository.createComment(concept, newCommentMessage));
+            conceptComments.add(noteDao.createComment(noteOnEdit, newCommentMessage));
             newCommentMessage = null;
         }
         comments = getSortedComments(conceptComments);

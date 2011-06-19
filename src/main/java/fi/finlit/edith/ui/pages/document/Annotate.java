@@ -5,7 +5,6 @@
  */
 package fi.finlit.edith.ui.pages.document;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
@@ -17,8 +16,6 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -28,25 +25,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.Term;
 import fi.finlit.edith.dto.DocumentNoteSearchInfo;
 import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.SelectedText;
+import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.sql.domain.NoteType;
+import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.ui.components.InfoMessage;
-import fi.finlit.edith.ui.components.note.Comments;
 import fi.finlit.edith.ui.components.note.DocumentNotes;
 import fi.finlit.edith.ui.components.note.NoteEdit;
 import fi.finlit.edith.ui.components.note.SearchResults;
 import fi.finlit.edith.ui.pages.Documents;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.NoteRepository;
 import fi.finlit.edith.ui.services.TermRepository;
-import fi.finlit.edith.ui.services.TimeService;
 
 @Import(library = {
         "classpath:js/jquery-1.5.1.min.js", "classpath:js/TapestryExt.js",
@@ -70,10 +65,7 @@ public class Annotate extends AbstractDocumentPage {
     private SelectedText createTermSelection;
 
     @Inject
-    private TimeService timeService;
-
-    @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Inject
     private Block documentView;
@@ -99,7 +91,7 @@ public class Annotate extends AbstractDocumentPage {
     private DocumentNote note;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteRepository;
 
     @Property
     private String noteRevisionId;
@@ -118,7 +110,7 @@ public class Annotate extends AbstractDocumentPage {
     private ComponentResources resources;
 
     @Persist
-    private DocumentNoteSearchInfo searchInfo;
+    private NoteSearchInfo searchInfo;
 
     @Inject
     private TermRepository termRepository;
@@ -133,7 +125,7 @@ public class Annotate extends AbstractDocumentPage {
     private String personId;
 
     @Property
-    private String noteToLinkId;
+    private Long noteToLinkId;
 
     @Inject
     @Symbol(EDITH.EXTENDED_TERM)
@@ -157,9 +149,9 @@ public class Annotate extends AbstractDocumentPage {
         renderSupport.addScript("editLink = '" + link + "';");
     }
 
-    public DocumentNoteSearchInfo getSearchInfo() {
+    public NoteSearchInfo getSearchInfo() {
         if (searchInfo == null) {
-            searchInfo = new DocumentNoteSearchInfo();
+            searchInfo = new NoteSearchInfo();
             searchInfo.getDocuments().add(getDocument());
             searchInfo.setCurrentDocument(getDocument());
         }
@@ -183,7 +175,7 @@ public class Annotate extends AbstractDocumentPage {
     Object onSuccessFromSelectNoteForm() {
 
         //Strip first n from the id
-        String id = selectedNoteId.substring(1);
+        long id = Long.parseLong(selectedNoteId.substring(1));
         DocumentNote documentNote = documentNoteRepository.getById(id);
         documentNotes.setNoteId(documentNote.getNote().getId());
         documentNotes.setSelectedNote(documentNote);
@@ -245,7 +237,7 @@ public class Annotate extends AbstractDocumentPage {
     }
 
     private MultiZoneUpdate noteHasChanged(DocumentNote documentNote, String msg) {
-        getDocumentRevision().setRevision(documentNote.getSVNRevision());
+        //getDocumentRevision().setRevision(documentNote.getSVNRevision());
 
         documentNotes.setNoteId(documentNote.getNote().getId());
         documentNotes.setSelectedNote(documentNote);
@@ -263,7 +255,7 @@ public class Annotate extends AbstractDocumentPage {
         try {
             Note n = noteRepository.getById(noteToLinkId);
             DocumentNote documentNote = noteRepository.createDocumentNote(n,
-                    getDocumentRevision(), createTermSelection.getSelection());
+                    getDocument(), createTermSelection.getSelection());
             documentNote = getDocumentRepository().updateNote(documentNote, createTermSelection);
 
             return noteHasChanged(documentNote, "note-connect-success");
@@ -274,7 +266,6 @@ public class Annotate extends AbstractDocumentPage {
 
     Object onSuccessFromCreateTermForm() {
         logger.info(createTermSelection.toString());
-        DocumentRevision documentRevision = getDocumentRevision();
 
 //        notes = noteRepository.findNotes(Note.createLemmaFromLongText(createTermSelection
 //                .getSelection()));
@@ -282,7 +273,7 @@ public class Annotate extends AbstractDocumentPage {
             DocumentNote documentNote = null;
             try {
                 Note n = createNote();
-                documentNote = getDocumentRepository().addNote(n, documentRevision,
+                documentNote = getDocumentRepository().addNote(n, getDocument(),
                         createTermSelection);
             } catch (Exception e) {
                 return zoneWithError("note-addition-failed", e);
@@ -312,7 +303,7 @@ public class Annotate extends AbstractDocumentPage {
 }
 
 
-    public void setSearchInfo(DocumentNoteSearchInfo searchInfo) {
+    public void setSearchInfo(NoteSearchInfo searchInfo) {
         this.searchInfo = searchInfo;
     }
 

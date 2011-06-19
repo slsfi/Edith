@@ -16,7 +16,7 @@
             <p:appearancesCell>
             	<t:if test="term.undeletedNotes">
                 	<t:loop source="term.undeletedNotes" value="note">
-                        <div><em>${note.lemma}</em> (${longTexts})<t:note.metadata note="note"/></div>
+                        <div><em>${note.lemma}</em> (${fullSelections})<t:note.metadata note="note"/></div>
                 	</t:loop>
                 	<p:else>
                 		<strong>${message:all-revisions-removed}</strong>

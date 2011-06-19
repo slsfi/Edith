@@ -6,15 +6,13 @@ import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.InjectPage;
-import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
 
 @Import(library = { "classpath:js/jquery.scrollTo-min.js" })
 @SuppressWarnings("unused")
@@ -28,10 +26,10 @@ public class DocumentNotes {
 
     private List<DocumentNote> documentNotes;
 
-    private String noteId;
+    private Long noteId;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteDao;
 
     @Property
     private DocumentNote documentNote;
@@ -51,7 +49,7 @@ public class DocumentNotes {
 
     public List<DocumentNote> getDocumentNotes() {
         if (documentNotes == null) {
-            documentNotes = documentNoteRepository.getOfNote(noteId);
+            documentNotes = documentNoteDao.getOfNote(noteId);
             Collections.sort(documentNotes, byPosition);
         }
 
@@ -76,17 +74,17 @@ public class DocumentNotes {
         return documentNote.getId().equals(getSelectedNote().getId()) ? "selected-note" : "";
     }
 
-    Object onActionFromSelectDocumentNote(String documentNoteId) {
+    Object onActionFromSelectDocumentNote(long documentNoteId) {
         System.out.println("select documentNote " + documentNoteId);
 
-        selectedNote = documentNoteRepository.getById(documentNoteId);
+        selectedNote = documentNoteDao.getById(documentNoteId);
 
         page.getNoteEdit().setDocumentNoteOnEdit(selectedNote);
 
         return page.getNoteEdit().getBlock();
     }
 
-    public void setNoteId(String noteId) {
+    public void setNoteId(Long noteId) {
         System.out.println("Setting noteid to " + noteId);
         this.noteId = noteId;
     }

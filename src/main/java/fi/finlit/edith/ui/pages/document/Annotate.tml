@@ -8,7 +8,7 @@
 			<t:delegate to="documentView" />
 		</t:zone>
 		<t:block t:id="documentView">
-			<t:document.view document="documentRevision" />
+			<t:document.view document="document" />
 		</t:block>
 	</div>
 
@@ -16,7 +16,7 @@
 	   <ul class="actions">
           <li>${message:to-annotate-document}</li>
 		     <li><a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:to-view-document}</a></li>
-		     <li><t:pagelink page="document/print" t:context="[document.id,documentRevision.revision]">${message:printVersion}</t:pagelink></li>
+		     <li><t:pagelink page="document/print" t:context="[document.id]">${message:printVersion}</t:pagelink></li>
 		     <li><t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink></li>
          <li><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></li>
        </ul>
@@ -257,7 +257,7 @@
         <div>
         <t:eventlink t:event="chooseBackingNote" context="loopNote.id" t:zone="editZone"><em>${loopNote.lemma}</em></t:eventlink>
         ${loopNote.lemmaMeaning}
-        ${loopNoteConcept.description}
+        ${loopNote.description}
         </div>
     </t:loop>
     <t:eventlink t:event="chooseBackingNote" t:zone="editZone">${message:createNewNote-label}</t:eventlink>

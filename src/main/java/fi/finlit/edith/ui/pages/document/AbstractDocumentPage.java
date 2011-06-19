@@ -18,21 +18,18 @@ import org.apache.tapestry5.services.Response;
 import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.ui.pages.HttpError;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 @SuppressWarnings("unused")
 public class AbstractDocumentPage {
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     private Document document;
-
-    private DocumentRevision documentRevision;
 
     @Property
     private List<RevisionInfo> revisions;
@@ -55,7 +52,7 @@ public class AbstractDocumentPage {
             response.sendError(HttpError.PAGE_NOT_FOUND, "No document ID given!");
         }
         try {
-            document = documentRepository.getById(ctx.get(String.class, 0));
+            document = documentRepository.getById(ctx.get(Long.class, 0));
             revisions = documentRepository.getRevisions(document);
         } catch (RuntimeException e) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "Document not found!");
@@ -77,7 +74,6 @@ public class AbstractDocumentPage {
             rev = revisions.get(revisions.size() - 1).getSvnRevision();
         }
         Collections.reverse(revisions);
-        documentRevision = new DocumentRevision(document, rev);
     }
 
     Object[] onPassivate() {
@@ -89,15 +85,12 @@ public class AbstractDocumentPage {
     }
     
     public String getDocumentPath() {
-        String svnPath = document.getSvnPath();
+        String svnPath = document.getPath();
         return svnPath.substring(documentRoot.length(), svnPath.length());
     }
 
-    public DocumentRevision getDocumentRevision() {
-        return documentRevision;
-    }
 
-    protected DocumentRepository getDocumentRepository() {
+    protected DocumentDao getDocumentRepository() {
         return documentRepository;
     }
 

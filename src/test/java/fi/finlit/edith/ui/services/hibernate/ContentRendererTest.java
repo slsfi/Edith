@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.test.services;
+package fi.finlit.edith.ui.services.hibernate;
 
 import static org.junit.Assert.assertTrue;
 
@@ -19,15 +19,23 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Test;
 
-import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.*;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Interval;
+import fi.finlit.edith.sql.domain.LinkElement;
+import fi.finlit.edith.sql.domain.NameForm;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.sql.domain.NoteFormat;
+import fi.finlit.edith.sql.domain.Paragraph;
+import fi.finlit.edith.sql.domain.Person;
+import fi.finlit.edith.sql.domain.Place;
+import fi.finlit.edith.sql.domain.StringElement;
+import fi.finlit.edith.sql.domain.UrlElement;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 
-public class ContentRendererTest extends AbstractServiceTest {
+public class ContentRendererTest extends AbstractHibernateTest {
 
     private static final String doc1 = "/documents/trunk/Nummisuutarit rakenteistettuna.xml";
 
@@ -37,45 +45,41 @@ public class ContentRendererTest extends AbstractServiceTest {
     private ContentRenderer renderer;
 
     @Inject
-    private DocumentRepository documentRepository;
-
-    @Inject @Symbol(EDITH.EXTENDED_TERM)
-    private boolean extendedTerm;
+    private DocumentDao documentDao;
 
     private final MarkupWriter writer = new MarkupWriterImpl();
 
     @Test
     public void renderDocument() throws Exception {
-        renderer.renderDocument(documentRepository.getOrCreateDocumentForPath(doc1).getRevision(-1), writer);
+        renderer.renderDocument(documentDao.getOrCreateDocumentForPath(doc1), writer);
     }
 
     @Test
     public void renderDocumentAsXML() throws IOException, XMLStreamException{
         List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        renderer.renderDocumentAsXML(documentRepository.getOrCreateDocumentForPath(doc2).getRevision(-1), docNotes, out);
+        renderer.renderDocumentAsXML(documentDao.getOrCreateDocumentForPath(doc2), docNotes, out);
     }
 
     @Test
     public void renderPageLinks() throws Exception {
-        renderer.renderPageLinks(documentRepository.getOrCreateDocumentForPath(doc1).getRevision(-1),
+        renderer.renderPageLinks(documentDao.getOrCreateDocumentForPath(doc1),
                 writer);
     }
 
     @Test
     public void renderDocumentWithNotes() throws Exception {
-        renderer.renderDocument(documentRepository.getOrCreateDocumentForPath(doc2).getRevision(-1), writer);
+        renderer.renderDocument(documentDao.getOrCreateDocumentForPath(doc2), writer);
     }
 
     @Test
     public void renderDocumentNotesAsXML(){
         List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
-        renderer.renderDocumentNotesAsXML(documentRepository.getOrCreateDocumentForPath(doc2).getRevision(-1), docNotes, writer);
+        renderer.renderDocumentNotesAsXML(documentDao.getOrCreateDocumentForPath(doc2), docNotes, writer);
     }
 
     private DocumentNote createDocumentNote(NoteFormat noteFormat) {
         Note note = new Note();
-        Concept concept = note.getConcept(extendedTerm);
 
         note.setLemma("taloon");
         note.setLemmaMeaning("johonkin ineen");
@@ -83,13 +87,13 @@ public class ContentRendererTest extends AbstractServiceTest {
         LinkElement element = new LinkElement("Kalevala");
         element.setReference("kalevala");
         paragraph.addElement(element);
-        concept.setSubtextSources(paragraph.toString());
-        concept.setDescription(paragraph.copy().toString());
-        concept.setSources(paragraph.copy().toString());
+        note.setSubtextSources(paragraph.toString());
+        note.setDescription(paragraph.copy().toString());
+        note.setSources(paragraph.copy().toString());
         note.setFormat(noteFormat);
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
-        documentNote.setId("1234");
+        documentNote.setId(1234L);
         return documentNote;
     }
 
@@ -137,16 +141,15 @@ public class ContentRendererTest extends AbstractServiceTest {
     public void Render_Place_Note() {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
         DocumentNote documentNote = createDocumentNote(NoteFormat.PLACE);
-        Concept concept = documentNote.getConcept(extendedTerm);
 
-        Paragraph description = Paragraph.parseSafe(concept.getDescription());
+        Paragraph description = Paragraph.parseSafe(documentNote.getNote().getDescription());
         description.addElement(new StringElement(" foo "));
         UrlElement urlElement = new UrlElement("Google");
         urlElement.setUrl("http://www.google.com/");
         description.addElement(urlElement);
         description.addElement(new UrlElement("happyness"));
         description.addElement(new LinkElement("maya"));
-        concept.setDescription(description.toString());
+        documentNote.getNote().setDescription(description.toString());
         Place place = new Place(new NameForm("New York", null), new HashSet<NameForm>());
         documentNote.getNote().setPlace(place);
         documentNotes.add(documentNote);

@@ -14,9 +14,9 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Test;
 
 import fi.finlit.edith.EdithTestConstants;
-import fi.finlit.edith.domain.Document;
+import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.ui.components.document.Pages;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
 public class PagesTest extends AbstractServiceTest{
@@ -26,7 +26,7 @@ public class PagesTest extends AbstractServiceTest{
     private String testDocument;
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentDao;
 
     @Autobuild
     @Inject
@@ -34,8 +34,8 @@ public class PagesTest extends AbstractServiceTest{
 
     @Test
     public void BeginRender() throws XMLStreamException, IOException{
-        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
-        pages.setDocument(document.getRevision(-1));
+        Document document = documentDao.getOrCreateDocumentForPath(testDocument);
+        pages.setDocument(document);
 
         MarkupWriter writer = new MarkupWriterImpl();
         pages.beginRender(writer);

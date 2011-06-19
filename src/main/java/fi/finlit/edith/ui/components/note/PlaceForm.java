@@ -10,9 +10,9 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.ui.services.PlaceRepository;
+import fi.finlit.edith.sql.domain.NameForm;
+import fi.finlit.edith.sql.domain.Place;
+import fi.finlit.edith.ui.services.PlaceDao;
 
 @SuppressWarnings("unused")
 public class PlaceForm {
@@ -25,7 +25,7 @@ public class PlaceForm {
     private Block closeDialog;
 
     @Inject
-    private PlaceRepository placeRepository;
+    private PlaceDao placeDao;
 
     @Property
     private String newName;
@@ -35,7 +35,7 @@ public class PlaceForm {
 
     @Property
     @Parameter
-    private String placeId;
+    private Long placeId;
 
     private Place place;
 
@@ -47,7 +47,7 @@ public class PlaceForm {
         if (placeId == null) {
             place = new Place(new NameForm(), new HashSet<NameForm>());
         } else {
-            place = placeRepository.getById(placeId);
+            place = placeDao.getById(placeId);
         }
     }
 
@@ -65,9 +65,9 @@ public class PlaceForm {
         }
     }
 
-    void onPrepareFromPlaceForm(String id) {
+    void onPrepareFromPlaceForm(long id) {
         if (place == null) {
-            place = placeRepository.getById(id);
+            place = placeDao.getById(id);
         }
     }
 
@@ -76,7 +76,7 @@ public class PlaceForm {
             getPlace().getOtherForms().add(new NameForm(newName, newDescription));
         }
         getPlace().setOtherForms(copyAndRemoveEmptyNameForms(getPlace().getOtherForms()));
-        placeRepository.save(getPlace());
+        placeDao.save(getPlace());
         placeId = getPlace().getId();
         if (placeZone != null) {
             return new MultiZoneUpdate("dialogZone", closeDialog).add("placeZone", placeZone.getBody());

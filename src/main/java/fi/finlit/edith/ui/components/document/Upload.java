@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.DocumentDao;
-import fi.finlit.edith.ui.services.DocumentRepository;
 
 @SuppressWarnings("unused")
 public class Upload {

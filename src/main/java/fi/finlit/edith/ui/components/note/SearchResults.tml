@@ -39,12 +39,9 @@
                     rowsPerPage="pageSize" pagerPosition="bottom" inPlace="true">
                       <p:noteCell>
                         <div class="note">
-                          <span>
-                            <t:actionlink t:id="selectNote" context="note.id" noteId="${note.id}"
-                              class="selectable-note ${noteConcept.status}">
-                              <em>${note.term?.basicForm}</em>
-                            </t:actionlink> 
-                          </span>
+                          <t:actionlink t:id="selectNote" context="note.id" noteId="${note.id}"
+                              class="selectable-note ${note.status}">
+                          <span>${note.term?.basicForm}</span>
                           
                           <t:if test="typesString">
                             <span class="type">, ${typesString}</span>
@@ -54,19 +51,14 @@
                             <span class="meaning">, "<t:outputRaw value="termMeaning"/>"</span>
                           </t:if>
                           
-                          <t:if test="noteConcept.description">
+                          <t:if test="note.description">
                             <span class="description">, "<t:outputRaw value="description"/>"</span>
                           </t:if>
                           
-                          <span class="creator">, ${noteConcept.lastEditedBy?.username} (${editorsForNote})</span>
-                          <span class="edited">, <t:dateTimeFormat date="note.editedOnDate" format="message:dateformat-compact" />
+                          <span class="creator">, ${note.lastEditedBy?.username} (${editorsForNote})</span>
+                          <span class="edited">, <t:dateTimeFormat date="note.editedOnDate" format="message:dateformat-compact" /></span>
                           <span class="status">, ${statusString}</span>
-                          
-                        
-                           
-                          
-                           
-                          </span>
+                          </t:actionlink>
                         </div>
                       </p:noteCell>
               
@@ -81,19 +73,19 @@
                             <li>
                                 <span>
                                 <t:actionlink t:id="selectNote" context="note.id" noteId="${note.id}"
-                                    class="selectable-note ${noteConcept.status}">
+                                    class="selectable-note ${note.status}">
                                     <em>${note.term?.basicForm}</em>
                                 </t:actionlink> 
                                  </span>
                                 
                                 <span class="meaning">${note.term?.meaning}; </span>
-                                <span class="description">${noteConcept.description}; </span>
+                                <span class="description">${note.description}; </span>
                                 <span class="type">${typesString}; </span>
                                 <span class="format"><t:if test="note.format"><t:fmt.message key="${note.format}"/></t:if>; </span>
-                                <span class="creator">${noteConcept.lastEditedBy?.username} (${editorsForNote}); </span>
+                                <span class="creator">${note.lastEditedBy?.username} (${editorsForNote}); </span>
                                 <span class="edited"><t:dateTimeFormat date="note.editedOnDate" format="message:dateformat-compact" />; </span>
                                 <t:remove>
-                                  <span class="status"><t:fmt.message key="NoteStatus.${noteConcept.status}"/></span>
+                                  <span class="status"><t:fmt.message key="NoteStatus.${note.status}"/></span>
                                 </t:remove>
                             </li>                           
                     </t:loop>

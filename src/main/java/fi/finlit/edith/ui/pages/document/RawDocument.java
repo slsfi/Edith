@@ -13,15 +13,14 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.util.TextStreamResponse;
 
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.ui.pages.HttpError;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.ui.services.DocumentDao;
 
 public class RawDocument {
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentRepository;
 
     @Inject
     private Response response;
@@ -40,7 +39,7 @@ public class RawDocument {
                 "</xsl:stylesheet>");
         }
         
-        final Document document = documentRepository.getById(id);
+        final Document document = documentRepository.getById(Long.parseLong(id));
 
         if (document == null) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "Could not find document with id: " + id);
@@ -54,7 +53,7 @@ public class RawDocument {
 
             @Override
             public InputStream getStream() throws IOException {
-                return documentRepository.getDocumentStream(new DocumentRevision(document, -1));
+                return documentRepository.getDocumentStream(document);
             }
 
             @Override

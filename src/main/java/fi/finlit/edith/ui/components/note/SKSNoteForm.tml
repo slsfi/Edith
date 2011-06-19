@@ -30,7 +30,7 @@
                     <div class="metadata">
                         <t:dateTimeFormat date="noteOnEdit.editedOnDate"
                             format="message:dateformat-compact" />
-                        ${noteOnEditConcept.lastEditedBy.username} (${editorsForNoteOnEdit})
+                        ${noteOnEdit.lastEditedBy.username} (${editorsForNoteOnEdit})
                     </div>
                     
                     
@@ -300,17 +300,17 @@
 			<div>
 				<div></div>
 				<div>
-					<a id="longTextEditLink" href="#">${message:update}</a>
+					<a id="fullSelectionEditLink" href="#">${message:update}</a>
 				</div>
 			</div>
 
             <t:remove>
-			<div class="longText">
+			<div class="fullSelection">
 				<div>
-					<strong>${message:longText-label}</strong>
+					<strong>${message:fullSelection-label}</strong>
 				</div>
 				<div>
-					<div id="longTextEdit">${noteOnEdit.longText}</div>
+					<div id="fullSelectionEdit">${noteOnEdit.fullSelection}</div>
 				</div>
 			</div>
             </t:remove>

@@ -30,6 +30,8 @@ public class DocumentNote {
     private long createdOn;
 
     private String shortenedSelection;
+    
+    private String lemmaPosition;
 
     @ManyToOne
     @QueryInit("*")
@@ -113,5 +115,13 @@ public class DocumentNote {
 
     public void setShortenedSelection(String shortenedSelection) {
         this.shortenedSelection = shortenedSelection;
+    }
+    
+    public String getLemmaPosition() {
+        return lemmaPosition;
+    }
+    
+    public void setLemmaPosition(String lemmaPosition) {
+        this.lemmaPosition = lemmaPosition;
     }
 }

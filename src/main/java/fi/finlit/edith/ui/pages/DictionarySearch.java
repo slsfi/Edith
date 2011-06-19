@@ -23,12 +23,12 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.tapestry.core.Context;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.Note;
 import fi.finlit.edith.domain.TermWithNotes;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.TermRepository;
+import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.TermDao;
 
 @SuppressWarnings("unused")
 @Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
@@ -52,13 +52,13 @@ public class DictionarySearch {
     private Note note;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteDao;
 
     @Inject
-    private TermRepository termRepository;
+    private TermDao termDao;
 
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteDao;
 
     private Map<Note, Collection<DocumentNote>> documentNotes;
 
@@ -74,41 +74,42 @@ public class DictionarySearch {
     }
 
     public void setupRender() {
-        terms = noteRepository.queryDictionary(searchTerm == null ? "*" : searchTerm);
+        terms = noteDao.queryDictionary(searchTerm == null ? "*" : searchTerm);
     }
 
     Object onPassivate() {
         return context == null ? null : context.toArray();
     }
 
-    void onActionFromDelete(String termId) {
-        termRepository.remove(termId);
+    void onActionFromDelete(long termId) {
+        termDao.remove(termId);
     }
 
     private void initDocumentNotes(){
-        // get notes from gridDataSource
-        List<Note> notes = new ArrayList<Note>();
-        int offset = (termsGrid.getCurrentPage()-1) * termsGrid.getRowsPerPage();
-        for (int i = 0; i < termsGrid.getRowsPerPage(); i++){
-            TermWithNotes t = (TermWithNotes) terms.getRowValue(offset + i);
-            if (t != null){
-                notes.addAll(t.getNotes());
-            }
-        }
-
-        // fetch document notes
-        List<DocumentNote> dn = documentNoteRepository.getOfNotes(notes);
-
-        // group document notes by note
-        documentNotes = new HashMap<Note, Collection<DocumentNote>>();
-        for (DocumentNote documentNote : dn){
-            Collection<DocumentNote> col = documentNotes.get(documentNote.getNote());
-            if (col == null){
-                col = new HashSet<DocumentNote>();
-                documentNotes.put(documentNote.getNote(), col);
-            }
-            col.add(documentNote);
-        }
+        //TODO FIX THIS
+//        // get notes from gridDataSource
+//        List<Note> notes = new ArrayList<Note>();
+//        int offset = (termsGrid.getCurrentPage()-1) * termsGrid.getRowsPerPage();
+//        for (int i = 0; i < termsGrid.getRowsPerPage(); i++){
+//            TermWithNotes t = (TermWithNotes) terms.getRowValue(offset + i);
+//            if (t != null){
+//                notes.addAll(t.getNotes());
+//            }
+//        }
+//
+//        // fetch document notes
+//        List<DocumentNote> dn = documentNoteDao.getOfNotes(notes);
+//
+//        // group document notes by note
+//        documentNotes = new HashMap<Note, Collection<DocumentNote>>();
+//        for (DocumentNote documentNote : dn){
+//            Collection<DocumentNote> col = documentNotes.get(documentNote.getNote());
+//            if (col == null){
+//                col = new HashSet<DocumentNote>();
+//                documentNotes.put(documentNote.getNote(), col);
+//            }
+//            col.add(documentNote);
+//        }
     }
 
     public String getLongTexts() {
@@ -119,7 +120,7 @@ public class DictionarySearch {
         if (documentNotes.containsKey(note)){
             Collection<String> longTexts = new ArrayList<String>();
             for (DocumentNote documentNote : documentNotes.get(note)) {
-                longTexts.add(documentNote.getLongText());
+                longTexts.add(documentNote.getFullSelection());
             }
             return StringUtils.join(longTexts, ", ");
         }else{

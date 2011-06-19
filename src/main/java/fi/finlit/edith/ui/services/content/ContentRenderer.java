@@ -13,25 +13,25 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.tapestry5.MarkupWriter;
 
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.dto.DocumentRevision;
+import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Document;
 
 /**
  * @author tiwe
  */
 public interface ContentRenderer {
 
-    void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException;
+    void renderPageLinks(Document document, MarkupWriter writer) throws IOException, XMLStreamException;
 
-    void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException, XMLStreamException;
+    void renderDocument(Document document, MarkupWriter writer) throws IOException, XMLStreamException;
 
     void renderDocumentNotes(List<DocumentNote> documentNotes, MarkupWriter writer);
 
-    void renderDocumentAsXML(DocumentRevision document, List<DocumentNote> documentNotes, OutputStream out) throws IOException, XMLStreamException;
+    void renderDocumentAsXML(Document document, List<DocumentNote> documentNotes, OutputStream out) throws IOException, XMLStreamException;
 
-    void renderDocument(DocumentRevision document, List<DocumentNote> documentNotes,
+    void renderDocument(Document document, List<DocumentNote> documentNotes,
             MarkupWriter writer) throws IOException, XMLStreamException;
 
-    void renderDocumentNotesAsXML(DocumentRevision document, List<DocumentNote> documentNotes, MarkupWriter notesWriter);
+    void renderDocumentNotesAsXML(Document document, List<DocumentNote> documentNotes, MarkupWriter notesWriter);
 
 }

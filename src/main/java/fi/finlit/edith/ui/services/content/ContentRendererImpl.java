@@ -39,9 +39,20 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.*;
-import fi.finlit.edith.dto.DocumentRevision;
-import fi.finlit.edith.ui.services.DocumentRepository;
+import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Interval;
+import fi.finlit.edith.sql.domain.LinkElement;
+import fi.finlit.edith.sql.domain.NameForm;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.sql.domain.NoteFormat;
+import fi.finlit.edith.sql.domain.NoteType;
+import fi.finlit.edith.sql.domain.Paragraph;
+import fi.finlit.edith.sql.domain.ParagraphElement;
+import fi.finlit.edith.sql.domain.Person;
+import fi.finlit.edith.sql.domain.Place;
+import fi.finlit.edith.sql.domain.UrlElement;
+import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.util.ElementContext;
 
 public class ContentRendererImpl implements ContentRenderer {
@@ -60,7 +71,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private static final String DIV = "div";
 
-    private final DocumentRepository documentRepository;
+    private final DocumentDao documentRepository;
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
@@ -70,14 +81,11 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private final String bibliographUrl;
 
-    private final boolean extendedTerm;
-
-    public ContentRendererImpl(@Inject DocumentRepository documentRepository,
-            @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl,
-            @Inject @Symbol(EDITH.EXTENDED_TERM) boolean extendedTerm) {
+    public ContentRendererImpl(@Inject DocumentDao documentRepository,
+            @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl
+           ) {
         this.documentRepository = documentRepository;
         this.bibliographUrl = bibliographUrl;
-        this.extendedTerm = extendedTerm;
     }
 
     private void writeSpan(MarkupWriter writer, String attr) {
@@ -85,18 +93,17 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void writeNote(MarkupWriter writer, Note note) {
-        Concept concept = note.getConcept(extendedTerm);
-        if (note.getLemmaMeaning() != null || concept.getSubtextSources() != null) {
+        if (note.getLemmaMeaning() != null || note.getSubtextSources() != null) {
             writeSpan(writer, "lemmaMeaningAndSubtextSources");
             if (note.getLemmaMeaning() != null) {
                 writer.write("'" + note.getLemmaMeaning() + "'");
             }
-            if (note.getLemmaMeaning() != null && concept.getSubtextSources() != null) {
+            if (note.getLemmaMeaning() != null && note.getSubtextSources() != null) {
                 writer.write(", ");
             }
-            if (concept.getSubtextSources() != null) {
+            if (note.getSubtextSources() != null) {
                 writer.write("Vrt. ");
-                writeParagraph(writer, Paragraph.parseSafe(concept.getSubtextSources()));
+                writeParagraph(writer, Paragraph.parseSafe(note.getSubtextSources()));
             }
             writer.end();
         }
@@ -144,10 +151,11 @@ public class ContentRendererImpl implements ContentRenderer {
 
 
     @Override
-    public void renderDocumentNotesAsXML(DocumentRevision document, List<DocumentNote> documentNotes, MarkupWriter writer) {
+    public void renderDocumentNotesAsXML(Document document, List<DocumentNote> documentNotes, MarkupWriter writer) {
         writer.element("document");
-        write(writer, "path", document.getSvnPath());
-        write(writer, "revision", document.getRevision());
+        write(writer, "path", document.getPath());
+        //TODO Would this be good?
+        write(writer, "revision", -1);
 
         Map<Note, List<DocumentNote>> noteToDocumentNotes = new HashMap<Note, List<DocumentNote>>();
         for (DocumentNote documentNote : documentNotes){
@@ -161,9 +169,8 @@ public class ContentRendererImpl implements ContentRenderer {
 
         for (Map.Entry<Note, List<DocumentNote>> entry : noteToDocumentNotes.entrySet()){
           Note note = entry.getKey();
-          Concept concept = note.getConcept(extendedTerm);
           writer.element("note", "xml:id", "note"+note.getId());
-          write(writer, "description", concept.getDescription());
+          write(writer, "description", note.getDescription());
           write(writer, "format", note.getFormat());
           write(writer, "lemma", note.getLemma());
           write(writer, "lemmaMeaning", note.getLemmaMeaning());
@@ -191,11 +198,11 @@ public class ContentRendererImpl implements ContentRenderer {
               writer.end(); // otherForms
               writer.end(); // place
           }
-          write(writer, "sources", concept.getSources());
-          write(writer, "subtextSources", concept.getSubtextSources());
-          if (!concept.getTypes().isEmpty()){
+          write(writer, "sources", note.getSources());
+          write(writer, "subtextSources", note.getSubtextSources());
+          if (!note.getTypes().isEmpty()){
               writer.element("types");
-              for (NoteType type : concept.getTypes()){
+              for (NoteType type : note.getTypes()){
                   write(writer, "type", type);
               }
               writer.end();
@@ -204,9 +211,9 @@ public class ContentRendererImpl implements ContentRenderer {
           writer.element("documentNotes");
           for (DocumentNote dn : entry.getValue()){
               writer.element("documentNote", "xml:id", "end"+dn.getId());
-              write(writer, "longText", dn.getLongText());
-              write(writer, "svnRevision", dn.getSVNRevision());
-              write(writer, "createdOn", dn.getCreatedOnDate());
+              write(writer, "longText", dn.getFullSelection());
+              write(writer, "svnRevision", dn.getRevision());
+              write(writer, "createdOn", dn.getCreatedOn());
               writer.end(); // documentNote
           }
           writer.end(); // documentNotes
@@ -242,8 +249,7 @@ public class ContentRendererImpl implements ContentRenderer {
         writer.element("ul", CLASS, "notes");
         for (DocumentNote documentNote : documentNotes) {
             Note note = documentNote.getNote();
-            Concept concept = documentNote.getConcept(extendedTerm);
-
+    
             if (note == null){
                 throw new IllegalStateException("Got no note for documentNote " + documentNote);
             }
@@ -268,20 +274,20 @@ public class ContentRendererImpl implements ContentRenderer {
                 }
             }
 
-            if (concept.getDescription() != null) {
+            if (note.getDescription() != null) {
                 if (note.getFormat() != null && !note.getFormat().equals(NoteFormat.NOTE)) {
                     writer.element("span");
                     writer.write("\u2013");
                     writer.end();
                 }
                 writeSpan(writer, "description");
-                writeParagraph(writer, Paragraph.parseSafe(concept.getDescription()));
+                writeParagraph(writer, Paragraph.parseSafe(note.getDescription()));
                 writer.end();
             }
-            if (concept.getSources() != null) {
+            if (note.getSources() != null) {
                 writeSpan(writer, "sources");
                 writer.write("(");
-                writeParagraph(writer, Paragraph.parseSafe(concept.getSources()));
+                writeParagraph(writer, Paragraph.parseSafe(note.getSources()));
                 writer.write(")");
                 writer.end();
             }
@@ -316,7 +322,7 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     @Override
-    public void renderPageLinks(DocumentRevision document, MarkupWriter writer) throws IOException,
+    public void renderPageLinks(Document document, MarkupWriter writer) throws IOException,
             XMLStreamException {
         InputStream is = documentRepository.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
@@ -351,14 +357,14 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     @Override
-    public void renderDocument(DocumentRevision document, MarkupWriter writer) throws IOException,
+    public void renderDocument(Document document, MarkupWriter writer) throws IOException,
             XMLStreamException {
         renderDocument(document, null, writer);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void renderDocumentAsXML(DocumentRevision document, List<DocumentNote> documentNotes, OutputStream out) throws IOException, XMLStreamException{
+    public void renderDocumentAsXML(Document document, List<DocumentNote> documentNotes, OutputStream out) throws IOException, XMLStreamException{
         InputStream is = documentRepository.getDocumentStream(document);
         XMLEventReader reader = inFactory.createXMLEventReader(is);
         XMLEventWriter writer = outFactory.createXMLEventWriter(out);
@@ -400,11 +406,11 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     @Override
-    public void renderDocument(DocumentRevision document, List<DocumentNote> documentNotes,
+    public void renderDocument(Document document, List<DocumentNote> documentNotes,
             MarkupWriter writer) throws IOException, XMLStreamException {
-        Set<String> publishIds = null;
+        Set<Long> publishIds = null;
         if (documentNotes != null) {
-            publishIds = new HashSet<String>();
+            publishIds = new HashSet<Long>();
             for (DocumentNote documentNote : documentNotes) {
                 publishIds.add(documentNote.getId());
             }
@@ -413,7 +419,7 @@ public class ContentRendererImpl implements ContentRenderer {
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
         MutableBoolean noteContent = new MutableBoolean(false);
-        Set<String> noteIds = new HashSet<String>();
+        Set<Long> noteIds = new HashSet<Long>();
         ElementContext context = new ElementContext(3);
 
         try {
@@ -436,8 +442,8 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void handleStartElement(XMLStreamReader reader, MarkupWriter writer,
-            ElementContext context, Set<String> noteIds, MutableBoolean noteContent,
-            Set<String> publishIds) {
+            ElementContext context, Set<Long> noteIds, MutableBoolean noteContent,
+            Set<Long> publishIds) {
         String localName = reader.getLocalName();
         String name = extractName(reader, localName);
         context.push(name);
@@ -484,7 +490,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.end();
 
                 noteContent.setValue(true);
-                noteIds.add(id.substring("start".length()));
+                noteIds.add(Long.getLong(id.substring("start".length())));
             } else if (id.startsWith("end")) {
                 noteIds.remove(id.substring("end".length()));
                 if (noteIds.isEmpty()) {
@@ -516,11 +522,11 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void handleCharactersElement(XMLStreamReader reader, MarkupWriter writer,
-            Set<String> noteIds, MutableBoolean noteContent) {
+            Set<Long> noteIds, MutableBoolean noteContent) {
         String text = WHITESPACE.matcher(reader.getText()).replaceAll(" ");
         if (noteContent.booleanValue() && !text.trim().isEmpty()) {
             StringBuilder classes = new StringBuilder("notecontent");
-            for (String noteId : noteIds) {
+            for (Long noteId : noteIds) {
                 classes.append(" n").append(noteId);
             }
             writer.element("span", CLASS, classes);

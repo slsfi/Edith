@@ -8,7 +8,7 @@ package fi.finlit.edith.ui.components.note;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 
-import fi.finlit.edith.domain.Note;
+import fi.finlit.edith.sql.domain.Note;
 
 @SuppressWarnings("unused")
 public class Metadata {

@@ -5,7 +5,7 @@
       //XXX Maybe these should be on external file
       var DocumentNoteForm = {
           setTextSelection : function() {
-        	  jQuery("#longTextUpdate").html(" --> " + TextSelector.selection);
+        	  jQuery("#fullSelectionUpdate").html(" --> " + TextSelector.selection);
         	  jQuery(":input[name='selectedStartId_2']").val(TextSelector.startId);
               jQuery(":input[name='selectedEndId_2']").val(TextSelector.endId);
               jQuery(":input[name='selectedText_2']").val(TextSelector.selection);
@@ -13,7 +13,7 @@
               jQuery(":input[name='selectedEndIndex_2']").val(TextSelector.endIndex);
           },
           clearTextSelection : function() {
-        	  jQuery("#longTextUpdate").html("");
+        	  jQuery("#fullSelectionUpdate").html("");
               jQuery(":input[name='selectedText_2']").val(null);
           }
     		  
@@ -73,14 +73,14 @@
         <t:errors />
         
         <div class="field">
-            <label for="longTextEdit">${message:longText-label}</label>
-            <div id="longTextEdit">${documentNoteOnEdit.longText}</div>
-            <div id="longTextUpdate"></div>
+            <label for="fullSelectionEdit">${message:fullSelection-label}</label>
+            <div id="fullSelectionEdit">${documentNoteOnEdit.fullSelection}</div>
+            <div id="fullSelectionUpdate"></div>
         </div>
         
         <div class="field">
-            <t:label for="shortText">${message:shortText-label}</t:label>
-            <t:textField t:id="shortText" value="documentNoteOnEdit.shortText" />
+            <t:label for="shortenedSelection">${message:shortenedSelection-label}</t:label>
+            <t:textField t:id="shortenedSelection" value="documentNoteOnEdit.shortenedSelection" />
         </div>
         
         <div class="field">

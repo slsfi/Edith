@@ -6,6 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 @Entity
 public class NoteComment {
     @Id
@@ -18,6 +21,9 @@ public class NoteComment {
     private String message;
 
     private String username;
+    
+    @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+    private DateTime createdAt;
     
     public NoteComment() { }
 
@@ -57,5 +63,13 @@ public class NoteComment {
 
     public String getUsername() {
         return username;
+    }
+    
+    public DateTime getCreatedAt() {
+        return createdAt;
+    }
+    
+    public void setCreatedAt(DateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

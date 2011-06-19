@@ -22,9 +22,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.DocumentNote;
 import fi.finlit.edith.dto.DocumentRevision;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
+import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
@@ -32,7 +33,7 @@ import fi.finlit.edith.ui.services.svn.SubversionService;
 @SuppressWarnings("unused")
 public class Publish extends AbstractDocumentPage {
     @Inject
-    private DocumentNoteRepository documentNoteRepository;
+    private DocumentNoteDao documentNoteRepository;
 
     @Property
     private DocumentNote documentNote;
@@ -51,18 +52,20 @@ public class Publish extends AbstractDocumentPage {
     private SubversionService subversionService;
 
     public void setupRender() {
-        documentNotes = documentNoteRepository.getPublishableNotesOfDocument(getDocumentRevision());
+        documentNotes = documentNoteRepository.getPublishableNotesOfDocument(getDocument());
     }
     
     public void onActionFromPublish(String id) throws IOException, XMLStreamException {
-        DocumentRevision revision = getDocumentRevision();
-        documentNotes = documentNoteRepository.getPublishableNotesOfDocument(revision);
+        Document document = getDocument();
+        
+        documentNotes = documentNoteRepository.getPublishableNotesOfDocument(document);
         new File(PUBLISH_PATH).mkdirs();
-        final String path = PUBLISH_PATH + "/" + revision.getDocument().getTitle();
+        final String path = PUBLISH_PATH + "/" + document.getTitle();
         
         // document as HTML
+        
         MarkupWriter documentWriter = new MarkupWriterImpl();
-        renderer.renderDocument(revision, documentNotes, documentWriter);
+        renderer.renderDocument(document, documentNotes, documentWriter);
         writeHtmlFile(path + "_document.html", documentWriter);
 
         // notes as HTML
@@ -74,11 +77,11 @@ public class Publish extends AbstractDocumentPage {
         File file = new File(path);
         file.createNewFile();
         FileOutputStream out = new FileOutputStream(file);
-        renderer.renderDocumentAsXML(revision, documentNotes, out);
+        renderer.renderDocumentAsXML(document, documentNotes, out);
         
         // notes as XML
         notesWriter = new MarkupWriterImpl();
-        renderer.renderDocumentNotesAsXML(revision, documentNotes, notesWriter);
+        renderer.renderDocumentNotesAsXML(document, documentNotes, notesWriter);
         writeHtmlFile(path + "_notes.xml", notesWriter);
     }
 

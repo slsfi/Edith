@@ -1,7 +1,6 @@
 package fi.finlit.edith.ui.components.note;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,15 +8,15 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.NoteFormat;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.domain.TermLanguage;
-import fi.finlit.edith.domain.UserInfo;
-import fi.finlit.edith.dto.DocumentNoteSearchInfo;
+import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
+import fi.finlit.edith.dto.UserInfo;
+import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.sql.domain.NoteFormat;
+import fi.finlit.edith.sql.domain.NoteType;
+import fi.finlit.edith.sql.domain.TermLanguage;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.ui.services.UserDao;
 
 @SuppressWarnings("unused")
 public class NoteSearchForm {
@@ -37,7 +36,7 @@ public class NoteSearchForm {
     private UserInfo user;
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userDao;
 
     @Property
     private OrderBy loopedOrderBy;
@@ -51,7 +50,7 @@ public class NoteSearchForm {
     }
 
     public Collection<UserInfo> getUsers() {
-        return userRepository.getAllUserInfos();
+        return userDao.getAllUserInfos();
     }
 
     public NoteType[] getTypes() {
@@ -140,12 +139,12 @@ public class NoteSearchForm {
         getSearchInfo().setLanguage(lang);
     }
 
-    public DocumentNoteSearchInfo getSearchInfo() {
+    public NoteSearchInfo getSearchInfo() {
         return page.getSearchInfo();
     }
 
     public String getDocuments() {
-        Collection<String> documentIds = new ArrayList<String>();
+        Collection<Long> documentIds = new ArrayList<Long>();
         for (Document document : getSearchInfo().getDocuments()) {
             documentIds.add(document.getId());
         }
@@ -156,7 +155,7 @@ public class NoteSearchForm {
         getSearchInfo().getDocuments().clear();
         for (String documentId : documents.split(",")) {
             Document document = new Document();
-            document.setId(documentId);
+            document.setId(Long.valueOf(documentId));
             getSearchInfo().getDocuments().add(document);
         }
     }

@@ -1,5 +1,7 @@
 package fi.finlit.edith.sql.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -20,9 +22,12 @@ import javax.persistence.OneToMany;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.joda.time.DateTime;
+
+import fi.finlit.edith.Identifiable;
 
 @Entity
-public class Note {
+public class Note implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -99,6 +104,10 @@ public class Note {
 
     public Long getEditedOn() {
         return editedOn;
+    }
+    
+    public DateTime getEditedOnDate() {
+        return new DateTime(editedOn);
     }
 
     public void setEditedOn(Long editedOn) {
@@ -248,6 +257,16 @@ public class Note {
 
     public void addEditor(User user) {
        allEditors.add(user); 
+    }
+    
+    public String getEditors() {
+        Collection<String> result = new ArrayList<String>();
+        for (User user : getAllEditors()) {
+            if (getLastEditedBy().equals(user)) {
+                result.add(user.getUsername());
+            }
+        }
+        return StringUtils.join(result, ", ");
     }
 
 }

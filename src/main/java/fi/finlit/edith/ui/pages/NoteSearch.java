@@ -26,10 +26,11 @@ import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Concept;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.ui.services.DocumentRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
+import fi.finlit.edith.ui.services.SqlPrimaryKeyEncoder;
 
 @SuppressWarnings("unused")
 @Import(library = { "classpath:js/jquery-1.4.1.js", "deleteDialog.js" })
@@ -50,13 +51,13 @@ public class NoteSearch {
     private Note note;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteDao;
 
     @Inject
-    private DocumentRepository documentRepository;
+    private DocumentDao documentDao;
 
     @Property
-    private PrimaryKeyEncoder<Note> encoder;
+    private SqlPrimaryKeyEncoder<Note> encoder;
 
     @Inject
     @Path("NoteSearch.css")
@@ -67,7 +68,7 @@ public class NoteSearch {
 
     private Collection<Note> selectedNotes;
 
-    private Collection<String> orphanNoteIds;
+    private Collection<Long> orphanNoteIds;
 
     private boolean removeSelected;
     
@@ -98,7 +99,7 @@ public class NoteSearch {
 
     void onActivate(EventContext ctx) {
         // TODO : fetch only orpahNote ids for the elements displayed in this window
-        orphanNoteIds = noteRepository.getOrphanIds();
+        orphanNoteIds = noteDao.getOrphanIds();
 
         if (selectedNotes == null){
             selectedNotes = new HashSet<Note>();
@@ -117,12 +118,12 @@ public class NoteSearch {
     }
 
     void onPrepare() {
-        encoder = new PrimaryKeyEncoder<Note>(noteRepository);
+        encoder = new SqlPrimaryKeyEncoder<Note>(noteDao);
     }
 
     void onSuccessFromEdit() {
         if (removeSelected){
-            noteRepository.removeNotes(selectedNotes);
+            noteDao.removeNotes(selectedNotes);
 
         }else{
           //getting all values from encoder
@@ -131,9 +132,9 @@ public class NoteSearch {
               //it means it has been edited
               //We must refetch the actual document note
               if (!isBlank(editedNote.getLemma())) {
-                  Note currentNote = noteRepository.getById(editedNote.getId());
+                  Note currentNote = noteDao.getById(editedNote.getId());
                   currentNote.setLemma(editedNote.getLemma());
-                  noteRepository.save(editedNote);
+                  noteDao.save(editedNote);
               }
             }
         }
@@ -146,7 +147,7 @@ public class NoteSearch {
     }
 
     void setupRender() {
-        notes = noteRepository.queryNotes(searchTerm == null ? "*" : searchTerm);
+        notes = noteDao.queryNotes(searchTerm == null ? "*" : searchTerm);
     }
 
     public boolean isNoteSelected() {
@@ -169,7 +170,4 @@ public class NoteSearch {
         return orphanNoteIds.contains(note.getId());
     }
 
-    public Concept getConcept() {
-        return note.getConcept(slsMode);
-    }
 }

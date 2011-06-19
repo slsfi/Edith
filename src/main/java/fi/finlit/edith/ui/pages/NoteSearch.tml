@@ -45,16 +45,16 @@
                     ${note.term?.basicForm}
                 </p:basicFormCell>
                 <p:descriptionCell>
-                    <t:markdown value="concept.description"/>
+                    <t:markdown value="note.description"/>
                 </p:descriptionCell>                
                 <p:meaningCell>
                         ${note.term?.meaning}
                 </p:meaningCell>
                 <p:subtextSourcesCell>
-                    <t:markdown value="concept.subtextSources"/>
+                    <t:markdown value="note.subtextSources"/>
                 </p:subtextSourcesCell>
                 <p:statusCell>
-					<t:fmt.message key="NoteStatus.${concept.status}"/>
+					<t:fmt.message key="NoteStatus.${note.status}"/>
                 </p:statusCell>
 
 				<p:deletionCell>

@@ -10,10 +10,10 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.Interval;
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.ui.services.PersonRepository;
+import fi.finlit.edith.sql.domain.Interval;
+import fi.finlit.edith.sql.domain.NameForm;
+import fi.finlit.edith.sql.domain.Person;
+import fi.finlit.edith.ui.services.PersonDao;
 
 @SuppressWarnings("unused")
 public class PersonForm {
@@ -26,7 +26,7 @@ public class PersonForm {
     private Block closeDialog;
 
     @Inject
-    private PersonRepository personRepository;
+    private PersonDao personDao;
 
     @Property
     private String newFirst;
@@ -39,7 +39,7 @@ public class PersonForm {
 
     @Property
     @Parameter
-    private String personId;
+    private Long personId;
 
     private Person person;
 
@@ -51,7 +51,7 @@ public class PersonForm {
         if (personId == null) {
             person = new Person(new NameForm(), new HashSet<NameForm>());
         } else {
-            person = personRepository.getById(personId);
+            person = personDao.getById(personId);
         }
     }
 
@@ -89,9 +89,9 @@ public class PersonForm {
         }
     }
 
-    void onPrepareFromPersonForm(String id) {
+    void onPrepareFromPersonForm(long id) {
         if (person == null) {
-            person = personRepository.getById(id);
+            person = personDao.getById(id);
         }
     }
 
@@ -100,7 +100,7 @@ public class PersonForm {
             getPerson().getOtherForms().add(new NameForm(newFirst, newLast, newDescription));
         }
         getPerson().setOtherForms(copyAndRemoveEmptyNameForms(getPerson().getOtherForms()));
-        personRepository.save(getPerson());
+        personDao.save(getPerson());
         personId = getPerson().getId();
         if (personZone != null) {
             return new MultiZoneUpdate("dialogZone", closeDialog).add("personZone", personZone.getBody());

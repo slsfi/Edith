@@ -2,36 +2,26 @@ package fi.finlit.edith.ui.components.note;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
-import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
-import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Symbol;
 
-import fi.finlit.edith.EDITH;
 import fi.finlit.edith.domain.Concept;
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.NoteType;
-import fi.finlit.edith.dto.DocumentNoteSearchInfo;
+import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.sql.domain.NoteType;
 import fi.finlit.edith.ui.pages.document.Annotate;
-import fi.finlit.edith.ui.services.DocumentNoteRepository;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.NoteWithInstances;
+import fi.finlit.edith.ui.services.NoteDao;
 
 @Import(library = {"SearchResults.js"})
 @SuppressWarnings("unused")
@@ -45,17 +35,11 @@ public class SearchResults {
     private Block notesList;
 
     @Inject
-    private NoteRepository noteRepository;
+    private NoteDao noteDao;
     
     @InjectComponent
     @Property
     private Grid grid;
-
-    @Property
-    private List<NoteWithInstances> notesWithInstances;
-
-    @Property
-    private NoteWithInstances noteWithInstances;
 
     @Property
     private GridDataSource notes;
@@ -83,7 +67,7 @@ public class SearchResults {
 
         // TODO Handle SKS case
 
-        notes = noteRepository.findNotes(page.getSearchInfo());
+        notes = noteDao.findNotes(page.getSearchInfo());
         
         return notes != null && notes.getAvailableRows() > 0;
     }
@@ -106,7 +90,7 @@ public class SearchResults {
 //        return grid.getCurrentPage() + " " + start + " - " + end + " / " + notes.getAvailableRows();
 //    }
 
-    Object onActionFromSelectNote(String noteId) {
+    Object onActionFromSelectNote(long noteId) {
         System.out.println("select note " + noteId);
 
         page.getDocumentNotes().setNoteId(noteId);
@@ -116,7 +100,7 @@ public class SearchResults {
             page.getNoteEdit().setDocumentNoteOnEdit(selected);
 
         } else {
-            page.getNoteEdit().setNoteOnEdit(noteRepository.getById(noteId));
+            page.getNoteEdit().setNoteOnEdit(noteDao.getById(noteId));
         }
         return new MultiZoneUpdate("documentNotesZone", page.getDocumentNotes().getBlock()).add(
                 "noteEditZone", page.getNoteEdit().getBlock());
@@ -124,14 +108,14 @@ public class SearchResults {
 
     public String getTypesString() {
         Collection<String> translated = new ArrayList<String>();
-        for (NoteType t : note.getConcept(page.isSlsMode()).getTypes()) {
+        for (NoteType t : note.getTypes()) {
             translated.add(messages.get(t.toString()));
         }
         return StringUtils.join(translated, ", ");
     }
     
     public String getStatusString() {
-        return messages.get(getNoteConcept().getStatus().toString());
+        return messages.get(note.getStatus().toString());
     }
     
     private String stripTagsAndConcat(String str, int maxSize) {
@@ -146,23 +130,11 @@ public class SearchResults {
     }
     
     public String getDescription() {
-        return stripTagsAndConcat(getNoteConcept().getDescription(), MAX_STRIPPED_LENGTH);
-    }
-
-    public int getNumberOfInstancesInDocument() {
-        return noteWithInstances.getDocumentNotes().size();
-    }
-
-    public Concept getNoteWithInstancesConcept() {
-        return noteWithInstances.getNote().getConcept(page.isSlsMode());
+        return stripTagsAndConcat(note.getDescription(), MAX_STRIPPED_LENGTH);
     }
 
     public String getEditorsForNote() {
-        return note.getEditors(page.isSlsMode());
-    }
-
-    public Concept getNoteConcept() {
-        return note.getConcept(page.isSlsMode());
+        return note.getEditors();
     }
 
     private enum DocumentNoteType {
@@ -172,7 +144,7 @@ public class SearchResults {
     public DocumentNoteType getDocumentNoteType() {
         if (documentNote.getDocument() == null) {
             return DocumentNoteType.ORPHAN;
-        } else if (documentNote.getLongText() == null) {
+        } else if (documentNote.getFullSelection() == null) {
             return DocumentNoteType.SEMI_ORPHAN;
         } else if (!documentNote.getDocument().equals(page.getDocument())) {
             return DocumentNoteType.ELSEWHERE;

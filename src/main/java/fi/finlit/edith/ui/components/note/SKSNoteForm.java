@@ -10,12 +10,12 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.NameForm;
-import fi.finlit.edith.domain.Person;
-import fi.finlit.edith.domain.Place;
-import fi.finlit.edith.domain.Term;
-import fi.finlit.edith.ui.services.PersonRepository;
-import fi.finlit.edith.ui.services.PlaceRepository;
+import fi.finlit.edith.sql.domain.NameForm;
+import fi.finlit.edith.sql.domain.Person;
+import fi.finlit.edith.sql.domain.Place;
+import fi.finlit.edith.sql.domain.Term;
+import fi.finlit.edith.ui.services.PersonDao;
+import fi.finlit.edith.ui.services.PlaceDao;
 
 @SuppressWarnings("unused")
 public class SKSNoteForm extends AbstractNoteForm {
@@ -49,20 +49,20 @@ public class SKSNoteForm extends AbstractNoteForm {
     private Place place;
 
     @Property
-    private String placeId;
+    private Long placeId;
 
     @Inject
-    private PlaceRepository placeRepository;
+    private PlaceDao placeDao;
 
     private Person person;
 
     @Property
-    private String personId;
+    private Long personId;
 
     @Inject
-    private PersonRepository personRepository;
+    private PersonDao personDao;
 
-    void onPrepareFromNoteEditForm(String noteId) {
+    void onPrepareFromNoteEditForm(long noteId) {
 
         super.onPrepareFromNoteEditForm(noteId);
 
@@ -103,14 +103,14 @@ public class SKSNoteForm extends AbstractNoteForm {
 
     public boolean isPerson() {
         if (person == null && personId != null) {
-            person = personRepository.getById(personId);
+            person = personDao.getById(personId);
         }
         return person != null;
     }
 
     public boolean isPlace() {
         if (place == null && placeId != null) {
-            place = placeRepository.getById(placeId);
+            place = placeDao.getById(placeId);
         }
         return place != null;
     }
@@ -131,17 +131,17 @@ public class SKSNoteForm extends AbstractNoteForm {
 
     private Person getPerson() {
         if (personId != null) {
-            return personRepository.getById(personId);
+            return personDao.getById(personId);
         }
         return person;
     }
 
     Collection<Person> onProvideCompletionsFromPerson(String partial) {
-        return personRepository.findByStartOfFirstAndLastName(partial, 10);
+        return personDao.findByStartOfFirstAndLastName(partial, 10);
     }
 
     Collection<Place> onProvideCompletionsFromPlace(String partial) {
-        return placeRepository.findByStartOfName(partial, 10);
+        return placeDao.findByStartOfName(partial, 10);
     }
 
     public String getNormalizedDescription() {
@@ -181,7 +181,7 @@ public class SKSNoteForm extends AbstractNoteForm {
 
     public int getPersonInstances() {
         if (isPerson()) {
-            return getDocumentNoteRepository().getOfPerson(getPerson().getId()).size();
+            return getDocumentNoteDao().getOfPerson(getPerson().getId()).size();
         }
         return 0;
     }
@@ -195,14 +195,14 @@ public class SKSNoteForm extends AbstractNoteForm {
 
     private Place getPlace() {
         if (placeId != null) {
-            return placeRepository.getById(placeId);
+            return placeDao.getById(placeId);
         }
         return place;
     }
 
     public int getPlaceInstances() {
         if (isPlace()) {
-            return getDocumentNoteRepository().getOfPlace(getPlace().getId()).size();
+            return getDocumentNoteDao().getOfPlace(getPlace().getId()).size();
         }
         return 0;
     }
@@ -214,26 +214,26 @@ public class SKSNoteForm extends AbstractNoteForm {
         return new HashSet<NameForm>();
     }
 
-    Object onEditPerson(String id) {
+    Object onEditPerson(Long id) {
         personId = id;
         return editPersonForm;
     }
 
-    Object onEditPlace(String id) {
+    Object onEditPlace(Long id) {
         placeId = id;
         return editPlaceForm;
     }
 
-    Object onPerson(String id) {
+    Object onPerson(long id) {
         if (!isPerson()) {
-            setPerson(personRepository.getById(id));
+            setPerson(personDao.getById(id));
         }
         return personZone.getBody();
     }
 
-    Object onPlace(String id) {
+    Object onPlace(long id) {
         if (!isPlace()) {
-            setPlace(placeRepository.getById(id));
+            setPlace(placeDao.getById(id));
         }
         return placeZone.getBody();
     }
