@@ -58,6 +58,7 @@ import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
+import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.svn.FileItem;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
@@ -83,6 +84,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     private final String documentRoot;
 
     private final SubversionService versioningService;
+    
+    private final NoteDao noteDao;
 
     private final AuthService authService;
 
@@ -95,10 +98,12 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     public DocumentDaoImpl(
             @Inject SubversionService versioningService,
             @Inject AuthService authService,
+            @Inject NoteDao noteDao,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot) {
         this.documentRoot = documentRoot;
         this.versioningService = versioningService;
         this.authService = authService;
+        this.noteDao = noteDao;
     }
 
     @Override
@@ -151,9 +156,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     public DocumentNote addNote(Note note, Document document, final SelectedText selection) {
         final DocumentNote documentNote = new DocumentNote();
         getSession().save(documentNote);
-        long revision;
         final MutableInt position = new MutableInt(0);
-        revision = versioningService.commit(document.getPath(), -1, authService.getUsername(),
+        versioningService.commit(document.getPath(), -1, authService.getUsername(),
                 new UpdateCallback() {
                     @Override
                     public void update(InputStream source, OutputStream target) throws IOException {
@@ -169,13 +173,9 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                     }
                 });
 
-        documentNote.setRevision(revision);
-        documentNote.setDocument(document);
-        // TODO: Implement the saving process in NoteRepository!
-        // DocumentNote docNote = noteRepository.createDocumentNote(documentNote, note,
-        // new DocumentRevision(docRevision, revision), "-1", selection.getSelection(),
-        // position.intValue());
-        return documentNote;
+        DocumentNote updatedDocumentNote = noteDao.createDocumentNote(documentNote, note, document,
+                selection.getSelection(), position.intValue());
+        return updatedDocumentNote;
     }
 
     private static class Matched {
