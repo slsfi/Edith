@@ -4,7 +4,6 @@
 
 	<p:title>${message:login}</p:title>
 	 
-	 <img src="${context:images/logo_big.jpg}" />
 	<p>${message:login}</p>
 	 
     <t:loginForm/>
