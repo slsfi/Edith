@@ -112,9 +112,6 @@ public class Annotate extends AbstractDocumentPage {
     @Persist
     private NoteSearchInfo searchInfo;
 
-    @Inject
-    private TermRepository termRepository;
-
     @Property
     private NoteType type;
 

@@ -6,9 +6,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.mysema.query.annotations.QueryInit;
 
 @Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class DocumentNote {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

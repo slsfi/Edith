@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
@@ -14,17 +15,20 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
     /**
      * @param docNote
      */
+    @CommitAfter
     void remove(DocumentNote docNote);
 
     /**
      * @param documentNoteId
      */
+    @CommitAfter
     void remove(Long documentNoteId);
 
     /**
      * @param docNote
      * @return
      */
+    @CommitAfter
     DocumentNote save(DocumentNote docNote);
 
 //    /**

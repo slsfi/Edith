@@ -15,6 +15,7 @@ import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.NoteFormat;
 import fi.finlit.edith.sql.domain.NoteType;
 import fi.finlit.edith.sql.domain.TermLanguage;
+import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.UserDao;
 

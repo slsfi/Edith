@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+  
+  <defaultCache
+    maxElementsInMemory="10000"
+    eternal="false"
+    timeToIdleSeconds="120"
+    timeToLiveSeconds="120"
+    overflowToDisk="false"
+    diskPersistent="false"
+    />
+
+  <cache
+    name="fi.finlit.edith.sql.domain.User"
+    maxElementsInMemory="100"
+    eternal="true"
+    overflowToDisk="false"
+  />
+  <cache
+    name="fi.finlit.edith.sql.domain.Term"
+    maxElementsInMemory="10000"
+    eternal="false"
+    timeToIdleSeconds="300"
+    timeToLiveSeconds="600"
+    overflowToDisk="false"
+  />
+  <cache
+    name="fi.finlit.edith.sql.domain.Note"
+    maxElementsInMemory="10000"
+    eternal="false"
+    timeToIdleSeconds="300"
+    timeToLiveSeconds="600"
+    overflowToDisk="false"
+  />
+  <cache
+    name="fi.finlit.edith.sql.domain.DocumentNote"
+    maxElementsInMemory="100000"
+    eternal="false"
+    timeToIdleSeconds="300"
+    timeToLiveSeconds="600"
+    overflowToDisk="false"
+  />
+
+</ehcache>

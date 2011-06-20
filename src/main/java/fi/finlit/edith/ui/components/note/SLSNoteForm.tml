@@ -22,6 +22,7 @@
     	  
           jQuery(":input[name='save']").click(function(){
               jQuery("#.note_edit .wysiwyg").each( function() {
+            	  //console.log("updating element before save");
             	  jQuery(this).ckeditorGet().updateElement();
               });
           });
@@ -46,7 +47,7 @@
           <t:dateTimeFormat date="noteOnEdit.editedOnDate"
             format="message:dateformat-compact" />
           ${noteOnEdit.lastEditedBy.username}
-          (${editorsForNoteOnEdit})
+          (${noteOnEdit.editors})
         </div>
     
     
@@ -64,7 +65,7 @@
             <div class="field">
               <label for="types">${message:type-label}</label>
               <div id="types"> 
-                <t:loop source="types" value="type">
+                <t:loop source="noteOnEdit.types" value="type">
                     <label><t:checkbox value="selected" /> <t:fmt.message key="${type}" /></label>
                 </t:loop>
               </div>
@@ -88,7 +89,7 @@
     
             <div class="field">
               <t:label for="description">${message:description-label}</t:label>
-              <t:textArea class="wysiwyg" style="display:none" t:id="description" value="description" />
+              <t:textArea class="wysiwyg" style="display:none" t:id="description" value="noteOnEdit.description" />
             </div>
     
             <!-- TODO In the future 
@@ -100,12 +101,12 @@
     
             <div class="field">
               <t:label for="sources">${message:sources-label}</t:label>
-              <t:textArea class="wysiwyg" style="display:none" t:id="sources" value="sources" rows="8" />
+              <t:textArea class="wysiwyg" style="display:none" t:id="sources" value="noteOnEdit.sources" rows="8" />
             </div>
     
             <div class="field">
               <t:label for="status">${message:status-label}</t:label>
-              <t:select t:id="status" model="statusModel" value="status" />
+              <t:select t:id="status" model="statusModel" value="noteOnEdit.status" />
             </div>
             
             <div class="field">

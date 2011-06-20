@@ -107,7 +107,7 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
         // XXX What was the point in having .createCopy?
         docNote.setDeleted(true);
         docNote.getNote().decDocumentNoteCount();
-        getSession().save(docNote);
+        //getSession().save(docNote);
     }
 
     @Override
@@ -128,14 +128,14 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
         docNote.getNote().setEditedOn(currentTime);
         docNote.getNote().setLastEditedBy(createdBy);
         docNote.getNote().getAllEditors().add(createdBy);
-        getSession().save(docNote.getNote());
-        getSession().save(docNote);
+        //getSession().save(docNote.getNote());
+        //getSession().save(docNote);
         // FIXME: Hibernatify!
-        if (docNote.getNote().getComments() != null) {
-            for (NoteComment comment : docNote.getNote().getComments()) {
-                getSession().save(comment);
-            }
-        }
+        //if (docNote.getNote().getComments() != null) {
+        //    for (NoteComment comment : docNote.getNote().getComments()) {
+        //        getSession().save(comment);
+        //    }
+        //}
         return docNote;
     }
 

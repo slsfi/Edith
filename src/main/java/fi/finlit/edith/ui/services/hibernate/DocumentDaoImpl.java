@@ -538,9 +538,11 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                         }
                     }
                 });
-        //TODO This might be bad idea
-        new HibernateUpdateClause(getSession(), documentNote).where(documentNote.in(documentNotes))
-                .set(documentNote.revision, revision).set(documentNote.deleted, true).execute();
+        
+        for(DocumentNote dn : documentNotes) {
+            dn.setRevision(revision);
+            documentNoteDao.remove(dn);
+        }
     }
 
     private void streamEvents(XMLEventReader reader, XMLEventWriter writer)

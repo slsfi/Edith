@@ -84,10 +84,6 @@ public abstract class AbstractNoteForm {
         return page.isSlsMode();
     }
 
-    public String getDescription() {
-        return noteOnEdit.getDescription();
-    }
-
     private Term getEditTerm(Note note) {
         return note.getTerm() != null ? note.getTerm() : new Term();
     }
@@ -113,25 +109,6 @@ public abstract class AbstractNoteForm {
         return getEditTerm(noteOnEdit).getLanguage();
     }
 
-    public String getSearch() {
-        return "";
-    }
-
-    public Set<NoteType> getSelectedTypes() {
-        if (noteOnEdit.getTypes() == null) {
-            noteOnEdit.setTypes(new HashSet<NoteType>());
-        }
-        return noteOnEdit.getTypes();
-    }
-
-    public String getSources() {
-        return noteOnEdit.getSources();
-    }
-
-    public NoteStatus getStatus() {
-        return noteOnEdit.getStatus();
-    }
-
     public EnumSelectModel getStatusModel() {
         final NoteStatus[] availableStatuses = noteOnEdit.getStatus().equals(
                 NoteStatus.INITIAL) ? new NoteStatus[] { NoteStatus.INITIAL, NoteStatus.DRAFT,
@@ -151,7 +128,7 @@ public abstract class AbstractNoteForm {
     }
 
     public boolean isSelected() {
-        return getSelectedTypes().contains(type);
+        return noteOnEdit.getTypes().contains(type);
     }
 
     void onPrepareFromNoteEditForm(long noteId) {
@@ -184,14 +161,18 @@ public abstract class AbstractNoteForm {
                 logger.info("note removed: " + noteOnEdit);
                 noteDao.removeNote(noteOnEdit);
                 page.getNoteEdit().setNoteOnEdit(null);
-                return page.zoneWithInfo("delete-success").add("listZone", page.getSearchResults())
-                        .add("noteEditZone", page.getNoteEdit());
+                return page.zoneWithInfo("delete-success")
+                    .add("listZone", page.getSearchResults())
+                    .add("noteEditZone", page.getNoteEdit());
 
             } else {
 
                 logger.info("note saved: " + noteOnEdit);
                 noteDao.save(noteOnEdit);
-                return page.zoneWithInfo("submit-success").add("listZone", page.getSearchResults());
+                //page.getNoteEdit().setsetNoteOnEdit(noteOnEdit);
+                return page.zoneWithInfo("submit-success")
+                    .add("listZone", page.getSearchResults());
+                    //.add("noteEditZone", page.getNoteEdit());
 
             }
 
@@ -201,46 +182,15 @@ public abstract class AbstractNoteForm {
 
     }
 
-    public String getSubtextSources() {
-        return noteOnEdit.getSubtextSources();
-    }
-
-    public void setSubtextSources(String subtextSources) throws XMLStreamException {
-        if (subtextSources != null) {
-            noteOnEdit.setSubtextSources(subtextSources);
-        }
-    }
-
-    public void setDescription(String description) throws XMLStreamException {
-        if (description != null) {
-            noteOnEdit.setDescription(description);
-        }
-    }
-
-    public void setFormat(NoteFormat format) {
-        noteOnEdit.setFormat(format);
-    }
-
-    @Validate("required")
     public void setLanguage(TermLanguage language) {
         getEditTerm(noteOnEdit).setLanguage(language);
     }
 
-    public void setSearch(String s) {
-        // Do nothing
-    }
-
     public void setSelected(boolean selected) {
         if (selected) {
-            getSelectedTypes().add(type);
+            noteOnEdit.getTypes().add(type);
         } else {
-            getSelectedTypes().remove(type);
-        }
-    }
-
-    public void setSources(String sources) throws XMLStreamException {
-        if (sources != null) {
-            noteOnEdit.setSources(sources);
+            noteOnEdit.getTypes().remove(type);
         }
     }
 
@@ -264,11 +214,18 @@ public abstract class AbstractNoteForm {
 //        documentNote.getNote().setTerm(term);
 //    }
 
-    public String getEditorsForNoteOnEdit() {
-        return noteOnEdit.getEditors();
-    }
     
     public boolean isDeletableNote() {
         return documentNoteDao.getDocumentNoteCount(noteOnEdit) == 0;
     }
+    
+    //Autocomplete
+    public String getSearch() {
+        return "";
+    }
+    
+    public void setSearch(String search) {
+        
+    }
+    
 }

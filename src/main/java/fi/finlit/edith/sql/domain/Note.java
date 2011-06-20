@@ -20,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.joda.time.DateTime;
@@ -27,6 +29,7 @@ import org.joda.time.DateTime;
 import fi.finlit.edith.Identifiable;
 
 @Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Note implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

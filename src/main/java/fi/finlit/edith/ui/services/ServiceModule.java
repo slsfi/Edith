@@ -73,6 +73,8 @@ public final class ServiceModule {
         binder.bind(SubversionService.class, SubversionServiceImpl.class);
         binder.bind(ContentRenderer.class, ContentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
+        
+        /*
         binder.bind(TimeService.class, SimpleTimeService.class);
 //        binder.bind(TasksService.class);
 
@@ -88,6 +90,7 @@ public final class ServiceModule {
 
         // tasks
         binder.bind(ReplacedByAdditionTask.class);
+        */
     }
     
     @Startup

@@ -30,7 +30,7 @@
                     <div class="metadata">
                         <t:dateTimeFormat date="noteOnEdit.editedOnDate"
                             format="message:dateformat-compact" />
-                        ${noteOnEdit.lastEditedBy.username} (${editorsForNoteOnEdit})
+                        ${noteOnEdit.lastEditedBy.username} (${noteOnEdit.editors})
                     </div>
                     
                     
@@ -54,7 +54,7 @@
 					<strong>${message:status-label}</strong>
 				</div>
 				<div>
-					<t:select model="statusModel" value="status" />
+					<t:select model="statusModel" value="noteOnEdit.status" />
 				</div>
 			</div>
 			
@@ -91,7 +91,7 @@
 					<strong>${message:type-label}</strong>
 				</div>
 				<div>
-					<t:loop source="types" value="type">
+					<t:loop source="noteOnEdit.types" value="type">
 						<div>
 						<label>
 							<t:checkbox value="selected" />
@@ -275,7 +275,7 @@
 					<strong>${message:description-label}</strong>
 				</div>
 				<div>
-					<t:textArea value="description" rows="8" />
+					<t:textArea value="noteOnEdit.description" rows="8" />
 				</div>
 			</div>
 
@@ -284,7 +284,7 @@
                     <strong>${message:subtextSources-label}</strong>
                 </div>
                 <div>
-                    <t:textField value="subtextSources" />
+                    <t:textField value="noteOnEdit.subtextSources" />
                 </div>
             </div>
 
@@ -293,7 +293,7 @@
 					<strong>${message:sources-label}</strong>
 				</div>
 				<div>
-					<t:textField value="sources" rows="8" />
+					<t:textField value="noteOnEdit.sources" rows="8" />
 				</div>
 			</div>
 

@@ -12,27 +12,30 @@ CREATE TABLE `documentnote` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `createdOn` bigint(20) NOT NULL,
   `deleted` bit(1) NOT NULL,
-  `fullSelection` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `fullSelection` text COLLATE utf8_swedish_ci DEFAULT NULL,
   `lemmaPosition` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
   `position` int(11) NOT NULL,
   `publishable` bit(1) NOT NULL,
   `revision` bigint(20) DEFAULT NULL,
-  `shortenedSelection` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `shortenedSelection` varchar(1024) COLLATE utf8_swedish_ci DEFAULT NULL,
   `document_id` bigint(20) DEFAULT NULL,
   `note_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_DOCUMENTNOTE_NOTEID` (`note_id`),
   KEY `FK_DOCUMENTNOTE_DOCUMENTID` (`document_id`),
   CONSTRAINT `FK_DOCUMENTNOTE_NOTEID` FOREIGN KEY (`note_id`) REFERENCES `note` (`id`),
-  CONSTRAINT `FK_DOCUMENTNOTE_DOCUMENTID` FOREIGN KEY (`document_id`) REFERENCES `document` (`id`)
+  CONSTRAINT `FK_DOCUMENTNOTE_DOCUMENTID` FOREIGN KEY (`document_id`) REFERENCES `document` (`id`),
+  INDEX del_pub_idx (deleted, publishable),
+  INDEX del_rev (deleted, revision)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `nameform` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `description` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `description` text COLLATE utf8_swedish_ci DEFAULT NULL,
   `first` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
   `last` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX name_id (first, last)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `note` (
@@ -42,10 +45,10 @@ CREATE TABLE `note` (
   `editedOn` bigint(20) DEFAULT NULL,
   `format` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
   `lemma` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
-  `lemmaMeaning` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
-  `sources` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `lemmaMeaning` text COLLATE utf8_swedish_ci DEFAULT NULL,
+  `sources` text COLLATE utf8_swedish_ci DEFAULT NULL,
   `status` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
-  `subtextSources` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `subtextSources` text COLLATE utf8_swedish_ci DEFAULT NULL,
   `lastEditedBy_id` bigint(20) DEFAULT NULL,
   `person_id` bigint(20) DEFAULT NULL,
   `place_id` bigint(20) DEFAULT NULL,
@@ -58,7 +61,8 @@ CREATE TABLE `note` (
   CONSTRAINT `FK_NOTE_TERMID` FOREIGN KEY (`term_id`) REFERENCES `term` (`id`),
   CONSTRAINT `FK_NOTE_LASTEDITEDBYID` FOREIGN KEY (`lastEditedBy_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK_NOTE_PERSONID` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`),
-  CONSTRAINT `FK_NOTE_PLACEID` FOREIGN KEY (`place_id`) REFERENCES `place` (`id`)
+  CONSTRAINT `FK_NOTE_PLACEID` FOREIGN KEY (`place_id`) REFERENCES `place` (`id`), 
+  INDEX count_idx (documentNoteCount)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `note_types` (
@@ -81,12 +85,13 @@ CREATE TABLE `note_user` (
 CREATE TABLE `notecomment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `createdAt` datetime DEFAULT NULL,
-  `message` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `message` text COLLATE utf8_swedish_ci DEFAULT NULL,
   `username` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
   `note_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_NOTECOMMENT_NOTEID` (`note_id`),
-  CONSTRAINT `FK_NOTECOMMENT_NOTEID` FOREIGN KEY (`note_id`) REFERENCES `note` (`id`)
+  CONSTRAINT `FK_NOTECOMMENT_NOTEID` FOREIGN KEY (`note_id`) REFERENCES `note` (`id`),
+  INDEX created_idx (createdAt)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `person` (
@@ -132,10 +137,11 @@ CREATE TABLE `place_nameform` (
 CREATE TABLE `term` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `basicForm` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
-  `language` int(11) DEFAULT NULL,
-  `meaning` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `language` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
+  `meaning` text COLLATE utf8_swedish_ci DEFAULT NULL,
   `otherLanguage` varchar(255) COLLATE utf8_swedish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX basic_form_idx (basicForm)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `user` (

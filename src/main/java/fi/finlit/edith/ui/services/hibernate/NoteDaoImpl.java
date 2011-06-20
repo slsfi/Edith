@@ -277,6 +277,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
+    //TODO Create variants for SKS/SLS
     public DocumentNote createDocumentNote(DocumentNote documentNote, Note n, Document document,
             String longText, int position) {
         User createdBy = userDao.getCurrentUser();
@@ -291,17 +292,17 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         documentNote.setFullSelection(longText);
 
         String createdLemma = Note.createLemmaFromLongText(longText);
-        if (n.getLemma() == null) {
+        if (n.getLemma() == null && !extendedTerm) {
             n.setLemma(createdLemma);
         }
 
         //Extended term version gets the lemma also to basicTerm automatically
         if (extendedTerm && n.getTerm() != null && n.getTerm().getBasicForm() == null) {
-            n.getTerm().setBasicForm(createdLemma);
+            n.getTerm().setBasicForm(longText);
         }
         //And to the short version
         if (extendedTerm && documentNote.getShortenedSelection() == null) {
-            documentNote.setShortenedSelection(createdLemma);
+            documentNote.setShortenedSelection(longText);
         }
 
         documentNote.setDocument(document);

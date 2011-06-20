@@ -8,9 +8,22 @@
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
     <property name="hibernate.connection.username">edith</property>
     <property name="hibernate.connection.password">edith</property>
-    <property name="connection.pool_size">1</property>
+   
     <property name="hbm2ddl.auto">none</property>
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.format_sql">true</property>
+    
+    <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+    <property name="hibernate.c3p0.acquire_increment">1</property>
+    <property name="hibernate.c3p0.idle_test_period">100</property> <!-- seconds -->
+    <property name="hibernate.c3p0.max_size">10</property>
+    <property name="hibernate.c3p0.max_statements">0</property>
+    <property name="hibernate.c3p0.min_size">1</property>
+    <property name="hibernate.c3p0.timeout">100</property> <!-- seconds -->
+    
+    <property name="hibernate.cache.use_second_level_cache">true</property>
+    <property name="hibernate.cache.use_query_cache">false</property>
+    <property name="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</property>
   </session-factory>
+  
 </hibernate-configuration>

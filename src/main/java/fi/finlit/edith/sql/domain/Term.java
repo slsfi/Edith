@@ -1,11 +1,17 @@
 package fi.finlit.edith.sql.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Term {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,6 +21,7 @@ public class Term {
 
     private String meaning;
 
+    @Enumerated(EnumType.STRING)
     private TermLanguage language;
 
     private String otherLanguage;

@@ -72,7 +72,6 @@ public final class AppModule {
     }
 
     public static void bind(ServiceBinder binder){
-        //binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
         binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
     }
 
@@ -94,10 +93,10 @@ public final class AppModule {
 
     @SuppressWarnings("unchecked")
     public static void contributeValueEncoderSource(
-            MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,
+            MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration/*,
             final com.mysema.rdfbean.object.Configuration rdfBeanConfiguration,
-            final SessionFactory sessionFactory){
-
+            final SessionFactory sessionFactory*/){
+        /*
         for (Class<?> cl : Arrays.<Class<?>>asList(
                 DocumentNote.class,
                 Document.class,
@@ -105,7 +104,8 @@ public final class AppModule {
             configuration.add(cl, new EntityValueEncoderFactory(sessionFactory, rdfBeanConfiguration, cl));
         }
 
-        configuration.add(UserInfo.class, new UserInfoValueEncoderFactory());
+        configuration.add(UserInfo.class, new UserInfoValueEncoderFactory());*/
+        configuration.add(fi.finlit.edith.dto.UserInfo.class, new SqlUserInfoValueEncoderFactory());
     }
 
 
