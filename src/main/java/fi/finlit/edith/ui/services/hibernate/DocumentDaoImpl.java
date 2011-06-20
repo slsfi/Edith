@@ -57,6 +57,7 @@ import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
@@ -84,10 +85,12 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     private final String documentRoot;
 
     private final SubversionService versioningService;
-    
+
     private final NoteDao noteDao;
 
     private final AuthService authService;
+
+    private final DocumentNoteDao documentNoteDao;
 
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
 
@@ -99,11 +102,13 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             @Inject SubversionService versioningService,
             @Inject AuthService authService,
             @Inject NoteDao noteDao,
+            @Inject DocumentNoteDao documentNoteDao,
             @Inject @Symbol(EDITH.SVN_DOCUMENT_ROOT) String documentRoot) {
         this.documentRoot = documentRoot;
         this.versioningService = versioningService;
         this.authService = authService;
         this.noteDao = noteDao;
+        this.documentNoteDao = documentNoteDao;
     }
 
     @Override
@@ -620,13 +625,15 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         Assert.notNull(doc, "document was null");
 
         versioningService.delete(doc.getPath());
-        new HibernateDeleteClause(getSession(), documentNote).where(documentNote.document.eq(doc))
-                .execute();
+        new HibernateDeleteClause(getSession(), documentNote)
+            .where(documentNote.document.eq(doc))
+            .execute();
     }
 
     @Override
     public void remove(Long id) {
-        throw new UnsupportedOperationException("not yet implemented");
+        Document document = (Document) getSession().get(Document.class, id);
+        remove(document);
     }
 
     @Override
@@ -665,9 +672,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             }
             rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.isFolder(),
                     file.getChildren(), file.hasChildren(), doc.getId(), doc.getId().equals(id),
-                    100l));
-            // FIXME: An actual value should be retrieved.
-            // documentNoteRepository.getNoteCountForDocument(doc.getId())));
+                    documentNoteDao.getNoteCountForDocument(doc.getId())));
         }
         Collections.sort(rv, new Comparator<FileItemWithDocumentId>() {
             @Override
