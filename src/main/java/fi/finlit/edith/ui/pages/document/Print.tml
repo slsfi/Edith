@@ -9,7 +9,7 @@
   
   <body>
     
-    <t:document.view document="documentRevision"/>
+    <t:document.view document="document"/>
 
   </body>
   
