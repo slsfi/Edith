@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
@@ -24,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -105,6 +105,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     public NoteComment createComment(Note note, String message) {
         NoteComment comment = new NoteComment(note, message, authService.getUsername());
         note.addComment(comment);
+        comment.setCreatedAt(new DateTime());
         getSession().save(comment);
         return comment;
     }
@@ -117,7 +118,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     public List<Note> listNotes(NoteSearchInfo search) {
         return query().from(note).where(notesQuery(search)).orderBy(getOrderBy(search)).list(note);
     }
-    
+
     @Override
     public GridDataSource findNotes(NoteSearchInfo search) {
         return createGridDataSource(note, getOrderBy(search), false, notesQuery(search).getValue());
