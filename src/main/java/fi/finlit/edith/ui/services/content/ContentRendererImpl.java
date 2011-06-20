@@ -249,7 +249,7 @@ public class ContentRendererImpl implements ContentRenderer {
         writer.element("ul", CLASS, "notes");
         for (DocumentNote documentNote : documentNotes) {
             Note note = documentNote.getNote();
-    
+
             if (note == null){
                 throw new IllegalStateException("Got no note for documentNote " + documentNote);
             }
@@ -482,7 +482,7 @@ public class ContentRendererImpl implements ContentRenderer {
             if (id == null) {
                 return;
             } else if (id.startsWith("start")) {
-                if (publishIds != null && !publishIds.contains(id.replace("start", ""))) {
+                if (publishIds != null && !publishIds.contains(Long.parseLong(id.replace("start", "")))) {
                     return;
                 }
                 // start anchor
@@ -490,9 +490,9 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.end();
 
                 noteContent.setValue(true);
-                noteIds.add(Long.getLong(id.substring("start".length())));
+                noteIds.add(Long.parseLong(id.substring("start".length())));
             } else if (id.startsWith("end")) {
-                noteIds.remove(id.substring("end".length()));
+                noteIds.remove(Long.parseLong(id.substring("end".length())));
                 if (noteIds.isEmpty()) {
                     noteContent.setValue(false);
                 }
