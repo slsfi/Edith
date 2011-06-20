@@ -221,6 +221,7 @@
             <db.user>edith</db.user>
             <db.password>edith</db.password>
             <db.schema>edith_test</db.schema>
+            <dbmaintain.fromScratchEnabled>true</dbmaintain.fromScratchEnabled>
         </properties>
     </profile>
     <profile>
@@ -230,6 +231,7 @@
             <db.user>edith</db.user>
             <db.password>edith</db.password>
             <db.schema>edith</db.schema>
+            <dbmaintain.fromScratchEnabled>false</dbmaintain.fromScratchEnabled>
         </properties>
     </profile>
     <profile>
@@ -367,6 +369,7 @@
           </databases>
           <scriptLocations>etc/sql</scriptLocations>
           <autoCreateDbMaintainScriptsTable>true</autoCreateDbMaintainScriptsTable>
+          <fromScratchEnabled>${dbmaintain.fromScratchEnabled}</fromScratchEnabled>
         </configuration>
         <executions>
           <!-- execution>
