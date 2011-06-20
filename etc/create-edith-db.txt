@@ -1,3 +1,5 @@
 CREATE DATABASE edith CHARACTER SET utf8 COLLATE utf8_swedish_ci;
+CREATE DATABASE edith_test CHARACTER SET utf8 COLLATE utf8_swedish_ci;
 CREATE USER 'edith'@'localhost' IDENTIFIED BY 'edith';
 GRANT ALL PRIVILEGES ON edith.* TO 'edith'@'localhost';
+GRANT ALL PRIVILEGES ON edith_test.* TO 'edith'@'localhost';

@@ -90,7 +90,7 @@
 
     <!-- services -->
 
-    <!-- <dependency> <groupId>stax</groupId> <artifactId>stax</artifactId> 
+    <!-- <dependency> <groupId>stax</groupId> <artifactId>stax</artifactId>
       <version>1.2.0</version> </dependency> -->
     <dependency>
       <groupId>org.codehaus.woodstox</groupId>
@@ -199,12 +199,12 @@
       <version>2.4</version>
       <scope>test</scope>
     </dependency>
-    
+
 
   </dependencies>
 
   <repositories>
-    <!-- <repository> <id>localhost.nu</id> <url>http://www.localhost.nu/java/mvn</url> 
+    <!-- <repository> <id>localhost.nu</id> <url>http://www.localhost.nu/java/mvn</url>
       </repository> -->
     <repository>
       <id>svnkit</id>
@@ -217,9 +217,19 @@
         <id>default</id>
         <activation><activeByDefault>true</activeByDefault></activation>
         <properties>
+            <db.url>jdbc:mysql://localhost:3306/edith_test</db.url>
+            <db.user>edith</db.user>
+            <db.password>edith</db.password>
+            <db.schema>edith_test</db.schema>
+        </properties>
+    </profile>
+    <profile>
+        <id>prod</id>
+        <properties>
             <db.url>jdbc:mysql://localhost:3306/edith</db.url>
             <db.user>edith</db.user>
             <db.password>edith</db.password>
+            <db.schema>edith</db.schema>
         </properties>
     </profile>
     <profile>
@@ -352,7 +362,7 @@
               <userName>${db.user}</userName>
               <password>${db.password}</password>
               <url>${db.url}</url>
-              <schemaNames>edith</schemaNames>
+              <schemaNames>${db.schema}</schemaNames>
             </database>
           </databases>
           <scriptLocations>etc/sql</scriptLocations>

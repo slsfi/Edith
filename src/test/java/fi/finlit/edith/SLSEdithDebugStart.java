@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2009 Mysema Ltd.
  * All rights reserved.
- * 
+ *
  */
 package fi.finlit.edith;
 
@@ -21,11 +21,11 @@ public final class SLSEdithDebugStart extends WebappStarter {
     }
 
     private final String root;
-    
+
     private final int port;
-    
+
     private final boolean clear;
-    
+
     SLSEdithDebugStart(String root, int port, boolean clear) {
         this.root = root;
         this.port = port;
@@ -37,16 +37,17 @@ public final class SLSEdithDebugStart extends WebappStarter {
         FSRepositoryFactory.setup();
         File rootFile = new File(root);
         if (clear && rootFile.exists()) {
-            FileUtils.cleanDirectory(rootFile);    
+            FileUtils.cleanDirectory(rootFile);
             rootFile.delete();
             File svnCache = new File("target/svncache");
             if (svnCache.exists()) {
                 FileUtils.cleanDirectory(svnCache);
-                svnCache.delete();    
-            }            
-        }        
+                svnCache.delete();
+            }
+        }
         File svnRepo = new File(rootFile, "repo-sls");
 
+        System.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/edith?useUnicode=true&characterEncoding=UTF-8");
         System.setProperty("org.mortbay.jetty.webapp.parentLoaderPriority", "true");
         System.setProperty("production.mode", "false");
         System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
@@ -54,7 +55,7 @@ public final class SLSEdithDebugStart extends WebappStarter {
         System.setProperty(EDITH.RDFBEAN_DATA_DIR, root + "data-sls");
 
         System.setProperty(EDITH.EXTENDED_TERM, "true");
-        
+
         return new JettyConfig(port);
     }
 
