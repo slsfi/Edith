@@ -171,8 +171,12 @@ public class Annotate extends AbstractDocumentPage {
 
     Object onSuccessFromSelectNoteForm() {
 
+        // FIXME: If an area which has multiple notes is clicked the url will
+        // be in the following form n100/12/13. With this we will handle this
+        // case and just return the id 100.
+        int firstSlash = selectedNoteId.indexOf("/");
         //Strip first n from the id
-        long id = Long.parseLong(selectedNoteId.substring(1));
+        long id = Long.parseLong(firstSlash == -1 ? selectedNoteId.substring(1) : selectedNoteId.substring(1, firstSlash));
         DocumentNote documentNote = documentNoteRepository.getById(id);
         documentNotes.setNoteId(documentNote.getNote().getId());
         documentNotes.setSelectedNote(documentNote);
