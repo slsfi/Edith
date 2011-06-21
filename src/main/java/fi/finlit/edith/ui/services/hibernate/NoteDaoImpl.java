@@ -296,13 +296,15 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             n.setLemma(createdLemma);
         }
 
+        String abbreviation = StringUtils.abbreviate(longText, 85);
+
         //Extended term version gets the lemma also to basicTerm automatically
         if (extendedTerm && n.getTerm() != null && n.getTerm().getBasicForm() == null) {
-            n.getTerm().setBasicForm(longText);
+            n.getTerm().setBasicForm(abbreviation);
         }
         //And to the short version
         if (extendedTerm && documentNote.getShortenedSelection() == null) {
-            documentNote.setShortenedSelection(longText);
+            documentNote.setShortenedSelection(abbreviation);
         }
 
         documentNote.setDocument(document);
@@ -311,9 +313,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         documentNote.setPosition(position);
         getSession().save(n);
         getSession().save(documentNote);
-        //getSession().flush();
-
-//        documentNoteRepository.removeOrphans(documentNote.getNote().getId());
 
         return documentNote;
     }
