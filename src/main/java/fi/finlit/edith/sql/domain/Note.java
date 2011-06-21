@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cache;
@@ -29,6 +30,7 @@ import org.joda.time.DateTime;
 import fi.finlit.edith.Identifiable;
 
 @Entity
+@Table(name = "note")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Note implements Identifiable {
     @Id
@@ -81,6 +83,7 @@ public class Note implements Identifiable {
 
     private int documentNoteCount = 0;
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -108,7 +111,7 @@ public class Note implements Identifiable {
     public Long getEditedOn() {
         return editedOn;
     }
-    
+
     public DateTime getEditedOnDate() {
         return new DateTime(editedOn);
     }
@@ -259,9 +262,9 @@ public class Note implements Identifiable {
     }
 
     public void addEditor(User user) {
-       allEditors.add(user); 
+       allEditors.add(user);
     }
-    
+
     public String getEditors() {
         Collection<String> result = new ArrayList<String>();
         for (User user : getAllEditors()) {

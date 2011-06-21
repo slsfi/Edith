@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import com.mysema.query.annotations.QueryInit;
 
 @Entity
+@Table(name = "documentnote")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class DocumentNote {
     @Id
@@ -34,7 +36,7 @@ public class DocumentNote {
     private long createdOn;
 
     private String shortenedSelection;
-    
+
     private String lemmaPosition;
 
     @ManyToOne
@@ -120,11 +122,11 @@ public class DocumentNote {
     public void setShortenedSelection(String shortenedSelection) {
         this.shortenedSelection = shortenedSelection;
     }
-    
+
     public String getLemmaPosition() {
         return lemmaPosition;
     }
-    
+
     public void setLemmaPosition(String lemmaPosition) {
         this.lemmaPosition = lemmaPosition;
     }

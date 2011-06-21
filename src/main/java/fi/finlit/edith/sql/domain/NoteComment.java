@@ -5,11 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
+@Table(name = "notecomment")
 public class NoteComment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,10 +23,10 @@ public class NoteComment {
     private String message;
 
     private String username;
-    
+
     @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
     private DateTime createdAt;
-    
+
     public NoteComment() { }
 
     public NoteComment(Note note, String message, String username) {
@@ -64,11 +66,11 @@ public class NoteComment {
     public String getUsername() {
         return username;
     }
-    
+
     public DateTime getCreatedAt() {
         return createdAt;
     }
-    
+
     public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
     }

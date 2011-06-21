@@ -4,14 +4,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "nameform")
 public class NameForm {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-   
+
     private String description;
 
     private String first;
@@ -78,7 +80,7 @@ public class NameForm {
     public String toString() {
         return "NameForm [description=" + description + ", name=" + getName() + "]";
     }
-    
+
     public Long getId() {
         return id;
     }
