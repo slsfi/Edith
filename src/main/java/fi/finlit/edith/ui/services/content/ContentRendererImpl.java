@@ -256,9 +256,16 @@ public class ContentRendererImpl implements ContentRenderer {
 
             writer.element("li");
             writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getId());
-            writer.element("em");
-            writer.write(note.getLemma());
-            writer.end();
+            if (note.getLemma() != null) {
+                writer.element("span", CLASS, "lemma");
+                writer.write(note.getLemma());
+                writer.end();
+            }
+            if (note.getTerm() != null && note.getTerm().getBasicForm() != null) {
+                writer.element("span", CLASS, "basicForm");
+                writer.write(note.getTerm().getBasicForm());
+                writer.end();
+            }
             writer.end();
 
             if (note.getFormat() != null) {
