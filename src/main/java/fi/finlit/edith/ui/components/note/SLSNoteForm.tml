@@ -65,7 +65,7 @@
             <div class="field">
               <label for="types">${message:type-label}</label>
               <div id="types"> 
-                <t:loop source="noteOnEdit.types" value="type">
+                <t:loop source="types" value="type">
                     <label><t:checkbox value="selected" /> <t:fmt.message key="${type}" /></label>
                 </t:loop>
               </div>
@@ -108,10 +108,12 @@
               <t:label for="status">${message:status-label}</t:label>
               <t:select t:id="status" model="statusModel" value="noteOnEdit.status" />
             </div>
-            
+     
+            <t:remove><!-- FIXME -->
             <div class="field">
               <label><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</label>
             </div>
+            </t:remove>
     
     
             <t:submit t:id="save" value="${message:save}" />

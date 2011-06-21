@@ -17,7 +17,7 @@
           text.push(node.data.noteCount);
           text.push('${message:notes-exclamation}');
         }
-        text.push('${message:remove-file}');
+        text.push('${message:remove-file}?');
         var response = confirm(text.join(' '));
         if (response) {
           window.location.href = '${deleteDocumentURL}/' + node.data.documentId;
@@ -135,18 +135,6 @@
 	            <p>${message:no-documents}</p>
 	        </p:empty>
 	    </t:grid>
-		
-		<t:if test="documentsNotEmpty">		
-			<input type="button" class="delete_question" style="font-size:80%; margin-left:0.5em;" value="${message:remove-selected}"/>
-			
-            <span class="delete_dialog" style="font-size:80%;"> 
-            	${message:remove-selected}?
-            	<t:submit t:id="removeSelected" value="${message:yes}"/>
-            	/ 
-            	<input type="button" class="delete_decline" value="${message:no}"/> 
-            </span> 
-												
-		</t:if>
 		
 	</t:form>
     </t:remove>

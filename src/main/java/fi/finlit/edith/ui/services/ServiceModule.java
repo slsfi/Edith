@@ -57,23 +57,15 @@ import fi.finlit.edith.ui.services.tasks.TasksService;
  *
  */
 public final class ServiceModule {
-    
-    private static final Logger logger = LoggerFactory.getLogger(HibernateDataModule.class);
 
-    // TODO : get rid of match
-    @Match({ "AdminService", "DocumentRepository", "NoteRepository", "UserRepository",
-            "DocumentNoteRepository", "TermRepository", "PersonRepository", "PlaceRepository" })
-    public static void adviseTransactions(TransactionalAdvisor advisor,
-            MethodAdviceReceiver receiver) {
-        advisor.addTransactionCommitAdvice(receiver);
-    }
+    private static final Logger logger = LoggerFactory.getLogger(HibernateDataModule.class);
 
     public static void bind(ServiceBinder binder) {
         // services
         binder.bind(SubversionService.class, SubversionServiceImpl.class);
         binder.bind(ContentRenderer.class, ContentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
-        
+
         /*
         binder.bind(TimeService.class, SimpleTimeService.class);
 //        binder.bind(TasksService.class);
@@ -92,7 +84,7 @@ public final class ServiceModule {
         binder.bind(ReplacedByAdditionTask.class);
         */
     }
-    
+
     @Startup
     public static void initData(SubversionService subversionService)
             throws IOException {

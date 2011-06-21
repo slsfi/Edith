@@ -35,8 +35,7 @@ import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.sql.domain.Place;
 import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.sql.domain.TermLanguage;
-import fi.finlit.edith.testutil.TapestryTestRunner;
-import fi.finlit.edith.ui.services.AdminService;
+import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteDao;
@@ -46,9 +45,6 @@ import fi.finlit.edith.ui.services.PlaceDao;
 import fi.finlit.edith.ui.services.UserDao;
 
 public class NoteDaoTest extends AbstractHibernateTest {
-
-    @Inject
-    private AdminService adminService;
 
     @Inject
     private NoteDao noteDao;
@@ -81,10 +77,8 @@ public class NoteDaoTest extends AbstractHibernateTest {
     private boolean extendedTerm;
 
     @Before
-    public void setUp() throws IOException {
-        userDao.addUsersFromCsvFile("/users.csv", "ISO-8859-1");
-        // FIXME!
-//        adminService.removeNotesAndTerms();
+    public void setUp() {
+        userDao.save(new User("timo"));
     }
 
     private int countDocumentNotes(List<NoteWithInstances> notes){

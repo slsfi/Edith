@@ -31,8 +31,10 @@ import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.Term;
+import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
+import fi.finlit.edith.ui.services.UserDao;
 import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
@@ -41,14 +43,11 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Inject
     private DocumentDao documentDao;
 
-    // @Inject
-    // private DocumentNoteDao documentNoteRepository;
-
     @Inject
     private SubversionService subversionService;
 
-    // @Inject
-    // private AdminService adminService;
+    @Inject
+    private UserDao userDao;
 
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
@@ -61,6 +60,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Before
     public void setUp() throws Exception {
         subversionService.initialize();
+        userDao.save(new User("timo"));
     }
 
     @After

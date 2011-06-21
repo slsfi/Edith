@@ -105,7 +105,7 @@ public class ContentRendererTest extends AbstractHibernateTest {
         String document = writer.toString();
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
-                .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
+                .contains("<li><a href=\"#start1234\" class=\"notelink\"><span class=\"lemma\">taloon</span></a>"));
         assertTrue(document.contains("'johonkin ineen', Vrt. <a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
         assertTrue(document.contains("<a href=\"http://www.google.com/kalevala\">Kalevala</a>"));
         assertTrue(document, document
@@ -127,7 +127,7 @@ public class ContentRendererTest extends AbstractHibernateTest {
         String document = writer.toString();
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
-                .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
+                .contains("<li><a href=\"#start1234\" class=\"notelink\"><span class=\"lemma\">taloon</span></a>"));
         assertTrue(document.contains("Fred Armisen"));
         assertTrue(document.contains("1970\u20132098."));
         assertTrue(document.contains("<span>\u2013</span>"));
@@ -158,7 +158,7 @@ public class ContentRendererTest extends AbstractHibernateTest {
 //        System.err.println(document);
         assertTrue(document.startsWith("<ul class=\"notes\">"));
         assertTrue(document
-                .contains("<li><a href=\"#start1234\" class=\"notelink\"><em>taloon</em></a>"));
+                .contains("<li><a href=\"#start1234\" class=\"notelink\"><span class=\"lemma\">taloon</span></a>"));
         assertTrue(document.contains("New York"));
         assertTrue(document.contains("<span>\u2013</span>"));
         assertTrue(document
