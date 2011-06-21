@@ -18,7 +18,7 @@ var Annotate = {
 	},
 
 	createNote : function() {
-		if(!this.updateSelectionForm()) {
+		if(!this.updateSelectionForm() || jQuery('#createTermLink').hasClass('disabled')) {
 			return false;
 		}
 		TapestryExt.submitZoneForm(jQuery("#createTermForm").get(0));
@@ -26,7 +26,7 @@ var Annotate = {
 	},
 
 	connectNote : function() {
-		if(!this.updateSelectionForm()) {
+		if(!this.updateSelectionForm() || jQuery('#connectTermLink').hasClass('disabled')) {
 			return false;
 		}
 		jQuery(":input[name='noteToLinkId']").val(this.selectedNoteId);
