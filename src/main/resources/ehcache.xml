@@ -15,6 +15,7 @@
     maxElementsInMemory="100"
     eternal="true"
     overflowToDisk="false"
+    diskPersistent="false"
   />
   <cache
     name="fi.finlit.edith.sql.domain.Term"
