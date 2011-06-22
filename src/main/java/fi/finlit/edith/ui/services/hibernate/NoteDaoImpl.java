@@ -30,10 +30,12 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.JPQLSubQuery;
+import com.mysema.query.types.ConstantImpl;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
+import com.mysema.query.types.template.BooleanTemplate;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.dto.NoteSearchInfo;
@@ -191,7 +193,12 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         if (!search.getNoteTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : search.getNoteTypes()) {
-                filter.or(note.types.contains(type));
+                /*
+                 * FIXME: Temporary quickfix. Should be fixed in Querydsl at some point.
+                 * Reported issue: https://bugs.launchpad.net/querydsl/+bug/800698
+                 */
+//                filter.or(note.types.contains(type));
+                filter.or(BooleanTemplate.create("{0} in elements({1})", new ConstantImpl<String>(type.name()), note.types));
             }
             builder.and(filter);
         }
