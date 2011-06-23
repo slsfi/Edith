@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.EventFilter;
@@ -38,6 +36,8 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
@@ -131,14 +131,14 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         try {
             String parent = parentPath.endsWith("/") ? parentPath : parentPath + "/";
             ZipFile zipFile = new ZipFile(file);
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             int rv = 0;
             while (entries.hasMoreElements()) {
-                ZipEntry zipEntry = entries.nextElement();
-                if (!zipEntry.getName().endsWith(".xml")) {
+                ZipArchiveEntry entry = entries.nextElement();
+                if (!entry.getName().endsWith(".xml")) {
                     continue;
                 }
-                InputStream in = zipFile.getInputStream(zipEntry);
+                InputStream in = zipFile.getInputStream(entry);
                 File outFile = File.createTempFile("tei", ".xml");
                 OutputStream out = new FileOutputStream(outFile);
                 try {
@@ -147,7 +147,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                     in.close();
                     out.close();
                 }
-                addDocument(parent + zipEntry.getName(), outFile);
+                addDocument(parent + entry.getName(), outFile);
                 outFile.delete();
                 rv++;
             }
@@ -538,7 +538,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                         }
                     }
                 });
-        
+
         for(DocumentNote dn : documentNotes) {
             dn.setRevision(revision);
             documentNoteDao.remove(dn);
@@ -630,6 +630,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         new HibernateDeleteClause(getSession(), documentNote)
             .where(documentNote.document.eq(doc))
             .execute();
+        getSession().delete(doc);
     }
 
     @Override
@@ -645,21 +646,28 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public void move(Long id, String newPath) {
-        Document document = getById(id);
-        versioningService.move(document.getPath(), newPath);
-        document.setPath(newPath);
-        document.setTitle(newPath.substring(newPath.lastIndexOf("/") + 1));
-
+//        Document document = getById(id);
+//        versioningService.move(document.getPath(), newPath);
+//        document.setPath(newPath);
+//        document.setTitle(newPath.substring(newPath.lastIndexOf("/") + 1));
+        throw new UnsupportedOperationException("Not used and thus not implemented...");
     }
 
     @Override
     public void rename(Long id, String newPath) {
-        Document document = getById(id);
-        String fullPath = document.getPath();
+        Document doc = getById(id);
+        String fullPath = doc.getPath();
         String directoryPath = fullPath.substring(0, fullPath.lastIndexOf("/") + 1);
+        List<Document> documents =
+            query().from(document).where(document.path.contains(doc.getPath())).list(document);
+        for (Document d : documents) {
+            if (!d.getId().equals(id)) {
+                d.setPath(d.getPath().replace(doc.getPath(), directoryPath + newPath));
+            }
+        }
         versioningService.move(fullPath, directoryPath + newPath);
-        document.setPath(directoryPath + newPath);
-        document.setTitle(newPath.substring(newPath.lastIndexOf("/") + 1));
+        doc.setPath(directoryPath + newPath);
+        doc.setTitle(newPath.substring(newPath.lastIndexOf("/") + 1));
     }
 
     @Override
