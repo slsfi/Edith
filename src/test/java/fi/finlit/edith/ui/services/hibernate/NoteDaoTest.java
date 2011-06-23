@@ -78,7 +78,9 @@ public class NoteDaoTest extends AbstractHibernateTest {
 
     @Before
     public void setUp() {
-        userDao.save(new User("timo"));
+        if (userDao.getAll().isEmpty()) {
+            userDao.save(new User("timo"));
+        }
     }
 
     private int countDocumentNotes(List<NoteWithInstances> notes){

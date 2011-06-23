@@ -96,9 +96,11 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
 
     @Before
     public void setUp() {
-        userDao.save(new User("timo"));
+        if (userDao.getAll().isEmpty()) {
+            userDao.save(new User("timo"));
+        }
         document = documentDao.getOrCreateDocumentForPath(testDocument);
-        
+
         documentNote1 = noteDao.createDocumentNote(createNote(), document, "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen", 0);
         documentNote2 = noteDao.createDocumentNote(createNote(), document, "koska suutarille k\u00E4skyn k\u00E4r\u00E4jiin annoit, saadaksesi naimalupaa.", 0);
         documentNote3 = noteDao.createDocumentNote(createNote(), document, "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.", 0);
@@ -164,8 +166,8 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
             previous = current;
         }
     }
-    
-    
+
+
 
     @Test
     public void Remove_Sets_Deleted_Flag() {
@@ -328,7 +330,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
     }
 
     @Test
-    //TODO This is not working for some reason, 
+    //TODO This is not working for some reason,
     public void Query_For_Notes_Based_On_Note_Type() {
         searchInfo.getNoteTypes().add(NoteType.HISTORICAL);
         assertEquals(2, noteDao.listNotes(searchInfo).size());
