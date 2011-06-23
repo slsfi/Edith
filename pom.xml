@@ -90,12 +90,17 @@
 
     <!-- services -->
 
-    <!-- <dependency> <groupId>stax</groupId> <artifactId>stax</artifactId>
+    <!-- <dependency> <groupId>stax</groupId> <artifactId>stax</artifactId> 
       <version>1.2.0</version> </dependency> -->
     <dependency>
       <groupId>org.codehaus.woodstox</groupId>
       <artifactId>woodstox-core-asl</artifactId>
       <version>4.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.1</version>
     </dependency>
 
     <!-- persistence -->
@@ -155,10 +160,10 @@
       <artifactId>joda-time-hibernate</artifactId>
       <version>1.3</version>
     </dependency>
-     <dependency>
-        <groupId>net.sf.ehcache</groupId>
-        <artifactId>ehcache-core</artifactId>
-        <version>2.4.2</version>
+    <dependency>
+      <groupId>net.sf.ehcache</groupId>
+      <artifactId>ehcache-core</artifactId>
+      <version>2.4.2</version>
     </dependency>
 
     <!-- TEST dependencies -->
@@ -221,25 +226,27 @@
 
   <profiles>
     <profile>
-        <id>default</id>
-        <activation><activeByDefault>true</activeByDefault></activation>
-        <properties>
-            <db.url>jdbc:mysql://localhost:3306/edith_test</db.url>
-            <db.user>edith</db.user>
-            <db.password>edith</db.password>
-            <db.schema>edith_test</db.schema>
-            <dbmaintain.fromScratchEnabled>true</dbmaintain.fromScratchEnabled>
-        </properties>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <db.url>jdbc:mysql://localhost:3306/edith_test</db.url>
+        <db.user>edith</db.user>
+        <db.password>edith</db.password>
+        <db.schema>edith_test</db.schema>
+        <dbmaintain.fromScratchEnabled>true</dbmaintain.fromScratchEnabled>
+      </properties>
     </profile>
     <profile>
-        <id>prod</id>
-        <properties>
-            <db.url>jdbc:mysql://localhost:3306/edith</db.url>
-            <db.user>edith</db.user>
-            <db.password>edith</db.password>
-            <db.schema>edith</db.schema>
-            <dbmaintain.fromScratchEnabled>false</dbmaintain.fromScratchEnabled>
-        </properties>
+      <id>prod</id>
+      <properties>
+        <db.url>jdbc:mysql://localhost:3306/edith</db.url>
+        <db.user>edith</db.user>
+        <db.password>edith</db.password>
+        <db.schema>edith</db.schema>
+        <dbmaintain.fromScratchEnabled>false</dbmaintain.fromScratchEnabled>
+      </properties>
     </profile>
     <profile>
       <id>sks</id>
@@ -359,7 +366,7 @@
             </configuration>
           </execution>
         </executions>
-          </plugin>
+      </plugin>
       <plugin>
         <groupId>org.dbmaintain</groupId>
         <artifactId>dbmaintain-maven-plugin</artifactId>
@@ -379,20 +386,16 @@
           <fromScratchEnabled>${dbmaintain.fromScratchEnabled}</fromScratchEnabled>
         </configuration>
         <executions>
-          <!-- execution>
-            <phase>install</phase>
-            <goals>
-              <goal>updateDatabase</goal>
-            </goals>
-          </execution-->
-          </executions>
-          <dependencies>
-            <dependency>
-              <groupId>mysql</groupId>
-              <artifactId>mysql-connector-java</artifactId>
-              <version>5.1.16</version>
-            </dependency>
-          </dependencies>
+          <!-- execution> <phase>install</phase> <goals> <goal>updateDatabase</goal> 
+            </goals> </execution -->
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.16</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
