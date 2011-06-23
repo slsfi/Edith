@@ -8,7 +8,7 @@
 			<t:delegate to="documentView" />
 		</t:zone>
 		<t:block t:id="documentView">
-			<t:document.view document="document" />
+			<t:document.view document="document"/>
 		</t:block>
 	</div>
 

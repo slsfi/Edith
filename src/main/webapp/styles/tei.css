@@ -1,4 +1,4 @@
-div.body {
+.tei div.body {
 	max-width: 600px;
 }
 .tei .head{
@@ -7,77 +7,77 @@ div.body {
 	padding: 1em 0em;
 }
 
-.speaker{
+.tei .speaker{
 	/*font-weight: bold;*/
 	color: #4040D0;
 	font-style: italic;
 }
 
-.stage {
+.tei .stage {
 	font-style: italic;
 }
 
-.orig, .sic {
+.tei .orig, .tei .sic {
 	font-style: italic;
 	color: #D0D0D0;
 }
 
-.sp{
+.tei .sp{
 	padding: 0.25em 0;
 }
 
-.sp .speaker {
+.tei .sp .speaker {
 	padding-right: 0.25em;	
 }	
 
-.p {
+.tei .p {
     display: block;
     margin-top: 1em;
 }
 
-.listBibl{
+.tei .listBibl{
 	border: dotted 1px gray;
 }
 
-.titleStmt .title{
+.tei .titleStmt .title{
 	/*font-weight: bold;*/
 	font-size: 1.5em;
 	text-align: center;
 	padding: 0.5em;	
 }
 
-.titleStmt .author{
+.tei .titleStmt .author{
 	font-weight: bold;
 	font-size: 1.2em;
 	text-align: center;
 	padding: 1em 0em;
 }	
 
-.respStmt .resp{
+.tei .respStmt .resp{
 	width: 10em;
 	float: left;
 	font-weight: bold;
 }
 
-.respStmt .name {
+.tei .respStmt .name {
 	float: left;	
 }
 
-.respStmt{
+.tei .respStmt{
 	clear: both;
 }
 
-.publicationStmt{
+.tei .publicationStmt{
 	clear: both;
 }
 
-.editionStmt .edition {
+.tei .editionStmt .edition {
 	font-weight: bold;
 	font-size: 1.2em;
 	padding-bottom: 0.5em;		
 }
 
-.page {
+.tei .page {
     text-align: center;
     font-weight: bold;
     /*display: inline;*/	
@@ -85,106 +85,106 @@ div.body {
 	border-top: dotted 1px gray;
 }
 
-.p .page {
+.tei .p .page {
 	display: inline;
 	padding: 0px !important;
 	border-top: none !important;
 }
-.p .page:before {
+.tei .p .page:before {
 	content: "|";
 }
-.p .page:after {
+.tei .p .page:after {
 	content: "|";
 }
 
-.pages li{
+.tei .pages li{
 	display: block;
 	float: left;
 	padding: 0.3em;	
 }
 
-.notes li{
+.tei .notes li{
 	display: block;
 }	
 
-.l{
+.tei .l{
 	padding-left: 2.5em;	
 }	
 
-.actor, 
-.camera, 
-.caption, 
-.date, 
-.desc, 
-.docAuthor, 
-.gap, 
-.orig,
-.sic,
-.corr,
-.ref, 
-.role, 
-.roleDesc, 
-.set, 
-.sound, 
-.speaker, 
-.tech, 
-.view, 
-.persName, 
-.note, 
-.hi, 
-.xref, 
-.placeName,
-.orgName,
-.p .title,
-.unclear,
-.del,
-.add,
-.supplied,
-.subst,
-.reg,
-.choice,
-.figure,
-.sp,
-.emph,
-.foreign,
-.rs,
-.cell
+.tei .actor, 
+.tei .camera, 
+.tei .caption, 
+.tei .date, 
+.tei .desc, 
+.tei .docAuthor, 
+.tei .gap, 
+.tei .orig,
+.tei .sic,
+.tei .corr,
+.tei .ref, 
+.tei .role, 
+.tei .roleDesc, 
+.tei .set, 
+.tei .sound, 
+.tei .speaker, 
+.tei .tech, 
+.tei .view, 
+.tei .persName, 
+.tei .note, 
+.tei .hi, 
+.tei .xref, 
+.tei .placeName,
+.tei .orgName,
+.tei .p .title,
+.tei .unclear,
+.tei .del,
+.tei .add,
+.tei .supplied,
+.tei .subst,
+.tei .reg,
+.tei .choice,
+.tei .figure,
+.tei .sp,
+.tei .emph,
+.tei .foreign,
+.tei .rs,
+.tei .cell
 {
 	display: inline;	
 }	
 
-.notecontent{
+.tei .notecontent{
 	color: #990202;
 	cursor: pointer;
 }
 
-.notecontent:hover{
+.tei .notecontent:hover{
 	border-bottom: solid 2px;
 }
 
-.hi, .emph {
+.tei .hi, .tei .emph {
 	font-style: italic;
 }
 
-.unclear {
+.tei .unclear {
 	color: #494949;
 	font-style: italic;
 }
 
-.del {
+.tei .del {
 	text-decoration: line-through;
 }
 
-.gap:before {
+.tei .gap:before {
 	color: #494949;
 	content: "[oläsligt]";
 }
 
-.cell {
+.tei .cell {
 	margin-right: 15px;
 }
 
-.list .item {
+.tei .list .item {
 	display: block;
 }
 

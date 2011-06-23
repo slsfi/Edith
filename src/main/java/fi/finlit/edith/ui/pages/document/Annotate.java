@@ -52,7 +52,7 @@ import fi.finlit.edith.ui.services.TermRepository;
         },
         stylesheet= {"context:styles/tei.css",
         "context:styles/smoothness/jquery-ui-1.8.12.custom.css",
-        "context:styles/dynatree/skin/ui.dynatree.css"})
+        "context:styles/dynatree/skin/ui.dynatree.css", "Annotate.css"})
 @SuppressWarnings("unused")
 public class Annotate extends AbstractDocumentPage {
 

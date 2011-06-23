@@ -5,8 +5,8 @@
 		<title><t:delegate to="title" /></title>
 	</head>
 	<body>
-		<div id="header" style="position:relative">
-			<div id="title-bar" style="background-image:url('${context:images/application_title_bg.png}');">
+		<div id="header">
+			<div id="title-bar">
                 <span id="app-name">${message:application-name}</span>
                 <div id="auth">
                     <t:authPanel />
@@ -15,7 +15,6 @@
 			<div class="content">
 				<t:dashboard />
 				<t:delegate to="leftPanel" />
-				<div style="clear:both;"></div>
 			</div>
             <img style="position:absolute;right:2em;top:3em" src="${context:images/sks_sls_logo.png}"/>
 		</div>

@@ -29,7 +29,7 @@ import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 
-@Import(stylesheet = { "context:styles/tei.css" }, library = { "classpath:js/jquery-1.4.1.js" })
+@Import(stylesheet = { "context:styles/tei.css", "Annotate.css" }, library = { "classpath:js/jquery-1.4.1.js" })
 @SuppressWarnings("unused")
 public class Publish extends AbstractDocumentPage {
     @Inject

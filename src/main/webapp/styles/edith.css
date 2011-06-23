@@ -4,6 +4,7 @@
 
 }
 
+#left > .content { padding-left: 2em }
 
 
 /**
@@ -14,9 +15,17 @@
 
 .ui-widget { font-size: 100% }
 .ui-accordion .ui-accordion-header a,
-.ui-accordion-content { /*font-size: 0.75em;*/ font-size: 100%; }
+.ui-accordion-content { 
+	font-size: 100%;
+}
+
+.ui-accordion-content, .ui-widget-content { 
+    background: url('/images/note_bg.png') repeat-x #dddddd;
+}
 
 .ui-accordion .ui-accordion-header a { font-family: verdana, serif }
+
+.ui-state-default, .ui-state-hover { background: white }
 
 #header .content {
     font-size: /*0.75em;*/ 100%;
@@ -33,19 +42,20 @@ ul.dynatree-container {
 * Header
 */
 
-#header { border-bottom: solid 1px #D0D0D0; }
+#header { border-bottom: solid 2px rgb(240,240,240); background-color: white; position: relative; }
 
 #title-bar {
-    background-repeat: repeat-x; 
+	background-image: url('/images/application_title_bg.png');
+    background-repeat: repeat-x;
     color: white;  
     padding: 22px; 
     padding-top: 13px	
 }
 
+
 #app-name { text-transform: uppercase; font-size: 1em }
 
 #top .content,#header .content {
-	padding: 0.2em;
 	padding-left: 2em;
 }
 
@@ -190,7 +200,7 @@ label.left {
 /* Note search */
 
 div.notes { /*margin-top: 1em; */ }
-.notes .t-data-grid { font-family: georgia, serif; }
+.notes .t-data-grid { font-family: georgia, serif; width: 100%; }
 .notes div.t-data-grid-pager a, 
 .notes div.t-data-grid-pager span.current { font-size: 100%; background-color: white; border: none; margin-right: 1em; padding: 0 }
 .notes div.t-data-grid-pager span.current { color: black; text-decoration: underline; }
@@ -355,9 +365,13 @@ a.ELSEWHERE {
 /**
 * Document note selection in listings
 */
+
 .selected-note {
-    background-color: #BBB;	
-    border-radius: 0.2em;
+    border: 1px black dotted;
+}
+
+.selected-note a {
+    color: black;	
 }
 
 /**

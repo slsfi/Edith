@@ -14,7 +14,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 
-@Import(stylesheet="context:styles/tei.css")
+@Import(stylesheet = { "context:styles/tei.css", "Annotate.css" })
 @SuppressWarnings("unused")
 public class View extends AbstractDocumentPage {
 
