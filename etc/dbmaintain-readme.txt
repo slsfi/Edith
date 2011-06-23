@@ -21,3 +21,7 @@ mvn -Psls dbmaintain:createScriptArchive
 # Creates archive for SKS
 
 mvn -Psks dbmaintain:createScriptArchive
+
+# In production maintenance
+
+~/dbmaintain-2.3/dbmaintain.sh updateDatabase ../edith.jar
