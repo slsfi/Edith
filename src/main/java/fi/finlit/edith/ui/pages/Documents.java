@@ -30,7 +30,8 @@ import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
         "classpath:js/jquery-ui-1.8.12.custom.min.js",
         "classpath:js/jquery.cookie.js",
         "deleteDialog.js",
-        "classpath:js/jquery.dynatree.js" },
+        "classpath:js/jquery.dynatree.js",
+        "classpath:js/url-encoder.js"},
         stylesheet = { "context:styles/dynatree/skin/ui.dynatree.css" }
 )
 public class Documents {
