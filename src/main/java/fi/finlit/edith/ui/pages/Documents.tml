@@ -84,7 +84,8 @@
         if (node != null) {
           var response = prompt('${message:rename-file}', node.data.title);
           if (response) {
-            window.location.href = '${renameDocumentURL}/' + node.data.documentId + '/' + escape(response);
+            // External library due to Tapestry's URL encoding: https://issues.apache.org/jira/browse/TAP5-637
+            window.location.href = '${renameDocumentURL}/' + node.data.documentId + '/' + URLEncoder.encode(response);
           }
         }
       });
