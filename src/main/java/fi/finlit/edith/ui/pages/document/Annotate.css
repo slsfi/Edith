@@ -1,12 +1,12 @@
 #header { 
-	background: url('/images/application_menu_bg.png') repeat-x fixed 0 7.9em #dddddd;
+	background: url('application_menu_bg.png') repeat-x fixed 0 7.9em #dddddd;
 	height: 9.2em !important;
 }
 
 #left > .content { padding-right: 0 }
 
 #left > .content > .content {
-    background: url('/images/note_bg.png') repeat-x fixed 0 10.4em #dddddd;
+    background: url('note_bg.png') repeat-x fixed 0 10.4em #dddddd;
     padding-left: 2em;    
 }
 

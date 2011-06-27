@@ -20,7 +20,7 @@
 }
 
 .ui-accordion-content, .ui-widget-content { 
-    background: url('/images/note_bg.png') repeat-x #dddddd;
+    background: url('../images/note_bg.png') repeat-x #dddddd;
 }
 
 .ui-accordion .ui-accordion-header a { font-family: verdana, serif }
@@ -45,7 +45,7 @@ ul.dynatree-container {
 #header { border-bottom: solid 2px rgb(240,240,240); background-color: white; position: relative; }
 
 #title-bar {
-	background-image: url('/images/application_title_bg.png');
+	background-image: url('../images/application_title_bg.png');
     background-repeat: repeat-x;
     color: white;  
     padding: 22px; 
