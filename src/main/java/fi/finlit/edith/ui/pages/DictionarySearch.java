@@ -112,7 +112,7 @@ public class DictionarySearch {
 //        }
     }
 
-    public String getLongTexts() {
+    public String getFullSelections() {
         if (documentNotes == null){
             initDocumentNotes();
         }

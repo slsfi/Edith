@@ -87,7 +87,7 @@ public class NoteRepositoryTest extends AbstractServiceTest {
 
     @Before
     public void setUp() {
-        adminService.removeNotesAndTerms();
+        adminService.removeNotesAndTermsAndDocuments();
     }
 
     private int countDocumentNotes(List<NoteWithInstances> notes){

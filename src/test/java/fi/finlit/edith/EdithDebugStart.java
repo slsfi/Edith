@@ -47,6 +47,7 @@ public final class EdithDebugStart extends WebappStarter {
         }        
         File svnRepo = new File(rootFile, "repo");
 
+        System.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/edith?useUnicode=true&characterEncoding=UTF-8");
         System.setProperty("org.mortbay.jetty.webapp.parentLoaderPriority", "true");
         System.setProperty("production.mode", "false");
         System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());

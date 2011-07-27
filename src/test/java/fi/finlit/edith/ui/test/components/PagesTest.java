@@ -17,9 +17,10 @@ import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.ui.components.document.Pages;
 import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.hibernate.AbstractHibernateTest;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
-public class PagesTest extends AbstractServiceTest{
+public class PagesTest extends AbstractHibernateTest {
 
     @Inject
     @Symbol(EdithTestConstants.TEST_DOCUMENT_KEY)

@@ -183,13 +183,13 @@
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-firefox-driver</artifactId>
-      <version>2.0b3</version>
+      <version>2.1.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-support</artifactId>
-      <version>2.0b3</version>
+      <version>2.1.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -214,10 +214,10 @@
   </dependencies>
 
   <repositories>
-    <repository>
-      <id>localhost.nu</id>
-      <url>http://www.localhost.nu/java/mvn</url>
-    </repository>
+<!--     <repository> -->
+<!--       <id>localhost.nu</id> -->
+<!--       <url>http://www.localhost.nu/java/mvn</url> -->
+<!--     </repository> -->
     <repository>
       <id>svnkit</id>
       <url>http://maven.svnkit.com/maven2</url>

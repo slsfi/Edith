@@ -14,7 +14,6 @@ import org.junit.Rule;
 import org.junit.rules.MethodRule;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Mouse;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -22,6 +21,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.DoubleClickAction;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -141,8 +141,8 @@ public abstract class AbstractSeleniumTest {
         return driver.findElement(By.linkText(linkText));
     }
 
-    public WebElement findElement(By by) {
-        return driver.findElement(by);
+    public RemoteWebElement findElement(By by) {
+        return (RemoteWebElement) driver.findElement(by);
     }
 
     public WebElement findElement(String cssSelector) {
@@ -182,12 +182,16 @@ public abstract class AbstractSeleniumTest {
         return new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver from) {
-                RenderedWebElement element = (RenderedWebElement)driver.findElement(findCondition);
+                RemoteWebElement element = (RemoteWebElement)driver.findElement(findCondition);
                 return element.isDisplayed();
             }
         };
     }
 
+    public void assertContainsText(String expected) {
+        assertTrue(driver.getPageSource().contains(expected));
+    }
+    
     public void assertContainsText(WebElement element, String expected) {
         assertNotNull(element);
         assertTrue("Element [" + element.getText() + "] does not contain text [" + expected + "]",

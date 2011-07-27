@@ -6,10 +6,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.ui.pages.DictionarySearch;
+import fi.finlit.edith.ui.services.hibernate.AbstractHibernateTest;
 import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
 
-public class DictionarySearchTest extends AbstractServiceTest{
+public class DictionarySearchTest extends AbstractHibernateTest {
     
     @Autobuild
     @Inject
@@ -24,7 +25,7 @@ public class DictionarySearchTest extends AbstractServiceTest{
     @Ignore
     public void getLongTexts() {
         // TODO : inject note
-        dictionarySearchPage.getLongTexts();
+        dictionarySearchPage.getFullSelections();
     }
 
 }
