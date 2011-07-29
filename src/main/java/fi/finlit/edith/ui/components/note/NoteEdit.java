@@ -8,7 +8,6 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.Concept;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.ui.pages.document.Annotate;

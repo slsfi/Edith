@@ -7,7 +7,6 @@ import org.junit.Test;
 import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.pages.Register;
 import fi.finlit.edith.ui.services.hibernate.AbstractHibernateTest;
-import fi.finlit.edith.ui.test.services.AbstractServiceTest;
 
 public class RegisterTest extends AbstractHibernateTest {
 

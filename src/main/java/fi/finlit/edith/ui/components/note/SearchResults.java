@@ -16,7 +16,6 @@ import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.domain.Concept;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteType;

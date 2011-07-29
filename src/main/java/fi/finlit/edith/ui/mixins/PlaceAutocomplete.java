@@ -8,7 +8,7 @@ import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-import fi.finlit.edith.domain.Place;
+import fi.finlit.edith.sql.domain.Place;
 
 @Import(library = { "place-autocomplete.js" })
 public class PlaceAutocomplete extends JQueryAutocomplete {

@@ -14,15 +14,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.tapestry5.grid.ColumnSort;
-import org.apache.tapestry5.grid.GridDataSource;
-import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.joda.time.DateTime;
@@ -51,6 +47,7 @@ import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.ui.services.svn.SubversionService;
 
 public class DocumentNoteDaoTest extends AbstractHibernateTest {
     @Inject
@@ -85,7 +82,9 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
     @Symbol(EdithTestConstants.NOTE_TEST_DATA_KEY)
     private File noteTestData;
 
-
+    @Inject
+    private SubversionService versioningService;
+    
     private int countDocumentNotes(List<Note> notes){
         int count = 0;
         for (Note n : notes){
@@ -94,6 +93,8 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         return count;
     }
 
+    private boolean initialized = false;
+    
     @Before
     public void setUp() {
         if (userDao.getAll().isEmpty()) {
@@ -111,6 +112,11 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
 
         addExtraNote("testo");
         addExtraNote("testo2");
+        
+        if (!initialized) {
+            versioningService.initialize();
+            initialized = true;
+        }
     }
 
     @Test
@@ -138,36 +144,6 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
 
         assertEquals(4, documentNoteDao.getOfDocument(document).size());
     }
-
-    @Test
-    public void QueryNotes_Returns_More_Than_Zero_Results() {
-        assertTrue(documentNoteDao.queryNotes("annoit").getAvailableRows() > 0);
-    }
-
-    @Test
-    public void QueryNotes_Sorting_Is_Case_Insensitive() {
-        noteDao.createDocumentNote(createNote(), document, "a");
-        noteDao.createDocumentNote(createNote(), document, "b");
-        noteDao.createDocumentNote(createNote(), document, "A");
-        noteDao.createDocumentNote(createNote(), document, "B");
-        GridDataSource gds = documentNoteDao.queryNotes("*");
-        int n = gds.getAvailableRows();
-        List<SortConstraint> sortConstraints = new ArrayList<SortConstraint>();
-        sortConstraints.add(new SortConstraint(new PropertyModelMock(), ColumnSort.ASCENDING));
-        gds.prepare(0, 100, sortConstraints);
-        String previous = null;
-        for (int i = 0; i < n; ++i) {
-            DocumentNote dn = (DocumentNote) gds.getRowValue(i);
-            String current = dn.getFullSelection().toLowerCase();
-            if (previous != null) {
-                assertThat("The actual value was probably in upper case!", previous,
-                        lessThanOrEqualTo(current));
-            }
-            previous = current;
-        }
-    }
-
-
 
     @Test
     public void Remove_Sets_Deleted_Flag() {

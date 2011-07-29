@@ -20,7 +20,7 @@ public class SKSServiceTestModule {
     public static SaltSource buildSaltSource() throws Exception {
         return ServiceTestModule.buildSaltSource();
     }
-
+    
     public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
         ServiceTestModule.contributeServiceOverride(configuration);
     }

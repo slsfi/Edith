@@ -5,8 +5,6 @@
  */
 package fi.finlit.edith.ui.services;
 
-import java.util.Arrays;
-
 import nu.localhost.tapestry5.springsecurity.services.RequestInvocationDefinition;
 
 import org.apache.tapestry5.SymbolConstants;
@@ -22,13 +20,6 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetailsService;
 
-import com.mysema.rdfbean.object.SessionFactory;
-import com.mysema.rdfbean.tapestry.EntityValueEncoderFactory;
-
-import fi.finlit.edith.domain.Document;
-import fi.finlit.edith.domain.DocumentNote;
-import fi.finlit.edith.domain.Note;
-import fi.finlit.edith.domain.UserInfo;
 import fi.finlit.edith.ui.services.hibernate.UserDetailsServiceImpl;
 
 /**

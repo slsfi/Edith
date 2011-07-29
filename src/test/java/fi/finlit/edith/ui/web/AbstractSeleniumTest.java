@@ -39,7 +39,7 @@ public abstract class AbstractSeleniumTest {
     public abstract WebappStarter starter();
 
     private static JettyConfig config;
-    
+
     private static boolean externalJetty = false;
 
     public String locales() {
@@ -64,7 +64,7 @@ public abstract class AbstractSeleniumTest {
             System.out.println("Firefox driver start took " + (System.currentTimeMillis() - start));
 
             config = starter().configure();
-            
+
             //Try if there is jetty running on our port already
             try {
                 new URL(path() + "/").getContent();
@@ -74,32 +74,32 @@ public abstract class AbstractSeleniumTest {
             } catch(ConnectException e) {
                 //No jetty, start it then
             }
-            
+
             starter().start();
-            
+
         }
     }
-    
+
     @AfterClass
     public static void afterClass() {
         if (driver != null) {
             driver.close();
             driver = null;
-            
+
             if (!externalJetty) {
                 JettyHelper.stopJettyAtPort(config.port);
             }
-        }       
-        
+        }
+
     }
-    
+
     @Rule
     public MethodRule rule = new SystemPropertyCheckRule("webtest");
 
     public String path() {
         return "http://127.0.0.1:" + config.port;
     }
-    
+
 
     protected void login(String user, String password) {
         get("/login");
@@ -107,11 +107,11 @@ public abstract class AbstractSeleniumTest {
             findElement(By.name("j_username")).sendKeys(user);
             WebElement passwordElement = findElement(By.name("j_password"));
             passwordElement.sendKeys(password);
-            passwordElement.submit();    
+            passwordElement.submit();
         }
-        
+
     }
-    
+
     protected void dblClick(WebElement element) {
         Action dblClick = new DoubleClickAction(getMouse(), (Locatable)element);
         dblClick.perform();
@@ -120,7 +120,7 @@ public abstract class AbstractSeleniumTest {
     private Mouse getMouse() {
         return ((FirefoxDriver)driver).getMouse();
     }
-    
+
     public void get(String url) {
         driver.get(path() + url);
     }
@@ -132,7 +132,7 @@ public abstract class AbstractSeleniumTest {
     public String title() {
         return driver.getTitle();
     }
-    
+
     public String pageSource() {
         return driver.getPageSource();
     }
@@ -172,12 +172,12 @@ public abstract class AbstractSeleniumTest {
     public void assertLink(String linkText) {
         assertNotNull("Link text not found: " + linkText, findByLinkText(linkText));
     }
-    
+
     protected void wait(ExpectedCondition<Boolean> expected) {
         Wait<WebDriver> wait = new WebDriverWait(driver, 3);
         wait.until(expected);
     }
-    
+
     protected ExpectedCondition<Boolean> element(final By findCondition) {
         return new ExpectedCondition<Boolean>() {
             @Override
@@ -191,7 +191,7 @@ public abstract class AbstractSeleniumTest {
     public void assertContainsText(String expected) {
         assertTrue(driver.getPageSource().contains(expected));
     }
-    
+
     public void assertContainsText(WebElement element, String expected) {
         assertNotNull(element);
         assertTrue("Element [" + element.getText() + "] does not contain text [" + expected + "]",

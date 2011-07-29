@@ -1,4 +1,4 @@
-package fi.finlit.edith.ui.test.services;
+package fi.finlit.edith.ui.services.hibernate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -21,8 +21,6 @@ import org.junit.Test;
 
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.dto.SelectedText;
-import fi.finlit.edith.ui.services.hibernate.AbstractHibernateTest;
-import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
 
 public class NoteAddition2Test extends AbstractHibernateTest {
     @Inject

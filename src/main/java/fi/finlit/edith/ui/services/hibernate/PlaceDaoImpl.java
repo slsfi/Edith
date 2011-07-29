@@ -1,11 +1,8 @@
 package fi.finlit.edith.ui.services.hibernate;
 
 import static fi.finlit.edith.sql.domain.QPlace.place;
-import static fi.finlit.edith.sql.domain.QTerm.term;
 
 import java.util.Collection;
-
-import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
 
 import fi.finlit.edith.sql.domain.Place;
 import fi.finlit.edith.ui.services.PlaceDao;

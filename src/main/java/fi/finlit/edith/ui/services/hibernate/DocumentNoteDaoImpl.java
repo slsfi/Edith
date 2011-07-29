@@ -7,22 +7,16 @@ package fi.finlit.edith.ui.services.hibernate;
 
 
 import static fi.finlit.edith.sql.domain.QDocumentNote.documentNote;
-import static fi.finlit.edith.sql.domain.QTerm.term;
 
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.util.Assert;
-
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.JPQLQuery;
 
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
-import fi.finlit.edith.sql.domain.NoteComment;
 import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
@@ -59,45 +53,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
                    documentNote.deleted.isFalse(),
                    documentNote.publishable.isTrue())
             .orderBy(documentNote.position.asc()).list(documentNote);
-    }
-
-    @Override
-    public GridDataSource queryNotes(String searchTerm) {
-        Assert.notNull(searchTerm);
-        JPQLQuery q = query();
-        BooleanBuilder builder = new BooleanBuilder();
-        if (!searchTerm.equals("*")) {
-            
-            builder.or(documentNote.note.lemma.containsIgnoreCase(searchTerm));
-            builder.or(documentNote.fullSelection.containsIgnoreCase(searchTerm));
-            
-            
-            
-            //builder.or(documentNote.note.term.basicForm.containsIgnoreCase(searchTerm));
-            //builder.or(documentNote.note.term.meaning.containsIgnoreCase(searchTerm));
-//            for (StringPath path : Arrays.asList(
-//                    documentNote.note.lemma,
-//                    documentNote.fullSelection,
-//                    documentNote.note.term.basicForm,
-//                    documentNote.note.term.meaning)) {
-//                // ,
-//                // documentNote.description, FIXME
-//                // note.subtextSources)
-//                builder.or(path.containsIgnoreCase(searchTerm));
-//            }
-            builder.or(
-                sub().from(term)
-                .where(
-                  term.id.eq(documentNote.note.id),
-                  term.basicForm.containsIgnoreCase(searchTerm).or(
-                  term.meaning.containsIgnoreCase(searchTerm)))
-                .exists()
-            );
-            
-        }
-        builder.and(documentNote.deleted.eq(false));
-
-        return createGridDataSource(documentNote, term.basicForm.lower().asc(), false, builder.getValue());
     }
 
     @Override

@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
-
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Before;
 import org.junit.Ignore;

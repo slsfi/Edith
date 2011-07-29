@@ -32,7 +32,6 @@ public class InlineEditField {
      * Value encoder for the value, usually determined automatically from the type of the property
      * bound to the value parameter.
      */
-    @SuppressWarnings("unchecked")
     @Parameter(required = true)
     private ValueEncoder encoder;
 

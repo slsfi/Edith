@@ -23,11 +23,6 @@ import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 
-import com.mysema.rdfbean.model.Format;
-import com.mysema.rdfbean.model.Repository;
-import com.mysema.rdfbean.model.io.RDFSource;
-import com.mysema.rdfbean.sesame.MemoryRepository;
-
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.ui.services.AuthService;
 
@@ -53,19 +48,10 @@ public class ServiceTestModule {
     }
 
     public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
-        MemoryRepository repository = new MemoryRepository();
-        repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
-        
-//        VirtuosoRepository repository = new VirtuosoRepository("localhost:1111", "dba", "dba");
-//        repository.setSources(new RDFSource("classpath:/edith.ttl", Format.TURTLE, EDITH.NS));
-
-        configuration.add(Repository.class, repository);
-
         AuthService authService = new StaticAuthService();
         configuration.add(AuthService.class, authService);
-
     }
-
+    
     public static PasswordEncoder buildPaswordEncoder() {
         return new ShaPasswordEncoder();
     }

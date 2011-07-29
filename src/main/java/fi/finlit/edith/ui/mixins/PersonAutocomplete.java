@@ -8,7 +8,7 @@ import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-import fi.finlit.edith.domain.Person;
+import fi.finlit.edith.sql.domain.Person;
 
 @Import(library = { "person-autocomplete.js" })
 public class PersonAutocomplete extends JQueryAutocomplete {

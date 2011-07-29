@@ -14,6 +14,7 @@
         <t:grid t:id="termsGrid" source="terms" row="term" rowsPerPage="20" 
             include="basicForm,meaning" add="appearances,actions">
             <p:appearancesCell>
+                <t:remove>
             	<t:if test="term.undeletedNotes">
                 	<t:loop source="term.undeletedNotes" value="note">
                         <div><em>${note.lemma}</em> (${fullSelections})<t:note.metadata note="note"/></div>
@@ -22,6 +23,7 @@
                 		<strong>${message:all-revisions-removed}</strong>
                 	</p:else>
                 </t:if>
+                </t:remove>
             </p:appearancesCell>
             <p:actionsCell>
             	<span class="delete_note"> 

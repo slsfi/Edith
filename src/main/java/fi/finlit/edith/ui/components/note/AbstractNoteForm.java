@@ -1,10 +1,6 @@
 package fi.finlit.edith.ui.components.note;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import javax.xml.stream.XMLStreamException;
 
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;

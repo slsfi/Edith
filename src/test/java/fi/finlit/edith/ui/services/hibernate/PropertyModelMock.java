@@ -9,7 +9,7 @@ import org.apache.tapestry5.PropertyConduit;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.beaneditor.PropertyModel;
 
-import fi.finlit.edith.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.DocumentNote;
 
 public class PropertyModelMock implements PropertyModel {
 

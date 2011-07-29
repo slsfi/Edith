@@ -11,10 +11,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
@@ -39,7 +37,6 @@ import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteDao;
-import fi.finlit.edith.ui.services.NoteWithInstances;
 import fi.finlit.edith.ui.services.PersonDao;
 import fi.finlit.edith.ui.services.PlaceDao;
 import fi.finlit.edith.ui.services.UserDao;
@@ -81,14 +78,6 @@ public class NoteDaoTest extends AbstractHibernateTest {
         if (userDao.getAll().isEmpty()) {
             userDao.save(new User("timo"));
         }
-    }
-
-    private int countDocumentNotes(List<NoteWithInstances> notes){
-        int count = 0;
-        for (NoteWithInstances n : notes){
-            count += n.getDocumentNotes().size();
-        }
-        return count;
     }
 
     @Test
@@ -195,7 +184,6 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertEquals(note.getId(), documentNote.getNote().getId());
         assertNotNull(documentNoteDao.getById(documentNote.getId())
                 .getNote());
-        assertEquals(1, documentNoteDao.queryNotes(lemma).getAvailableRows());
     }
 
     @Test

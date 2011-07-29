@@ -46,11 +46,12 @@ import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.ui.services.AuthService;
+import fi.finlit.edith.ui.services.hibernate.AbstractHibernateTest;
 import fi.finlit.edith.ui.services.svn.SubversionException;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
 import fi.finlit.edith.ui.services.svn.UpdateCallback;
 
-public class SubversionServiceTest extends AbstractServiceTest {
+public class SubversionServiceTest extends AbstractHibernateTest {
 
     private static final Logger logger = LoggerFactory.getLogger(SubversionServiceTest.class);
 

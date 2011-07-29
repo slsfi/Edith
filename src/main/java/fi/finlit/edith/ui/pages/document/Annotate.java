@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.dto.DocumentNoteSearchInfo;
-import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.DocumentNote;
@@ -40,8 +38,6 @@ import fi.finlit.edith.ui.components.note.SearchResults;
 import fi.finlit.edith.ui.pages.Documents;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteDao;
-import fi.finlit.edith.ui.services.NoteRepository;
-import fi.finlit.edith.ui.services.TermRepository;
 
 @Import(library = {
         "classpath:js/jquery-1.5.1.min.js", "classpath:js/TapestryExt.js",

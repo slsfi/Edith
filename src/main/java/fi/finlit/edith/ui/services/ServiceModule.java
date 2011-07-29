@@ -11,43 +11,20 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Properties;
 
+import nu.localhost.tapestry5.springsecurity.services.LogoutService;
+import nu.localhost.tapestry5.springsecurity.services.internal.LogoutServiceImpl;
+
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.Startup;
-import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
-import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.rdfbean.model.Repository;
-import com.mysema.rdfbean.object.Configuration;
-import com.mysema.rdfbean.object.DefaultConfiguration;
-import com.mysema.rdfbean.sesame.NativeRepository;
-import com.mysema.rdfbean.tapestry.TransactionalAdvisor;
-
-import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.Document;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.ui.services.content.ContentRendererImpl;
-import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
-import fi.finlit.edith.ui.services.hibernate.UserDaoImpl;
-import fi.finlit.edith.ui.services.repository.AdminServiceImpl;
-import fi.finlit.edith.ui.services.repository.DocumentNoteRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.DocumentRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.NoteRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.PersonRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.PlaceRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.TermRepositoryImpl;
-import fi.finlit.edith.ui.services.repository.UserRepositoryImpl;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.SubversionServiceImpl;
-import fi.finlit.edith.ui.services.tasks.ReplacedByAdditionTask;
-import fi.finlit.edith.ui.services.tasks.TasksService;
 
 /**
  * ServiceModule provides service bindings and RDFBean configuration elements
@@ -86,32 +63,9 @@ public final class ServiceModule {
     }
 
     @Startup
-    public static void initData(SubversionService subversionService)
-            throws IOException {
+    public static void initData(SubversionService subversionService) {
         logger.info("Starting up subversion");
         subversionService.initialize();
-    }
-
-    public static Configuration buildConfiguration() {
-        DefaultConfiguration configuration = new DefaultConfiguration(EDITH.NS);
-        configuration.addPackages(Document.class.getPackage());
-        return configuration;
-    }
-
-    public static Repository buildRepository(
-            @Inject @Symbol(EDITH.RDFBEAN_DATA_DIR) String rdfbeanDataDir, RegistryShutdownHub hub) {
-        final NativeRepository repository = new NativeRepository();
-        repository.setIndexes("spoc,posc,opsc");
-        repository.setDataDirName(rdfbeanDataDir);
-
-
-        hub.addRegistryShutdownListener(new RegistryShutdownListener() {
-            @Override
-            public void registryDidShutdown() {
-                repository.close();
-            }
-        });
-        return repository;
     }
 
     public static void contributeApplicationDefaults(

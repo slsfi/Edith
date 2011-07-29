@@ -11,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,6 +117,10 @@ public class SubversionServiceImpl implements SubversionService {
 
     @Override
     public long commit(String svnPath, long revision, String username, UpdateCallback callback) {
+        if (svnRepository == null) {
+            String s = "foobaaah!";
+            System.err.println(s);
+        }
         File userCheckout = new File(workingCopies + "/" + username);
         String path = svnPath.substring(documentRoot.length());
         if (userCheckout.exists()) {

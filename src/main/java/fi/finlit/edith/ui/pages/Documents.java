@@ -40,9 +40,6 @@ public class Documents {
     private DocumentDao documentDao;
 
     @Property
-    private Collection<Document> documents;
-
-    @Property
     private Document document;
 
     @SessionState(create=false)
@@ -62,8 +59,6 @@ public class Documents {
         if (selectedDocuments == null){
             selectedDocuments = new HashSet<Document>();
         }
-        toBeDeleted = new HashSet<Document>();
-        documents = documentDao.getAll();
     }
 
     public boolean isDocumentSelected() {
@@ -98,10 +93,6 @@ public class Documents {
         } else {
             selectedForDeletion.remove(document);
         }
-    }
-
-    public boolean isDocumentsNotEmpty(){
-        return !documents.isEmpty();
     }
 
     TextStreamResponse onJson(@RequestParameter(value = "path", allowBlank = true) String path,

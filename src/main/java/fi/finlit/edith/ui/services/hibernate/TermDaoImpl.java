@@ -10,8 +10,6 @@ import static fi.finlit.edith.sql.domain.QTerm.term;
 import java.util.Collection;
 import java.util.List;
 
-import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
-
 import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.ui.services.TermDao;
 

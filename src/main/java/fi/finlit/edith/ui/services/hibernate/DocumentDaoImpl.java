@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mysema.commons.lang.Assert;
 import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
-import com.mysema.query.jpa.hibernate.HibernateUpdateClause;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.dto.SelectedText;

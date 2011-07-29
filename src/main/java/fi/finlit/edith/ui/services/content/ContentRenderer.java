@@ -13,8 +13,8 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.tapestry5.MarkupWriter;
 
-import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.sql.domain.DocumentNote;
 
 /**
  * @author tiwe

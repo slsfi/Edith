@@ -10,8 +10,8 @@ import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UserDetailsService;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 
-import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.dto.UserDetailsImpl;
+import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.UserDao;
 
 public class UserDetailsServiceImpl implements UserDetailsService {

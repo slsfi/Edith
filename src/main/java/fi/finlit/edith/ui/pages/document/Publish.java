@@ -22,7 +22,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.ui.services.DocumentNoteDao;

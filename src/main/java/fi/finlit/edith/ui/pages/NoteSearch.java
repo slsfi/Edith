@@ -25,11 +25,9 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import com.mysema.tapestry.core.Context;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.domain.Concept;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.NoteDao;
-import fi.finlit.edith.ui.services.PrimaryKeyEncoder;
 import fi.finlit.edith.ui.services.SqlPrimaryKeyEncoder;
 
 @SuppressWarnings("unused")

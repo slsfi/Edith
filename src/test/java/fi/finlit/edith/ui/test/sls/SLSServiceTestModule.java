@@ -22,10 +22,6 @@ public class SLSServiceTestModule {
         return ServiceTestModule.buildSaltSource();
     }
 
-    public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
-        ServiceTestModule.contributeServiceOverride(configuration);
-    }
-
     public static PasswordEncoder buildPaswordEncoder() {
         return ServiceTestModule.buildPaswordEncoder();
     }

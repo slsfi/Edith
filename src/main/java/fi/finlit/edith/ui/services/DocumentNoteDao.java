@@ -3,7 +3,6 @@ package fi.finlit.edith.ui.services;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
 import fi.finlit.edith.sql.domain.Document;
@@ -80,14 +79,6 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
      * @return
      */
     List<DocumentNote> getOfPlace(Long placeId);
-
-    /**
-     * Query for notes matching the given search term
-     *
-     * @param searchTem
-     * @return
-     */
-    GridDataSource queryNotes(String searchTem);
 
     /**
      * Returns all the document notes attached to the term.

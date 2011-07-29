@@ -7,9 +7,6 @@ package fi.finlit.edith.ui.pages;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -23,9 +20,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.mysema.tapestry.core.Context;
 
-import fi.finlit.edith.domain.TermWithNotes;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.TermDao;
@@ -46,9 +43,6 @@ public class DictionarySearch {
     private GridDataSource terms;
 
     @Property
-    private TermWithNotes term;
-
-    @Property
     private Note note;
 
     @Inject
@@ -59,6 +53,9 @@ public class DictionarySearch {
 
     @Inject
     private DocumentNoteDao documentNoteDao;
+
+    @Property
+    private Term term;
 
     private Map<Note, Collection<DocumentNote>> documentNotes;
 

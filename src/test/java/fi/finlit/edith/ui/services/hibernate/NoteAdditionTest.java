@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.test.services;
+package fi.finlit.edith.ui.services.hibernate;
 
 import static org.junit.Assert.fail;
 
@@ -34,8 +34,6 @@ import org.junit.Test;
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.ui.services.NoteAdditionFailedException;
-import fi.finlit.edith.ui.services.hibernate.AbstractHibernateTest;
-import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
 import fi.finlit.edith.util.ElementContext;
 
 public class NoteAdditionTest extends AbstractHibernateTest {

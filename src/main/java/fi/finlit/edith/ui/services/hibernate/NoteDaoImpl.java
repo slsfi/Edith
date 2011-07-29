@@ -24,8 +24,6 @@ import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
@@ -58,8 +56,6 @@ import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.UserDao;
 
 public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
-
-    private static final Logger logger = LoggerFactory.getLogger(NoteDaoImpl.class);
 
     private static final class LoopContext {
         private Note note;
@@ -512,13 +508,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     public void removeNotes(Collection<Note> notes) {
         for (Note note : notes){
             removeNote(note);
-        }
-    }
-
-    private void logDuration(String method, long start) {
-        long duration = System.currentTimeMillis()-start;
-        if (duration > 500){
-            logger.warn(method + " took " + duration+"ms");
         }
     }
 

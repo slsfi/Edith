@@ -13,14 +13,15 @@ import org.junit.Test;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 
-import fi.finlit.edith.domain.User;
 import fi.finlit.edith.dto.UserDetailsImpl;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.sql.domain.User;
+import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.ui.services.hibernate.AbstractHibernateTest;
 
-public class UserEncodingTest extends AbstractServiceTest {
+public class UserEncodingTest extends AbstractHibernateTest {
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userRepository;
 
     @Test
     @Ignore

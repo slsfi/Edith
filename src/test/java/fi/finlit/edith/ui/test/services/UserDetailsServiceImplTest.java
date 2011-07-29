@@ -12,18 +12,20 @@ import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 
-import fi.finlit.edith.ui.services.UserDetailsServiceImpl;
-import fi.finlit.edith.ui.services.UserRepository;
+import fi.finlit.edith.ui.services.UserDao;
+import fi.finlit.edith.ui.services.hibernate.AbstractHibernateTest;
+import fi.finlit.edith.ui.services.hibernate.UserDetailsServiceImpl;
 
-public class UserDetailsServiceImplTest extends AbstractServiceTest {
+public class UserDetailsServiceImplTest extends AbstractHibernateTest {
     private UserDetailsServiceImpl service;
 
     @Inject
-    private UserRepository userRepository;
+    private UserDao userDao;
 
     @Before
     public void setUp() throws Exception {
-        service = new UserDetailsServiceImpl(userRepository);
+    	service = new UserDetailsServiceImpl(userDao);
+        userDao.addUsersFromCsvFile("/users.csv", "ISO-8859-1");
     }
 
     @After
@@ -40,7 +42,6 @@ public class UserDetailsServiceImplTest extends AbstractServiceTest {
         UserDetails userDetails = service.loadUserByUsername("timo");
         assertEquals("timo", userDetails.getUsername());
         assertEquals("d8a0c6468369447dc6328adca0c17e8ad5e572f1", userDetails.getPassword());
-        assertArrayEquals(new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_USER"),
-                new GrantedAuthorityImpl("ROLE_ADMIN") }, userDetails.getAuthorities());
+        assertArrayEquals(new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_USER"), new GrantedAuthorityImpl("ROLE_ADMIN") }, userDetails.getAuthorities());
     }
 }

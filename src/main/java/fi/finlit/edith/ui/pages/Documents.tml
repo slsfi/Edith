@@ -108,37 +108,6 @@
   <h3>${message:documents}</h3>
       
   <div id="directory-tree"></div>
-    <t:remove>
-	<t:form t:id="documentsForm">
-
-	    <t:grid source="documents" row="document" exclude="id,title,svnPath,description" add="document,views,null,null1,null2,deletion">
-	        <p:documentCell>
-	          ${document.title}
-	        </p:documentCell>
-	        <p:viewsCell>
-	          <a t:type="pageLink" t:page="document/annotate" t:context="${document.id}">${message:annotate-document}</a>
-	        </p:viewsCell>
-	        <p:nullCell>
-	            <a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:view-document}</a>
-	        </p:nullCell>
-	        <p:null1Cell>
-	            <a t:type="pageLink" t:page="document/print" t:context="${document.id}">${message:print-document}</a>
-	        </p:null1Cell>
-	        <p:null2Cell>
-                <a t:type="pageLink" t:page="document/publish" t:context="${document.id}">${message:publishVersion}</a>
-            </p:null2Cell>
-			
-			<p:deletionCell>
-				<t:checkbox value="selectedForDeletion" />
-			</p:deletionCell>
-			
-	        <p:empty>
-	            <p>${message:no-documents}</p>
-	        </p:empty>
-	    </t:grid>
-		
-	</t:form>
-    </t:remove>
     <p:rightPanel>
         <p>${message:add-document}</p>   
         <t:document.upload/>

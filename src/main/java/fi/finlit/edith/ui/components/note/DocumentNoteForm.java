@@ -5,7 +5,6 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.dto.DocumentRevision;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.ui.pages.document.Annotate;

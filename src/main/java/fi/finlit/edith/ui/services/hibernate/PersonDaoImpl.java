@@ -1,12 +1,11 @@
 package fi.finlit.edith.ui.services.hibernate;
 
+import static fi.finlit.edith.sql.domain.QPerson.person;
+
 import java.util.Collection;
 
 import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.ui.services.PersonDao;
-
-import static fi.finlit.edith.sql.domain.QPerson.person;
-import static fi.finlit.edith.sql.domain.QPlace.place;
 
 public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
     @Override
