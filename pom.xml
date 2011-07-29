@@ -227,6 +227,19 @@
       </properties>
     </profile>
     <profile>
+      <id>jenkins</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+	    <db.url>jdbc:mysql://localhost:3306/edith</db.url>
+	    <db.user>edith</db.user>
+	    <db.password>edith</db.password>
+	    <db.schema>edith</db.schema>
+	    <dbmaintain.fromScratchEnabled>true</dbmaintain.fromScratchEnabled>
+      </properties>
+    </profile>
+    <profile>
       <id>prod</id>
       <properties>
         <db.url>jdbc:mysql://localhost:3306/edith</db.url>
