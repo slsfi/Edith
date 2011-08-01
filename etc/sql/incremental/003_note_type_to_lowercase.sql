@@ -1,1 +1,1 @@
-ALTER TABLE `note_types` RENAME TO `note_type`;
+ALTER TABLE `Note_types` RENAME TO `note_type`;

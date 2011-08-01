@@ -64,9 +64,9 @@ public class Note implements Identifiable {
     @Enumerated(EnumType.STRING)
     private NoteStatus status = NoteStatus.INITIAL;
 
-    @Column(name = "note_type")
     @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
+    @Column(name = "note_type")
     private Set<NoteType> types = new HashSet<NoteType>();
 
     @Enumerated(EnumType.STRING)
