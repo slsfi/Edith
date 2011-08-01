@@ -47,7 +47,7 @@ public abstract class AbstractHibernateTest {
     private HibernateSessionSource source;
 
     static {
-        System.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/edith_test?useUnicode=true&characterEncoding=UTF-8");
+//        System.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/edith_test?useUnicode=true&characterEncoding=UTF-8");
         FSRepositoryFactory.setup();
     }
 

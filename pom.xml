@@ -228,9 +228,6 @@
     </profile>
     <profile>
       <id>jenkins</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <properties>
 	    <db.url>jdbc:mysql://localhost:3306/edith</db.url>
 	    <db.user>edith</db.user>
@@ -298,7 +295,7 @@
     <testResources>
       <testResource>
         <directory>src/test/resources</directory>
-        <filtering>false</filtering>
+        <filtering>true</filtering>
       </testResource>
       <testResource>
         <directory>src/test/java</directory>
