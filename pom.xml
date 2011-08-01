@@ -332,7 +332,7 @@
           <systemProperties>
             <property>
               <name>webtest</name>
-              <value>true</value>
+              <value>false</value>
             </property>
           </systemProperties>
         </configuration>
