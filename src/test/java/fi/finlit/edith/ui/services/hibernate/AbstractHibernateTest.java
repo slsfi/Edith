@@ -112,7 +112,7 @@ public abstract class AbstractHibernateTest {
         List<String> sql = new ArrayList<String>();
         for (Iterator<Table> iter = source.getConfiguration().getTableMappings(); iter.hasNext();) {
             Table table = iter.next();
-            sql.add("truncate " + table.getName());
+            sql.add("truncate " + table.getName().toLowerCase());
         }
         return sql.toArray(new String[sql.size()]);
     }
