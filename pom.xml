@@ -373,7 +373,7 @@
         </configuration>
         <executions>
           <execution>
-            <phase>install</phase>
+            <phase>compile</phase>
             <goals>
               <goal>updateDatabase</goal> 
             </goals>
