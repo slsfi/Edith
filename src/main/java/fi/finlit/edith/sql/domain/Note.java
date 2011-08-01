@@ -64,6 +64,7 @@ public class Note implements Identifiable {
     @Enumerated(EnumType.STRING)
     private NoteStatus status = NoteStatus.INITIAL;
 
+    @Column(name = "note_type")
     @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
     private Set<NoteType> types = new HashSet<NoteType>();
@@ -137,11 +138,11 @@ public class Note implements Identifiable {
     }
 
     public void addComment(NoteComment comment) {
-        this.comments.add(comment);
+        comments.add(comment);
     }
 
     public void removeComment(NoteComment comment) {
-        this.comments.remove(comment);
+        comments.remove(comment);
     }
 
     public User getLastEditedBy() {
@@ -217,13 +218,13 @@ public class Note implements Identifiable {
     }
 
     public void decDocumentNoteCount() {
-        if (this.documentNoteCount > 0) {
-            this.documentNoteCount--;
+        if (documentNoteCount > 0) {
+            documentNoteCount--;
         }
     }
 
     public void incDocumentNoteCount() {
-        this.documentNoteCount++;
+        documentNoteCount++;
     }
 
     public void setPerson(Person person) {
