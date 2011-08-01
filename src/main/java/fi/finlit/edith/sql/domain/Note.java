@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -66,7 +67,7 @@ public class Note implements Identifiable {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-    @Column(name = "note_type")
+    @JoinTable(name = "note_types")
     private Set<NoteType> types = new HashSet<NoteType>();
 
     @Enumerated(EnumType.STRING)
