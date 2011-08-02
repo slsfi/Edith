@@ -4,15 +4,15 @@ import java.util.Comparator;
 
 import fi.finlit.edith.sql.domain.NoteComment;
 
-public final class SqlNoteCommentComparator implements Comparator<NoteComment> {
+public final class NoteCommentComparator implements Comparator<NoteComment> {
 
-    public static final SqlNoteCommentComparator ASC = new SqlNoteCommentComparator(true);
+    public static final NoteCommentComparator ASC = new NoteCommentComparator(true);
     
-    public static final SqlNoteCommentComparator DESC = new SqlNoteCommentComparator(false);
+    public static final NoteCommentComparator DESC = new NoteCommentComparator(false);
 
     private final boolean asc;
     
-    private SqlNoteCommentComparator(boolean asc) {
+    private NoteCommentComparator(boolean asc) {
         this.asc = asc;
     }
     

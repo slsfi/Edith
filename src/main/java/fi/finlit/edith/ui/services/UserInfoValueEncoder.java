@@ -7,7 +7,7 @@ import org.apache.tapestry5.ValueEncoder;
 
 import fi.finlit.edith.dto.UserInfo;
 
-public class SqlUserInfoValueEncoder implements ValueEncoder<UserInfo> {
+public class UserInfoValueEncoder implements ValueEncoder<UserInfo> {
 
     @Override
     public String toClient(UserInfo value) {

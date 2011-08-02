@@ -96,7 +96,7 @@ public final class AppModule {
         }
 
         configuration.add(UserInfo.class, new UserInfoValueEncoderFactory());*/
-        configuration.add(fi.finlit.edith.dto.UserInfo.class, new SqlUserInfoValueEncoderFactory());
+        configuration.add(fi.finlit.edith.dto.UserInfo.class, new UserInfoValueEncoderFactory());
     }
 
 

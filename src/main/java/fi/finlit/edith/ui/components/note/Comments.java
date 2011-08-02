@@ -11,7 +11,7 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import fi.finlit.edith.dto.SqlNoteCommentComparator;
+import fi.finlit.edith.dto.NoteCommentComparator;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteComment;
 import fi.finlit.edith.ui.pages.document.Annotate;
@@ -44,7 +44,7 @@ public class Comments {
 
     private static List<NoteComment> getSortedComments(Set<NoteComment> c) {
         List<NoteComment> rv = new ArrayList<NoteComment>(c);
-        Collections.sort(rv, SqlNoteCommentComparator.ASC);
+        Collections.sort(rv, NoteCommentComparator.ASC);
         return rv;
     }
 
