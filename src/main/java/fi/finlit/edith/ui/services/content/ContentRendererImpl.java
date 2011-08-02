@@ -54,6 +54,7 @@ import fi.finlit.edith.sql.domain.Place;
 import fi.finlit.edith.sql.domain.UrlElement;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.util.ElementContext;
+import fi.finlit.edith.util.ParagraphParser;
 
 public class ContentRendererImpl implements ContentRenderer {
 
@@ -71,7 +72,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private static final String DIV = "div";
 
-    private final DocumentDao documentRepository;
+    private final DocumentDao documentDao;
 
     private final XMLInputFactory inFactory = XMLInputFactory.newInstance();
 
@@ -81,10 +82,10 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private final String bibliographUrl;
 
-    public ContentRendererImpl(@Inject DocumentDao documentRepository,
+    public ContentRendererImpl(@Inject DocumentDao documentDao,
             @Inject @Symbol(EDITH.BIBLIOGRAPH_URL) String bibliographUrl
            ) {
-        this.documentRepository = documentRepository;
+        this.documentDao = documentDao;
         this.bibliographUrl = bibliographUrl;
     }
 
@@ -103,7 +104,7 @@ public class ContentRendererImpl implements ContentRenderer {
             }
             if (note.getSubtextSources() != null) {
                 writer.write("Vrt. ");
-                writeParagraph(writer, Paragraph.parseSafe(note.getSubtextSources()));
+                writeParagraph(writer, ParagraphParser.parseSafe(note.getSubtextSources()));
             }
             writer.end();
         }
@@ -288,13 +289,13 @@ public class ContentRendererImpl implements ContentRenderer {
                     writer.end();
                 }
                 writeSpan(writer, "description");
-                writeParagraph(writer, Paragraph.parseSafe(note.getDescription()));
+                writeParagraph(writer, ParagraphParser.parseSafe(note.getDescription()));
                 writer.end();
             }
             if (note.getSources() != null) {
                 writeSpan(writer, "sources");
                 writer.write("(");
-                writeParagraph(writer, Paragraph.parseSafe(note.getSources()));
+                writeParagraph(writer, ParagraphParser.parseSafe(note.getSources()));
                 writer.write(")");
                 writer.end();
             }
@@ -331,7 +332,7 @@ public class ContentRendererImpl implements ContentRenderer {
     @Override
     public void renderPageLinks(Document document, MarkupWriter writer) throws IOException,
             XMLStreamException {
-        InputStream is = documentRepository.getDocumentStream(document);
+        InputStream is = documentDao.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
         try {
@@ -372,7 +373,7 @@ public class ContentRendererImpl implements ContentRenderer {
     @SuppressWarnings("unchecked")
     @Override
     public void renderDocumentAsXML(Document document, List<DocumentNote> documentNotes, OutputStream out) throws IOException, XMLStreamException{
-        InputStream is = documentRepository.getDocumentStream(document);
+        InputStream is = documentDao.getDocumentStream(document);
         XMLEventReader reader = inFactory.createXMLEventReader(is);
         XMLEventWriter writer = outFactory.createXMLEventWriter(out);
 
@@ -422,7 +423,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 publishIds.add(documentNote.getId());
             }
         }
-        InputStream is = documentRepository.getDocumentStream(document);
+        InputStream is = documentDao.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
         MutableBoolean noteContent = new MutableBoolean(false);

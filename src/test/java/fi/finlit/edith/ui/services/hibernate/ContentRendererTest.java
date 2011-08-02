@@ -34,6 +34,7 @@ import fi.finlit.edith.sql.domain.StringElement;
 import fi.finlit.edith.sql.domain.UrlElement;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
+import fi.finlit.edith.util.ParagraphParser;
 
 public class ContentRendererTest extends AbstractHibernateTest {
 
@@ -142,7 +143,7 @@ public class ContentRendererTest extends AbstractHibernateTest {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
         DocumentNote documentNote = createDocumentNote(NoteFormat.PLACE);
 
-        Paragraph description = Paragraph.parseSafe(documentNote.getNote().getDescription());
+        Paragraph description = ParagraphParser.parseSafe(documentNote.getNote().getDescription());
         description.addElement(new StringElement(" foo "));
         UrlElement urlElement = new UrlElement("Google");
         urlElement.setUrl("http://www.google.com/");

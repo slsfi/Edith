@@ -7,7 +7,9 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.ui.pages.document.Annotate;
@@ -16,10 +18,6 @@ import fi.finlit.edith.ui.services.NoteDao;
 
 @SuppressWarnings("unused")
 public class NoteEdit {
-
-    @InjectPage
-    private Annotate page;
-
     @Inject
     private Block noteEditBlock;
 
@@ -42,6 +40,10 @@ public class NoteEdit {
     @InjectComponent
     private Comments comments;
 
+    @Inject
+    @Symbol(EDITH.EXTENDED_TERM)
+    private boolean slsMode;
+
     public Long getNoteId() {
         return documentNoteOnEdit != null ? documentNoteOnEdit.getId() : null;
     }
@@ -51,7 +53,7 @@ public class NoteEdit {
     }
 
     public boolean isSlsMode() {
-        return page.isSlsMode();
+        return slsMode;
     }
 
     public int getLemmaInstances() {

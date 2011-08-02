@@ -7,21 +7,9 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.lang.StringUtils;
 
-import fi.finlit.edith.util.SqlParagraphParser;
+import fi.finlit.edith.util.ParagraphParser;
 
 public class Paragraph {
-    public static final Paragraph parseSafe(String s){
-        if (s != null){
-            try {
-                return SqlParagraphParser.parseParagraph(s);
-            } catch (XMLStreamException e) {
-                throw new RuntimeException(e);
-            }
-        }else{
-            return null;
-        }
-    }
-
     private final List<ParagraphElement> elements = new ArrayList<ParagraphElement>();
 
     public List<ParagraphElement> getElements() {

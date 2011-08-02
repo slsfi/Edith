@@ -13,7 +13,18 @@ import fi.finlit.edith.sql.domain.StringElement;
 import fi.finlit.edith.sql.domain.UrlElement;
 
 
-public final class SqlParagraphParser {
+public final class ParagraphParser {
+
+    public static final Paragraph parseSafe(String s){
+        if (s != null){
+            try {
+                return parseParagraph(s);
+            } catch (XMLStreamException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
 
     public static final Paragraph parseParagraph(String s) throws XMLStreamException {
         String document = new StringBuilder("<root>").append(s).append("</root>").toString();
@@ -66,6 +77,6 @@ public final class SqlParagraphParser {
         return paragraph;
     }
 
-    private SqlParagraphParser() {
+    private ParagraphParser() {
     }
 }
