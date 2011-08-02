@@ -41,7 +41,7 @@ public class AbstractDocumentPage {
 
     @Inject
     private Response response;
-    
+
     @Inject
     @Symbol(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
@@ -71,7 +71,7 @@ public class AbstractDocumentPage {
             }
         } else {
             // get latest
-            rev = revisions.get(revisions.size() - 1).getSvnRevision();
+            revisions.get(revisions.size() - 1).getSvnRevision();
         }
         Collections.reverse(revisions);
     }
@@ -83,7 +83,7 @@ public class AbstractDocumentPage {
     public Document getDocument() {
         return document;
     }
-    
+
     public String getDocumentPath() {
         String svnPath = document.getPath();
         return svnPath.substring(documentRoot.length(), svnPath.length());
