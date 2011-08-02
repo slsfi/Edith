@@ -12,7 +12,7 @@
   <artifactId>fi.finlit.edith</artifactId>
   <packaging>war</packaging>
   <version>0.6.1-SNAPSHOT</version>
-  <name>SKS Edith</name>
+  <name>Edith</name>
   <description></description>
 
   <properties>
