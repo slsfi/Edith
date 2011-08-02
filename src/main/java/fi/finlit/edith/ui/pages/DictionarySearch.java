@@ -7,6 +7,7 @@ package fi.finlit.edith.ui.pages;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -83,7 +84,7 @@ public class DictionarySearch {
     }
 
     private void initDocumentNotes(){
-        //TODO FIX THIS
+        // FIXME
 //        // get notes from gridDataSource
 //        List<Note> notes = new ArrayList<Note>();
 //        int offset = (termsGrid.getCurrentPage()-1) * termsGrid.getRowsPerPage();
@@ -107,6 +108,7 @@ public class DictionarySearch {
 //            }
 //            col.add(documentNote);
 //        }
+        documentNotes = new HashMap<Note, Collection<DocumentNote>>();
     }
 
     public String getFullSelections() {
@@ -120,9 +122,7 @@ public class DictionarySearch {
                 longTexts.add(documentNote.getFullSelection());
             }
             return StringUtils.join(longTexts, ", ");
-        }else{
-            return "";
         }
-
+        return "";
     }
 }
