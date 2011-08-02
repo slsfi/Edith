@@ -367,7 +367,7 @@
         </configuration>
         <executions>
           <execution>
-            <phase>compile</phase>
+            <phase>initialize</phase>
             <goals>
               <goal>updateDatabase</goal> 
             </goals>
