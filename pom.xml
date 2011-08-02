@@ -367,7 +367,7 @@
         </configuration>
         <executions>
           <execution>
-            <phase>initialize</phase>
+            <phase>generate-sources</phase>
             <goals>
               <goal>updateDatabase</goal> 
             </goals>
