@@ -75,7 +75,7 @@ public final class ServiceModule {
 
         InputStream stream = null;
         try {
-            stream = AppModule.class.getResourceAsStream("/edith.properties");
+            stream = ServiceModule.class.getResourceAsStream("/edith.properties");
             properties.load(stream);
             if (properties.getProperty(SymbolConstants.APPLICATION_VERSION) == null) {
                 configuration.add(SymbolConstants.APPLICATION_VERSION,
