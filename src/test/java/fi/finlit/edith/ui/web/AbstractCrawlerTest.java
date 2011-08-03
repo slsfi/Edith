@@ -67,10 +67,10 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
             logger.debug("About to visit page: " + current);
             get(current);
             visited.add(current);
-//            if (title().contains("Exception")) {
+            if (title().contains("Exception")) {
                 System.err.println(pageSource());
                 fail(currentUrl() + " contained an exception.");
-//            }
+            }
             for (WebElement element : findElements(By.tagName("a"))) {
                 String href = null;
                 String text = null;
