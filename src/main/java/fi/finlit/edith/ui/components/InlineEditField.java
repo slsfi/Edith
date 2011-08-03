@@ -72,8 +72,9 @@ public class InlineEditField {
 
     @SuppressWarnings("unchecked")
     boolean beginRender(MarkupWriter writer) {
-        if (formSupport == null)
+        if (formSupport == null) {
             throw new RuntimeException("The Hidden component must be enclosed by a Form component.");
+        }
 
         controlName = formSupport.allocateControlName(resources.getId());
 
