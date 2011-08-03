@@ -60,11 +60,19 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
 
-    static final Set<String> EMPTY_ELEMENTS = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
+    private static final Set<String> EMPTY_ELEMENTS = new HashSet<String>(Arrays.asList("anchor", "lb", "pb"));
 
-    static final Set<String> UL_ELEMENTS = new HashSet<String>(Arrays.asList("castGroup", "castList", "listPerson"));
+    private static final Set<String> UL_ELEMENTS = new HashSet<String>(Arrays.asList("castGroup", "castList", "listPerson"));
 
-    static final Set<String> LI_ELEMENTS = new HashSet<String>(Arrays.asList("castItem", "person"));
+    private static final Set<String> LI_ELEMENTS = new HashSet<String>(Arrays.asList("castItem", "person"));
+
+    private static final String TYPE = "type";
+
+    private static final String ANCHOR = "anchor";
+
+    private static final String END = "end";
+
+    private static final String SPAN = "span";
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
@@ -204,14 +212,14 @@ public class ContentRendererImpl implements ContentRenderer {
           if (!note.getTypes().isEmpty()){
               writer.element("types");
               for (NoteType type : note.getTypes()){
-                  write(writer, "type", type);
+                  write(writer, TYPE, type);
               }
               writer.end();
           }
 
           writer.element("documentNotes");
           for (DocumentNote dn : entry.getValue()){
-              writer.element("documentNote", "xml:id", "end"+dn.getId());
+              writer.element("documentNote", "xml:id", END+dn.getId());
               write(writer, "longText", dn.getFullSelection());
               write(writer, "svnRevision", dn.getRevision());
               write(writer, "createdOn", dn.getCreatedOn());
@@ -258,12 +266,12 @@ public class ContentRendererImpl implements ContentRenderer {
             writer.element("li");
             writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getId());
             if (note.getLemma() != null) {
-                writer.element("span", CLASS, "lemma");
+                writer.element(SPAN, CLASS, "lemma");
                 writer.write(note.getLemma());
                 writer.end();
             }
             if (note.getTerm() != null && note.getTerm().getBasicForm() != null) {
-                writer.element("span", CLASS, "basicForm");
+                writer.element(SPAN, CLASS, "basicForm");
                 writer.write(note.getTerm().getBasicForm());
                 writer.end();
             }
@@ -284,7 +292,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
             if (note.getDescription() != null) {
                 if (note.getFormat() != null && !note.getFormat().equals(NoteFormat.NOTE)) {
-                    writer.element("span");
+                    writer.element(SPAN);
                     writer.write("\u2013");
                     writer.end();
                 }
@@ -385,11 +393,11 @@ public class ContentRendererImpl implements ContentRenderer {
                 if (event.isStartElement()){
                     StartElement startElement = event.asStartElement();
                     Iterator<Attribute> attributes = startElement.getAttributes();
-                    if (startElement.getName().getLocalPart().equals("anchor") && attributes.next().getValue().startsWith("end")){
+                    if (startElement.getName().getLocalPart().equals(ANCHOR) && attributes.next().getValue().startsWith(END)){
                         String id = ((Iterator<Attribute>)startElement.getAttributes()).next().getValue().substring(3);
                         List<Attribute> atts = new ArrayList<Attribute>();
-                        atts.add(eventFactory.createAttribute("type", "editor"));
-                        atts.add(eventFactory.createAttribute("xml:id", "end"+id));
+                        atts.add(eventFactory.createAttribute(TYPE, "editor"));
+                        atts.add(eventFactory.createAttribute("xml:id", END+id));
                         atts.add(eventFactory.createAttribute("target", "#start"+id));
                         event = eventFactory.createStartElement(note, atts.iterator(), null);
                         openAnchor = event;
@@ -398,7 +406,7 @@ public class ContentRendererImpl implements ContentRenderer {
                     }
                 }else if (event.isEndElement()){
                     EndElement endElement = event.asEndElement();
-                    if (openAnchor != null && endElement.getName().getLocalPart().equals("anchor")){
+                    if (openAnchor != null && endElement.getName().getLocalPart().equals(ANCHOR)){
                         event = eventFactory.createEndElement(note, null);
                     }
                     openAnchor = null;
@@ -468,7 +476,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.attributes("id", path);
             }
         } else if (localName.equals(DIV)) {
-            String type = reader.getAttributeValue(null, "type");
+            String type = reader.getAttributeValue(null, TYPE);
             writer.element(localName, CLASS, type);
             if (path != null) {
                 writer.attributes("id", path);
@@ -485,7 +493,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.writeRaw(page + ".");
                 writer.end();
             }
-        } else if (localName.equals("anchor")) {
+        } else if (localName.equals(ANCHOR)) {
             String id = reader.getAttributeValue(XML_NS, "id");
             if (id == null) {
                 return;
@@ -494,13 +502,13 @@ public class ContentRendererImpl implements ContentRenderer {
                     return;
                 }
                 // start anchor
-                writer.element("span", CLASS, "notestart", "id", id);
+                writer.element(SPAN, CLASS, "notestart", "id", id);
                 writer.end();
 
                 noteContent.setValue(true);
                 noteIds.add(Long.parseLong(id.substring("start".length())));
-            } else if (id.startsWith("end")) {
-                noteIds.remove(Long.parseLong(id.substring("end".length())));
+            } else if (id.startsWith(END)) {
+                noteIds.remove(Long.parseLong(id.substring(END.length())));
                 if (noteIds.isEmpty()) {
                     noteContent.setValue(false);
                 }
@@ -515,7 +523,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private String extractName(XMLStreamReader reader, String localName) {
         if (localName.equals(DIV)) {
-            return reader.getAttributeValue(null, "type");
+            return reader.getAttributeValue(null, TYPE);
         }
         return localName;
     }
@@ -537,7 +545,7 @@ public class ContentRendererImpl implements ContentRenderer {
             for (Long noteId : noteIds) {
                 classes.append(" n").append(noteId);
             }
-            writer.element("span", CLASS, classes);
+            writer.element(SPAN, CLASS, classes);
             writer.writeRaw(StringEscapeUtils.escapeXml(text));
             writer.end();
         } else {
