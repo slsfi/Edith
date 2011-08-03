@@ -656,7 +656,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     public void rename(Long id, String newPath) {
         Document doc = getById(id);
         String fullPath = doc.getPath();
-        String directoryPath = fullPath.substring(0, fullPath.lastIndexOf("/") + 1);
+        String directoryPath = fullPath.substring(0, fullPath.lastIndexOf('/') + 1);
         List<Document> documents =
             query().from(document).where(document.path.contains(doc.getPath())).list(document);
         for (Document d : documents) {
@@ -666,7 +666,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         }
         versioningService.move(fullPath, directoryPath + newPath);
         doc.setPath(directoryPath + newPath);
-        doc.setTitle(newPath.substring(newPath.lastIndexOf("/") + 1));
+        doc.setTitle(newPath.substring(newPath.lastIndexOf('/') + 1));
     }
 
     @Override
