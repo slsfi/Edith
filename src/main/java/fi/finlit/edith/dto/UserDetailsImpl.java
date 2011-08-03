@@ -16,14 +16,14 @@ public class UserDetailsImpl implements UserDetails{
 
     private String password;
 
-    private final boolean nonExpired = true, nonLocked = true, enabled = true;
+    private static final boolean NON_EXPIRED = true, NON_LOCKED = true, ENABLED = true;
 
     private final GrantedAuthority[] authorities;
 
     public UserDetailsImpl(String username, String password, GrantedAuthority... auth){
         this.username = username;
         this.password = password;
-        this.authorities = auth;
+        authorities = auth;
     }
 
     @Override
@@ -47,22 +47,22 @@ public class UserDetailsImpl implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-        return nonExpired;
+        return NON_EXPIRED;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return nonLocked;
+        return NON_LOCKED;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return nonExpired;
+        return NON_EXPIRED;
     }
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return ENABLED;
     }
 
 }
