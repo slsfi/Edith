@@ -16,6 +16,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Mouse;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.interactions.Action;
@@ -52,6 +53,12 @@ public abstract class AbstractSeleniumTest {
         return p;
     }
 
+    public FirefoxBinary binary() {
+        FirefoxBinary b = new FirefoxBinary();
+        b.setEnvironmentProperty("DISPLAY", ":20");
+        return b;
+    }
+
     private boolean webtestMode() {
         return System.getProperty("webtest") != null;
     }
@@ -60,7 +67,7 @@ public abstract class AbstractSeleniumTest {
     public void beforeClass() throws Exception {
         if (webtestMode() && driver == null) {
             long start = System.currentTimeMillis();
-            driver = new FirefoxDriver(profile());
+            driver = new FirefoxDriver(binary(), profile());
             System.out.println("Firefox driver start took " + (System.currentTimeMillis() - start));
 
             config = starter().configure();
