@@ -117,10 +117,6 @@ public class SubversionServiceImpl implements SubversionService {
 
     @Override
     public long commit(String svnPath, long revision, String username, UpdateCallback callback) {
-        if (svnRepository == null) {
-            String s = "foobaaah!";
-            System.err.println(s);
-        }
         File userCheckout = new File(workingCopies + "/" + username);
         String path = svnPath.substring(documentRoot.length());
         if (userCheckout.exists()) {

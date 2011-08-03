@@ -69,13 +69,13 @@ public abstract class AbstractNoteForm {
 
     @Property
     private NoteType type;
-    
+
     private boolean delete;
 
     void onSelectedFromDelete() {
         delete = true;
     }
-    
+
     public boolean isSlsMode() {
         return page.isSlsMode();
     }
@@ -128,7 +128,6 @@ public abstract class AbstractNoteForm {
     }
 
     void onPrepareFromNoteEditForm(long noteId) {
-        System.err.println("noteForm.onPrepareFromNoteEditForm " + noteId);
         noteOnEdit = noteDao.getById(noteId);
     }
 
@@ -140,7 +139,7 @@ public abstract class AbstractNoteForm {
         logger.info("onSuccessFromNoteEditForm begins with " + noteOnEdit);
 
         logger.info("html edit contents: " + noteOnEdit.getTerm().getMeaning());
-        
+
         try {
 
             if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
@@ -210,18 +209,18 @@ public abstract class AbstractNoteForm {
 //        documentNote.getNote().setTerm(term);
 //    }
 
-    
+
     public boolean isDeletableNote() {
         return documentNoteDao.getDocumentNoteCount(noteOnEdit) == 0;
     }
-    
+
     //Autocomplete
     public String getSearch() {
         return "";
     }
-    
+
     public void setSearch(String search) {
-        
+
     }
-    
+
 }

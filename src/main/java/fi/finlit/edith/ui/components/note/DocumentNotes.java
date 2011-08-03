@@ -58,7 +58,6 @@ public class DocumentNotes {
 
     public DocumentNote getSelectedNote() {
         if (selectedNote == null) {
-            System.err.println("selectednote null, selecting first");
             getDocumentNotes();
             selectedNote = documentNotes.size() > 0 ? documentNotes.get(0) : null;
         }
@@ -70,13 +69,10 @@ public class DocumentNotes {
     }
 
     public String getSelectedCssClass() {
-        System.out.println("selecting" + documentNote.getId() + " == " + getSelectedNote().getId() );
         return documentNote.getId().equals(getSelectedNote().getId()) ? "selected-note" : "";
     }
 
     Object onActionFromSelectDocumentNote(long documentNoteId) {
-        System.out.println("select documentNote " + documentNoteId);
-
         selectedNote = documentNoteDao.getById(documentNoteId);
 
         page.getNoteEdit().setDocumentNoteOnEdit(selectedNote);
@@ -85,7 +81,6 @@ public class DocumentNotes {
     }
 
     public void setNoteId(Long noteId) {
-        System.out.println("Setting noteid to " + noteId);
         this.noteId = noteId;
     }
 

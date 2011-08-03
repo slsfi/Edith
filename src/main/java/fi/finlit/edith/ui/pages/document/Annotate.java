@@ -159,7 +159,6 @@ public class Annotate extends AbstractDocumentPage {
     }
 
     void onActivate() {
-        System.err.println("onActivate");
         if (createTermSelection == null) {
             createTermSelection = new SelectedText();
         }

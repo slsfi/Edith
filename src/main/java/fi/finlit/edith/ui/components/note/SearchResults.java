@@ -35,14 +35,14 @@ public class SearchResults {
 
     @Inject
     private NoteDao noteDao;
-    
+
     @InjectComponent
     @Property
     private Grid grid;
 
     @Property
     private GridDataSource notes;
-    
+
     @Property
     private Note note;
 
@@ -55,31 +55,28 @@ public class SearchResults {
     public Block getBlock() {
         return notesList;
     }
-    
+
     private static Pattern STRIP_TAGS = Pattern.compile("\\<.*?>", Pattern.DOTALL);
     private static int MAX_STRIPPED_LENGTH = 30;
 
     // XXX Would be nice to get into real workflow
     public boolean getSearchResults() {
-
-        System.out.println("Searching with" + page.getSearchInfo());
-
         // TODO Handle SKS case
 
         notes = noteDao.findNotes(page.getSearchInfo());
-        
+
         return notes != null && notes.getAvailableRows() > 0;
     }
-    
+
     void onInplaceUpdate() {
         getSearchResults();
     }
-    
+
     public int getPageSize() {
         //TODO make configurable
         return 20;
     }
-    
+
 //    public String getPagerInfo() {
 //        int start = ((grid.getCurrentPage()-1) * getPageSize()) + 1;
 //        int end = grid.getCurrentPage() * getPageSize();
@@ -90,12 +87,9 @@ public class SearchResults {
 //    }
 
     Object onActionFromSelectNote(long noteId) {
-        System.out.println("select note " + noteId);
-
         page.getDocumentNotes().setNoteId(noteId);
         DocumentNote selected = page.getDocumentNotes().getSelectedNote();
         if (selected != null) {
-            System.out.println("selected documentnote " + selected);
             page.getNoteEdit().setDocumentNoteOnEdit(selected);
 
         } else {
@@ -112,22 +106,22 @@ public class SearchResults {
         }
         return StringUtils.join(translated, ", ");
     }
-    
+
     public String getStatusString() {
         return messages.get(note.getStatus().toString());
     }
-    
+
     private String stripTagsAndConcat(String str, int maxSize) {
         if (str == null) {
             return null;
         }
         return StringUtils.abbreviate(STRIP_TAGS.matcher(str).replaceAll(""), maxSize);
     }
-    
+
     public String getTermMeaning() {
         return stripTagsAndConcat(note.getTerm().getMeaning(), MAX_STRIPPED_LENGTH);
     }
-    
+
     public String getDescription() {
         return stripTagsAndConcat(note.getDescription(), MAX_STRIPPED_LENGTH);
     }

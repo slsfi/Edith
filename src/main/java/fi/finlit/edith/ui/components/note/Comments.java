@@ -62,7 +62,6 @@ public class Comments {
 
     void onPrepareFromCommentForm(long noteId) {
         if (noteOnEdit == null) {
-            System.err.println("onPrepareFromCommentForm with noteid " + noteId);
             noteOnEdit = noteDao.getById(noteId);
         }
     }
@@ -75,15 +74,12 @@ public class Comments {
     }
 
     Object onSuccessFromCommentForm() {
-        System.err.println("onSuccessFromCommentForm with comment " + newCommentMessage
-                + " on note " + noteOnEdit);
         Set<NoteComment> conceptComments = noteOnEdit.getComments();
         if (newCommentMessage != null) {
             conceptComments.add(noteDao.createComment(noteOnEdit, newCommentMessage));
             newCommentMessage = null;
         }
         comments = getSortedComments(conceptComments);
-        System.err.println("onSuccessFromCommentForm --");
         return commentsBlock;
     }
 
