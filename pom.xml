@@ -329,6 +329,12 @@
         <configuration>
           <useSystemClassLoader>false</useSystemClassLoader>
           <argLine>-Xms256m -Xmx512m</argLine>
+          <systemProperties>
+            <property>
+              <name>webtest</name>
+              <value>false</value>
+            </property>
+          </systemProperties>
         </configuration>
       </plugin>
       <plugin>
