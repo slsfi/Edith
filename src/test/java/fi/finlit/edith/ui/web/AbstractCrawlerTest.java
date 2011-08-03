@@ -32,7 +32,7 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
 //        findElement(By.name("j_password")).sendKeys(PASSWORD);
 //        findElement(By.id("loginForm")).submit();
         get("/adddummydata");
-        
+
         Set<String> pages = crawl();
         get("/logout");
         for (String page : pages) {
@@ -67,10 +67,10 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
             logger.debug("About to visit page: " + current);
             get(current);
             visited.add(current);
-            if (title().contains("Exception")) {
+//            if (title().contains("Exception")) {
                 System.err.println(pageSource());
                 fail(currentUrl() + " contained an exception.");
-            }
+//            }
             for (WebElement element : findElements(By.tagName("a"))) {
                 String href = null;
                 String text = null;
@@ -80,7 +80,7 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
                 } catch(StaleElementReferenceException e) {
                     continue;
                 }
-                
+
                 if (href == null) {
                     logger.warn("A-tag without href found: " + text);
                     continue;
@@ -90,10 +90,10 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
                 }
-                if (href != null 
-                        && !href.startsWith("mailto:") 
-                        && !href.startsWith("http") 
-                        && !href.contains("#") 
+                if (href != null
+                        && !href.startsWith("mailto:")
+                        && !href.startsWith("http")
+                        && !href.contains("#")
                         && !href.contains("t:ac")) {
                     links.add(href);
                 }
