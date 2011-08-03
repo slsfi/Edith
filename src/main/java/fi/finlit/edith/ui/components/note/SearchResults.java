@@ -56,8 +56,8 @@ public class SearchResults {
         return notesList;
     }
 
-    private static Pattern STRIP_TAGS = Pattern.compile("\\<.*?>", Pattern.DOTALL);
-    private static int MAX_STRIPPED_LENGTH = 30;
+    private static final Pattern STRIP_TAGS = Pattern.compile("\\<.*?>", Pattern.DOTALL);
+    private static final int MAX_STRIPPED_LENGTH = 30;
 
     // XXX Would be nice to get into real workflow
     public boolean getSearchResults() {

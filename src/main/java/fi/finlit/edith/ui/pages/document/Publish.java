@@ -42,7 +42,7 @@ public class Publish extends AbstractDocumentPage {
 
     @Inject
     @Symbol(EDITH.PUBLISH_PATH)
-    private String PUBLISH_PATH;
+    private String publishPath;
 
     @Inject
     private ContentRenderer renderer;
@@ -58,8 +58,8 @@ public class Publish extends AbstractDocumentPage {
         Document document = getDocument();
         
         documentNotes = documentNoteRepository.getPublishableNotesOfDocument(document);
-        new File(PUBLISH_PATH).mkdirs();
-        final String path = PUBLISH_PATH + "/" + document.getTitle();
+        new File(publishPath).mkdirs();
+        final String path = publishPath + "/" + document.getTitle();
         
         // document as HTML
         
