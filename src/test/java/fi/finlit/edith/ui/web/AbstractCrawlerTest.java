@@ -27,12 +27,6 @@ public abstract class AbstractCrawlerTest extends AbstractSeleniumTest {
     @Test
     public void BrowsePages() throws Exception {
         login("vesa", "vesa");
-//        get("/login");
-//        findElement(By.name("j_username")).sendKeys(USERNAME);
-//        findElement(By.name("j_password")).sendKeys(PASSWORD);
-//        findElement(By.id("loginForm")).submit();
-        get("/adddummydata");
-
         Set<String> pages = crawl();
         get("/logout");
         for (String page : pages) {

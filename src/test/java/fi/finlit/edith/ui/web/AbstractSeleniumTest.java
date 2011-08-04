@@ -55,7 +55,9 @@ public abstract class AbstractSeleniumTest {
 
     public FirefoxBinary binary() {
         FirefoxBinary b = new FirefoxBinary();
-        b.setEnvironmentProperty("DISPLAY", ":20");
+        if (System.getProperty("headless") != null) {
+            b.setEnvironmentProperty("DISPLAY", ":20");
+        }
         return b;
     }
 
