@@ -12,6 +12,7 @@ import static org.easymock.EasyMock.isNull;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -360,9 +361,28 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     }
 
     @Test
-    public void Get_File_Items_For_Root_Path() {
+    public void Root_Path_Contains_File_Items() {
         List<FileItem> items = subversionService.getFileItems(documentRoot, -1);
         assertFalse(items.isEmpty());
+    }
+
+    @Test
+    public void Root_Path_Contains_File_Items_That_Have_Fields_Set() {
+        List<FileItem> items = subversionService.getFileItems(documentRoot, -1);
+        FileItem item = null;
+        String title = "Nummisuutarit rakenteistettuna.xml";
+        for (FileItem fi : items) {
+            if (fi.getTitle().equals(title)) {
+                item = fi;
+                break;
+            }
+        }
+        assertNotNull(item);
+        assertEquals(title, item.getTitle());
+        assertEquals(documentRoot + "/" + title, item.getPath());
+        assertNull(item.getChildren());
+        assertFalse(item.isFolder());
+        assertFalse(item.isLazy());
     }
 
     @Inject
@@ -387,4 +407,11 @@ public class SubversionServiceTest extends AbstractHibernateTest {
         verify(repositoryMock);
     }
 
+    @Test
+    public void Move_Bumps_Revision() {
+        String oldPath = documentRoot + "/" + "Nummisuutarit rakenteistettuna.xml";
+        String newPath = documentRoot + "/" + "Pummisuutarit.xml";
+        long oldRevision = subversionService.getLatestRevision();
+        assertEquals(oldRevision + 1, subversionService.move(oldPath, newPath));
+    }
 }

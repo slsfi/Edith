@@ -353,8 +353,7 @@ public class SubversionServiceImpl implements SubversionService {
             File oldFile = new File(userCheckout + "/" + path);
             File newFile = new File(userCheckout + "/" + newPath.replace(documentRoot, ""));
             clientManager.getMoveClient().doMove(oldFile, newFile);
-            commit(newFile);
-            commit(oldFile);
+            commit(userCheckout);
         } catch (SVNException e) {
             throw new SubversionException(e.getMessage(), e);
         }
