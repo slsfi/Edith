@@ -202,10 +202,10 @@
   </dependencies>
 
   <repositories>
-<!--     <repository> -->
-<!--       <id>localhost.nu</id> -->
-<!--       <url>http://www.localhost.nu/java/mvn</url> -->
-<!--     </repository> -->
+    <!-- <repository> -->
+    <!-- <id>localhost.nu</id> -->
+    <!-- <url>http://www.localhost.nu/java/mvn</url> -->
+    <!-- </repository> -->
     <repository>
       <id>svnkit</id>
       <url>http://maven.svnkit.com/maven2</url>
@@ -229,12 +229,27 @@
     <profile>
       <id>jenkins</id>
       <properties>
-	    <db.url>jdbc:mysql://localhost:3306/edith</db.url>
-	    <db.user>edith</db.user>
-	    <db.password>edith</db.password>
-	    <db.schema>edith</db.schema>
-	    <dbmaintain.fromScratchEnabled>true</dbmaintain.fromScratchEnabled>
+        <db.url>jdbc:mysql://localhost:3306/edith</db.url>
+        <db.user>edith</db.user>
+        <db.password>edith</db.password>
+        <db.schema>edith</db.schema>
+        <dbmaintain.fromScratchEnabled>true</dbmaintain.fromScratchEnabled>
       </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.5</version>
+            <configuration>
+              <useSystemClassLoader>false</useSystemClassLoader>
+              <systemPropertyVariables>
+                <webtest>true</webtest>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>prod</id>
@@ -325,8 +340,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.5</version>
+        <!--version>2.5</version-->
         <configuration>
+          <argLine>-Xms256m -Xmx512m</argLine>
           <useSystemClassLoader>false</useSystemClassLoader>
           <systemPropertyVariables>
             <webtest>true</webtest>
@@ -371,7 +387,7 @@
           <execution>
             <phase>generate-sources</phase>
             <goals>
-              <goal>updateDatabase</goal> 
+              <goal>updateDatabase</goal>
             </goals>
           </execution>
         </executions>
