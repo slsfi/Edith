@@ -245,6 +245,7 @@
               <useSystemClassLoader>false</useSystemClassLoader>
               <systemPropertyVariables>
                 <webtest>true</webtest>
+                <headless>true</headless>
               </systemPropertyVariables>
             </configuration>
           </plugin>
