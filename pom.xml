@@ -11,7 +11,7 @@
   <groupId>fi.finlit</groupId>
   <artifactId>fi.finlit.edith</artifactId>
   <packaging>war</packaging>
-  <version>0.6.1-SNAPSHOT</version>
+  <version>0.6.2-SNAPSHOT</version>
   <name>Edith</name>
   <description></description>
 
