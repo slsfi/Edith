@@ -12,9 +12,6 @@ import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 
 public class DocumentNoteForm {
-
-    // private final Logger logger = LoggerFactory.getLogger(getClass());
-
     @Parameter
     @Property
     private DocumentNote documentNoteOnEdit;

@@ -11,9 +11,6 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Properties;
 
-import nu.localhost.tapestry5.springsecurity.services.LogoutService;
-import nu.localhost.tapestry5.springsecurity.services.internal.LogoutServiceImpl;
-
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -42,24 +39,6 @@ public final class ServiceModule {
         binder.bind(SubversionService.class, SubversionServiceImpl.class);
         binder.bind(ContentRenderer.class, ContentRendererImpl.class);
         binder.bind(AuthService.class, SpringSecurityAuthService.class);
-
-        /*
-        binder.bind(TimeService.class, SimpleTimeService.class);
-//        binder.bind(TasksService.class);
-
-        // repositories
-        binder.bind(AdminService.class, AdminServiceImpl.class);
-        binder.bind(DocumentRepository.class, DocumentRepositoryImpl.class);
-        binder.bind(NoteRepository.class, NoteRepositoryImpl.class);
-        binder.bind(DocumentNoteRepository.class, DocumentNoteRepositoryImpl.class);
-        binder.bind(TermRepository.class, TermRepositoryImpl.class);
-        binder.bind(PersonRepository.class, PersonRepositoryImpl.class);
-        binder.bind(PlaceRepository.class, PlaceRepositoryImpl.class);
-        binder.bind(UserRepository.class, UserRepositoryImpl.class);
-
-        // tasks
-        binder.bind(ReplacedByAdditionTask.class);
-        */
     }
 
     @Startup

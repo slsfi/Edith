@@ -46,23 +46,22 @@ public class Publish extends AbstractDocumentPage {
 
     @Inject
     private ContentRenderer renderer;
-    
+
     @Inject
     private SubversionService subversionService;
 
     public void setupRender() {
         documentNotes = documentNoteRepository.getPublishableNotesOfDocument(getDocument());
     }
-    
+
     public void onActionFromPublish(String id) throws IOException, XMLStreamException {
         Document document = getDocument();
-        
+
         documentNotes = documentNoteRepository.getPublishableNotesOfDocument(document);
         new File(publishPath).mkdirs();
         final String path = publishPath + "/" + document.getTitle();
-        
+
         // document as HTML
-        
         MarkupWriter documentWriter = new MarkupWriterImpl();
         renderer.renderDocument(document, documentNotes, documentWriter);
         writeHtmlFile(path + "_document.html", documentWriter);
@@ -71,13 +70,13 @@ public class Publish extends AbstractDocumentPage {
         MarkupWriter notesWriter = new MarkupWriterImpl();
         renderer.renderDocumentNotes(documentNotes, notesWriter);
         writeHtmlFile(path + "_notes.html", notesWriter);
-        
+
         // document as TEI
         File file = new File(path);
         file.createNewFile();
         FileOutputStream out = new FileOutputStream(file);
         renderer.renderDocumentAsXML(document, documentNotes, out);
-        
+
         // notes as XML
         notesWriter = new MarkupWriterImpl();
         renderer.renderDocumentNotesAsXML(document, documentNotes, notesWriter);

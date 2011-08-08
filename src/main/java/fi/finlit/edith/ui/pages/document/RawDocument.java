@@ -24,13 +24,12 @@ public class RawDocument {
 
     @Inject
     private Response response;
-    
+
     public void onActivate() throws IOException {
         response.sendError(HttpError.PAGE_NOT_FOUND, "Document id is not given");
     }
-    
+
     public StreamResponse onActivate(String id) throws IOException {
-          
         //Give xsl if it's requested
         if (id.endsWith(".xsl")) {
             return new TextStreamResponse("text/xsl", "<xsl:stylesheet version='1.0' " +
@@ -38,14 +37,14 @@ public class RawDocument {
                 "<xsl:template match='/'><xsl:copy-of select='.'/></xsl:template>" +
                 "</xsl:stylesheet>");
         }
-        
+
         final Document document = documentRepository.getById(Long.parseLong(id));
 
         if (document == null) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "Could not find document with id: " + id);
             return null;
         }
-        
+
         return new StreamResponse() {
             @Override
             public void prepareResponse(Response response) {

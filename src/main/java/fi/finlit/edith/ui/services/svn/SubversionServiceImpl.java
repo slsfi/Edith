@@ -93,6 +93,10 @@ public class SubversionServiceImpl implements SubversionService {
         this.clientManager = clientManager;
     }
 
+    public void setSvnRepository(SVNRepository svnRepository) {
+        this.svnRepository = svnRepository;
+    }
+
     @SuppressWarnings("deprecation")
     public void checkout(File destination, long revision) {
         try {
@@ -227,25 +231,6 @@ public class SubversionServiceImpl implements SubversionService {
             return revision;
         } catch (SVNException e) {
             throw new SubversionException(e);
-        }
-    }
-
-    @Override
-    public List<RevisionInfo> getRevisions(String svnPath) {
-        try {
-            List<SVNFileRevision> revisions = getFileRevisions(svnPath);
-            List<RevisionInfo> revisionInfos = new ArrayList<RevisionInfo>(revisions.size());
-            for (SVNFileRevision rev : revisions) {
-                long svnRevision = rev.getRevision();
-                String created = rev.getRevisionProperties().getStringValue(
-                        SVNRevisionProperty.DATE);
-                String creator = rev.getRevisionProperties().getStringValue(
-                        SVNRevisionProperty.AUTHOR);
-                revisionInfos.add(new RevisionInfo(svnRevision, created, creator));
-            }
-            return revisionInfos;
-        } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
         }
     }
 

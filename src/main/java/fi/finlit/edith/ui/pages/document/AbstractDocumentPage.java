@@ -31,12 +31,6 @@ public class AbstractDocumentPage {
 
     private Document document;
 
-    @Property
-    private List<RevisionInfo> revisions;
-
-    @Property
-    private RevisionInfo revision;
-
     private Context context;
 
     @Inject
@@ -53,27 +47,10 @@ public class AbstractDocumentPage {
         }
         try {
             document = documentRepository.getById(ctx.get(Long.class, 0));
-            revisions = documentRepository.getRevisions(document);
         } catch (RuntimeException e) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "Document not found!");
             return;
         }
-        long rev = -1;
-        if (ctx.getCount() > 1) {
-            // TODO : block this for AnnotatePage
-            try {
-                rev = ctx.get(Long.class, 1);
-            } catch (RuntimeException e) {
-                response.sendError(HttpError.PAGE_NOT_FOUND, "Revision not numerical!");
-            }
-            if (!revisions.contains(new RevisionInfo(rev))) {
-                response.sendError(HttpError.PAGE_NOT_FOUND, "Document revision not found!");
-            }
-        } else {
-            // get latest
-            revisions.get(revisions.size() - 1).getSvnRevision();
-        }
-        Collections.reverse(revisions);
     }
 
     Object[] onPassivate() {
@@ -88,7 +65,6 @@ public class AbstractDocumentPage {
         String svnPath = document.getPath();
         return svnPath.substring(documentRoot.length(), svnPath.length());
     }
-
 
     protected DocumentDao getDocumentRepository() {
         return documentRepository;

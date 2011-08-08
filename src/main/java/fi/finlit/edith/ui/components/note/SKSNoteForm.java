@@ -37,7 +37,7 @@ public class SKSNoteForm extends AbstractNoteForm {
     @InjectComponent
     @Property
     private Zone personZone;
-    
+
     //TODO This does not belong here, term have to be edited in it's on component
     @Property
     private Term termOnEdit;
@@ -62,6 +62,7 @@ public class SKSNoteForm extends AbstractNoteForm {
     @Inject
     private PersonDao personDao;
 
+    @Override
     void onPrepareFromNoteEditForm(long noteId) {
 
         super.onPrepareFromNoteEditForm(noteId);
@@ -74,13 +75,8 @@ public class SKSNoteForm extends AbstractNoteForm {
         }
 
     }
-    
-//  // Handling the embedded term edit
-//  if (StringUtils.isNotBlank(termOnEdit.getBasicForm())) {
-//      setTerm(noteOnEdit);
-//  }
 
-
+    @Override
     Object onSuccessFromNoteEditForm() {
         getNoteOnEdit().setPerson(getPerson());
         getNoteOnEdit().setPlace(getPlace());

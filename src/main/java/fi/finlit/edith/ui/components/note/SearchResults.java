@@ -77,15 +77,6 @@ public class SearchResults {
         return 20;
     }
 
-//    public String getPagerInfo() {
-//        int start = ((grid.getCurrentPage()-1) * getPageSize()) + 1;
-//        int end = grid.getCurrentPage() * getPageSize();
-//        if (end > notes.getAvailableRows()) {
-//            end = notes.getAvailableRows();
-//        }
-//        return grid.getCurrentPage() + " " + start + " - " + end + " / " + notes.getAvailableRows();
-//    }
-
     Object onActionFromSelectNote(long noteId) {
         page.getDocumentNotes().setNoteId(noteId);
         DocumentNote selected = page.getDocumentNotes().getSelectedNote();

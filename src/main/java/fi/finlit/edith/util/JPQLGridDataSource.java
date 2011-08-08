@@ -26,7 +26,7 @@ import com.mysema.query.types.path.PathBuilder;
 
 /**
  * BeanGridDataSource provides an implementation of the GridDataSource for Querydsl hibernate
- * 
+ *
  * @author tiwe
  */
 public class JPQLGridDataSource<T> implements GridDataSource {
@@ -54,7 +54,7 @@ public class JPQLGridDataSource<T> implements GridDataSource {
 
     /**
      * Create a new instance with no filter conditions
-     * 
+     *
      * @param sessionFactory
      * @param entity
      *            root entity of the query
@@ -70,7 +70,7 @@ public class JPQLGridDataSource<T> implements GridDataSource {
 
     /**
      * Create a new instance with filter conditions
-     * 
+     *
      * @param sessionFactory
      * @param entity
      *            root entity of the query
@@ -146,10 +146,9 @@ public class JPQLGridDataSource<T> implements GridDataSource {
         index = index - startIndex;
         if (index < preparedResults.size()) {
             return preparedResults.get(index);
-        } else {
-            logger.error("Invalid index " + index + " (size " + preparedResults.size() + ")");
-            return null;
         }
+        logger.error("Invalid index " + index + " (size " + preparedResults.size() + ")");
+        return null;
     }
 
     @Override

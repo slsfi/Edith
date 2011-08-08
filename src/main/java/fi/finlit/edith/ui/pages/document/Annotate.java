@@ -148,9 +148,6 @@ public class Annotate extends AbstractDocumentPage {
             searchInfo.getDocuments().add(getDocument());
             searchInfo.setCurrentDocument(getDocument());
         }
-//        if (selectedDocuments != null) {
-//            searchInfo.getDocuments().addAll(selectedDocuments);
-//        }
         return searchInfo;
     }
 
@@ -165,7 +162,6 @@ public class Annotate extends AbstractDocumentPage {
     }
 
     Object onSuccessFromSelectNoteForm() {
-
         // FIXME: If an area which has multiple notes is clicked the url will
         // be in the following form n100/12/13. With this we will handle this
         // case and just return the id 100.
@@ -182,59 +178,15 @@ public class Annotate extends AbstractDocumentPage {
     }
 
     Object onDelete(EventContext context) {
-//        noteOnEdit = documentNoteRepository.getById(context.get(String.class, 0));
-//        DocumentRevision documentRevision = getDocumentRevision();
-//        documentRevision = getDocumentRepository().removeNotes(documentRevision, noteOnEdit);
-
-        // prepare view with new revision
-//        getDocumentRevision().setRevision(documentRevision.getRevision());
-//        selectedNotes = Collections.emptyList();
         return new MultiZoneUpdate(EDIT_ZONE, emptyBlock)
-                //.add("listZone", notesList)
                 .add("documentZone", documentView).add("commentZone", emptyBlock);
     }
 
     Object onEdit(EventContext context) {
-//        System.err.println("onEdit");
-//        selectedNotes = new ArrayList<DocumentNote>();
-//        if (context.getCount() > 0 && context.get(String.class, 0).startsWith("n")) {
-//            for (int i = 0; i < context.getCount(); i++) {
-//                String localId = context.get(String.class, i).substring(1);
-//                DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
-//                if (docNote != null){
-//                    selectedNotes.add(docNote);
-//                }else{
-//                    throw new IllegalStateException("No DocumentNote available for local id " + localId);
-//                }
-//            }
-//        } else {
-//            String localId = context.get(String.class, 0).substring(1);
-//            DocumentNote docNote = documentNoteRepository.getByLocalId(getDocumentRevision(), localId);
-//            if (docNote == null) {
-//                docNote = new DocumentNote();
-//                docNote.setLocalId(String.valueOf(timeService.currentTimeMillis()));
-//                docNote.setNote(noteRepository.getById(context.get(String.class, 1)));
-//            }
-//            selectedNotes.add(docNote);
-//        }
-//
-//        if (selectedNotes.size() > 0) {
-//            noteOnEdit = selectedNotes.get(0);
-//            termOnEdit = getEditTerm(noteOnEdit.getNote());
-//            comments = getSortedComments(noteOnEdit.getConcept(slsMode).getComments());
-//        } else {
-//            comments = Collections.<NoteComment> emptyList();
-//        }
-//        moreThanOneSelectable = selectedNotes.size() > 1;
-//        System.err.println("onEdit --");
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
-//        .add("commentZone", commentZone.getBody())
-        ;
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit);
     }
 
     private MultiZoneUpdate noteHasChanged(DocumentNote documentNote, String msg) {
-        //getDocumentRevision().setRevision(documentNote.getSVNRevision());
-
         documentNotes.setNoteId(documentNote.getNote().getId());
         documentNotes.setSelectedNote(documentNote);
         noteEdit.setDocumentNoteOnEdit(documentNote);
@@ -262,32 +214,15 @@ public class Annotate extends AbstractDocumentPage {
 
     Object onSuccessFromCreateTermForm() {
         logger.info(createTermSelection.toString());
+        DocumentNote documentNote = null;
+        try {
+            Note n = createNote();
+            documentNote = getDocumentRepository().addNote(n, getDocument(), createTermSelection);
+        } catch (Exception e) {
+            return zoneWithError("note-addition-failed", e);
+        }
 
-//        notes = noteRepository.findNotes(Note.createLemmaFromLongText(createTermSelection
-//                .getSelection()));
-//        if (notes.isEmpty()) {
-            DocumentNote documentNote = null;
-            try {
-                Note n = createNote();
-                documentNote = getDocumentRepository().addNote(n, getDocument(),
-                        createTermSelection);
-            } catch (Exception e) {
-                return zoneWithError("note-addition-failed", e);
-            }
-
-            return noteHasChanged(documentNote, "create-success");
-
-
-
-
-                //            selectedNotes = Collections.singletonList(documentNote);
-//            termOnEdit = getEditTerm(noteOnEdit.getNote());
-//            return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
-//                    //.add("listZone", notesList)
-//                    .add("documentZone", documentView).add("commentZone", commentZone.getBody())
-//                    .add("dialogZone", closeDialog);
-//        }
-        //return new MultiZoneUpdate("dialogZone", notesForLemma);
+        return noteHasChanged(documentNote, "create-success");
     }
 
     private Note createNote() {
@@ -312,30 +247,7 @@ public class Annotate extends AbstractDocumentPage {
     }
 
     private Object handleUserChoice(String noteId) {
-//        logger.info(createTermSelection.toString());
-//        DocumentNote documentNote;
-//        DocumentRevision documentRevision = getDocumentRevision();
-//        try {
-//            if (noteId == null) {
-//                documentNote = getDocumentRepository().addNote(createNote(), documentRevision,
-//                        createTermSelection);
-//            } else {
-//                documentNote = getDocumentRepository().addNote(noteRepository.getById(noteId),
-//                        documentRevision, createTermSelection);
-//            }
-//        } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
-//            infoMessage = messages.format("note-addition-failed");
-//            return new MultiZoneUpdate(EDIT_ZONE, errorBlock);
-//        }
-//        documentRevision.setRevision(documentNote.getSVNRevision());
-//        selectedNotes = Collections.singletonList(documentNote);
-//        noteOnEdit = documentNote;
-//        termOnEdit = getEditTerm(noteOnEdit.getNote());
-        return new MultiZoneUpdate(EDIT_ZONE, noteEdit)
-            //.add("listZone", notesList)
-                //.add("documentZone", documentView).add("commentZone", commentZone.getBody())
-                .add("dialogZone", closeDialog);
+        return new MultiZoneUpdate(EDIT_ZONE, noteEdit).add("dialogZone", closeDialog);
     }
 
     public boolean isSlsMode() {

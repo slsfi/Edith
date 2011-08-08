@@ -110,7 +110,6 @@ public class NoteSearchForm {
     }
 
     public OrderBy[] getOrderBys() {
-
         //SLS Spesific set
         return new OrderBy[] {OrderBy.KEYTERM, OrderBy.USER, OrderBy.STATUS, OrderBy.DATE};
     }
@@ -130,11 +129,11 @@ public class NoteSearchForm {
     public void setOrphans(boolean orphans) {
         getSearchInfo().setOrphans(orphans);
     }
-    
+
     public TermLanguage getLanguage() {
         return getSearchInfo().getLanguage();
     }
-    
+
     public void setLanguage(TermLanguage lang) {
         getSearchInfo().setLanguage(lang);
     }
@@ -163,18 +162,18 @@ public class NoteSearchForm {
     public String getFullText() {
         return getSearchInfo().getFullText();
     }
-    
+
     public void setFullText(String fullText) {
         getSearchInfo().setFullText(fullText);
     }
-    
+
     public boolean getIncludeAllDocs() {
         return getSearchInfo().isIncludeAllDocs();
     }
-    
+
     public void setIncludeAllDocs(boolean value) {
         getSearchInfo().setIncludeAllDocs(value);
     }
-    
+
 
 }

@@ -3,11 +3,7 @@ package fi.finlit.edith.sql.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.apache.commons.lang.StringUtils;
-
-import fi.finlit.edith.util.ParagraphParser;
 
 public class Paragraph {
     private final List<ParagraphElement> elements = new ArrayList<ParagraphElement>();

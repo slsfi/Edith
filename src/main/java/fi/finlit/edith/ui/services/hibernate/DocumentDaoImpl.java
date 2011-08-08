@@ -502,12 +502,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public List<RevisionInfo> getRevisions(Document document) {
-        Assert.notNull(document, "document was null");
-        return versioningService.getRevisions(document.getPath());
-    }
-
-    @Override
     public void removeAllNotes(Document document) {
         // long revision = versioningService.getLatestRevision(document.getPath());
         // DocumentRevision docRevision = document.getRevision(revision);
@@ -641,15 +635,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     @Override
     public void removeAll(Collection<Document> documents) {
         throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    @Override
-    public void move(Long id, String newPath) {
-//        Document document = getById(id);
-//        versioningService.move(document.getPath(), newPath);
-//        document.setPath(newPath);
-//        document.setTitle(newPath.substring(newPath.lastIndexOf("/") + 1));
-        throw new UnsupportedOperationException("Not used and thus not implemented...");
     }
 
     @Override

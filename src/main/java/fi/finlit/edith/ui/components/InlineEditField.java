@@ -52,7 +52,6 @@ public class InlineEditField {
     @Inject
     private Request request;
 
-    @SuppressWarnings("unchecked")
     ValueEncoder defaultEncoder() {
         return defaultProvider.defaultValueEncoder("value", resources);
     }
@@ -65,6 +64,7 @@ public class InlineEditField {
             this.controlName = controlName;
         }
 
+        @Override
         public void execute(InlineEditField component) {
             component.processSubmission(controlName);
         }

@@ -90,14 +90,6 @@ public interface DocumentDao extends Dao<Document, Long> {
     InputStream getDocumentStream(Document document) throws IOException;
 
     /**
-     * Get the SVN revisions for the given document in ascending order
-     *
-     * @param document
-     * @return
-     */
-    List<RevisionInfo> getRevisions(Document document);
-
-    /**
      * Remove all notes from the given Document
      *
      * @param document
@@ -161,9 +153,6 @@ public interface DocumentDao extends Dao<Document, Long> {
      */
     @CommitAfter
     void removeAll(Collection<Document> documents);
-
-    @CommitAfter
-    void move(Long id, String newPath);
 
     @CommitAfter
     void rename(Long id, String newPath);

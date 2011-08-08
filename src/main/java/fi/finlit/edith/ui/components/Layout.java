@@ -24,8 +24,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
     })
 @SuppressWarnings("unused")
 public class Layout {
-
-
     @Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
     @Property
     private Block title;

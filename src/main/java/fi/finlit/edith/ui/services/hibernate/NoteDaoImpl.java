@@ -122,7 +122,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return createGridDataSource(note, getOrderBy(search), false, notesQuery(search).getValue());
     }
 
-    @SuppressWarnings("unchecked")
     private BooleanBuilder notesQuery(NoteSearchInfo search) {
         BooleanBuilder builder = new BooleanBuilder();
 

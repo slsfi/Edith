@@ -12,10 +12,7 @@ import fi.finlit.edith.sql.domain.Note;
 
 @SuppressWarnings("unused")
 public class Metadata {
-
     @Property
     @Parameter(required = true)
     private Note note;
-
-
 }

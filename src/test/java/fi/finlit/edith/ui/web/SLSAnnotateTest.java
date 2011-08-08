@@ -1,7 +1,5 @@
 package fi.finlit.edith.ui.web;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.openqa.selenium.By;
 

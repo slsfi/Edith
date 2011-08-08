@@ -11,8 +11,6 @@ import org.apache.tapestry5.ioc.annotations.Startup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.finlit.edith.ui.services.svn.SubversionService;
-
 public final class HibernateDataModule {
     private HibernateDataModule() {
     }
@@ -20,7 +18,7 @@ public final class HibernateDataModule {
     private static final Logger logger = LoggerFactory.getLogger(HibernateDataModule.class);
 
     @Startup
-    public static void initData(SubversionService subversionService, UserDao userDao)
+    public static void initData(UserDao userDao)
             throws IOException {
         logger.info("Creating users");
         userDao.addUsersFromCsvFile("/users.csv", "ISO-8859-1");

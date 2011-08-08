@@ -82,20 +82,8 @@ public final class AppModule {
         configuration.add("js", "js");
     }
 
-    @SuppressWarnings("unchecked")
     public static void contributeValueEncoderSource(
-            MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration/*,
-            final com.mysema.rdfbean.object.Configuration rdfBeanConfiguration,
-            final SessionFactory sessionFactory*/){
-        /*
-        for (Class<?> cl : Arrays.<Class<?>>asList(
-                DocumentNote.class,
-                Document.class,
-                Note.class)){
-            configuration.add(cl, new EntityValueEncoderFactory(sessionFactory, rdfBeanConfiguration, cl));
-        }
-
-        configuration.add(UserInfo.class, new UserInfoValueEncoderFactory());*/
+            MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration){
         configuration.add(fi.finlit.edith.dto.UserInfo.class, new UserInfoValueEncoderFactory());
     }
 

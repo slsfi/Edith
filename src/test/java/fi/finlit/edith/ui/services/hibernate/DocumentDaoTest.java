@@ -79,7 +79,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         documentDao.addDocument(targetPath, file);
 
         Document document = documentDao.getOrCreateDocumentForPath(targetPath);
-        assertFalse(documentDao.getRevisions(document).isEmpty());
+        assertNotNull(document);
     }
 
     @Test
@@ -185,13 +185,6 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     public void GetDocumentStream() throws IOException {
         for (Document document : documentDao.getAll()) {
             register(documentDao.getDocumentStream(document));
-        }
-    }
-
-    @Test
-    public void GetRevisions() {
-        for (Document document : documentDao.getAll()) {
-            assertFalse(documentDao.getRevisions(document).isEmpty());
         }
     }
 
@@ -323,43 +316,6 @@ public class DocumentDaoTest extends AbstractHibernateTest {
             note.setTerm(new Term());
         }
         return note;
-    }
-
-    @Ignore
-    @Test
-    public void Move_Updates_Document_Location_And_Title() {
-        String newTitle = "Pummisuutarit rakeistettuna.xml";
-        String oldTitle = "Nummisuutarit rakenteistettuna.xml";
-        documentDao.move(getDocument("/" + oldTitle).getId(), "/" + newTitle);
-        boolean found = false;
-        for (Document document : documentDao.getAll()) {
-            if (newTitle.equals(document.getTitle())
-                    && ("/documents/trunk/" + newTitle).equals(document.getPath())) {
-                found = true;
-            }
-            if (oldTitle.equals(document.getTitle())
-                    || ("/documents/trunk/" + oldTitle).equals(document.getPath())) {
-                fail("Old document was still available!");
-            }
-        }
-        assertTrue(found);
-    }
-
-    @Ignore
-    @Test(expected = SubversionException.class)
-    public void Moved_File_Is_No_Longer_Available_In_Old_Location() throws IOException {
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        documentDao.move(document.getId(), "/Pummisuutarit rakeistettuna.xml");
-        documentDao.getDocumentStream(document);
-    }
-
-    @Ignore
-    @Test
-    public void Moved_File_Is_Available_In_New_Location() throws IOException {
-        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        documentDao.move(document.getId(), "/Pummisuutarit rakeistettuna.xml");
-        Document movedDocument = getDocument("/Pummisuutarit rakeistettuna.xml");
-        assertNotNull(documentDao.getDocumentStream(movedDocument));
     }
 
     @Test(expected = SubversionException.class)

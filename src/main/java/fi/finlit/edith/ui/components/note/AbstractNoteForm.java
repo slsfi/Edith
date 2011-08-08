@@ -146,11 +146,6 @@ public abstract class AbstractNoteForm {
                 noteOnEdit.setStatus(NoteStatus.DRAFT);
             }
 
-            // if (saveAsNew) {
-            // logger.info("note saved as new: " + noteOnEdit);
-            // documentNote = documentNoteDao.saveAsCopy(noteOnEdit);
-            // saveAsNew = false;
-
             if (delete) {
 
                 logger.info("note removed: " + noteOnEdit);
@@ -160,21 +155,13 @@ public abstract class AbstractNoteForm {
                     .add("listZone", page.getSearchResults())
                     .add("noteEditZone", page.getNoteEdit());
 
-            } else {
-
-                logger.info("note saved: " + noteOnEdit);
-                noteDao.save(noteOnEdit);
-                //page.getNoteEdit().setsetNoteOnEdit(noteOnEdit);
-                return page.zoneWithInfo("submit-success")
-                    .add("listZone", page.getSearchResults());
-                    //.add("noteEditZone", page.getNoteEdit());
-
             }
-
+            logger.info("note saved: " + noteOnEdit);
+            noteDao.save(noteOnEdit);
+            return page.zoneWithInfo("submit-success").add("listZone", page.getSearchResults());
         } catch (Exception e) {
             return page.zoneWithError("note-addition-failed", e);
         }
-
     }
 
     public void setLanguage(TermLanguage language) {
@@ -193,22 +180,6 @@ public abstract class AbstractNoteForm {
     public void setStatus(NoteStatus status) {
         noteOnEdit.setStatus(status);
     }
-
-//    private void setTerm(DocumentNote documentNote) {
-//        Term term = null;
-//        Term oldTerm = termOnEdit;
-//        if (saveTermAsNew) {
-//            saveTermAsNew = false;
-//            term = new Term();
-//            term.setBasicForm(oldTerm.getBasicForm());
-//            term.setMeaning(oldTerm.getMeaning());
-//            term.setLanguage(oldTerm.getLanguage());
-//        } else {
-//            term = oldTerm;
-//        }
-//        documentNote.getNote().setTerm(term);
-//    }
-
 
     public boolean isDeletableNote() {
         return documentNoteDao.getDocumentNoteCount(noteOnEdit) == 0;

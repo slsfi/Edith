@@ -15,7 +15,6 @@ import fi.finlit.edith.ui.pages.document.Annotate;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 
 @Import(library = { "classpath:js/jquery.scrollTo-min.js" })
-@SuppressWarnings("unused")
 public class DocumentNotes {
 
     @InjectPage
