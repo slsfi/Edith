@@ -18,7 +18,6 @@ import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
-import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
 public interface DocumentDao extends Dao<Document, Long> {
 

@@ -62,7 +62,6 @@ import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
 import fi.finlit.edith.ui.services.svn.FileItem;
 import fi.finlit.edith.ui.services.svn.FileItemWithDocumentId;
-import fi.finlit.edith.ui.services.svn.RevisionInfo;
 import fi.finlit.edith.ui.services.svn.SubversionService;
 import fi.finlit.edith.ui.services.svn.UpdateCallback;
 import fi.finlit.edith.util.ElementContext;
