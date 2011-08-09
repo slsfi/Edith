@@ -10,6 +10,11 @@
     <param-value>fi.finlit.edith.ui</param-value>
   </context-param>
   
+  <context-param>
+     <param-name>tapestry.production-modules</param-name>
+     <param-value>fi.finlit.edith.ui.config.AppModule</param-value>
+  </context-param>
+  
   <filter>
     <filter-name>app</filter-name>
     <filter-class>org.apache.tapestry5.TapestryFilter</filter-class>

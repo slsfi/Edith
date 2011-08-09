@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.config;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +18,8 @@ import org.apache.tapestry5.ioc.annotations.Startup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fi.finlit.edith.ui.services.AuthService;
+import fi.finlit.edith.ui.services.SpringSecurityAuthService;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.ui.services.content.ContentRendererImpl;
 import fi.finlit.edith.ui.services.svn.SubversionService;

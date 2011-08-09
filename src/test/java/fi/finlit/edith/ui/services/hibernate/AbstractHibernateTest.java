@@ -30,8 +30,8 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
 import fi.finlit.edith.testutil.Modules;
 import fi.finlit.edith.testutil.TapestryTestRunner;
-import fi.finlit.edith.ui.services.HibernateServiceModule;
-import fi.finlit.edith.ui.services.ServiceModule;
+import fi.finlit.edith.ui.config.HibernateServiceModule;
+import fi.finlit.edith.ui.config.ServiceModule;
 import fi.finlit.edith.ui.test.services.SKSServiceTestModule;
 
 @RunWith(TapestryTestRunner.class)

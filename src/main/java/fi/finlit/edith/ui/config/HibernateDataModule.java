@@ -3,13 +3,15 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.config;
 
 import java.io.IOException;
 
 import org.apache.tapestry5.ioc.annotations.Startup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import fi.finlit.edith.ui.services.UserDao;
 
 public final class HibernateDataModule {
     private HibernateDataModule() {

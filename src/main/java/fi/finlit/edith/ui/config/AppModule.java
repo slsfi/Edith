@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.config;
 
 import nu.localhost.tapestry5.springsecurity.services.RequestInvocationDefinition;
 
@@ -20,6 +20,7 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetailsService;
 
+import fi.finlit.edith.ui.services.UserInfoValueEncoderFactory;
 import fi.finlit.edith.ui.services.hibernate.UserDetailsServiceImpl;
 
 /**

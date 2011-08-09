@@ -1,4 +1,4 @@
-package fi.finlit.edith.ui.services;
+package fi.finlit.edith.ui.config;
 
 import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor;
 import org.apache.tapestry5.ioc.Configuration;
@@ -6,6 +6,13 @@ import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
 
+import fi.finlit.edith.ui.services.DocumentDao;
+import fi.finlit.edith.ui.services.DocumentNoteDao;
+import fi.finlit.edith.ui.services.NoteDao;
+import fi.finlit.edith.ui.services.PersonDao;
+import fi.finlit.edith.ui.services.PlaceDao;
+import fi.finlit.edith.ui.services.TermDao;
+import fi.finlit.edith.ui.services.UserDao;
 import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
 import fi.finlit.edith.ui.services.hibernate.DocumentNoteDaoImpl;
 import fi.finlit.edith.ui.services.hibernate.NoteDaoImpl;

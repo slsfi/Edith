@@ -25,7 +25,6 @@ import fi.finlit.edith.dto.UserInfo;
 import fi.finlit.edith.sql.domain.Profile;
 import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.AuthService;
-import fi.finlit.edith.ui.services.HibernateDataModule;
 import fi.finlit.edith.ui.services.UserDao;
 
 @EagerLoad
@@ -85,7 +84,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         // "/users.csv"), "ISO-8859-1"
         @SuppressWarnings("unchecked")
         List<String> lines = IOUtils.readLines(
-                HibernateDataModule.class.getResourceAsStream(filePath), encoding);
+                UserDaoImpl.class.getResourceAsStream(filePath), encoding);
         List<User> users = new ArrayList<User>();
         for (String line : lines) {
             String[] values = line.split(";");
