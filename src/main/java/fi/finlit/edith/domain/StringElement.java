@@ -6,10 +6,7 @@ package fi.finlit.edith.domain;
 
 public class StringElement implements ParagraphElement {
 
-    private String string;
-
-    public StringElement() {
-    }
+    private final String string;
 
     public StringElement(String string) {
         this.string = string;

@@ -6,12 +6,9 @@ package fi.finlit.edith.domain;
 
 public class UrlElement implements ParagraphElement {
 
-    private String string;
+    private final String string;
 
     private String url;
-
-    public UrlElement() {
-    }
 
     public UrlElement(String string) {
         this.string = string;
