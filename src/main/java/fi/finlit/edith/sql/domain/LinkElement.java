@@ -6,12 +6,9 @@ package fi.finlit.edith.sql.domain;
 
 public class LinkElement implements ParagraphElement {
 
-    private String string;
+    private final String string;
 
     private String reference;
-
-    public LinkElement() {
-    }
 
     public LinkElement(String string) {
         this.string = string;
