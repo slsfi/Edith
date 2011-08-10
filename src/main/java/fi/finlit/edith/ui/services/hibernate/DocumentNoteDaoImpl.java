@@ -189,13 +189,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
     }
 
     @Override
-    public Collection<DocumentNote> getAll() {
-        return query()
-            .from(documentNote)
-            .list(documentNote);
-    }
-
-    @Override
     public DocumentNote getById(Long id) {
         return (DocumentNote) getSession().get(DocumentNote.class, id);
     }

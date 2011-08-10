@@ -20,7 +20,7 @@ public interface UserDao extends Dao<User, Long> {
 
     /**
      * Get the user with the given username
-     * 
+     *
      * @param shortName
      * @return
      */
@@ -29,7 +29,7 @@ public interface UserDao extends Dao<User, Long> {
 
     /**
      * Get the current user
-     * 
+     *
      * @param username
      * @return
      */
@@ -38,7 +38,7 @@ public interface UserDao extends Dao<User, Long> {
 
     /**
      * FIXME TEST AND DOCUMENT
-     * 
+     *
      * @param username
      * @return
      */
@@ -47,7 +47,7 @@ public interface UserDao extends Dao<User, Long> {
 
     /**
      * Get the users with asceding username order
-     * 
+     *
      * @return
      */
     List<User> getOrderedByName();
@@ -59,8 +59,11 @@ public interface UserDao extends Dao<User, Long> {
 
     @CommitAfter
     List<User> addUsersFromCsvFile(String filePath, String encoding) throws IOException;
-    
+
     @CommitAfter
     void save(User user);
+
+    Collection<User> getAll();
+
 
 }

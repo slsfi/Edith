@@ -7,7 +7,6 @@ package fi.finlit.edith.ui.services.hibernate;
 
 import static fi.finlit.edith.sql.domain.QTerm.term;
 
-import java.util.Collection;
 import java.util.List;
 
 import fi.finlit.edith.sql.domain.Term;
@@ -35,11 +34,6 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
     @Override
     public void save(Term term) {
         getSession().save(term);
-    }
-
-    @Override
-    public Collection<Term> getAll() {
-        return query().from(term).list(term);
     }
 
     @Override

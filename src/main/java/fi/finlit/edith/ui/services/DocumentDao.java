@@ -159,4 +159,5 @@ public interface DocumentDao extends Dao<Document, Long> {
     @CommitAfter
     List<FileItemWithDocumentId> fromPath(String path, Long id);
 
+    Collection<Document> getAll();
 }

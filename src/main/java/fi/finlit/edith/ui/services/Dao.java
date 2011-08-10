@@ -1,7 +1,6 @@
 package fi.finlit.edith.ui.services;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import javax.annotation.Nullable;
 
@@ -12,14 +11,6 @@ import javax.annotation.Nullable;
  * @param <Id>
  */
 public interface Dao<Entity, Id extends Serializable> {
-
-    /**
-     * Get all persisted instances
-     *
-     * @return
-     */
-    Collection<Entity> getAll();
-
     /**
      * Get the persisted instance with the given id
      *

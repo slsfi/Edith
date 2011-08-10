@@ -33,11 +33,6 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
     }
 
     @Override
-    public Collection<Place> getAll() {
-        return query().from(place).list(place);
-    }
-
-    @Override
     public Place getById(Long id) {
         return query().from(place).where(place.id.eq(id)).uniqueResult(place);
     }

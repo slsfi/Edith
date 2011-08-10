@@ -12,6 +12,7 @@ import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteComment;
+import fi.finlit.edith.sql.domain.User;
 
 public interface NoteDao extends Dao<Note, Long> {
 
@@ -114,7 +115,7 @@ public interface NoteDao extends Dao<Note, Long> {
     List<Long> getOrphanIds();
 
     GridDataSource findNotes(NoteSearchInfo search);
-    
+
     List<Note> listNotes(NoteSearchInfo search);
 
     /**
@@ -147,5 +148,7 @@ public interface NoteDao extends Dao<Note, Long> {
 
     @CommitAfter
     DocumentNote createDocumentNote(Note note, Document document, String longText);
+
+    Collection<Note> getAll();
 
 }

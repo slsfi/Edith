@@ -332,4 +332,15 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         Document renamedDocument = getDocument("/letters/letter_to_the_reader.xml");
         assertNotNull(documentDao.getDocumentStream(renamedDocument));
     }
+
+    @Test
+    public void From_Root_Path() {
+        assertEquals(8, documentDao.fromPath(documentRoot, null).size());
+    }
+
+    @Test
+    public void From_Nested_Path() {
+        assertEquals(3, documentDao.fromPath(documentRoot + "/letters", null).size());
+    }
+
 }
