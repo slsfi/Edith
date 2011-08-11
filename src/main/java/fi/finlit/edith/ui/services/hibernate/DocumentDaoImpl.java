@@ -458,11 +458,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         for (Entry<String, String> entry : entries.entrySet()) {
             String path = entry.getKey();
             String title = entry.getValue();
-            Document doc = getDocumentMetadata(path);
-            if (doc == null) {
-                doc = createDocument(path, title);
-            }
-            documents.add(doc);
+            documents.add(getDocumentMetadata(path));
         }
         return documents;
     }
@@ -631,9 +627,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
         for (FileItem file : files) {
             Document doc = getDocumentForPath(file.getPath());
-            if (doc == null) {
-                doc = createDocument(file.getPath(), file.getTitle());
-            }
             rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.isFolder(),
                     file.getChildren(), file.hasChildren(), doc.getId(), doc.getId().equals(id),
                     documentNoteDao.getNoteCountForDocument(doc.getId())));
