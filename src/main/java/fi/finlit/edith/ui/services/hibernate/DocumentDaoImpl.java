@@ -110,11 +110,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public Collection<Document> getAll() {
-        return getDocumentsOfFolder(documentRoot);
-    }
-
-    @Override
     public Document getById(Long id) {
         return query().from(document).where(document.id.eq(id)).singleResult(document);
     }
@@ -450,16 +445,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public Document getOrCreateDocumentForPath(String path) {
-        Assert.notNull(path, "path was null");
-        Document doc = getDocumentMetadata(path);
-        if (doc == null) {
-            doc = createDocument(path, path.substring(path.lastIndexOf('/') + 1));
-        }
-        return doc;
-    }
-
-    @Override
     public Document getDocumentForPath(String svnPath) {
         Assert.notNull(svnPath, "svnPath was null");
         return getDocumentMetadata(svnPath);
@@ -483,7 +468,11 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     private Document getDocumentMetadata(String path) {
-        return query().from(document).where(document.path.eq(path)).uniqueResult(document);
+        Document doc = query()
+                .from(document)
+                .where(document.path.eq(path))
+                .uniqueResult(document);
+        return doc != null ? doc : createDocument(path, path.substring(0, path.lastIndexOf('/')));
     }
 
     private Document createDocument(String path, String title) {
@@ -498,19 +487,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     public InputStream getDocumentStream(Document document) throws IOException {
         Assert.notNull(document, "document was null");
         return versioningService.getStream(document.getPath(), -1);
-    }
-
-    @Override
-    public void removeAllNotes(Document document) {
-        // long revision = versioningService.getLatestRevision(document.getPath());
-        // DocumentRevision docRevision = document.getRevision(revision);
-        // List<DocumentNote> noteRevisions = documentNoteRepository.getOfDocument(docRevision);
-        // DocumentNote[] notes = new DocumentNote[noteRevisions.size()];
-        // for (int i = 0; i < notes.length; i++){
-        // notes[i] = noteRevisions.get(i);
-        // }
-        // return removeNotes(docRevision, notes);
-        throw new UnsupportedOperationException("implement me");
     }
 
     @Override
@@ -575,11 +551,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                 return true;
             }
         };
-    }
-
-    @Override
-    public void removeNotesPermanently(Document document, DocumentNote... notes) {
-        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

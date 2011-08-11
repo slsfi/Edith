@@ -6,11 +6,8 @@
 package fi.finlit.edith.ui.pages.document;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 import org.apache.tapestry5.EventContext;
-import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.Response;
@@ -21,9 +18,7 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.ui.pages.HttpError;
 import fi.finlit.edith.ui.services.DocumentDao;
-import fi.finlit.edith.ui.services.svn.RevisionInfo;
 
-@SuppressWarnings("unused")
 public class AbstractDocumentPage {
 
     @Inject

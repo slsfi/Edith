@@ -32,16 +32,6 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
     }
 
     @Override
-    public void remove(Person person) {
-        getSession().delete(person);
-    }
-
-//    @Override
-//    public Collection<Person> getAll() {
-//        return query().from(person).list(person);
-//    }
-
-    @Override
     public Person getById(Long id) {
         return query().from(person).where(person.id.eq(id)).uniqueResult(person);
     }

@@ -17,14 +17,6 @@ public class Paragraph {
         return this;
     }
 
-    public Paragraph copy() {
-        Paragraph paragraph = new Paragraph();
-        for (ParagraphElement element : elements) {
-            paragraph.addElement(element.copy());
-        }
-        return paragraph;
-    }
-
     @Override
     public int hashCode(){
         return toString().hashCode();

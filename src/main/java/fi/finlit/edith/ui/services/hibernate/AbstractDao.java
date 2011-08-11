@@ -7,7 +7,6 @@ import org.hibernate.Session;
 
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
-import com.mysema.query.jpa.hibernate.HibernateSubQuery;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.Predicate;
@@ -29,10 +28,6 @@ public abstract class AbstractDao<T> implements Dao<T, Long> {
 
     protected HibernateSessionManager getSessionManager() {
         return sessionManager;
-    }
-
-    protected HibernateSubQuery sub() {
-        return new HibernateSubQuery();
     }
 
     protected <K> GridDataSource createGridDataSource(final EntityPath<K> path,

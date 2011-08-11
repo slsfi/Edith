@@ -8,7 +8,6 @@ package fi.finlit.edith.ui.services.hibernate;
 
 import static fi.finlit.edith.sql.domain.QDocumentNote.documentNote;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -66,13 +65,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
     }
 
     @Override
-    public void remove(Long documentNoteId) {
-        // FIXME: Hibernatify!
-        DocumentNote note = getById(documentNoteId);
-        remove(note);
-    }
-
-    @Override
     public DocumentNote save(DocumentNote docNote) {
         if (docNote.getNote() == null) {
             throw new ServiceException("Note was null for " + docNote);
@@ -94,25 +86,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
         return docNote;
     }
 
-//    @Override
-//    //XXX Not really used
-//    public DocumentNote saveAsCopy(DocumentNote docNote) {
-//        if (docNote.getNote() == null) {
-//            throw new ServiceException("Note was null for " + docNote);
-//        }
-//        docNote.setNote(docNote.getNote().createCopy());
-//        docNote.getNote().incDocumentNoteCount();
-//        return save(docNote);
-//    }
-
-    @Override
-    public List<DocumentNote> getOfNotes(Collection<Note> notes){
-        return query()
-            .from(documentNote)
-            .where(documentNote.note.in(notes),
-                   documentNote.deleted.isFalse()).list(documentNote);
-    }
-
     @Override
     public List<DocumentNote> getOfNote(Long noteId) {
         Assert.notNull(noteId);
@@ -125,10 +98,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
 
     @Override
     public int getDocumentNoteCount(Note note) {
-//        return (int)query()
-//            .from(documentNote)
-//            .where(documentNote.note.eq(note),
-//               documentNote.deleted.isFalse()).count();
         return note.getDocumentNoteCount();
     }
 
@@ -139,18 +108,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
             .where(documentNote.document.id.eq(id),
                    documentNote.deleted.isFalse())
             .count();
-    }
-
-
-    @Override
-    public List<DocumentNote> getOfNoteInDocument(Long noteId, Long documentId) {
-        Assert.notNull(noteId);
-        Assert.notNull(documentId);
-        return query()
-            .from(documentNote)
-            .where(documentNote.note.id.eq(noteId),
-                   documentNote.document.id.eq(documentId),
-                   documentNote.deleted.isFalse()).list(documentNote);
     }
 
     @Override
@@ -178,14 +135,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
             .from(documentNote)
             .where(documentNote.note.place.id.eq(placeId),
                    documentNote.deleted.isFalse()).list(documentNote);
-    }
-
-    @Override
-    public List<DocumentNote> getNotesLessDocumentNotes() {
-        return query()
-            .from(documentNote)
-            .where(documentNote.note.isNull())
-            .list(documentNote);
     }
 
     @Override

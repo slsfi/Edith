@@ -52,31 +52,31 @@ public class ContentRendererTest extends AbstractHibernateTest {
 
     @Test
     public void renderDocument() throws Exception {
-        renderer.renderDocument(documentDao.getOrCreateDocumentForPath(doc1), writer);
+        renderer.renderDocument(documentDao.getDocumentForPath(doc1), writer);
     }
 
     @Test
     public void renderDocumentAsXML() throws IOException, XMLStreamException{
         List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        renderer.renderDocumentAsXML(documentDao.getOrCreateDocumentForPath(doc2), docNotes, out);
+        renderer.renderDocumentAsXML(documentDao.getDocumentForPath(doc2), docNotes, out);
     }
 
     @Test
     public void renderPageLinks() throws Exception {
-        renderer.renderPageLinks(documentDao.getOrCreateDocumentForPath(doc1),
+        renderer.renderPageLinks(documentDao.getDocumentForPath(doc1),
                 writer);
     }
 
     @Test
     public void renderDocumentWithNotes() throws Exception {
-        renderer.renderDocument(documentDao.getOrCreateDocumentForPath(doc2), writer);
+        renderer.renderDocument(documentDao.getDocumentForPath(doc2), writer);
     }
 
     @Test
     public void renderDocumentNotesAsXML(){
         List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
-        renderer.renderDocumentNotesAsXML(documentDao.getOrCreateDocumentForPath(doc2), docNotes, writer);
+        renderer.renderDocumentNotesAsXML(documentDao.getDocumentForPath(doc2), docNotes, writer);
     }
 
     private DocumentNote createDocumentNote(NoteFormat noteFormat) {
@@ -89,8 +89,8 @@ public class ContentRendererTest extends AbstractHibernateTest {
         element.setReference("kalevala");
         paragraph.addElement(element);
         note.setSubtextSources(paragraph.toString());
-        note.setDescription(paragraph.copy().toString());
-        note.setSources(paragraph.copy().toString());
+        note.setDescription(paragraph.toString());
+        note.setSources(paragraph.toString());
         note.setFormat(noteFormat);
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);

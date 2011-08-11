@@ -37,22 +37,6 @@ public interface UserDao extends Dao<User, Long> {
     User getCurrentUser();
 
     /**
-     * FIXME TEST AND DOCUMENT
-     *
-     * @param username
-     * @return
-     */
-    @Nullable
-    UserInfo getUserInfoByUsername(String username);
-
-    /**
-     * Get the users with asceding username order
-     *
-     * @return
-     */
-    List<User> getOrderedByName();
-
-    /**
      * @return
      */
     Collection<UserInfo> getAllUserInfos();

@@ -26,7 +26,7 @@ public final class ParagraphParser {
         return null;
     }
 
-    public static final Paragraph parseParagraph(String s) throws XMLStreamException {
+    private static final Paragraph parseParagraph(String s) throws XMLStreamException {
         String document = new StringBuilder("<root>").append(s).append("</root>").toString();
         Paragraph paragraph = new Paragraph();
         XMLInputFactory factory = XMLInputFactory.newInstance();

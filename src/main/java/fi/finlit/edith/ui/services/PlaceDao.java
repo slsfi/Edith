@@ -12,11 +12,8 @@ public interface PlaceDao extends Dao<Place, Long> {
 
     @CommitAfter
     void remove(Long placeId);
-    
-    @CommitAfter
-    void save(Place place);
 
     @CommitAfter
-    void remove(Place place);
+    void save(Place place);
 
 }

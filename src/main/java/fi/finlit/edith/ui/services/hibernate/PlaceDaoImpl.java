@@ -28,11 +28,6 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
     }
 
     @Override
-    public void remove(Place place) {
-        getSession().delete(place);
-    }
-
-    @Override
     public Place getById(Long id) {
         return query().from(place).where(place.id.eq(id)).uniqueResult(place);
     }

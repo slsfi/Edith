@@ -14,9 +14,6 @@ public interface PersonDao extends Dao<Person, Long> {
     void remove(Long personId);
 
     @CommitAfter
-    void remove(Person person);
-
-    @CommitAfter
     void save(Person person);
 
 }

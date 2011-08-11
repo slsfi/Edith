@@ -90,11 +90,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
-    public Collection<Note> getAll() {
-        return query().from(note).list(note);
-    }
-
-    @Override
     public Note getById(Long id) {
         return (Note) getSession().get(Note.class, id);
     }
@@ -110,11 +105,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     private JPQLSubQuery sub(EntityPath<?> entityPath) {
         return new JPQLSubQuery().from(entityPath);
-    }
-
-    @Override
-    public List<Note> listNotes(NoteSearchInfo search) {
-        return query().from(note).where(notesQuery(search)).orderBy(getOrderBy(search)).list(note);
     }
 
     @Override
@@ -220,13 +210,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return createGridDataSource(note, note.term.basicForm.lower().asc(), false, builder.getValue());
     }
 
-
-    @Override
-    public NoteComment getCommentById(Long id) {
-        return (NoteComment) getSession().get(NoteComment.class, id);
-    }
-
-
     private OrderSpecifier<?> getOrderBy(NoteSearchInfo searchInfo) {
         ComparableExpressionBase<?> comparable = null;
         OrderBy orderBy = searchInfo.getOrderBy() == null ? OrderBy.LEMMA : searchInfo.getOrderBy();
@@ -250,14 +233,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
-    public List<Note> getOrphans() {
-        return query()
-            .from(note)
-            .where(sub(documentNote).where(documentNote.note.eq(note)).notExists())
-            .list(note);
-    }
-
-    @Override
     public List<Long> getOrphanIds() {
         return query().from(note)
                 .where(sub(documentNote).where(documentNote.note.eq(note)).notExists())
@@ -269,13 +244,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             String longText) {
         return createDocumentNote(new DocumentNote(), n, document,
                 longText, 0);
-    }
-
-    @Override
-    public DocumentNote createDocumentNote(Note n, Document document,
-            String longText, int position) {
-        return createDocumentNote(new DocumentNote(), n, document,
-                longText, position);
     }
 
     @Override
@@ -317,11 +285,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         getSession().save(documentNote);
 
         return documentNote;
-    }
-
-    @Override
-    public Note find(String lemma) {
-        return query().from(note).where(note.lemma.eq(lemma)).uniqueResult(note);
     }
 
     private void handleEndElement(XMLStreamReader reader, LoopContext data) {
@@ -472,25 +435,12 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
-    public void removePermanently(DocumentNote documentNote) {
-        Note n = documentNote.getNote();
-        getSession().delete(documentNote);
-        n.decDocumentNoteCount();
-        save(n);
-    }
-
-    @Override
     public NoteComment removeComment(Long commentId) {
         // FIXME: Do differently with Hibernate!
         NoteComment comment = (NoteComment) getSession().get(NoteComment.class, commentId);
         getSession().delete(comment);
         comment.getNote().removeComment(comment);
         return comment;
-    }
-
-    @Override
-    public List<Note> findNotes(String lemma) {
-        return query().from(note).where(note.lemma.eq(lemma)).list(note);
     }
 
     @Override

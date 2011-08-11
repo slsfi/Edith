@@ -28,6 +28,9 @@ import org.junit.After;
 import org.junit.runner.RunWith;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
+import com.mysema.query.jpa.JPQLQuery;
+import com.mysema.query.jpa.hibernate.HibernateQuery;
+
 import fi.finlit.edith.testutil.Modules;
 import fi.finlit.edith.testutil.TapestryTestRunner;
 import fi.finlit.edith.ui.config.HibernateServiceModule;
@@ -80,8 +83,12 @@ public abstract class AbstractHibernateTest {
         return "<anchor xml:id=\"end" + localId + "\"/>";
     }
 
-    private Session getSession() {
+    protected Session getSession() {
         return sessionManager.getSession();
+    }
+
+    protected JPQLQuery query() {
+        return new HibernateQuery(getSession());
     }
 
     @After

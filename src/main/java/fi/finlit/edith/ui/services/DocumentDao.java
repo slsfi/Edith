@@ -53,15 +53,6 @@ public interface DocumentDao extends Dao<Document, Long> {
     DocumentNote addNote(Note note, Document document, SelectedText selection) throws IOException, NoteAdditionFailedException;
 
     /**
-     * Get a Document handle for the given path or create a new one if none could be found
-     *
-     * @param svnPath
-     * @return
-     */
-    @CommitAfter
-    Document getOrCreateDocumentForPath(String svnPath);
-
-    /**
      * Get a Document handle for the given path
      *
      * @param svnPath
@@ -89,17 +80,6 @@ public interface DocumentDao extends Dao<Document, Long> {
     InputStream getDocumentStream(Document document) throws IOException;
 
     /**
-     * Remove all notes from the given Document
-     *
-     * @param document
-     * @return
-     * @throws IOException
-     */
-    @Deprecated //Move to service
-    @CommitAfter
-    void removeAllNotes(Document document);
-
-    /**
      * Remove the given anchors from the given Document
      *
      * @param docRevision
@@ -109,16 +89,6 @@ public interface DocumentDao extends Dao<Document, Long> {
     @Deprecated //Move to service
     @CommitAfter
     void removeDocumentNotes(Document document, DocumentNote... notes);
-
-    /**
-     * Permanently removes document notes and their anchors.
-     *
-     * @param docRevision
-     * @param notes
-     * @return
-     */
-    @Deprecated //Move to service
-    void removeNotesPermanently(Document document, DocumentNote... notes);
 
     /**
      * Update the boundaries of the given note
@@ -158,6 +128,4 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     @CommitAfter
     List<FileItemWithDocumentId> fromPath(String path, Long id);
-
-    Collection<Document> getAll();
 }

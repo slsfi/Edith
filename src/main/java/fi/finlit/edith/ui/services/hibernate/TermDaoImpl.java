@@ -21,19 +21,9 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
     }
 
     @Override
-    public List<Term> findByBasicForm(String basicForm) {
-        return query().from(term).where(term.basicForm.eq(basicForm)).list(term);
-    }
-
-    @Override
     public void remove(Long id) {
         Term term = getById(id);
         getSession().delete(term);
-    }
-
-    @Override
-    public void save(Term term) {
-        getSession().save(term);
     }
 
     @Override

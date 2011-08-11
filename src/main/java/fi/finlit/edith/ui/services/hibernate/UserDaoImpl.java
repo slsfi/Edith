@@ -57,19 +57,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public List<User> getOrderedByName() {
-        return query().from(user).orderBy(user.username.asc()).list(user);
-    }
-
-    @Override
     public User getCurrentUser() {
         return getByUsername(authService.getUsername());
-    }
-
-    @Override
-    public UserInfo getUserInfoByUsername(String username) {
-        return query().from(user).where(user.username.eq(username))
-                .uniqueResult(ConstructorExpression.create(UserInfo.class, user.id, user.username));
     }
 
     @Override
@@ -114,7 +103,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         }
         return users;
     }
-    
+
     @Override
     public void save(User user) {
         getSession().save(user);

@@ -1,6 +1,5 @@
 package fi.finlit.edith.ui.services;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
@@ -16,12 +15,6 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
      */
     @CommitAfter
     void remove(DocumentNote docNote);
-
-    /**
-     * @param documentNoteId
-     */
-    @CommitAfter
-    void remove(Long documentNoteId);
 
     /**
      * @param docNote
@@ -59,12 +52,6 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
     List<DocumentNote> getOfNote(Long noteId);
 
     /**
-     * @param notes
-     * @return
-     */
-    List<DocumentNote> getOfNotes(Collection<Note> notes);
-
-    /**
      * Get the DocumentNotes of the given Person.
      *
      * @param personId
@@ -97,25 +84,10 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
 //    DocumentNote saveAsCopy(DocumentNote docNote);
 
     /**
-     * Returns the DocumentNotes with the same given Note in the given Document.
-     *
-     * @param noteId
-     * @param documentId
-     * @return
-     */
-    List<DocumentNote> getOfNoteInDocument(Long noteId, Long documentId);
-
-    /**
      * @param documentRevision
      * @return
      */
     List<DocumentNote> getPublishableNotesOfDocument(Document document);
-
-    /**
-     * @return
-     */
-    // FIXME: WTF?
-    List<DocumentNote> getNotesLessDocumentNotes();
 
     /**
      * @param note

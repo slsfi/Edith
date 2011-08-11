@@ -31,6 +31,7 @@ import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteComment;
 import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.sql.domain.Place;
+import fi.finlit.edith.sql.domain.QNote;
 import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.sql.domain.TermLanguage;
 import fi.finlit.edith.sql.domain.User;
@@ -81,17 +82,6 @@ public class NoteDaoTest extends AbstractHibernateTest {
     }
 
     @Test
-    public void Create_Comment_And_Load() {
-        Note note = createNote();
-        noteDao.save(note);
-        NoteComment comment = noteDao.createComment(note, "boomboomboom");
-        NoteComment loaded = noteDao.getCommentById(comment.getId());
-        assertEquals(comment.getId(), loaded.getId());
-        assertEquals(note.getId(), loaded.getId());
-        assertEquals(comment.getId(), loaded.getId());
-    }
-
-    @Test
     public void CreateComment() {
         Note note = createNote();
         noteDao.save(note);
@@ -115,7 +105,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
 
     @Test
     public void Create_Note() {
-        Document document = documentDao.getOrCreateDocumentForPath(testDocument);
+        Document document = documentDao.getDocumentForPath(testDocument);
 
         String longText = "two words";
         DocumentNote documentNote = noteDao.createDocumentNote(createNote(), document,
@@ -137,7 +127,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
 
     @Test
     public void CreateNote_Note_With_The_Lemma_Already_Exists_Notes_Are_Same() {
-        Document document = documentDao.getOrCreateDocumentForPath(testDocument);
+        Document document = documentDao.getDocumentForPath(testDocument);
 
         String longText = "two words";
         DocumentNote documentNote = noteDao.createDocumentNote(createNote(), document,
@@ -147,18 +137,12 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertEquals(documentNote.getNote().getId(), documentNote2.getNote().getId());
     }
 
-    @Test
-    public void Find() {
-        Document document = documentDao.getOrCreateDocumentForPath(testDocument);
-        noteDao.createDocumentNote(createNote(), document, "foobar");
-        Note note = noteDao.find("foobar");
-        assertNotNull(note);
-    }
+    private static final QNote qnote = QNote.note;
 
     @Test
     public void ImportNote() throws Exception {
         noteDao.importNotes(noteTestData);
-        Note note = noteDao.find("kereitten");
+        Note note = findByLemma("kereitten");
         assertNotNull(note);
         assertEquals("kereitten", note.getLemma());
         assertEquals("'keritte'", note.getLemmaMeaning());
@@ -171,15 +155,19 @@ public class NoteDaoTest extends AbstractHibernateTest {
                 sources.replaceAll("\\s+", " ").trim());
     }
 
+    private Note findByLemma(String string) {
+        return query().from(qnote).where(qnote.lemma.eq(string)).singleResult(qnote);
+    }
+
     @Test
     public void Add_Note_With_Existing_Orphan() {
         noteDao.importNotes(noteTestData);
         String lemma = "riksi\u00E4";
-        Note note = noteDao.find(lemma);
+        Note note = findByLemma(lemma);
         assertNotNull(note);
-        Document document = documentDao.getOrCreateDocumentForPath(testDocument);
+        Document document = documentDao.getDocumentForPath(testDocument);
         DocumentNote documentNote = noteDao.createDocumentNote(note, document,
-                lemma, 0);
+                lemma);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
         assertNotNull(documentNoteDao.getById(documentNote.getId())
@@ -190,11 +178,11 @@ public class NoteDaoTest extends AbstractHibernateTest {
     public void Add_Note_With_Existing_Orphan_Verify_Sources_And_Description_Correct() {
         noteDao.importNotes(noteTestData);
         String lemma = "riksi\u00E4";
-        Note note = noteDao.find(lemma);
+        Note note = findByLemma(lemma);
         assertNotNull(note);
-        Document document = documentDao.getOrCreateDocumentForPath(testDocument);
+        Document document = documentDao.getDocumentForPath(testDocument);
         DocumentNote documentNote = noteDao.createDocumentNote(note, document,
-                lemma, 0);
+                lemma);
         assertNotNull(documentNote);
         assertEquals(note.getId(), documentNote.getNote().getId());
         assertEquals(note.getDescription(),
@@ -207,14 +195,14 @@ public class NoteDaoTest extends AbstractHibernateTest {
     public void Import_The_Same_Notes_Twice() {
         assertEquals(9, noteDao.importNotes(noteTestData));
         assertEquals(9, noteDao.importNotes(noteTestData));
-        assertEquals(18, noteDao.getAll().size());
+        assertEquals(18, query().from(qnote).count());
     }
 
     @Test
     public void importNotes() throws Exception {
         assertEquals(9, noteDao.importNotes(noteTestData));
-        assertEquals(9, noteDao.getAll().size());
-        assertNotNull(noteDao.find("kereitten"));
+        assertEquals(9, query().from(qnote).count());
+        assertNotNull(findByLemma("kereitten"));
     }
 
     @Test
@@ -247,31 +235,6 @@ public class NoteDaoTest extends AbstractHibernateTest {
     }
 
     @Test
-    public void Find_Notes() {
-        noteDao.importNotes(noteTestData);
-        assertEquals(1, noteDao.findNotes("kereitten").size());
-    }
-
-//    @Test
-//    public void Find_All_Notes_With_Search() {
-//        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
-//        String longText = "two words";
-//        noteRepository.createDocumentNote(createNote(), document, longText);
-//        NoteSearchInfo search = new NoteSearchInfo();
-//        //Empty finds all
-//        assertEquals(1, noteRepository.findAllNotes(search).size());
-//
-//        //With document we should find our note
-//        search.setCurrentDocument(document);
-//        assertEquals(1, noteRepository.findAllNotes(search).size());
-//
-//        //False hit
-//        userRepository.save(new User("dummy"));
-//        search.setCreators(Collections.singleton(new UserInfo("dummy")));
-//        assertEquals(0, noteRepository.findAllNotes(search).size());
-//    }
-
-    @Test
     public void Find_Notes_With_Paged_Search() {
         Note note1 = createNote("note1");
         Note note2 = createNote("note2");
@@ -287,8 +250,8 @@ public class NoteDaoTest extends AbstractHibernateTest {
         search.setOrphans(true);
         assertRowCount(3, search);
 
-        Document document = documentDao.getOrCreateDocumentForPath(testDocument);
-        search.setDocuments(Collections.singleton(document));
+        Document document = documentDao.getDocumentForPath(testDocument);
+        search.getDocuments().add(document);
         search.setOrphans(false);
         assertRowCount(0, search);
 
@@ -300,11 +263,11 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertRowValues(search, note1);
 
         //Create different document
-        Document otherDoc = documentDao.getOrCreateDocumentForPath("/documents/nummi.xml");
+        Document otherDoc = documentDao.getDocumentForPath("/documents/nummi.xml");
         noteDao.createDocumentNote(note2, otherDoc, "b");
 
         //notes 1 and 2 should be found
-        search.addDocument(otherDoc);
+        search.getDocuments().add(otherDoc);
         assertRowCount(2, search);
         assertRowValues(search, note1, note2);
 
@@ -321,8 +284,6 @@ public class NoteDaoTest extends AbstractHibernateTest {
         //with all - orphans
         search.setOrphans(false);
         assertRowCount(2, search);
-
-
     }
 
     private void assertRowCount(int expected, NoteSearchInfo search) {
@@ -400,20 +361,6 @@ public class NoteDaoTest extends AbstractHibernateTest {
         search.setFullText(fulltext);
         assertEquals(expected, noteDao.findNotes(search).getAvailableRows());
     }
-
-
-
-//    If we are using remote permanently, then this test is not necessary
-//    @Test
-//    public void Find_Notes_As_Orpan_With_Deleted_Doc_Notes() {
-//        Document document = documentRepository.getOrCreateDocumentForPath(testDocument);
-//        String longText = "two words";
-//        DocumentNote docNote = noteRepository.createDocumentNote(createNote(), document, "10", longText);
-//
-//        NoteSearchInfo search = new NoteSearchInfo(document);
-//        assertEquals(1, noteRepository.findNotes(search).size());
-//
-//    }
 
     @Test
     public void Query_All_Persons() throws Exception {

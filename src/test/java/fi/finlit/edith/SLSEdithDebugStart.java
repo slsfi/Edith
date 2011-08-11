@@ -52,7 +52,6 @@ public final class SLSEdithDebugStart extends WebappStarter {
         System.setProperty("production.mode", "false");
         System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
-        System.setProperty(EDITH.RDFBEAN_DATA_DIR, root + "data-sls");
 
         System.setProperty(EDITH.EXTENDED_TERM, "true");
 

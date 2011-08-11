@@ -17,10 +17,9 @@ public class EdithLocalProdStart {
         System.setProperty("production.mode", "true");
         System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
-        System.setProperty(EDITH.RDFBEAN_DATA_DIR, "/opt/rdfbean/edith");
-        
+
         System.setProperty(EDITH.EXTENDED_TERM, "false");
-        
+
         JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
     }
 

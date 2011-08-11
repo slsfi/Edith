@@ -70,17 +70,6 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     }
 
     @Test
-    public void AddDocument() throws IOException {
-        File file = File.createTempFile("test", null);
-        FileUtils.writeStringToFile(file, "test file", "UTF-8");
-        String targetPath = "/documents/" + UUID.randomUUID().toString();
-        documentDao.addDocument(targetPath, file);
-
-        Document document = documentDao.getOrCreateDocumentForPath(targetPath);
-        assertNotNull(document);
-    }
-
-    @Test
     public void AddDocuments_From_Zip() {
         File file = new File("src/test/resources/tei.zip");
         assertEquals(5, documentDao.addDocumentsFromZip("/documents/parent", file));
@@ -108,53 +97,6 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         assertTrue(content.contains(start(localId) + text + end(localId)));
     }
 
-    // FIXME
-    // @Test
-    // public void AddRemoveNote() throws IOException, NoteAdditionFailedException{
-    // Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-    // int count = documentNoteRepository.queryNotes("*").getAvailableRows();
-    //
-    // // add
-    // String element = "play-act-sp4-p";
-    // String text = "min\u00E4; ja nytp\u00E4, luulen,";
-    // DocumentNote documentNote = documentRepository.addNote(createNote(), document, new
-    // SelectedText(element, element, text));
-    //
-    // assertEquals(count+1, documentNoteRepository.queryNotes("*").getAvailableRows());
-    // // remove
-    // documentRepository.removeNotes(document.getRevision(documentNote.getSVNRevision()),
-    // documentNote);
-    // DocumentNote deletedDocumentNote = documentNoteRepository.getById(documentNote.getId());
-    // assertTrue(deletedDocumentNote.isDeleted());
-    //
-    // GridDataSource dataSource = documentNoteRepository.queryNotes("*");
-    // int available = dataSource.getAvailableRows();
-    // dataSource.prepare(0, 1000, new ArrayList<SortConstraint>());
-    // assertEquals(0, available);
-    // }
-
-    // FIXME
-    // @Test
-    // public void Add_Note_With_The_Same_Lemma() throws IOException, NoteAdditionFailedException {
-    // Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-    // String element = "play-act-sp2-p";
-    // String text = "s";
-    //
-    // DocumentNote note1 = documentRepository.addNote(createNote(), document, new
-    // SelectedText(element, element, 1, 1, text));
-    // DocumentNote note2 = documentRepository.addNote(createNote(), document, new
-    // SelectedText(element, element, 2, 2, text));
-    // assertEquals(2, documentNoteRepository.getAll().size());
-    // List<DocumentNote> documentNotes =
-    // documentNoteRepository.getOfDocument(note2.getDocRevision());
-    // assertEquals(2, documentNotes.size());
-    // }
-
-    @Test
-    public void Get_All_Returns_All_Documents() {
-        assertEquals(10, documentDao.getAll().size());
-    }
-
     private String getContent(String svnPath, long svnRevision) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         InputStream in = register(subversionService.getStream(svnPath, svnRevision));
@@ -165,13 +107,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     }
 
     private Document getDocument(String path) {
-        return documentDao.getOrCreateDocumentForPath(documentRoot + path);
-    }
-
-    @Test
-    public void GetDocumentForPath() {
-        assertNotNull(documentDao.getOrCreateDocumentForPath("/documents/"
-                + UUID.randomUUID().toString()));
+        return documentDao.getDocumentForPath(documentRoot + path);
     }
 
     @Test
@@ -181,29 +117,10 @@ public class DocumentDaoTest extends AbstractHibernateTest {
 
     @Test
     public void GetDocumentStream() throws IOException {
-        for (Document document : documentDao.getAll()) {
+        for (Document document : documentDao.getDocumentsOfFolder(documentRoot)) {
             register(documentDao.getDocumentStream(document));
         }
     }
-
-    // FIXME
-    // @Test
-    // public void RemoveAllNotes() throws Exception{
-    // Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-    // String element = "play-act-sp2-p";
-    // String text = "sun ullakosta ottaa";
-    //
-    // DocumentNote noteRevision = documentRepository.addNote(createNote(), document, new
-    // SelectedText(element, element, text));
-    // DocumentRevision docRevision = noteRevision.getDocumentRevision();
-    //
-    // List<DocumentNote> revs = documentNoteRepository.getOfDocument(docRevision);
-    // assertTrue(revs.size() > 0);
-    //
-    // docRevision = documentRepository.removeAllNotes(document);
-    // revs = documentNoteRepository.getOfDocument(docRevision);
-    // assertEquals(0, revs.size());
-    // }
 
     @Test
     public void RemoveNotes() throws Exception {

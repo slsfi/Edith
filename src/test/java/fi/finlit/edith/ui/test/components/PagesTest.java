@@ -37,7 +37,7 @@ public class PagesTest extends AbstractHibernateTest {
 
     @Inject
     private SubversionService subversionService;
-    
+
     @Before
     public void before() {
         subversionService.initialize();
@@ -47,10 +47,10 @@ public class PagesTest extends AbstractHibernateTest {
     public void after() {
         subversionService.destroy();
     }
-    
+
     @Test
     public void BeginRender() throws XMLStreamException, IOException{
-        Document document = documentDao.getOrCreateDocumentForPath(testDocument);
+        Document document = documentDao.getDocumentForPath(testDocument);
         pages.setDocument(document);
 
         MarkupWriter writer = new MarkupWriterImpl();

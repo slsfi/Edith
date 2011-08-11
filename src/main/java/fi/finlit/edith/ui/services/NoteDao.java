@@ -12,7 +12,6 @@ import fi.finlit.edith.sql.domain.Document;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteComment;
-import fi.finlit.edith.sql.domain.User;
 
 public interface NoteDao extends Dao<Note, Long> {
 
@@ -25,25 +24,8 @@ public interface NoteDao extends Dao<Note, Long> {
     @CommitAfter
     NoteComment createComment(Note note, String message);
 
-    /**
-     * Create a new document note for the given DocumentRevision with the given local id, lemma and long text
-     *
-     * @param docRevision
-     * @param localId
-     * @param longText
-     * @return
-     */
-    @CommitAfter
-    DocumentNote createDocumentNote(Note note, Document document, String longText, int position);
-
     @CommitAfter
     DocumentNote createDocumentNote(DocumentNote documentNote, Note note, Document document, String longText, int position);
-
-    /**
-     * @param lemma
-     * @return
-     */
-    Note find(String lemma);
 
     /**
      * Import notes from the given file
@@ -63,14 +45,6 @@ public interface NoteDao extends Dao<Note, Long> {
     GridDataSource queryDictionary(String searchTerm);
 
     /**
-     * Removes the document note permanently
-     *
-     * @param note
-     */
-    @CommitAfter
-    void removePermanently(DocumentNote note);
-
-    /**
      * Removes a NoteComment based on its id. Returns the deleted comment.
      *
      * @param commentId
@@ -78,13 +52,6 @@ public interface NoteDao extends Dao<Note, Long> {
      */
     @CommitAfter
     NoteComment removeComment(Long commentId);
-
-    /**
-     * Finds all the Notes based on a lemma.
-     * @param lemma
-     * @return
-     */
-    List<Note> findNotes(String lemma);
 
     /**
      * @param searchTerm
@@ -107,16 +74,9 @@ public interface NoteDao extends Dao<Note, Long> {
     /**
      * @return
      */
-    List<Note> getOrphans();
-
-    /**
-     * @return
-     */
     List<Long> getOrphanIds();
 
     GridDataSource findNotes(NoteSearchInfo search);
-
-    List<Note> listNotes(NoteSearchInfo search);
 
     /**
      * @param editedNote
@@ -140,15 +100,7 @@ public interface NoteDao extends Dao<Note, Long> {
     @CommitAfter
     void removeNote(Note note);
 
-    /**
-     * @param id
-     * @return
-     */
-    NoteComment getCommentById(Long id);
-
     @CommitAfter
     DocumentNote createDocumentNote(Note note, Document document, String longText);
-
-    Collection<Note> getAll();
 
 }

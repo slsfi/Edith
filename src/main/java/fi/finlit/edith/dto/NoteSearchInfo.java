@@ -35,7 +35,7 @@ public class NoteSearchInfo {
     public NoteSearchInfo() {}
 
     public NoteSearchInfo(Document document) {
-        this.currentDocument = document;
+        currentDocument = document;
     }
 
     public Set<Document> getDocuments() {
@@ -132,12 +132,6 @@ public class NoteSearchInfo {
                 + ", creators=" + creators + ", language=" + language + ", orderBy=" + orderBy
                 + ", ascending=" + ascending + ", orphans=" + orphans + ", includeAllDocs="
                 + includeAllDocs + ", fullText=" + fullText + "]";
-    }
-
-    public void addDocument(Document otherDoc) {
-       HashSet<Document> newSet = new HashSet<Document>(this.documents);
-       newSet.add(otherDoc);
-       this.documents = newSet;
     }
 
 }

@@ -1,6 +1,6 @@
 package fi.finlit.edith.dto;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -38,28 +38,4 @@ public class NoteCommentComparatorTest {
         assertEquals(EQUAL, NoteCommentComparator.ASC.compare(comment, comment));
     }
 
-    @Test
-    public void Is_Bigger_When_Descending_Comparator() {
-        NoteComment smaller = new NoteComment();
-        smaller.setCreatedAt(new DateTime(0));
-        NoteComment bigger = new NoteComment();
-        bigger.setCreatedAt(new DateTime(10));
-        assertEquals(BIGGER, NoteCommentComparator.DESC.compare(smaller, bigger));
-    }
-
-    @Test
-    public void Is_Smaller_When_Descending_Comparator() {
-        NoteComment bigger = new NoteComment();
-        bigger.setCreatedAt(new DateTime(10));
-        NoteComment smaller = new NoteComment();
-        smaller.setCreatedAt(new DateTime(0));
-        assertEquals(SMALLER, NoteCommentComparator.DESC.compare(bigger, smaller));
-    }
-
-    @Test
-    public void Is_Equal_When_Descending_Comparator() {
-        NoteComment comment = new NoteComment();
-        comment.setCreatedAt(new DateTime(10));
-        assertEquals(EQUAL, NoteCommentComparator.DESC.compare(comment, comment));
-    }
 }
