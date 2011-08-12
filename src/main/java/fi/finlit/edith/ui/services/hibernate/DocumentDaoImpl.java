@@ -455,9 +455,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         Assert.notNull(svnFolder, "svnFolder was null");
         Map<String, String> entries = versioningService.getEntries(svnFolder, /* HEAD */-1);
         List<Document> documents = new ArrayList<Document>(entries.size());
-        for (Entry<String, String> entry : entries.entrySet()) {
-            String path = entry.getKey();
-            String title = entry.getValue();
+        for (String path : entries.keySet()) {
             documents.add(getDocumentMetadata(path));
         }
         return documents;
