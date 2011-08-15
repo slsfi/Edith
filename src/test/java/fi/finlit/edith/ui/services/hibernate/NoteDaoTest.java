@@ -24,17 +24,8 @@ import org.junit.Test;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.dto.NoteSearchInfo;
-import fi.finlit.edith.sql.domain.Document;
-import fi.finlit.edith.sql.domain.DocumentNote;
-import fi.finlit.edith.sql.domain.NameForm;
-import fi.finlit.edith.sql.domain.Note;
-import fi.finlit.edith.sql.domain.NoteComment;
-import fi.finlit.edith.sql.domain.Person;
-import fi.finlit.edith.sql.domain.Place;
-import fi.finlit.edith.sql.domain.QNote;
-import fi.finlit.edith.sql.domain.Term;
-import fi.finlit.edith.sql.domain.TermLanguage;
-import fi.finlit.edith.sql.domain.User;
+import fi.finlit.edith.dto.UserInfo;
+import fi.finlit.edith.sql.domain.*;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteDao;
@@ -286,6 +277,43 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertRowCount(2, search);
     }
 
+    @Test
+    public void Find_With_Creators() {
+        createNote("note1");
+        createNote("note2");
+        createNote("note3");
+        
+        User user = userDao.getCurrentUser();
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.getCreators().add(new UserInfo(user.getId(), user.getUsername()));
+        noteDao.findNotes(search);
+        // TODO
+    }
+    
+    @Test
+    public void Find_With_Formats() {
+        createNote("note1");
+        createNote("note2");
+        createNote("note3");
+        
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.getNoteFormats().add(NoteFormat.NOTE);
+        noteDao.findNotes(search);
+        // TODO
+    }
+    
+    @Test
+    public void Find_With_Types() {
+        createNote("note1");
+        createNote("note2");
+        createNote("note3");
+        
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.getNoteTypes().add(NoteType.CRITIQUE);
+        noteDao.findNotes(search);
+        // TODO
+    }
+    
     private void assertRowCount(int expected, NoteSearchInfo search) {
         assertEquals(expected, noteDao.findNotes(search).getAvailableRows());
     }
