@@ -8,7 +8,7 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.tmatesoft.svn.core.SVNException;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.ui.test.services.ServiceTestModule;
+import fi.finlit.edith.ui.services.ServiceTestModule;
 
 public class SLSServiceTestModule {
     
