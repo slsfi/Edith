@@ -414,12 +414,12 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         Assert.notNull(searchTerm);
         if (!searchTerm.equals("*")) {
             BooleanBuilder builder = new BooleanBuilder();
-            builder.or(person.normalizedForm.first.containsIgnoreCase(searchTerm));
-            builder.or(person.normalizedForm.last.containsIgnoreCase(searchTerm));
-            return createGridDataSource(person, person.normalizedForm.last.lower().asc(), false,
+            builder.or(person.normalized.first.containsIgnoreCase(searchTerm));
+            builder.or(person.normalized.last.containsIgnoreCase(searchTerm));
+            return createGridDataSource(person, person.normalized.last.lower().asc(), false,
                     builder.getValue());
         }
-        return createGridDataSource(person, person.normalizedForm.last.asc(), false, null);
+        return createGridDataSource(person, person.normalized.last.asc(), false, null);
     }
 
     @Override
@@ -427,11 +427,11 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         Assert.notNull(searchTerm);
         if (!searchTerm.equals("*")) {
             BooleanBuilder builder = new BooleanBuilder();
-            builder.or(place.normalizedForm.last.containsIgnoreCase(searchTerm));
-            return createGridDataSource(place, place.normalizedForm.last.lower().asc(), false,
+            builder.or(place.normalized.last.containsIgnoreCase(searchTerm));
+            return createGridDataSource(place, place.normalized.last.lower().asc(), false,
                     builder.getValue());
         }
-        return createGridDataSource(place, place.normalizedForm.last.asc(), false, null);
+        return createGridDataSource(place, place.normalized.last.asc(), false, null);
     }
 
     @Override

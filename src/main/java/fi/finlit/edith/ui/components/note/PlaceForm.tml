@@ -3,11 +3,11 @@
 		<t:form t:id="placeForm" t:zone="dialogZone" t:context="place.id">
 			<t:errors />
 			<div>
-				<div><strong>${message:normalizedForm-label}</strong></div>
+				<div><strong>${message:normalizedName-label}</strong></div>
 				<div>${message:name-label}</div>
-				<div><t:textField t:id="normalizedFirst" value="place.normalizedForm.name" /></div>
+				<div><t:textField t:id="normalizedFirst" value="place.normalized.name" /></div>
     			<div>${message:nameFormDescription-label}</div>
-				<div><t:textField t:id="normalizedDescription" value="place.normalizedForm.description" /></div>
+				<div><t:textField t:id="normalizedDescription" value="place.normalized.description" /></div>
 			</div>
 			
 			<div>

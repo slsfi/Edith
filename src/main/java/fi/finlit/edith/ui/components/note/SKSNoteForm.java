@@ -142,35 +142,35 @@ public class SKSNoteForm extends AbstractNoteForm {
 
     public String getNormalizedDescription() {
         if (isPerson()) {
-            return getPerson().getNormalizedForm().getDescription();
+            return getPerson().getNormalized().getDescription();
         }
         return null;
     }
 
     public String getNormalizedFirst() {
         if (isPerson()) {
-            return getPerson().getNormalizedForm().getFirst();
+            return getPerson().getNormalized().getFirst();
         }
         return null;
     }
 
     public String getNormalizedLast() {
         if (isPerson()) {
-            return getPerson().getNormalizedForm().getLast();
+            return getPerson().getNormalized().getLast();
         }
         return null;
     }
 
     public String getNormalizedPlaceDescription() {
         if (isPlace()) {
-            return getPlace().getNormalizedForm().getDescription();
+            return getPlace().getNormalized().getDescription();
         }
         return null;
     }
 
     public String getNormalizedPlaceName() {
         if (isPlace()) {
-            return getPlace().getNormalizedForm().getName();
+            return getPlace().getNormalized().getName();
         }
         return null;
     }

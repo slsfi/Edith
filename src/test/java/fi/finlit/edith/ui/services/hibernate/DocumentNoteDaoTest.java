@@ -171,10 +171,10 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         note.getPerson().setTimeOfDeath(timeOfDeath);
         noteDao.save(note);
         Note persistedNote = documentNoteDao.getById(documentNote.getId()).getNote();
-        assertEquals(note.getPerson().getNormalizedForm().getName(), persistedNote.getPerson()
-                .getNormalizedForm().getName());
-        assertEquals(note.getPerson().getNormalizedForm().getDescription(), persistedNote
-                .getPerson().getNormalizedForm().getDescription());
+        assertEquals(note.getPerson().getNormalized().getName(), persistedNote.getPerson()
+                .getNormalized().getName());
+        assertEquals(note.getPerson().getNormalized().getDescription(), persistedNote
+                .getPerson().getNormalized().getDescription());
         assertEquals(note.getFormat(), persistedNote.getFormat());
 
         assertEquals(note.getPerson().getTimeOfBirth().getStart(), persistedNote.getPerson().getTimeOfBirth().getStart());
@@ -217,10 +217,10 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         note.setPlace(new Place(normalizedForm, otherForms));
         noteDao.save(note);
         Note persistedNote = documentNoteDao.getById(documentNote.getId()).getNote();
-        assertEquals(note.getPlace().getNormalizedForm().getName(), persistedNote.getPlace()
-                .getNormalizedForm().getName());
-        assertEquals(note.getPlace().getNormalizedForm().getDescription(), persistedNote.getPlace()
-                .getNormalizedForm().getDescription());
+        assertEquals(note.getPlace().getNormalized().getName(), persistedNote.getPlace()
+                .getNormalized().getName());
+        assertEquals(note.getPlace().getNormalized().getDescription(), persistedNote.getPlace()
+                .getNormalized().getDescription());
         assertEquals(note.getFormat(), persistedNote.getFormat());
     }
 

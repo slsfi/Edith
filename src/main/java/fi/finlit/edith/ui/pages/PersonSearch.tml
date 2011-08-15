@@ -16,10 +16,10 @@
 		<t:grid source="persons" row="person" rowsPerPage="20"
 			add="normalizedName,normalizedDescription,timeOfBirth,timeOfDeath,actions" exclude="id">
 			<p:normalizedNameCell>
-	                ${person.normalizedForm.name}
+	                ${person.normalized.name}
 	            </p:normalizedNameCell>
 	                        <p:normalizedDescriptionCell>
-	                ${person.normalizedForm.description}
+	                ${person.normalized.description}
 	            </p:normalizedDescriptionCell>
 			<p:timeOfBirthCell>
 	                ${timeOfBirth}

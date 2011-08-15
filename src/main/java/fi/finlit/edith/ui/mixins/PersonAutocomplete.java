@@ -27,9 +27,9 @@ public class PersonAutocomplete extends JQueryAutocomplete {
         for (Object o : matches) {
             Person person = (Person) o;
             JSONObject json = new JSONObject();
-            StringBuilder builder = new StringBuilder(person.getNormalizedForm().getName());
-            if (person.getNormalizedForm().getDescription() != null) {
-                builder.append(" - " + StringUtils.abbreviate(person.getNormalizedForm().getDescription(), 32));
+            StringBuilder builder = new StringBuilder(person.getNormalized().getName());
+            if (person.getNormalized().getDescription() != null) {
+                builder.append(" - " + StringUtils.abbreviate(person.getNormalized().getDescription(), 32));
             }
             json.put("value", builder.toString());
             json.put("id", person.getId());

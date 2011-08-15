@@ -122,7 +122,7 @@ public class ContentRendererImpl implements ContentRenderer {
         Person person = note.getPerson();
         if (person != null) {
             writeSpan(writer, "personName");
-            writer.write(person.getNormalizedForm().getName());
+            writer.write(person.getNormalized().getName());
 
             Interval timeOfBirth = person.getTimeOfBirth();
             Interval timeOfDeath = person.getTimeOfDeath();
@@ -153,7 +153,7 @@ public class ContentRendererImpl implements ContentRenderer {
         Place place = note.getPlace();
         if (place != null) {
             writeSpan(writer, "placeName");
-            writer.write(place.getNormalizedForm().getName() + ".");
+            writer.write(place.getNormalized().getName() + ".");
             writer.end();
         }
     }
@@ -186,7 +186,7 @@ public class ContentRendererImpl implements ContentRenderer {
           if (note.getPerson() != null){
               writer.element("person");
               Person person = note.getPerson();
-              writeNameForm("normalizedForm", person.getNormalizedForm(), writer);
+              writeNameForm("normalizedForm", person.getNormalized(), writer);
               writer.element("otherForms");
               for (NameForm otherForm : person.getOtherForms()){
                   writeNameForm("nameForm", otherForm, writer);
@@ -199,7 +199,7 @@ public class ContentRendererImpl implements ContentRenderer {
           if (note.getPlace() != null){
               writer.element("place");
               Place place = note.getPlace();
-              writeNameForm("normalizedForm", place.getNormalizedForm(), writer);
+              writeNameForm("normalizedForm", place.getNormalized(), writer);
               writer.element("otherForms");
               for (NameForm otherForm : place.getOtherForms()){
                   writeNameForm("nameForm", otherForm, writer);

@@ -5,18 +5,16 @@ import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "person")
@@ -25,12 +23,11 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @Cascade(value = CascadeType.SAVE_UPDATE)
-    private NameForm normalizedForm;
+    @Embedded
+    private NameForm normalized;
 
-    @ManyToMany
-    @Cascade(value = CascadeType.SAVE_UPDATE)
+    @ElementCollection
+    @CollectionTable(name = "person_nameform", joinColumns = @JoinColumn(name = "person_id"))
     private Set<NameForm> otherForms = new HashSet<NameForm>();
 
     @Embedded
@@ -48,12 +45,12 @@ public class Person {
     public Person() {
     }
 
-    public Person(NameForm normalizedForm) {
-        this.normalizedForm = normalizedForm;
+    public Person(NameForm normalized) {
+        this.normalized = normalized;
     }
 
-    public Person(NameForm normalizedForm, Set<NameForm> otherForms) {
-        this(normalizedForm);
+    public Person(NameForm normalized, Set<NameForm> otherForms) {
+        this(normalized);
         this.otherForms = otherForms;
     }
 
@@ -65,8 +62,8 @@ public class Person {
         this.id = id;
     }
 
-    public NameForm getNormalizedForm() {
-        return normalizedForm;
+    public NameForm getNormalized() {
+        return normalized;
     }
 
     public Set<NameForm> getOtherForms() {
@@ -81,8 +78,8 @@ public class Person {
         return timeOfDeath;
     }
 
-    public void setNormalizedForm(NameForm normalizedForm) {
-        this.normalizedForm = normalizedForm;
+    public void setNormalized(NameForm normalized) {
+        this.normalized = normalized;
     }
 
     public void setOtherForms(Set<NameForm> otherForms) {

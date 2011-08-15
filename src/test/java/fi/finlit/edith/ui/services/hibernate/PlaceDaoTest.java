@@ -25,7 +25,7 @@ public class PlaceDaoTest extends AbstractHibernateTest {
     @Before
     public void Before() {
         place = new Place(new NameForm(), new HashSet<NameForm>());
-        place.getNormalizedForm().setName("Stockholm");
+        place.getNormalized().setName("Stockholm");
         placeDao.save(place);
     }
 

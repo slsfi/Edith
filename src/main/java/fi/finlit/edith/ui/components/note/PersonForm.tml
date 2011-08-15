@@ -5,11 +5,11 @@
 			<div>
 				<div><strong>${message:normalizedForm-label}</strong></div>
 				<div>${message:firstName-label}</div>
-				<div><t:textField t:id="normalizedFirst" value="person.normalizedForm.first" /></div>
+				<div><t:textField t:id="normalizedFirst" value="person.normalized.first" /></div>
 				<div>${message:lastName-label}</div>
-				<div><t:textField t:id="normalizedLast" value="person.normalizedForm.last" /></div>
+				<div><t:textField t:id="normalizedLast" value="person.normalized.last" /></div>
     			<div>${message:nameFormDescription-label}</div>
-				<div><t:textField t:id="normalizedDescription" value="person.normalizedForm.description" /></div>
+				<div><t:textField t:id="normalizedDescription" value="person.normalized.description" /></div>
 			</div>
 			
 			<div>

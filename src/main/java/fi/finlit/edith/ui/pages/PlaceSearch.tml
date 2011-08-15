@@ -16,10 +16,10 @@
 		<t:grid source="places" row="place" rowsPerPage="20"
 			add="normalizedName,normalizedDescription,actions" exclude="id">
 			<p:normalizedNameCell>
-	                ${place.normalizedForm.name}
+	                ${place.normalized.name}
 	            </p:normalizedNameCell>
 	            <p:normalizedDescriptionCell>
-	                ${place.normalizedForm.description}
+	                ${place.normalized.description}
 	            </p:normalizedDescriptionCell>
 			<p:actionsCell>
 				<span class="delete_note"> <a href="" class="delete_question">${message:delete}</a>

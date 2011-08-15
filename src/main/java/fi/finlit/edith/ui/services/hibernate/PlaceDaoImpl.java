@@ -12,7 +12,7 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
     public Collection<Place> findByStartOfName(String partial, int limit) {
         return query()
             .from(place)
-            .where(place.normalizedForm.last.startsWithIgnoreCase(partial)).limit(limit)
+            .where(place.normalized.last.startsWithIgnoreCase(partial)).limit(limit)
             .list(place);
     }
 

@@ -27,10 +27,10 @@ public class PlaceAutocomplete extends JQueryAutocomplete {
         for (Object o : matches) {
             Place place = (Place) o;
             JSONObject json = new JSONObject();
-            StringBuilder builder = new StringBuilder(place.getNormalizedForm().getName());
-            if (place.getNormalizedForm().getDescription() != null) {
+            StringBuilder builder = new StringBuilder(place.getNormalized().getName());
+            if (place.getNormalized().getDescription() != null) {
                 builder.append(" - "
-                        + StringUtils.abbreviate(place.getNormalizedForm().getDescription(), 32));
+                        + StringUtils.abbreviate(place.getNormalized().getDescription(), 32));
             }
             json.put("value", builder.toString());
             json.put("id", place.getId());

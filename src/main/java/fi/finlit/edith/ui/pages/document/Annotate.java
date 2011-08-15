@@ -136,6 +136,14 @@ public class Annotate extends AbstractDocumentPage {
     @Inject
     private PageRenderLinkSource linkSource;
 
+    @Inject
+    @Property
+    private Block personForm;
+
+    @Inject
+    @Property
+    private Block placeForm;
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
@@ -287,5 +295,13 @@ public class Annotate extends AbstractDocumentPage {
 
     public String getDocumentsAjaxURL() {
         return linkSource.createPageRenderLink(Documents.class).toString();
+    }
+
+    Object onCreatePerson() {
+        return personForm;
+    }
+
+    Object onCreatePlace() {
+        return placeForm;
     }
 }

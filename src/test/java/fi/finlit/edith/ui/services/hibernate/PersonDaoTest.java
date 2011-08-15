@@ -24,8 +24,8 @@ public class PersonDaoTest extends AbstractHibernateTest {
     @Before
     public void Before() {
         person = new Person(new NameForm());
-        person.getNormalizedForm().setFirst("Simon");
-        person.getNormalizedForm().setLast("Garfunkel");
+        person.getNormalized().setFirst("Simon");
+        person.getNormalized().setLast("Garfunkel");
         personDao.save(person);
     }
 
