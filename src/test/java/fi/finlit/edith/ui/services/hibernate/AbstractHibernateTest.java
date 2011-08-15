@@ -35,7 +35,7 @@ import fi.finlit.edith.testutil.Modules;
 import fi.finlit.edith.testutil.TapestryTestRunner;
 import fi.finlit.edith.ui.config.HibernateServiceModule;
 import fi.finlit.edith.ui.config.ServiceModule;
-import fi.finlit.edith.ui.test.services.SKSServiceTestModule;
+import fi.finlit.edith.ui.services.SKSServiceTestModule;
 
 @RunWith(TapestryTestRunner.class)
 @Modules({ SKSServiceTestModule.class, ServiceModule.class, HibernateServiceModule.class,
