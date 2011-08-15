@@ -50,7 +50,7 @@
                             <span class="type">, ${typesString}</span>
                           </t:if>
                           
-                          <t:if test="note.term.meaning">
+                          <t:if test="note.term?.meaning">
                             <span class="meaning">, "<t:outputRaw value="termMeaning"/>"</span>
                           </t:if>
                           
