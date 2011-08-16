@@ -10,9 +10,11 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import fi.finlit.edith.Identifiable;
+
 @Entity
 @Table(name = "notecomment")
-public class NoteComment {
+public class NoteComment implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

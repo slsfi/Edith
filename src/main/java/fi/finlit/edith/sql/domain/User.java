@@ -12,10 +12,12 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import fi.finlit.edith.Identifiable;
+
 @Entity
 @Table(name = "user")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class User {
+public class User implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

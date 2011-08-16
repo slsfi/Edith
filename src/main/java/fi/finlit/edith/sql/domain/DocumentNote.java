@@ -12,10 +12,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.mysema.query.annotations.QueryInit;
 
+import fi.finlit.edith.Identifiable;
+
 @Entity
 @Table(name = "documentnote")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class DocumentNote {
+public class DocumentNote implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

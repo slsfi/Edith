@@ -13,9 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
+import fi.finlit.edith.Identifiable;
+
 @Entity
 @Table(name = "place")
-public class Place {
+public class Place implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
