@@ -255,10 +255,10 @@
     <profile>
       <id>jenkins</id>
       <properties>
-        <db.url>jdbc:mysql://localhost:3306/edith</db.url>
+        <db.url>jdbc:mysql://localhost:3306/edith_test</db.url>
         <db.user>edith</db.user>
         <db.password>edith</db.password>
-        <db.schema>edith</db.schema>
+        <db.schema>edith_test</db.schema>
         <dbmaintain.fromScratchEnabled>true</dbmaintain.fromScratchEnabled>
       </properties>
       <build>
