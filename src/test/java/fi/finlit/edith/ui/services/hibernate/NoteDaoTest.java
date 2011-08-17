@@ -420,7 +420,21 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertEquals(0, noteDao.queryPlaces("Helssin").getAvailableRows());
         assertEquals(1, noteDao.queryPlaces("Helsin").getAvailableRows());
     }
+    
+    @Test
+    public void Query_Notes() {
+        noteDao.importNotes(noteTestData);        
+        GridDataSource dataSource = noteDao.queryNotes("XXX");
+        assertEquals(0, dataSource.getAvailableRows());
+    }
 
+    @Test
+    public void Query_Notes_Wildcard() {
+        noteDao.importNotes(noteTestData);        
+        GridDataSource dataSource = noteDao.queryNotes("*");
+        assertTrue(dataSource.getAvailableRows() > 0);
+    }
+    
     private Note createNote() {
         Note note = new Note();
         //XXX Whats best way to deal with this, we always going to have this
