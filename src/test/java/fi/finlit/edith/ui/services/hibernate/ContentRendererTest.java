@@ -21,17 +21,7 @@ import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.junit.Test;
 
-import fi.finlit.edith.sql.domain.DocumentNote;
-import fi.finlit.edith.sql.domain.Interval;
-import fi.finlit.edith.sql.domain.LinkElement;
-import fi.finlit.edith.sql.domain.NameForm;
-import fi.finlit.edith.sql.domain.Note;
-import fi.finlit.edith.sql.domain.NoteFormat;
-import fi.finlit.edith.sql.domain.Paragraph;
-import fi.finlit.edith.sql.domain.Person;
-import fi.finlit.edith.sql.domain.Place;
-import fi.finlit.edith.sql.domain.StringElement;
-import fi.finlit.edith.sql.domain.UrlElement;
+import fi.finlit.edith.sql.domain.*;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.content.ContentRenderer;
 import fi.finlit.edith.util.ParagraphParser;
@@ -92,10 +82,24 @@ public class ContentRendererTest extends AbstractHibernateTest {
         note.setDescription(paragraph.toString());
         note.setSources(paragraph.toString());
         note.setFormat(noteFormat);
+        note.setPerson(createPerson());
+        note.setPlace(createPlace());
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
         documentNote.setId(1234L);
         return documentNote;
+    }
+
+    private Place createPlace() {
+        Place place = new Place();
+        place.setNormalized(new NameForm("MyPlace", ""));
+        return place;
+    }
+
+    private Person createPerson() {
+        Person person = new Person();
+        person.setNormalized(new NameForm("MyPlace", ""));
+        return person;        
     }
 
     @Test

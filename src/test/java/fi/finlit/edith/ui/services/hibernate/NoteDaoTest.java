@@ -7,6 +7,7 @@
 package fi.finlit.edith.ui.services.hibernate;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -433,6 +434,12 @@ public class NoteDaoTest extends AbstractHibernateTest {
         noteDao.importNotes(noteTestData);        
         GridDataSource dataSource = noteDao.queryNotes("*");
         assertTrue(dataSource.getAvailableRows() > 0);
+    }
+    
+    @Test
+    public void Get_Orphan_Ids() {
+        noteDao.importNotes(noteTestData);
+        assertFalse(noteDao.getOrphanIds().isEmpty());
     }
     
     private Note createNote() {
