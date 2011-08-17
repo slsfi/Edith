@@ -24,17 +24,7 @@ import org.junit.Test;
 
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.dto.NoteSearchInfo;
-import fi.finlit.edith.sql.domain.Document;
-import fi.finlit.edith.sql.domain.DocumentNote;
-import fi.finlit.edith.sql.domain.Interval;
-import fi.finlit.edith.sql.domain.NameForm;
-import fi.finlit.edith.sql.domain.Note;
-import fi.finlit.edith.sql.domain.NoteFormat;
-import fi.finlit.edith.sql.domain.NoteType;
-import fi.finlit.edith.sql.domain.Person;
-import fi.finlit.edith.sql.domain.Place;
-import fi.finlit.edith.sql.domain.Term;
-import fi.finlit.edith.sql.domain.User;
+import fi.finlit.edith.sql.domain.*;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteDao;
@@ -273,6 +263,11 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         assertEquals(1, documentNoteDao.getOfPlace(place.getId()).size());
     }
 
+    @Test
+    public void GetPublishableNotesOfDocument() {
+        assertEquals(0, documentNoteDao.getPublishableNotesOfDocument(document).size());
+    }
+    
     private void addExtraNote(String username) {
         DocumentNote documentNote = new DocumentNote();
         User user = userDao.getByUsername(username);

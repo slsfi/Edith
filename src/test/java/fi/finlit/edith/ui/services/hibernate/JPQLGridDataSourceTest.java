@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.services.hibernate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -60,6 +61,12 @@ public class JPQLGridDataSourceTest extends AbstractHibernateTest {
         for (int i = 0; i < 5; i++){
             assertNotNull(dataSource.getRowValue(i));
         }
+    }
+    
+    @Test
+    public void GetRowValue_Invalid_Index() {
+        dataSource.prepare(0, 5, Collections.<SortConstraint>emptyList());
+        assertNull(dataSource.getRowValue(100));
     }
 
     @Test
