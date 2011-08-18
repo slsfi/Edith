@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import fi.finlit.edith.ui.services.hibernate.DocumentDaoImpl;
 
-public class DocumentDaoImpl_getIndexText {
+public class DocumentDaoImpl_getIndexTest {
     @Test
     public void ShortText(){
         assertEquals(8, DocumentDaoImpl.getIndex("This is a sentence", "a", 1));
