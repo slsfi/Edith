@@ -3,6 +3,7 @@ package fi.finlit.edith.ui.services;
 import java.io.IOException;
 
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.services.Response;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.tmatesoft.svn.core.SVNException;
@@ -29,4 +30,9 @@ public class SKSServiceTestModule {
         return ServiceTestModule.buildPaswordEncoder();
     }
 
+    public static Response buildResponse() {
+        return ServiceTestModule.buildResponse();
+    }
+
+    
 }

@@ -16,7 +16,9 @@ import java.io.IOException;
 import nu.localhost.tapestry5.springsecurity.services.internal.SaltSourceImpl;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.tapestry5.internal.test.TestableResponseImpl;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.services.Response;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
@@ -24,7 +26,6 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.ui.services.AuthService;
 
 public class ServiceTestModule {
 
@@ -45,6 +46,10 @@ public class ServiceTestModule {
         saltSource.setSystemWideSalt("DEADBEEF");
         saltSource.afterPropertiesSet();
         return saltSource;
+    }
+        
+    public static Response buildResponse() {
+        return new TestableResponseImpl();
     }
 
     public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
