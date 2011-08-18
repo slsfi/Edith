@@ -21,7 +21,6 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -598,7 +597,9 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public void removeAll(Collection<Document> documents) {
-        throw new UnsupportedOperationException("not yet implemented");
+        for (Document document : documents) {
+            remove(document);
+        }
     }
 
     @Override

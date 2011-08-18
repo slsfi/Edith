@@ -14,9 +14,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.UUID;
+import java.util.Collections;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -222,6 +221,13 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         assertNotNull(stream);
         IOUtils.closeQuietly(stream);
         documentDao.remove(document);
+        documentDao.getDocumentStream(document);
+    }
+    
+    @Test(expected = RuntimeException.class)
+    public void Remove_All() throws IOException {
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        documentDao.removeAll(Collections.singleton(document));
         documentDao.getDocumentStream(document);
     }
 
