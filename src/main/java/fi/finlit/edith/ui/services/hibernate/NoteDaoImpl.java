@@ -190,8 +190,9 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             }
         }
 
-        // TODO : default order excludes notes without terms from search results
-        return createGridDataSource(note, note.term.basicForm.lower().asc(), false, builder.getValue());
+
+//        return createGridDataSource(note, note.term.basicForm.lower().asc(), false, builder.getValue());
+        return createGridDataSource(note, note.lemma.asc(), false, builder.getValue());
     }
 
     private OrderSpecifier<?> getOrderBy(NoteSearchInfo searchInfo) {

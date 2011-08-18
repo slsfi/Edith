@@ -20,7 +20,6 @@ import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.finlit.edith.EDITH;
@@ -443,9 +442,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertFalse(noteDao.getOrphanIds().isEmpty());
     }
     
- // FIXME
     @Test
-    @Ignore 
     public void RemoveNote() {
         noteDao.importNotes(noteTestData);
         GridDataSource data = noteDao.queryNotes("*");
