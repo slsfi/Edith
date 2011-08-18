@@ -12,8 +12,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
@@ -443,7 +445,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
     }
     
     @Test
-    public void RemoveNote() {
+    public void Remove_Note() {
         noteDao.importNotes(noteTestData);
         GridDataSource data = noteDao.queryNotes("*");
         assertTrue(data.getAvailableRows() > 0);
@@ -455,6 +457,22 @@ public class NoteDaoTest extends AbstractHibernateTest {
         }
         assertEquals(0, data.getAvailableRows());
         
+    }
+    
+    @Test
+    public void Remove_Notes() {
+        noteDao.importNotes(noteTestData);
+        GridDataSource data = noteDao.queryNotes("*");
+        assertTrue(data.getAvailableRows() > 0);
+        data.prepare(0, data.getAvailableRows(), Collections.<SortConstraint>emptyList());
+        
+        int max = data.getAvailableRows();
+        List<Note> notes = new ArrayList<Note>(max);
+        for (int i = 0; i < max; i++) {
+            notes.add((Note)data.getRowValue(i));
+        }
+        noteDao.removeNotes(notes);
+        assertEquals(0, data.getAvailableRows());
     }
     
     private Note createNote() {
