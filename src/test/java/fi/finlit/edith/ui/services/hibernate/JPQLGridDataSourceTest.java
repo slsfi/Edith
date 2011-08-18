@@ -54,7 +54,21 @@ public class JPQLGridDataSourceTest extends AbstractHibernateTest {
         SortConstraint constraint = new SortConstraint(firstName,ColumnSort.ASCENDING);
         dataSource.prepare(0, 10, Collections.singletonList(constraint));
     }
-
+    
+    @Test
+    public void Prepare_with_sort_descending() {
+        PropertyModel firstName = new SimplePropertyModel("firstName",String.class);
+        SortConstraint constraint = new SortConstraint(firstName,ColumnSort.DESCENDING);
+        dataSource.prepare(0, 10, Collections.singletonList(constraint));
+    }
+    
+    @Test
+    public void Prepare_with_sort_by_id() {
+        PropertyModel firstName = new SimplePropertyModel("id",Long.class);
+        SortConstraint constraint = new SortConstraint(firstName,ColumnSort.ASCENDING);
+        dataSource.prepare(0, 10, Collections.singletonList(constraint));
+    }
+    
     @Test
     public void GetRowValue() {
         dataSource.prepare(0, 5, Collections.<SortConstraint>emptyList());
