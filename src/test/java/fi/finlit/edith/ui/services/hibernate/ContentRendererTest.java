@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class ContentRendererTest extends AbstractHibernateTest {
 
     @Test
     public void renderDocumentAsXML() throws IOException, XMLStreamException{
-        List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
+        List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE, true), createDocumentNote(NoteFormat.PERSON, true));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         renderer.renderDocumentAsXML(documentDao.getDocumentForPath(doc2), docNotes, out);
     }
@@ -65,11 +66,11 @@ public class ContentRendererTest extends AbstractHibernateTest {
 
     @Test
     public void renderDocumentNotesAsXML(){
-        List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE), createDocumentNote(NoteFormat.PERSON));
+        List<DocumentNote> docNotes = Arrays.asList(createDocumentNote(NoteFormat.NOTE, true), createDocumentNote(NoteFormat.PERSON, true));
         renderer.renderDocumentNotesAsXML(documentDao.getDocumentForPath(doc2), docNotes, writer);
     }
 
-    private DocumentNote createDocumentNote(NoteFormat noteFormat) {
+    private DocumentNote createDocumentNote(NoteFormat noteFormat, boolean extended) {
         Note note = new Note();
 
         note.setLemma("taloon");
@@ -82,30 +83,42 @@ public class ContentRendererTest extends AbstractHibernateTest {
         note.setDescription(paragraph.toString());
         note.setSources(paragraph.toString());
         note.setFormat(noteFormat);
-        note.setPerson(createPerson());
-        note.setPlace(createPlace());
+        if (extended) {
+            note.setPerson(createPerson());
+            note.setPlace(createPlace());
+            note.setTerm(createTerm());
+        }
+        note.setTypes(Collections.singleton(NoteType.HISTORICAL));
         DocumentNote documentNote = new DocumentNote();
         documentNote.setNote(note);
         documentNote.setId(1234L);
         return documentNote;
     }
 
+    private Term createTerm() {
+        Term term = new Term();
+        term.setBasicForm("basic form");
+        return term;
+    }
+
     private Place createPlace() {
         Place place = new Place();
         place.setNormalized(new NameForm("MyPlace", ""));
+        place.setOtherForms(Collections.singleton(new NameForm("MyPlace", "")));
         return place;
     }
 
     private Person createPerson() {
         Person person = new Person();
         person.setNormalized(new NameForm("MyPlace", ""));
+        person.setOtherForms(Collections.singleton(new NameForm("MyPlace", "")));
         return person;        
     }
 
     @Test
     public void Render_Normal_Note() {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
-        documentNotes.add(createDocumentNote(NoteFormat.NOTE));
+        documentNotes.add(createDocumentNote(NoteFormat.NOTE, false));
         renderer.renderDocumentNotes(documentNotes, writer);
         String document = writer.toString();
         assertTrue(document.startsWith("<ul class=\"notes\">"));
@@ -122,7 +135,7 @@ public class ContentRendererTest extends AbstractHibernateTest {
     @Test
     public void Render_Person_Note() {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
-        DocumentNote documentNote = createDocumentNote(NoteFormat.PERSON);
+        DocumentNote documentNote = createDocumentNote(NoteFormat.PERSON, false);
         Person person = new Person(new NameForm("Fred", "Armisen", null), new HashSet<NameForm>());
         person.setTimeOfBirth(Interval.createYear(1970));
         person.setTimeOfDeath(Interval.createYear(2098));
@@ -145,7 +158,7 @@ public class ContentRendererTest extends AbstractHibernateTest {
     @Test
     public void Render_Place_Note() {
         List<DocumentNote> documentNotes = new ArrayList<DocumentNote>();
-        DocumentNote documentNote = createDocumentNote(NoteFormat.PLACE);
+        DocumentNote documentNote = createDocumentNote(NoteFormat.PLACE, false);
 
         Paragraph description = ParagraphParser.parseSafe(documentNote.getNote().getDescription());
         description.addElement(new StringElement(" foo "));

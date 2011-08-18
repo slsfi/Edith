@@ -28,28 +28,16 @@ import org.springframework.util.Assert;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.JPQLSubQuery;
-import com.mysema.query.types.ConstantImpl;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
-import com.mysema.query.types.template.BooleanTemplate;
 
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.dto.UserInfo;
-import fi.finlit.edith.sql.domain.Document;
-import fi.finlit.edith.sql.domain.DocumentNote;
-import fi.finlit.edith.sql.domain.LinkElement;
-import fi.finlit.edith.sql.domain.Note;
-import fi.finlit.edith.sql.domain.NoteComment;
-import fi.finlit.edith.sql.domain.NoteType;
-import fi.finlit.edith.sql.domain.Paragraph;
-import fi.finlit.edith.sql.domain.StringElement;
-import fi.finlit.edith.sql.domain.Term;
-import fi.finlit.edith.sql.domain.UrlElement;
-import fi.finlit.edith.sql.domain.User;
+import fi.finlit.edith.sql.domain.*;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
@@ -178,12 +166,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         if (!search.getNoteTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : search.getNoteTypes()) {
-                /*
-                 * FIXME: Temporary quickfix. Should be fixed in Querydsl at some point.
-                 * Reported issue: https://bugs.launchpad.net/querydsl/+bug/800698
-                 */
-//                filter.or(note.types.contains(type));
-                filter.or(BooleanTemplate.create("{0} in elements({1})", new ConstantImpl<String>(type.name()), note.types));
+                filter.or(note.types.contains(type));
             }
             builder.and(filter);
         }
@@ -207,6 +190,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             }
         }
 
+        // TODO : default order excludes notes without terms from search results
         return createGridDataSource(note, note.term.basicForm.lower().asc(), false, builder.getValue());
     }
 
