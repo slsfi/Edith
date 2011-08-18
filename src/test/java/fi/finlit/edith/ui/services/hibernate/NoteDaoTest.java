@@ -27,6 +27,7 @@ import org.junit.Test;
 import fi.finlit.edith.EDITH;
 import fi.finlit.edith.EdithTestConstants;
 import fi.finlit.edith.dto.NoteSearchInfo;
+import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.dto.UserInfo;
 import fi.finlit.edith.sql.domain.*;
 import fi.finlit.edith.ui.services.DocumentDao;
@@ -313,6 +314,51 @@ public class NoteDaoTest extends AbstractHibernateTest {
         
         NoteSearchInfo search = new NoteSearchInfo();
         search.getNoteTypes().add(NoteType.CRITIQUE);
+        noteDao.findNotes(search);
+        // TODO
+    }
+    
+    @Test
+    public void Find_With_Order_Date() {
+        noteDao.importNotes(noteTestData);
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setOrderBy(OrderBy.DATE);
+        GridDataSource data = noteDao.findNotes(search);
+        assertTrue(data.getAvailableRows() > 0);
+    }
+    
+    @Test
+    public void Find_With_Order_Keyterm() {
+        noteDao.importNotes(noteTestData);
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setOrderBy(OrderBy.KEYTERM);
+        GridDataSource data = noteDao.findNotes(search);
+        assertTrue(data.getAvailableRows() > 0);
+    }
+    
+    @Test
+    public void Find_With_Order_Lemma() {
+        noteDao.importNotes(noteTestData);
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setOrderBy(OrderBy.LEMMA);
+        GridDataSource data = noteDao.findNotes(search);
+        assertTrue(data.getAvailableRows() > 0);
+    }
+    
+    @Test
+    public void Find_With_Order_Status() {
+        noteDao.importNotes(noteTestData);
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setOrderBy(OrderBy.STATUS);
+        GridDataSource data = noteDao.findNotes(search);
+        assertTrue(data.getAvailableRows() > 0);
+    }
+    
+    @Test
+    public void Find_With_Order_User() {
+        noteDao.importNotes(noteTestData);
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setOrderBy(OrderBy.STATUS);
         noteDao.findNotes(search);
         // TODO
     }
