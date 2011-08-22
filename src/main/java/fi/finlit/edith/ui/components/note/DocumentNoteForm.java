@@ -29,6 +29,10 @@ public class DocumentNoteForm {
 
     private boolean delete;
 
+    public boolean isSlsMode() {
+        return page.isSlsMode();
+    }
+
     public SelectedText getUpdateLongTextSelection() {
         if (updateLongTextSelection == null) {
             updateLongTextSelection = new SelectedText();

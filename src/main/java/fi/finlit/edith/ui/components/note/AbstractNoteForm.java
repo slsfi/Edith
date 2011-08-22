@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.components.note;
 
 import java.util.List;
 
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -26,6 +27,7 @@ import fi.finlit.edith.ui.services.DocumentNoteDao;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.TermDao;
 
+@Import(library = {"NoteForm.js"})
 @SuppressWarnings("unused")
 public abstract class AbstractNoteForm {
 
@@ -82,11 +84,6 @@ public abstract class AbstractNoteForm {
 
     private Term getEditTerm(Note note) {
         return note.getTerm() != null ? note.getTerm() : new Term();
-    }
-
-    @Validate("required")
-    public NoteFormat getFormat() {
-        return noteOnEdit.getFormat();
     }
 
     public Note getNoteOnEdit() {

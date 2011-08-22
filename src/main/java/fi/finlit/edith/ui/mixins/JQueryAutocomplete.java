@@ -22,10 +22,16 @@ import org.apache.tapestry5.services.ResponseRenderer;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.TextStreamResponse;
 
-@Import(library = { "jquery-autocomplete.js", "classpath:js/jquery-1.4.1.js",
-        "classpath:js/ui/jquery.ui.core.js", "classpath:js/ui/jquery.ui.widget.js",
-        "classpath:js/ui/jquery.ui.position.js", "classpath:js/ui/jquery.ui.autocomplete.js" }, stylesheet = {
-        "context:styles/themes/base/jquery-ui.css", "jquery-autocomplete.css" })
+@Import(library = {
+            "jquery-autocomplete.js",
+            "classpath:js/jquery-1.5.1.min.js",
+            "classpath:js/jquery-ui-1.8.12.custom.min.js",
+            "classpath:js/ui/jquery.ui.widget.js",
+            "classpath:js/ui/jquery.ui.position.js",
+            "classpath:js/ui/jquery.ui.autocomplete.js" },
+        stylesheet = {
+            "context:styles/smoothness/jquery-ui-1.8.12.custom.css",
+            "context:styles/smoothness/jquery.ui.autocomplete.css" })
 @Events(EventConstants.PROVIDE_COMPLETIONS)
 public class JQueryAutocomplete {
     static final String EVENT_NAME = "jqueryautocomplete";

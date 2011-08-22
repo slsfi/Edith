@@ -78,18 +78,21 @@
             <div id="fullSelectionUpdate"></div>
         </div>
         
-        <div class="field">
-            <t:label for="shortenedSelection">${message:shortenedSelection-label}</t:label>
-            <t:textField t:id="shortenedSelection" value="documentNoteOnEdit.shortenedSelection" />
-        </div>
+        <t:if test="slsMode">
+          <div class="field">
+              <t:label for="shortenedSelection">${message:shortenedSelection-label}</t:label>
+              <t:textField t:id="shortenedSelection" value="documentNoteOnEdit.shortenedSelection" />
+          </div>
+          
+          <div class="field">
+              <t:label for="lemmaPosition">${message:lemmaPosition-label}</t:label>
+              <t:textField t:id="lemmaPosition" value="documentNoteOnEdit.lemmaPosition" />
+          </div>
+        </t:if>
         
-        <div class="field">
-            <t:label for="lemmaPosition">${message:lemmaPosition-label}</t:label>
-            <t:textField t:id="lemmaPosition" value="documentNoteOnEdit.lemmaPosition" />
-        </div>
        <div class="field">
           <label><t:checkbox value="documentNoteOnEdit.publishable" />${message:publishable-label}</label>
-        </div>
+       </div>
         
         <t:hidden t:id="noteOnEditId" value="documentNoteOnEdit.id" />
         

@@ -21,7 +21,7 @@ public class PersonForm {
     @Property
     private NameForm loopPerson;
 
-    @Parameter
+    @Parameter(required = true, allowNull = false)
     @Property
     private Block closeDialog;
 
