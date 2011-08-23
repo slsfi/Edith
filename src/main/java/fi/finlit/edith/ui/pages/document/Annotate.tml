@@ -22,7 +22,7 @@
        </ul>
        <ul class="actions">
 		 <li><a id="createTermLink" class="disabled" href="#">${message:createTerm}</a></li>
-         <li><a id="connectTermLink" class="disabled" href="#">${message:connectTerm}</a></li> 
+         <li><a id="connectTermLink" class="disabled" href="#">${message:connectTerm}</a></li>
 		 <t:if test="!slsMode">
 		   <li><t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink></li>
            <li><t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink></li>
@@ -32,7 +32,7 @@
 	</p:leftPanel>
 
 	<p:rightPanel>
-	
+
 	<script type="text/javascript">
 	   var AccordionState = {
 	     saveState : function(event, ui) {
@@ -43,40 +43,42 @@
              }
              jQuery.cookie(id, state, {expires: 7});
          },
-         
+
          loadState : function(event, ui) {
              var id = jQuery(this).attr("id");
              var state = jQuery.cookie(id);
              if (state == 0) {
                 jQuery(this).accordion("option", "active", 0);
-             } 
-         }	   
+             }
+         }
 	   };
-	
+
+
+
 	   jQuery(function() {
-	   
-	     jQuery('#documentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+
+	     jQuery('#documentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
 	    	 create: AccordionState.loadState, change: AccordionState.saveState});
-	     jQuery('#searchAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+	     jQuery('#searchAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
 	    	 create: AccordionState.loadState, change: AccordionState.saveState });
-		 jQuery('#searchResultsAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+		 jQuery('#searchResultsAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
 			 create: AccordionState.loadState, change: AccordionState.saveState });
-		 jQuery('#instancesAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+		 jQuery('#instancesAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
 			 create: AccordionState.loadState, change: AccordionState.saveState });
-		 jQuery('#editAccordion').accordion({ collapsible: true, active: false, clearStyle:true, 
+		 jQuery('#editAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
 			 create: AccordionState.loadState, change: AccordionState.saveState });
-		 
+
 		 (function($) {
 
 		   var documents = {};
 		   documents['${document.id}'] = true;
-		   
+
 		   var visualizeNode = function(node) {
 		     if (node.data.isSelected) {
 		       node.select(true);
 		     }
 		   }
-		   
+
 	     $('#to_annotate').click(function(e) {
 	       e.preventDefault();
 	       var node = $("#directory-tree").dynatree("getActiveNode");
@@ -84,7 +86,7 @@
 	         window.location.href = node.data.documentId;
 	       }
 	     });
-		   
+
 		   jQuery('#directory-tree').dynatree({
 	       initAjax: {
 	         url: '${documentsAjaxURL}:json',
@@ -92,13 +94,13 @@
 	           id: '${document.id}'
 	         }
 	       },
-	       
+
 	       onDblClick: function(node, event) {
 	         if (!node.data.isFolder) {
 	           window.location.href = node.data.documentId;
 	         }
 	       },
-	       
+
 	       onActivate: function(node) {
 	         if (node.data.isFolder) {
 	           $('#to_annotate').addClass('disabled');
@@ -106,7 +108,7 @@
 	           $('#to_annotate').removeClass('disabled');
 	         }
 	       },
-	       
+
 	       onLazyRead: function(node) {
 	         node.appendAjax({
 	           url: '${documentsAjaxURL}:json/',
@@ -114,7 +116,7 @@
 	             path: node.data.path,
 	             id: '${document.id}'
 	           },
-	         
+
 	           success: function(node) {
 	             node.visit(function(child) {
 	               if (node.isSelected()) {
@@ -125,11 +127,11 @@
 	           }
 	         });
 	       },
-	       
+
 	       onPostInit: function(isReloading, isError) {
 	         this.visit(visualizeNode);
 	       },
-	       
+
 	       onSelect: function(flag, node) {
 	         if (flag) {
 	           documents[node.data.documentId] = true;
@@ -142,10 +144,10 @@
              });
            }
 	       },
-	       
+
 	       checkbox: true
 		   });
-		   
+
 		   $('#noteSearchFormSubmit').click(function() {
 		     var documentIds = [];
 		     $.each(documents, function(k, _) {
@@ -155,13 +157,13 @@
 		       $('#noteSearchForm #documents').val(documentIds.join(','));
 		     }
 		   });
-		   
+
 		 })(jQuery);
-		 
+
 	   });
 	</script>
-	
-	
+
+
 	<div id="documentsAccordion">
         <h5><a href="#">${message:search-from-documents}</a></h5>
         <div>
@@ -178,21 +180,21 @@
 	<div id="searchResultsAccordion">
         <h3><a href="#">${message:notesearchresults}</a></h3>
         <div>
-            <t:note.searchResults />        
+            <t:note.searchResults />
         </div>
     </div>
     <div id="instancesAccordion">
         <h3><a href="#">${message:document-notes}</a></h3>
         <div>
-        
+
             <t:note.documentNotes />
-        
+
             <t:remove>
-            <!-- This is going to be replaced with *** model -->    
+            <!-- This is going to be replaced with *** model -->
 	        <t:if test="moreThanOneSelectable">
 	           <h3>${message:selectNote}</h3>
 	           <ul class="notes">
-	
+
 	               <t:loop source="selectedNotes" value="note">
 	                   <li>
 	                       <t:eventlink t:event="edit" context="e${note.id}" t:zone="editZone" class="notelink">
@@ -205,16 +207,16 @@
             </t:remove>
         </div>
     </div>
-	
+
 	<div id="editAccordion">
         <h3><a href="#">${message:noteEdit}</a></h3>
         <div>
-          
+
           <t:note.noteEdit />
-              
+
         </div>
     </div>
-	
+
     <t:form t:id="createTermForm" t:zone="listZone">
        <t:hidden t:id="selectedText_1" value="createTermSelection.selection" />
        <t:hidden t:id="selectedStartId_1" value="createTermSelection.startId" />
@@ -222,7 +224,7 @@
        <t:hidden t:id="selectedStartIndex_1" value="createTermSelection.startIndex" />
        <t:hidden t:id="selectedEndIndex_1" value="createTermSelection.endIndex" />
     </t:form>
-    
+
     <t:form t:id="connectTermForm" t:zone="listZone">
        <t:hidden t:id="noteToLinkId" value="noteToLinkId" />
        <t:hidden t:id="selectedText_2" value="createTermSelection.selection" />
@@ -231,25 +233,24 @@
        <t:hidden t:id="selectedStartIndex_2" value="createTermSelection.startIndex" />
        <t:hidden t:id="selectedEndIndex_2" value="createTermSelection.endIndex" />
     </t:form>
-    
+
     <t:form t:id="selectNoteForm" t:zone="noteEditZone">
         <t:hidden t:id="selectedNoteId" value="selectedNoteId" />
     </t:form>
-    
+
 	<t:block id="emptyBlock">
 		<span />
 	</t:block>
 
 	</p:rightPanel>
-  
+
     <t:infoMessage />
 
     <div class="jqmWindow" id="dialog">
         <t:zone t:id="dialogZone" update="show">${message:creatingNote}...</t:zone>
-    
-        <a href="#" class="jqmClose">${message:close}</a>
+        <button type="button" class="jqmClose">${message:close}</button>
     </div>
-    
+
     <t:remove>
     <t:block t:id="notesForLemma">
         <div><strong>${message:createNewNoteOrChooseExistingOne}</strong></div>
@@ -263,15 +264,15 @@
     <t:eventlink t:event="chooseBackingNote" t:zone="editZone">${message:createNewNote-label}</t:eventlink>
     </t:block>
     </t:remove>
-    
+
     <t:block t:id="closeDialog">
-        ${message:create-success}
+        <script type="text/javascript">jQuery('#dialog').jqmHide();</script>
     </t:block>
-    
+
     <t:block t:id="personForm">
         <t:note.personForm closeDialog="closeDialog"/>
     </t:block>
-    
+
     <t:block t:id="placeForm">
         <t:note.placeForm closeDialog="closeDialog"/>
     </t:block>
@@ -280,6 +281,6 @@
 		var l10n = new Array();
 		l10n.invalidSelection = "${message:invalid-selection-error}";
 	</script>
-	
-		
+
+
 </html>

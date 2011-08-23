@@ -1,58 +1,56 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 	<t:content>
+	 <t:infoMessage />
+	    <h2>${message:personForm-title}</h2>
 		<t:form t:id="personForm" t:zone="dialogZone" t:context="person.id">
+		 <div class="scrollable">
 			<t:errors />
-			<div>
-				<div><strong>${message:normalizedForm-label}</strong></div>
-				<div>${message:firstName-label}</div>
-				<div><t:textField t:id="normalizedFirst" value="person.normalized.first" /></div>
-				<div>${message:lastName-label}</div>
-				<div><t:textField t:id="normalizedLast" value="person.normalized.last" /></div>
-    			<div>${message:nameFormDescription-label}</div>
-				<div><t:textField t:id="normalizedDescription" value="person.normalized.description" /></div>
-			</div>
-			
-			<div>
-                <div><strong>${message:createNameForm-label}</strong></div>
+    	    <fieldset>
+	          <legend>${message:normalizedForm-label}</legend>
+			  <div>${message:firstName-label}</div>
+              <div><t:textField t:id="normalizedFirst" value="person.normalized.first" /></div>
+              <div>${message:lastName-label}</div>
+              <div><t:textField t:id="normalizedLast" value="person.normalized.last" /></div>
+              <div>${message:nameFormDescription-label}</div>
+              <div><t:textField t:id="normalizedDescription" value="person.normalized.description" /></div>
+			</fieldset>
+			<fieldset>
+              <div>${message:timeOfBirth-label} (${message:timeFormat})</div>
+              <div>
+                <t:textField t:id="timeOfBirth" />
+             </div>
+             <div>
+                <div>
+                  ${message:timeOfDeath-label} (${message:timeFormat})
+                </div>
+                <div>
+                  <t:textField t:id="timeOfDeath" />
+                </div>
+             </div>
+            </fieldset>
+            <t:loop source="persons" value="loopPerson" volatile="true">
+               <fieldset>
+                    <legend>${message:nameForm-label}</legend>
+                    <div>${message:firstName-label}</div>
+                    <div><t:textField value="loopPerson.first" /></div>
+                    <div>${message:lastName-label}</div>
+                    <div><t:textField value="loopPerson.last" /></div>
+                    <div>${message:nameFormDescription-label}</div>
+                    <div><t:textField value="loopPerson.description" /></div>
+                </fieldset>
+            </t:loop>
+
+			<fieldset>
+                <legend>${message:createNameForm-label}</legend>
                 <div>${message:firstName-label}</div>
                 <div><t:textField t:id="newFirst" value="newFirst" /></div>
                 <div>${message:lastName-label}</div>
                 <div><t:textField t:id="newLast" value="newLast" /></div>
                 <div>${message:nameFormDescription-label}</div>
                 <div><t:textField t:id="newDescription" value="newDescription" /></div>
+            </fieldset>
             </div>
-
-			<t:loop source="persons" value="loopPerson" volatile="true">
-				<div>
-					<div><strong>${message:nameForm-label}</strong></div>
-					<div>${message:firstName-label}</div> 
-					<div><t:textField value="loopPerson.first" /></div>
-					<div>${message:lastName-label}</div>
-					<div><t:textField value="loopPerson.last" /></div>
-    				<div>${message:nameFormDescription-label}</div>
-					<div><t:textField value="loopPerson.description" /></div>
-				</div>
-			</t:loop>
-
-			<div>
-				<div>
-					<strong>${message:timeOfBirth-label} (${message:timeFormat})</strong>
-				</div>
-				<div>
-					<t:textField t:id="timeOfBirth" />
-				</div>
-			</div>
-
-			<div>
-				<div>
-					<strong>${message:timeOfDeath-label} (${message:timeFormat})</strong>
-				</div>
-				<div>
-					<t:textField t:id="timeOfDeath" />
-				</div>
-			</div>
-
-			<input type="submit" value="${message:savePerson}" />
-		</t:form>		
+		  <button class="save" type="submit">${message:savePerson}</button>
+		</t:form>
 	</t:content>
 </html>

@@ -1,34 +1,37 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 	<t:content>
+	 <t:infoMessage />
+	    <h2>${message:placeForm-title}</h2>
 		<t:form t:id="placeForm" t:zone="dialogZone" t:context="place.id">
+		  <div class="scrollable">
 			<t:errors />
-			<div>
-				<div><strong>${message:normalizedName-label}</strong></div>
+			<fieldset>
+				<legend>${message:normalizedName-label}</legend>
 				<div>${message:name-label}</div>
-				<div><t:textField t:id="normalizedFirst" value="place.normalized.name" /></div>
+				<div><t:textField class="first-name" t:id="normalizedFirst" value="place.normalized.name" /></div>
     			<div>${message:nameFormDescription-label}</div>
-				<div><t:textField t:id="normalizedDescription" value="place.normalized.description" /></div>
-			</div>
-			
-			<div>
-                <div><strong>${message:createNameForm-label}</strong></div>
+				<div><t:textField class="last-name" t:id="normalizedDescription" value="place.normalized.description" /></div>
+            </fieldset>
+
+			<t:loop source="places" value="loopPlace" volatile="true">
+				<fieldset>
+					<legend>${message:nameForm-label}</legend>
+					<div>${message:name-label}</div>
+					<div><t:textField value="loopPlace.name" /></div>
+    				<div>${message:nameFormDescription-label}</div>
+					<div><t:textField value="loopPlace.description" /></div>
+				</fieldset>
+			</t:loop>
+
+            <fieldset>
+                <legend>${message:createNameForm-label}</legend>
                 <div>${message:name-label}</div>
                 <div><t:textField t:id="newName" value="newName" /></div>
                 <div>${message:nameFormDescription-label}</div>
                 <div><t:textField t:id="newDescription" value="newDescription" /></div>
-            </div>
-
-			<t:loop source="places" value="loopPlace" volatile="true">
-				<div>
-					<div><strong>${message:nameForm-label}</strong></div>
-					<div>${message:name-label}</div> 
-					<div><t:textField value="loopPlace.name" /></div>
-    				<div>${message:nameFormDescription-label}</div>
-					<div><t:textField value="loopPlace.description" /></div>
-				</div>
-			</t:loop>
-
-			<input type="submit" value="${message:savePlace}" />
-		</t:form>		
+            </fieldset>
+	      </div>
+	      <button class="save" type="submit">${message:savePlace}</button>
+		</t:form>
 	</t:content>
 </html>

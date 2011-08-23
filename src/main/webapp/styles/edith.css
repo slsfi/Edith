@@ -15,11 +15,11 @@
 
 .ui-widget { font-size: 100% }
 .ui-accordion .ui-accordion-header a,
-.ui-accordion-content { 
+.ui-accordion-content {
 	font-size: 100%;
 }
 
-.ui-accordion-content, .ui-widget-content { 
+.ui-accordion-content, .ui-widget-content {
     background: url('../images/note_bg.png') repeat-x #dddddd;
 }
 
@@ -35,7 +35,7 @@
 ul.dynatree-container {
     border: none;
     font-family: verdana, serif;
-    font-size: 100%;   
+    font-size: 100%;
 }
 
 /**
@@ -47,9 +47,9 @@ ul.dynatree-container {
 #title-bar {
 	background-image: url('../images/application_title_bg.png');
     background-repeat: repeat-x;
-    color: white;  
-    padding: 22px; 
-    padding-top: 13px	
+    color: white;
+    padding: 22px;
+    padding-top: 13px
 }
 
 
@@ -64,13 +64,13 @@ ul.dynatree-container {
 	font-family: verdana, serif;
 }
 
-#header a:link, #header a:visited, 
+#header a:link, #header a:visited,
 #header a:hover, #header a:active {
     text-decoration: underline;
     color: #000;
 }
 
-#header a.disabled:link, #header a.disabled:visited, 
+#header a.disabled:link, #header a.disabled:visited,
 #header a.disabled:hover, #header a.disabled:active  {
     text-decoration: none;
     color: #919191;
@@ -78,7 +78,7 @@ ul.dynatree-container {
 
 
 #auth { float: right; font-size: 0.75em; }
-#auth a:link, #auth a:visited, 
+#auth a:link, #auth a:visited,
 #auth a:hover, #auth a:active { color: white; }
 
 
@@ -201,7 +201,7 @@ label.left {
 
 div.notes { /*margin-top: 1em; */ }
 .notes .t-data-grid { font-family: georgia, serif; width: 100%; }
-.notes div.t-data-grid-pager a, 
+.notes div.t-data-grid-pager a,
 .notes div.t-data-grid-pager span.current { font-size: 100%; background-color: white; border: none; margin-right: 1em; padding: 0 }
 .notes div.t-data-grid-pager span.current { color: black; text-decoration: underline; }
 .notes div.t-data-grid-pager { padding-left: 2px }
@@ -271,7 +271,7 @@ div.note_edit {
 	text-decoration: none !important;
 }
 
-.metadata { 
+.metadata {
 	float:right;
 	/*font-size: 0.8em;*/
 }
@@ -317,11 +317,11 @@ div.note_edit {
 }
 
 ul.notes li span, ul.notes li .notelink {
-    margin-right: 5px;	
+    margin-right: 5px;
 }
 
 a.NORMAL {
-    color: blue;	
+    color: blue;
 }
 
 a.ORPHAN {
@@ -329,7 +329,7 @@ a.ORPHAN {
 }
 
 a.SEMI_ORPHAN {
-    color: black;   
+    color: black;
 }
 
 a.ELSEWHERE {
@@ -338,24 +338,69 @@ a.ELSEWHERE {
 
 .jqmWindow {
     display: none;
-    
     position: fixed;
     top: 5%;
     left: 50%;
     bottom: 5%;
     overflow: auto;
-    
+
     margin-left: -300px;
     width: 600px;
-    
-    background-color: #EEE;
+
+    background: url(../images/application_title_bg.png) repeat-x #FFF;
     color: #333;
     border: 1px solid black;
     padding: 12px;
 }
 
-.jqmOverlay { 
-	background-color: #000; 
+div.jqmWindow > div > h2 {
+	color: #FFF;
+	text-weight: normal;
+	font-size: 14px;
+	margin-bottom: 20px;
+	margin-top: 4px;
+}
+
+div.jqmWindow fieldset {
+	border-bottom: none;
+	margin-bottom: 0;
+}
+
+div.jqmWindow fieldset legend{
+	font-weight: bold;
+}
+div.jqmWindow div.scrollable {
+	position: absolute;
+	overflow: auto;
+	top: 60px;
+	bottom: 50px;
+	left: 12px;
+	right: 12px;
+}
+
+div.jqmWindow h3 {
+    font-size: 1em;
+    margin: 4px 0;
+}
+
+div.jqmWindow input {
+	width: 300px;
+}
+
+div.jqmWindow button.save {
+	position: absolute;
+	bottom: 12px;
+	left: 12px;
+}
+
+button.jqmClose {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+.jqmOverlay {
+	background-color: #000;
 }
 
 #conceptsList a {
@@ -371,7 +416,7 @@ a.ELSEWHERE {
 }
 
 .selected-note a {
-    color: black;	
+    color: black;
 }
 
 /**
@@ -379,9 +424,9 @@ a.ELSEWHERE {
 */
 ul.dynatree-container {
     border: none;
-    
+
 }
-	
+
 
 /**
 * Note edit fields
@@ -404,7 +449,7 @@ ul.dynatree-container {
     top: 0px;
     lef: 0px;
     width: 100%;
-    height: 3em;	 
+    height: 3em;
 }
 
 #info-message .info {
@@ -425,7 +470,7 @@ ul.dynatree-container {
 * Comments
 */
 .comment {
-  margin-bottom: 1em;	
+  margin-bottom: 1em;
 }
 
 .comment-metadata {
@@ -441,15 +486,15 @@ ul.dynatree-container {
 * Form fields
 */
 
-.field input[type="text"] { width: 95% } 
+.field input[type="text"] { width: 95% }
 
 /*
 .wysiwyg {
     height: 3em;
-    	
+
 }
 
-.note_edit input[type="text"], .note_edit textarea, 
+.note_edit input[type="text"], .note_edit textarea,
 textarea.wysiwyg {
     width: 95%;
 }
@@ -464,7 +509,7 @@ textarea.wysiwyg {
 */
 
 #document-path {
-    text-align: center; 
+    text-align: center;
     width: 100%;
     /*font-size: 0.875em;*/
     font-weight: bold;

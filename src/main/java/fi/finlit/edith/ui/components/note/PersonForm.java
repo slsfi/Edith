@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ajax.MultiZoneUpdate;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -13,10 +14,14 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import fi.finlit.edith.sql.domain.Interval;
 import fi.finlit.edith.sql.domain.NameForm;
 import fi.finlit.edith.sql.domain.Person;
+import fi.finlit.edith.ui.components.InfoMessage;
 import fi.finlit.edith.ui.services.PersonDao;
 
 @SuppressWarnings("unused")
 public class PersonForm {
+
+    @InjectComponent
+    private InfoMessage infoMessage;
 
     @Property
     private NameForm loopPerson;
@@ -102,10 +107,13 @@ public class PersonForm {
         getPerson().setOtherForms(copyAndRemoveEmptyNameForms(getPerson().getOtherForms()));
         personDao.save(getPerson());
         personId = getPerson().getId();
+        infoMessage.addInfoMsg("create-success");
+        MultiZoneUpdate update = new MultiZoneUpdate("dialogZone", closeDialog)
+            .add("infoMessageZone", infoMessage.getBlock());
         if (personZone != null) {
-            return new MultiZoneUpdate("dialogZone", closeDialog).add("personZone", personZone.getBody());
+            update = update.add("personZone", personZone.getBody());
         }
-        return closeDialog;
+        return update;
     }
 
     private Set<NameForm> copyAndRemoveEmptyNameForms(Set<NameForm> nameForms) {
