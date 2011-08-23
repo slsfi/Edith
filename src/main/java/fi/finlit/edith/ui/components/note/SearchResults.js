@@ -4,14 +4,18 @@ var SearchResults = {
         var checkbox = checkbox;
         var isChecked = checkbox.attr("checked");
         if (isChecked) {
-            jQuery(".notes ." + checkbox.attr("name")).show();
+            jQuery(".notes ." + checkbox.attr("name")).removeClass('hidden');
         } else {
-            jQuery(".notes ." + checkbox.attr("name")).hide();
+            jQuery(".notes ." + checkbox.attr("name")).addClass('hidden');
         }
     }
 };
 
 jQuery(function() {
+  jQuery("#note_filters input").each(function() {
+    SearchResults.toggleNoteListElements(jQuery(this));
+  });
+  
 	jQuery("#note_filters input").click(function() {
         SearchResults.toggleNoteListElements(jQuery(this));
     });

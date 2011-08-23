@@ -15,7 +15,9 @@ import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteType;
@@ -51,6 +53,11 @@ public class SearchResults {
 
     @Inject
     private Messages messages;
+
+    @Inject
+    @Symbol(EDITH.EXTENDED_TERM)
+    @Property
+    private boolean slsMode;
 
     public Block getBlock() {
         return notesList;

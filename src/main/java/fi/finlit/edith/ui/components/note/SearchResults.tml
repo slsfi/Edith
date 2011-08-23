@@ -1,118 +1,133 @@
-<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-	<t:content>
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+ xmlns:p="tapestry:parameter">
+<t:content>
 
-        <div class="panel narrow search-results">
-        
-        <t:remove>
-            <form id="note_filters">
-                <input id="numberOfInstancesInDocument" name="numberOfInstancesInDocument" type="checkbox"/><label for="numberOfInstancesInDocument">${message:numberOfInstancesInDocument-label}</label>
-                <input id="basicForm" name="basicForm" type="checkbox"/><label for="basicForm">${message:basicForm-label}</label>
-                <input id="meaning" name="meaning" type="checkbox"/><label for="meaning">${message:meaning-label}</label>
-                <input id="description" name="description" type="checkbox"/><label for="description">${message:description-label}</label>
-                <input id="document" name="document" type="checkbox"/><label for="document">${message:document-label}</label>
-                <input id="type" name="type" type="checkbox"/><label for="type">${message:type-label}</label>
-                <input id="format" name="format" type="checkbox"/><label for="format">${message:format-label}</label>
-                <input id="creator" name="creator" type="checkbox"/><label for="creator">${message:creator-label}</label>
-                <input id="edited" name="edited" type="checkbox"/><label for="edited">${message:edited-label}</label>
-                <input id="status" name="status" type="checkbox"/><label for="status">${message:status-label}</label>
-            </form>
-       </t:remove>        
-            <t:zone t:id="listZone" update="show">
-                <t:delegate to="notesList"/>
-            </t:zone>
+ <div class="panel narrow search-results">
 
-        <t:block t:id="notesList">                  
-            <t:if test="searchResults">
-            <t:remove>
-            <script type="text/javascript">
-              jQuery(function() {
-                  jQuery("#note_filters input").each(function() {
-                      SearchResults.toggleNoteListElements(jQuery(this));
-                  });
-              });
-            </script>
-            </t:remove>
-            
-                <div class="notes">
-                  
-                  <t:grid source="notes" row="note" 
-                    exclude="id, format, lemma, lemmaMeaning, editedOn, documentNoteCount, 
-                    lastEditedBy, status, editors, sources, subtextSources, description" 
-                    add="note" 
-                    rowsPerPage="pageSize" pagerPosition="bottom" inPlace="true">
-                      <p:noteCell>
-                        <div class="note">
-                          <t:actionlink t:id="selectNote" context="note.id" noteId="${note.id}"
-                              class="selectable-note ${note.status}">
-                          <span>${note.term?.basicForm}</span>
-                          
-                          <t:if test="typesString">
-                            <span class="type">, ${typesString}</span>
-                          </t:if>
-                          
-                          <t:if test="note.term?.meaning">
-                            <span class="meaning">, "<t:outputRaw value="termMeaning"/>"</span>
-                          </t:if>
-                          
-                          <t:if test="note.description">
-                            <span class="description">, "<t:outputRaw value="description"/>"</span>
-                          </t:if>
-                          
-                          <span class="creator">, ${note.lastEditedBy?.username} (${editorsForNote})</span>
-                          <span class="edited">, <t:dateTimeFormat date="note.editedOnDate" format="message:dateformat-compact" /></span>
-                          <span class="status">, ${statusString}</span>
-                          </t:actionlink>
-                        </div>
-                      </p:noteCell>
-              
-                  </t:grid>
-                  <div class="right">${message:result-size} ${notes.availableRows}</div>
-                </div>
-            
-               <t:remove>
+  <t:if test="!slsMode">
+   <form id="note_filters">
+    <t:remove>
+    <input id="numberOfInstancesInDocument"
+           name="numberOfInstancesInDocument" type="checkbox" />
+    <label for="numberOfInstancesInDocument">${message:numberOfInstancesInDocument-label}</label>
+    </t:remove>
+    
+    <input id="basicForm" name="basicForm" type="checkbox" />
+    <label for="basicForm">${message:basicForm-label}</label>
+    
+    <input id="meaning" name="meaning" type="checkbox" />
+    <label for="meaning">${message:meaning-label}</label>
+    
+    <input id="description" name="description" type="checkbox" />
+    <label for="description">${message:description-label}</label>
+    
+    <input id="type" name="type" type="checkbox" />
+    <label for="type">${message:type-label}</label>
+    
+    <input id="format" name="format" type="checkbox" />
+    <label for="format">${message:format-label}</label>
+    
+    <input id="creator" name="creator" type="checkbox" />
+    <label for="creator">${message:creator-label}</label>
+    
+    <input id="edited" name="edited" type="checkbox" />
+    <label for="edited">${message:edited-label}</label>
+    
+    <input id="status" name="status" type="checkbox" />
+    <label for="status">${message:status-label}</label>
+   </form>
+  </t:if>
+
+  <t:zone t:id="listZone" update="show">
+   <t:delegate to="notesList" />
+  </t:zone>
+
+  <t:block t:id="notesList">
+   <t:if test="searchResults">
+    <div class="notes">
+     <t:grid source="notes"
+             row="note"
+             exclude="id, format, lemma, lemmaMeaning, editedOn, documentNoteCount, 
+                      lastEditedBy, status, editors, sources, subtextSources, description"
+             add="note"
+             rowsPerPage="pageSize"
+             pagerPosition="bottom"
+             inPlace="true">
+      <p:noteCell>
+       <div class="note">
+        <t:actionlink t:id="selectNote" context="note.id"
+         noteId="${note.id}" class="selectable-note ${note.status}">
+         <t:if test="slsMode">
+         <span>${note.term?.basicForm}</span>
+
+         <t:if test="typesString">
+          <span class="type">, ${typesString}</span>
+         </t:if>
+
+         <t:if test="note.term?.meaning">
+          <span class="meaning">, "<t:outputRaw
+            value="termMeaning" />"</span>
+         </t:if>
+
+         <t:if test="note.description">
+          <span class="description">, "<t:outputRaw
+            value="description" />"</span>
+         </t:if>
+
+         <span class="creator">, ${note.lastEditedBy?.username}
+          (${editorsForNote})</span>
+         <span class="edited">, <t:dateTimeFormat
+           date="note.editedOnDate" format="message:dateformat-compact" />
+         </span>
+         <span class="status">, ${statusString}</span>
+         
+         <p:else>
+          <span><em>${note.lemma}</em></span>
+ 
+          <t:if test="typesString">
+           <span class="type hidden">, ${typesString}</span>
+          </t:if>
+ 
+          <t:if test="note.term?.basicForm">
+           <span class="basicForm hidden">, <t:outputRaw value="note.term?.basicForm" /></span>
+          </t:if>
+ 
+          <t:if test="note.term?.meaning">
+           <span class="meaning hidden">, <t:outputRaw value="termMeaning" /></span>
+          </t:if>
+ 
+          <t:if test="note.description">
+           <span class="description hidden">, <t:outputRaw value="description" /></span>
+          </t:if>
           
-                <ul class="notes">
-                    <t:loop source="notes" value="note">
-                            <li>
-                                <span>
-                                <t:actionlink t:id="selectNote" context="note.id" noteId="${note.id}"
-                                    class="selectable-note ${note.status}">
-                                    <em>${note.term?.basicForm}</em>
-                                </t:actionlink> 
-                                 </span>
-                                
-                                <span class="meaning">${note.term?.meaning}; </span>
-                                <span class="description">${note.description}; </span>
-                                <span class="type">${typesString}; </span>
-                                <span class="format"><t:if test="note.format"><t:fmt.message key="${note.format}"/></t:if>; </span>
-                                <span class="creator">${note.lastEditedBy?.username} (${editorsForNote}); </span>
-                                <span class="edited"><t:dateTimeFormat date="note.editedOnDate" format="message:dateformat-compact" />; </span>
-                                <t:remove>
-                                  <span class="status"><t:fmt.message key="NoteStatus.${note.status}"/></span>
-                                </t:remove>
-                            </li>                           
-                    </t:loop>
-                </ul>
-                </t:remove>
-                <p:else>${message:no-notes}</p:else>
-            </t:if>
-            
-            
-        </t:block>
+          <t:if test="note.format">
+           <span class="format hidden">, <t:fmt.message key="${note.format}"/></span>
+          </t:if>
+ 
+          <span class="creator hidden">, ${note.lastEditedBy?.username} (${editorsForNote})</span>
+          
+          <span class="edited hidden">, <t:dateTimeFormat date="note.editedOnDate" format="message:dateformat-compact" /></span>
+          
+          <span class="status hidden">, ${statusString}</span>
+         </p:else>
+         </t:if>
+          
+        </t:actionlink>
+       </div>
+      </p:noteCell>
+     </t:grid>
+     
+     <div class="right">${message:result-size}
+      ${notes.availableRows}</div>
+    </div>
 
+    <p:else>${message:no-notes}</p:else>
+   </t:if>
 
-                
-            
-            
-            
-            
-            
-            
-           
-            <div style="clear:both;"></div>
-        </div>
-        
-        
+  </t:block>
 
-	</t:content>
+  <div style="clear: both;"></div>
+ </div>
+
+</t:content>
 </html>

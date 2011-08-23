@@ -514,3 +514,7 @@ textarea.wysiwyg {
     /*font-size: 0.875em;*/
     font-weight: bold;
 }
+
+.hidden {
+	display: none;
+}
