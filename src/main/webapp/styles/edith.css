@@ -20,10 +20,13 @@
 }
 
 .ui-accordion-content, .ui-widget-content {
-    background: url('../images/note_bg.png') repeat-x #dddddd;
+    /* background: url('../images/note_bg.png') repeat-x #dddddd; */
 }
 
-.ui-accordion .ui-accordion-header a { font-family: verdana, serif }
+.ui-accordion .ui-accordion-header a {
+	font-family: verdana, serif;
+	background: #F3F3F3;
+}
 
 .ui-state-default, .ui-state-hover { background: white }
 
