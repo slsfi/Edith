@@ -215,7 +215,7 @@
             <t:textfield t:id="placeId" value="placeId" style="display: none;"/>
 
             </div>
-            <t:zone id="placeZone" t:id="placeZone" t:zone="placeZone">
+            <t:zone id="placeZone" t:id="placeZone" t:zone="placeZone" update="show">
             <t:block t:id="editPlaceForm">
                 <t:note.placeForm closeDialog="closeDialog" placeId="placeId" placeZone="placeZone"/>
             </t:block>
