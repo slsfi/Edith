@@ -157,6 +157,11 @@
                     <div>${message:meaning-label}</div>
                     <div>${termMeaning}</div>
                 </t:if>
+                <t:if test="termLanguage">
+                    <div>${message:basicFormLanguage-label}</div>
+                    <div><t:fmt.message key="${termLanguage}" /></div>
+                </t:if>
+                
             </div>
 
             <t:eventlink t:event="editTerm" t:zone="dialogZone" class="jqModal note editTerm" t:context="termId">${message:editTerm}</t:eventlink>

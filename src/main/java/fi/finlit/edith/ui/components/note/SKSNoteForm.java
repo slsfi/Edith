@@ -16,6 +16,7 @@ import fi.finlit.edith.sql.domain.NoteFormat;
 import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.sql.domain.Place;
 import fi.finlit.edith.sql.domain.Term;
+import fi.finlit.edith.sql.domain.TermLanguage;
 import fi.finlit.edith.ui.services.PersonDao;
 import fi.finlit.edith.ui.services.PlaceDao;
 import fi.finlit.edith.ui.services.TermDao;
@@ -92,12 +93,17 @@ public class SKSNoteForm extends AbstractNoteForm {
             setPlace(getNoteOnEdit().getPlace());
         }
 
+        if (!isTerm()) {
+            setTerm(getNoteOnEdit().getTerm());
+        }
+
     }
 
     @Override
     Object onSuccessFromNoteEditForm() {
         getNoteOnEdit().setPerson(getPerson());
         getNoteOnEdit().setPlace(getPlace());
+        getNoteOnEdit().setTerm(getTerm());
         return super.onSuccessFromNoteEditForm();
     }
 
@@ -308,6 +314,13 @@ public class SKSNoteForm extends AbstractNoteForm {
     public String getTermMeaning() {
         if (isTerm()) {
             return getTerm().getMeaning();
+        }
+        return null;
+    }
+
+    public TermLanguage getTermLanguage() {
+        if (isTerm()) {
+            return getTerm().getLanguage();
         }
         return null;
     }
