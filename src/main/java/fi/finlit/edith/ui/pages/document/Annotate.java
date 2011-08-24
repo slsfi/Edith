@@ -149,6 +149,10 @@ public class Annotate extends AbstractDocumentPage {
     @Property
     private Block placeForm;
 
+    @Inject
+    @Property
+    private Block termForm;
+
     @AfterRender
     void addScript() {
         String link = resources.createEventLink("edit", "CONTEXT").toAbsoluteURI();
@@ -308,5 +312,9 @@ public class Annotate extends AbstractDocumentPage {
 
     Object onCreatePlace() {
         return placeForm;
+    }
+
+    Object onCreateTerm() {
+        return termForm;
     }
 }

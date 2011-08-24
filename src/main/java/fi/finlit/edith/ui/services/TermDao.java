@@ -27,4 +27,7 @@ public interface TermDao extends Dao<Term, Long> {
     @CommitAfter
     void remove(Long termId);
 
+    @CommitAfter
+    void save(Term term);
+
 }

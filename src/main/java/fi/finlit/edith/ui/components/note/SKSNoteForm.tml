@@ -106,6 +106,7 @@
               </div>
             </div>
 
+<t:remove>
             <div class="field note">
               <t:label for="basicForm">${message:basicForm-label}</t:label>
               <t:textField t:id="basicForm" value="noteOnEdit.term?.basicForm" />
@@ -121,6 +122,46 @@
               <t:select t:id="language" value="language" blankOption="ALWAYS"/>
               <t:textField style="margin-left: 1em; width: 10em" t:id="otherLanguage" value="noteOnEdit.term?.otherLanguage" />
             </div>
+</t:remove>
+
+
+
+
+
+            <div class="note">
+            <strong>${message:termSearch}</strong>
+            <t:textField t:id="term" value="search" t:mixins="termAutocomplete" />
+            <t:textfield t:id="termId" value="termId" style="display: none;"/>
+
+            </div>
+            <t:zone id="termZone" t:id="termZone" t:zone="termZone" update="show">
+            <t:block t:id="editTermForm">
+                <t:note.termForm closeDialog="closeDialog" termId="termId" termZone="termZone"/>
+            </t:block>
+            <script type="text/javascript">
+            jQuery(function() {
+              jQuery("input[name='termId']").attr("value", jQuery("#termId").attr("name"));
+              jQuery(".editTerm").click(function() {
+                jQuery("#dialog").jqm().jqmShow();
+              });
+            });
+            </script>
+            <div id="termId" name="${termId}" style="display: none;"/>
+            <t:if test="term">
+            <div class="note">
+                <t:if test="termBasicForm">
+                    <div>${message:basicForm-label}</div>
+                    <div>${termBasicForm}</div>
+                </t:if>
+                <t:if test="termMeaning">
+                    <div>${message:meaning-label}</div>
+                    <div>${termMeaning}</div>
+                </t:if>
+            </div>
+
+            <t:eventlink t:event="editTerm" t:zone="dialogZone" class="jqModal note editTerm" t:context="termId">${message:editTerm}</t:eventlink>
+            </t:if>
+            </t:zone>
 
             <div class="field person">
                 <label>${message:personSearch}</label>

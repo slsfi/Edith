@@ -31,4 +31,9 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
         return query().from(term).where(term.id.eq(id)).uniqueResult(term);
     }
 
+    @Override
+    public void save(Term term) {
+        getSession().save(term);
+    }
+
 }

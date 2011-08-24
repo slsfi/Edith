@@ -21,9 +21,10 @@
          <li><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></li>
        </ul>
        <ul class="actions">
-		 <li><a id="createTermLink" class="disabled" href="#">${message:createTerm}</a></li>
-         <li><a id="connectTermLink" class="disabled" href="#">${message:connectTerm}</a></li>
+		 <li><a id="createTermLink" class="disabled" href="#">${message:createNote}</a></li>
+         <li><a id="connectTermLink" class="disabled" href="#">${message:connectNote}</a></li>
 		 <t:if test="!slsMode">
+           <li><t:eventlink t:event="createTerm" t:zone="dialogZone" class="jqmOpen">${message:createTerm}</t:eventlink></li>
 		   <li><t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink></li>
            <li><t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink></li>
          </t:if>
@@ -275,6 +276,10 @@
 
     <t:block t:id="placeForm">
         <t:note.placeForm closeDialog="closeDialog"/>
+    </t:block>
+    
+    <t:block t:id="termForm">
+        <t:note.termForm closeDialog="closeDialog"/>
     </t:block>
 
 	<script type="text/javascript">

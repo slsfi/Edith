@@ -4,7 +4,19 @@
 
  <div class="panel narrow search-results">
 
-  <t:if test="!slsMode">
+  <t:zone t:id="listZone" update="show">
+   <t:delegate to="notesList" />
+  </t:zone>
+
+  <t:block t:id="notesList">
+   <script>
+   jQuery(function() {
+     jQuery("#note_filters input").each(function() {
+       SearchResults.toggleNoteListElements(jQuery(this));
+     });
+   });
+   </script>
+     <t:if test="!slsMode">
    <form id="note_filters">
     <t:remove>
     <input id="numberOfInstancesInDocument"
@@ -37,19 +49,6 @@
     <label for="status">${message:status-label}</label>
    </form>
   </t:if>
-
-  <t:zone t:id="listZone" update="show">
-   <t:delegate to="notesList" />
-  </t:zone>
-
-  <t:block t:id="notesList">
-   <script>
-   jQuery(function() {
-     jQuery("#note_filters input").each(function() {
-       SearchResults.toggleNoteListElements(jQuery(this));
-     });
-   });
-   </script>
    <t:if test="searchResults">
     <div class="notes">
      <t:grid source="notes"

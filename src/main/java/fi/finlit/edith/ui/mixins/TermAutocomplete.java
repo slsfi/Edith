@@ -10,7 +10,6 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import fi.finlit.edith.sql.domain.Term;
 
-// TODO : use common superclass for TermAutocomplete and JQueryAutocomplete
 @Import(library = { "term-autocomplete.js" })
 public class TermAutocomplete extends JQueryAutocomplete {
 

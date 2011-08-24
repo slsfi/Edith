@@ -1,0 +1,20 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<t:content>
+	 <t:infoMessage />
+	    <h2>${message:termForm-title}</h2>
+		<t:form t:id="termForm" t:zone="dialogZone" t:context="term.id">
+		  <div class="scrollable">
+			<t:errors />
+			<fieldset>
+				<div>${message:basicForm-label}</div>
+				<div><t:textField t:id="basicForm" value="term.basicForm" /></div>
+    			<div>${message:meaning-label}</div>
+				<div><t:textField t:id="meaning" value="term.meaning" /></div>
+                <div>${message:basicFormLanguage-label}</div>
+                <t:select t:id="language" value="term.language" blankOption="ALWAYS"/>
+            </fieldset>
+	      </div>
+	      <button class="save" type="submit">${message:saveTerm}</button>
+		</t:form>
+	</t:content>
+</html>

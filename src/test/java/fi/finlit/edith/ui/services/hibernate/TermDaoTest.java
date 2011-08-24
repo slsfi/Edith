@@ -32,6 +32,15 @@ public class TermDaoTest extends AbstractHibernateTest {
     }
 
     @Test
+    public void Save_And_Find() {
+        Term term = new Term();
+        term.setBasicForm("bar");
+        termDao.save(term);
+        List<Term> results = termDao.findByStartOfBasicForm("bar", 100);
+        assertEquals(1, results.size());
+    }
+
+    @Test
     public void Remove(){
         Term term = new Term();
         term.setBasicForm("bar");

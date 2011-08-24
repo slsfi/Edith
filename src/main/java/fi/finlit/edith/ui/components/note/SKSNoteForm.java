@@ -6,20 +6,19 @@ import java.util.Set;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.annotations.InjectComponent;
-import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import fi.finlit.edith.sql.domain.NameForm;
-import fi.finlit.edith.sql.domain.Note;
 import fi.finlit.edith.sql.domain.NoteFormat;
 import fi.finlit.edith.sql.domain.Person;
 import fi.finlit.edith.sql.domain.Place;
 import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.ui.services.PersonDao;
 import fi.finlit.edith.ui.services.PlaceDao;
+import fi.finlit.edith.ui.services.TermDao;
 
 @SuppressWarnings("unused")
 public class SKSNoteForm extends AbstractNoteForm {
@@ -31,6 +30,10 @@ public class SKSNoteForm extends AbstractNoteForm {
     @Property
     private Block editPlaceForm;
 
+    @Inject
+    @Property
+    private Block editTermForm;
+
     @Property
     private NameForm loopPerson;
 
@@ -40,19 +43,22 @@ public class SKSNoteForm extends AbstractNoteForm {
     @InjectComponent
     @Property
     private Zone personZone;
-//
-//    //TODO This does not belong here, term have to be edited in it's on component
-//    @Property
-//    private Term termOnEdit;
 
     @InjectComponent
     @Property
     private Zone placeZone;
 
+    @InjectComponent
+    @Property
+    private Zone termZone;
+
     private Place place;
 
     @Property
     private Long placeId;
+
+    @Property
+    private Long termId;
 
     @Inject
     private PlaceDao placeDao;
@@ -64,6 +70,11 @@ public class SKSNoteForm extends AbstractNoteForm {
 
     @Inject
     private PersonDao personDao;
+
+    private Term term;
+
+    @Inject
+    private TermDao termDao;
 
     @Inject
     @Property
@@ -111,6 +122,13 @@ public class SKSNoteForm extends AbstractNoteForm {
         return person != null;
     }
 
+    public boolean isTerm() {
+        if (term == null && termId != null) {
+            term = termDao.getById(termId);
+        }
+        return term != null;
+    }
+
     public boolean isPlace() {
         if (place == null && placeId != null) {
             place = placeDao.getById(placeId);
@@ -132,11 +150,29 @@ public class SKSNoteForm extends AbstractNoteForm {
         }
     }
 
+    private void setTerm(Term term) {
+        this.term = term;
+        if (isTerm()) {
+            termId = term.getId();
+        }
+    }
+
     private Person getPerson() {
         if (personId != null) {
             return personDao.getById(personId);
         }
         return person;
+    }
+
+    private Term getTerm() {
+        if (termId != null) {
+            return termDao.getById(termId);
+        }
+        return term;
+    }
+
+    Collection<Term> onProvideCompletionsFromTerm(String partial) {
+        return termDao.findByStartOfBasicForm(partial, 10);
     }
 
     Collection<Person> onProvideCompletionsFromPerson(String partial) {
@@ -227,6 +263,11 @@ public class SKSNoteForm extends AbstractNoteForm {
         return editPlaceForm;
     }
 
+    Object onEditTerm(Long id) {
+        termId = id;
+        return editTermForm;
+    }
+
     Object onPerson(long id) {
         if (!isPerson()) {
             setPerson(personDao.getById(id));
@@ -241,6 +282,13 @@ public class SKSNoteForm extends AbstractNoteForm {
         return placeZone.getBody();
     }
 
+    Object onTerm(long id) {
+        if (!isTerm()) {
+            setTerm(termDao.getById(id));
+        }
+        return termZone.getBody();
+    }
+
     @Validate("required")
     public NoteFormat getFormat() {
         return getNoteOnEdit().getFormat();
@@ -248,5 +296,19 @@ public class SKSNoteForm extends AbstractNoteForm {
 
     public void setFormat(NoteFormat noteFormat) {
         super.getNoteOnEdit().setFormat(noteFormat);
+    }
+
+    public String getTermBasicForm() {
+        if (isTerm()) {
+            return getTerm().getBasicForm();
+        }
+        return null;
+    }
+
+    public String getTermMeaning() {
+        if (isTerm()) {
+            return getTerm().getMeaning();
+        }
+        return null;
     }
 }
