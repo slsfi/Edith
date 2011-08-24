@@ -7,7 +7,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.dto.UserInfo;
@@ -40,6 +42,10 @@ public class NoteSearchForm {
 
     @Property
     private OrderBy loopedOrderBy;
+
+    @Inject
+    @Symbol(EDITH.EXTENDED_TERM)
+    private boolean slsMode;
 
     public int getSelectedDocumentCount() {
         return selectedDocuments != null ? selectedDocuments.size() : 0;
@@ -102,16 +108,17 @@ public class NoteSearchForm {
     }
 
     public OrderBy getOrderBy() {
-        //SLS spesific
         if (getSearchInfo().getOrderBy() == null) {
-            getSearchInfo().setOrderBy(OrderBy.KEYTERM);
+            getSearchInfo().setOrderBy(slsMode ? OrderBy.KEYTERM : OrderBy.LEMMA);
         }
         return getSearchInfo().getOrderBy();
     }
 
     public OrderBy[] getOrderBys() {
-        //SLS Spesific set
-        return new OrderBy[] {OrderBy.KEYTERM, OrderBy.USER, OrderBy.STATUS, OrderBy.DATE};
+        if (slsMode) {
+            return new OrderBy[] {OrderBy.KEYTERM, OrderBy.USER, OrderBy.STATUS, OrderBy.DATE};
+        }
+        return new OrderBy[] {OrderBy.LEMMA, OrderBy.USER, OrderBy.STATUS, OrderBy.DATE};
     }
 
     public boolean isReversed() {
