@@ -59,6 +59,8 @@ public class Note implements Identifiable {
 
     private String subtextSources;
 
+    private boolean deleted;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -242,6 +244,14 @@ public class Note implements Identifiable {
 
     public Place getPlace() {
         return place;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");

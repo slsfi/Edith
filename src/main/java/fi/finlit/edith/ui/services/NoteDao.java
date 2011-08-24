@@ -98,7 +98,7 @@ public interface NoteDao extends Dao<Note, Long> {
      * @param note
      */
     @CommitAfter
-    void removeNote(Note note);
+    void remove(Note note);
 
     @CommitAfter
     DocumentNote createDocumentNote(Note note, Document document, String longText);

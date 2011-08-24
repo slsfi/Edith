@@ -148,7 +148,7 @@ public abstract class AbstractNoteForm {
             if (delete) {
 
                 logger.info("note removed: " + noteOnEdit);
-                noteDao.removeNote(noteOnEdit);
+                noteDao.remove(noteOnEdit);
                 page.getNoteEdit().setNoteOnEdit(null);
                 return page.zoneWithInfo("delete-success")
                     .add("listZone", page.getSearchResults())

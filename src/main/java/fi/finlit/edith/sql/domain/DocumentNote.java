@@ -45,6 +45,7 @@ public class DocumentNote implements Identifiable {
     @QueryInit("*")
     private Note note;
 
+    @Override
     public Long getId() {
         return id;
     }

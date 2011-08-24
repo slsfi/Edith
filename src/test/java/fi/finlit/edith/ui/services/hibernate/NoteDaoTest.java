@@ -499,7 +499,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         
         int max = data.getAvailableRows();
         for (int i = 0; i < max; i++) {
-            noteDao.removeNote((Note)data.getRowValue(i));
+            noteDao.remove((Note)data.getRowValue(i));
         }
         assertEquals(0, data.getAvailableRows());
         

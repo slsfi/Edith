@@ -189,6 +189,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                 builder.or(path.containsIgnoreCase(searchTerm));
             }
         }
+        builder.and(note.deleted.isFalse());
 
 
 //        return createGridDataSource(note, note.term.basicForm.lower().asc(), false, builder.getValue());
@@ -434,14 +435,15 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
-    public void removeNote(Note note) {
-        getSession().delete(note);
+    public void remove(Note note) {
+        note.setDeleted(true);
+        save(note);
     }
 
     @Override
     public void removeNotes(Collection<Note> notes) {
         for (Note note : notes){
-            removeNote(note);
+            remove(note);
         }
     }
 
