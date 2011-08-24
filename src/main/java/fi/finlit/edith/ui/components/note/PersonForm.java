@@ -105,21 +105,26 @@ public class PersonForm {
             getPerson().getOtherForms().add(new NameForm(newFirst, newLast, newDescription));
         }
         getPerson().setOtherForms(copyAndRemoveEmptyNameForms(getPerson().getOtherForms()));
-        personDao.save(getPerson());
-        personId = getPerson().getId();
-        infoMessage.addInfoMsg("create-success");
-        MultiZoneUpdate update = new MultiZoneUpdate("dialogZone", closeDialog)
-            .add("infoMessageZone", infoMessage.getBlock());
-        if (personZone != null) {
-            update = update.add("personZone", personZone.getBody());
+        if (person.getNormalized().isValid()) {
+            personDao.save(getPerson());
+            personId = getPerson().getId();
+            infoMessage.addInfoMsg("create-success");
+            MultiZoneUpdate update = new MultiZoneUpdate("dialogZone", closeDialog)
+                .add("infoMessageZone", infoMessage.getBlock());
+            if (personZone != null) {
+                update = update.add("personZone", personZone.getBody());
+            }
+
+            return update;
+        } else {
+            return null;
         }
-        return update;
     }
 
     private Set<NameForm> copyAndRemoveEmptyNameForms(Set<NameForm> nameForms) {
         Set<NameForm> result = new HashSet<NameForm>();
         for (NameForm nameForm : nameForms) {
-            if (nameForm.getFirst() != null || nameForm.getLast() != null) {
+            if (nameForm.isValid()) {
                 result.add(nameForm);
             }
         }

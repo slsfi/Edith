@@ -2,6 +2,8 @@ package fi.finlit.edith.sql.domain;
 
 import javax.persistence.Embeddable;
 
+import org.apache.commons.lang.StringUtils;
+
 @Embeddable
 public class NameForm {
     private String description;
@@ -64,6 +66,10 @@ public class NameForm {
 
     public void setFirst(String first) {
         this.first = first;
+    }
+
+    public boolean isValid() {
+        return StringUtils.isNotBlank(first) || StringUtils.isNotBlank(last);
     }
 
     @Override

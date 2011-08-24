@@ -81,23 +81,27 @@ public class PlaceForm {
             getPlace().getOtherForms().add(new NameForm(newName, newDescription));
         }
         getPlace().setOtherForms(copyAndRemoveEmptyNameForms(getPlace().getOtherForms()));
-        placeDao.save(getPlace());
-        placeId = getPlace().getId();
-        infoMessage.addInfoMsg("create-success");
-        MultiZoneUpdate update = new MultiZoneUpdate("dialogZone", closeDialog)
-            .add("infoMessageZone", infoMessage.getBlock());
+        if (getPlace().getNormalized().isValid()) {
+            placeDao.save(getPlace());
+            placeId = getPlace().getId();
+            infoMessage.addInfoMsg("create-success");
+            MultiZoneUpdate update = new MultiZoneUpdate("dialogZone", closeDialog).add(
+                    "infoMessageZone", infoMessage.getBlock());
 
-        if (placeZone != null) {
-            update = update.add("placeZone", placeZone.getBody());
+            if (placeZone != null) {
+                update = update.add("placeZone", placeZone.getBody());
+            }
+
+            return update;
+        } else {
+            return null;
         }
-
-        return update;
     }
 
     private Set<NameForm> copyAndRemoveEmptyNameForms(Set<NameForm> nameForms) {
         Set<NameForm> result = new HashSet<NameForm>();
         for (NameForm nameForm : nameForms) {
-            if (nameForm.getFirst() != null || nameForm.getLast() != null) {
+            if (nameForm.isValid()) {
                 result.add(nameForm);
             }
         }
