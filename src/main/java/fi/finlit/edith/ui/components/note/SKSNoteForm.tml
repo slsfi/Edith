@@ -226,7 +226,8 @@
             jQuery(function() {
               jQuery("input[name='placeId']").attr("value", jQuery("#placeId").attr("name"));
               jQuery(".editPlace").click(function() {
-                jQuery("#dialog").jqmShow();
+                jQuery("#dialogZone").text("Hetki...");
+                jQuery("#dialog").jqm().jqmShow();
               });
             });
             </script>
