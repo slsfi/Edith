@@ -55,7 +55,8 @@
      <t:grid source="notes"
              row="note"
              exclude="id, format, lemma, lemmaMeaning, editedOn, documentNoteCount, 
-                      lastEditedBy, status, editors, sources, subtextSources, description"
+                      lastEditedBy, status, editors, sources, subtextSources, description,
+                      deleted"
              add="note"
              rowsPerPage="pageSize"
              pagerPosition="bottom"
