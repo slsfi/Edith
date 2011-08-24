@@ -12,6 +12,7 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Grid;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -34,6 +35,9 @@ public class SearchResults {
     @Inject
     @Property
     private Block notesList;
+
+    @InjectComponent
+    private Zone listZone;
 
     @Inject
     private NoteDao noteDao;
@@ -84,7 +88,7 @@ public class SearchResults {
         return 20;
     }
 
-    Object onActionFromSelectNote(long noteId) {
+    Object onSelectNote(long noteId) {
         page.getDocumentNotes().setNoteId(noteId);
         DocumentNote selected = page.getDocumentNotes().getSelectedNote();
         if (selected != null) {
@@ -93,8 +97,8 @@ public class SearchResults {
         } else {
             page.getNoteEdit().setNoteOnEdit(noteDao.getById(noteId));
         }
-        return new MultiZoneUpdate("documentNotesZone", page.getDocumentNotes().getBlock()).add(
-                "noteEditZone", page.getNoteEdit().getBlock());
+        return new MultiZoneUpdate("documentNotesZone", page.getDocumentNotes().getBlock())
+                              .add("noteEditZone", page.getNoteEdit().getBlock());
     }
 
     public String getTypesString() {

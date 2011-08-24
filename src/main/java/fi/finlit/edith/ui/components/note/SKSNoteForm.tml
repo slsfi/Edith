@@ -35,15 +35,18 @@
 
           var hideBasedOnFormat = function() {
             var type = jQuery("select[name='format']").val();
-            jQuery(".note").hide();
-            jQuery(".place").hide();
-            jQuery(".person").hide();
+            var $notes = jQuery(".note_edit .note");
+            var $places = jQuery(".note_edit .place");
+            var $persons = jQuery(".note_edit .person");
+            $notes.hide();
+            $places.hide();
+            $persons.hide();
             if (type == "NOTE") {
-                jQuery(".note").show();
+                $notes.show();
             } else if (type == "PLACE") {
-                jQuery(".place").show();
+                $places.show();
             } else if (type == "PERSON") {
-                jQuery(".person").show();
+                $persons.show();
             }
         }
 

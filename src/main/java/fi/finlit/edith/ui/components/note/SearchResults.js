@@ -17,17 +17,16 @@ jQuery(function() {
   });
   
 	jQuery("#note_filters input").click(function() {
-        SearchResults.toggleNoteListElements(jQuery(this));
-    });
+    SearchResults.toggleNoteListElements(jQuery(this));
+  });
     
-    jQuery(".search-results .selectable-note").live("click",
-      function(event) {
-    	  jQuery(".search-results .notes div.note").removeClass("selected-note");
-          jQuery(this).closest("div.note").addClass("selected-note");
-          
-          //Update note instances view on the selection
-          TapestryExt.updateZone('documentNotesZone', jQuery(this).attr("href"));
-          return false;
-      }
-    );
+  jQuery(".search-results .selectable-note").live("click",
+    function(event) {
+      jQuery(".search-results .notes div.note").removeClass("selected-note");
+      jQuery(this).closest("div.note").addClass("selected-note");
+  
+      //Update note instances view on the selection
+      TapestryExt.updateZone('documentNotesZone', jQuery(this).attr("href"));
+      return false;
+  });
 });

@@ -43,6 +43,13 @@
   </t:zone>
 
   <t:block t:id="notesList">
+   <script>
+   jQuery(function() {
+     jQuery("#note_filters input").each(function() {
+       SearchResults.toggleNoteListElements(jQuery(this));
+     });
+   });
+   </script>
    <t:if test="searchResults">
     <div class="notes">
      <t:grid source="notes"
@@ -55,8 +62,11 @@
              inPlace="true">
       <p:noteCell>
        <div class="note">
-        <t:actionlink t:id="selectNote" context="note.id"
-         noteId="${note.id}" class="selectable-note ${note.status}">
+        <t:eventlink t:id="selectNote"
+                     t:zone="documentNotesZone"
+                     context="note.id"
+                     noteId="${note.id}"
+                     class="selectable-note ${note.status}">
          <t:if test="slsMode">
          <span>${note.term?.basicForm}</span>
 
@@ -112,7 +122,7 @@
          </p:else>
          </t:if>
           
-        </t:actionlink>
+        </t:eventlink>
        </div>
       </p:noteCell>
      </t:grid>
