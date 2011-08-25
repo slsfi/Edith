@@ -239,7 +239,6 @@ jQuery(document).ready(function() {
     */
    
     jQuery(".jqmOpen").click(function() {
-    	jQuery("#dialogZone").text("Hetki...");
     	jQuery("#dialog").jqm().jqmShow();
     });
 

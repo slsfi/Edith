@@ -1,4 +1,4 @@
-var SLSNoteForm = {
+var NoteForm = {
     toggleOtherLanguage : function() {
       if (jQuery("select[name='language']").val() === "OTHER") {
           jQuery(":input[name='otherLanguage']").show();

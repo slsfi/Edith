@@ -1,13 +1,6 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 <t:content>
-
-
-
-
-
     <script type="text/javascript">
-
-
       jQuery(function() {
 
           //Empty values need to be filled, otherwise the page
@@ -25,10 +18,10 @@
               });
           });
 
-          SLSNoteForm.toggleOtherLanguage();
+          NoteForm.toggleOtherLanguage();
 
           jQuery("select[name='language']").change(function() {
-              SLSNoteForm.toggleOtherLanguage();
+              NoteForm.toggleOtherLanguage();
            });
 
           var hideBasedOnFormat = function() {
@@ -104,28 +97,6 @@
               </div>
             </div>
 
-<t:remove>
-            <div class="field note">
-              <t:label for="basicForm">${message:basicForm-label}</t:label>
-              <t:textField t:id="basicForm" value="noteOnEdit.term?.basicForm" />
-            </div>
-
-            <div class="field note">
-              <t:label for="termMeaning">${message:basicFormMeaning-label}</t:label>
-              <t:textArea class="wysiwyg" style="display:none" t:id="termMeaning" value="noteOnEdit.term?.meaning" />
-            </div>
-
-            <div class="field note">
-              <t:label for="language">${message:basicFormLanguage-label}</t:label>
-              <t:select t:id="language" value="language" blankOption="ALWAYS"/>
-              <t:textField style="margin-left: 1em; width: 10em" t:id="otherLanguage" value="noteOnEdit.term?.otherLanguage" />
-            </div>
-</t:remove>
-
-
-
-
-
             <div class="note">
             <strong>${message:termSearch}</strong>
             <t:textField t:id="term" value="search" t:mixins="termAutocomplete" />
@@ -144,7 +115,7 @@
               });
             });
             </script>
-            <div id="termId" name="${termId}" style="display: none;"/>
+            <div id="termId" name="${termId}" style="display: none;"></div>
             <t:if test="term">
             <div class="note">
                 <t:if test="termBasicForm">
@@ -159,14 +130,18 @@
                     <div>${message:basicFormLanguage-label}</div>
                     <div><t:fmt.message key="${termLanguage}" /></div>
                 </t:if>
-                
             </div>
 
-            <t:eventlink t:event="editTerm" t:zone="dialogZone" class="jqModal note editTerm" t:context="termId">${message:editTerm}</t:eventlink>
+            <button type="button" class="note" onclick="NoteForm.triggerNextActionLink(this)">
+              ${message:editTerm}
+            </button>
+            <span style="display: none">
+            <t:eventlink t:event="editPlace" t:zone="dialogZone" class="jqModal place editPlace" t:context="placeId">${message:editPlace}</t:eventlink>
+            </span>
             </t:if>
             </t:zone>
 
-            <div class="field person">
+            <div class="person">
                 <label>${message:personSearch}</label>
                 <t:textField t:id="person" value="search" t:mixins="personAutocomplete" />
                 <t:textfield t:id="personId" value="personId" style="display: none;"/>
@@ -186,15 +161,14 @@
             jQuery(function() {
               jQuery("input[name='personId']").attr("value", jQuery("#personId").attr("name"));
               jQuery(".jqmOpen").click(function() {
-                jQuery("#dialogZone").text("Hetki...");
                 jQuery("#dialog").jqm().jqmShow();
               });
             });
 
             </script>
-            <div id="personId" name="${personId}" style="display: none;"/>
+            <div id="personId" name="${personId}" style="display: none;"></div>
             <t:if test="person">
-            <div class="field person">
+            <div class="person">
                 <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="personInstances"/>)</span></div>
                 <t:if test="normalizedFirst">
                     <div>${message:firstName-label}</div>
@@ -210,7 +184,7 @@
                 </t:if>
             </div>
 
-            <div class="field person">
+            <div class="person">
             <t:loop source="persons" value="loopPerson" formState="none">
                 <div>
                     <div><strong>${message:nameForm-label}</strong></div>
@@ -231,7 +205,7 @@
             </div>
 
             <t:if test="timeOfBirth">
-            <div class="field person">
+            <div class="person">
                 <div>
                     <strong>${message:timeOfBirth-label} (${message:timeFormat})</strong>
                 </div>
@@ -240,9 +214,8 @@
                 </div>
             </div>
             </t:if>
-
             <t:if test="timeOfDeath">
-            <div class="field person">
+            <div class="person">
                 <div>
                     <strong>${message:timeOfDeath-label} (${message:timeFormat})</strong>
                 </div>
@@ -251,9 +224,7 @@
                 </div>
             </div>
             </t:if>
-            <button type="button" onclick="SLSNoteForm.triggerNextActionLink(this)">
-              ${message:editPerson}
-            </button>
+            <button type="button" class="person" onclick="NoteForm.triggerNextActionLink(this)">${message:editPerson}</button>
             <span style="display: none">
             <t:eventlink t:event="editPerson" t:zone="dialogZone" class="jqmOpen person editPerson" t:context="personId">${message:editPerson}</t:eventlink>
             </span>
@@ -274,12 +245,11 @@
             jQuery(function() {
               jQuery("input[name='placeId']").attr("value", jQuery("#placeId").attr("name"));
               jQuery(".editPlace").click(function() {
-                jQuery("#dialogZone").text("Hetki...");
                 jQuery("#dialog").jqm().jqmShow();
               });
             });
             </script>
-            <div id="placeId" name="${placeId}" style="display: none;"/>
+            <div id="placeId" name="${placeId}" style="display: none;"></div>
             <t:if test="place">
             <div class="place">
                 <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="placeInstances"/>)</span></div>
@@ -308,7 +278,7 @@
                 </div>
             </t:loop>
             </div>
-            <button type="button" onclick="SLSNoteForm.triggerNextActionLink(this)">
+            <button type="button" class="place" onclick="NoteForm.triggerNextActionLink(this)">
               ${message:editPlace}
             </button>
             <span style="display: none">
@@ -334,12 +304,12 @@
               <t:textArea class="wysiwyg" style="display:none" t:id="sources" value="noteOnEdit.sources" rows="8" />
             </div>
 
-            <t:remove><!-- FIXME -->
+
+<t:remove>
             <div class="field">
               <label><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</label>
             </div>
-            </t:remove>
-
+</t:remove>
 
             <t:submit t:id="save" value="${message:save}" />
             <t:if test="deletableNote">

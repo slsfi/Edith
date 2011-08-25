@@ -27,10 +27,10 @@
               });
           });
           
-          SLSNoteForm.toggleOtherLanguage();
+          NoteForm.toggleOtherLanguage();
           
           jQuery("select[name='language']").change(function() { 
-        	  SLSNoteForm.toggleOtherLanguage();
+        	  NoteForm.toggleOtherLanguage();
            });
           
       });
