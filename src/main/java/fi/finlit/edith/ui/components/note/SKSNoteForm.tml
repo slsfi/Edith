@@ -1,5 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 <t:content>
 
@@ -253,8 +251,12 @@
                 </div>
             </div>
             </t:if>
-
+            <button type="button" onclick="SLSNoteForm.triggerNextActionLink(this)">
+              ${message:editPerson}
+            </button>
+            <span style="display: none">
             <t:eventlink t:event="editPerson" t:zone="dialogZone" class="jqmOpen person editPerson" t:context="personId">${message:editPerson}</t:eventlink>
+            </span>
             </t:if>
             </t:zone>
 
@@ -306,8 +308,12 @@
                 </div>
             </t:loop>
             </div>
-
+            <button type="button" onclick="SLSNoteForm.triggerNextActionLink(this)">
+              ${message:editPlace}
+            </button>
+            <span style="display: none">
             <t:eventlink t:event="editPlace" t:zone="dialogZone" class="jqModal place editPlace" t:context="placeId">${message:editPlace}</t:eventlink>
+            </span>
             </t:if>
             </t:zone>
 
