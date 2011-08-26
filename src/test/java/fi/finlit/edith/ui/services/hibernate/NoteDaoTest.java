@@ -77,6 +77,20 @@ public class NoteDaoTest extends AbstractHibernateTest {
     }
 
     @Test
+    public void Save_As_New() {
+        Note note = new Note();
+        note.setLemma("foobar");
+        noteDao.save(note);
+        Long id = note.getId();
+
+        noteDao.saveAsNew(note);
+        Long otherId = note.getId();
+
+        assertNotNull(otherId);
+        assertFalse(id.equals(otherId));
+    }
+
+    @Test
     public void CreateComment() {
         Note note = createNote();
         noteDao.save(note);
@@ -286,38 +300,38 @@ public class NoteDaoTest extends AbstractHibernateTest {
         createNote("note1");
         createNote("note2");
         createNote("note3");
-        
+
         User user = userDao.getCurrentUser();
         NoteSearchInfo search = new NoteSearchInfo();
         search.getCreators().add(new UserInfo(user.getId(), user.getUsername()));
         noteDao.findNotes(search);
         // TODO
     }
-    
+
     @Test
     public void Find_With_Formats() {
         createNote("note1");
         createNote("note2");
         createNote("note3");
-        
+
         NoteSearchInfo search = new NoteSearchInfo();
         search.getNoteFormats().add(NoteFormat.NOTE);
         noteDao.findNotes(search);
         // TODO
     }
-    
+
     @Test
     public void Find_With_Types() {
         createNote("note1");
         createNote("note2");
         createNote("note3");
-        
+
         NoteSearchInfo search = new NoteSearchInfo();
         search.getNoteTypes().add(NoteType.CRITIQUE);
         noteDao.findNotes(search);
         // TODO
     }
-    
+
     @Test
     public void Find_With_Order_Date() {
         noteDao.importNotes(noteTestData);
@@ -326,7 +340,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         GridDataSource data = noteDao.findNotes(search);
         assertTrue(data.getAvailableRows() > 0);
     }
-    
+
     @Test
     public void Find_With_Order_Keyterm() {
         noteDao.importNotes(noteTestData);
@@ -335,7 +349,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         GridDataSource data = noteDao.findNotes(search);
         assertTrue(data.getAvailableRows() > 0);
     }
-    
+
     @Test
     public void Find_With_Order_Lemma() {
         noteDao.importNotes(noteTestData);
@@ -344,7 +358,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         GridDataSource data = noteDao.findNotes(search);
         assertTrue(data.getAvailableRows() > 0);
     }
-    
+
     @Test
     public void Find_With_Order_Status() {
         noteDao.importNotes(noteTestData);
@@ -353,7 +367,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         GridDataSource data = noteDao.findNotes(search);
         assertTrue(data.getAvailableRows() > 0);
     }
-    
+
     @Test
     public void Find_With_Order_User() {
         noteDao.importNotes(noteTestData);
@@ -362,7 +376,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         noteDao.findNotes(search);
         // TODO
     }
-    
+
     private void assertRowCount(int expected, NoteSearchInfo search) {
         assertEquals(expected, noteDao.findNotes(search).getAvailableRows());
     }
@@ -469,49 +483,49 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertEquals(0, noteDao.queryPlaces("Helssin").getAvailableRows());
         assertEquals(1, noteDao.queryPlaces("Helsin").getAvailableRows());
     }
-    
+
     @Test
     public void Query_Notes() {
-        noteDao.importNotes(noteTestData);        
+        noteDao.importNotes(noteTestData);
         GridDataSource dataSource = noteDao.queryNotes("XXX");
         assertEquals(0, dataSource.getAvailableRows());
     }
 
     @Test
     public void Query_Notes_Wildcard() {
-        noteDao.importNotes(noteTestData);        
+        noteDao.importNotes(noteTestData);
         GridDataSource dataSource = noteDao.queryNotes("*");
         assertTrue(dataSource.getAvailableRows() > 0);
     }
-    
+
     @Test
     public void Get_Orphan_Ids() {
         noteDao.importNotes(noteTestData);
         assertFalse(noteDao.getOrphanIds().isEmpty());
     }
-    
+
     @Test
     public void Remove_Note() {
         noteDao.importNotes(noteTestData);
         GridDataSource data = noteDao.queryNotes("*");
         assertTrue(data.getAvailableRows() > 0);
         data.prepare(0, data.getAvailableRows(), Collections.<SortConstraint>emptyList());
-        
+
         int max = data.getAvailableRows();
         for (int i = 0; i < max; i++) {
             noteDao.remove((Note)data.getRowValue(i));
         }
         assertEquals(0, data.getAvailableRows());
-        
+
     }
-    
+
     @Test
     public void Remove_Notes() {
         noteDao.importNotes(noteTestData);
         GridDataSource data = noteDao.queryNotes("*");
         assertTrue(data.getAvailableRows() > 0);
         data.prepare(0, data.getAvailableRows(), Collections.<SortConstraint>emptyList());
-        
+
         int max = data.getAvailableRows();
         List<Note> notes = new ArrayList<Note>(max);
         for (int i = 0; i < max; i++) {
@@ -520,7 +534,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         noteDao.removeNotes(notes);
         assertEquals(0, data.getAvailableRows());
     }
-    
+
     private Note createNote() {
         Note note = new Note();
         //XXX Whats best way to deal with this, we always going to have this

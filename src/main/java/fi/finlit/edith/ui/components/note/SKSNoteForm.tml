@@ -332,15 +332,10 @@
 </tr>
 
 
-<t:remove>
-            <div class="field">
-              <label><t:checkbox value="saveTermAsNew" />${message:saveTermAsNew}</label>
-            </div>
-</t:remove>
-
             </table>
 
             <t:submit t:id="save" value="${message:save}" />
+            <t:submit t:id="saveAsNew" name="saveAsNew" value="${message:saveAsNew}"/>
             <t:if test="deletableNote">
                 <t:submit class="right" t:id="delete" value="${message:delete}" />
             </t:if>

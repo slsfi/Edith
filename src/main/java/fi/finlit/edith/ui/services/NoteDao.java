@@ -103,4 +103,6 @@ public interface NoteDao extends Dao<Note, Long> {
     @CommitAfter
     DocumentNote createDocumentNote(Note note, Document document, String longText);
 
+    @CommitAfter
+    void saveAsNew(Note noteOnEdit);
 }

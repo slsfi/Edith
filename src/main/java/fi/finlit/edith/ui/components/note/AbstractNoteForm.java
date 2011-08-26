@@ -2,6 +2,7 @@ package fi.finlit.edith.ui.components.note;
 
 import java.util.List;
 
+import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
@@ -78,6 +79,10 @@ public abstract class AbstractNoteForm {
         delete = true;
     }
 
+    void onSelectedFromSaveAsNew() {
+        saveAsNew = true;
+    }
+
     public boolean isSlsMode() {
         return page.isSlsMode();
     }
@@ -140,24 +145,29 @@ public abstract class AbstractNoteForm {
         }
 
         try {
-
             if (noteOnEdit.getStatus().equals(NoteStatus.INITIAL)) {
                 noteOnEdit.setStatus(NoteStatus.DRAFT);
             }
 
             if (delete) {
-
                 logger.info("note removed: " + noteOnEdit);
                 noteDao.remove(noteOnEdit);
                 page.getNoteEdit().setNoteOnEdit(null);
                 return page.zoneWithInfo("delete-success")
                     .add("listZone", page.getSearchResults())
                     .add("noteEditZone", page.getNoteEdit());
-
             }
             logger.info("note saved: " + noteOnEdit);
+            MultiZoneUpdate update = page.zoneWithInfo("submit-success");
+            if (saveAsNew) {
+                noteDao.saveAsNew(noteOnEdit);
+                page.getNoteEdit().setNoteOnEdit(noteOnEdit);
+                return page.zoneWithInfo("submit-success")
+                    .add("listZone", page.getSearchResults())
+                    .add("noteEditZone", page.getNoteEdit().getBlock());
+            }
             noteDao.save(noteOnEdit);
-            return page.zoneWithInfo("submit-success").add("listZone", page.getSearchResults());
+            return update.add("listZone", page.getSearchResults());
         } catch (Exception e) {
             return page.zoneWithError("note-addition-failed", e);
         }

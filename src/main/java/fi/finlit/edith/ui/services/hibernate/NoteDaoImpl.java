@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.hibernate.Session;
 import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
@@ -37,7 +38,17 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.dto.UserInfo;
-import fi.finlit.edith.sql.domain.*;
+import fi.finlit.edith.sql.domain.Document;
+import fi.finlit.edith.sql.domain.DocumentNote;
+import fi.finlit.edith.sql.domain.LinkElement;
+import fi.finlit.edith.sql.domain.Note;
+import fi.finlit.edith.sql.domain.NoteComment;
+import fi.finlit.edith.sql.domain.NoteType;
+import fi.finlit.edith.sql.domain.Paragraph;
+import fi.finlit.edith.sql.domain.StringElement;
+import fi.finlit.edith.sql.domain.Term;
+import fi.finlit.edith.sql.domain.UrlElement;
+import fi.finlit.edith.sql.domain.User;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
@@ -445,6 +456,15 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         for (Note note : notes){
             remove(note);
         }
+    }
+
+    @Override
+    public void saveAsNew(Note note) {
+        Session session = getSession();
+        session.evict(note);
+        note.setId(null);
+        note.setDocumentNoteCount(0);
+        session.save(note);
     }
 
 }
