@@ -84,7 +84,22 @@
               </th>
               <td style="width: 100%">
                 <t:select t:id="format"/>
-                            <t:zone id="personZone" t:id="personZone" t:zone="personZone">
+                <span class="place">
+                  ${message:placeSearch}
+                  <t:textField t:id="place" value="search" t:mixins="placeAutocomplete" />
+                  <t:textfield t:id="placeId" value="placeId" style="display: none;"/>
+                </span>
+                <span class="note">
+                  ${message:termSearch}
+                  <t:textField t:id="term" value="search" t:mixins="termAutocomplete" />
+                  <t:textfield t:id="termId" value="termId" style="display: none;"/>
+                </span>
+                <span class="person">
+                  ${message:personSearch}
+                  <t:textField t:id="person" value="search" t:mixins="personAutocomplete" />
+                  <t:textfield t:id="personId" value="personId" style="display: none;"/>
+                </span>
+                <t:zone id="personZone" t:id="personZone" t:zone="personZone">
 
             <t:block t:id="closeDialog">
                 <script type="text/javascript">jQuery('#dialog').jqmHide();</script>
@@ -108,16 +123,16 @@
             <div class="person">
                 <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="personInstances"/>)</span></div>
                 <t:if test="normalizedFirst">
-                    <div>${message:firstName-label}</div>
-                    <div>${normalizedFirst}</div>
+                    <div class="editor_label">${message:firstName-label}</div>
+                    <div class="editor_value">${normalizedFirst}</div>
                 </t:if>
                 <t:if test="normalizedLast">
-                    <div>${message:lastName-label}</div>
-                    <div>${normalizedLast}</div>
+                    <div class="editor_label">${message:lastName-label}</div>
+                    <div class="editor_value">${normalizedLast}</div>
                 </t:if>
                 <t:if test="normalizedDescription">
-                    <div>${message:normalizedDescription-label}</div>
-                    <div>${normalizedDescription}</div>
+                    <div class="editor_label">${message:normalizedDescription-label}</div>
+                    <div class="editor_value">${normalizedDescription}</div>
                 </t:if>
             </div>
 
@@ -126,16 +141,16 @@
                 <div>
                     <div><strong>${message:nameForm-label}</strong></div>
                     <t:if test="loopPerson.first">
-                        <div>${message:firstName-label}</div>
-                        <div>${loopPerson.first}</div>
+                        <div class="editor_label">${message:firstName-label}</div>
+                        <div class="editor_value">${loopPerson.first}</div>
                     </t:if>
                     <t:if test="loopPerson.last">
-                        <div>${message:lastName-label}</div>
-                        <div>${loopPerson.last}</div>
+                        <div class="editor_label">${message:lastName-label}</div>
+                        <div class="editor_value">${loopPerson.last}</div>
                     </t:if>
                     <t:if test="loopPerson.description">
-                        <div>${message:nameFormDescription-label}</div>
-                        <div>${loopPerson.description}</div>
+                        <div class="editor_label">${message:nameFormDescription-label}</div>
+                        <div class="editor_value">${loopPerson.description}</div>
                     </t:if>
                 </div>
             </t:loop>
@@ -185,16 +200,16 @@
             <t:if test="term">
             <div class="note">
                 <t:if test="termBasicForm">
-                    <div>${message:basicForm-label}</div>
-                    <div>${termBasicForm}</div>
+                    <div class="editor_label">${message:basicForm-label}</div>
+                    <div class="editor_value">${termBasicForm}</div>
                 </t:if>
                 <t:if test="termMeaning">
-                    <div>${message:meaning-label}</div>
-                    <div>${termMeaning}</div>
+                    <div class="editor_label">${message:meaning-label}</div>
+                    <div class="editor_value">${termMeaning}</div>
                 </t:if>
                 <t:if test="termLanguage">
-                    <div>${message:basicFormLanguage-label}</div>
-                    <div><t:fmt.message key="${termLanguage}" /></div>
+                    <div class="editor_label">${message:basicFormLanguage-label}</div>
+                    <div class="editor_value"><t:fmt.message key="${termLanguage}" /></div>
                 </t:if>
             </div>
 
@@ -225,12 +240,12 @@
             <div class="place">
                 <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="placeInstances"/>)</span></div>
                 <t:if test="normalizedPlaceName">
-                    <div>${message:name-label}</div>
-                    <div>${normalizedPlaceName}</div>
+                    <div class="editor_label">${message:name-label}</div>
+                    <div class="editor_value">${normalizedPlaceName}</div>
                 </t:if>
                 <t:if test="normalizedPlaceDescription">
-                    <div>${message:nameFormDescription-label}</div>
-                    <div>${normalizedPlaceDescription}</div>
+                    <div class="editor_label">${message:nameFormDescription-label}</div>
+                    <div class="editor_value">${normalizedPlaceDescription}</div>
                 </t:if>
             </div>
 
@@ -239,12 +254,12 @@
                 <div>
                     <div><strong>${message:nameForm-label}</strong></div>
                     <t:if test="loopPlace.name">
-                        <div>${message:name-label}</div>
-                        <div>${loopPlace.name}</div>
+                        <div class="editor_label">${message:name-label}</div>
+                        <div class="editor_value">${loopPlace.name}</div>
                     </t:if>
                     <t:if test="loopPlace.description">
-                        <div>${message:description-label}</div>
-                        <div>${loopPlace.description}</div>
+                        <div class="editor_label">${message:description-label}</div>
+                        <div class="editor_value">${loopPlace.description}</div>
                     </t:if>
                 </div>
             </t:loop>
@@ -277,29 +292,6 @@
                     <label><t:checkbox value="selected" /> <t:fmt.message key="${type}" /></label>
                 </t:loop>
               </div>
-            </div>
-
-            <div class="note">
-            <strong>${message:termSearch}</strong>
-            <t:textField t:id="term" value="search" t:mixins="termAutocomplete" />
-            <t:textfield t:id="termId" value="termId" style="display: none;"/>
-
-            </div>
-
-
-            <div class="person">
-                <label>${message:personSearch}</label>
-                <t:textField t:id="person" value="search" t:mixins="personAutocomplete" />
-                <t:textfield t:id="personId" value="personId" style="display: none;"/>
-            </div>
-
-
-
-            <div class="place">
-            <strong>${message:placeSearch}</strong>
-            <t:textField t:id="place" value="search" t:mixins="placeAutocomplete" />
-            <t:textfield t:id="placeId" value="placeId" style="display: none;"/>
-
             </div>
  </td>
 </tr>
