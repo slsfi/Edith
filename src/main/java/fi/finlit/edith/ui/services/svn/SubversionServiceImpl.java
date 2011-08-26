@@ -201,13 +201,6 @@ public class SubversionServiceImpl implements SubversionService {
         }
     }
 
-    private List<SVNFileRevision> getFileRevisions(String svnPath) throws SVNException {
-        long latest = svnRepository.getLatestRevision();
-        List<SVNFileRevision> revisions = new ArrayList<SVNFileRevision>();
-        svnRepository.getFileRevisions(svnPath, revisions, 0, latest);
-        return revisions;
-    }
-
     @Override
     public long getLatestRevision() {
         try {
@@ -218,28 +211,13 @@ public class SubversionServiceImpl implements SubversionService {
     }
 
     @Override
-    public long getLatestRevision(String svnPath) {
-        try {
-            List<SVNFileRevision> revisions = getFileRevisions(svnPath);
-            long revision = 0;
-            for (SVNFileRevision rev : revisions) {
-                if (revision < rev.getRevision()) {
-                    revision = rev.getRevision();
-                }
-            }
-            return revision;
-        } catch (SVNException e) {
-            throw new SubversionException(e);
-        }
-    }
-
-    @Override
     public InputStream getStream(String svnPath, long revision) throws IOException {
         try {
             long rev = revision;
             if (rev == -1) {
-                rev = getLatestRevision(svnPath);
+                rev = getLatestRevision();
             }
+
             File documentFolder = new File(readCache, URLEncoder.encode(svnPath, "UTF-8"));
             File documentFile = new File(documentFolder, String.valueOf(rev));
             if (!documentFile.exists()) {

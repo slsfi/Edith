@@ -73,13 +73,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         File file = new File("src/test/resources/tei.zip");
         assertEquals(5, documentDao.addDocumentsFromZip("/documents/parent", file));
 
-        assertTrue(subversionService.getLatestRevision("/documents/parent/Kullervo.xml") > 0);
-        assertTrue(subversionService
-                .getLatestRevision("/documents/parent/Nummisuutarit_100211.xml") > 0);
-        assertTrue(subversionService.getLatestRevision("/documents/parent/Nummisuutarit.xml") > 0);
-        assertTrue(subversionService
-                .getLatestRevision("/documents/parent/Olviretki_Schleusingenissa_manuscript.xml") > 0);
-        assertTrue(subversionService.getLatestRevision("/documents/parent/xmlparsertest.xml") > 0);
+        assertEquals(5, subversionService.getFileItems("/documents/parent", -1).size());
     }
 
     @Test
@@ -223,7 +217,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         documentDao.remove(document);
         documentDao.getDocumentStream(document);
     }
-    
+
     @Test(expected = RuntimeException.class)
     public void Remove_All() throws IOException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");

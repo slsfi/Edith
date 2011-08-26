@@ -314,7 +314,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
         long revision = subversionService.commit(modifiedFile);
-        assertEquals(revision, subversionService.getLatestRevision(svnPath));
+        assertEquals(revision, subversionService.getLatestRevision());
     }
 
     @SuppressWarnings("deprecation")

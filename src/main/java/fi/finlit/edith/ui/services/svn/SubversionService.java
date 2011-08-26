@@ -60,15 +60,6 @@ public interface SubversionService {
     long getLatestRevision();
 
     /**
-     * Retrieves the latest revision number for the given path
-     *
-     * @param svnPath
-     * @return
-     * @throws SVNException
-     */
-    long getLatestRevision(String svnPath);
-
-    /**
      * Get read access to given svn path with given revision
      *
      * @param svnPath svn path of file

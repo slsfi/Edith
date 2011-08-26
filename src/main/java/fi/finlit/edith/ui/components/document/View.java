@@ -32,6 +32,7 @@ public class View {
 
     @BeginRender
     void beginRender(MarkupWriter writer) throws IOException, XMLStreamException {
+        long start = System.currentTimeMillis();
         if (documentNotes == null) {
             renderer.renderDocument(document, writer);
         } else {
