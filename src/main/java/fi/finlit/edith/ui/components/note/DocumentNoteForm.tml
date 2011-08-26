@@ -16,24 +16,24 @@
         	  jQuery("#fullSelectionUpdate").html("");
               jQuery(":input[name='selectedText_2']").val(null);
           }
-    		  
+
       };
-    
+
       jQuery(function() {
-    	  
+
     	  //Remove previously binded versions
     	  var mmoveEvt = "mousemove.documentNoteForm";
     	  var mupEvt = "mouseup.documentNoteForm";
     	  var saveButton = jQuery(".document-note-form :input[name^='save']");
-    	  
+
     	  //Unbind, so we don't stack these events as this part will
     	  //be loaded again and again on the ajax update
     	  jQuery('body').unbind(mmoveEvt);
     	  jQuery('body').unbind(mupEvt);
-    	  
+
     	  //Show update button, if there is selection
     	  jQuery('body').bind(mupEvt, function() {
-              if(TextSelector.getSelection() == "") { 
+              if(TextSelector.getSelection() == "") {
                   saveButton.val("${message:save}");
                   DocumentNoteForm.clearTextSelection();
               } else {
@@ -44,64 +44,64 @@
                   DocumentNoteForm.setTextSelection();
               }
           });
-    	  
+
     	  //Clear on mousemove, just in case
     	  jQuery('body').bind(mmoveEvt, function() {
-              if(TextSelector.getSelection() == "") { 
+              if(TextSelector.getSelection() == "") {
             	  saveButton.val("${message:save}");
                   DocumentNoteForm.clearTextSelection();
-              } 
+              }
           });
-    	  
-    	  
-    	  
+
+
+
       });
     </script>
-    
+
     <div class="document-note-form">
-    
-     
+
+
       <t:form t:id="documentNoteForm" t:context="documentNoteOnEdit.id" t:zone="noteEditZone">
-        <fieldset>
-        <legend>${message:document-note}</legend>
-        
+        <fieldset class="editor">
+        <legend class="editor">${message:document-note}</legend>
+
         <div class="metadata">
             <!--t:dateTimeFormat date="documentNoteOnEdit.createdOnDate" format="message:dateformat-compact" /-->
             ${documentNoteOnEdit.position}
         </div>
-        
+
         <t:errors />
-        
+
         <div class="field">
             <label for="fullSelectionEdit">${message:fullSelection-label}</label>
             <div id="fullSelectionEdit">${documentNoteOnEdit.fullSelection}</div>
             <div id="fullSelectionUpdate"></div>
         </div>
-        
+
         <t:if test="slsMode">
           <div class="field">
               <t:label for="shortenedSelection">${message:shortenedSelection-label}</t:label>
               <t:textField t:id="shortenedSelection" value="documentNoteOnEdit.shortenedSelection" />
           </div>
-          
+
           <div class="field">
               <t:label for="lemmaPosition">${message:lemmaPosition-label}</t:label>
               <t:textField t:id="lemmaPosition" value="documentNoteOnEdit.lemmaPosition" />
           </div>
         </t:if>
-        
+
        <div class="field">
           <label><t:checkbox value="documentNoteOnEdit.publishable" />${message:publishable-label}</label>
        </div>
-        
+
         <t:hidden t:id="noteOnEditId" value="documentNoteOnEdit.id" />
-        
+
         <t:hidden t:id="selectedText_2" value="updateLongTextSelection.selection" />
         <t:hidden t:id="selectedStartId_2" value="updateLongTextSelection.startId" />
         <t:hidden t:id="selectedEndId_2" value="updateLongTextSelection.endId" />
         <t:hidden t:id="selectedStartIndex_2" value="updateLongTextSelection.startIndex" />
         <t:hidden t:id="selectedEndIndex_2" value="updateLongTextSelection.endIndex" />
-    
+
         <t:submit t:id="save" value="${message:save}" />
         <t:submit class="right" t:id="delete" value="${message:delete}" />
         </fieldset>

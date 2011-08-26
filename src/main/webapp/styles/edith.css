@@ -489,6 +489,16 @@ ul.dynatree-container {
 * Form fields
 */
 
+label.section {
+    color: #333333;
+    display: block;
+    line-height: 26px;
+    padding-left: 4px;
+    margin-top: 0px;
+    padding-right: 4px;
+    text-align: right;
+}
+
 .field input[type="text"] { width: 95% }
 
 /*
@@ -520,4 +530,13 @@ textarea.wysiwyg {
 
 .hidden {
 	display: none;
+}
+
+fieldset.editor {
+	border: 4px solid #A0A0A0;
+}
+
+legend.editor {
+	background: #FFF;
+	font-size: 14pt;
 }
