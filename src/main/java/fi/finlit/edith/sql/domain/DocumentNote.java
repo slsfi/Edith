@@ -45,6 +45,12 @@ public class DocumentNote implements Identifiable {
     @QueryInit("*")
     private Note note;
 
+    /**
+     * Only used because old documents use the localId variable for anchor in the document.
+     */
+    @Deprecated
+    private String anchorId;
+
     @Override
     public Long getId() {
         return id;
@@ -132,5 +138,13 @@ public class DocumentNote implements Identifiable {
 
     public void setLemmaPosition(String lemmaPosition) {
         this.lemmaPosition = lemmaPosition;
+    }
+
+    public String getAnchorId() {
+        return anchorId != null ? anchorId : String.valueOf(id);
+    }
+
+    public void setAnchorId(String anchorId) {
+        this.anchorId = anchorId;
     }
 }

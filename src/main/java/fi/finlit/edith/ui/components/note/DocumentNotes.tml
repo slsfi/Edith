@@ -41,7 +41,7 @@
           <t:loop source="documentNotes" value="documentNote">
             <li class="${selectedCssClass}">
                 <t:actionlink t:id="selectDocumentNote"
-                context="documentNote.id" class="selectable-doc-note" localId="${documentNote.id}">${documentNote.fullSelection}, 
+                context="documentNote.id" class="selectable-doc-note" localId="${documentNote.anchorId}">${documentNote.fullSelection}, 
                 ${documentNote.document.title}</t:actionlink>
             </li>
           </t:loop>
