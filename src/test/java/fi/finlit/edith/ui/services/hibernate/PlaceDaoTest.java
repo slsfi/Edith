@@ -16,7 +16,7 @@ import fi.finlit.edith.sql.domain.Place;
 import fi.finlit.edith.ui.services.PlaceDao;
 
 public class PlaceDaoTest extends AbstractHibernateTest {
-    
+
     @Inject
     private PlaceDao placeDao;
 
@@ -25,7 +25,7 @@ public class PlaceDaoTest extends AbstractHibernateTest {
     @Before
     public void Before() {
         place = new Place(new NameForm(), new HashSet<NameForm>());
-        place.getNormalized().setName("Stockholm");
+        place.getNormalized().setLast("Stockholm");
         placeDao.save(place);
     }
 

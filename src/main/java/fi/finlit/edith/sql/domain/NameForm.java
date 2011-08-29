@@ -44,10 +44,6 @@ public class NameForm {
         return builder.toString();
     }
 
-    public void setName(String name) {
-        last = name;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }

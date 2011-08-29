@@ -65,10 +65,12 @@
         <fieldset class="editor">
         <legend class="editor">${message:document-note}</legend>
 
+        <t:remove>
         <div class="metadata">
             <!--t:dateTimeFormat date="documentNoteOnEdit.createdOnDate" format="message:dateformat-compact" /-->
             ${documentNoteOnEdit.position}
         </div>
+        </t:remove>
 
         <t:errors />
 
