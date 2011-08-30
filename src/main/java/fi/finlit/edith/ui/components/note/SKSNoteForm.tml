@@ -108,6 +108,11 @@
                       </div>
                         <div id="personId" name="${personId}" style="display: none;"></div>
                         <t:if test="person">
+                            <script type="text/javascript">
+                            jQuery(function() {
+                              Annotate.recreateCKEditors();
+                            });
+                            </script>
                             <span class="metadata"> (
                             <t:fmt.message key="embeddedTo" args="personInstances" />
                           ) </span>
@@ -184,6 +189,11 @@
                        <div id="termId" name="${termId}" style="display: none;"></div>
                        <hr/>
                        <t:if test="term">
+                        <script type="text/javascript">
+                        jQuery(function() {
+                          Annotate.recreateCKEditors();
+                        });
+                        </script>
                          <t:if test="termBasicForm">
                             <h3 class="field-label">
                               ${message:basicForm-label}
@@ -259,16 +269,20 @@
                             placeId="placeId" placeZone="placeZone" />
                       </t:block>
                       <script type="text/javascript">
-                         jQuery(function() {
-                        jQuery("input[name='placeId']").attr("value",
-                         jQuery("#placeId").attr("name"));
-                            jQuery(".editPlace").click(function() {
+                      jQuery(function() {
+                        jQuery("input[name='placeId']").attr("value", jQuery("#placeId").attr("name"));
+                        jQuery(".editPlace").click(function() {
                           jQuery("#dialog").jqm().jqmShow();
-                            });
-                             });
-                       </script>
+                        });
+                      });
+                      </script>
                        <div id="placeId" name="${placeId}" style="display: none;"></div>
                        <t:if test="place">
+                       <script type="text/javascript">
+                       jQuery(function() {
+                         Annotate.recreateCKEditors();
+                       });
+                       </script>
                        <span class="metadata">( <t:fmt.message key="embeddedTo" args="placeInstances" /> )</span>
                        <hr/>
                        <h3 class="field-label">${message:normalizedForm-label}</h3>

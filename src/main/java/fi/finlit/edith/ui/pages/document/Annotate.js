@@ -68,7 +68,13 @@ var Annotate = {
   		  }
   		  // console.debug("Removed ckeditor instance");
   	  }
+    },
+	
+	recreateCKEditors: function() {
+	  if (Object.keys(window.CKEDITOR.instances).length === 0) {
+	    jQuery(".note_edit .wysiwyg").ckeditor(Edith_CKEditorSetup);
     }
+	}
 	
 };
 
