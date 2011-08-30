@@ -552,3 +552,41 @@ legend.editor {
 	margin-bottom: 4px;
 	margin-left: 8px;
 }
+
+div.edit-fields > div > h2.field-label,
+div.edit-fields > h2.field-label {
+    width: 130px;
+    float: left;
+    font-size: 9pt;
+    clear: left;
+}
+
+div.edit-fields h2.field-label-2 {
+    clear: both;
+    margin-left: 0;
+    font-size: 9pt;
+}
+
+div.edit-fields hr {
+	border: none;
+	clear: both;
+	padding: 0;
+	margin: 0;
+}
+
+div.edit-fields h3.field-label {
+    width: 130px;
+    float: left;
+    font-size: 9pt;
+    clear: left;
+    font-weight: normal;
+    text-align: right;
+    font-style: italic;
+    border: none;
+    margin-bottom: 0;
+}
+
+div.edit-fields div.field-content {
+    margin-left: 135px;
+    margin-bottom: 0.5em;
+}

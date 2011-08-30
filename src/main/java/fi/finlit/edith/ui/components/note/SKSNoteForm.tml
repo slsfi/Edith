@@ -48,294 +48,288 @@
 
     </script>
 
-
-
-      <fieldset class="editor">
-
-        <legend class="editor">${message:noteEdit}</legend>
-
-        <div class="metadata">
-          <t:dateTimeFormat date="noteOnEdit.editedOnDate"
-            format="message:dateformat-compact" />
-          ${noteOnEdit.lastEditedBy.username}
-          (${noteOnEdit.editors})
-        </div>
-
-
-
-        <div class="note_edit">
-
-
-          <t:form t:id="noteEditForm" t:zone="noteEditZone" t:context="[noteOnEdit.id]">
-            <t:errors />
-
-            <table class="section" style="width: 100%">
-             <tr>
-              <th>
-                <t:label class="section" for="status">${message:status-label}</t:label>
-              </th>
-              <td style="width: 100%">
-                <t:select t:id="status" model="statusModel" value="noteOnEdit.status" />
-              </td>
-             </tr>
-             <tr>
-              <th>
-                <label class="section" for="format">${message:format-label}</label>
-              </th>
-              <td style="width: 100%">
-                <t:select t:id="format"/>
-                <span class="place">
-                  ${message:placeSearch}
-                  <t:textField t:id="place" value="search" t:mixins="placeAutocomplete" />
-                  <t:textfield t:id="placeId" value="placeId" style="display: none;"/>
-                </span>
-                <span class="note">
-                  ${message:termSearch}
-                  <t:textField t:id="term" value="search" t:mixins="termAutocomplete" />
-                  <t:textfield t:id="termId" value="termId" style="display: none;"/>
-                </span>
-                <span class="person">
-                  ${message:personSearch}
-                  <t:textField t:id="person" value="search" t:mixins="personAutocomplete" />
-                  <t:textfield t:id="personId" value="personId" style="display: none;"/>
-                </span>
-                <t:zone id="personZone" t:id="personZone" t:zone="personZone">
-
-            <t:block t:id="closeDialog">
-                <script type="text/javascript">jQuery('#dialog').jqmHide();</script>
-            </t:block>
-
-            <t:block t:id="editPersonForm">
-                <t:note.personForm closeDialog="closeDialog" personId="personId" personZone="personZone"/>
-            </t:block>
-
-            <script type="text/javascript">
-            jQuery(function() {
-              jQuery("input[name='personId']").attr("value", jQuery("#personId").attr("name"));
-              jQuery(".jqmOpen").click(function() {
-                jQuery("#dialog").jqm().jqmShow();
-              });
-            });
-
-            </script>
-            <div id="personId" name="${personId}" style="display: none;"></div>
-            <t:if test="person">
-            <div class="person">
-                <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="personInstances"/>)</span></div>
-                <t:if test="normalizedFirst">
-                    <div class="editor_label">${message:firstName-label}</div>
-                    <div class="editor_value">${normalizedFirst}</div>
-                </t:if>
-                <t:if test="normalizedLast">
-                    <div class="editor_label">${message:lastName-label}</div>
-                    <div class="editor_value">${normalizedLast}</div>
-                </t:if>
-                <t:if test="normalizedDescription">
-                    <div class="editor_label">${message:normalizedDescription-label}</div>
-                    <div class="editor_value">${normalizedDescription}</div>
-                </t:if>
-            </div>
-
-            <div class="person">
-            <t:loop source="persons" value="loopPerson" formState="none">
-                <div>
-                    <div><strong>${message:nameForm-label}</strong></div>
-                    <t:if test="loopPerson.first">
-                        <div class="editor_label">${message:firstName-label}</div>
-                        <div class="editor_value">${loopPerson.first}</div>
-                    </t:if>
-                    <t:if test="loopPerson.last">
-                        <div class="editor_label">${message:lastName-label}</div>
-                        <div class="editor_value">${loopPerson.last}</div>
-                    </t:if>
-                    <t:if test="loopPerson.description">
-                        <div class="editor_label">${message:nameFormDescription-label}</div>
-                        <div class="editor_value">${loopPerson.description}</div>
-                    </t:if>
+	<fieldset class="editor">
+		<legend class="editor">${message:noteEdit}</legend>
+		<div class="metadata">
+			<t:dateTimeFormat date="noteOnEdit.editedOnDate"
+				format="message:dateformat-compact" />
+			${noteOnEdit.lastEditedBy.username}
+			(${noteOnEdit.editors})
+		</div>
+		<div class="note_edit">
+			<t:form t:id="noteEditForm" t:zone="noteEditZone" t:context="[noteOnEdit.id]">
+				<t:errors />
+                <div class="edit-fields">
+                  <h2 class="field-label">
+                    <t:label class="section" for="status">${message:status-label}</t:label>
+                  </h2>
+                  <div class="field-content">
+                   <t:select t:id="status" model="statusModel" value="noteOnEdit.status" />
+                  </div>
+                  <h2 class="field-label">
+                    <label class="section" for="format">${message:format-label}</label>
+                  </h2>
+                  <div class="field-content">
+                    <t:select t:id="format" />
+                    <span class="place">
+                      ${message:placeSearch}
+                      <t:textField t:id="place" value="search" t:mixins="placeAutocomplete" />
+                      <t:textfield t:id="placeId" value="placeId" style="display: none;" />
+                    </span>
+                    <span class="note">
+                      ${message:termSearch}
+                      <t:textField t:id="term" value="search" t:mixins="termAutocomplete" />
+                      <t:textfield t:id="termId" value="termId" style="display: none;" />
+                    </span>
+                    <span class="person">
+                      ${message:personSearch}
+                      <t:textField t:id="person" value="search" t:mixins="personAutocomplete" />
+                      <t:textfield t:id="personId" value="personId" style="display: none;" />
+                    </span>
+                  </div>
+                  <div class="person" style="display: none; padding-left: 130px">
+                   <t:zone id="personZone" t:id="personZone" t:zone="personZone">
+                        <div class="field-content">
+                        <t:block t:id="closeDialog">
+                          <script type="text/javascript">jQuery('#dialog').jqmHide();</script>
+                        </t:block>
+                        <t:block t:id="editPersonForm">
+                          <t:note.personForm closeDialog="closeDialog" personId="personId" personZone="personZone" />
+                        </t:block>
+                        <script type="text/javascript">
+                          jQuery(function() {
+                            jQuery("input[name='personId']").attr("value",
+                              jQuery("#personId").attr("name"));
+                            jQuery(".jqmOpen").click(function() {
+                              jQuery("#dialog").jqm().jqmShow();
+                            });
+                          });
+                        </script>
+                      </div>
+                        <div id="personId" name="${personId}" style="display: none;"></div>
+                        <t:if test="person">
+                            <span class="metadata"> (
+                            <t:fmt.message key="embeddedTo" args="personInstances" />
+                          ) </span>
+                          <hr/>
+                          <h3 class="field-label">${message:normalizedForm-label}</h3>
+                          <div class="field-content">
+                            <t:if test="normalizedFirst">
+                            <!--<h3 class="field-label">
+                               ${message:firstName-label}
+                            </h3>-->
+                               ${normalizedFirst}
+                          </t:if>
+                          <t:if test="normalizedLast">
+                               ${normalizedLast}</t:if><t:if test="normalizedDescription">, ${normalizedDescription}
+                          </t:if>
+                          </div>
+                          <hr/>
+                          <t:loop source="persons" value="loopPerson" formState="none">
+                              <h3 class="field-label">${message:nameForm-label}</h3>
+                              <div class="field-content">
+                              <t:if test="loopPerson.first">
+                                ${loopPerson.first}
+                              </t:if>
+                              <t:if test="loopPerson.last">
+                                ${loopPerson.last}</t:if><t:if test="loopPerson.description">, ${loopPerson.description}</t:if>
+                              </div>
+                              <hr/>
+                          </t:loop>
+                          <t:if test="timeOfBirth">
+                            <hr />
+                            <h3 class="field-label">
+                                 ${message:timeOfBirth-label}
+                            </h3>
+                            <div class="field-content">
+                              ${timeOfBirth}
+                            </div>
+                          </t:if>
+                          <t:if test="timeOfDeath">
+                            <hr />
+                            <h3 class="field-label">
+                              ${message:timeOfDeath-label}
+                            </h3>
+                            <div class="field-content">
+                                ${timeOfDeath}
+                            </div>
+                          </t:if>
+                          <div class="field">
+                            <button type="button" class="person"
+                              onclick="NoteForm.triggerNextActionLink(this)">${message:editPerson}</button>
+                            <span style="display: none">
+                              <t:eventlink t:event="editPerson" t:zone="dialogZone"
+                                  class="jqmOpen person editPerson" t:context="personId">${message:editPerson}
+                              </t:eventlink>
+                            </span>
+                          </div>
+                       </t:if>
+                     </t:zone>
+                   </div>
+                   <div class="note" style="display: none;">
+                     <t:zone id="termZone" t:id="termZone" t:zone="termZone">
+                       <t:block t:id="editTermForm">
+                         <t:note.termForm closeDialog="closeDialog" termId="termId" termZone="termZone" />
+                       </t:block>
+                       <script type="text/javascript">
+                         jQuery(function() {
+                           jQuery("input[name='termId']").attr("value",
+                           jQuery("#termId").attr("name"));
+                           jQuery(".editTerm").click(function() {
+                           jQuery("#dialog").jqm().jqmShow();
+                           });
+                        });
+                       </script>
+                       <div style="padding-left: 130px">
+                       <div id="termId" name="${termId}" style="display: none;"></div>
+                       <hr/>
+                       <t:if test="term">
+                         <t:if test="termBasicForm">
+                            <h3 class="field-label">
+                              ${message:basicForm-label}
+                            </h3>
+                            <div class="field-content">
+                              ${termBasicForm}
+                            </div>
+                            <hr/>
+                         </t:if>
+                         <t:if test="termMeaning">
+                            <h3 class="field-label">
+                              ${message:meaning-label}
+                            </h3>
+                            <div class="field-content">
+                              ${termMeaning}
+                            </div>
+                            <hr/>
+                         </t:if>
+                         <t:if test="termLanguage">
+                            <h3 class="field-label">
+                              ${message:basicFormLanguage-label}
+                            </h3>
+                            <div class="field-content">
+                              <t:fmt.message key="${termLanguage}" />
+                            </div>
+                            <hr/>
+                          </t:if>
+                         </t:if>
+                       <div class="field">
+                       <button type="button" class="note"
+                          onclick="NoteForm.triggerNextActionLink(this)">
+                          ${message:editTerm}
+                       </button>
+                       <span style="display: none">
+                         <t:eventlink t:event="editTerm" t:zone="dialogZone"
+                           class="jqModal term editTerm" t:context="termId">${message:editTerm}
+                         </t:eventlink>
+                       </span>
+                       </div>
+                       </div>
+                     </t:zone>
+                     <h2 class="field-label" style="padding-top: 4px">
+                       <t:label class="section"  for="lemma">${message:lemma-label}</t:label>
+                     </h2>
+                     <div class="field-content">
+                       <t:textField t:id="lemma" value="noteOnEdit.lemma" />
+                     </div>
+                     <hr/>
+                     <h2 class="field-label" style="padding-top: 4px">
+                       <t:label class="section" for="lemmaMeaning">${message:lemmaMeaning-label}</t:label>
+                     </h2>
+                     <div class="field-content">
+                        <t:textArea rows="1" t:id="lemmaMeaning" value="noteOnEdit.lemmaMeaning" />
+                     </div>
+                     <hr/>
+                     <h2 class="field-label" style="padding-top: 4px">
+                        <label class="section" for="types">${message:type-label}</label>
+                     </h2>
+                     <div class="field-content">
+                       <t:loop source="types" value="type">
+                         <div style="float: left">
+                           <t:checkbox value="selected" />
+                           <t:fmt.message key="${type}" />
+                         </div>
+                       </t:loop>
+                     </div>
+                     <hr/>
+                    </div>
+                  <div class="place" style="display: none; padding-left: 130px">
+                    <t:zone id="placeZone" t:id="placeZone" t:zone="placeZone">
+                      <t:block t:id="editPlaceForm">
+                        <t:note.placeForm closeDialog="closeDialog"
+                            placeId="placeId" placeZone="placeZone" />
+                      </t:block>
+                      <script type="text/javascript">
+                         jQuery(function() {
+                        jQuery("input[name='placeId']").attr("value",
+                         jQuery("#placeId").attr("name"));
+                            jQuery(".editPlace").click(function() {
+                          jQuery("#dialog").jqm().jqmShow();
+                            });
+                             });
+                       </script>
+                       <div id="placeId" name="${placeId}" style="display: none;"></div>
+                       <t:if test="place">
+                       <span class="metadata">( <t:fmt.message key="embeddedTo" args="placeInstances" /> )</span>
+                       <hr/>
+                       <h3 class="field-label">${message:normalizedForm-label}</h3>
+                          <div class="field-content">
+                            <t:if test="normalizedPlaceName">
+                               ${normalizedPlaceName}</t:if><t:if test="normalizedPlaceDescription">, ${normalizedPlaceDescription}</t:if>
+                          </div>
+                          <hr/>
+                          <t:loop source="places" value="loopPlace" formState="none">
+                              <h3 class="field-label">${message:nameForm-label}</h3>
+                              <div class="field-content">
+                              <t:if test="loopPlace.name">
+                                ${loopPlace.name}</t:if><t:if test="loopPlace.description">, ${loopPlace.description}</t:if>
+                              </div>
+                              <hr/>
+                          </t:loop>
+                          <div class="field">
+                            <button type="button" class="place"
+                                onclick="NoteForm.triggerNextActionLink(this)">
+                                 ${message:editPlace}
+                            </button>
+                            <span style="display: none">
+                                <t:eventlink t:event="editPlace" t:zone="dialogZone"
+                                  class="jqModal place editPlace" t:context="placeId">${message:editPlace}
+                                </t:eventlink>
+                            </span>
+                          </div>
+                        </t:if>
+                     </t:zone>
+                  </div>
+                   <h2 class="field-label">
+                       <t:label class="section" for="description">${message:description-label}</t:label>
+                    </h2>
+                    <div class="field-content">
+                      <div class="field note person place">
+                        <t:textArea class="wysiwyg" style="display:none"
+                                t:id="description" value="noteOnEdit.description" />
+                      </div>
+                    </div>
+                    <hr/>
+                    <h2 class="field-label">
+                      <t:label class="section" for="sources">${message:sources-label}</t:label>
+                    </h2>
+                    <div class="field-content">
+                      <div class="field note person place">
+                        <t:textArea class="wysiwyg" style="display:none"
+                              t:id="sources" value="noteOnEdit.sources" rows="8" />
+                      </div>
+                    </div>
+                            <!-- TODO In the future <div class="field"> <label>${message:linkTo-label}</label>
+                                <div>TBD</div> </div> -->
                 </div>
-            </t:loop>
-            </div>
-
-            <t:if test="timeOfBirth">
-            <div class="person">
-                <div>
-                    <strong>${message:timeOfBirth-label} (${message:timeFormat})</strong>
-                </div>
-                <div>
-                    ${timeOfBirth}
-                </div>
-            </div>
-            </t:if>
-            <t:if test="timeOfDeath">
-            <div class="person">
-                <div>
-                    <strong>${message:timeOfDeath-label} (${message:timeFormat})</strong>
-                </div>
-                <div>
-                    ${timeOfDeath}
-                </div>
-            </div>
-            </t:if>
-             <div class="field">
-            <button type="button" class="person" onclick="NoteForm.triggerNextActionLink(this)">${message:editPerson}</button>
-            <span style="display: none">
-            <t:eventlink t:event="editPerson" t:zone="dialogZone" class="jqmOpen person editPerson" t:context="personId">${message:editPerson}</t:eventlink>
-            </span>
-            </div>
-            </t:if>
-            </t:zone>
-            <t:zone id="termZone" t:id="termZone" t:zone="termZone">
-            <t:block t:id="editTermForm">
-                <t:note.termForm closeDialog="closeDialog" termId="termId" termZone="termZone"/>
-            </t:block>
-            <script type="text/javascript">
-            jQuery(function() {
-              jQuery("input[name='termId']").attr("value", jQuery("#termId").attr("name"));
-              jQuery(".editTerm").click(function() {
-                jQuery("#dialog").jqm().jqmShow();
-              });
-            });
-            </script>
-            <div id="termId" name="${termId}" style="display: none;"></div>
-            <t:if test="term">
-            <div class="note">
-                <t:if test="termBasicForm">
-                    <div class="editor_label">${message:basicForm-label}</div>
-                    <div class="editor_value">${termBasicForm}</div>
+                <t:submit t:id="save" value="${message:save}" />
+                <t:submit t:id="saveAsNew" name="saveAsNew" value="${message:saveAsNew}" />
+                <t:if test="deletableNote">
+                    <t:submit class="right" t:id="delete" value="${message:delete}" />
                 </t:if>
-                <t:if test="termMeaning">
-                    <div class="editor_label">${message:meaning-label}</div>
-                    <div class="editor_value">${termMeaning}</div>
-                </t:if>
-                <t:if test="termLanguage">
-                    <div class="editor_label">${message:basicFormLanguage-label}</div>
-                    <div class="editor_value"><t:fmt.message key="${termLanguage}" /></div>
-                </t:if>
-            </div>
+			</t:form>
 
-             <div class="field">
-            <button type="button" class="note" onclick="NoteForm.triggerNextActionLink(this)">
-              ${message:editTerm}
-            </button>
-            <span style="display: none">
-            <t:eventlink t:event="editTerm" t:zone="dialogZone" class="jqModal term editTerm" t:context="termId">${message:editTerm}</t:eventlink>
-            </span>
-            </div>
-            </t:if>
-            </t:zone>
-                        <t:zone id="placeZone" t:id="placeZone" t:zone="placeZone">
-            <t:block t:id="editPlaceForm">
-                <t:note.placeForm closeDialog="closeDialog" placeId="placeId" placeZone="placeZone"/>
-            </t:block>
-            <script type="text/javascript">
-            jQuery(function() {
-              jQuery("input[name='placeId']").attr("value", jQuery("#placeId").attr("name"));
-              jQuery(".editPlace").click(function() {
-                jQuery("#dialog").jqm().jqmShow();
-              });
-            });
-            </script>
-            <div id="placeId" name="${placeId}" style="display: none;"></div>
-            <t:if test="place">
-            <div class="place">
-                <div><strong>${message:normalizedForm-label}</strong> <span class="metadata"> (<t:fmt.message key="embeddedTo" args="placeInstances"/>)</span></div>
-                <t:if test="normalizedPlaceName">
-                    <div class="editor_label">${message:name-label}</div>
-                    <div class="editor_value">${normalizedPlaceName}</div>
-                </t:if>
-                <t:if test="normalizedPlaceDescription">
-                    <div class="editor_label">${message:nameFormDescription-label}</div>
-                    <div class="editor_value">${normalizedPlaceDescription}</div>
-                </t:if>
-            </div>
-
-            <div class="place">
-            <t:loop source="places" value="loopPlace" formState="none">
-                <div>
-                    <div><strong>${message:nameForm-label}</strong></div>
-                    <t:if test="loopPlace.name">
-                        <div class="editor_label">${message:name-label}</div>
-                        <div class="editor_value">${loopPlace.name}</div>
-                    </t:if>
-                    <t:if test="loopPlace.description">
-                        <div class="editor_label">${message:description-label}</div>
-                        <div class="editor_value">${loopPlace.description}</div>
-                    </t:if>
-                </div>
-            </t:loop>
-            </div>
-            <div class="field">
-            <button type="button" class="place" onclick="NoteForm.triggerNextActionLink(this)">
-              ${message:editPlace}
-            </button>
-            <span style="display: none">
-            <t:eventlink t:event="editPlace" t:zone="dialogZone" class="jqModal place editPlace" t:context="placeId">${message:editPlace}</t:eventlink>
-            </span>
-            </div>
-            </t:if>
-            </t:zone>
-
-            <div class="field note">
-               <t:label for="lemma">${message:lemma-label}</t:label>
-               <t:textField t:id="lemma" value="noteOnEdit.lemma" />
-            </div>
-
-            <div class="field note">
-               <t:label for="lemmaMeaning">${message:lemmaMeaning-label}</t:label>
-               <t:textArea rows="1" t:id="lemmaMeaning" value="noteOnEdit.lemmaMeaning" />
-            </div>
-
-            <div class="field note">
-              <label for="types">${message:type-label}</label>
-              <div id="types">
-                <t:loop source="types" value="type">
-                    <label><t:checkbox value="selected" /> <t:fmt.message key="${type}" /></label>
-                </t:loop>
-              </div>
-            </div>
- </td>
-</tr>
-<tr>
-<th>
-              <t:label class="section" for="description">${message:description-label}</t:label>
-</th>
-<td style="width: 100%">
-            <div class="field note person place">
-              <t:textArea class="wysiwyg" style="display:none" t:id="description" value="noteOnEdit.description" />
-            </div>
-</td>
-</tr>
-<tr>
-<th>
-              <t:label class="section" for="sources">${message:sources-label}</t:label>
-            <!-- TODO In the future
-            <div class="field">
-              <label>${message:linkTo-label}</label>
-              <div>TBD</div>
-            </div>
-            -->
-</th>
-<td style="width: 100%">
-            <div class="field note person place">
-
-              <t:textArea class="wysiwyg" style="display:none" t:id="sources" value="noteOnEdit.sources" rows="8" />
-            </div>
-</td>
-</tr>
-
-
-            </table>
-
-            <t:submit t:id="save" value="${message:save}" />
-            <t:submit t:id="saveAsNew" name="saveAsNew" value="${message:saveAsNew}"/>
-            <t:if test="deletableNote">
-                <t:submit class="right" t:id="delete" value="${message:delete}" />
-            </t:if>
-
-          </t:form>
-
-        </div>
-      </fieldset>
+		</div>
+	</fieldset>
 
 
 </t:content>
