@@ -11,7 +11,7 @@
   <groupId>fi.finlit</groupId>
   <artifactId>fi.finlit.edith</artifactId>
   <packaging>war</packaging>
-  <version>0.6.2-SNAPSHOT</version>
+  <version>0.7.0-SNAPSHOT</version>
   <name>Edith</name>
   <description></description>
 
@@ -406,14 +406,6 @@
           <autoCreateDbMaintainScriptsTable>true</autoCreateDbMaintainScriptsTable>
           <fromScratchEnabled>${dbmaintain.fromScratchEnabled}</fromScratchEnabled>
         </configuration>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>updateDatabase</goal>
-            </goals>
-          </execution>
-        </executions>
         <dependencies>
           <dependency>
             <groupId>mysql</groupId>
