@@ -98,8 +98,7 @@
                         </t:block>
                         <script type="text/javascript">
                           jQuery(function() {
-                            jQuery("input[name='personId']").attr("value",
-                              jQuery("#personId").attr("name"));
+                            jQuery("input[name='personId']").attr("value", jQuery("#personId").attr("name"));
                             jQuery(".jqmOpen").click(function() {
                               jQuery("#dialog").jqm().jqmShow();
                             });
@@ -178,10 +177,9 @@
                        </t:block>
                        <script type="text/javascript">
                          jQuery(function() {
-                           jQuery("input[name='termId']").attr("value",
-                           jQuery("#termId").attr("name"));
+                           jQuery("input[name='termId']").attr("value", jQuery("#termId").attr("name"));
                            jQuery(".editTerm").click(function() {
-                           jQuery("#dialog").jqm().jqmShow();
+                               jQuery("#dialog").jqm().jqmShow();
                            });
                         });
                        </script>
@@ -221,7 +219,7 @@
                             </div>
                             <hr/>
                           </t:if>
-                         </t:if>
+                         
                        <div class="field">
                        <button type="button" class="note"
                           onclick="NoteForm.triggerNextActionLink(this)">
@@ -233,6 +231,7 @@
                          </t:eventlink>
                        </span>
                        </div>
+                       </t:if>
                        </div>
                      </t:zone>
                      <h2 class="field-label" style="padding-top: 4px">

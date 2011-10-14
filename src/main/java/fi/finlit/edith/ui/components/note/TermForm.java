@@ -13,7 +13,7 @@ import fi.finlit.edith.sql.domain.Term;
 import fi.finlit.edith.ui.components.InfoMessage;
 import fi.finlit.edith.ui.services.TermDao;
 
-@SuppressWarnings("unused")
+
 public class TermForm {
     @InjectComponent
     private InfoMessage infoMessage;
