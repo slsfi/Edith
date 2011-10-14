@@ -1,0 +1,1 @@
+ALTER TABLE documentnote DROP COLUMN `anchorId`;
