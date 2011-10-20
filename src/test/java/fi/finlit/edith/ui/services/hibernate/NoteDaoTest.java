@@ -296,6 +296,54 @@ public class NoteDaoTest extends AbstractHibernateTest {
     }
 
     @Test
+    public void Find_With_Lemma_No_Term() {        
+        String lemma = "XXX" + System.currentTimeMillis() + "XXX";
+        Note note = new Note();
+        note.setLemma(lemma);
+        noteDao.save(note);
+        
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setFullText(lemma);
+        GridDataSource ds = noteDao.findNotes(search);
+        assertEquals(1, ds.getAvailableRows());
+    }
+    
+    @Test
+    public void Find_With_Lemma_Of_Given_Docs() {
+        String lemma = "XXX" + System.currentTimeMillis() + "XXX";
+        Note note = createNote(lemma);
+        
+        Document document = documentDao.getDocumentForPath(testDocument);
+        
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setDocuments(Collections.singleton(document));
+        search.setFullText(lemma);
+        GridDataSource ds = noteDao.findNotes(search);
+        assertEquals(0, ds.getAvailableRows());
+        
+        noteDao.createDocumentNote(note, document, "a");
+        assertEquals(1, ds.getAvailableRows());
+    }
+    
+    @Test
+    public void Find_With_Lemma_Of_All_Docs() {
+        String lemma = "XXX" + System.currentTimeMillis() + "XXX";
+        Note note = createNote(lemma);
+        
+        Document document = documentDao.getDocumentForPath(testDocument);
+        
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setIncludeAllDocs(true);
+        search.setFullText(lemma);
+        GridDataSource ds = noteDao.findNotes(search);
+        assertEquals(0, ds.getAvailableRows());
+        
+        noteDao.createDocumentNote(note, document, "a");
+        assertEquals(1, ds.getAvailableRows());
+    }
+    
+    
+    @Test
     public void Find_With_Creators() {
         createNote("note1");
         createNote("note2");

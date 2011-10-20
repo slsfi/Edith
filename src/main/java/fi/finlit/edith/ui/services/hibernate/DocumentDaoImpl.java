@@ -465,7 +465,11 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                 .from(document)
                 .where(document.path.eq(path))
                 .uniqueResult(document);
-        return doc != null ? doc : createDocument(path, path.substring(0, path.lastIndexOf('/')));
+        if (doc != null) {
+            return doc;
+        } else {
+            return createDocument(path, path.substring(path.lastIndexOf('/')+1));
+        }
     }
 
     private Document createDocument(String path, String title) {

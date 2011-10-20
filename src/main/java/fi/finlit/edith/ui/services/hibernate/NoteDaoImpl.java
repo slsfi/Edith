@@ -38,17 +38,7 @@ import fi.finlit.edith.EDITH;
 import fi.finlit.edith.dto.NoteSearchInfo;
 import fi.finlit.edith.dto.OrderBy;
 import fi.finlit.edith.dto.UserInfo;
-import fi.finlit.edith.sql.domain.Document;
-import fi.finlit.edith.sql.domain.DocumentNote;
-import fi.finlit.edith.sql.domain.LinkElement;
-import fi.finlit.edith.sql.domain.Note;
-import fi.finlit.edith.sql.domain.NoteComment;
-import fi.finlit.edith.sql.domain.NoteType;
-import fi.finlit.edith.sql.domain.Paragraph;
-import fi.finlit.edith.sql.domain.StringElement;
-import fi.finlit.edith.sql.domain.Term;
-import fi.finlit.edith.sql.domain.UrlElement;
-import fi.finlit.edith.sql.domain.User;
+import fi.finlit.edith.sql.domain.*;
 import fi.finlit.edith.ui.services.AuthService;
 import fi.finlit.edith.ui.services.NoteDao;
 import fi.finlit.edith.ui.services.ServiceException;
@@ -143,14 +133,17 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         // fulltext
         if (StringUtils.isNotBlank(search.getFullText())) {
             BooleanBuilder filter = new BooleanBuilder();
-            for (StringPath path : Arrays.asList(note.lemma,
-                                                 note.term.basicForm,
-                                                 note.term.meaning,
-                                                 note.description,
-                                                 note.sources,
-                                                 note.comments.any().message)) {
+            for (StringPath path : Arrays.asList(note.lemma, note.description, note.sources, note.comments.any().message)) {
                 filter.or(path.containsIgnoreCase(search.getFullText()));
             }
+            // NOTE : this needs to be separate because otherwise there is an implicit inner join to term, which is an optional property
+            QTerm term = QTerm.term;
+            filter.or(sub(term)
+                .where(
+                    term.eq(note.term),
+                    term.basicForm.containsIgnoreCase(search.getFullText()).or(
+                    term.meaning.containsIgnoreCase(search.getFullText())))
+                .exists());            
             builder.and(filter);
         }
 
@@ -182,6 +175,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             builder.and(filter);
         }
 
+        System.err.println(builder.toString());
+        
         return builder;
     }
 

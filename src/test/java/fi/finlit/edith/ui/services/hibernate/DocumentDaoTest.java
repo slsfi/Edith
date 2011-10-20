@@ -104,6 +104,14 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     }
 
     @Test
+    public void GetDocument() {
+        String path = "/a/b/name";
+        Document document = documentDao.getDocumentForPath(path);
+        assertEquals("name", document.getTitle());
+        assertEquals(path, document.getPath());
+    }
+    
+    @Test
     public void GetDocumentsOfFolder() {
         assertEquals(10, documentDao.getDocumentsOfFolder(documentRoot).size());
     }
