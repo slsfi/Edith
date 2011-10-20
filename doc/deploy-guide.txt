@@ -1,5 +1,7 @@
 Edithin ip-osoite on 128.214.12.238
 
+Uusi IP :            128.214.12.107
+
 mvn -Psks clean package
 scp target/edith.war root@edith:/opt/jetty/
 
