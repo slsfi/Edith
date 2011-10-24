@@ -16,7 +16,7 @@ jQuery(function() {
     SearchResults.toggleNoteListElements(jQuery(this));
   });
   
-	jQuery("#note_filters input").click(function() {
+	jQuery("#note_filters input").live("click", function() {
     SearchResults.toggleNoteListElements(jQuery(this));
   });
     

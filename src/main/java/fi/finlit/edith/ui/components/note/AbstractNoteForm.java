@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import fi.finlit.edith.dto.SelectedText;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.sql.domain.Note;
-import fi.finlit.edith.sql.domain.NoteFormat;
 import fi.finlit.edith.sql.domain.NoteStatus;
 import fi.finlit.edith.sql.domain.NoteType;
 import fi.finlit.edith.sql.domain.Term;
@@ -165,9 +164,11 @@ public abstract class AbstractNoteForm {
                 return page.zoneWithInfo("submit-success")
                     .add("listZone", page.getSearchResults())
                     .add("noteEditZone", page.getNoteEdit().getBlock());
+            } else {
+                noteDao.save(noteOnEdit);
+                return update.add("listZone", page.getSearchResults());    
             }
-            noteDao.save(noteOnEdit);
-            return update.add("listZone", page.getSearchResults());
+            
         } catch (Exception e) {
             return page.zoneWithError("note-addition-failed", e);
         }
