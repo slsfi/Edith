@@ -58,7 +58,7 @@ public class AbstractDocumentPage {
 
     public String getDocumentPath() {
         String svnPath = document.getPath();
-        return svnPath.substring(documentRoot.length(), svnPath.length());
+        return svnPath.substring(documentRoot.length() + 1, svnPath.length());
     }
 
     protected DocumentDao getDocumentRepository() {
