@@ -395,9 +395,9 @@ public class NoteDaoTest extends AbstractHibernateTest {
         NoteSearchInfo search = new NoteSearchInfo();
         search.setOrderBy(OrderBy.KEYTERM);
         GridDataSource data = noteDao.findNotes(search);
-        assertTrue(data.getAvailableRows() > 0);
+        assertTrue(data.getAvailableRows() > 0);                
     }
-
+    
     @Test
     public void Find_With_Order_Lemma() {
         noteDao.importNotes(noteTestData);

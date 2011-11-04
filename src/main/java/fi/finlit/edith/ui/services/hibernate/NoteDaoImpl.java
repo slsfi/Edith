@@ -175,8 +175,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             builder.and(filter);
         }
 
-        System.err.println(builder.toString());
-        
         return builder;
     }
 
@@ -208,6 +206,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         switch (orderBy) {
         case KEYTERM:
             comparable = note.term.basicForm;
+            break;
         case DATE:
             comparable = note.editedOn;
             break;
