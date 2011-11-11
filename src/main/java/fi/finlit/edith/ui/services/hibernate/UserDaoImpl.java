@@ -48,7 +48,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Collection<User> getAll() {
-        return query().from(user).list(user);
+        return query().from(user).where(user.active.eq(true)).list(user);
     }
 
     @Override
@@ -63,8 +63,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Collection<UserInfo> getAllUserInfos() {
-        return query().from(user).list(
-                ConstructorExpression.create(UserInfo.class, user.id, user.username));
+        return query().from(user).where(user.active.eq(true))
+                .list(ConstructorExpression.create(UserInfo.class, user.id, user.username));
     }
 
     @Override
@@ -81,6 +81,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             if (user == null) {
                 user = new User();
             }
+            user.setActive(true);
             user.setFirstName(values[0]);
             user.setLastName(values[1]);
             user.setUsername(values[2]);

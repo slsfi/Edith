@@ -32,6 +32,8 @@ public class User implements Identifiable {
 
     @Column(unique = true)
     private String username;
+    
+    private boolean active;
 
     public User() {
 
@@ -88,8 +90,17 @@ public class User implements Identifiable {
     public void setUsername(String username) {
         this.username = username;
     }
+    
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     public Long getId() {
         return id;
     }
+    
 }

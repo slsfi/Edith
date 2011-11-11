@@ -123,7 +123,19 @@ public class SubversionServiceImpl implements SubversionService {
         String path = svnPath.substring(documentRoot.length());
         if (userCheckout.exists()) {
             // long updateStart = System.currentTimeMillis();
-            update(userCheckout);
+            try {
+                update(userCheckout);
+            } catch (SubversionException e) {
+                try {
+                    FileUtils.cleanDirectory(userCheckout);
+                } catch (IOException e1) {
+                    throw new SubversionException("Exception when cleaning directory", e1);
+                }
+                userCheckout.delete();
+                checkout(userCheckout, revision);
+                logger.error(e.getMessage(), e);
+            }
+                
             // System.err.println("Update finished in: " + (System.currentTimeMillis() -
             // updateStart));
         } else {
