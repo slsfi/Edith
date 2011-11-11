@@ -16,7 +16,7 @@ public class SLSAnnotateTest extends AbstractSeleniumTest {
         assertTitle("Dokument");
         assertLink("Kommentarer");
         assertLink("Hämta kommentarer");
-        assertLink("Instructioner");
+        assertLink("Instruktioner");
     }
 
     @Test
