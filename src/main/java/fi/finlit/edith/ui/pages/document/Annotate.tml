@@ -139,11 +139,11 @@
 	         } else {
 	           delete documents[node.data.documentId];
 	         }
-           if (node.data.isFolder) {
-             node.visit(function(child) {
-               child.select(flag);
-             });
-           }
+             if (node.data.isFolder) {
+               node.visit(function(child) {
+                 child.select(flag);
+               });
+             }
 	       },
 
 	       checkbox: true
