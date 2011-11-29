@@ -158,6 +158,10 @@ public class NoteSearchForm {
     }
 
     public void setDocuments(String documents) {
+        
+        System.out.println("Setting documents with data: " + documents);
+        
+        
         getSearchInfo().getDocuments().clear();
         for (String documentId : documents.split(",")) {
             Document document = new Document();

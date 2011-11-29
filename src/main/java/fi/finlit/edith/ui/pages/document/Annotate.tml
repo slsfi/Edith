@@ -70,16 +70,13 @@
 			 create: AccordionState.loadState, change: AccordionState.saveState });
 
 		 (function($) {
-
-		   var documents = {};
-		   documents['${document.id}'] = true;
-
+		   
 		   var visualizeNode = function(node) {
 		     if (node.data.isSelected) {
 		       node.select(true);
 		     }
 		   }
-
+		   
 	     $('#to_annotate').click(function(e) {
 	       e.preventDefault();
 	       var node = $("#directory-tree").dynatree("getActiveNode");
@@ -119,11 +116,6 @@
 	           },
 
 	           success: function(node) {
-	             node.visit(function(child) {
-	               if (node.isSelected()) {
-	                 child.select(true);
-	               }
-	             });
 	             node.visit(visualizeNode);
 	           }
 	         });
@@ -134,28 +126,34 @@
 	       },
 
 	       onSelect: function(flag, node) {
-	         if (flag) {
-	           documents[node.data.documentId] = true;
-	         } else {
-	           delete documents[node.data.documentId];
-	         }
-             if (node.data.isFolder) {
+	         
+	         //Folder select always clears child selects
+             if (node.data.isFolder) {           
                node.visit(function(child) {
-                 child.select(flag);
+            	   if(!child.isActive())
+            		   child._select(false, false, false);
                });
-             }
+             } 
+          	//Child select always clears parent select
+          	node.visitParents(function(parent) {
+          		if(!parent.isActive())
+          			  parent._select(false, false, false)
+          	})
+             
+            	 
 	       },
 
 	       checkbox: true
 		   });
 
 		   $('#noteSearchFormSubmit').click(function() {
-		     var documentIds = [];
-		     $.each(documents, function(k, _) {
-		       documentIds.push(k);
-		     });
+		     var selectedNodes = $("#directory-tree").dynatree("getSelectedNodes")
+		     var documentIds = $.map(selectedNodes, function(node){
+		    	 return (node.data.isFolder ? "f:" : "d:") + node.data.documentId
+		      })
+		     console.log("ids length " + documentIds)
 		     if (documentIds.length != 0) {
-		       $('#noteSearchForm #documents').val(documentIds.join(','));
+		       $('#noteSearchForm #documents').val(ids.join(','));
 		     }
 		   });
 
