@@ -424,6 +424,22 @@ public class NoteDaoTest extends AbstractHibernateTest {
         noteDao.findNotes(search);
         // TODO
     }
+    
+    @Test
+    public void Find_With_Path() {
+        Note note = createNote("lemma");  
+        Document document = documentDao.getDocumentForPath(testDocument);
+        
+        noteDao.createDocumentNote(note, document, "a");
+        NoteSearchInfo search = new NoteSearchInfo();
+        search.setPaths(Collections.singleton("/nothere"));
+        
+        assertEquals(0, noteDao.findNotes(search).getAvailableRows());
+        
+        search.setPaths(Collections.singleton("/documents"));
+        
+        assertEquals(1, noteDao.findNotes(search).getAvailableRows());
+    }
 
     private void assertRowCount(int expected, NoteSearchInfo search) {
         assertEquals(expected, noteDao.findNotes(search).getAvailableRows());

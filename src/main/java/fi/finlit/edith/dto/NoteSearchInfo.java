@@ -12,6 +12,8 @@ public class NoteSearchInfo {
 
     private Set<Document> documents = new HashSet<Document>();
 
+    private Set<String> paths = new HashSet<String>();
+
     private Set<NoteType> noteTypes = new HashSet<NoteType>();
 
     private Set<NoteFormat> noteFormats = new HashSet<NoteFormat>();
@@ -32,6 +34,7 @@ public class NoteSearchInfo {
 
     private String fullText;
 
+
     public NoteSearchInfo() {}
 
     public NoteSearchInfo(Document document) {
@@ -46,6 +49,14 @@ public class NoteSearchInfo {
         this.documents = documents;
     }
 
+    public void setPaths(Set<String> paths) {
+        this.paths = paths;
+    }
+    
+    public Set<String> getPaths() {
+        return paths;
+    }
+    
     public Set<NoteType> getNoteTypes() {
         return noteTypes;
     }
@@ -133,5 +144,7 @@ public class NoteSearchInfo {
                 + ", ascending=" + ascending + ", orphans=" + orphans + ", includeAllDocs="
                 + includeAllDocs + ", fullText=" + fullText + "]";
     }
+
+    
 
 }

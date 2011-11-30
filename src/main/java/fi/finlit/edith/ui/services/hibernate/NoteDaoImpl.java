@@ -116,15 +116,26 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         else if (!search.isOrphans() && search.isIncludeAllDocs()) {
             builder.and(note.documentNoteCount.gt(0));
         }
-        // or documents from selection
-        else if (!search.getDocuments().isEmpty() && !search.isIncludeAllDocs()) {
+        // or documents and paths from selection
+        else if (!search.isIncludeAllDocs()
+                && (!search.getPaths().isEmpty() || !search.getDocuments().isEmpty())) {
+            
+            BooleanBuilder filter = new BooleanBuilder();
+            for (String path : search.getPaths()) {
+                filter.or(documentNote.document.path.startsWith(path));
+            }
+            if (!search.getDocuments().isEmpty()) {
+                filter.or(documentNote.document.in(search.getDocuments()));
+            }   
+            
             JPQLSubQuery subQuery = sub(documentNote);
             subQuery.where(documentNote.note.eq(note),
-                    documentNote.document.in(search.getDocuments()),
-                    documentNote.deleted.eq(false));
+                           documentNote.deleted.eq(false), 
+                           filter);
+            
             builder.and(subQuery.exists());
         }
-
+        
         //language
         if (search.getLanguage() != null) {
             builder.and(note.term.language.eq(search.getLanguage()));

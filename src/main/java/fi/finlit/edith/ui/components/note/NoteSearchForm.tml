@@ -99,6 +99,7 @@
       <div style="clear: both;"></div>
 
       <t:textField t:id="documents" value="documents" style="display: none;"/>
+      <t:textField t:id="paths" value="paths" style="display: none;"/>
 
       <input id="noteSearchFormSubmit" type="submit"
         value="${message:query}" />

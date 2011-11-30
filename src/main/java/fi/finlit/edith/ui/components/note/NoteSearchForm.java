@@ -149,20 +149,31 @@ public class NoteSearchForm {
         return page.getSearchInfo();
     }
 
+    public String getPaths() {
+        return StringUtils.join(getSearchInfo().getPaths(), ",");
+    }
+
+    public void setPaths(String paths) {
+        getSearchInfo().getPaths().clear();
+        if (paths == null) return;
+        for (String path : paths.split(",")) {
+            getSearchInfo().getPaths().add(path);
+        }
+    }
+
     public String getDocuments() {
+
         Collection<Long> documentIds = new ArrayList<Long>();
         for (Document document : getSearchInfo().getDocuments()) {
             documentIds.add(document.getId());
         }
+
         return StringUtils.join(documentIds, ",");
     }
 
     public void setDocuments(String documents) {
-        
-        System.out.println("Setting documents with data: " + documents);
-        
-        
         getSearchInfo().getDocuments().clear();
+        if (documents == null) return;
         for (String documentId : documents.split(",")) {
             Document document = new Document();
             document.setId(Long.valueOf(documentId));
