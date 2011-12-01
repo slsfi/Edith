@@ -154,14 +154,16 @@
 		     var paths = $.map(selectedNodes, function(node) {
 		    	 return node.data.isFolder ? node.data.path : null
 		     })
-		     console.log("documentids " + documentIds)
-		     console.log("paths " + paths)
-		     //if(documentIds.length != 0) {
-		    	 $('#noteSearchForm #documents').val(documentIds.join(','));
-		     //}
-		     //if(paths.length != 0) {
-		    	 $('#noteSearchForm #paths').val(paths.join(','));
-		     //}
+		     
+		     //Always add current document
+		     documentIds.push('${document.id}')
+
+		     //console.log("documentids " + documentIds)
+		     //console.log("paths " + paths)
+
+		     $('#noteSearchForm #documents').val(documentIds.join(','));
+		     $('#noteSearchForm #paths').val(paths.join(','));
+		     
 		   });
 
 		 })(jQuery);
