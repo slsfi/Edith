@@ -221,7 +221,7 @@ public class Annotate extends AbstractDocumentPage {
             Note n = noteRepository.getById(noteToLinkId);
             DocumentNote documentNote = noteRepository.createDocumentNote(n,
                     getDocument(), createTermSelection.getSelection());
-            documentNote = getDocumentRepository().updateNote(documentNote, createTermSelection);
+            documentNote = getDocumentDao().updateNote(documentNote, createTermSelection);
 
             return noteHasChanged(documentNote, "note-connect-success");
         } catch (Exception e) {
@@ -234,7 +234,7 @@ public class Annotate extends AbstractDocumentPage {
         DocumentNote documentNote = null;
         try {
             Note n = createNote();
-            documentNote = getDocumentRepository().addNote(n, getDocument(), createTermSelection);
+            documentNote = getDocumentDao().addNote(n, getDocument(), createTermSelection);
         } catch (Exception e) {
             return zoneWithError("note-addition-failed", e);
         }

@@ -22,7 +22,7 @@ import fi.finlit.edith.ui.services.DocumentDao;
 public class AbstractDocumentPage {
 
     @Inject
-    private DocumentDao documentRepository;
+    private DocumentDao documentDao;
 
     private Document document;
 
@@ -41,7 +41,7 @@ public class AbstractDocumentPage {
             response.sendError(HttpError.PAGE_NOT_FOUND, "No document ID given!");
         }
         try {
-            document = documentRepository.getById(ctx.get(Long.class, 0));
+            document = documentDao.getById(ctx.get(Long.class, 0));
         } catch (RuntimeException e) {
             response.sendError(HttpError.PAGE_NOT_FOUND, "Document not found!");
             return;
@@ -61,8 +61,8 @@ public class AbstractDocumentPage {
         return svnPath.substring(documentRoot.length() + 1, svnPath.length());
     }
 
-    protected DocumentDao getDocumentRepository() {
-        return documentRepository;
+    protected DocumentDao getDocumentDao() {
+        return documentDao;
     }
 
 }

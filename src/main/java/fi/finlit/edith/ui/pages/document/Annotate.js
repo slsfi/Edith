@@ -73,7 +73,7 @@ var Annotate = {
 	recreateCKEditors: function() {
 	  if (Object.keys(window.CKEDITOR.instances).length === 0) {
 	    jQuery(".note_edit .wysiwyg").ckeditor(Edith_CKEditorSetup);
-    }
+      }
 	}
 	
 };
@@ -205,30 +205,28 @@ jQuery(document).ready(function() {
 		jQuery("#normalNotes").attr("href", "#").removeClass("disable_link");
 	});
 	
-    jQuery('.notecontent').live('click',
+	jQuery('.noteanchor').live('click',
+		function(event) {
+        	if (!disableLink) {
+        		var classes = "n"+jQuery(this).attr('id').substring(3)
+        		jQuery(":input[name='selectedNoteId']").val(classes);
+        		TapestryExt.submitZoneForm(jQuery("#selectNoteForm").get(0));
+        	}
+    	}    
+	);			
+	
+    jQuery('.noteanchor').live('mouseenter',
         function(event) {
-            if (!disableLink) {
-            	var classes = jQuery(this).attr('class').replace(/notecontent\ /g,'').replace(/\ /g, '/');
-            	jQuery(":input[name='selectedNoteId']").val(classes);
-    			TapestryExt.submitZoneForm(jQuery("#selectNoteForm").get(0));
-            }
-        }    
-    );
-    
-    //jQuery(".selectable-note").live('click',
-    //	function(event) {
-    //		alert("selected");
-    //	}
-    //);
-    
-    // live updated
-    //jQuery('.notelink').live('click',
-    //	function(event) {
-    //		var localId= jQuery(this).attr('href').replace('#start','');
-	//		var noteId = jQuery(this).attr('id').replace('noteid', '');		
-    //		//Editor.updateEditZone("e" + localId + "/" + noteId);
-    //	}
-    //);
+    	    var classes = "n"+jQuery(this).attr('id').substring(3);
+    	    jQuery("."+classes).addClass("underline");
+        }
+    );    
+    jQuery('.noteanchor').live('mouseleave',
+        function(event) {
+         	var classes = "n"+jQuery(this).attr('id').substring(3);
+       	    jQuery("."+classes).removeClass("underline");
+       }
+    );    
   
     jQuery('#createTermLink').bind('click', function() { Annotate.createNote() });
     jQuery("#connectTermLink").bind("click", function() { Annotate.connectNote() });

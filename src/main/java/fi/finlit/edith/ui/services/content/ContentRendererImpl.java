@@ -39,19 +39,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import fi.finlit.edith.EDITH;
-import fi.finlit.edith.sql.domain.Document;
-import fi.finlit.edith.sql.domain.DocumentNote;
-import fi.finlit.edith.sql.domain.Interval;
-import fi.finlit.edith.sql.domain.LinkElement;
-import fi.finlit.edith.sql.domain.NameForm;
-import fi.finlit.edith.sql.domain.Note;
-import fi.finlit.edith.sql.domain.NoteFormat;
-import fi.finlit.edith.sql.domain.NoteType;
-import fi.finlit.edith.sql.domain.Paragraph;
-import fi.finlit.edith.sql.domain.ParagraphElement;
-import fi.finlit.edith.sql.domain.Person;
-import fi.finlit.edith.sql.domain.Place;
-import fi.finlit.edith.sql.domain.UrlElement;
+import fi.finlit.edith.sql.domain.*;
 import fi.finlit.edith.ui.services.DocumentDao;
 import fi.finlit.edith.util.ElementContext;
 import fi.finlit.edith.util.ParagraphParser;
@@ -507,7 +495,11 @@ public class ContentRendererImpl implements ContentRenderer {
 
                 noteContent.setValue(true);
                 noteIds.add(Long.parseLong(id.substring("start".length())));
-            } else if (id.startsWith(END)) {
+            } else if (id.startsWith(END)) {                
+                writer.element(SPAN, "class", "noteanchor", "id", id);
+                writer.write(" [*] ");
+                writer.end();
+                
                 noteIds.remove(Long.parseLong(id.substring(END.length())));
                 if (noteIds.isEmpty()) {
                     noteContent.setValue(false);

@@ -154,13 +154,26 @@
 }	
 
 .tei .notecontent{
-	color: #990202;
+	color: #990202;	
+}
+
+/*.tei .notecontent:hover{
+	border-bottom: solid 2px;
+}*/
+
+.underline {
+	border-bottom: solid 2px;
+}
+
+.tei .noteanchor{
+	color: #990202;	
 	cursor: pointer;
 }
 
-.tei .notecontent:hover{
+.tei .noteanchor:hover{
 	border-bottom: solid 2px;
 }
+
 
 .tei .hi, .tei .emph {
 	font-style: italic;
