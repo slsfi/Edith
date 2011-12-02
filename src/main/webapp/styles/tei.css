@@ -166,14 +166,9 @@
 }
 
 .tei .noteanchor{
-	color: #990202;	
+	color: #020299;	
 	cursor: pointer;
 }
-
-.tei .noteanchor:hover{
-	border-bottom: solid 2px;
-}
-
 
 .tei .hi, .tei .emph {
 	font-style: italic;
