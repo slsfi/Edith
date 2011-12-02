@@ -469,7 +469,7 @@ public class ContentRendererImpl implements ContentRenderer {
             if (path != null) {
                 writer.attributes("id", path);
             }
-        } else if (localName.equals("TEI")) {
+        } else if (localName.equals("TEI") || localName.equals("TEI.2")) {
             writer.element(DIV, CLASS, "tei");
         } else if (localName.equals("lb")) {
             writer.element("br");
