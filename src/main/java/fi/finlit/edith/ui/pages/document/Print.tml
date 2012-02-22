@@ -10,6 +10,10 @@
   <body>
     
     <t:document.view document="document"/>
+    
+    <p>&nbsp;</p> <!-- spacer -->    
+    <h3>${message:notes}</h3>
+    <t:note.view documentNotes="documentNotes"/>
 
   </body>
   
