@@ -452,7 +452,8 @@ public class ContentRendererImpl implements ContentRenderer {
         String name = extractName(reader, localName);
         context.push(name);
         String path = context.getPath();
-
+        String rend = reader.getAttributeValue(null, "rend");
+        
         if (UL_ELEMENTS.contains(localName)) {
             writer.element("ul", CLASS, localName);
             if (path != null) {
@@ -476,7 +477,10 @@ public class ContentRendererImpl implements ContentRenderer {
             writer.end();
         } else if (localName.equals("pb")) {
             String page = reader.getAttributeValue(null, "n");
-            if (page != null) {
+            String type = reader.getAttributeValue(null, "type");
+            if (type != null) {
+                
+            } else if (page != null) {
                 writer.element(DIV, "id", "page" + page, CLASS, "page");
                 writer.writeRaw(page + ".");
                 writer.end();
@@ -505,11 +509,25 @@ public class ContentRendererImpl implements ContentRenderer {
                     noteContent.setValue(false);
                 }
             }
+        } else if (localName.equals("milestone")) {   
+            StringBuilder cssClass = new StringBuilder(name);
+            String type = reader.getAttributeValue(null, "type");
+            if (type != null) {
+                cssClass.append(" " + type);
+            }
+            String unit = reader.getAttributeValue(null, "unit");
+            if (unit != null) {
+                cssClass.append(" " + unit);
+            }
+            writer.element(DIV, CLASS, cssClass.toString());
+            
         } else {
-            writer.element(DIV, CLASS, name);
+            String cssClass = rend != null ? (name + " " + rend) : name;
+            writer.element(DIV, CLASS, cssClass);
             if (path != null) {
                 writer.attributes("id", path);
             }
+            
         }
     }
 

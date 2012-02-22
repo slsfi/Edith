@@ -1,10 +1,28 @@
 .tei div.body {
     max-width: 600px;
 }
+
 .tei .head{
     font-weight: bold;
     font-size: 1.2em;
     padding: 1em 0em;
+}
+
+.tei .center {
+    text-align: center;
+}
+
+.tei .lg {
+    padding-top: 1em;
+    padding-bottom: 1em;	
+}
+
+.tei .lg, .tei .l {
+    padding-left: 1em;  
+}
+
+.tei .indent {
+    padding-left: 1.5em;        
 }
 
 .tei .speaker{
@@ -17,12 +35,20 @@
     font-style: italic;
 }
 
-.tei .orig, .tei .sic {
+.tei .sic {
+    display: none; /* sls */	
+}
+
+.tei .corr, .tei .reg {
+    color: #808080;	
+}
+
+.tei .orig {
     font-style: italic;
     color: #D0D0D0;
 }
 
-.tei .sp{
+.tei .sp {
     padding: 0.25em 0;
 }
 
@@ -32,11 +58,36 @@
 
 .tei .p {
     display: block;
-    margin-top: 1em;
+    text-indent: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 
-.tei .listBibl{
+.tei .p.parIndent {
+    text-indent: 0em;
+    padding-left: 1em;
+    padding-right: 1em;	
+}
+
+.tei .p.noIndent {
+    text-indent: 0em;	
+    padding-left: 0em;  
+}
+
+.tei .listBibl {
     border: dotted 1px gray;
+}
+
+.tei .right {
+    text-align: right;	
+}
+
+.tei .expanded, .tei .romanType, .tei .italics {
+    font-style: italic;	
+}
+
+.tei .bold {
+    font-weight: bold;    	
 }
 
 .tei .titleStmt .title{
@@ -85,14 +136,25 @@
     border-top: dotted 1px gray;
 }
 
+.tei .milestone.bar {
+    margin: 1em;
+    border-top: dotted 1px gray;
+}
+
+.tei .milestone.unit {    
+    border-top: dotted 1px gray;
+}
+
 .tei .p .page {
     display: inline;
     padding: 0px !important;
     border-top: none !important;
 }
+
 .tei .p .page:before {
     content: "|";
 }
+
 .tei .p .page:after {
     content: "|";
 }
@@ -119,7 +181,6 @@
 .tei .docAuthor, 
 .tei .gap, 
 .tei .orig,
-.tei .sic,
 .tei .corr,
 .tei .ref, 
 .tei .role, 
