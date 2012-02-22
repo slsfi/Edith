@@ -476,12 +476,11 @@ public class ContentRendererImpl implements ContentRenderer {
             writer.element("br");
             writer.end();
         } else if (localName.equals("pb")) {
-            String page = reader.getAttributeValue(null, "n");
-            String type = reader.getAttributeValue(null, "type");
-            if (type != null) {
-                
-            } else if (page != null) {
-                writer.element(DIV, "id", "page" + page, CLASS, "page");
+            String page = reader.getAttributeValue(null, "n");            
+            if (page != null) {
+                String type = reader.getAttributeValue(null, "type");
+                String cssClass = type != null ? ("page " + type) : "page";
+                writer.element(DIV, "id", "page" + page, CLASS, cssClass);
                 writer.writeRaw(page + ".");
                 writer.end();
             }

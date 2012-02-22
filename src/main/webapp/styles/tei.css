@@ -2,7 +2,7 @@
     max-width: 600px;
 }
 
-.tei .head{
+.tei .head {
     font-weight: bold;
     font-size: 1.2em;
     padding: 1em 0em;
@@ -25,7 +25,7 @@
     padding-left: 1.5em;        
 }
 
-.tei .speaker{
+.tei .speaker {
     /*font-weight: bold;*/
     color: #4040D0;
     font-style: italic;
@@ -90,21 +90,21 @@
     font-weight: bold;    	
 }
 
-.tei .titleStmt .title{
+.tei .titleStmt .title {
     /*font-weight: bold;*/
     font-size: 1.5em;
     text-align: center;
     padding: 0.5em;    
 }
 
-.tei .titleStmt .author{
+.tei .titleStmt .author {
     font-weight: bold;
     font-size: 1.2em;
     text-align: center;
     padding: 1em 0em;
 }    
 
-.tei .respStmt .resp{
+.tei .respStmt .resp {
     width: 10em;
     float: left;
     font-weight: bold;
@@ -114,11 +114,11 @@
     float: left;    
 }
 
-.tei .respStmt{
+.tei .respStmt {
     clear: both;
 }
 
-.tei .publicationStmt{
+.tei .publicationStmt {
     clear: both;
 }
 
@@ -151,6 +151,14 @@
     border-top: none !important;
 }
 
+.tei .page.ZTS {
+    color: orange;	
+}
+
+.tei .page.author, .tei .page.orig {
+    color: violet;	
+}
+
 .tei .p .page:before {
     content: "|";
 }
@@ -159,17 +167,17 @@
     content: "|";
 }
 
-.tei .pages li{
+.tei .pages li {
     display: block;
     float: left;
     padding: 0.3em;    
 }
 
-.tei .notes li{
+.tei .notes li {
     display: block;
 }    
 
-.tei .l{
+.tei .l {
     padding-left: 2.5em;    
 }    
 
