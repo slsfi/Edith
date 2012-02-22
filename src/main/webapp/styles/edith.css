@@ -1,6 +1,6 @@
 .content {
-	padding-left: 0.5em;
-	padding-right: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 
 }
 
@@ -16,7 +16,7 @@
 .ui-widget { font-size: 100% }
 .ui-accordion .ui-accordion-header a,
 .ui-accordion-content {
-	font-size: 100%;
+    font-size: 100%;
 }
 
 .ui-accordion-content, .ui-widget-content {
@@ -24,8 +24,8 @@
 }
 
 .ui-accordion .ui-accordion-header a {
-	font-family: verdana, serif;
-	background: #F3F3F3;
+    font-family: verdana, serif;
+    background: #F3F3F3;
 }
 
 .ui-state-default, .ui-state-hover { background: white }
@@ -48,7 +48,7 @@ ul.dynatree-container {
 #header { border-bottom: solid 2px rgb(240,240,240); background-color: white; position: relative; }
 
 #title-bar {
-	background-image: url('../images/application_title_bg.png');
+    background-image: url('../images/application_title_bg.png');
     background-repeat: repeat-x;
     color: white;
     padding: 22px;
@@ -59,12 +59,12 @@ ul.dynatree-container {
 #app-name { text-transform: uppercase; font-size: 1em }
 
 #top .content,#header .content {
-	padding-left: 2em;
+    padding-left: 2em;
 }
 
 #header .content {
-	font-size: 0.75em;
-	font-family: verdana, serif;
+    font-size: 0.75em;
+    font-family: verdana, serif;
 }
 
 #header a:link, #header a:visited,
@@ -98,7 +98,7 @@ ul.dynatree-container {
 
 
 #top .content {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 #center h3 {
@@ -114,90 +114,90 @@ ul.dynatree-container {
 
 
 #bottom .content {
-	font-size: 0.75em;
-	border-top: solid 1px #D0D0D0;
-	padding: 0.4em;
-	margin: 0.4em;
-	clear: both;
+    font-size: 0.75em;
+    border-top: solid 1px #D0D0D0;
+    padding: 0.4em;
+    margin: 0.4em;
+    clear: both;
 }
 
 #main form {
-	margin: 0 auto;
-	padding-bottom: 5px;
+    margin: 0 auto;
+    padding-bottom: 5px;
 }
 
 
 #homeLink,#top .title {
-	float: left;
+    float: left;
 }
 
 .dashboard li {
-	list-style-type: none;
-	display: inline;
-	font-weight: bold;
-	padding: 4px;
+    list-style-type: none;
+    display: inline;
+    font-weight: bold;
+    padding: 4px;
 }
 
 .dashboard li a {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 #top .title {
-	padding-top: 0.2em;
-	padding-left: 3em;
+    padding-top: 0.2em;
+    padding-left: 3em;
 }
 
 .searchbox {
-	width: 5em;
+    width: 5em;
 }
 
 a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .label {
-	width: 5em;
+    width: 5em;
 }
 
 label.left {
-	display: block;
-	width: 160px;
-	float: left;
+    display: block;
+    width: 160px;
+    float: left;
 }
 
 #header a {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 /*.actions {
-	margin-top: 1em;
+    margin-top: 1em;
 }*/
 .actions li {
-	display: inline;
-	border-left: 1px solid #444;
-	padding: 0 0.4em;
-	margin: 0;
+    display: inline;
+    border-left: 1px solid #444;
+    padding: 0 0.4em;
+    margin: 0;
 }
 
 .actions li:first-child {
-	border-left: 0;
-	padding-left: 0;
+    border-left: 0;
+    padding-left: 0;
 }
 
 .profile,.archive,.latest {
-	width: 15em;
+    width: 15em;
 }
 
 .articleform div.t-beaneditor-row label {
-	display: none;
+    display: none;
 }
 
 #bottom li {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 #bottom li a {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 /* Note search */
@@ -218,105 +218,105 @@ div.notes { /*margin-top: 1em; */ }
 
 /*
 table.t-data-grid {
-	font-size: 80%;
+    font-size: 80%;
 }
 
 table.searchresults  th {
-	text-align: left;
-	border-bottom: 2px solid black;
+    text-align: left;
+    border-bottom: 2px solid black;
 }
 
 table.searchresults td+td {
-	border-left: 1px solid #cccccc;
+    border-left: 1px solid #cccccc;
 }
 
 table.searchresults td {
-	border-bottom: 1px solid #999999;
-	padding: 0.2em;
+    border-bottom: 1px solid #999999;
+    padding: 0.2em;
 }
 
 */
 
 .msg {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 /**
 * Disabled link
 */
 a.disabled:link,a.disabled:visited,a.disabled:hover,a.disabled:active {
-	color: #919191;
+    color: #919191;
 }
 
 /*
 * Note edit box
 */
 div.note_edit {
-	margin-top: 1em;
+    margin-top: 1em;
 }
 
 /*
 * Content edited
 */
 .note_edit form {
-	clear: both;
+    clear: both;
 }
 
 .note_edit .edited {
-	color: #aa00cc;
+    color: #aa00cc;
 }
 
 .delete { /*float: right;*/
-	font-size: 80%;
+    font-size: 80%;
 }
 
 .disable_link {
-	text-decoration: none !important;
+    text-decoration: none !important;
 }
 
 .metadata {
-	float:right;
-	/*font-size: 0.8em;*/
+    float:right;
+    /*font-size: 0.8em;*/
 }
 
 #longTextEditLink {
-	/*font-size: 80%;*/
+    /*font-size: 80%;*/
 }
 
 .Initial:before {
-	content: "* ";
+    content: "* ";
 }
 
 #listZone {
-	/*overflow: auto;
-	height: 15em;*/
+    /*overflow: auto;
+    height: 15em;*/
 }
 
 .note_edit th {
-	text-align: left;
+    text-align: left;
 }
 
 .error {
-	font-weight: bold;
-	color: red;
+    font-weight: bold;
+    color: red;
 }
 
 #submit_success_info {
-	color: green;
-	float: right;
+    color: green;
+    float: right;
 }
 
 #create_success_info {
-	color: green;
-	float: right;
+    color: green;
+    float: right;
 }
 
 .top_links, .top_links span, #document_links, #document_links span {
-	margin: 5px;
+    margin: 5px;
 }
 
 #note_filters {
-	border-bottom: solid 1px #D0D0D0;
+    border-bottom: solid 1px #D0D0D0;
 }
 
 ul.notes li span, ul.notes li .notelink {
@@ -357,28 +357,29 @@ a.ELSEWHERE {
 }
 
 div.jqmWindow > div > h2 {
-	color: #FFF;
-	text-weight: normal;
-	font-size: 14px;
-	margin-bottom: 20px;
-	margin-top: 4px;
+    color: #FFF;
+    text-weight: normal;
+    font-size: 14px;
+    margin-bottom: 20px;
+    margin-top: 4px;
 }
 
 div.jqmWindow fieldset {
-	border-bottom: none;
-	margin-bottom: 0;
+    border-bottom: none;
+    margin-bottom: 0;
 }
 
 div.jqmWindow fieldset legend{
-	font-weight: bold;
+    font-weight: bold;
 }
+
 div.jqmWindow div.scrollable {
-	position: absolute;
-	overflow: auto;
-	top: 60px;
-	bottom: 50px;
-	left: 12px;
-	right: 12px;
+    position: absolute;
+    overflow: auto;
+    top: 60px;
+    bottom: 50px;
+    left: 12px;
+    right: 12px;
 }
 
 div.jqmWindow h3 {
@@ -387,13 +388,13 @@ div.jqmWindow h3 {
 }
 
 div.jqmWindow input {
-	width: 300px;
+    width: 300px;
 }
 
 div.jqmWindow button.save {
-	position: absolute;
-	bottom: 12px;
-	left: 12px;
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
 }
 
 button.jqmClose {
@@ -403,11 +404,11 @@ button.jqmClose {
 }
 
 .jqmOverlay {
-	background-color: #000;
+    background-color: #000;
 }
 
 #conceptsList a {
-	margin-left: 0.2em;
+    margin-left: 0.2em;
 }
 
 /**
@@ -438,9 +439,9 @@ ul.dynatree-container {
     margin-bottom: 1em;
 }
 .field > label {
-	font-weight: bold;
-	display: block;
-	margin-bottom: 3px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 3px;
 }
 
 /**
@@ -456,8 +457,8 @@ ul.dynatree-container {
 }
 
 #info-message .info {
-	background-color: green;
-	color: white;
+    background-color: green;
+    color: white;
 }
 
 #info-message .error {
@@ -529,28 +530,28 @@ textarea.wysiwyg {
 }
 
 .hidden {
-	display: none;
+    display: none;
 }
 
 fieldset.editor {
-	border: 4px solid #d3d3d3;
+    border: 4px solid #d3d3d3;
 }
 
 legend.editor {
-	background: #FFF;
-	font-size: 14pt;
+    background: #FFF;
+    font-size: 14pt;
 }
 
 .editor_label {
-	font-style: italic;
-	font-size: smaller;
-	margin-top: 4px;
-	margin-left: 8px;
+    font-style: italic;
+    font-size: smaller;
+    margin-top: 4px;
+    margin-left: 8px;
 }
 
 .editor_value {
-	margin-bottom: 4px;
-	margin-left: 8px;
+    margin-bottom: 4px;
+    margin-left: 8px;
 }
 
 div.edit-fields > div > h2.field-label,
@@ -568,10 +569,10 @@ div.edit-fields h2.field-label-2 {
 }
 
 div.edit-fields hr {
-	border: none;
-	clear: both;
-	padding: 0;
-	margin: 0;
+    border: none;
+    clear: both;
+    padding: 0;
+    margin: 0;
 }
 
 div.edit-fields h3.field-label {
@@ -589,4 +590,16 @@ div.edit-fields h3.field-label {
 div.edit-fields div.field-content {
     margin-left: 135px;
     margin-bottom: 0.5em;
+}
+
+span.italics {
+    font-style: italic;	
+}
+
+span.bold {
+    font-weight: bold;	
+}
+
+span.lb, span.l {
+    display: block;	
 }

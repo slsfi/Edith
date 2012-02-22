@@ -1,34 +1,34 @@
 .tei div.body {
-	max-width: 600px;
+    max-width: 600px;
 }
 .tei .head{
-	font-weight: bold;
-	font-size: 1.2em;
-	padding: 1em 0em;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 1em 0em;
 }
 
 .tei .speaker{
-	/*font-weight: bold;*/
-	color: #4040D0;
-	font-style: italic;
+    /*font-weight: bold;*/
+    color: #4040D0;
+    font-style: italic;
 }
 
 .tei .stage {
-	font-style: italic;
+    font-style: italic;
 }
 
 .tei .orig, .tei .sic {
-	font-style: italic;
-	color: #D0D0D0;
+    font-style: italic;
+    color: #D0D0D0;
 }
 
 .tei .sp{
-	padding: 0.25em 0;
+    padding: 0.25em 0;
 }
 
 .tei .sp .speaker {
-	padding-right: 0.25em;	
-}	
+    padding-right: 0.25em;    
+}    
 
 .tei .p {
     display: block;
@@ -36,80 +36,80 @@
 }
 
 .tei .listBibl{
-	border: dotted 1px gray;
+    border: dotted 1px gray;
 }
 
 .tei .titleStmt .title{
-	/*font-weight: bold;*/
-	font-size: 1.5em;
-	text-align: center;
-	padding: 0.5em;	
+    /*font-weight: bold;*/
+    font-size: 1.5em;
+    text-align: center;
+    padding: 0.5em;    
 }
 
 .tei .titleStmt .author{
-	font-weight: bold;
-	font-size: 1.2em;
-	text-align: center;
-	padding: 1em 0em;
-}	
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+    padding: 1em 0em;
+}    
 
 .tei .respStmt .resp{
-	width: 10em;
-	float: left;
-	font-weight: bold;
+    width: 10em;
+    float: left;
+    font-weight: bold;
 }
 
 .tei .respStmt .name {
-	float: left;	
+    float: left;    
 }
 
 .tei .respStmt{
-	clear: both;
+    clear: both;
 }
 
 .tei .publicationStmt{
-	clear: both;
+    clear: both;
 }
 
 .tei .editionStmt .edition {
-	font-weight: bold;
-	font-size: 1.2em;
-	padding-bottom: 0.5em;		
+    font-weight: bold;
+    font-size: 1.2em;
+    padding-bottom: 0.5em;        
 }
 
 .tei .page {
     text-align: center;
     font-weight: bold;
-    /*display: inline;*/	
+    /*display: inline;*/    
     padding: 0.5em;
-	border-top: dotted 1px gray;
+    border-top: dotted 1px gray;
 }
 
 .tei .p .page {
-	display: inline;
-	padding: 0px !important;
-	border-top: none !important;
+    display: inline;
+    padding: 0px !important;
+    border-top: none !important;
 }
 .tei .p .page:before {
-	content: "|";
+    content: "|";
 }
 .tei .p .page:after {
-	content: "|";
+    content: "|";
 }
 
 .tei .pages li{
-	display: block;
-	float: left;
-	padding: 0.3em;	
+    display: block;
+    float: left;
+    padding: 0.3em;    
 }
 
 .tei .notes li{
-	display: block;
-}	
+    display: block;
+}    
 
 .tei .l{
-	padding-left: 2.5em;	
-}	
+    padding-left: 2.5em;    
+}    
 
 .tei .actor, 
 .tei .camera, 
@@ -150,50 +150,50 @@
 .tei .rs,
 .tei .cell
 {
-	display: inline;	
-}	
+    display: inline;    
+}    
 
 .tei .notecontent{
-	color: #990202;	
+    color: #990202;    
 }
 
 /*.tei .notecontent:hover{
-	border-bottom: solid 2px;
+    border-bottom: solid 2px;
 }*/
 
 .underline {
-	border-bottom: solid 2px;
+    border-bottom: solid 2px;
 }
 
 .tei .noteanchor{
-	color: #020299;	
-	cursor: pointer;
+    color: #020299;    
+    cursor: pointer;
 }
 
 .tei .hi, .tei .emph {
-	font-style: italic;
+    font-style: italic;
 }
 
 .tei .unclear {
-	color: #494949;
-	font-style: italic;
+    color: #494949;
+    font-style: italic;
 }
 
 .tei .del {
-	text-decoration: line-through;
+    text-decoration: line-through;
 }
 
 .tei .gap:before {
-	color: #494949;
-	content: "[oläsligt]";
+    color: #494949;
+    content: "[oläsligt]";
 }
 
 .tei .cell {
-	margin-right: 15px;
+    margin-right: 15px;
 }
 
 .tei .list .item {
-	display: block;
+    display: block;
 }
 
 
@@ -203,7 +203,7 @@
 }
 
 .persName {
-	background-color: #E5BB71;
+    background-color: #E5BB71;
 }
 
 .foreign {

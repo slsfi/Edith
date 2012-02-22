@@ -23,3 +23,17 @@ ol,ul,dl
 	/* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
     padding:0 40px;
 }
+
+/* additional styles */
+
+span.italics {
+    font-style: italic; 
+}
+
+span.bold {
+    font-weight: bold;  
+}
+
+span.lb, span.l {
+    display: block;     
+}
