@@ -13,8 +13,15 @@
     
     <p>&nbsp;</p> <!-- spacer -->    
     <h3>${message:notes}</h3>
-    <t:note.view documentNotes="documentNotes"/>
-
+    
+    <ol>
+    <t:loop source="documentNotes" value="documentNote">
+        <li>
+            <em>${shortForm}</em> – <t:outputraw value="description"/>    
+        </li>
+    </t:loop>
+    </ol>
+    
   </body>
   
 </html>

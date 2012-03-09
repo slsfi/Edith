@@ -10,7 +10,9 @@ import java.util.List;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 
+import fi.finlit.edith.EDITH;
 import fi.finlit.edith.sql.domain.DocumentNote;
 import fi.finlit.edith.ui.services.DocumentNoteDao;
 
@@ -30,9 +32,26 @@ public class Print extends AbstractDocumentPage{
 
     @Property
     private List<DocumentNote> documentNotes;
-
+    
+    @Inject
+    @Symbol(EDITH.EXTENDED_TERM)
+    private boolean slsMode;
+    
     void setupRender() {
         documentNotes = documentNoteRepository.getOfDocument(getDocument());
+        // TODO : order by occurrence
+    }
+    
+    public String getShortForm() {
+        if (slsMode) {
+            return documentNote.getShortenedSelection();    
+        } else {
+            return documentNote.getNote().getLemma();
+        }        
+    }
+    
+    public String getDescription() {
+        return documentNote.getNote().getDescription();
     }
 
 }
