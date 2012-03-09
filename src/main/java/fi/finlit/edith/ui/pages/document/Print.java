@@ -39,7 +39,6 @@ public class Print extends AbstractDocumentPage{
     
     void setupRender() {
         documentNotes = documentNoteRepository.getOfDocument(getDocument());
-        // TODO : order by occurrence
     }
     
     public String getShortForm() {

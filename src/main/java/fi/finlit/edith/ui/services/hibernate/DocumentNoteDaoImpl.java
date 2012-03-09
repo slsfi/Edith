@@ -39,7 +39,7 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements
                         // FIXME: Commented out, is good?
 //                       documentNote.revision.loe(),
                        documentNote.deleted.eq(false))
-                .orderBy(documentNote.createdOn.asc()).list(documentNote);
+                .orderBy(documentNote.position.asc()).list(documentNote);
     }
 
     @Override

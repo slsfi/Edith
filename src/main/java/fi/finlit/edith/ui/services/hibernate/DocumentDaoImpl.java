@@ -242,8 +242,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             while (reader.hasNext()) {
                 boolean handled = false;
                 XMLEvent event = reader.nextEvent();
-                if (event.isStartElement()) {
-                    position.increment();
+                if (event.isStartElement()) {                   
                     context.push(extractName(event.asStartElement()));
                     if (buffering && !matched.areBothMatched()) {
                         handled = true;
@@ -264,7 +263,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                                     tempContext.pop();
                                 }
                             }
-                            flush(writer, endStrings.toString(), sel, events, tempContext, matched,
+                            flush(writer, position, endStrings.toString(), sel, events, tempContext, matched,
                                     localId, endOffset);
                             allStrings = new StringBuilder();
                             events.clear();
@@ -281,7 +280,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                                     tempContext.pop();
                                 }
                             }
-                            flush(writer, startStrings.toString(), sel, events, tempContext,
+                            flush(writer, position, startStrings.toString(), sel, events, tempContext,
                                     matched, localId, endOffset);
                             allStrings = new StringBuilder();
                             events.clear();
@@ -296,7 +295,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                         startedBuffering = true;
                     }
                 } else if (event.isCharacters()) {
-                    position.increment();
                     if (buffering && !matched.areBothMatched()) {
                         events.add(event);
                         handled = true;
@@ -308,10 +306,14 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                             allStrings.append(event.asCharacters().getData());
                         }
                     }
+                    
+                    if (!buffering) {
+                        position.add(event.asCharacters().getData().length());
+                    }
+                    
                 } else if (event.isEndElement()) {
-                    position.increment();
                     if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
-                        flush(writer, !matched.isStartMatched() ? allStrings.toString()
+                        flush(writer, position, !matched.isStartMatched() ? allStrings.toString()
                                 : endStrings.toString(), sel, events, context, matched, localId,
                                 endOffset);
                         buffering = false;
@@ -368,7 +370,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         return index;
     }
 
-    private void flush(XMLEventWriter writer, String string, SelectedText sel,
+    private void flush(XMLEventWriter writer, MutableInt position, String string, SelectedText sel,
             List<XMLEvent> events, ElementContext context, Matched matched, Long localId,
             MutableInt endOffset) throws XMLStreamException {
         String startAnchor = "start" + localId;
@@ -397,6 +399,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                 }
                 if (context.equalsAny(sel.getStartId()) && !matched.isStartMatched()
                         && startIndex <= offset) {
+                    position.add(relativeStart);                    
                     writer.add(eventFactory.createCharacters(eventString
                             .substring(0, relativeStart)));
                     writeAnchor(writer, startAnchor);
@@ -432,6 +435,10 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                 }
             }
             if (!handled) {
+                if (e.isCharacters() && !matched.isStartMatched()) {
+                    position.add(e.asCharacters().getData().length());
+                }
+                
                 writer.add(e);
             }
         }
