@@ -1,42 +1,45 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter">
+    xmlns:p="tapestry:parameter">
 
-	<p:title>${document.title}</p:title>
+    <p:title>${document.title}</p:title>
 
-	<div class="content">
-		<t:zone t:id="documentZone" update="show">
-			<t:delegate to="documentView" />
-		</t:zone>
-		<t:block t:id="documentView">
-			<t:document.view document="document"/>
-		</t:block>
-	</div>
+    <div class="content">
+        <t:zone t:id="documentZone" update="show">
+            <t:delegate to="documentView" />
+        </t:zone>
+        <t:block t:id="documentView">
+            <t:document.view document="document"/>
+        </t:block>
+    </div>
 
-	<p:leftPanel>
-	   <ul class="actions">
+    <p:leftPanel>
+       <ul class="actions">
           <li>${message:to-annotate-document}</li>
-		     <li><a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:to-view-document}</a></li>
-		     <li><t:pagelink page="document/print" t:context="[document.id]">${message:printVersion}</t:pagelink></li>
-		     <li><t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink></li>
+             <li><a t:type="pageLink" t:page="document/view" t:context="${document.id}">${message:to-view-document}</a></li>
+             <li><t:pagelink page="document/print" t:context="[document.id]">${message:printVersion}</t:pagelink></li>
+             <li><t:pagelink page="document/publish" t:context="document.id">${message:publishVersion}</t:pagelink></li>
          <li><t:pagelink page="document/rawdocument" t:context="document.id">${message:rawVersion}</t:pagelink></li>
        </ul>
        <ul class="actions">
-		 <li><a id="createTermLink" class="disabled" href="#">${message:createNote}</a></li>
+         <li><a id="createTermLink" class="disabled" href="#">${message:createNote}</a></li>
          <li><a id="connectTermLink" class="disabled" href="#">${message:connectNote}</a></li>
-		 <t:if test="!slsMode">
+         <t:if test="!slsMode">
            <li><t:eventlink t:event="createTerm" t:zone="dialogZone" class="jqmOpen">${message:createTerm}</t:eventlink></li>
-		   <li><t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink></li>
+           <li><t:eventlink t:event="createPerson" t:zone="dialogZone" class="jqmOpen">${message:createPerson}</t:eventlink></li>
            <li><t:eventlink t:event="createPlace" t:zone="dialogZone" class="jqmOpen">${message:createPlace}</t:eventlink></li>
          </t:if>
        </ul>
        <div id="document-path">${documentPath}</div>
-	</p:leftPanel>
+    </p:leftPanel>
 
-	<p:rightPanel>
+    <p:rightPanel>
 
-	<script type="text/javascript">
-	   var AccordionState = {
-	     saveState : function(event, ui) {
+    <script type="text/javascript">
+       var AccordionState = {
+         saveState : function(event, ui) {
+             /*var accordions = jQuery("#right");
+             accordions.scrollTop(accordions.height());*/
+        	 
              var id = jQuery(this).attr("id");
              var state = jQuery(this).accordion("option", "active");
              if (state === false) {
@@ -52,179 +55,178 @@
                 jQuery(this).accordion("option", "active", 0);
              }
          }
-	   };
+       };
 
 
 
-	   jQuery(function() {
+       jQuery(function() {
 
-	     jQuery('#documentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
-	    	 create: AccordionState.loadState, change: AccordionState.saveState});
-	     jQuery('#searchAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
-	    	 create: AccordionState.loadState, change: AccordionState.saveState });
-		 jQuery('#searchResultsAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
-			 create: AccordionState.loadState, change: AccordionState.saveState });
-		 jQuery('#instancesAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
-			 create: AccordionState.loadState, change: AccordionState.saveState });
-		 jQuery('#editAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
-			 create: AccordionState.loadState, change: AccordionState.saveState });
+         jQuery('#documentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
+             create: AccordionState.loadState, change: AccordionState.saveState});
+         jQuery('#searchAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
+             create: AccordionState.loadState, change: AccordionState.saveState });
+         jQuery('#searchResultsAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
+             create: AccordionState.loadState, change: AccordionState.saveState });
+         jQuery('#instancesAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
+             create: AccordionState.loadState, change: AccordionState.saveState });
+         jQuery('#editAccordion').accordion({ collapsible: true, active: false, clearStyle:true,
+             create: AccordionState.loadState, change: AccordionState.saveState });
 
-		 (function($) {
-		   
-		   var visualizeNode = function(node) {
-		     if (node.data.isSelected) {
-		       node.select(true);
-		     }
-		   }
-		   
-	     $('#to_annotate').click(function(e) {
-	       e.preventDefault();
-	       var node = $("#directory-tree").dynatree("getActiveNode");
-	       if (node != null) {
-	         window.location.href = node.data.documentId;
-	       }
-	     });
+         (function($) {
+           
+           var visualizeNode = function(node) {
+             if (node.data.isSelected) {
+               node.select(true);
+             }
+           }
+           
+         $('#to_annotate').click(function(e) {
+           e.preventDefault();
+           var node = $("#directory-tree").dynatree("getActiveNode");
+           if (node != null) {
+             window.location.href = node.data.documentId;
+           }
+         });
 
-		   jQuery('#directory-tree').dynatree({
-	       initAjax: {
-	         url: '${documentsAjaxURL}:json',
-	         data: {
-	           id: '${document.id}'
-	         }
-	       },
+           jQuery('#directory-tree').dynatree({
+           initAjax: {
+             url: '${documentsAjaxURL}:json',
+             data: {
+               id: '${document.id}'
+             }
+           },
 
-	       onDblClick: function(node, event) {
-	         if (!node.data.isFolder) {
-	           window.location.href = node.data.documentId;
-	         }
-	       },
+           onDblClick: function(node, event) {
+             if (!node.data.isFolder) {
+               window.location.href = node.data.documentId;
+             }
+           },
 
-	       onActivate: function(node) {
-	         if (node.data.isFolder) {
-	           $('#to_annotate').addClass('disabled');
-	         } else {
-	           $('#to_annotate').removeClass('disabled');
-	         }
-	       },
+           onActivate: function(node) {
+             if (node.data.isFolder) {
+               $('#to_annotate').addClass('disabled');
+             } else {
+               $('#to_annotate').removeClass('disabled');
+             }
+           },
 
-	       onLazyRead: function(node) {
-	         node.appendAjax({
-	           url: '${documentsAjaxURL}:json/',
-	           data: {
-	             path: node.data.path,
-	             id: '${document.id}'
-	           },
+           onLazyRead: function(node) {
+             node.appendAjax({
+               url: '${documentsAjaxURL}:json/',
+               data: {
+                 path: node.data.path,
+                 id: '${document.id}'
+               },
 
-	           success: function(node) {
-	             node.visit(visualizeNode);
-	           }
-	         });
-	       },
+               success: function(node) {
+                 node.visit(visualizeNode);
+               }
+             });
+           },
 
-	       onPostInit: function(isReloading, isError) {
-	         this.visit(visualizeNode);
-	       },
+           onPostInit: function(isReloading, isError) {
+             this.visit(visualizeNode);
+           },
 
-	       onSelect: function(flag, node) {
-	         
-	         //Folder select always clears child selects
+           onSelect: function(flag, node) {
+             
+             //Folder select always clears child selects
              if (node.data.isFolder) {           
                node.visit(function(child) {
-            	   if(!child.isActive())
-            		   child._select(false, false, false);
+                   if(!child.isActive())
+                       child._select(false, false, false);
                });
              } 
-          	//Child select always clears parent select
-          	node.visitParents(function(parent) {
-          		if(!parent.isActive())
-          			  parent._select(false, false, false)
-          	})
+              //Child select always clears parent select
+              node.visitParents(function(parent) {
+                  if(!parent.isActive())
+                        parent._select(false, false, false)
+              })
              
-            	 
-	       },
+                 
+           },
 
-	       checkbox: true
-		   });
+           checkbox: true
+           });
 
-		   $('#noteSearchFormSubmit').click(function() {
-		     var selectedNodes = $("#directory-tree").dynatree("getSelectedNodes")
-		     var documentIds = $.map(selectedNodes, function(node){
-		    	 return node.data.isFolder ? null : node.data.documentId
-		      })
-		     var paths = $.map(selectedNodes, function(node) {
-		    	 return node.data.isFolder ? node.data.path : null
-		     })
-		     
-		     //Always add current document
-		     documentIds.push('${document.id}')
+           $('#noteSearchFormSubmit').click(function() {
+             var selectedNodes = $("#directory-tree").dynatree("getSelectedNodes")
+             var documentIds = $.map(selectedNodes, function(node){
+                 return node.data.isFolder ? null : node.data.documentId
+              })
+             var paths = $.map(selectedNodes, function(node) {
+                 return node.data.isFolder ? node.data.path : null
+             })
+             
+             //Always add current document
+             documentIds.push('${document.id}')
 
-		     //console.log("documentids " + documentIds)
-		     //console.log("paths " + paths)
+             //console.log("documentids " + documentIds)
+             //console.log("paths " + paths)
 
-		     $('#noteSearchForm #documents').val(documentIds.join(','));
-		     $('#noteSearchForm #paths').val(paths.join(','));
-		     
-		   });
+             $('#noteSearchForm #documents').val(documentIds.join(','));
+             $('#noteSearchForm #paths').val(paths.join(','));
+             
+           });
 
-		 })(jQuery);
+         })(jQuery);
 
-	   });
-	</script>
-
+       });
+    </script>
 
 	<div id="documentsAccordion">
-        <h5><a href="#">${message:search-from-documents}</a></h5>
-        <div>
-          <span><a id="to_annotate" href="#" class="disabled">${message:to-annotate-document}</a></span>
-          <div id="directory-tree"/>
-        </div>
-    </div>
-    <div id="searchAccordion">
-        <h3><a href="#">${message:notesearch}</a></h3>
-        <div>
-            <t:note.noteSearchForm />
-        </div>
-    </div>
+	    <h5><a href="#">${message:search-from-documents}</a></h5>
+	    <div>
+	      <span><a id="to_annotate" href="#" class="disabled">${message:to-annotate-document}</a></span>
+	      <div id="directory-tree"/>
+	    </div>
+	</div>
+	
+	<div id="searchAccordion">
+	    <h3><a href="#">${message:notesearch}</a></h3>
+	    <div>
+	        <t:note.noteSearchForm />
+	    </div>
+	</div>
+	
 	<div id="searchResultsAccordion">
-        <h3><a href="#">${message:notesearchresults}</a></h3>
-        <div>
-            <t:note.searchResults />
-        </div>
-    </div>
-    <div id="instancesAccordion">
-        <h3><a href="#">${message:document-notes}</a></h3>
-        <div>
-
-            <t:note.documentNotes />
-
-            <t:remove>
-            <!-- This is going to be replaced with *** model -->
+	    <h3><a href="#">${message:notesearchresults}</a></h3>
+	    <div>
+	        <t:note.searchResults />
+	    </div>
+	</div>
+	
+	<div id="instancesAccordion">
+	    <h3><a href="#">${message:document-notes}</a></h3>
+	    <div>
+	
+	        <t:note.documentNotes />
+	
+	        <t:remove>
+	        <!-- This is going to be replaced with *** model -->
 	        <t:if test="moreThanOneSelectable">
-	           <h3>${message:selectNote}</h3>
-	           <ul class="notes">
-
-	               <t:loop source="selectedNotes" value="note">
-	                   <li>
-	                       <t:eventlink t:event="edit" context="e${note.id}" t:zone="editZone" class="notelink">
-	                           <em>${note.note.lemma}</em>
-	                       </t:eventlink>
-	                   </li>
-	               </t:loop>
-	           </ul>
-	        </t:if>
-            </t:remove>
+	          <h3>${message:selectNote}</h3>
+	          <ul class="notes">
+	              <t:loop source="selectedNotes" value="note">
+	                  <li>
+	                      <t:eventlink t:event="edit" context="e${note.id}" t:zone="editZone" class="notelink">
+	                          <em>${note.note.lemma}</em>
+	                      </t:eventlink>
+	                  </li>
+	              </t:loop>
+	          </ul>
+	      </t:if>
+	      </t:remove>
+	  </div>
         </div>
-    </div>
-
+	
 	<div id="editAccordion">
-        <h3><a href="#">${message:noteEdit}</a></h3>
-        <div>
-
-          <t:note.noteEdit />
-
-        </div>
-    </div>
-
+	    <h3><a href="#">${message:noteEdit}</a></h3>
+	    <div>
+	      <t:note.noteEdit />
+	    </div>
+	</div>
+    
     <t:form t:id="createTermForm" t:zone="listZone">
        <t:hidden t:id="selectedText_1" value="createTermSelection.selection" />
        <t:hidden t:id="selectedStartId_1" value="createTermSelection.startId" />
@@ -246,11 +248,11 @@
         <t:hidden t:id="selectedNoteId" value="selectedNoteId" />
     </t:form>
 
-	<t:block id="emptyBlock">
-		<span />
-	</t:block>
+    <t:block id="emptyBlock">
+        <span />
+    </t:block>
 
-	</p:rightPanel>
+    </p:rightPanel>
 
     <t:infoMessage />
 
@@ -289,10 +291,10 @@
         <t:note.termForm closeDialog="closeDialog"/>
     </t:block>
 
-	<script type="text/javascript">
-		var l10n = new Array();
-		l10n.invalidSelection = "${message:invalid-selection-error}";
-	</script>
+    <script type="text/javascript">
+        var l10n = new Array();
+        l10n.invalidSelection = "${message:invalid-selection-error}";
+    </script>
 
 
 </html>

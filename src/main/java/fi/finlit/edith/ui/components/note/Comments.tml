@@ -6,7 +6,14 @@
         <script type="text/javascript">
               
               jQuery(function() {
-                  jQuery('#commentsAccordion').accordion({ collapsible: true, active: false, clearStyle:true });
+            	  
+            	  var change = function() {
+                    var accordions = jQuery("#right");
+                    accordions.scrollTop(accordions.height());
+            	  }
+            	  
+                  jQuery('#commentsAccordion').accordion(
+                    { collapsible: true, active: false, clearStyle:true, change: change });
                   
                   //Empty values need to be filled, otherwise the page
                   //will jump on load
