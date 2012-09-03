@@ -62,7 +62,7 @@ var Annotate = {
     	//Remove all CKEditor instances
   	  for(var i in CKEDITOR.instances) {
   		  try {
-  			  CKEDITOR.instances[i].destroy();
+  			  CKEDITOR.instances[i].destroy(true);
   		  }catch(e) {
   			  alert("Got exception " + e);
   		  }
