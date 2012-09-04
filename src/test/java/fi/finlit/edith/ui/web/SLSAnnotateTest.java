@@ -31,7 +31,7 @@ public class SLSAnnotateTest extends AbstractSeleniumTest {
 
         assertTitleNot("Application Exception");
         assertContainsText("Kommentarvy");
-        assertLink("Textvy");
+        assertLink("Printvy");
         assertLink("Publiceringsvy");
     }
 
