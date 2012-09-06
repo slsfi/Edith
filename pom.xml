@@ -16,6 +16,7 @@
   <description></description>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <extraResources>src/main/resources</extraResources>
 
     <failIfNoTests>false</failIfNoTests>
