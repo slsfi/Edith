@@ -1,10 +1,18 @@
 SLS INSTALLATION
 
-WEB :
+SLS Edith palvelimen julkinen IP on 194.100.126.140,
+tunnus timo / annotaatio.
+
+Alla ovat palvelimen tiedot. Mavenissa SLS build tehdään
+sls profiililla, sitten ylikirjoitat kohdepalvelimen
+/opt/jetty/webapps/edith.war tiedoston ja
+uudelleenkäynnistät jettyn (sudo service jetty restart).
+
+WEB:
 
 http://192.168.0.8:8080/edith
 
-DIRS :
+DIRS:
 
 SVN repository dir : /opt/svn/edith
 SVN cache dir      : /opt/svn/cache
@@ -12,7 +20,7 @@ RDF metadata dir   : /opt/rdfbean/edith
 Published docs     : /opt/published
 Jetty              : /opt/jetty
 
-USERS :
+USERS:
 
 kylander
 asp
