@@ -291,6 +291,19 @@
               </systemPropertyVariables>
             </configuration>
           </plugin>
+          <plugin>
+            <groupId>org.dbmaintain</groupId>
+            <artifactId>dbmaintain-maven-plugin</artifactId>                    
+            <executions>
+              <execution>
+                <id>updateDatabase</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>updateDatabase</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>          
         </plugins>
       </build>
     </profile>
@@ -390,8 +403,8 @@
       </plugin>
       <plugin>
         <groupId>com.mysema.maven</groupId>
-        <artifactId>maven-apt-plugin</artifactId>
-        <version>1.0</version>
+        <artifactId>apt-maven-plugin</artifactId>
+        <version>1.0.4</version>
         <executions>
           <execution>
             <goals>
@@ -422,15 +435,6 @@
           <autoCreateDbMaintainScriptsTable>true</autoCreateDbMaintainScriptsTable>
           <fromScratchEnabled>${dbmaintain.fromScratchEnabled}</fromScratchEnabled>
         </configuration>
-        <executions>
-            <execution>
-                <id>updateDatabase</id>
-                <phase>generate-sources</phase>
-                <goals>
-                    <goal>updateDatabase</goal>
-                </goals>
-            </execution>
-        </executions>        
         <dependencies>
           <dependency>
             <groupId>mysql</groupId>
