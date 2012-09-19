@@ -13,11 +13,14 @@ import com.mysema.commons.lang.Assert;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.QDocumentNote;
 import com.mysema.edith.domain.User;
 
 @Transactional
 public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements DocumentNoteDao {
 
+    private static final QDocumentNote documentNote = QDocumentNote.documentNote;
+    
     private final UserDao userDao;
 
     @Inject
@@ -27,7 +30,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public List<DocumentNote> getOfDocument(Document document) {
-        Assert.notNull(document, "document");
         return query().from(documentNote).where(documentNote.document.eq(document),
         // FIXME: Commented out, is good?
         // documentNote.revision.loe(),
@@ -43,11 +45,18 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
                 documentNote.deleted.isFalse(), documentNote.publishable.isTrue())
                 .orderBy(documentNote.position.asc()).list(documentNote);
     }
+    
+    @Override
+    public void remove(Long id) {
+        DocumentNote docNote = find(DocumentNote.class, id);
+        if (docNote != null) {
+            remove(docNote);
+        }
+    }
 
     @Override
     // XXX This is not really used anywhere?
     public void remove(DocumentNote docNote) {
-        Assert.notNull(docNote, "note was null");
         // XXX What was the point in having .createCopy?
         docNote.setDeleted(true);
         docNote.getNote().decDocumentNoteCount();
@@ -78,7 +87,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public List<DocumentNote> getOfNote(Long noteId) {
-        Assert.notNull(noteId, "noteId");
         return query().from(documentNote)
                 .where(documentNote.note.id.eq(noteId), documentNote.deleted.isFalse())
                 .list(documentNote);
@@ -97,7 +105,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public List<DocumentNote> getOfTerm(Long termId) {
-        Assert.notNull(termId, "termId");
         return query().from(documentNote)
                 .where(documentNote.note.term.id.eq(termId), documentNote.deleted.isFalse())
                 .list(documentNote);
@@ -105,7 +112,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public List<DocumentNote> getOfPerson(Long personId) {
-        Assert.notNull(personId, "personId");
         return query().from(documentNote)
                 .where(documentNote.note.person.id.eq(personId), documentNote.deleted.isFalse())
                 .list(documentNote);
@@ -113,7 +119,6 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public List<DocumentNote> getOfPlace(Long placeId) {
-        Assert.notNull(placeId, "placeId");
         return query().from(documentNote)
                 .where(documentNote.note.place.id.eq(placeId), documentNote.deleted.isFalse())
                 .list(documentNote);
@@ -121,7 +126,7 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public DocumentNote getById(Long id) {
-        return (DocumentNote) getEntityManager().find(DocumentNote.class, id);
+        return find(DocumentNote.class, id);
     }
 
 }

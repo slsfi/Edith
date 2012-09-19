@@ -4,16 +4,20 @@ import java.util.Collection;
 
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Person;
+import com.mysema.edith.domain.QPerson;
 
 @Transactional
 public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
+    private static final QPerson person = QPerson.person;
+    
     @Override
     public Collection<Person> findByStartOfFirstAndLastName(String partial, int limit) {
         return query()
                 .from(person)
                 .where(person.normalized.first.startsWithIgnoreCase(partial).or(
-                        person.normalized.last.startsWithIgnoreCase(partial))).limit(limit)
+                       person.normalized.last.startsWithIgnoreCase(partial)))
+                .limit(limit)
                 .list(person);
     }
 
@@ -22,13 +26,13 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
         // FIXME: Hibernatify!
         Person entity = getById(personId);
         if (entity != null) {
-            getEntityManager().remove(entity);
+            remove(entity);
         }
     }
 
     @Override
     public void save(Person person) {
-        getEntityManager().persist(person);
+        persist(person);
     }
 
     @Override

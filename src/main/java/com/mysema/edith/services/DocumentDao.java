@@ -130,4 +130,9 @@ public interface DocumentDao extends Dao<Document, Long> {
      * @return
      */
     List<FileItemWithDocumentId> fromPath(String path, Long id);
+    
+    /**
+     * @param doc
+     */
+    void save(Document doc);
 }

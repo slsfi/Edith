@@ -13,6 +13,11 @@ import com.mysema.edith.domain.Note;
 public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
 
     /**
+     * @param id
+     */
+    void remove(Long id);
+    
+    /**
      * @param docNote
      */
     void remove(DocumentNote docNote);

@@ -36,6 +36,10 @@ import com.mysema.query.types.path.StringPath;
 @Transactional
 public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
+    private static final QNote note = QNote.note;
+    
+    private static final QDocumentNote documentNote = QDocumentNote.documentNote;
+    
     private static final class LoopContext {
         private Note note;
         private String text;
@@ -69,7 +73,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     @Override
     public Note getById(Long id) {
-        return (Note) getEntityManager().find(Note.class, id);
+        return find(Note.class, id);
     }
 
     @Override
@@ -77,7 +81,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         NoteComment comment = new NoteComment(note, message, authService.getUsername());
         note.addComment(comment);
         comment.setCreatedAt(new DateTime());
-        getEntityManager().persist(comment);
+        persist(comment);
         return comment;
     }
 
@@ -266,9 +270,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         documentNote.setNote(n);
         n.incDocumentNoteCount();
         documentNote.setPosition(position);
-        getEntityManager().persist(n);
-        getEntityManager().persist(documentNote);
-
+        persist(n);
+        persist(documentNote);
         return documentNote;
     }
 
@@ -422,21 +425,29 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     @Override
     public NoteComment removeComment(Long commentId) {
         // FIXME: Do differently with Hibernate!
-        NoteComment comment = (NoteComment) getEntityManager().find(NoteComment.class, commentId);
-        getEntityManager().remove(comment);
+        NoteComment comment = find(NoteComment.class, commentId);
+        remove(comment);
         comment.getNote().removeComment(comment);
         return comment;
     }
 
     @Override
     public void save(Note note) {
-        getEntityManager().persist(note);
+        persist(note);
     }
 
     @Override
     public void remove(Note note) {
         note.setDeleted(true);
         save(note);
+    }
+    
+    @Override
+    public void remove(Long id) {
+        Note note = find(Note.class, id);
+        if (note != null) {
+            remove(note);    
+        }        
     }
 
     @Override
@@ -448,11 +459,12 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     @Override
     public void saveAsNew(Note note) {
-        EntityManager em = getEntityManager();
-        em.unwrap(Session.class).evict(note);
+//        EntityManager em = getEntityManager();
+//        em.unwrap(Session.class).evict(note);
+        evict(note);
         note.setId(null);
         note.setDocumentNoteCount(0);
-        em.persist(note);
+        persist(note);
     }
 
 }

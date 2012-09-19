@@ -62,6 +62,10 @@ import com.mysema.query.jpa.impl.JPADeleteClause;
 @Transactional
 public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDao {
 
+    private static final QDocument document = QDocument.document;
+    
+    private static final QDocumentNote documentNote = QDocumentNote.documentNote;
+    
     private static final Logger logger = LoggerFactory.getLogger(DocumentDaoImpl.class);
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
@@ -143,7 +147,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     @Override
     public DocumentNote addNote(Note note, Document document, final SelectedText selection) {
         final DocumentNote documentNote = new DocumentNote();
-        getEntityManager().persist(documentNote);
+        persist(documentNote);
         final MutableInt position = new MutableInt(0);
         versioningService.commit(document.getPath(), -1, authService.getUsername(),
                 new UpdateCallback() {
@@ -449,13 +453,11 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public Document getDocumentForPath(String svnPath) {
-        Assert.notNull(svnPath, "svnPath was null");
         return getDocumentMetadata(svnPath);
     }
 
     @Override
     public List<Document> getDocumentsOfFolder(String svnFolder) {
-        Assert.notNull(svnFolder, "svnFolder was null");
         Map<String, String> entries = versioningService.getEntries(svnFolder, /* HEAD */-1);
         List<Document> documents = new ArrayList<Document>(entries.size());
         for (String path : entries.keySet()) {
@@ -477,13 +479,12 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         Document doc = new Document();
         doc.setPath(path);
         doc.setTitle(title);
-        getEntityManager().persist(doc);
+        persist(doc);
         return doc;
     }
 
     @Override
     public InputStream getDocumentStream(Document document) throws IOException {
-        Assert.notNull(document, "document was null");
         return versioningService.getStream(document.getPath(), -1);
     }
 
@@ -575,8 +576,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                         }
                     }
                 });
-        DocumentNote fetchedDocumentNote = (DocumentNote) getEntityManager().find(
-                DocumentNote.class, documentNote.getId());
+        DocumentNote fetchedDocumentNote = find(DocumentNote.class, documentNote.getId());
         fetchedDocumentNote.setFullSelection(selection.getSelection());
         fetchedDocumentNote.setRevision(newRevision);
         fetchedDocumentNote.setPosition(position.intValue());
@@ -585,18 +585,17 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public void remove(Document doc) {
-        Assert.notNull(doc, "document was null");
-
         versioningService.delete(doc.getPath());
-        new JPADeleteClause(getEntityManager(), documentNote).where(documentNote.document.eq(doc))
-                .execute();
-        getEntityManager().remove(doc);
+        delete(documentNote).where(documentNote.document.eq(doc)).execute();
+        remove(doc);
     }
 
     @Override
     public void remove(Long id) {
-        Document document = (Document) getEntityManager().find(Document.class, id);
-        remove(document);
+        Document document = find(Document.class, id);
+        if (document != null) {
+            remove(document);    
+        }        
     }
 
     @Override
@@ -621,6 +620,11 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         versioningService.move(fullPath, directoryPath + newPath);
         doc.setPath(directoryPath + newPath);
         doc.setTitle(newPath.substring(newPath.lastIndexOf('/') + 1));
+    }
+    
+    @Override
+    public void save(Document doc) {
+        persist(doc);
     }
 
     @Override

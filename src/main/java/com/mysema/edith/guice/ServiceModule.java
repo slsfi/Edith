@@ -17,7 +17,7 @@ public class ServiceModule extends AbstractModule {
         bindProperties();
         bind(JpaInitializer.class).asEagerSingleton();
         bind(DataInitService.class).asEagerSingleton();
-        //bind(AuthService.class, AuthServiceImpl.class);
+//        bind(AuthService.class, AuthServiceImpl.class);
         bind(ContentRenderer.class, ContentRendererImpl.class);
         bind(DocumentDao.class, DocumentDaoImpl.class);
         bind(DocumentNoteDao.class, DocumentNoteDaoImpl.class);
@@ -47,13 +47,15 @@ public class ServiceModule extends AbstractModule {
         }        
     }
     
-    protected <T> void bind(Class<T> iface, Class<? extends T> implementation) {
-        bind(iface).to(implementation).in(Scopes.SINGLETON);
+    protected <T> void bind(Class<T> iface, Class<? extends T> impl) {
+        bind(iface).to(impl).in(Scopes.SINGLETON);
     }
     
+    // XXX maybe return a Map<String,Object> instead?
     protected Properties getProperties() throws Exception {        
-        Properties props = new Properties();
+        Properties props = new Properties();        
         props.load(ServiceModule.class.getResourceAsStream("/edith.properties"));
+        props.putAll(System.getProperties());
         return props;
     }
     

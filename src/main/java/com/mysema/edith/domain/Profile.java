@@ -2,9 +2,9 @@ package com.mysema.edith.domain;
 
 public enum Profile {
 
-    ADMIN("ROLE_USER", "ROLE_ADMIN"),
+    Admin("ROLE_USER", "ROLE_ADMIN"),
 
-    USER("ROLE_USER");
+    User("ROLE_USER");
     
     private final String[] roles;
 

@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Profile;
+import com.mysema.edith.domain.QUser;
 import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.UserInfo;
 import com.mysema.query.types.ConstructorExpression;
@@ -22,8 +23,10 @@ import com.mysema.query.types.ConstructorExpression;
 @Transactional
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
+    private static final QUser user = QUser.user;
+    
     private final AuthService authService;
-
+    
 //    private final SaltSource saltSource;
 //
 //    private final PasswordEncoder passwordEncoder;
@@ -87,9 +90,9 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             user.setUsername(values[2]);
             user.setEmail(values[3]);
             if (values[3].endsWith("mysema.com")) {
-                user.setProfile(Profile.ADMIN);
+                user.setProfile(Profile.Admin);
             } else {
-                user.setProfile(Profile.USER);
+                user.setProfile(Profile.User);
             }
 
             // encode password
@@ -99,7 +102,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 //                    saltSource.getSalt(userDetails));
 //            user.setPassword(password);
 
-            getEntityManager().persist(user);
+            persist(user);
             users.add(user);
         }
         return users;
@@ -107,7 +110,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public void save(User user) {
-        getEntityManager().persist(user);
+        persist(user);
     }
 
 }

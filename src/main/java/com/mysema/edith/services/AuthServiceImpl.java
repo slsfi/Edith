@@ -5,7 +5,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean isAuthenticated() {
         // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
@@ -16,7 +16,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String getUsername() {
-        return "xxx";
+        return "timo";
     }
 
 }

@@ -105,6 +105,11 @@ public interface NoteDao extends Dao<Note, Long> {
      * @param note
      */
     void remove(Note note);
+    
+    /**
+     * @param id
+     */
+    void remove(Long id);
 
     /**
      * @param note
