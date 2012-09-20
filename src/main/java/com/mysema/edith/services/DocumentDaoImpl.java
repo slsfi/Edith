@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.EventFilter;
@@ -34,16 +35,14 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.mutable.MutableInt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
-import com.mysema.commons.lang.Assert;
 import com.mysema.edith.EDITH;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
@@ -54,7 +53,6 @@ import com.mysema.edith.dto.FileItem;
 import com.mysema.edith.dto.FileItemWithDocumentId;
 import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.util.ElementContext;
-import com.mysema.query.jpa.impl.JPADeleteClause;
 
 // TODO: It would make sense to move XML parsing and all SVN operations
 // to other low-level classes and use a service to achieve what this
@@ -129,7 +127,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                 File outFile = File.createTempFile("tei", ".xml");
                 OutputStream out = new FileOutputStream(outFile);
                 try {
-                    IOUtils.copy(in, out);
+//                    IOUtils.copy(in, out);
+                    ByteStreams.copy(in, out);
                 } finally {
                     in.close();
                     out.close();
@@ -148,13 +147,13 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     public DocumentNote addNote(Note note, Document document, final SelectedText selection) {
         final DocumentNote documentNote = new DocumentNote();
         persist(documentNote);
-        final MutableInt position = new MutableInt(0);
+        final AtomicInteger position = new AtomicInteger(0);
         versioningService.commit(document.getPath(), -1, authService.getUsername(),
                 new UpdateCallback() {
                     @Override
                     public void update(InputStream source, OutputStream target) throws IOException {
                         try {
-                            position.setValue(addNote(inFactory.createXMLEventReader(source),
+                            position.set(addNote(inFactory.createXMLEventReader(source),
                                     outFactory.createXMLEventWriter(target), selection,
                                     documentNote.getId()));
                         } catch (XMLStreamException e) {
@@ -220,10 +219,10 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         StringBuilder endStrings = new StringBuilder();
         /* Used to store all the events while buffering. */
         List<XMLEvent> events = new ArrayList<XMLEvent>();
-        MutableInt endOffset = new MutableInt(0);
+        AtomicInteger endOffset = new AtomicInteger(0);
 
         // Some sort of absolute position to have elements in order
-        MutableInt position = new MutableInt(0);
+        AtomicInteger position = new AtomicInteger(0);
 
         Matched matched = new Matched();
         try {
@@ -307,7 +306,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                     }
 
                     if (!buffering) {
-                        position.add(event.asCharacters().getData().length());
+                        position.addAndGet(event.asCharacters().getData().length());
                     }
 
                 } else if (event.isEndElement()) {
@@ -370,9 +369,9 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         return index;
     }
 
-    private void flush(XMLEventWriter writer, MutableInt position, String string, SelectedText sel,
+    private void flush(XMLEventWriter writer, AtomicInteger position, String string, SelectedText sel,
             List<XMLEvent> events, ElementContext context, Matched matched, Long localId,
-            MutableInt endOffset) throws XMLStreamException {
+            AtomicInteger endOffset) throws XMLStreamException {
         String startAnchor = "start" + localId;
         String endAnchor = "end" + localId;
         boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
@@ -395,11 +394,11 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                 int index = -1;
                 offset += eventString.length();
                 if (context.equalsAny(sel.getEndId()) && sel.isStartChildOfEnd()) {
-                    endOffset.add(eventString.length());
+                    endOffset.addAndGet(eventString.length());
                 }
                 if (context.equalsAny(sel.getStartId()) && !matched.isStartMatched()
                         && startIndex <= offset) {
-                    position.add(relativeStart);
+                    position.addAndGet(relativeStart);
                     writer.add(eventFactory.createCharacters(eventString
                             .substring(0, relativeStart)));
                     writeAnchor(writer, startAnchor);
@@ -437,7 +436,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             }
             if (!handled) {
                 if (e.isCharacters() && !matched.isStartMatched()) {
-                    position.add(e.asCharacters().getData().length());
+                    position.addAndGet(e.asCharacters().getData().length());
                 }
 
                 writer.add(e);
@@ -557,7 +556,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             throws IOException {
         Document doc = documentNote.getDocument();
         long newRevision;
-        final MutableInt position = new MutableInt(0);
+        final AtomicInteger position = new AtomicInteger(0);
         newRevision = versioningService.commit(doc.getPath(), -1, authService.getUsername(),
                 new UpdateCallback() {
                     @Override
@@ -566,7 +565,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                             XMLEventReader eventReader = inFactory.createFilteredReader(
                                     inFactory.createXMLEventReader(source),
                                     createRemoveFilter(new DocumentNote[] { documentNote }));
-                            position.setValue(addNote(eventReader,
+                            position.set(addNote(eventReader,
                                     outFactory.createXMLEventWriter(target), selection,
                                     documentNote.getId()));
                         } catch (XMLStreamException e) {
@@ -629,7 +628,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public List<FileItemWithDocumentId> fromPath(String path, Long id) {
-        List<FileItem> files = StringUtils.isEmpty(path) ? versioningService.getFileItems(
+        List<FileItem> files = Strings.isNullOrEmpty(path) ? versioningService.getFileItems(
                 documentRoot, -1) : versioningService.getFileItems(path, -1);
         List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
         for (FileItem file : files) {

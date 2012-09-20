@@ -1,7 +1,5 @@
 package com.mysema.edith.web;
 
-import static com.mysema.edith.web.Converter.convert;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,7 +18,7 @@ import com.mysema.edith.services.PlaceDao;
 @Transactional
 @Path("/places")
 @Produces(MediaType.APPLICATION_JSON)
-public class PlaceService implements Service<PlaceInfo> {
+public class PlaceService extends AbstractService<PlaceInfo> {
 
     private final PlaceDao dao;
     

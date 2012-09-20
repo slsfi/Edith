@@ -6,12 +6,12 @@
 package com.mysema.edith.services;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-
+import com.google.common.io.Resources;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Profile;
@@ -74,9 +74,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     public List<User> addUsersFromCsvFile(String filePath, String encoding) throws IOException {
 
         // "/users.csv"), "ISO-8859-1"
-        @SuppressWarnings("unchecked")
-        List<String> lines = IOUtils.readLines(UserDaoImpl.class.getResourceAsStream(filePath),
-                encoding);
+        List<String> lines = Resources.readLines(UserDaoImpl.class.getResource(filePath), Charset.forName(encoding));
         List<User> users = new ArrayList<User>();
         for (String line : lines) {
             String[] values = line.split(";");

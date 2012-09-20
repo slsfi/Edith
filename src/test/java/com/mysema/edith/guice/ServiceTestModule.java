@@ -13,9 +13,10 @@ import static com.mysema.edith.EdithTestConstants.TEST_DOCUMENT_KEY;
 import java.io.File;
 import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
 import org.tmatesoft.svn.core.SVNURL;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.mysema.edith.EDITH;
 import com.mysema.edith.services.AuthService;
 import com.mysema.edith.services.StaticAuthService;
@@ -35,7 +36,7 @@ public class ServiceTestModule extends ServiceModule {
         properties.put(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
         File testDocumentFile = new File("etc/demo-material/tei/Nummisuutarit rakenteistettuna.xml");
         properties.put(TEST_DOCUMENT_FILE_KEY, testDocumentFile.getPath());
-        properties.put(TEST_DOCUMENT_CONTENT_KEY, FileUtils.readFileToString(testDocumentFile, "UTF-8"));
+        properties.put(TEST_DOCUMENT_CONTENT_KEY, Files.toString(testDocumentFile, Charsets.UTF_8));
         properties.put(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna.xml");
         properties.put(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         properties.put(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());       

@@ -3,7 +3,8 @@ package com.mysema.edith.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Joiner;
+import com.mysema.edith.util.StringUtils;
 
 public class Paragraph {
     private final List<ParagraphElement> elements = new ArrayList<ParagraphElement>();
@@ -35,6 +36,6 @@ public class Paragraph {
 
     @Override
     public String toString() {
-        return StringUtils.join(elements, "");
+        return StringUtils.join(elements);
     }
 }

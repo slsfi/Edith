@@ -8,16 +8,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
 import org.joda.time.DateTime;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
@@ -133,7 +131,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
 
         // fulltext
-        if (StringUtils.isNotBlank(search.getFullText())) {
+        if (Strings.isNullOrEmpty(search.getFullText())) {
             BooleanBuilder filter = new BooleanBuilder();
             for (StringPath path : Arrays.asList(note.lemma, note.description, note.sources,
                     note.comments.any().message)) {
@@ -255,8 +253,11 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             n.setLemma(createdLemma);
         }
 
-        String abbreviation = StringUtils.abbreviate(longText, 85);
-
+        String abbreviation = longText;
+        if (abbreviation.length() > 85) {
+            abbreviation = abbreviation.substring(0, 85);
+        }
+        
         // Extended term version gets the lemma also to basicTerm automatically
         if (extendedTerm && n.getTerm() != null && n.getTerm().getBasicForm() == null) {
             n.getTerm().setBasicForm(abbreviation);

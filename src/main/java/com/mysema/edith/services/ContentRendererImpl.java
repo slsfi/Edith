@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -32,8 +33,6 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
-import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -461,7 +460,7 @@ public class ContentRendererImpl implements ContentRenderer {
         InputStream is = documentDao.getDocumentStream(document);
         XMLStreamReader reader = inFactory.createXMLStreamReader(is);
 
-        MutableBoolean noteContent = new MutableBoolean(false);
+        AtomicBoolean noteContent = new AtomicBoolean(false);
         Set<Long> noteIds = new HashSet<Long>();
         ElementContext context = new ElementContext(3);
 
@@ -485,7 +484,7 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void handleStartElement(XMLStreamReader reader, XMLStreamWriter writer,
-            ElementContext context, Set<Long> noteIds, MutableBoolean noteContent,
+            ElementContext context, Set<Long> noteIds, AtomicBoolean noteContent,
             Set<Long> publishIds) throws XMLStreamException {
         String localName = reader.getLocalName();
         String name = extractName(reader, localName);
@@ -551,7 +550,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.writeAttribute("id", id);
                 writer.writeEndElement();
 
-                noteContent.setValue(true);
+                noteContent.set(true);
                 noteIds.add(Long.parseLong(id.substring("start".length())));
             } else if (id.startsWith(END)) {
 //                writer.element(SPAN, "class", "noteanchor", "id", id);
@@ -563,7 +562,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
                 noteIds.remove(Long.parseLong(id.substring(END.length())));
                 if (noteIds.isEmpty()) {
-                    noteContent.setValue(false);
+                    noteContent.set(false);
                 }
             }
         } else if (localName.equals("milestone")) {
@@ -609,9 +608,9 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void handleCharactersElement(XMLStreamReader reader, XMLStreamWriter writer,
-            Set<Long> noteIds, MutableBoolean noteContent) throws XMLStreamException {
+            Set<Long> noteIds, AtomicBoolean noteContent) throws XMLStreamException {
         String text = WHITESPACE.matcher(reader.getText()).replaceAll(" ");
-        if (noteContent.booleanValue() && !text.trim().isEmpty()) {
+        if (noteContent.get() && !text.trim().isEmpty()) {
             StringBuilder classes = new StringBuilder("notecontent");
             for (Long noteId : noteIds) {
                 classes.append(" n").append(noteId);

@@ -1,7 +1,5 @@
 package com.mysema.edith.web;
 
-import static com.mysema.edith.web.Converter.convert;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,7 +18,7 @@ import com.mysema.edith.services.PersonDao;
 @Transactional
 @Path("/persons")
 @Produces(MediaType.APPLICATION_JSON)
-public class PersonService implements Service<PersonInfo> {
+public class PersonService extends AbstractService<PersonInfo> {
 
     private final PersonDao dao;
     

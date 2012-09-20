@@ -5,7 +5,7 @@ package com.mysema.edith.dto;
 
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
+import com.mysema.edith.util.StringUtils;
 
 public class SelectedText {
 

@@ -23,7 +23,6 @@ import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.XMLEvent;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +31,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
 import com.mysema.edith.dto.SelectedText;
-import com.mysema.edith.services.DocumentDaoImpl;
-import com.mysema.edith.services.NoteAdditionFailedException;
 import com.mysema.edith.util.ElementContext;
+import com.mysema.edith.util.StringUtils;
 
 
 public class NoteAdditionTest extends AbstractHibernateTest {
@@ -75,9 +73,11 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     }
 
     @Test
-    public void Generic_selections_in_cleared_document() throws Exception {
+    public void Generic_selections_in_cleared_document() throws Exception {        
         List<SelectedText> failedSelectedTexts = new ArrayList<SelectedText>();
+        System.err.println("1");
         List<SelectedText> selections = createSelections();
+        System.err.println("2");
         for (SelectedText sel : selections) {
             source = new StringReader(testDocumentContent);
             try {
@@ -132,7 +132,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         String prevCharacters = null;
         String prevContext = null;
         try {
-            while (reader.hasNext()) {
+            while (reader.hasNext()) {                
                 XMLEvent e = reader.nextEvent();
                 if (e.isStartElement()) {
                     context.push(DocumentDaoImpl.extractName(e.asStartElement()));

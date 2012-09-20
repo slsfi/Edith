@@ -1,7 +1,5 @@
 package com.mysema.edith.web;
 
-import static com.mysema.edith.web.Converter.convert;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,7 +18,7 @@ import com.mysema.edith.services.DocumentDao;
 @Transactional
 @Path("/documents")
 @Produces(MediaType.APPLICATION_JSON)
-public class DocumentService implements Service<DocumentInfo>{
+public class DocumentService extends AbstractService<DocumentInfo>{
 
     private final DocumentDao dao;
     

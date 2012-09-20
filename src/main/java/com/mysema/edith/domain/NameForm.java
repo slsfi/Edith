@@ -2,7 +2,7 @@ package com.mysema.edith.domain;
 
 import javax.persistence.Embeddable;
 
-import org.apache.commons.lang3.StringUtils;
+import com.mysema.edith.util.StringUtils;
 
 @Embeddable
 public class NameForm {
@@ -65,7 +65,7 @@ public class NameForm {
     }
 
     public boolean isValid() {
-        return StringUtils.isNotBlank(first) || StringUtils.isNotBlank(last);
+        return !StringUtils.isBlank(first) || !StringUtils.isBlank(last);
     }
 
     @Override

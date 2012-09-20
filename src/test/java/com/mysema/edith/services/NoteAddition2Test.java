@@ -1,6 +1,5 @@
 package com.mysema.edith.services;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.Reader;
@@ -11,7 +10,6 @@ import java.util.UUID;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +18,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
 import com.mysema.edith.dto.SelectedText;
-import com.mysema.edith.services.DocumentDaoImpl;
 
 
 public class NoteAddition2Test extends AbstractHibernateTest {
@@ -228,7 +225,7 @@ public class NoteAddition2Test extends AbstractHibernateTest {
         // System.out.println(content);
         assertTrue(content.contains("(To" + start(localId)
                 + "piaksen <ref xml:id=\"ref.3\" target=\"note.3\">huo" + end(localId) + "ne"));
-        assertEquals(1, StringUtils.countMatches(content,
+        assertTrue(content.contains(
                 "Jaana istuu pöyd\u00E4n \u00E4\u00E4ress\u00E4, kutoen sukkaa,"));
     }
 

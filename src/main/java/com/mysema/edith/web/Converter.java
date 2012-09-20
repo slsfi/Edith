@@ -6,16 +6,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.hibernate.mapping.Set;
+import javax.persistence.EntityManager;
 
 import com.google.common.collect.Maps;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.mysema.edith.Identifiable;
 import com.mysema.util.BeanMap;
 import com.mysema.util.ReflectionUtils;
 
 @SuppressWarnings("unchecked")
-public final class Converter {
+public class Converter {
     
     private static final Map<Class<?>, Class<?>> containerTypes = Maps.newHashMap();
     
@@ -25,34 +28,29 @@ public final class Converter {
         containerTypes.put(Collection.class, ArrayList.class);
     }
     
-    public static <F, T> Collection<T> convert(Collection<F> coll1, Collection<T> coll2, Class<T> targetClass) {
-        try {
-            if (!coll1.isEmpty()) {
-                if (Identifiable.class.isInstance(coll1.iterator().next()) && targetClass.equals(Long.class)) {
-                    for (F bean : coll1) {
-                        coll2.add((T)((Identifiable)bean).getId());
-                    }
-                } else {
-                    for (F bean : coll1) {                
-                        coll2.add((T)convert(new BeanMap(bean), new BeanMap(targetClass.newInstance())));                                
-                    }    
-                }                    
-            }            
-            return coll2;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
+    @Inject
+    private Provider<EntityManager> em;
     
-    public static <F, T> T convert(F source, T target) {
+    /**
+     * @param source
+     * @param targetClass
+     * @return
+     */
+    public <F, T> T convert(F source, Class<T> targetClass) {
         try {
-            if (source != null) {
-                return (T)convert(new BeanMap(source), new BeanMap(target));    
+            // id to bean
+            if (source instanceof Long && Identifiable.class.isAssignableFrom(targetClass)) {
+                return em.get().find(targetClass, source);
+            // bean to id
+            } else if (source instanceof Identifiable && targetClass.equals(Long.class)) {
+                return (T) ((Identifiable)source).getId();
+            } else if (targetClass.isInstance(source)) {
+                return (T) source;
+            } else if (source != null) {
+                return (T) convertBean(new BeanMap(source), new BeanMap(targetClass.newInstance()));
             } else {
                 return null;
-            }     
+            }
         } catch (InstantiationException e) {
             throw new RuntimeException(e.getMessage(), e);
         } catch (IllegalAccessException e) {
@@ -60,10 +58,36 @@ public final class Converter {
         }
     }
     
+    /**
+     * @param source
+     * @param target
+     */
+    public <F, T> T convert(F source, T target) {
+        try {
+            if (source != null) {
+                return (T) convertBean(new BeanMap(source), new BeanMap(target));
+            } else {
+                return null;
+            }
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+    
+    
+    /**
+     * @param source
+     * @param target
+     * @return
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     @SuppressWarnings("rawtypes")
-    private static Object convert(BeanMap source, BeanMap target) throws InstantiationException, IllegalAccessException {
+    private Object convertBean(BeanMap source, BeanMap target) throws InstantiationException, IllegalAccessException {
         for (Map.Entry<String, Object> entry : source.entrySet()) {
-            if (entry.getKey().equals("class")) {
+            if (entry.getKey().equals("class") || entry.getValue() == null) {
                 continue;
             }
                   
@@ -72,6 +96,7 @@ public final class Converter {
                 Class<?> sourceType = source.getType(entry.getKey());
                 Object sourceValue = source.get(entry.getKey());
                 Object targetValue = null;
+                // collection
                 if (Collection.class.isAssignableFrom(type) && Collection.class.isAssignableFrom(sourceType)) {
                     Collection sourceColl = (Collection)sourceValue;
                     Collection targetColl = (Collection) containerTypes.get(type).newInstance();
@@ -80,15 +105,22 @@ public final class Converter {
                         Type genericType = target.getReadMethod(entry.getKey()).getGenericReturnType();
                         Class elementType = ReflectionUtils.getTypeParameter(genericType, 0);
                         if (!elementType.isInstance(sourceColl.iterator().next())) {
-                            convert(sourceColl, targetColl, elementType);    
-                        }                                
+                            for (Object obj : sourceColl) {
+                                targetColl.add(convert(obj, elementType));
+                            }       
+                        } else {
+                            targetColl.addAll(sourceColl);
+                        }
                     }
+                // map
                 } else if (Map.class.isAssignableFrom(type)) {
                     // TODO
+                // direct
                 } else if (sourceType.equals(type)) {
                     targetValue = sourceValue;
-                } else { // Bean
-                    targetValue = convert(sourceValue, type.newInstance());
+                // other
+                } else { 
+                    targetValue = convert(sourceValue, type);
                 }
                 target.put(entry.getKey(), targetValue);
             }
@@ -97,6 +129,4 @@ public final class Converter {
 
     }
     
-    private Converter() {}
-
 }

@@ -8,6 +8,7 @@ import com.google.inject.Scopes;
 import com.google.inject.name.Names;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.mysema.edith.services.*;
+import com.mysema.edith.web.Converter;
 
 public class ServiceModule extends AbstractModule {
 
@@ -15,6 +16,7 @@ public class ServiceModule extends AbstractModule {
     protected void configure() {
         install(new JpaPersistModule("edith"));
         bindProperties();
+        bind(Converter.class).in(Scopes.SINGLETON);        
         bind(JpaInitializer.class).asEagerSingleton();
         bind(DataInitService.class).asEagerSingleton();
 //        bind(AuthService.class, AuthServiceImpl.class);

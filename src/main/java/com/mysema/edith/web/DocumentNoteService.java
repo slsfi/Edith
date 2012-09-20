@@ -1,7 +1,5 @@
 package com.mysema.edith.web;
 
-import static com.mysema.edith.web.Converter.convert;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,7 +18,7 @@ import com.mysema.edith.services.DocumentNoteDao;
 @Transactional
 @Path("/documentnotes")
 @Produces(MediaType.APPLICATION_JSON)
-public class DocumentNoteService implements Service<DocumentNoteInfo>{
+public class DocumentNoteService extends AbstractService<DocumentNoteInfo>{
 
     private final DocumentNoteDao dao;
     

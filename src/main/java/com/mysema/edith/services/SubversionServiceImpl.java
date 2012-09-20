@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
@@ -31,10 +30,12 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import com.google.common.io.Files;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EDITH;
 import com.mysema.edith.dto.FileItem;
+import com.mysema.util.FileUtils;
 
 /**
  * SubversionServiceImpl is the default implementation of the SubversionService
@@ -130,7 +131,7 @@ public class SubversionServiceImpl implements SubversionService {
                 update(userCheckout);
             } catch (SubversionException e) {
                 try {
-                    FileUtils.cleanDirectory(userCheckout);
+                    FileUtils.delete(userCheckout);
                 } catch (IOException e1) {
                     throw new SubversionException("Exception when cleaning directory", e1);
                 }
@@ -161,7 +162,8 @@ public class SubversionServiceImpl implements SubversionService {
                 os.close();
                 is.close();
             }
-            FileUtils.copyFile(tmp, file);
+//            FileUtils.copyFile(tmp, file);
+            Files.copy(tmp, file);
         } catch (IOException e) {
             throw new SubversionException(e);
         } finally {
@@ -192,8 +194,8 @@ public class SubversionServiceImpl implements SubversionService {
         try {
             svnRepository.closeSession();
             svnRepository = null;
-            FileUtils.deleteDirectory(svnCache);
-            FileUtils.deleteDirectory(svnRepo);
+            FileUtils.delete(svnCache);
+            FileUtils.delete(svnRepo);
         } catch (IOException e) {
             throw new SubversionException(e.getMessage(), e);
         }

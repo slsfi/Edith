@@ -1,7 +1,5 @@
 package com.mysema.edith.web;
 
-import static com.mysema.edith.web.Converter.convert;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,7 +12,7 @@ import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.UserInfo;
 import com.mysema.edith.services.UserDao;
 
-public class UserService implements Service<UserInfo> {
+public class UserService extends AbstractService<UserInfo> {
 
     private final UserDao dao;
     

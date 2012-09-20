@@ -8,12 +8,13 @@ import java.util.regex.Pattern;
 
 import javax.persistence.*;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 
+import com.google.common.base.Joiner;
 import com.mysema.edith.Identifiable;
+import com.mysema.edith.util.StringUtils;
 
 @Entity
 @Table(name = "note")
@@ -244,7 +245,7 @@ public class Note implements Identifiable {
     public static String createLemmaFromLongText(String text) {
         String result = null;
         if (WHITESPACE.matcher(text).find()) {
-            String[] words = StringUtils.split(text);
+            String[] words = StringUtils.split(text.trim());
             if (words.length == 2) {
                 result = words[0] + " " + words[1];
             } else if (words.length > 1) {

@@ -2,27 +2,26 @@ package com.mysema.edith.util;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.lang3.mutable.MutableInt;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Item implements Cloneable {
 
     final String name;
 
-    private Map<String, MutableInt> counts = new HashMap<String, MutableInt>();
+    private Map<String, AtomicInteger> counts = new HashMap<String, AtomicInteger>();
 
     Item(String name) {
         this.name = name;
     }
 
     public String getName(String elemName) {
-        MutableInt intValue = counts.get(elemName);
+        AtomicInteger intValue = counts.get(elemName);
         if (intValue == null) {
-            intValue = new MutableInt(1);
+            intValue = new AtomicInteger(1);
             counts.put(elemName, intValue);
             return elemName;
         }
-        intValue.add(1);
+        intValue.addAndGet(1);
         return elemName + intValue;
     }
 
@@ -34,7 +33,7 @@ public class Item implements Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Item item = (Item) super.clone();
-        item.counts = new HashMap<String, MutableInt>();
+        item.counts = new HashMap<String, AtomicInteger>();
         for (String key : counts.keySet()) {
             item.counts.put(key, counts.get(key));
         }
