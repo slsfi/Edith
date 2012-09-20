@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2012 Mysema Ltd.
+ * All rights reserved.
+ *
+ */
 package com.mysema.edith.guice;
 
 import java.io.IOException;

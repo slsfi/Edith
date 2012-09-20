@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2012 Mysema Ltd.
+ * All rights reserved.
+ *
+ */
 package com.mysema.edith.services;
 
 import java.util.List;

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2012 Mysema Ltd.
+ * All rights reserved.
+ *
+ */
 package com.mysema.edith.domain;
 
 import java.util.ArrayList;
@@ -12,7 +17,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 
-import com.google.common.base.Joiner;
 import com.mysema.edith.Identifiable;
 import com.mysema.edith.util.StringUtils;
 

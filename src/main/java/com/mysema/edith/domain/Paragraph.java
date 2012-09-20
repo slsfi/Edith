@@ -1,9 +1,13 @@
+/*
+ * Copyright (c) 2012 Mysema Ltd.
+ * All rights reserved.
+ *
+ */
 package com.mysema.edith.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Joiner;
 import com.mysema.edith.util.StringUtils;
 
 public class Paragraph {
