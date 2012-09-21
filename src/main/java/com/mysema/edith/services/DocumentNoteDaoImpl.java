@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.commons.lang.Assert;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;

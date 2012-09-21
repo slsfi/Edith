@@ -6,6 +6,7 @@
 package com.mysema.edith.util;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Joiner;
@@ -13,7 +14,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-public class StringUtils {
+public final class StringUtils {
     
     private static final Splitter WHITESPACE_SPLITTER = Splitter.on(Pattern.compile("\\s+"));
 
@@ -25,7 +26,8 @@ public class StringUtils {
         } else if (str.trim().isEmpty()) {
             return new String[0];
         } else {
-            return Lists.newArrayList(WHITESPACE_SPLITTER.split(str.trim())).toArray(new String[0]);    
+            List<String> list = Lists.newArrayList(WHITESPACE_SPLITTER.split(str.trim())); 
+            return list.toArray(new String[list.size()]);    
         }        
     }
     

@@ -586,7 +586,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     public void remove(Document doc) {
         versioningService.delete(doc.getPath());
         delete(documentNote).where(documentNote.document.eq(doc)).execute();
-        remove(doc);
+        super.remove(doc);
     }
 
     @Override
