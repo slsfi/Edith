@@ -11,12 +11,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Item implements Cloneable {
 
-    final String name;
+    private final String name;
 
     private Map<String, AtomicInteger> counts = new HashMap<String, AtomicInteger>();
 
     Item(String name) {
         this.name = name;
+    }
+    
+    public String getName() {
+        return name;
     }
 
     public String getName(String elemName) {

@@ -49,7 +49,7 @@ public class ElementContext implements Cloneable {
                 if (i > offset) {
                     b.append("-");
                 }
-                b.append(stack.get(i).name);
+                b.append(stack.get(i).getName());
             }
             path = b.toString();
             return path;

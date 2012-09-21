@@ -5,11 +5,14 @@
  */
 package com.mysema.edith.dto;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import com.mysema.edith.domain.NoteComment;
 
-public final class NoteCommentComparator implements Comparator<NoteComment> {
+public final class NoteCommentComparator implements Comparator<NoteComment>, Serializable {
+
+    private static final long serialVersionUID = 4759673633350279296L;
 
     public static final NoteCommentComparator ASC = new NoteCommentComparator();
 
