@@ -353,21 +353,21 @@
     <profile>
       <id>sks</id>
       <properties>
-        <extraResources>profiles/sks/res</extraResources>
+        <extraResources>profiles/sks</extraResources>
       </properties>
     </profile>
     
     <profile>
       <id>sls</id>
       <properties>
-        <extraResources>profiles/sls/res</extraResources>
+        <extraResources>profiles/sls</extraResources>
       </properties>
     </profile>
     
     <profile>
       <id>standalone</id>
       <properties>
-        <extraResources>profiles/standalone/res</extraResources>
+        <extraResources>profiles/standalone</extraResources>
       </properties>
     </profile>
   </profiles>

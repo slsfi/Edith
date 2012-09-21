@@ -19,12 +19,12 @@ public class ServiceModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new JpaPersistModule("edith"));
+        // TODO provide properties also from somewhere else 
+        install(new JpaPersistModule("edith").properties(System.getProperties())); 
         bindProperties();
         bind(Converter.class).in(Scopes.SINGLETON);        
         bind(JpaInitializer.class).asEagerSingleton();
         bind(DataInitService.class).asEagerSingleton();
-//        bind(AuthService.class, AuthServiceImpl.class);
         bind(ContentRenderer.class, ContentRendererImpl.class);
         bind(DocumentDao.class, DocumentDaoImpl.class);
         bind(DocumentNoteDao.class, DocumentNoteDaoImpl.class);
