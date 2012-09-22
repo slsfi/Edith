@@ -56,5 +56,9 @@ public class DocumentService extends AbstractService<DocumentInfo>{
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
+    
+    // TODO addDocumentsFromZip
+    
+    // TODO document rendering
 
 }

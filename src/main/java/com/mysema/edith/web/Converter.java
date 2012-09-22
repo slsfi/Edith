@@ -92,45 +92,48 @@ public class Converter {
     @SuppressWarnings("rawtypes")
     private Object convertBean(BeanMap source, BeanMap target) throws InstantiationException, IllegalAccessException {
         for (Map.Entry<String, Object> entry : source.entrySet()) {
-            if (entry.getKey().equals("class") || entry.getValue() == null) {
-                continue;
-            }
-                  
             Class<?> type = target.getType(entry.getKey());
             if (type != null) {
-                Class<?> sourceType = source.getType(entry.getKey());
-                Object sourceValue = source.get(entry.getKey());
-                Object targetValue = null;
-                // collection
-                if (Collection.class.isAssignableFrom(type) && Collection.class.isAssignableFrom(sourceType)) {
-                    Collection sourceColl = (Collection)sourceValue;
-                    Collection targetColl = (Collection) containerTypes.get(type).newInstance();
-                    targetValue = targetColl;
-                    if (!sourceColl.isEmpty()) {
-                        Type genericType = target.getReadMethod(entry.getKey()).getGenericReturnType();
-                        Class elementType = ReflectionUtils.getTypeParameter(genericType, 0);
-                        if (!elementType.isInstance(sourceColl.iterator().next())) {
-                            for (Object obj : sourceColl) {
-                                targetColl.add(convert(obj, elementType));
-                            }       
-                        } else {
-                            targetColl.addAll(sourceColl);
-                        }
-                    }
-                // map
-                } else if (Map.class.isAssignableFrom(type)) {
-                    // TODO
-                    throw new UnsupportedOperationException();
-                // direct
-                } else if (sourceType.equals(type)) {
-                    targetValue = sourceValue;
-                // other
-                } else { 
-                    targetValue = convert(sourceValue, type);
-                }
-                target.put(entry.getKey(), targetValue);
+                boolean primitive = target.getType(entry.getKey()).isPrimitive();
+                if (entry.getKey().equals("class") || (primitive && entry.getValue() == null)) {
+                    continue;
+                }    
+            } else {
+                continue;
             }
+                        
+            Class<?> sourceType = source.getType(entry.getKey());
+            Object sourceValue = source.get(entry.getKey());
+            Object targetValue = null;
+            // collection
+            if (Collection.class.isAssignableFrom(type) && Collection.class.isAssignableFrom(sourceType)) {
+                Collection sourceColl = (Collection)sourceValue;
+                Collection targetColl = (Collection) containerTypes.get(type).newInstance();
+                targetValue = targetColl;
+                if (!sourceColl.isEmpty()) {
+                    Type genericType = target.getReadMethod(entry.getKey()).getGenericReturnType();
+                    Class elementType = ReflectionUtils.getTypeParameter(genericType, 0);
+                    if (!elementType.isInstance(sourceColl.iterator().next())) {
+                        for (Object obj : sourceColl) {
+                            targetColl.add(convert(obj, elementType));
+                        }       
+                    } else {
+                        targetColl.addAll(sourceColl);
+                    }
+                }
+            // map
+            } else if (Map.class.isAssignableFrom(type)) {
+                throw new UnsupportedOperationException();
+            // direct
+            } else if (sourceType.equals(type)) {
+                targetValue = sourceValue;
+            // other
+            } else { 
+                targetValue = convert(sourceValue, type);
+            }
+            target.put(entry.getKey(), targetValue);
         }
+        
         return target.getBean();
 
     }

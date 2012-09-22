@@ -58,12 +58,10 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
     private DocumentNote documentNote4;
 
     @Inject @Named(EdithTestConstants.NOTE_TEST_DATA_KEY)
-    private String noteTestDataPath;
+    private File noteTestData;
 
     @Inject
     private SubversionService versioningService;
-
-    private File noteTestData;
     
 //    private int countDocumentNotes(List<Note> notes){
 //        int count = 0;
@@ -77,7 +75,6 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
 
     @Before
     public void setUp() {
-        noteTestData = new File(noteTestDataPath);
         if (userDao.getAll().isEmpty()) {
             userDao.save(new User("timo"));
         }

@@ -14,6 +14,7 @@ import com.mysema.edith.web.DocumentService;
 import com.mysema.edith.web.NoteService;
 import com.mysema.edith.web.PersonService;
 import com.mysema.edith.web.PlaceService;
+import com.mysema.edith.web.TermService;
 import com.mysema.edith.web.UserService;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
@@ -21,13 +22,13 @@ public class WebModule extends ServletModule {
     
     @Override
     protected void configureServlets() {
-        install(new ServiceModule());
         // bind resource classes here
         bind(DocumentNoteService.class).in(Scopes.SINGLETON);
         bind(DocumentService.class).in(Scopes.SINGLETON);
         bind(NoteService.class).in(Scopes.SINGLETON);
         bind(PersonService.class).in(Scopes.SINGLETON);
         bind(PlaceService.class).in(Scopes.SINGLETON);
+        bind(TermService.class).in(Scopes.SINGLETON);        
         bind(UserService.class).in(Scopes.SINGLETON);
         
         bind(GuiceContainer.class);

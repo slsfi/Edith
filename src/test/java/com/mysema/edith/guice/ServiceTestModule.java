@@ -11,7 +11,7 @@ import static com.mysema.edith.EdithTestConstants.TEST_DOCUMENT_FILE_KEY;
 import static com.mysema.edith.EdithTestConstants.TEST_DOCUMENT_KEY;
 
 import java.io.File;
-import java.util.Properties;
+import java.util.Map;
 
 import org.tmatesoft.svn.core.SVNURL;
 
@@ -30,12 +30,12 @@ public class ServiceTestModule extends ServiceModule {
     }
     
     @Override
-    protected Properties getProperties() throws Exception {
-        Properties properties = super.getProperties();
+    protected Map<String, Object> getProperties() throws Exception {
+        Map<String, Object> properties = super.getProperties();
         File svnRepo = new File("target/repo");
-        properties.put(NOTE_TEST_DATA_KEY, "etc/demo-material/notes/nootit.xml");
+        properties.put(NOTE_TEST_DATA_KEY, new File("etc/demo-material/notes/nootit.xml"));
         File testDocumentFile = new File("etc/demo-material/tei/Nummisuutarit rakenteistettuna.xml");
-        properties.put(TEST_DOCUMENT_FILE_KEY, testDocumentFile.getPath());
+        properties.put(TEST_DOCUMENT_FILE_KEY, testDocumentFile);
         properties.put(TEST_DOCUMENT_CONTENT_KEY, Files.toString(testDocumentFile, Charsets.UTF_8));
         properties.put(TEST_DOCUMENT_KEY, "/documents/trunk/Nummisuutarit rakenteistettuna.xml");
         properties.put(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());

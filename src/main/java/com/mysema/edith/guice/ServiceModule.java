@@ -5,9 +5,13 @@
  */
 package com.mysema.edith.guice;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
+import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
@@ -38,16 +42,11 @@ public class ServiceModule extends AbstractModule {
     
     private void bindProperties() {
         try {
-            for (Entry entry : getProperties().entrySet()) {
-                String key = entry.getKey().toString();
-                String value = entry.getValue().toString();
-                if (value.equals("true") || value.equals("false")) {
-                    bind(Boolean.class).annotatedWith(Names.named(key))
-                        .toInstance(Boolean.parseBoolean(value));
-                } else {
-                    bind(String.class).annotatedWith(Names.named(key))
-                        .toInstance(value);
-                }
+            for (Entry<String, Object> entry : getProperties().entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                bind((Class)value.getClass()).annotatedWith(Names.named(key))
+                    .toInstance(value);
             }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -58,12 +57,21 @@ public class ServiceModule extends AbstractModule {
         bind(iface).to(impl).in(Scopes.SINGLETON);
     }
     
-    // XXX maybe return a Map<String,Object> instead?
-    protected Properties getProperties() throws Exception {        
+    protected Map<String, Object> getProperties() throws Exception {        
         Properties props = new Properties();        
         props.load(ServiceModule.class.getResourceAsStream("/edith.properties"));
         props.putAll(System.getProperties());
-        return props;
+        Map<String, Object> rv = new HashMap<String, Object>();
+        Set<String> booleans = Sets.newHashSet("true", "false");
+        for (Entry entry : props.entrySet()) {
+            String key = entry.getKey().toString();
+            if (booleans.contains(entry.getValue())){
+                rv.put(key, Boolean.valueOf(entry.getValue().toString()));
+            } else {
+                rv.put(key, entry.getValue());
+            }
+        }
+        return rv;
     }
     
 }

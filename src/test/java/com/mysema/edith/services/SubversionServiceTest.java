@@ -46,8 +46,6 @@ import org.tmatesoft.svn.core.wc.SVNCommitClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EDITH;
@@ -69,12 +67,10 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     private String documentRoot;
 
     @Inject @Named(EdithTestConstants.NOTE_TEST_DATA_KEY)
-    private String noteTestDataPath;
+    private File noteTestData;
 
     @Inject @Named(EDITH.REPO_FILE_PROPERTY)
     private String svnRepoPath;
-    
-    private File noteTestData;
     
     private File svnRepo;
 
@@ -88,7 +84,6 @@ public class SubversionServiceTest extends AbstractHibernateTest {
 
     @Before
     public void setUp() throws Exception {
-        noteTestData = new File(noteTestDataPath);
         svnRepo = new File(svnRepoPath);
         subversionService.initialize();
         checkoutDirectory = new File("target/checkout");

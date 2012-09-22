@@ -1,6 +1,6 @@
 package com.mysema.edith.guice;
 
-import java.util.Properties;
+import java.util.Map;
 
 import com.mysema.edith.EDITH;
 
@@ -8,9 +8,9 @@ import com.mysema.edith.EDITH;
 public class SLSServiceTestModule extends ServiceTestModule {
     
     @Override
-    protected Properties getProperties() throws Exception  {
-        Properties properties = super.getProperties();
-        properties.put(EDITH.EXTENDED_TERM, "true");
+    protected Map<String, Object> getProperties() throws Exception  {
+        Map<String, Object> properties = super.getProperties();
+        properties.put(EDITH.EXTENDED_TERM, true);
         return properties;
     }
     

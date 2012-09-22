@@ -52,19 +52,16 @@ public class NoteDaoTest extends AbstractHibernateTest {
     private UserDao userDao;
 
     @Inject @Named(EdithTestConstants.NOTE_TEST_DATA_KEY)
-    private String noteTestDataPath;
+    private File noteTestData;
 
     @Inject @Named(EdithTestConstants.TEST_DOCUMENT_KEY)
     private String testDocument;
 
     @Inject @Named(EDITH.EXTENDED_TERM)
     private boolean extendedTerm;
-
-    private File noteTestData;
     
     @Before
     public void setUp() {
-        noteTestData = new File(noteTestDataPath);
         if (userDao.getAll().isEmpty()) {
             userDao.save(new User("timo"));
         }

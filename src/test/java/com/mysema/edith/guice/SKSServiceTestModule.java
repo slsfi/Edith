@@ -1,6 +1,6 @@
 package com.mysema.edith.guice;
 
-import java.util.Properties;
+import java.util.Map;
 
 import com.mysema.edith.EDITH;
 
@@ -8,9 +8,9 @@ import com.mysema.edith.EDITH;
 public class SKSServiceTestModule extends ServiceTestModule {
     
     @Override
-    protected Properties getProperties() throws Exception  {
-        Properties properties = super.getProperties();
-        properties.put(EDITH.EXTENDED_TERM, "false");
+    protected Map<String, Object> getProperties() throws Exception  {
+        Map<String, Object> properties = super.getProperties();
+        properties.put(EDITH.EXTENDED_TERM, false);
         return properties;
     }    
     

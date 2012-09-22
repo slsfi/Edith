@@ -13,10 +13,10 @@ import org.junit.Test;
 
 import com.mysema.edith.dto.RevisionInfo;
 
-
-
 public class RevisionInfoTest {
+    
     private RevisionInfo ri;
+    
     private RevisionInfo ri2;
 
     @Before
