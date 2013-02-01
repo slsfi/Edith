@@ -16,7 +16,7 @@ import com.mysema.edith.dto.TermInfo;
 import com.mysema.edith.services.TermDao;
 
 @Transactional
-@Path("/notes")
+@Path("/terms")
 @Produces(MediaType.APPLICATION_JSON)
 public class TermService extends AbstractService<TermInfo> {
 
