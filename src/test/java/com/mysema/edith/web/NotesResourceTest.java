@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
+import com.mysema.edith.dto.NoteInfo;
 import com.mysema.edith.services.NoteDao;
 
 public class NotesResourceTest extends AbstractResourceTest {
@@ -31,6 +32,12 @@ public class NotesResourceTest extends AbstractResourceTest {
     @Test
     public void GetById() {       
         assertNotNull(notes.getById(1l));
+    }
+    
+    @Test
+    public void Add() {
+        NoteInfo note = new NoteInfo();
+        notes.add(note);
     }
     
 }

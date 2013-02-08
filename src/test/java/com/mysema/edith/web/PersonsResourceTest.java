@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import com.mysema.edith.domain.Interval;
 import com.mysema.edith.domain.NameForm;
 import com.mysema.edith.domain.Person;
+import com.mysema.edith.dto.PersonInfo;
 import com.mysema.edith.services.PersonDao;
 
 public class PersonsResourceTest extends AbstractResourceTest {
@@ -32,4 +33,13 @@ public class PersonsResourceTest extends AbstractResourceTest {
         assertNotNull(persons.getById(person.getId()));
     }
 
+    @Test
+    public void Add() {
+        PersonInfo person = new PersonInfo();
+        person.setNormalized(new NameForm("a", "b"));
+        person.setOtherForms(Sets.newHashSet(new NameForm("c","d")));
+        person.setTimeOfBirth(Interval.createDate(new DateTime()));
+        person.setTimeOfDeath(Interval.createDate(new DateTime()));
+        persons.add(person);    
+    }
 }

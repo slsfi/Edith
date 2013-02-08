@@ -7,6 +7,7 @@ import org.junit.Test;
 import com.google.inject.Inject;
 import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.TermLanguage;
+import com.mysema.edith.dto.TermInfo;
 import com.mysema.edith.services.TermDao;
 
 public class TermsResourceTest extends AbstractResourceTest {
@@ -27,6 +28,16 @@ public class TermsResourceTest extends AbstractResourceTest {
         termDao.save(term);
         
         assertNotNull(terms.getById(term.getId()));
+    }
+    
+    @Test
+    public void Add() {
+        TermInfo term = new TermInfo();
+        term.setBasicForm("a");
+        term.setLanguage(TermLanguage.ENGLISH);
+        term.setMeaning("b");
+        term.setOtherLanguage("fi");
+        terms.add(term);
     }
     
 }

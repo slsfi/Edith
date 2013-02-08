@@ -98,7 +98,7 @@ public class Converter {
     private Object convertBean(BeanMap source, BeanMap target) throws InstantiationException, IllegalAccessException {
         for (Map.Entry<String, Object> entry : source.entrySet()) {
             Class<?> type = target.getType(entry.getKey());
-            if (type != null) {
+            if (type != null && target.getWriteMethod(entry.getKey()) != null) {
                 boolean primitive = target.getType(entry.getKey()).isPrimitive();
                 if (entry.getKey().equals("class") || (primitive && entry.getValue() == null)) {
                     continue;
@@ -115,7 +115,7 @@ public class Converter {
                 Collection sourceColl = (Collection)sourceValue;
                 Collection targetColl = (Collection) containerTypes.get(type).newInstance();
                 targetValue = targetColl;
-                if (!sourceColl.isEmpty()) {
+                if (sourceColl != null && !sourceColl.isEmpty()) {
                     Type genericType = target.getReadMethod(entry.getKey()).getGenericReturnType();
                     Class elementType = ReflectionUtils.getTypeParameter(genericType, 0);
                     if (!elementType.isInstance(sourceColl.iterator().next())) {
