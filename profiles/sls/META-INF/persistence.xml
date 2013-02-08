@@ -6,14 +6,14 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <properties>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-      <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/edith_test" />
-      <property name="hibernate.connection.username" value="edith" />
-      <property name="hibernate.connection.password" value="edith" />
+      <property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.7:3306/topelius_notes" />
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" />
-      <property name="hibernate.archive.autodetection" value="class" />
+      <property name="hibernate.connection.username" value="topeliusapp" />
+      <property name="hibernate.connection.password" value="Kuddnas10" />
 
       <property name="hbm2ddl.auto" value="none" />
-      <!-- <property name="hibernate.show_sql" value="true"/> <property name="hibernate.format_sql" value="true"/> -->
+      <property name="hibernate.show_sql" value="false" />
+      <property name="hibernate.format_sql" value="false" />
 
       <property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
       <property name="hibernate.c3p0.acquire_increment" value="1" />
@@ -25,7 +25,7 @@
 
       <property name="hibernate.cache.use_second_level_cache" value="true" />
       <property name="hibernate.cache.use_query_cache" value="false" />
-      <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
+      <property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.EhCacheRegionFactory" />
     </properties>
   </persistence-unit>
 </persistence>
