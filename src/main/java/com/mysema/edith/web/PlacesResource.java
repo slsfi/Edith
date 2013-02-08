@@ -16,30 +16,30 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.edith.domain.Document;
-import com.mysema.edith.dto.DocumentInfo;
-import com.mysema.edith.services.DocumentDao;
+import com.mysema.edith.domain.Place;
+import com.mysema.edith.dto.PlaceInfo;
+import com.mysema.edith.services.PlaceDao;
 
 @Transactional
-@Path("/documents")
+@Path("/places")
 @Produces(MediaType.APPLICATION_JSON)
-public class DocumentService extends AbstractService<DocumentInfo>{
+public class PlacesResource extends AbstractResource<PlaceInfo> {
 
-    private final DocumentDao dao;
+    private final PlaceDao dao;
     
     @Inject
-    public DocumentService(DocumentDao dao) {
+    public PlacesResource(PlaceDao dao) {
         this.dao = dao;
     }
     
-    @GET @Path("{id}")    
-    public DocumentInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new DocumentInfo());        
+    @GET @Path("{id}")
+    public PlaceInfo getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new PlaceInfo());        
     }
 
     @POST
-    public DocumentInfo update(DocumentInfo info) {
-        Document entity = dao.getById(info.getId());
+    public PlaceInfo update(PlaceInfo info) {
+        Place entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
         }
@@ -47,8 +47,8 @@ public class DocumentService extends AbstractService<DocumentInfo>{
     }
 
     @PUT 
-    public DocumentInfo add(DocumentInfo info) {
-        dao.save(convert(info, new Document()));
+    public PlaceInfo add(PlaceInfo info) {
+        dao.save(convert(info, new Place()));
         return info;
     }
 
@@ -56,9 +56,5 @@ public class DocumentService extends AbstractService<DocumentInfo>{
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-    
-    // TODO addDocumentsFromZip
-    
-    // TODO document rendering
 
 }

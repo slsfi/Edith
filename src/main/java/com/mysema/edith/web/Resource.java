@@ -5,7 +5,7 @@
  */
 package com.mysema.edith.web;
 
-public interface Service<Type> {
+public interface Resource<Type> {
     
     Type getById(Long id);
     

@@ -16,39 +16,39 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.edith.domain.Note;
-import com.mysema.edith.dto.NoteInfo;
-import com.mysema.edith.services.NoteDao;
+import com.mysema.edith.domain.DocumentNote;
+import com.mysema.edith.dto.DocumentNoteInfo;
+import com.mysema.edith.services.DocumentNoteDao;
 
 @Transactional
-@Path("/notes")
+@Path("/documentnotes")
 @Produces(MediaType.APPLICATION_JSON)
-public class NoteService extends AbstractService<NoteInfo> {
+public class DocumentNotesResource extends AbstractResource<DocumentNoteInfo>{
 
-    private final NoteDao dao;
+    private final DocumentNoteDao dao;
     
     @Inject
-    public NoteService(NoteDao dao) {
+    public DocumentNotesResource(DocumentNoteDao dao) {
         this.dao = dao;
     }
     
     @GET @Path("{id}")
-    public NoteInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new NoteInfo());        
+    public DocumentNoteInfo getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new DocumentNoteInfo());        
     }
 
     @POST
-    public NoteInfo update(NoteInfo info) {
-        Note entity = dao.getById(info.getId());
+    public DocumentNoteInfo update(DocumentNoteInfo info) {
+        DocumentNote entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
         }
         return info;
     }
 
-    @PUT 
-    public NoteInfo add(NoteInfo info) {
-        dao.save(convert(info, new Note()));
+    @PUT
+    public DocumentNoteInfo add(DocumentNoteInfo info) {
+        dao.save(convert(info, new DocumentNote()));
         return info;
     }
 
@@ -56,5 +56,5 @@ public class NoteService extends AbstractService<NoteInfo> {
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-
+    
 }

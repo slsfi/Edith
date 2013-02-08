@@ -16,39 +16,39 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.dto.DocumentNoteInfo;
-import com.mysema.edith.services.DocumentNoteDao;
+import com.mysema.edith.domain.Person;
+import com.mysema.edith.dto.PersonInfo;
+import com.mysema.edith.services.PersonDao;
 
 @Transactional
-@Path("/documentnotes")
+@Path("/persons")
 @Produces(MediaType.APPLICATION_JSON)
-public class DocumentNoteService extends AbstractService<DocumentNoteInfo>{
+public class PersonsResource extends AbstractResource<PersonInfo> {
 
-    private final DocumentNoteDao dao;
+    private final PersonDao dao;
     
     @Inject
-    public DocumentNoteService(DocumentNoteDao dao) {
+    public PersonsResource(PersonDao dao) {
         this.dao = dao;
     }
     
     @GET @Path("{id}")
-    public DocumentNoteInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new DocumentNoteInfo());        
+    public PersonInfo getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new PersonInfo());        
     }
 
     @POST
-    public DocumentNoteInfo update(DocumentNoteInfo info) {
-        DocumentNote entity = dao.getById(info.getId());
+    public PersonInfo update(PersonInfo info) {
+        Person entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
         }
         return info;
     }
 
-    @PUT
-    public DocumentNoteInfo add(DocumentNoteInfo info) {
-        dao.save(convert(info, new DocumentNote()));
+    @PUT 
+    public PersonInfo add(PersonInfo info) {
+        dao.save(convert(info, new Person()));
         return info;
     }
 
@@ -56,5 +56,5 @@ public class DocumentNoteService extends AbstractService<DocumentNoteInfo>{
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-    
+
 }

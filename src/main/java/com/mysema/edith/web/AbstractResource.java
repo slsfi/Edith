@@ -7,7 +7,7 @@ package com.mysema.edith.web;
 
 import com.google.inject.Inject;
 
-public abstract class AbstractService<Type> implements Service<Type> {
+public abstract class AbstractResource<Type> implements Resource<Type> {
     
     @Inject
     private Converter converter;

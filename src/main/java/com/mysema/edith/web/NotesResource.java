@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2012 Mysema Ltd.
+ * All rights reserved.
+ *
+ */
 package com.mysema.edith.web;
 
 import javax.ws.rs.DELETE;
@@ -11,30 +16,30 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.edith.domain.Term;
-import com.mysema.edith.dto.TermInfo;
-import com.mysema.edith.services.TermDao;
+import com.mysema.edith.domain.Note;
+import com.mysema.edith.dto.NoteInfo;
+import com.mysema.edith.services.NoteDao;
 
 @Transactional
-@Path("/terms")
+@Path("/notes")
 @Produces(MediaType.APPLICATION_JSON)
-public class TermService extends AbstractService<TermInfo> {
+public class NotesResource extends AbstractResource<NoteInfo> {
 
-    private final TermDao dao;
+    private final NoteDao dao;
     
     @Inject
-    public TermService(TermDao dao) {
+    public NotesResource(NoteDao dao) {
         this.dao = dao;
     }
     
     @GET @Path("{id}")
-    public TermInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new TermInfo());        
+    public NoteInfo getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new NoteInfo());        
     }
 
     @POST
-    public TermInfo update(TermInfo info) {
-        Term entity = dao.getById(info.getId());
+    public NoteInfo update(NoteInfo info) {
+        Note entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
         }
@@ -42,8 +47,8 @@ public class TermService extends AbstractService<TermInfo> {
     }
 
     @PUT 
-    public TermInfo add(TermInfo info) {
-        dao.save(convert(info, new Term()));
+    public NoteInfo add(NoteInfo info) {
+        dao.save(convert(info, new Note()));
         return info;
     }
 
@@ -51,5 +56,5 @@ public class TermService extends AbstractService<TermInfo> {
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-    
+
 }

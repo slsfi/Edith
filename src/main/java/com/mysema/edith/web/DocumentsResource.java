@@ -16,30 +16,30 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.edith.domain.Place;
-import com.mysema.edith.dto.PlaceInfo;
-import com.mysema.edith.services.PlaceDao;
+import com.mysema.edith.domain.Document;
+import com.mysema.edith.dto.DocumentInfo;
+import com.mysema.edith.services.DocumentDao;
 
 @Transactional
-@Path("/places")
+@Path("/documents")
 @Produces(MediaType.APPLICATION_JSON)
-public class PlaceService extends AbstractService<PlaceInfo> {
+public class DocumentsResource extends AbstractResource<DocumentInfo>{
 
-    private final PlaceDao dao;
+    private final DocumentDao dao;
     
     @Inject
-    public PlaceService(PlaceDao dao) {
+    public DocumentsResource(DocumentDao dao) {
         this.dao = dao;
     }
     
-    @GET @Path("{id}")
-    public PlaceInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new PlaceInfo());        
+    @GET @Path("{id}")    
+    public DocumentInfo getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new DocumentInfo());        
     }
 
     @POST
-    public PlaceInfo update(PlaceInfo info) {
-        Place entity = dao.getById(info.getId());
+    public DocumentInfo update(DocumentInfo info) {
+        Document entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
         }
@@ -47,8 +47,8 @@ public class PlaceService extends AbstractService<PlaceInfo> {
     }
 
     @PUT 
-    public PlaceInfo add(PlaceInfo info) {
-        dao.save(convert(info, new Place()));
+    public DocumentInfo add(DocumentInfo info) {
+        dao.save(convert(info, new Document()));
         return info;
     }
 
@@ -56,5 +56,9 @@ public class PlaceService extends AbstractService<PlaceInfo> {
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
+    
+    // TODO addDocumentsFromZip
+    
+    // TODO document rendering
 
 }

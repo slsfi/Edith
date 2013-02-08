@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.web;
 
 import javax.ws.rs.DELETE;
@@ -16,30 +11,30 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.edith.domain.Person;
-import com.mysema.edith.dto.PersonInfo;
-import com.mysema.edith.services.PersonDao;
+import com.mysema.edith.domain.Term;
+import com.mysema.edith.dto.TermInfo;
+import com.mysema.edith.services.TermDao;
 
 @Transactional
-@Path("/persons")
+@Path("/terms")
 @Produces(MediaType.APPLICATION_JSON)
-public class PersonService extends AbstractService<PersonInfo> {
+public class TermsResource extends AbstractResource<TermInfo> {
 
-    private final PersonDao dao;
+    private final TermDao dao;
     
     @Inject
-    public PersonService(PersonDao dao) {
+    public TermsResource(TermDao dao) {
         this.dao = dao;
     }
     
     @GET @Path("{id}")
-    public PersonInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new PersonInfo());        
+    public TermInfo getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new TermInfo());        
     }
 
     @POST
-    public PersonInfo update(PersonInfo info) {
-        Person entity = dao.getById(info.getId());
+    public TermInfo update(TermInfo info) {
+        Term entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
         }
@@ -47,8 +42,8 @@ public class PersonService extends AbstractService<PersonInfo> {
     }
 
     @PUT 
-    public PersonInfo add(PersonInfo info) {
-        dao.save(convert(info, new Person()));
+    public TermInfo add(TermInfo info) {
+        dao.save(convert(info, new Term()));
         return info;
     }
 
@@ -56,5 +51,5 @@ public class PersonService extends AbstractService<PersonInfo> {
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-
+    
 }

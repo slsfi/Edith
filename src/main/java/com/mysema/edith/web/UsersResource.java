@@ -17,12 +17,12 @@ import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.UserInfo;
 import com.mysema.edith.services.UserDao;
 
-public class UserService extends AbstractService<UserInfo> {
+public class UsersResource extends AbstractResource<UserInfo> {
 
     private final UserDao dao;
     
     @Inject
-    public UserService(UserDao dao) {
+    public UsersResource(UserDao dao) {
         this.dao = dao;
     }
     

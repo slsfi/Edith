@@ -9,13 +9,13 @@ import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import com.google.inject.Scopes;
 import com.google.inject.servlet.ServletModule;
-import com.mysema.edith.web.DocumentNoteService;
-import com.mysema.edith.web.DocumentService;
-import com.mysema.edith.web.NoteService;
-import com.mysema.edith.web.PersonService;
-import com.mysema.edith.web.PlaceService;
-import com.mysema.edith.web.TermService;
-import com.mysema.edith.web.UserService;
+import com.mysema.edith.web.DocumentNotesResource;
+import com.mysema.edith.web.DocumentsResource;
+import com.mysema.edith.web.NotesResource;
+import com.mysema.edith.web.PersonsResource;
+import com.mysema.edith.web.PlacesResource;
+import com.mysema.edith.web.TermsResource;
+import com.mysema.edith.web.UsersResource;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
 public class WebModule extends ServletModule {
@@ -23,13 +23,13 @@ public class WebModule extends ServletModule {
     @Override
     protected void configureServlets() {
         // bind resource classes here
-        bind(DocumentNoteService.class).in(Scopes.SINGLETON);
-        bind(DocumentService.class).in(Scopes.SINGLETON);
-        bind(NoteService.class).in(Scopes.SINGLETON);
-        bind(PersonService.class).in(Scopes.SINGLETON);
-        bind(PlaceService.class).in(Scopes.SINGLETON);
-        bind(TermService.class).in(Scopes.SINGLETON);        
-        bind(UserService.class).in(Scopes.SINGLETON);
+        bind(DocumentNotesResource.class).in(Scopes.SINGLETON);
+        bind(DocumentsResource.class).in(Scopes.SINGLETON);
+        bind(NotesResource.class).in(Scopes.SINGLETON);
+        bind(PersonsResource.class).in(Scopes.SINGLETON);
+        bind(PlacesResource.class).in(Scopes.SINGLETON);
+        bind(TermsResource.class).in(Scopes.SINGLETON);        
+        bind(UsersResource.class).in(Scopes.SINGLETON);
         
         bind(GuiceContainer.class);
         bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
