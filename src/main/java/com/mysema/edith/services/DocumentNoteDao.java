@@ -41,6 +41,12 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
      * @return
      */
     List<DocumentNote> getOfDocument(Document document);
+    
+    /**
+     * @param docId
+     * @return
+     */
+    List<DocumentNote> getOfDocument(Long docId);
 
     /**
      * Get the document notes of the given note.

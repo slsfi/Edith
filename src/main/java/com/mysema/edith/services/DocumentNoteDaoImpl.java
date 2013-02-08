@@ -35,6 +35,15 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
                 documentNote.deleted.eq(false)).orderBy(documentNote.position.asc())
                 .list(documentNote);
     }
+    
+    @Override
+    public List<DocumentNote> getOfDocument(Long docId) {
+        return query().from(documentNote).where(documentNote.document.id.eq(docId),
+        // FIXME: Commented out, is good?
+        // documentNote.revision.loe(),
+                documentNote.deleted.eq(false)).orderBy(documentNote.position.asc())
+                .list(documentNote);
+    }
 
     @Override
     public List<DocumentNote> getPublishableNotesOfDocument(Document document) {
