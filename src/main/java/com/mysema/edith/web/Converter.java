@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import com.google.common.collect.Maps;
+import com.google.common.primitives.Primitives;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.mysema.edith.Identifiable;
@@ -43,6 +44,10 @@ public class Converter {
      */
     public <F, T> T convert(F source, Class<T> targetClass) {
         try {
+            if (targetClass.isPrimitive()) {
+                targetClass = Primitives.wrap(targetClass);
+            }
+            
             // id to bean
             if (source instanceof Long && Identifiable.class.isAssignableFrom(targetClass)) {
                 return em.get().find(targetClass, source);
