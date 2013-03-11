@@ -32,20 +32,21 @@ import com.mysema.edith.services.DocumentNoteDao;
 public class DocumentsResource extends AbstractResource<DocumentInfo>{
 
     private final DocumentDao dao;
-    
+
     private final DocumentNoteDao documentNoteDao;
-    
+
     @Inject
     public DocumentsResource(DocumentDao dao, DocumentNoteDao documentNoteDao) {
         this.dao = dao;
         this.documentNoteDao = documentNoteDao;
     }
-    
-    @GET @Path("{id}")    
-    public DocumentInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new DocumentInfo());        
+
+    @Override
+    @GET @Path("{id}")
+    public DocumentInfo getById(@PathParam("id") Long id) {
+        return convert(dao.getById(id), new DocumentInfo());
     }
-    
+
     @GET @Path("{id}/document-notes")
     public List<DocumentNoteInfo> getDocumentNotes(@PathParam("id") Long id) {
         List<DocumentNote> docNotes = documentNoteDao.getOfDocument(id);
@@ -56,6 +57,7 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
         return result;
     }
 
+    @Override
     @POST
     public DocumentInfo update(DocumentInfo info) {
         Document entity = dao.getById(info.getId());
@@ -65,19 +67,21 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
         return info;
     }
 
-    @PUT 
+    @Override
+    @PUT
     public DocumentInfo add(DocumentInfo info) {
         dao.save(convert(info, new Document()));
         return info;
     }
 
+    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-    
+
     // TODO addDocumentsFromZip
-    
+
     // TODO document rendering
 
 }

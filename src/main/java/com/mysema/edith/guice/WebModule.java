@@ -11,6 +11,7 @@ import com.google.inject.Scopes;
 import com.google.inject.servlet.ServletModule;
 import com.mysema.edith.web.DocumentNotesResource;
 import com.mysema.edith.web.DocumentsResource;
+import com.mysema.edith.web.FilesResource;
 import com.mysema.edith.web.NotesResource;
 import com.mysema.edith.web.PersonsResource;
 import com.mysema.edith.web.PlacesResource;
@@ -19,7 +20,7 @@ import com.mysema.edith.web.UsersResource;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
 public class WebModule extends ServletModule {
-    
+
     @Override
     protected void configureServlets() {
         // bind resource classes here
@@ -28,12 +29,13 @@ public class WebModule extends ServletModule {
         bind(NotesResource.class).in(Scopes.SINGLETON);
         bind(PersonsResource.class).in(Scopes.SINGLETON);
         bind(PlacesResource.class).in(Scopes.SINGLETON);
-        bind(TermsResource.class).in(Scopes.SINGLETON);        
+        bind(TermsResource.class).in(Scopes.SINGLETON);
         bind(UsersResource.class).in(Scopes.SINGLETON);
-        
+        bind(FilesResource.class).in(Scopes.SINGLETON);
+
         bind(GuiceContainer.class);
         bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
         serve("/api/*").with(GuiceContainer.class);
     }
-    
+
 }

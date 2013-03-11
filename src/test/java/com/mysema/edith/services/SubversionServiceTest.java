@@ -71,7 +71,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
 
     @Inject @Named(EDITH.REPO_FILE_PROPERTY)
     private String svnRepoPath;
-    
+
     private File svnRepo;
 
     private File checkoutDirectory;
@@ -375,8 +375,8 @@ public class SubversionServiceTest extends AbstractHibernateTest {
         assertEquals(title, item.getTitle());
         assertEquals(documentRoot + "/" + title, item.getPath());
         assertNull(item.getChildren());
-        assertFalse(item.isFolder());
-        assertFalse(item.isLazy());
+        assertFalse(item.getIsFolder());
+        assertFalse(item.getIsLazy());
     }
 
     @Inject @Named(EDITH.REPO_URL_PROPERTY)

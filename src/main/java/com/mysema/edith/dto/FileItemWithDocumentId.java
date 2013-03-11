@@ -27,7 +27,7 @@ public class FileItemWithDocumentId extends FileItem {
         return documentId;
     }
 
-    public boolean isSelected() {
+    public boolean getIsSelected() {
         return isSelected;
     }
 

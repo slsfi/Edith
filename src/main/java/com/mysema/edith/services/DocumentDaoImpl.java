@@ -61,9 +61,9 @@ import com.mysema.edith.util.ElementContext;
 public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDao {
 
     private static final QDocument document = QDocument.document;
-    
+
     private static final QDocumentNote documentNote = QDocumentNote.documentNote;
-    
+
     private static final Logger logger = LoggerFactory.getLogger(DocumentDaoImpl.class);
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
@@ -593,8 +593,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     public void remove(Long id) {
         Document document = find(Document.class, id);
         if (document != null) {
-            remove(document);    
-        }        
+            remove(document);
+        }
     }
 
     @Override
@@ -620,7 +620,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         doc.setPath(directoryPath + newPath);
         doc.setTitle(newPath.substring(newPath.lastIndexOf('/') + 1));
     }
-    
+
     @Override
     public void save(Document doc) {
         persist(doc);
@@ -633,16 +633,16 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
         for (FileItem file : files) {
             Document doc = getDocumentForPath(file.getPath());
-            rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.isFolder(),
-                    file.getChildren(), file.hasChildren(), doc.getId(), doc.getId().equals(id),
+            rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.getIsFolder(),
+                    file.getChildren(), file.getHasChildren(), doc.getId(), doc.getId().equals(id),
                     documentNoteDao.getNoteCountForDocument(doc.getId())));
         }
         Collections.sort(rv, new Comparator<FileItemWithDocumentId>() {
             @Override
             public int compare(FileItemWithDocumentId o1, FileItemWithDocumentId o2) {
-                if (o1.isFolder() && !o2.isFolder()) {
+                if (o1.getIsFolder() && !o2.getIsFolder()) {
                     return -1;
-                } else if (!o1.isFolder() && o2.isFolder()) {
+                } else if (!o1.getIsFolder() && o2.getIsFolder()) {
                     return 1;
                 }
                 return o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase());

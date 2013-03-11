@@ -20,7 +20,7 @@ public class FileItem {
         this.title = title;
         this.path = path;
         this.isFolder = isFolder;
-        this.isLazy = isFolder;
+        isLazy = isFolder;
         this.children = children;
         this.hasChildren = hasChildren;
     }
@@ -33,11 +33,11 @@ public class FileItem {
         return title;
     }
 
-    public boolean isFolder() {
+    public boolean getIsFolder() {
         return isFolder;
     }
 
-    public boolean isLazy() {
+    public boolean getIsLazy() {
         return isLazy;
     }
 
@@ -45,7 +45,7 @@ public class FileItem {
         return path;
     }
 
-    public boolean hasChildren() {
+    public boolean getHasChildren() {
         return hasChildren;
     }
 
