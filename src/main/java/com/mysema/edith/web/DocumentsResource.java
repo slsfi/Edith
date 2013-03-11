@@ -5,6 +5,7 @@
  */
 package com.mysema.edith.web;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.io.IOUtils;
+
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Document;
@@ -25,6 +28,7 @@ import com.mysema.edith.dto.DocumentInfo;
 import com.mysema.edith.dto.DocumentNoteInfo;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
+import com.mysema.edith.services.SubversionService;
 
 @Transactional
 @Path("/documents")
@@ -35,10 +39,16 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
 
     private final DocumentNoteDao documentNoteDao;
 
+    private final SubversionService subversionService;
+
     @Inject
-    public DocumentsResource(DocumentDao dao, DocumentNoteDao documentNoteDao) {
+    public DocumentsResource(
+            DocumentDao dao,
+            DocumentNoteDao documentNoteDao,
+            SubversionService subversionService) {
         this.dao = dao;
         this.documentNoteDao = documentNoteDao;
+        this.subversionService = subversionService;
     }
 
     @Override
@@ -83,5 +93,9 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
     // TODO addDocumentsFromZip
 
     // TODO document rendering
-
+    @GET
+    @Path("{id}/raw")
+    public String getRawDocument(@PathParam("id") Long id) throws IOException {
+        return IOUtils.toString(dao.getDocumentStream(dao.getById(id)));
+    }
 }

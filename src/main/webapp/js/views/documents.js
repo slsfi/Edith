@@ -1,6 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'handlebars',
-        'text!templates/documents.html', 'dynatree'],
-  function($, _, Backbone, Handlebars, template) {
+define(['jquery', 'underscore', 'backbone', 'js/vent',
+        'handlebars', 'text!templates/documents.html', 'dynatree'],
+  function($, _, Backbone, vent, Handlebars, template) {
   var DocumentsView = Backbone.View.extend({
     initialize: function() {
       this.render();
@@ -15,7 +15,7 @@ define(['jquery', 'underscore', 'backbone', 'handlebars',
         
         onDblClick: function(node, event) {
           if (!node.data.isFolder) {
-            window.location.href = '/api/documents/' + node.data.documentId;
+            vent.trigger('document:open', node.data.documentId)
           }
         },
         
