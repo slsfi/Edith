@@ -1,4 +1,4 @@
-require.config({
+window.rconfig = {
   paths: {
     jquery: 'http://code.jquery.com/jquery-1.8.2',
     jqueryui: 'http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min',
@@ -26,10 +26,4 @@ require.config({
     'jqueryui': { deps: ['jquery'] },
     'moment': { exports: 'moment'}
   }
-});
-
-require([], function() {
-  require(['app'], function(App){
-    App.initialize();
-  });   
-});
+}
