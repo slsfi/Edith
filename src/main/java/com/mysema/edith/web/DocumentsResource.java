@@ -31,6 +31,7 @@ import com.mysema.edith.dto.DocumentNoteInfo;
 import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
+import com.sun.jersey.core.header.MediaTypes;
 
 @Transactional
 @Path("/documents")
@@ -99,12 +100,10 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
     // TODO document rendering
     @GET
     @Path("{id}/raw")
-    @Produces(MediaType.TEXT_HTML)
     public void getRawDocument(
             @Context HttpServletResponse response,
             @PathParam("id") Long id) throws Exception {
-        //renderer.renderDocument(dao.getById(id), factory.createXMLStreamWriter(response.getWriter()));
-        response.getWriter().write("<div>ääääöööööyyyyyy</div>");
-        response.getWriter().flush();
+    	response.setContentType("text/html; charset=utf-8");
+        renderer.renderDocument(dao.getById(id), factory.createXMLStreamWriter(response.getWriter()));
     }
 }
