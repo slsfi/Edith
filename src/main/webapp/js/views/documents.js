@@ -3,11 +3,13 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
   function($, _, Backbone, vent, Handlebars, template) {
   var DocumentsView = Backbone.View.extend({
     initialize: function() {
+      _.bindAll(this, 'render');
       this.render();
     },
     
     render: function() {
-      this.$el.html(template);
+      this.$('#documentListing').html(template);
+      var self = this;
       this.$('#directoryTree').dynatree({
         initAjax: {
           url: '/api/files'
@@ -15,7 +17,9 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
         
         onDblClick: function(node, event) {
           if (!node.data.isFolder) {
-            vent.trigger('document:open', node.data.documentId)
+            vent.trigger('document:open', node.data.documentId);
+            // FIXME: Don't do this Vesa
+            self.$el.hide();
           }
         },
         

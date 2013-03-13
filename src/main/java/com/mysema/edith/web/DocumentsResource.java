@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,9 +17,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.io.IOUtils;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
@@ -26,9 +28,9 @@ import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.dto.DocumentInfo;
 import com.mysema.edith.dto.DocumentNoteInfo;
+import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
-import com.mysema.edith.services.SubversionService;
 
 @Transactional
 @Path("/documents")
@@ -39,16 +41,18 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
 
     private final DocumentNoteDao documentNoteDao;
 
-    private final SubversionService subversionService;
+    private final ContentRenderer renderer;
+
+    private static final XMLOutputFactory factory = XMLOutputFactory.newInstance();
 
     @Inject
     public DocumentsResource(
             DocumentDao dao,
             DocumentNoteDao documentNoteDao,
-            SubversionService subversionService) {
+            ContentRenderer renderer) {
         this.dao = dao;
         this.documentNoteDao = documentNoteDao;
-        this.subversionService = subversionService;
+        this.renderer = renderer;
     }
 
     @Override
@@ -95,7 +99,12 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
     // TODO document rendering
     @GET
     @Path("{id}/raw")
-    public String getRawDocument(@PathParam("id") Long id) throws IOException {
-        return IOUtils.toString(dao.getDocumentStream(dao.getById(id)));
+    @Produces(MediaType.TEXT_HTML)
+    public void getRawDocument(
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws Exception {
+        //renderer.renderDocument(dao.getById(id), factory.createXMLStreamWriter(response.getWriter()));
+        response.getWriter().write("<div>ääääöööööyyyyyy</div>");
+        response.getWriter().flush();
     }
 }
