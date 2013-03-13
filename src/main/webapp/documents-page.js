@@ -7,5 +7,5 @@ require([], function() {
     $('#header').append(headerTemplate);
     new DocumentsView({el: $('#documents')});
     new DocumentView({el: $('#document')});
-  });   
+  });
 });
