@@ -5,7 +5,6 @@
  */
 package com.mysema.edith.web;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamWriter;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
@@ -31,7 +29,6 @@ import com.mysema.edith.dto.DocumentNoteInfo;
 import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
-import com.sun.jersey.core.header.MediaTypes;
 
 @Transactional
 @Path("/documents")
