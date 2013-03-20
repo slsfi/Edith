@@ -11,7 +11,6 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars'],
       // FIXME: We know better
       $.get('/api/documents/'+id+'/raw', function(data) {
         self.$('#documentView').html(data);
-        self.$el.show();
       });
       
     }
