@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -28,6 +29,7 @@ import com.mysema.edith.EDITH;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.SelectedText;
@@ -36,6 +38,9 @@ public class DocumentDaoTest extends AbstractHibernateTest {
 
     @Inject
     private DocumentDao documentDao;
+
+    @Inject
+    private NoteDao noteDao;
 
     @Inject
     private SubversionService subversionService;
@@ -104,7 +109,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         assertEquals("name", document.getTitle());
         assertEquals(path, document.getPath());
     }
-    
+
     @Test
     public void GetDocuments_Of_Folder() {
         assertEquals(10, documentDao.getDocumentsOfFolder(documentRoot).size());
@@ -263,4 +268,16 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         assertEquals(3, documentDao.fromPath(documentRoot + "/letters", null).size());
     }
 
+    @Test
+    public void Note_Comments_Of_Document() throws Exception {
+        Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
+        String element = "play-act-sp2-p";
+        String text = "sun ullakosta ottaa";
+
+        DocumentNote docNote = documentDao.addNote(createNote(), document,
+                new SelectedText(element, element, text));
+        noteDao.createComment(docNote.getNote(), "Yay");
+        List<NoteComment> comments = documentDao.getNoteComments(document.getId(), 3);
+        assertFalse(comments.isEmpty());
+    }
 }

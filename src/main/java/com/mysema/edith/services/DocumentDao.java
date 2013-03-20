@@ -14,6 +14,7 @@ import java.util.List;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.dto.FileItemWithDocumentId;
 import com.mysema.edith.dto.SelectedText;
 
@@ -25,7 +26,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Import the given File to the given svnPath
-     * 
+     *
      * @param svnPath
      * @param file
      */
@@ -33,7 +34,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Import documents from the given ZIP file
-     * 
+     *
      * @param parentSvnPath
      * @param file
      * @return amount of imported documents
@@ -42,7 +43,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Add the given note for the given Document
-     * 
+     *
      * @param docRevision
      * @param selection
      * @return
@@ -54,7 +55,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Get a Document handle for the given path
-     * 
+     *
      * @param svnPath
      * @return
      */
@@ -62,7 +63,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Get the Documents of the given directory path and its subpaths
-     * 
+     *
      * @param svnFolder
      * @return
      */
@@ -70,7 +71,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Get the file for the given document for reading
-     * 
+     *
      * @param docRevision
      * @return
      * @throws IOException
@@ -79,7 +80,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Remove the given anchors from the given Document
-     * 
+     *
      * @param docRevision
      * @param notes
      * @throws IOException
@@ -90,7 +91,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Update the boundaries of the given note
-     * 
+     *
      * @param note
      * @param selection
      * @throws IOException
@@ -101,7 +102,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Remove the given document
-     * 
+     *
      * @param doc
      */
     void remove(Document doc);
@@ -113,7 +114,7 @@ public interface DocumentDao extends Dao<Document, Long> {
 
     /**
      * Remove the given documents
-     * 
+     *
      * @param documents
      */
     void removeAll(Collection<Document> documents);
@@ -130,9 +131,11 @@ public interface DocumentDao extends Dao<Document, Long> {
      * @return
      */
     List<FileItemWithDocumentId> fromPath(String path, Long id);
-    
+
     /**
      * @param doc
      */
     void save(Document doc);
+
+    List<NoteComment> getNoteComments(long id, long limit);
 }

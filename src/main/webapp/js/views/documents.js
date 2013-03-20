@@ -15,7 +15,13 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
           url: '/api/files'
         },
         
-        onDblClick: function(node, event) {
+        onClick: function(node) {
+          if (!node.data.isFolder) {
+            vent.trigger('document:select', node.data.documentId);
+          }
+        },
+        
+        onDblClick: function(node) {
           if (!node.data.isFolder) {
             vent.trigger('document:open', node.data.documentId);
             // FIXME: Don't do this Vesa

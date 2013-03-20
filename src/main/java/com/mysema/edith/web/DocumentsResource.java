@@ -21,14 +21,21 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.stream.XMLOutputFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
+import com.mysema.edith.EDITH;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
+import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.dto.DocumentInfo;
 import com.mysema.edith.dto.DocumentNoteInfo;
+import com.mysema.edith.dto.NoteCommentTO;
+import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
+import com.mysema.edith.services.NoteDao;
 
 @Transactional
 @Path("/documents")
@@ -39,17 +46,26 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
 
     private final DocumentNoteDao documentNoteDao;
 
+    // TODO: Remove once not needed
+    private final NoteDao noteDao;
+
     private final ContentRenderer renderer;
 
     private static final XMLOutputFactory factory = XMLOutputFactory.newInstance();
+
+    // TODO: Remove once not needed
+    @Inject @Named(EDITH.SVN_DOCUMENT_ROOT)
+    private String documentRoot;
 
     @Inject
     public DocumentsResource(
             DocumentDao dao,
             DocumentNoteDao documentNoteDao,
+            NoteDao noteDao,
             ContentRenderer renderer) {
         this.dao = dao;
         this.documentNoteDao = documentNoteDao;
+        this.noteDao = noteDao;
         this.renderer = renderer;
     }
 
@@ -94,7 +110,6 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
 
     // TODO addDocumentsFromZip
 
-    // TODO document rendering
     @GET
     @Path("{id}/raw")
     public void getRawDocument(
@@ -102,5 +117,33 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
             @PathParam("id") Long id) throws Exception {
     	response.setContentType("text/html; charset=utf-8");
         renderer.renderDocument(dao.getById(id), factory.createXMLStreamWriter(response.getWriter()));
+    }
+
+    @GET
+    @Path("{id}/notecomments")
+    public List<NoteCommentTO> getLatestComments(@PathParam("id") Long id) {
+        List<NoteComment> noteComments = dao.getNoteComments(id, 3);
+        // TODO: Remove once there is an UI implementation for adding comments
+        if (noteComments.isEmpty()) {
+            Document document = dao.getDocumentForPath(documentRoot + "/Nummisuutarit rakenteistettuna.xml");
+            String element = "play-act-sp2-p";
+            String text = "sun ullakosta ottaa";
+
+            try {
+                DocumentNote docNote = dao.addNote(new Note(), document,
+                        new SelectedText(element, element, text));
+                noteDao.createComment(docNote.getNote(), "Yay");
+                noteDao.createComment(docNote.getNote(), "Hay");
+                noteDao.createComment(docNote.getNote(), "Bay");
+            } catch (Exception e) {
+                System.err.println("nooooooooooo");
+            }
+            noteComments = dao.getNoteComments(document.getId(), 3);
+        }
+        List<NoteCommentTO> result = new ArrayList<NoteCommentTO>();
+        for (NoteComment noteComment : noteComments) {
+            result.add(convert(noteComment, new NoteCommentTO()));
+        }
+        return result;
     }
 }

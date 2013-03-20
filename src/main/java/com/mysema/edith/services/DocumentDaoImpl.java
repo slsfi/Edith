@@ -47,8 +47,11 @@ import com.mysema.edith.EDITH;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.domain.QDocument;
 import com.mysema.edith.domain.QDocumentNote;
+import com.mysema.edith.domain.QNote;
+import com.mysema.edith.domain.QNoteComment;
 import com.mysema.edith.dto.FileItem;
 import com.mysema.edith.dto.FileItemWithDocumentId;
 import com.mysema.edith.dto.SelectedText;
@@ -63,6 +66,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     private static final QDocument document = QDocument.document;
 
     private static final QDocumentNote documentNote = QDocumentNote.documentNote;
+
+    private static final QNote note = QNote.note;
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentDaoImpl.class);
 
@@ -651,4 +656,18 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         return rv;
     }
 
+    @Override
+    public List<NoteComment> getNoteComments(long id, long limit) {
+        final QNoteComment noteComment = QNoteComment.noteComment;
+        List<NoteComment> noteComments = query()
+                .from(note, documentNote, noteComment)
+                .where(documentNote.document.id.eq(id),
+                       documentNote.deleted.isFalse(),
+                       documentNote.note.eq(note),
+                       noteComment.in(note.comments))
+                .orderBy(noteComment.createdAt.desc())
+                .limit(limit)
+                .list(noteComment);
+        return noteComments;
+    }
 }
