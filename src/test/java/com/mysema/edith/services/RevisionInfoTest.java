@@ -11,18 +11,18 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mysema.edith.dto.RevisionInfo;
+import com.mysema.edith.dto.RevisionTO;
 
 public class RevisionInfoTest {
     
-    private RevisionInfo ri;
+    private RevisionTO ri;
     
-    private RevisionInfo ri2;
+    private RevisionTO ri2;
 
     @Before
     public void setUp() {
-        ri = new RevisionInfo(100, "today", "somebody");
-        ri2 = new RevisionInfo(100, "yesterday", "somebody else");
+        ri = new RevisionTO(100, "today", "somebody");
+        ri2 = new RevisionTO(100, "yesterday", "somebody else");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class RevisionInfoTest {
 
     @Test
     public void RevisionInfo_Long() {
-        RevisionInfo revisionInfo = new RevisionInfo(666);
+        RevisionTO revisionInfo = new RevisionTO(666);
         assertEquals("", revisionInfo.getCreated());
         assertEquals("", revisionInfo.getCreator());
     }

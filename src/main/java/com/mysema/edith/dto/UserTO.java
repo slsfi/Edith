@@ -5,21 +5,21 @@
  */
 package com.mysema.edith.dto;
 
-public class UserInfo {
+public class UserTO {
 
     private long id;
 
     private String username;
 
-    public UserInfo() {
+    public UserTO() {
     }
 
-    public UserInfo(long id, String username) {
+    public UserTO(long id, String username) {
         this(username);
         this.id = id;
     }
 
-    public UserInfo(String username) {
+    public UserTO(String username) {
         this.username = username;
     }
 
@@ -58,7 +58,7 @@ public class UserInfo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        UserInfo other = (UserInfo) obj;
+        UserTO other = (UserTO) obj;
         if (username == null) {
             if (other.username != null) {
                 return false;

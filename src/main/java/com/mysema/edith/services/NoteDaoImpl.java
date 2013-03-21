@@ -26,9 +26,9 @@ import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EDITH;
 import com.mysema.edith.domain.*;
-import com.mysema.edith.dto.NoteSearchInfo;
+import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.OrderBy;
-import com.mysema.edith.dto.UserInfo;
+import com.mysema.edith.dto.UserTO;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.JPQLSubQuery;
 import com.mysema.query.types.EntityPath;
@@ -97,7 +97,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 //        return createGridDataSource(note, getOrderBy(search), false, notesQuery(search).getValue());
 //    }
 
-    private BooleanBuilder notesQuery(NoteSearchInfo search) {
+    private BooleanBuilder notesQuery(NoteSearchTO search) {
         BooleanBuilder builder = new BooleanBuilder();
 
         // only orphans
@@ -156,7 +156,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         if (!search.getCreators().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
             Collection<String> usernames = new ArrayList<String>(search.getCreators().size());
-            for (UserInfo userInfo : search.getCreators()) {
+            for (UserTO userInfo : search.getCreators()) {
                 filter.or(note.allEditors.contains(userDao.getByUsername(userInfo.getUsername())));
                 usernames.add(userInfo.getUsername());
             }
@@ -203,7 +203,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 //        return createGridDataSource(note, note.lemma.asc(), false, builder.getValue());
 //    }
 
-    private OrderSpecifier<?> getOrderBy(NoteSearchInfo searchInfo) {
+    private OrderSpecifier<?> getOrderBy(NoteSearchTO searchInfo) {
         ComparableExpressionBase<?> comparable = null;
         OrderBy orderBy = searchInfo.getOrderBy() == null ? OrderBy.LEMMA : searchInfo.getOrderBy();
         switch (orderBy) {

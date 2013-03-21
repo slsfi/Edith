@@ -9,12 +9,16 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars'],
     render: function(id) {
       var self = this;
       // FIXME: We know better
-      $.get('/api/documents/'+id+'/raw', function(data) {
+      $.get('/api/documents/' + id + '/raw', function(data) {
         self.$('#documentView').html(data);
       });
-      
+      $.get('/api/documents/' + id + '/document-notes', function(data) {
+        _(data).each(function(documentNote) {
+          self.$('#documentNoteListing').append('<li>' + documentNote.fullSelection + '</li>');
+        });
+      });
     }
-  })
+  });
   
   return DocumentView;
 });

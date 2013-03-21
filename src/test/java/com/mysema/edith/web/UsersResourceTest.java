@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.google.inject.Inject;
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.UserInfo;
+import com.mysema.edith.dto.UserTO;
 import com.mysema.edith.services.UserDao;
 
 public class UsersResourceTest extends AbstractResourceTest {
@@ -33,7 +33,7 @@ public class UsersResourceTest extends AbstractResourceTest {
     
     @Test
     public void Add() {
-        UserInfo user = new UserInfo();
+        UserTO user = new UserTO();
         user.setUsername("test"+System.currentTimeMillis());
         users.add(user);
     }

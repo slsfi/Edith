@@ -5,7 +5,7 @@
  */
 package com.mysema.edith.dto;
 
-public class RevisionInfo {
+public class RevisionTO {
 
     private final long svnRevision;
 
@@ -13,13 +13,13 @@ public class RevisionInfo {
 
     private final String creator;
 
-    public RevisionInfo(long svnRevision, String created, String creator) {
+    public RevisionTO(long svnRevision, String created, String creator) {
         this.svnRevision = svnRevision;
         this.created = created;
         this.creator = creator;
     }
 
-    public RevisionInfo(long svnRevision) {
+    public RevisionTO(long svnRevision) {
         this.svnRevision = svnRevision;
         this.created = "";
         this.creator = "";
@@ -53,7 +53,7 @@ public class RevisionInfo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        RevisionInfo other = (RevisionInfo) obj;
+        RevisionTO other = (RevisionTO) obj;
         if (svnRevision != other.svnRevision) {
             return false;
         }

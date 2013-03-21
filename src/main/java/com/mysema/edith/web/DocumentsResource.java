@@ -28,8 +28,8 @@ import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
-import com.mysema.edith.dto.DocumentInfo;
-import com.mysema.edith.dto.DocumentNoteInfo;
+import com.mysema.edith.dto.DocumentTO;
+import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.services.ContentRenderer;
@@ -40,7 +40,7 @@ import com.mysema.edith.services.NoteDao;
 @Transactional
 @Path("/documents")
 @Produces(MediaType.APPLICATION_JSON)
-public class DocumentsResource extends AbstractResource<DocumentInfo>{
+public class DocumentsResource extends AbstractResource<DocumentTO>{
 
     private final DocumentDao dao;
 
@@ -71,23 +71,23 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
 
     @Override
     @GET @Path("{id}")
-    public DocumentInfo getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), new DocumentInfo());
+    public DocumentTO getById(@PathParam("id") Long id) {
+        return convert(dao.getById(id), new DocumentTO());
     }
 
     @GET @Path("{id}/document-notes")
-    public List<DocumentNoteInfo> getDocumentNotes(@PathParam("id") Long id) {
+    public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
         List<DocumentNote> docNotes = documentNoteDao.getOfDocument(id);
-        List<DocumentNoteInfo> result = new ArrayList<DocumentNoteInfo>(docNotes.size());
+        List<DocumentNoteTO> result = new ArrayList<DocumentNoteTO>(docNotes.size());
         for (DocumentNote docNote : docNotes) {
-            result.add(convert(docNote, new DocumentNoteInfo()));
+            result.add(convert(docNote, new DocumentNoteTO()));
         }
         return result;
     }
 
     @Override
     @POST
-    public DocumentInfo update(DocumentInfo info) {
+    public DocumentTO update(DocumentTO info) {
         Document entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -97,7 +97,7 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
 
     @Override
     @PUT
-    public DocumentInfo add(DocumentInfo info) {
+    public DocumentTO add(DocumentTO info) {
         dao.save(convert(info, new Document()));
         return info;
     }
@@ -120,7 +120,7 @@ public class DocumentsResource extends AbstractResource<DocumentInfo>{
     }
 
     @GET
-    @Path("{id}/notecomments")
+    @Path("{id}/note-comments")
     public List<NoteCommentTO> getLatestComments(@PathParam("id") Long id) {
         List<NoteComment> noteComments = dao.getNoteComments(id, 3);
         // TODO: Remove once there is an UI implementation for adding comments

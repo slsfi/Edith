@@ -17,13 +17,13 @@ import javax.ws.rs.core.MediaType;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.dto.DocumentNoteInfo;
+import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 
 @Transactional
 @Path("/documentnotes")
 @Produces(MediaType.APPLICATION_JSON)
-public class DocumentNotesResource extends AbstractResource<DocumentNoteInfo>{
+public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
 
     private final DocumentNoteDao dao;
     
@@ -33,12 +33,12 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteInfo>{
     }
     
     @GET @Path("{id}")
-    public DocumentNoteInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new DocumentNoteInfo());        
+    public DocumentNoteTO getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new DocumentNoteTO());        
     }
 
     @POST
-    public DocumentNoteInfo update(DocumentNoteInfo info) {
+    public DocumentNoteTO update(DocumentNoteTO info) {
         DocumentNote entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -47,7 +47,7 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteInfo>{
     }
 
     @PUT
-    public DocumentNoteInfo add(DocumentNoteInfo info) {
+    public DocumentNoteTO add(DocumentNoteTO info) {
         dao.save(convert(info, new DocumentNote()));
         return info;
     }

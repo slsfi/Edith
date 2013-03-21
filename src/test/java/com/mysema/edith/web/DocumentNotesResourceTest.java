@@ -15,7 +15,7 @@ import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.DocumentNoteInfo;
+import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.services.UserDao;
@@ -69,7 +69,7 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
     @Test
     public void Add() {
         Document document = documentDao.getDocumentForPath(testDocument);
-        DocumentNoteInfo info = new DocumentNoteInfo();
+        DocumentNoteTO info = new DocumentNoteTO();
         info.setDocument(document.getId());
         info.setFullSelection("a");
         info.setNote(note.getId());

@@ -12,13 +12,13 @@ import javax.ws.rs.core.MediaType;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Term;
-import com.mysema.edith.dto.TermInfo;
+import com.mysema.edith.dto.TermTO;
 import com.mysema.edith.services.TermDao;
 
 @Transactional
 @Path("/terms")
 @Produces(MediaType.APPLICATION_JSON)
-public class TermsResource extends AbstractResource<TermInfo> {
+public class TermsResource extends AbstractResource<TermTO> {
 
     private final TermDao dao;
     
@@ -28,12 +28,12 @@ public class TermsResource extends AbstractResource<TermInfo> {
     }
     
     @GET @Path("{id}")
-    public TermInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new TermInfo());        
+    public TermTO getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new TermTO());        
     }
 
     @POST
-    public TermInfo update(TermInfo info) {
+    public TermTO update(TermTO info) {
         Term entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -42,7 +42,7 @@ public class TermsResource extends AbstractResource<TermInfo> {
     }
 
     @PUT 
-    public TermInfo add(TermInfo info) {
+    public TermTO add(TermTO info) {
         dao.save(convert(info, new Term()));
         return info;
     }

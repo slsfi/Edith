@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.UserInfo;
+import com.mysema.edith.dto.UserTO;
 
 /**
  * @author tiwe
@@ -37,7 +37,7 @@ public interface UserDao extends Dao<User, Long> {
     /**
      * @return
      */
-    Collection<UserInfo> getAllUserInfos();
+    Collection<UserTO> getAllUserInfos();
 
     /**
      * @param filePath

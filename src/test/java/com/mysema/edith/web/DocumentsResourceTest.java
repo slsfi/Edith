@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
 import com.mysema.edith.domain.Document;
-import com.mysema.edith.dto.DocumentInfo;
+import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.services.DocumentDao;
 
 public class DocumentsResourceTest extends AbstractResourceTest {
@@ -30,7 +30,7 @@ public class DocumentsResourceTest extends AbstractResourceTest {
     
     @Test
     public void Add() {
-        DocumentInfo doc = new DocumentInfo();
+        DocumentTO doc = new DocumentTO();
         doc.setPath("abc" + System.currentTimeMillis());
         doc.setTitle("title");
         documents.add(doc);

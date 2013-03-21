@@ -25,7 +25,7 @@ import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EdithTestConstants;
 import com.mysema.edith.domain.*;
-import com.mysema.edith.dto.NoteSearchInfo;
+import com.mysema.edith.dto.NoteSearchTO;
 
 @Transactional
 public class DocumentNoteDaoTest extends AbstractHibernateTest {
@@ -47,7 +47,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
 
     private Document document;
 
-    private NoteSearchInfo searchInfo;
+    private NoteSearchTO searchInfo;
 
     private DocumentNote documentNote1;
 
@@ -85,7 +85,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         documentNote3 = noteDao.createDocumentNote(createNote(), document, "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
         documentNote4 = noteDao.createDocumentNote(createNote(), document, "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
 
-        searchInfo = new NoteSearchInfo();
+        searchInfo = new NoteSearchTO();
         searchInfo.setCurrentDocument(document);
 
         addExtraNote("testo");

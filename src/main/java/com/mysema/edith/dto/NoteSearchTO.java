@@ -13,7 +13,7 @@ import com.mysema.edith.domain.NoteFormat;
 import com.mysema.edith.domain.NoteType;
 import com.mysema.edith.domain.TermLanguage;
 
-public class NoteSearchInfo {
+public class NoteSearchTO {
 
     private Set<Document> documents = new HashSet<Document>();
 
@@ -23,7 +23,7 @@ public class NoteSearchInfo {
 
     private Set<NoteFormat> noteFormats = new HashSet<NoteFormat>();
 
-    private Set<UserInfo> creators = new HashSet<UserInfo>();
+    private Set<UserTO> creators = new HashSet<UserTO>();
 
     private TermLanguage language;
 
@@ -39,10 +39,10 @@ public class NoteSearchInfo {
 
     private String fullText;
 
-    public NoteSearchInfo() {
+    public NoteSearchTO() {
     }
 
-    public NoteSearchInfo(Document document) {
+    public NoteSearchTO(Document document) {
         currentDocument = document;
     }
 
@@ -78,11 +78,11 @@ public class NoteSearchInfo {
         this.noteFormats = noteFormats;
     }
 
-    public Set<UserInfo> getCreators() {
+    public Set<UserTO> getCreators() {
         return creators;
     }
 
-    public void setCreators(Set<UserInfo> creators) {
+    public void setCreators(Set<UserTO> creators) {
         this.creators = creators;
     }
 

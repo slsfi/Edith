@@ -14,12 +14,12 @@ import com.mysema.edith.domain.Person;
 import com.mysema.edith.domain.Place;
 import com.mysema.edith.domain.Profile;
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.DocumentInfo;
-import com.mysema.edith.dto.DocumentNoteInfo;
-import com.mysema.edith.dto.NoteInfo;
-import com.mysema.edith.dto.PersonInfo;
-import com.mysema.edith.dto.PlaceInfo;
-import com.mysema.edith.dto.UserInfo;
+import com.mysema.edith.dto.DocumentTO;
+import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.NoteTO;
+import com.mysema.edith.dto.PersonTO;
+import com.mysema.edith.dto.PlaceTO;
+import com.mysema.edith.dto.UserTO;
 
 public class ConverterTest {
     
@@ -32,7 +32,7 @@ public class ConverterTest {
         doc.setPath("abc");
         doc.setTitle("title");
         
-        DocumentInfo info = converter.convert(doc, new DocumentInfo());
+        DocumentTO info = converter.convert(doc, new DocumentTO());
         assertEquals(Long.valueOf(3l), info.getId());
         assertEquals("abc", info.getPath());
         assertEquals("title", info.getTitle());
@@ -53,7 +53,7 @@ public class ConverterTest {
         docNote.setNote(note);
         docNote.setDocument(doc);
         
-        DocumentNoteInfo docNoteInfo = converter.convert(docNote, new DocumentNoteInfo());
+        DocumentNoteTO docNoteInfo = converter.convert(docNote, new DocumentNoteTO());
         assertEquals("full", docNoteInfo.getFullSelection());
         assertEquals(Long.valueOf(2), docNoteInfo.getDocument());
         assertEquals(Long.valueOf(3), docNoteInfo.getNote());
@@ -70,12 +70,12 @@ public class ConverterTest {
         note.setFormat(NoteFormat.NOTE);
         note.setPerson(person);
         
-        NoteInfo noteInfo = converter.convert(note, new NoteInfo());
+        NoteTO noteInfo = converter.convert(note, new NoteTO());
         assertEquals(Long.valueOf(3), noteInfo.getId());
         assertEquals("description", noteInfo.getDescription());
         assertEquals(NoteFormat.NOTE, noteInfo.getFormat());
         
-        PersonInfo personInfo = noteInfo.getPerson();
+        PersonTO personInfo = noteInfo.getPerson();
         assertEquals(Long.valueOf(4l), personInfo.getId());
         
     }
@@ -92,7 +92,7 @@ public class ConverterTest {
         person.setNormalized(nameForm);
         person.setOtherForms(Sets.newHashSet(nameForm));
         
-        PersonInfo personInfo = converter.convert(person, new PersonInfo());
+        PersonTO personInfo = converter.convert(person, new PersonTO());
         assertEquals(Long.valueOf(4l), personInfo.getId());
         
         assertEquals("abc", personInfo.getNormalized().getDescription());
@@ -116,7 +116,7 @@ public class ConverterTest {
         place.setId(4l);
         place.setNormalized(nameForm);
         
-        PlaceInfo placeInfo = converter.convert(place, new PlaceInfo());
+        PlaceTO placeInfo = converter.convert(place, new PlaceTO());
         assertEquals(Long.valueOf(4), placeInfo.getId());
         
         assertEquals("abc", placeInfo.getNormalized().getDescription());
@@ -133,7 +133,7 @@ public class ConverterTest {
         user.setLastName("b");
         user.setProfile(Profile.User);
         
-        UserInfo info = converter.convert(user, new UserInfo());
+        UserTO info = converter.convert(user, new UserTO());
         assertEquals("x", info.getUsername());
     }
 

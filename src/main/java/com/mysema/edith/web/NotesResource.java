@@ -21,15 +21,15 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
-import com.mysema.edith.dto.DocumentNoteInfo;
-import com.mysema.edith.dto.NoteInfo;
+import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteDao;
 
 @Transactional
 @Path("/notes")
 @Produces(MediaType.APPLICATION_JSON)
-public class NotesResource extends AbstractResource<NoteInfo> {
+public class NotesResource extends AbstractResource<NoteTO> {
 
     private final NoteDao dao;
     
@@ -42,22 +42,22 @@ public class NotesResource extends AbstractResource<NoteInfo> {
     }
     
     @GET @Path("{id}")
-    public NoteInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new NoteInfo());        
+    public NoteTO getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new NoteTO());        
     }
     
     @GET @Path("{id}/document-notes")
-    public List<DocumentNoteInfo> getDocumentNotes(@PathParam("id") Long id) {
+    public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
         List<DocumentNote> docNotes = documentNoteDao.getOfNote(id);
-        List<DocumentNoteInfo> result = new ArrayList<DocumentNoteInfo>(docNotes.size());
+        List<DocumentNoteTO> result = new ArrayList<DocumentNoteTO>(docNotes.size());
         for (DocumentNote docNote : docNotes) {
-            result.add(convert(docNote, new DocumentNoteInfo()));
+            result.add(convert(docNote, new DocumentNoteTO()));
         }
         return result;
     }
 
     @POST
-    public NoteInfo update(NoteInfo info) {
+    public NoteTO update(NoteTO info) {
         Note entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -66,7 +66,7 @@ public class NotesResource extends AbstractResource<NoteInfo> {
     }
 
     @PUT 
-    public NoteInfo add(NoteInfo info) {
+    public NoteTO add(NoteTO info) {
         dao.save(convert(info, new Note()));
         return info;
     }

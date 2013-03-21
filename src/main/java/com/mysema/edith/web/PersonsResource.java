@@ -17,13 +17,13 @@ import javax.ws.rs.core.MediaType;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Person;
-import com.mysema.edith.dto.PersonInfo;
+import com.mysema.edith.dto.PersonTO;
 import com.mysema.edith.services.PersonDao;
 
 @Transactional
 @Path("/persons")
 @Produces(MediaType.APPLICATION_JSON)
-public class PersonsResource extends AbstractResource<PersonInfo> {
+public class PersonsResource extends AbstractResource<PersonTO> {
 
     private final PersonDao dao;
     
@@ -33,12 +33,12 @@ public class PersonsResource extends AbstractResource<PersonInfo> {
     }
     
     @GET @Path("{id}")
-    public PersonInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new PersonInfo());        
+    public PersonTO getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new PersonTO());        
     }
 
     @POST
-    public PersonInfo update(PersonInfo info) {
+    public PersonTO update(PersonTO info) {
         Person entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -47,7 +47,7 @@ public class PersonsResource extends AbstractResource<PersonInfo> {
     }
 
     @PUT 
-    public PersonInfo add(PersonInfo info) {
+    public PersonTO add(PersonTO info) {
         dao.save(convert(info, new Person()));
         return info;
     }

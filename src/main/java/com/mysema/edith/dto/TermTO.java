@@ -7,7 +7,7 @@ package com.mysema.edith.dto;
 
 import com.mysema.edith.domain.TermLanguage;
 
-public class TermInfo {
+public class TermTO {
     
     private Long id;
     

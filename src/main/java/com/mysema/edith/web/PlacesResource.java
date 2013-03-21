@@ -17,13 +17,13 @@ import javax.ws.rs.core.MediaType;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Place;
-import com.mysema.edith.dto.PlaceInfo;
+import com.mysema.edith.dto.PlaceTO;
 import com.mysema.edith.services.PlaceDao;
 
 @Transactional
 @Path("/places")
 @Produces(MediaType.APPLICATION_JSON)
-public class PlacesResource extends AbstractResource<PlaceInfo> {
+public class PlacesResource extends AbstractResource<PlaceTO> {
 
     private final PlaceDao dao;
     
@@ -33,12 +33,12 @@ public class PlacesResource extends AbstractResource<PlaceInfo> {
     }
     
     @GET @Path("{id}")
-    public PlaceInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new PlaceInfo());        
+    public PlaceTO getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new PlaceTO());        
     }
 
     @POST
-    public PlaceInfo update(PlaceInfo info) {
+    public PlaceTO update(PlaceTO info) {
         Place entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -47,7 +47,7 @@ public class PlacesResource extends AbstractResource<PlaceInfo> {
     }
 
     @PUT 
-    public PlaceInfo add(PlaceInfo info) {
+    public PlaceTO add(PlaceTO info) {
         dao.save(convert(info, new Place()));
         return info;
     }

@@ -14,10 +14,10 @@ import javax.ws.rs.PathParam;
 
 import com.google.inject.Inject;
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.UserInfo;
+import com.mysema.edith.dto.UserTO;
 import com.mysema.edith.services.UserDao;
 
-public class UsersResource extends AbstractResource<UserInfo> {
+public class UsersResource extends AbstractResource<UserTO> {
 
     private final UserDao dao;
     
@@ -27,12 +27,12 @@ public class UsersResource extends AbstractResource<UserInfo> {
     }
     
     @GET @Path("{id}")
-    public UserInfo getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new UserInfo());        
+    public UserTO getById(@PathParam("id") Long id) {        
+        return convert(dao.getById(id), new UserTO());        
     }
 
     @POST
-    public UserInfo update(UserInfo info) {
+    public UserTO update(UserTO info) {
         User entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -41,7 +41,7 @@ public class UsersResource extends AbstractResource<UserInfo> {
     }
 
     @PUT 
-    public UserInfo add(UserInfo info) {
+    public UserTO add(UserTO info) {
         dao.save(convert(info, new User()));
         return info;
     }

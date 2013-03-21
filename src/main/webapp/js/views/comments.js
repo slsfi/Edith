@@ -8,7 +8,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
       _.bindAll(this, 'render');
       var render = this.render;
       vent.on('document:select', function(id) {
-        $.get('/api/documents/' + id + '/notecomments', render);
+        $.get('/api/documents/' + id + '/note-comments', render);
       });
     },
     

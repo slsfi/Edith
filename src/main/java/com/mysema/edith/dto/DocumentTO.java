@@ -5,7 +5,7 @@
  */
 package com.mysema.edith.dto;
 
-public class DocumentInfo {
+public class DocumentTO {
     
     private Long id;
     

@@ -10,17 +10,17 @@ import java.util.Set;
 import com.mysema.edith.domain.NoteFormat;
 import com.mysema.edith.domain.NoteType;
 
-public class NoteInfo {
+public class NoteTO {
     
     private Long id;
     
     private String lemma;
     
-    private TermInfo term;
+    private TermTO term;
     
     private Long editedOn;
     
-    private UserInfo lastEditedBy;
+    private UserTO lastEditedBy;
     
     private String sources;
     
@@ -36,9 +36,9 @@ public class NoteInfo {
     
     private String lemmaMeaning;
     
-    private PersonInfo person;
+    private PersonTO person;
     
-    private PlaceInfo place;
+    private PlaceTO place;
 
     public Long getId() {
         return id;
@@ -56,11 +56,11 @@ public class NoteInfo {
         this.lemma = lemma;
     }
 
-    public TermInfo getTerm() {
+    public TermTO getTerm() {
         return term;
     }
 
-    public void setTerm(TermInfo term) {
+    public void setTerm(TermTO term) {
         this.term = term;
     }
 
@@ -72,11 +72,11 @@ public class NoteInfo {
         this.editedOn = editedOn;
     }
 
-    public UserInfo getLastEditedBy() {
+    public UserTO getLastEditedBy() {
         return lastEditedBy;
     }
 
-    public void setLastEditedBy(UserInfo lastEditedBy) {
+    public void setLastEditedBy(UserTO lastEditedBy) {
         this.lastEditedBy = lastEditedBy;
     }
 
@@ -136,19 +136,19 @@ public class NoteInfo {
         this.lemmaMeaning = lemmaMeaning;
     }
 
-    public PersonInfo getPerson() {
+    public PersonTO getPerson() {
         return person;
     }
 
-    public void setPerson(PersonInfo person) {
+    public void setPerson(PersonTO person) {
         this.person = person;
     }
 
-    public PlaceInfo getPlace() {
+    public PlaceTO getPlace() {
         return place;
     }
 
-    public void setPlace(PlaceInfo place) {
+    public void setPlace(PlaceTO place) {
         this.place = place;
     }
     

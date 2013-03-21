@@ -17,7 +17,7 @@ import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Profile;
 import com.mysema.edith.domain.QUser;
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.UserInfo;
+import com.mysema.edith.dto.UserTO;
 import com.mysema.query.types.ConstructorExpression;
 
 @Transactional
@@ -65,9 +65,9 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public Collection<UserInfo> getAllUserInfos() {
+    public Collection<UserTO> getAllUserInfos() {
         return query().from(user).where(user.active.eq(true))
-                .list(ConstructorExpression.create(UserInfo.class, user.id, user.username));
+                .list(ConstructorExpression.create(UserTO.class, user.id, user.username));
     }
 
     @Override
