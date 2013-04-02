@@ -9,6 +9,11 @@ window.rconfig = {
     bootstrap: 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/bootstrap.min',
     moment: 'http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.2/moment.min',
     text: 'js/libs/require/text',
+    jqueryeventdrag: 'js/libs/jquery/jquery.event.drag',
+    'slickgrid-core': 'js/libs/slickgrid/slick.core',
+    slickgrid: 'js/libs/slickgrid/slick.grid',
+    'slickgrid-pager': 'js/libs/slickgrid/slick.pager', 
+    slickback: 'js/libs/slickback/slickback.full',
     json: 'js/libs/require/json'
   },
   shim: {
@@ -18,8 +23,25 @@ window.rconfig = {
     },
     'underscore': { exports: '_' },
     'backbone': {
-      deps: ['underscore', 'jquery', 'moment'],
+      deps: ['underscore', 'jquery'],
       exports: 'Backbone'
+    },
+    'jqueryeventdrag': {
+      deps: ['jquery']
+    },
+    'slickgrid-pager': {
+      deps: ['jquery']
+    },
+    'slickgrid': {
+      deps: ['jquery', 'jqueryeventdrag', 'jqueryui', 'slickgrid-pager'],
+      exports: 'Slick'
+    },
+    'slickgrid-core': {
+      deps: ['jquery']
+    },
+    'slickback': {
+      deps: ['backbone', 'slickgrid', 'slickgrid-core'],
+      exports: 'Slickback'
     },
     'bootstrap': { deps: ['jquery'] },
     'handlebars': { exports: 'Handlebars' },

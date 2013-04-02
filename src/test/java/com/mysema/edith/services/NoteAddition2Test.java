@@ -21,7 +21,7 @@ import com.mysema.edith.dto.SelectedText;
 
 
 public class NoteAddition2Test extends AbstractHibernateTest {
-    
+
     @Inject @Named(EdithTestConstants.TEST_DOCUMENT_CONTENT_KEY)
     private String testDocumentContent;
 
