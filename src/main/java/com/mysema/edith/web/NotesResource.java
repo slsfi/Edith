@@ -29,9 +29,11 @@ import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteDao;
+import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.HQLTemplates;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.support.Expressions;
+import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.path.StringPath;
 
 @Transactional
@@ -66,10 +68,11 @@ public class NotesResource extends AbstractResource<NoteTO> {
 
     @GET
     public Map<String, Object> all(
-            @QueryParam("page") long page,
-            @QueryParam("per_page") long perPage,
+            @QueryParam("page") Long page,
+            @QueryParam("per_page") Long perPage,
             @QueryParam("order") String order,
-            @QueryParam("direction") String direction) {
+            @QueryParam("direction") String direction,
+            @QueryParam("query") String query) {
         QTerm term = QTerm.term;
         StringPath path = null;
         if (order == null) {
@@ -79,11 +82,31 @@ public class NotesResource extends AbstractResource<NoteTO> {
         } else {
             path = stringPath(note, order);
         }
+        if (perPage == null) {
+            perPage = 10L;
+        }
+        if (page == null) {
+            page = 1L;
+        }
+        BooleanExpression filter = null;
+        if (query != null) {
+            // TODO: use other fields as well?
+            filter = note.lemma.containsIgnoreCase(query);
+        }
+        long limit = perPage;
+        long offset = (page - 1) * limit;
         List<Note> notes = query()
                 .from(note)
                 .leftJoin(note.term, term)
+                .where(filter)
                 .orderBy(direction == null || direction.equals("ASC") ? path.asc() : path.desc())
+                .limit(limit)
+                .offset(offset)
                 .list(note);
+        long count = query()
+                .from(note)
+                .where(filter)
+                .count();
         List<NoteTO> entries = new ArrayList<NoteTO>();
         for (Note note : notes) {
             entries.add(convert(note, new NoteTO()));
@@ -92,9 +115,16 @@ public class NotesResource extends AbstractResource<NoteTO> {
         rv.put("entries", entries);
         rv.put("currentPage", page);
         rv.put("perPage", perPage);
-        rv.put("totalPages", 100);
-        rv.put("totalEntries", 1000);
+        rv.put("totalPages", totalPages(limit, count));
+        rv.put("totalEntries", count);
         return rv;
+    }
+
+    private static final long totalPages(long pageSize, long count) {
+        if (count % pageSize != 0) {
+            return count / pageSize + 1;
+        }
+        return count / pageSize;
     }
 
     @GET @Path("{id}/document-notes")
