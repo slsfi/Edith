@@ -73,6 +73,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
             @QueryParam("order") String order,
             @QueryParam("direction") String direction,
             @QueryParam("query") String query) {
+        // TODO: Move query into DAO-layer?
         QTerm term = QTerm.term;
         StringPath path = null;
         if (order == null) {
