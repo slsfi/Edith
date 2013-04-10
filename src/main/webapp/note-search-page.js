@@ -13,17 +13,18 @@ require([], function() {
     
     var notes = new NotesCollection();
     var columns = [
-                   {sortable: true, minWidth: 100, id: 'id', name: 'ID', field: 'id'},
-                   {sortable: true, minWidth: 100, id: 'lemma', name: 'Lemma', field: 'lemma'},
-                   {sortable: true, minWidth: 1400, id: 'description', name: 'Description', field: 'description'},
-                   {sortable: true, minWidth: 100, id: 'subtextSources', name: 'Subtext sources', field: 'subtextSources'},
-                   {sortable: true, minWidth: 100, id: 'editedOn', name: 'Edited on', field: 'editedOn'},
-                   {sortable: true, minWidth: 100, id: 'basicForm', name: 'Basic form', field: 'term.basicForm'},
-                   {minWidth: 100,id: 'meaning', name: 'Meaning', field: 'term.meaning'}
+                   {sortable: true, id: 'id', name: 'ID', field: 'id'},
+                   {sortable: true, id: 'lemma', name: 'Lemma', field: 'lemma'},
+                   {sortable: true, maxWidth: 300, id: 'description', name: 'Description', field: 'description'},
+                   {sortable: true,  id: 'subtextSources', name: 'Subtext sources', field: 'subtextSources'},
+                   {sortable: true,  id: 'editedOn', name: 'Edited on', field: 'editedOn'},
+                   {sortable: true,  id: 'basicForm', name: 'Basic form', field: 'term.basicForm'},
+                   {id: 'meaning', name: 'Meaning', field: 'term.meaning'}
                    // TODO: Add 'poistettava'
                    ];
     var options = {
-      formatterFactory: Slickback.BackboneModelFormatterFactory, autoHeight: true
+      formatterFactory: Slickback.BackboneModelFormatterFactory, autoHeight: true,
+      forceFitColumns: true
     };
     var grid = new Slick.Grid('#noteGrid', notes, columns, options);
     var pager = new Slick.Controls.Pager(notes, grid, $('#notePager'));
