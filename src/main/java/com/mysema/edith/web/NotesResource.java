@@ -84,7 +84,10 @@ public class NotesResource extends AbstractResource<NoteTO> {
             path = stringPath(note, order);
         }
         if (perPage == null) {
-            perPage = 10L;
+            perPage = 25L;
+        }
+        if (perPage <= 0) {
+            perPage = (long) Integer.MAX_VALUE;
         }
         if (page == null) {
             page = 1L;

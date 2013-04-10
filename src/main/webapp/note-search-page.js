@@ -8,7 +8,11 @@ require([], function() {
     var Note = Backbone.Model;
     var NotesCollection = Slickback.PaginatedCollection.extend({
       model: Note,
-      url: '/api/notes'
+      url: '/api/notes',
+
+      setRefreshHints: function() {
+        // Called when changing page size. TODO: Implement functionality? 
+      }
     });
     
     var notes = new NotesCollection();
