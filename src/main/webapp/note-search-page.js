@@ -18,7 +18,7 @@ require([], function() {
     var notes = new NotesCollection();
     var columns = [
                    {sortable: true, id: 'id', name: 'ID', field: 'id'},
-                   {sortable: true, id: 'lemma', name: 'Lemma', field: 'lemma'},
+                   {sortable: true, id: 'lemma', name: 'Lemma', field: 'lemma', editor: Slickback.TextCellEditor},
                    {sortable: true, maxWidth: 300, id: 'description', name: 'Description', field: 'description'},
                    {sortable: true,  id: 'subtextSources', name: 'Subtext sources', field: 'subtextSources'},
                    {sortable: true,  id: 'editedOn', name: 'Edited on', field: 'editedOn'},
@@ -27,7 +27,9 @@ require([], function() {
                    // TODO: Add 'poistettava'
                    ];
     var options = {
-      formatterFactory: Slickback.BackboneModelFormatterFactory, autoHeight: true,
+      formatterFactory: Slickback.BackboneModelFormatterFactory,
+      editable: true,
+      autoHeight: true,
       forceFitColumns: true
     };
     var grid = new Slick.Grid('#noteGrid', notes, columns, options);
