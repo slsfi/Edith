@@ -18,20 +18,14 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
         onClick: function(node) {
           if (!node.data.isFolder) {
             vent.trigger('document:select', node.data.documentId);
+          } else {
+            vent.trigger('folder:select');
           }
         },
         
         onDblClick: function(node) {
           if (!node.data.isFolder) {
             vent.trigger('document:open', node.data.documentId);
-            // FIXME: Don't do this Vesa
-            self.$el.hide();
-          }
-        },
-        
-        onKeypress: function(node, event) {
-          var code = event.keyCode || event.which;
-          if (code === 46) {
           }
         },
         

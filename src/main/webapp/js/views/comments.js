@@ -10,6 +10,8 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
       vent.on('document:select', function(id) {
         $.get('/api/documents/' + id + '/note-comments', render);
       });
+      var self = this;
+      vent.on('folder:select', function() { self.$el.empty(); });
     },
     
     render: function(data) {
