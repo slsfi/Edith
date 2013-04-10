@@ -38,8 +38,8 @@ public class UsersResource extends AbstractResource<UserTO> {
     }
 
     @Override
-    @PUT
-    public UserTO update(UserTO info) {
+    @PUT @Path("{id}")
+    public UserTO update(@PathParam("id") Long id, UserTO info) {
         dao.save(convert(info, new User()));
         return info;
     }

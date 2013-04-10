@@ -49,8 +49,9 @@ public class FilesResource extends AbstractResource<FileItemWithDocumentId>{
     }
 
     @Override
-    @PUT
-    public FileItemWithDocumentId update(FileItemWithDocumentId file) {
+    @PUT @Path("{id}")
+    public FileItemWithDocumentId update(@PathParam("id") Long id,
+            FileItemWithDocumentId file) {
         throw new UnsupportedOperationException();
     }
 

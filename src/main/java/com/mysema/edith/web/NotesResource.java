@@ -152,8 +152,8 @@ public class NotesResource extends AbstractResource<NoteTO> {
     }
 
     @Override
-    @PUT
-    public NoteTO update(NoteTO info) {
+    @PUT @Path("{id}")
+    public NoteTO update(@PathParam("id") Long id, NoteTO info) {
         dao.save(convert(info, new Note()));
         return info;
     }

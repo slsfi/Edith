@@ -49,8 +49,8 @@ public class PlacesResource extends AbstractResource<PlaceTO> {
     }
 
     @Override
-    @PUT
-    public PlaceTO update(PlaceTO info) {
+    @PUT @Path("{id}")
+    public PlaceTO update(@PathParam("id") Long id, PlaceTO info) {
         dao.save(convert(info, new Place()));
         return info;
     }

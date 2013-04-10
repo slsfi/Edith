@@ -44,8 +44,8 @@ public class TermsResource extends AbstractResource<TermTO> {
     }
 
     @Override
-    @PUT
-    public TermTO update(TermTO info) {
+    @PUT @Path("{id}")
+    public TermTO update(@PathParam("id") Long id, TermTO info) {
         dao.save(convert(info, new Term()));
         return info;
     }
