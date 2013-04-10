@@ -23,7 +23,7 @@ require([], function() {
                    // TODO: Add 'poistettava'
                    ];
     var options = {
-      formatterFactory: Slickback.BackboneModelFormatterFactory
+      formatterFactory: Slickback.BackboneModelFormatterFactory, autoHeight: true
     };
     var grid = new Slick.Grid('#noteGrid', notes, columns, options);
     var pager = new Slick.Controls.Pager(notes, grid, $('#notePager'));
