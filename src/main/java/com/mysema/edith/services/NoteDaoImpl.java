@@ -40,9 +40,9 @@ import com.mysema.query.types.path.StringPath;
 public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     private static final QNote note = QNote.note;
-    
+
     private static final QDocumentNote documentNote = QDocumentNote.documentNote;
-    
+
     private static final class LoopContext {
         private Note note;
         private String text;
@@ -262,7 +262,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         if (abbreviation.length() > 85) {
             abbreviation = abbreviation.substring(0, 85);
         }
-        
+
         // Extended term version gets the lemma also to basicTerm automatically
         if (extendedTerm && n.getTerm() != null && n.getTerm().getBasicForm() == null) {
             n.getTerm().setBasicForm(abbreviation);
@@ -438,8 +438,14 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     @Override
-    public void save(Note note) {
-        persist(note);
+    public Note save(Note note) {
+        note.setEditedOn(System.currentTimeMillis());
+        if (note.getId() != null) {
+            merge(note);
+        } else {
+            persist(note);
+        }
+        return note;
     }
 
     @Override
@@ -447,13 +453,13 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         note.setDeleted(true);
         save(note);
     }
-    
+
     @Override
     public void remove(Long id) {
         Note note = find(Note.class, id);
         if (note != null) {
-            remove(note);    
-        }        
+            remove(note);
+        }
     }
 
     @Override

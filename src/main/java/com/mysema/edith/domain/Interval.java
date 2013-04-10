@@ -52,13 +52,8 @@ public class Interval {
         this.end = end;
     }
 
-    public boolean isDate() {
+    private boolean notInterval() {
         return getStart().equals(getEnd());
-    }
-
-    public boolean isYear() {
-        // FIXME Naive, doesn't consider ranges yet.
-        return !isDate();
     }
 
     public int getYear() {
@@ -76,7 +71,7 @@ public class Interval {
 
     /**
      * This creates an empty interval for the start of the given date
-     * 
+     *
      * @param localDate
      * @return
      */
@@ -86,7 +81,7 @@ public class Interval {
 
     /**
      * This creates an empty interval for the given timestamp
-     * 
+     *
      * @param dateTime
      * @return
      */
@@ -94,8 +89,9 @@ public class Interval {
         return new Interval(dateTime, dateTime);
     }
 
-    public String asString() {
-        if (isYear()) {
+    @Override
+    public String toString() {
+        if (!notInterval()) {
             return String.valueOf(getYear());
         }
         return formatter.print(getDate());

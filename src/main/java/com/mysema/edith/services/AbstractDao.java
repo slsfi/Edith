@@ -24,7 +24,7 @@ public abstract class AbstractDao<T> implements Dao<T, Long> {
     protected JPAQuery query() {
         return new JPAQuery(em.get(), HQLTemplates.DEFAULT);
     }
-    
+
     protected JPADeleteClause delete(EntityPath<?> entity) {
         return new JPADeleteClause(em.get(), entity, HQLTemplates.DEFAULT);
     }
@@ -32,18 +32,22 @@ public abstract class AbstractDao<T> implements Dao<T, Long> {
     protected void evict(Object entity) {
         em.get().unwrap(Session.class).evict(entity);
     }
-    
+
     protected <E> E find(Class<E> type, Long id) {
-        return em.get().find(type, id);                
+        return em.get().find(type, id);
     }
-    
+
     protected void persist(Object entity) {
         em.get().persist(entity);
     }
-    
+
+    protected void merge(Object entity) {
+        em.get().merge(entity);
+    }
+
     protected void remove(Object entity) {
         em.get().remove(entity);
     }
-    
+
 
 }

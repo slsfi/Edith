@@ -42,7 +42,7 @@ public class Note implements Identifiable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "note")
     private Set<NoteComment> comments = new HashSet<NoteComment>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private User lastEditedBy;
 
     private String sources;

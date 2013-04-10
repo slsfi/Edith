@@ -122,11 +122,11 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.writeEndElement();
                 StringBuilder builder = new StringBuilder();
                 if (timeOfBirth != null) {
-                    builder.append(timeOfBirth.asString());
+                    builder.append(timeOfBirth.toString());
                 }
                 builder.append("\u2013");
                 if (timeOfDeath != null) {
-                    builder.append(timeOfDeath.asString());
+                    builder.append(timeOfDeath.toString());
                 }
                 builder.append(".");
                 writeSpan(writer, "lifetime");

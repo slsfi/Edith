@@ -22,7 +22,7 @@ public interface NoteDao extends Dao<Note, Long> {
 
     /**
      * Creates a comment for the given note.
-     * 
+     *
      * @param concept
      * @param message
      */
@@ -41,7 +41,7 @@ public interface NoteDao extends Dao<Note, Long> {
 
     /**
      * Import notes from the given file
-     * 
+     *
      * @param file
      * @throws Exception
      */
@@ -49,7 +49,7 @@ public interface NoteDao extends Dao<Note, Long> {
 
 //    /**
 //     * Query for notes with the given search term
-//     * 
+//     *
 //     * @param searchTerm
 //     * @return
 //     */
@@ -57,7 +57,7 @@ public interface NoteDao extends Dao<Note, Long> {
 
     /**
      * Removes a NoteComment based on its id. Returns the deleted comment.
-     * 
+     *
      * @param commentId
      * @return
      */
@@ -95,22 +95,22 @@ public interface NoteDao extends Dao<Note, Long> {
     /**
      * @param editedNote
      */
-    void save(Note editedNote);
+    Note save(Note editedNote);
 
     /**
      * Remove notes
-     * 
+     *
      * @param notes
      */
     void removeNotes(Collection<Note> notes);
 
     /**
      * Remove note
-     * 
+     *
      * @param note
      */
     void remove(Note note);
-    
+
     /**
      * @param id
      */
