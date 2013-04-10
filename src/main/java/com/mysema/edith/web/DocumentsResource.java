@@ -87,7 +87,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
 
     @Override
     @POST
-    public DocumentTO update(DocumentTO info) {
+    public DocumentTO create(DocumentTO info) {
         Document entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -97,7 +97,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
 
     @Override
     @PUT
-    public DocumentTO add(DocumentTO info) {
+    public DocumentTO update(DocumentTO info) {
         dao.save(convert(info, new Document()));
         return info;
     }

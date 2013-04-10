@@ -11,7 +11,7 @@ public interface Resource<Type> {
     
     Type update(Type entity);
     
-    Type add(Type entity);
+    Type create(Type entity);
     
     void delete(Long id);
 

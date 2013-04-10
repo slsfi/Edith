@@ -26,19 +26,21 @@ import com.mysema.edith.services.PlaceDao;
 public class PlacesResource extends AbstractResource<PlaceTO> {
 
     private final PlaceDao dao;
-    
+
     @Inject
     public PlacesResource(PlaceDao dao) {
         this.dao = dao;
     }
-    
+
+    @Override
     @GET @Path("{id}")
-    public PlaceTO getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new PlaceTO());        
+    public PlaceTO getById(@PathParam("id") Long id) {
+        return convert(dao.getById(id), new PlaceTO());
     }
 
+    @Override
     @POST
-    public PlaceTO update(PlaceTO info) {
+    public PlaceTO create(PlaceTO info) {
         Place entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -46,12 +48,14 @@ public class PlacesResource extends AbstractResource<PlaceTO> {
         return info;
     }
 
-    @PUT 
-    public PlaceTO add(PlaceTO info) {
+    @Override
+    @PUT
+    public PlaceTO update(PlaceTO info) {
         dao.save(convert(info, new Place()));
         return info;
     }
 
+    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);

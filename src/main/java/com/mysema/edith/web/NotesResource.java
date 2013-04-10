@@ -143,7 +143,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
 
     @Override
     @POST
-    public NoteTO update(NoteTO info) {
+    public NoteTO create(NoteTO info) {
         Note entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -153,7 +153,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
 
     @Override
     @PUT
-    public NoteTO add(NoteTO info) {
+    public NoteTO update(NoteTO info) {
         dao.save(convert(info, new Note()));
         return info;
     }

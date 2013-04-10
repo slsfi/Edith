@@ -21,19 +21,21 @@ import com.mysema.edith.services.TermDao;
 public class TermsResource extends AbstractResource<TermTO> {
 
     private final TermDao dao;
-    
+
     @Inject
     public TermsResource(TermDao dao) {
         this.dao = dao;
     }
-    
+
+    @Override
     @GET @Path("{id}")
-    public TermTO getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new TermTO());        
+    public TermTO getById(@PathParam("id") Long id) {
+        return convert(dao.getById(id), new TermTO());
     }
 
+    @Override
     @POST
-    public TermTO update(TermTO info) {
+    public TermTO create(TermTO info) {
         Term entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -41,15 +43,17 @@ public class TermsResource extends AbstractResource<TermTO> {
         return info;
     }
 
-    @PUT 
-    public TermTO add(TermTO info) {
+    @Override
+    @PUT
+    public TermTO update(TermTO info) {
         dao.save(convert(info, new Term()));
         return info;
     }
 
+    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-    
+
 }

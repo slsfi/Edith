@@ -26,19 +26,21 @@ import com.mysema.edith.services.PersonDao;
 public class PersonsResource extends AbstractResource<PersonTO> {
 
     private final PersonDao dao;
-    
+
     @Inject
     public PersonsResource(PersonDao dao) {
         this.dao = dao;
     }
-    
+
+    @Override
     @GET @Path("{id}")
-    public PersonTO getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new PersonTO());        
+    public PersonTO getById(@PathParam("id") Long id) {
+        return convert(dao.getById(id), new PersonTO());
     }
 
+    @Override
     @POST
-    public PersonTO update(PersonTO info) {
+    public PersonTO create(PersonTO info) {
         Person entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -46,12 +48,14 @@ public class PersonsResource extends AbstractResource<PersonTO> {
         return info;
     }
 
-    @PUT 
-    public PersonTO add(PersonTO info) {
+    @Override
+    @PUT
+    public PersonTO update(PersonTO info) {
         dao.save(convert(info, new Person()));
         return info;
     }
 
+    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);

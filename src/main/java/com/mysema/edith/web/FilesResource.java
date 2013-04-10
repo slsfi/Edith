@@ -1,10 +1,10 @@
 package com.mysema.edith.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -14,11 +14,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.FileItemWithDocumentId;
 import com.mysema.edith.services.DocumentDao;
-import com.mysema.edith.services.DocumentNoteDao;
 
 @Transactional
 @Path("/files")
@@ -46,13 +43,14 @@ public class FilesResource extends AbstractResource<FileItemWithDocumentId>{
     }
 
     @Override
-    public FileItemWithDocumentId update(FileItemWithDocumentId file) {
+    @POST
+    public FileItemWithDocumentId create(FileItemWithDocumentId file) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     @PUT
-    public FileItemWithDocumentId add(FileItemWithDocumentId file) {
+    public FileItemWithDocumentId update(FileItemWithDocumentId file) {
         throw new UnsupportedOperationException();
     }
 

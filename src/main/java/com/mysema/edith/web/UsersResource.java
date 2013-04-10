@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.web;
 
 import javax.ws.rs.DELETE;
@@ -20,19 +15,21 @@ import com.mysema.edith.services.UserDao;
 public class UsersResource extends AbstractResource<UserTO> {
 
     private final UserDao dao;
-    
+
     @Inject
     public UsersResource(UserDao dao) {
         this.dao = dao;
     }
-    
+
+    @Override
     @GET @Path("{id}")
-    public UserTO getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new UserTO());        
+    public UserTO getById(@PathParam("id") Long id) {
+        return convert(dao.getById(id), new UserTO());
     }
 
+    @Override
     @POST
-    public UserTO update(UserTO info) {
+    public UserTO create(UserTO info) {
         User entity = dao.getById(info.getId());
         if (entity != null) {
             dao.save(convert(info, entity));
@@ -40,12 +37,14 @@ public class UsersResource extends AbstractResource<UserTO> {
         return info;
     }
 
-    @PUT 
-    public UserTO add(UserTO info) {
+    @Override
+    @PUT
+    public UserTO update(UserTO info) {
         dao.save(convert(info, new User()));
         return info;
     }
 
+    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         throw new UnsupportedOperationException();

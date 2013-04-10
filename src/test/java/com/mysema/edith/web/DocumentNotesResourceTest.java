@@ -73,7 +73,7 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         info.setDocument(document.getId());
         info.setFullSelection("a");
         info.setNote(note.getId());
-        documentNotes.add(info);
+        documentNotes.create(info);
     }
 
 }

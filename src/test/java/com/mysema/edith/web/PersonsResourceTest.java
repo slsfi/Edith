@@ -40,6 +40,6 @@ public class PersonsResourceTest extends AbstractResourceTest {
         person.setOtherForms(Sets.newHashSet(new NameForm("c","d")));
         person.setTimeOfBirth(Interval.createDate(new DateTime()));
         person.setTimeOfDeath(Interval.createDate(new DateTime()));
-        persons.add(person);    
+        persons.create(person);
     }
 }
