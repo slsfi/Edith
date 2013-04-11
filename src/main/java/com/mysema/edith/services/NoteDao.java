@@ -127,5 +127,5 @@ public interface NoteDao extends Dao<Note, Long> {
     /**
      * @param noteOnEdit
      */
-    void saveAsNew(Note noteOnEdit);
+    void saveAsNew(Note note);
 }
