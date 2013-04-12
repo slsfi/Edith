@@ -1,13 +1,11 @@
-(ns edith.core)
-
-(import 'com.google.inject.Guice)
-(import 'com.mysema.edith.guice.ServiceModule)
-(import 'com.mysema.edith.guice.SecurityModule)
-(import 'com.mysema.edith.services.NoteDaoImpl)
-(import 'com.mysema.edith.services.UserDaoImpl)
-(import 'com.mysema.edith.EDITH)
-(import 'org.tmatesoft.svn.core.SVNURL)
-(import 'com.mysema.edith.domain.Note)
+(ns edith.core
+  (:require [clojure.java.io :as io])
+  (:import com.google.inject.Guice
+           [com.mysema.edith.guice ServiceModule SecurityModule]
+           [com.mysema.edith.services NoteDaoImpl UserDaoImpl TermDaoImpl]
+           com.mysema.edith.EDITH
+           org.tmatesoft.svn.core.SVNURL
+           [com.mysema.edith.domain Note Term]))
 
 (def repository
   (java.io.File. "target/repo"))
@@ -17,6 +15,10 @@
 (System/setProperty EDITH/REPO_URL_PROPERTY (.toString (SVNURL/fromFile repository)))
 (System/setProperty EDITH/EXTENDED_TERM "false")
 
+(with-open [rdr (io/reader (.getResourceAsStream ServiceModule "/edith.properties"))]
+  (doseq [line (line-seq rdr)]
+    (println line)))
+
 (def injector
   (Guice/createInjector [(ServiceModule.) (SecurityModule.)]))
 
@@ -24,12 +26,33 @@
 
 (def user-dao (.getInstance injector UserDaoImpl))
 
-(def note
-  (doto (Note.)
-    (.setLemma "huihai nyt mennään")
-    (.setDescription "hienoin lemma ikinä")))
+(def term-dao (.getInstance injector TermDaoImpl))
 
-(.save note-dao note)
+(defn find-note
+  [id]
+  (.getById note-dao id))
 
-(.setLemma note "i haz been changed")
+(defn save-note!
+  [note]
+  (.save note-dao note)) 
+
+(comment
+  (def note
+    (find-note 19))
+
+  (.setDescription note "magic man")
+
+  (save-note! note)
+
+  (.setTerm note (Term.))
+
+  (.save term-dao (.getTerm note))
+
+  (.getId (.getTerm note))
+
+  (.setMeaning (.getTerm note) "sitä poikaa ei enää olekaan")
+
+  (save-note! note)
+
+  )
 
