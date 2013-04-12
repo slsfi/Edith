@@ -236,6 +236,8 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         DocumentNote documentNote = documentNotesOfDocument.get(0);
         documentNote.getNote().setTerm(term);
         noteDao.save(documentNote.getNote());
+        getEntityManager().flush();
+        
         List<DocumentNote> documentNotesOfTerm = documentNoteDao.getOfTerm(term.getId());
         assertEquals(documentNote, documentNotesOfTerm.get(0));
     }
