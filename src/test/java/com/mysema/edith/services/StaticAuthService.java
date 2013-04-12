@@ -3,7 +3,6 @@
  */
 package com.mysema.edith.services;
 
-import com.mysema.edith.services.AuthService;
 
 
 public final class StaticAuthService implements AuthService {

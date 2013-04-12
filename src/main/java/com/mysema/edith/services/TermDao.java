@@ -17,12 +17,12 @@ public interface TermDao extends Dao<Term, Long> {
 
     /**
      * Find matching terms by searching matches from basicForm -property.
-     * 
+     *
      * @param partial
      *            the start of the basicForm
      * @param maxResults
      *            the max results
-     * 
+     *
      */
     List<Term> findByStartOfBasicForm(String partial, int maxResults);
 
@@ -34,6 +34,6 @@ public interface TermDao extends Dao<Term, Long> {
     /**
      * @param term
      */
-    void save(Term term);
+    Term save(Term term);
 
 }

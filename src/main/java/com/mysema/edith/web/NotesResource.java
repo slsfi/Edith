@@ -29,10 +29,8 @@ import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteDao;
-import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.HQLTemplates;
 import com.mysema.query.jpa.impl.JPAQuery;
-import com.mysema.query.support.Expressions;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.path.StringPath;
 
@@ -99,6 +97,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
         }
         long limit = perPage;
         long offset = (page - 1) * limit;
+        // TODO: Use listResults
         List<Note> notes = query()
                 .from(note)
                 .leftJoin(note.term, term)
@@ -144,17 +143,17 @@ public class NotesResource extends AbstractResource<NoteTO> {
     @Override
     @POST
     public NoteTO create(NoteTO info) {
-        Note entity = dao.getById(info.getId());
-        if (entity != null) {
-            dao.save(convert(info, entity));
-        }
-        return info;
+        return convert(dao.save(convert(info, new Note())), new NoteTO());
     }
 
     @Override
     @PUT @Path("{id}")
     public NoteTO update(@PathParam("id") Long id, NoteTO info) {
-        return convert(dao.save(convert(info, new Note())), new NoteTO());
+        Note entity = dao.getById(id);
+        if (entity != null) {
+            throw new RuntimeException("Entity not found");
+        }
+        return convert(dao.save(convert(info, entity)), new NoteTO());
     }
 
     @Override

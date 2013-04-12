@@ -24,9 +24,9 @@ import com.mysema.query.types.ConstructorExpression;
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     private static final QUser user = QUser.user;
-    
+
     private final AuthService authService;
-    
+
 //    private final SaltSource saltSource;
 //
 //    private final PasswordEncoder passwordEncoder;
@@ -38,7 +38,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 //        this.saltSource = saltSource;
 //        this.passwordEncoder = passwordEncoder;
 //    }
-    
+
     @Inject
     public UserDaoImpl(AuthService authService) {
         this.authService = authService;
@@ -107,8 +107,9 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         persist(user);
+        return user;
     }
 
 }

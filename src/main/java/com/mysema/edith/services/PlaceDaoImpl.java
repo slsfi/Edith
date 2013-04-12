@@ -13,9 +13,9 @@ import com.mysema.edith.domain.QPlace;
 
 @Transactional
 public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
-    
+
     private static final QPlace place = QPlace.place;
-    
+
     @Override
     public Collection<Place> findByStartOfName(String partial, int limit) {
         return query().from(place)
@@ -30,8 +30,9 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
     }
 
     @Override
-    public void save(Place place) {
+    public Place save(Place place) {
         persist(place);
+        return place;
     }
 
     @Override

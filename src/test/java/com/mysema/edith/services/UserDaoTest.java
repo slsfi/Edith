@@ -15,8 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.inject.Inject;
-import com.mysema.edith.services.AuthService;
-import com.mysema.edith.services.UserDao;
 
 
 public class UserDaoTest extends AbstractHibernateTest {

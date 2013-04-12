@@ -41,18 +41,17 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     @Override
     @POST
     public DocumentNoteTO create(DocumentNoteTO info) {
-        DocumentNote entity = dao.getById(info.getId());
-        if (entity != null) {
-            dao.save(convert(info, entity));
-        }
-        return info;
+        return convert(dao.save(convert(info, new DocumentNote())), new DocumentNoteTO());
     }
 
     @Override
     @PUT @Path("{id}")
     public DocumentNoteTO update(@PathParam("id") Long id, DocumentNoteTO info) {
-        dao.save(convert(info, new DocumentNote()));
-        return info;
+        DocumentNote entity = dao.getById(id);
+        if (entity == null) {
+            throw new RuntimeException("Entity not found");
+        }
+        return convert(dao.save(convert(info, entity)), new DocumentNoteTO());
     }
 
     @Override

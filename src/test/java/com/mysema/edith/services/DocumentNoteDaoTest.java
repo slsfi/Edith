@@ -24,7 +24,17 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EdithTestConstants;
-import com.mysema.edith.domain.*;
+import com.mysema.edith.domain.Document;
+import com.mysema.edith.domain.DocumentNote;
+import com.mysema.edith.domain.Interval;
+import com.mysema.edith.domain.NameForm;
+import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.NoteFormat;
+import com.mysema.edith.domain.NoteType;
+import com.mysema.edith.domain.Person;
+import com.mysema.edith.domain.Place;
+import com.mysema.edith.domain.Term;
+import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.NoteSearchTO;
 
 @Transactional

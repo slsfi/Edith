@@ -41,18 +41,17 @@ public class PlacesResource extends AbstractResource<PlaceTO> {
     @Override
     @POST
     public PlaceTO create(PlaceTO info) {
-        Place entity = dao.getById(info.getId());
-        if (entity != null) {
-            dao.save(convert(info, entity));
-        }
-        return info;
+        return convert(dao.save(convert(info, new Place())), new PlaceTO());
     }
 
     @Override
     @PUT @Path("{id}")
     public PlaceTO update(@PathParam("id") Long id, PlaceTO info) {
-        dao.save(convert(info, new Place()));
-        return info;
+        Place entity = dao.getById(id);
+        if (entity != null) {
+            throw new RuntimeException("Entity not found");
+        }
+        return convert(dao.save(convert(info, entity)), new PlaceTO());
     }
 
     @Override

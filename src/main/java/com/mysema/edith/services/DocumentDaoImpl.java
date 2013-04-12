@@ -627,8 +627,9 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public void save(Document doc) {
-        persist(doc);
+    public Document save(Document document) {
+        persist(document);
+        return document;
     }
 
     @Override

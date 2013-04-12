@@ -135,7 +135,7 @@ public interface DocumentDao extends Dao<Document, Long> {
     /**
      * @param doc
      */
-    void save(Document doc);
+    Document save(Document doc);
 
     List<NoteComment> getNoteComments(long id, long limit);
 }

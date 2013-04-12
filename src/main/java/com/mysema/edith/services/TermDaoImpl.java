@@ -15,7 +15,7 @@ import com.mysema.edith.domain.Term;
 public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
 
     private static final QTerm term = QTerm.term;
-    
+
     @Override
     public List<Term> findByStartOfBasicForm(String partial, int maxResults) {
         return query().from(term)
@@ -35,8 +35,9 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
     }
 
     @Override
-    public void save(Term term) {
+    public Term save(Term term) {
         persist(term);
+        return term;
     }
 
 }

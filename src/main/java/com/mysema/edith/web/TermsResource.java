@@ -36,18 +36,17 @@ public class TermsResource extends AbstractResource<TermTO> {
     @Override
     @POST
     public TermTO create(TermTO info) {
-        Term entity = dao.getById(info.getId());
-        if (entity != null) {
-            dao.save(convert(info, entity));
-        }
-        return info;
+        return convert(dao.save(convert(info, new Term())), new TermTO());
     }
 
     @Override
     @PUT @Path("{id}")
     public TermTO update(@PathParam("id") Long id, TermTO info) {
-        dao.save(convert(info, new Term()));
-        return info;
+        Term entity = dao.getById(id);
+        if (entity == null) {
+            throw new RuntimeException("Entity not found");
+        }
+        return convert(dao.save(convert(info, entity)), new TermTO());
     }
 
     @Override

@@ -41,18 +41,17 @@ public class PersonsResource extends AbstractResource<PersonTO> {
     @Override
     @POST
     public PersonTO create(PersonTO info) {
-        Person entity = dao.getById(info.getId());
-        if (entity != null) {
-            dao.save(convert(info, entity));
-        }
-        return info;
+        return convert(dao.save(convert(info, new Person())), new PersonTO());
     }
 
     @Override
     @PUT @Path("{id}")
     public PersonTO update(@PathParam("id") Long id, PersonTO info) {
-        dao.save(convert(info, new Person()));
-        return info;
+        Person entity = dao.getById(id);
+        if (entity != null) {
+            throw new RuntimeException("Entity not found");
+        }
+        return convert(dao.save(convert(info, entity)), new PersonTO());
     }
 
     @Override
