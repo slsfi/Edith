@@ -11,33 +11,46 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
 import com.mysema.edith.dto.NoteTO;
+import com.mysema.edith.dto.TermTO;
 import com.mysema.edith.services.NoteDao;
 
 public class NotesResourceTest extends AbstractResourceTest {
 
     @Inject
     private NoteDao noteDao;
-    
+
     @Inject @Named(EdithTestConstants.NOTE_TEST_DATA_KEY)
     private File noteTestData;
-    
+
     @Inject
     private NotesResource notes;
-    
+
     @Before
     public void setUp() {
         noteDao.importNotes(noteTestData);
     }
-    
+
     @Test
-    public void GetById() {       
+    public void GetById() {
         assertNotNull(notes.getById(1l));
     }
-    
+
     @Test
-    public void Add() {
+    public void Create() {
         NoteTO note = new NoteTO();
         notes.create(note);
     }
-    
+
+    @Test
+    public void Create_Note_And_Verify_Cascading_Works() {
+        TermTO term = new TermTO();
+        term.setBasicForm("talo");
+        NoteTO note = new NoteTO();
+        note.setLemma("talossa");
+        note.setTerm(term);
+        NoteTO persistedNote = notes.create(note);
+        assertNotNull(persistedNote.getId());
+        assertNotNull(persistedNote.getTerm().getId());
+    }
+
 }
