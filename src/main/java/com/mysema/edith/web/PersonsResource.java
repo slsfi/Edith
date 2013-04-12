@@ -48,7 +48,7 @@ public class PersonsResource extends AbstractResource<PersonTO> {
     @PUT @Path("{id}")
     public PersonTO update(@PathParam("id") Long id, PersonTO info) {
         Person entity = dao.getById(id);
-        if (entity != null) {
+        if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
         return convert(dao.save(convert(info, entity)), new PersonTO());

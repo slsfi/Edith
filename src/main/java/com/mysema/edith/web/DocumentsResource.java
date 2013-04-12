@@ -95,7 +95,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     @PUT @Path("{id}")
     public DocumentTO update(@PathParam("id") Long id, DocumentTO info) {
         Document entity = dao.getById(id);
-        if (entity != null) {
+        if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
         return convert(dao.save(convert(info, entity)), new DocumentTO());

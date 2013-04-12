@@ -48,7 +48,7 @@ public class PlacesResource extends AbstractResource<PlaceTO> {
     @PUT @Path("{id}")
     public PlaceTO update(@PathParam("id") Long id, PlaceTO info) {
         Place entity = dao.getById(id);
-        if (entity != null) {
+        if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
         return convert(dao.save(convert(info, entity)), new PlaceTO());
