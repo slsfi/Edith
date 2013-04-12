@@ -5,7 +5,9 @@ require([], function() {
           function($, _, Backbone, Slickback, Slick, headerTemplate) {
     $('body').prepend(headerTemplate);
 
-    var Note = Backbone.Model;
+    var Note = Backbone.Model.extend({
+    });
+    
     var NotesCollection = Slickback.PaginatedCollection.extend({
       model: Note,
       url: '/api/notes',
@@ -43,11 +45,6 @@ require([], function() {
       notes.fetchWithScope();
     });
     
-    // TODO: Find out when these are called
-    notes.bind('change', function(model, attributes) {
-      model.save();
-    });
-
     notes.onRowCountChanged.subscribe(function() {
       grid.updateRowCount();
       grid.render();
