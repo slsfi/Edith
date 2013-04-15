@@ -31,7 +31,7 @@ public class Note implements Identifiable {
 
     private String lemma;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Term term;
 
     private Long editedOn;

@@ -53,4 +53,19 @@ public class NotesResourceTest extends AbstractResourceTest {
         assertNotNull(persistedNote.getTerm().getId());
     }
 
+    @Test
+    public void Update_Note() {
+        NoteTO note = new NoteTO();
+        note.setLemma("talossa");
+        note = notes.create(note);
+
+        TermTO term = new TermTO();
+        term.setBasicForm("talo");
+        note.setTerm(term);
+        note = notes.update(note.getId(), note);
+
+        assertNotNull(note.getId());
+        assertNotNull(note.getTerm().getId());
+    }
+
 }
