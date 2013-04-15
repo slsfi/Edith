@@ -454,10 +454,9 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     public Note save(Note note) {
         note.setEditedOn(System.currentTimeMillis());
         if (note.getId() != null) {
-            merge(note);
-        } else {
-            persist(note);
+            return merge(note);
         }
+        persist(note);
         return note;
     }
 

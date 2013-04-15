@@ -41,8 +41,8 @@ public abstract class AbstractDao<T> implements Dao<T, Long> {
         em.get().persist(entity);
     }
 
-    protected void merge(Object entity) {
-        em.get().merge(entity);
+    protected T merge(Object entity) {
+        return (T)em.get().merge(entity);
     }
 
     protected void remove(Object entity) {
