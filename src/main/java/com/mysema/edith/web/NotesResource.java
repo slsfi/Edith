@@ -101,7 +101,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
         List<Note> notes = query()
                 .from(note)
                 .leftJoin(note.term, term)
-                .where(filter)
+                .where(note.deleted.isFalse().and(filter))
                 .orderBy(direction == null || direction.equals("ASC") ? path.asc() : path.desc())
                 .limit(limit)
                 .offset(offset)
