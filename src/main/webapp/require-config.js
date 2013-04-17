@@ -12,7 +12,9 @@ window.rconfig = {
     jqueryeventdrag: 'js/libs/jquery/jquery.event.drag',
     'slickgrid-core': 'js/libs/slickgrid/slick.core',
     slickgrid: 'js/libs/slickgrid/slick.grid',
-    'slickgrid-pager': 'js/libs/slickgrid/slick.pager', 
+    'slickgrid-pager': 'js/libs/slickgrid/slick.pager',
+    'slickgrid-formatters': 'js/libs/slickgrid/slick.formatters',
+    'slickgrid-rowselectionmodel': 'js/libs/slickgrid/slick.rowselectionmodel',
     slickback: 'js/libs/slickback/slickback.full',
     json: 'js/libs/require/json'
   },
@@ -32,8 +34,15 @@ window.rconfig = {
     'slickgrid-pager': {
       deps: ['jquery']
     },
+    'slickgrid-formatters': {
+      deps: ['jquery']
+    },
+    'slickgrid-rowselectionmodel': {
+      deps: ['jquery']
+    },
     'slickgrid': {
-      deps: ['jquery', 'jqueryeventdrag', 'jqueryui', 'slickgrid-pager'],
+      deps: ['jquery', 'jqueryeventdrag', 'jqueryui', 'slickgrid-pager', 'slickgrid-formatters',
+             'slickgrid-rowselectionmodel'],
       exports: 'Slick'
     },
     'slickgrid-core': {

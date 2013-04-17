@@ -16,25 +16,24 @@ require([], function() {
         // Called when changing page size. TODO: Implement functionality? 
       }
     });
-    
+
     var notes = new NotesCollection();
-    var columns = [
-                   {sortable: true, id: 'id', name: 'ID', field: 'id'},
-                   {sortable: true, id: 'lemma', name: 'Lemma', field: 'lemma', editor: Slickback.TextCellEditor},
+    var columns = [{sortable: true, defaultSortAsc: true, id: 'lemma', name: 'Lemma', field: 'lemma', editor: Slickback.TextCellEditor},
                    {sortable: true, maxWidth: 300, id: 'description', name: 'Description', field: 'description'},
                    {sortable: true,  id: 'subtextSources', name: 'Subtext sources', field: 'subtextSources'},
                    {sortable: true,  id: 'editedOn', name: 'Edited on', field: 'editedOn'},
                    {sortable: true,  id: 'basicForm', name: 'Basic form', field: 'term.basicForm'},
-                   {id: 'meaning', name: 'Meaning', field: 'term.meaning'}
-                   // TODO: Add 'poistettava'
-                   ];
+                   {id: 'meaning', name: 'Meaning', field: 'term.meaning'}];
     var options = {
       formatterFactory: Slickback.BackboneModelFormatterFactory,
       editable: true,
       autoHeight: true,
-      forceFitColumns: true
+      forceFitColumns: true,
+      autoEdit: false
     };
+    
     var grid = new Slick.Grid('#noteGrid', notes, columns, options);
+    grid.setSelectionModel(new Slick.RowSelectionModel());
     var pager = new Slick.Controls.Pager(notes, grid, $('#notePager'));
     
     grid.onSort.subscribe(function(e, msg) {
@@ -72,7 +71,23 @@ require([], function() {
       }
     });
     
-    var noteSearch = new NoteSearch({el: $('#noteSearch')})
+    var noteSearch = new NoteSearch({el: $('#noteSearch')});
     
+    var DeleteNotes = Backbone.View.extend({
+      events: {'click': 'remove'},
+      
+      initialize: function() {
+        _.bindAll(this, 'remove');
+      },
+      
+      remove: function() {
+        var rows = grid.getSelectedRows();
+        _.each(rows, function(row) {
+          grid.getData().models[row].destroy();
+        });
+      }
+    });
+    
+    var deleteNotes = new DeleteNotes({el: $('#deleteNotes')}); 
   });
 });

@@ -10,11 +10,18 @@
     <link rel="stylesheet" href="styles/slick.pager.css" type="text/css"/>
     <script src="require-config.js"></script>
     <script data-main="note-search-page" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js"></script>
+    <!-- TODO: Externalize -->
+    <style>
+		.active {
+		    background: #ff0;
+		}
+    </style>
   </head>
   <body>
     <input type="text" id="noteSearch"></input>
     <!-- FIXME: Inline size to enable proper rendering -->
     <div id="noteGrid"></div>
     <div id="notePager"></div>
+    <button id="deleteNotes">Delete notes</button>
   </body>
 </html>
