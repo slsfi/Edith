@@ -838,8 +838,7 @@
     var internalValue = unformatValue(value,column);
     var newValues = {};
     newValues[column.field] = internalValue;
-    // XXX: Customized by Mysema
-    model.save(newValues);
+    model.set(newValues);
   };
 
   var isInputValueChanged = function() {
