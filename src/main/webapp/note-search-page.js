@@ -108,10 +108,11 @@ require([], function() {
       
       save: function() {
         var dirty = notes.filter(function(note) { return note.dirty; });
-        var reset = _.after(dirty.length, function() { notes.fetchWithPagination(); });
+        var reset = _.after(dirty.length, function() {
+          notes.fetchWithPagination();
+        });
         _(dirty).each(function(note) {
-          note.save();
-          reset();
+          note.save(null, {success: reset});
         });
       }
     });
