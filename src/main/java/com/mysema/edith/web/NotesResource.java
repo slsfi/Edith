@@ -29,6 +29,7 @@ import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteDao;
+import com.mysema.query.SearchResults;
 import com.mysema.query.jpa.HQLTemplates;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.BooleanExpression;
@@ -97,34 +98,32 @@ public class NotesResource extends AbstractResource<NoteTO> {
         }
         long limit = perPage;
         long offset = (page - 1) * limit;
-        // TODO: Use listResults
-        List<Note> notes = query()
+
+        SearchResults<Note> results = query()
                 .from(note)
                 .leftJoin(note.term, term)
                 .where(note.deleted.isFalse().and(filter))
                 .orderBy(direction == null || direction.equals("ASC") ? path.asc() : path.desc())
                 .limit(limit)
                 .offset(offset)
-                .list(note);
-        long count = query()
-                .from(note)
-                .where(filter)
-                .count();
+                .listResults(note);
         List<NoteTO> entries = new ArrayList<NoteTO>();
-        for (Note note : notes) {
+        for (Note note : results.getResults()) {
             entries.add(convert(note, new NoteTO()));
         }
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
         rv.put("currentPage", page);
         rv.put("perPage", perPage);
-        rv.put("totalPages", totalPages(limit, count));
-        rv.put("totalEntries", count);
+        rv.put("totalPages", totalPages(limit, results.getTotal()));
+        rv.put("totalEntries", results.getTotal());
         return rv;
     }
 
     private static final long totalPages(long pageSize, long count) {
-        if (count % pageSize != 0) {
+        if (count == 0) {
+            return 1;
+        } else if (count % pageSize != 0) {
             return count / pageSize + 1;
         }
         return count / pageSize;
