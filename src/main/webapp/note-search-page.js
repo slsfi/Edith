@@ -6,6 +6,12 @@ require([], function() {
     $('body').prepend(headerTemplate);
 
     var Note = Backbone.Model.extend({
+      initialize: function() {
+        var self = this;
+        this.on('change', function() {
+          self.dirty = true;
+        });
+      }
     });
     
     var NotesCollection = Slickback.PaginatedCollection.extend({
@@ -53,6 +59,11 @@ require([], function() {
       grid.invalidateAllRows();
       grid.render();
     });
+    
+    notes.on('change', function() {
+      // FIXME: Inline CSS bad
+      $(grid.getActiveCellNode()).css('background', 'red');
+    });
 
     notes.fetchWithPagination();
     
@@ -88,6 +99,24 @@ require([], function() {
       }
     });
     
-    var deleteNotes = new DeleteNotes({el: $('#deleteNotes')}); 
+    var SaveNotes = Backbone.View.extend({
+      events: {'click': 'save'},
+      
+      initialize: function() {
+        _.bindAll(this, 'save');
+      },
+      
+      save: function() {
+        var dirty = notes.filter(function(note) { return note.dirty; });
+        var reset = _.after(dirty.length, function() { notes.fetchWithPagination(); });
+        _(dirty).each(function(note) {
+          note.save();
+          reset();
+        });
+      }
+    });
+    
+    var deleteNotes = new DeleteNotes({el: $('#deleteNotes')});
+    var saveNotes = new SaveNotes({el: $('#saveNotes')}); 
   });
 });
