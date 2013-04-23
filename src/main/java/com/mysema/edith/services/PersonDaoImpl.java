@@ -15,7 +15,7 @@ import com.mysema.edith.domain.QPerson;
 public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
     private static final QPerson person = QPerson.person;
-    
+
     @Override
     public Collection<Person> findByStartOfFirstAndLastName(String partial, int limit) {
         return query()
@@ -36,8 +36,9 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
     }
 
     @Override
-    public void save(Person person) {
+    public Person save(Person person) {
         persist(person);
+        return person;
     }
 
     @Override

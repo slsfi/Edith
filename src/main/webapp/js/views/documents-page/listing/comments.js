@@ -1,5 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'js/vent',
-        'handlebars', 'text!templates/comments.html'],
+        'handlebars', 'text!templates/documents-page/listing/comments.html'],
   function($, _, Backbone, vent, Handlebars, template) {
   var template = Handlebars.compile(template);
   

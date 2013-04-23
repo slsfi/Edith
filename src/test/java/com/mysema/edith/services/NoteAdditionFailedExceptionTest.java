@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.mysema.edith.dto.SelectedText;
-import com.mysema.edith.services.NoteAdditionFailedException;
 
 
 public class NoteAdditionFailedExceptionTest {

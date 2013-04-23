@@ -12,7 +12,6 @@ import org.junit.Test;
 import com.google.inject.Inject;
 import com.mysema.edith.domain.NameForm;
 import com.mysema.edith.domain.Person;
-import com.mysema.edith.services.PersonDao;
 
 public class PersonDaoTest extends AbstractHibernateTest {
     

@@ -13,7 +13,6 @@ import org.junit.Test;
 import com.google.inject.Inject;
 import com.mysema.edith.domain.NameForm;
 import com.mysema.edith.domain.Place;
-import com.mysema.edith.services.PlaceDao;
 
 
 public class PlaceDaoTest extends AbstractHibernateTest {

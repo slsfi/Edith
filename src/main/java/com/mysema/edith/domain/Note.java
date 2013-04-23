@@ -15,6 +15,7 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
 import org.joda.time.DateTime;
 
 import com.mysema.edith.Identifiable;
@@ -30,8 +31,7 @@ public class Note implements Identifiable {
 
     private String lemma;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @Cascade(value = CascadeType.SAVE_UPDATE)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Term term;
 
     private Long editedOn;
@@ -42,7 +42,7 @@ public class Note implements Identifiable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "note")
     private Set<NoteComment> comments = new HashSet<NoteComment>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private User lastEditedBy;
 
     private String sources;

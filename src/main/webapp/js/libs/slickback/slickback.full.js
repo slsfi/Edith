@@ -1098,7 +1098,22 @@
   var exportNamespace = Slickback;
 
   var makeColumnFormatter = function(column) {
-    return function(row,cell,value,col,data) {return data.get(col.field);};
+    return function(row,cell,value,col,data) {
+             // XXX: Modified by Mysema
+             var s = col.field;
+             if (s.indexOf('.') !== -1) {
+               var ss = s.split('.');
+               var entity = data.get(ss[0]);
+               if (entity === null) {
+                 return null;
+               }
+               for (var i = 1; i < ss.length; ++i) {
+                 entity = entity[ss[i]];
+               }
+               return entity;
+             }
+             return data.get(col.field);
+           };
   };
 
   /**

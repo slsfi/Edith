@@ -9,8 +9,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.mysema.edith.services.DocumentDaoImpl;
-
 
 public class DocumentDaoImpl_getIndexTest {
     

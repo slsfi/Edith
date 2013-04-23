@@ -1,5 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
-        'text!/templates/document-note.html'],
+        'text!/templates/documents-page/document-note.html'],
   function($, _, Backbone, vent, Handlebars, documentNoteTemplate) {
   var documentNoteTemplate = Handlebars.compile(documentNoteTemplate);
   var DocumentView = Backbone.View.extend({

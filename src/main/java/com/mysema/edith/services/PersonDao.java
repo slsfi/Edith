@@ -30,6 +30,6 @@ public interface PersonDao extends Dao<Person, Long> {
     /**
      * @param person
      */
-    void save(Person person);
+    Person save(Person person);
 
 }

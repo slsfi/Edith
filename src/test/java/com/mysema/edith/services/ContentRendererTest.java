@@ -24,7 +24,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.inject.Inject;
-import com.mysema.edith.domain.*;
+import com.mysema.edith.domain.DocumentNote;
+import com.mysema.edith.domain.Interval;
+import com.mysema.edith.domain.LinkElement;
+import com.mysema.edith.domain.NameForm;
+import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.NoteFormat;
+import com.mysema.edith.domain.NoteType;
+import com.mysema.edith.domain.Paragraph;
+import com.mysema.edith.domain.Person;
+import com.mysema.edith.domain.Place;
+import com.mysema.edith.domain.StringElement;
+import com.mysema.edith.domain.Term;
+import com.mysema.edith.domain.UrlElement;
 import com.mysema.edith.util.ParagraphParser;
 
 

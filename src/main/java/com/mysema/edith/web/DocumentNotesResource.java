@@ -26,35 +26,38 @@ import com.mysema.edith.services.DocumentNoteDao;
 public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
 
     private final DocumentNoteDao dao;
-    
+
     @Inject
     public DocumentNotesResource(DocumentNoteDao dao) {
         this.dao = dao;
     }
-    
+
+    @Override
     @GET @Path("{id}")
-    public DocumentNoteTO getById(@PathParam("id") Long id) {        
-        return convert(dao.getById(id), new DocumentNoteTO());        
+    public DocumentNoteTO getById(@PathParam("id") Long id) {
+        return convert(dao.getById(id), new DocumentNoteTO());
     }
 
+    @Override
     @POST
-    public DocumentNoteTO update(DocumentNoteTO info) {
-        DocumentNote entity = dao.getById(info.getId());
-        if (entity != null) {
-            dao.save(convert(info, entity));
+    public DocumentNoteTO create(DocumentNoteTO info) {
+        return convert(dao.save(convert(info, new DocumentNote())), new DocumentNoteTO());
+    }
+
+    @Override
+    @PUT @Path("{id}")
+    public DocumentNoteTO update(@PathParam("id") Long id, DocumentNoteTO info) {
+        DocumentNote entity = dao.getById(id);
+        if (entity == null) {
+            throw new RuntimeException("Entity not found");
         }
-        return info;
+        return convert(dao.save(convert(info, entity)), new DocumentNoteTO());
     }
 
-    @PUT
-    public DocumentNoteTO add(DocumentNoteTO info) {
-        dao.save(convert(info, new DocumentNote()));
-        return info;
-    }
-
+    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-    
+
 }

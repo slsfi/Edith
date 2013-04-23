@@ -24,12 +24,22 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EdithTestConstants;
-import com.mysema.edith.domain.*;
+import com.mysema.edith.domain.Document;
+import com.mysema.edith.domain.DocumentNote;
+import com.mysema.edith.domain.Interval;
+import com.mysema.edith.domain.NameForm;
+import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.NoteFormat;
+import com.mysema.edith.domain.NoteType;
+import com.mysema.edith.domain.Person;
+import com.mysema.edith.domain.Place;
+import com.mysema.edith.domain.Term;
+import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.NoteSearchTO;
 
 @Transactional
 public class DocumentNoteDaoTest extends AbstractHibernateTest {
-    
+
     @Inject @Named(EdithTestConstants.TEST_DOCUMENT_KEY)
     private String testDocument;
 
@@ -57,19 +67,8 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
 
     private DocumentNote documentNote4;
 
-    @Inject @Named(EdithTestConstants.NOTE_TEST_DATA_KEY)
-    private File noteTestData;
-
     @Inject
     private SubversionService versioningService;
-    
-//    private int countDocumentNotes(List<Note> notes){
-//        int count = 0;
-//        for (Note n : notes){
-//            count += n.getDocumentNoteCount();
-//        }
-//        return count;
-//    }
 
     private boolean initialized = false;
 
@@ -110,12 +109,11 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         assertEquals(4, documentNoteDao.getOfDocument(document).size());
     }
 
-    @Test    
+    @Test
     public void Get_Of_Document_With_Note_Updates() {
         assertEquals(4, documentNoteDao.getOfDocument(document).size());
 
         for (DocumentNote documentNote : documentNoteDao.getOfDocument(document)) {
-//            documentNote = documentNote.createCopy();
             documentNote.getNote().setLemma(documentNote.getNote().getLemma() + "XXX");
             documentNoteDao.save(documentNote);
         }
@@ -226,7 +224,8 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         DocumentNote documentNote = documentNotesOfDocument.get(0);
         documentNote.getNote().setTerm(term);
         noteDao.save(documentNote.getNote());
-        List<DocumentNote> documentNotesOfTerm = documentNoteDao.getOfTerm(term.getId());
+
+        List<DocumentNote> documentNotesOfTerm = documentNoteDao.getOfTerm(documentNote.getNote().getTerm().getId());
         assertEquals(documentNote, documentNotesOfTerm.get(0));
     }
 
@@ -261,7 +260,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
     public void GetPublishableNotesOfDocument() {
         assertEquals(0, documentNoteDao.getPublishableNotesOfDocument(document).size());
     }
-    
+
     private void addExtraNote(String username) {
         DocumentNote documentNote = new DocumentNote();
         User user = userDao.getByUsername(username);

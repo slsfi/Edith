@@ -5,7 +5,15 @@ require([], function() {
           function($, _, Backbone, Slickback, Slick, headerTemplate) {
     $('body').prepend(headerTemplate);
 
-    var Note = Backbone.Model;
+    var Note = Backbone.Model.extend({
+      initialize: function() {
+        var self = this;
+        this.on('change', function() {
+          self.dirty = true;
+        });
+      }
+    });
+    
     var NotesCollection = Slickback.PaginatedCollection.extend({
       model: Note,
       url: '/api/notes',
@@ -14,23 +22,24 @@ require([], function() {
         // Called when changing page size. TODO: Implement functionality? 
       }
     });
-    
+
     var notes = new NotesCollection();
-    var columns = [
-                   {sortable: true, id: 'id', name: 'ID', field: 'id'},
-                   {sortable: true, id: 'lemma', name: 'Lemma', field: 'lemma'},
+    var columns = [{sortable: true, defaultSortAsc: true, id: 'lemma', name: 'Lemma', field: 'lemma', editor: Slickback.TextCellEditor},
                    {sortable: true, maxWidth: 300, id: 'description', name: 'Description', field: 'description'},
                    {sortable: true,  id: 'subtextSources', name: 'Subtext sources', field: 'subtextSources'},
                    {sortable: true,  id: 'editedOn', name: 'Edited on', field: 'editedOn'},
                    {sortable: true,  id: 'basicForm', name: 'Basic form', field: 'term.basicForm'},
-                   {id: 'meaning', name: 'Meaning', field: 'term.meaning'}
-                   // TODO: Add 'poistettava'
-                   ];
+                   {id: 'meaning', name: 'Meaning', field: 'term.meaning'}];
     var options = {
-      formatterFactory: Slickback.BackboneModelFormatterFactory, autoHeight: true,
-      forceFitColumns: true
+      formatterFactory: Slickback.BackboneModelFormatterFactory,
+      editable: true,
+      autoHeight: true,
+      forceFitColumns: true,
+      autoEdit: false
     };
+    
     var grid = new Slick.Grid('#noteGrid', notes, columns, options);
+    grid.setSelectionModel(new Slick.RowSelectionModel());
     var pager = new Slick.Controls.Pager(notes, grid, $('#notePager'));
     
     grid.onSort.subscribe(function(e, msg) {
@@ -41,11 +50,6 @@ require([], function() {
       notes.fetchWithScope();
     });
     
-    // TODO: Find out when these are called
-    notes.bind('change', function(model, attributes) {
-      model.save();
-    });
-
     notes.onRowCountChanged.subscribe(function() {
       grid.updateRowCount();
       grid.render();
@@ -54,6 +58,11 @@ require([], function() {
     notes.onRowsChanged.subscribe(function() {
       grid.invalidateAllRows();
       grid.render();
+    });
+    
+    notes.on('change', function() {
+      // FIXME: Inline CSS bad
+      $(grid.getActiveCellNode()).css('background', 'red');
     });
 
     notes.fetchWithPagination();
@@ -73,7 +82,42 @@ require([], function() {
       }
     });
     
-    var noteSearch = new NoteSearch({el: $('#noteSearch')})
+    var noteSearch = new NoteSearch({el: $('#noteSearch')});
     
+    var DeleteNotes = Backbone.View.extend({
+      events: {'click': 'remove'},
+      
+      initialize: function() {
+        _.bindAll(this, 'remove');
+      },
+      
+      remove: function() {
+        var rows = grid.getSelectedRows();
+        _.each(rows, function(row) {
+          grid.getData().models[row].destroy();
+        });
+      }
+    });
+    
+    var SaveNotes = Backbone.View.extend({
+      events: {'click': 'save'},
+      
+      initialize: function() {
+        _.bindAll(this, 'save');
+      },
+      
+      save: function() {
+        var dirty = notes.filter(function(note) { return note.dirty; });
+        var reset = _.after(dirty.length, function() {
+          notes.fetchWithPagination();
+        });
+        _(dirty).each(function(note) {
+          note.save(null, {success: reset});
+        });
+      }
+    });
+    
+    var deleteNotes = new DeleteNotes({el: $('#deleteNotes')});
+    var saveNotes = new SaveNotes({el: $('#saveNotes')}); 
   });
 });

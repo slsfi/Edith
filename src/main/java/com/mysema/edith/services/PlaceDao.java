@@ -30,6 +30,6 @@ public interface PlaceDao extends Dao<Place, Long> {
     /**
      * @param place
      */
-    void save(Place place);
+    Place save(Place place);
 
 }

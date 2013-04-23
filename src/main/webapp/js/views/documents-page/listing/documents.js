@@ -1,5 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'js/vent',
-        'handlebars', 'text!templates/documents.html', 'dynatree'],
+        'handlebars', 'text!templates/documents-page/listing/documents.html', 'dynatree'],
   function($, _, Backbone, vent, Handlebars, template) {
   var DocumentsView = Backbone.View.extend({
     initialize: function() {
@@ -8,7 +8,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
     },
     
     render: function() {
-      this.$('#documentListing').html(template);
+      this.$el.html(template);
       var self = this;
       this.$('#directoryTree').dynatree({
         initAjax: {
@@ -25,7 +25,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
         
         onDblClick: function(node) {
           if (!node.data.isFolder) {
-            vent.trigger('document:open', node.data.documentId);
+            vent.trigger('route:change', 'documents/' + node.data.documentId);
           }
         },
         

@@ -20,7 +20,7 @@ public interface UserDao extends Dao<User, Long> {
 
     /**
      * Get the user with the given username
-     * 
+     *
      * @param shortName
      * @return
      */
@@ -28,7 +28,7 @@ public interface UserDao extends Dao<User, Long> {
 
     /**
      * Get the current user
-     * 
+     *
      * @param username
      * @return
      */
@@ -50,7 +50,7 @@ public interface UserDao extends Dao<User, Long> {
     /**
      * @param user
      */
-    void save(User user);
+    User save(User user);
 
     /**
      * @return

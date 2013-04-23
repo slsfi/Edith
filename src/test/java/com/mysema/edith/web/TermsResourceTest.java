@@ -37,7 +37,7 @@ public class TermsResourceTest extends AbstractResourceTest {
         term.setLanguage(TermLanguage.ENGLISH);
         term.setMeaning("b");
         term.setOtherLanguage("fi");
-        terms.add(term);
+        terms.create(term);
     }
     
 }

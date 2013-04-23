@@ -35,7 +35,7 @@ public class UsersResourceTest extends AbstractResourceTest {
     public void Add() {
         UserTO user = new UserTO();
         user.setUsername("test"+System.currentTimeMillis());
-        users.add(user);
+        users.create(user);
     }
 
 }

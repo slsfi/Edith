@@ -21,7 +21,7 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
      * @param id
      */
     void remove(Long id);
-    
+
     /**
      * @param docNote
      */
@@ -31,17 +31,17 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
      * @param docNote
      * @return
      */
-    DocumentNote save(DocumentNote docNote);
+    DocumentNote save(DocumentNote documentNote);
 
     /**
      * Get the note revisions of the given document revision
-     * 
+     *
      * @param document
      * @param revision
      * @return
      */
     List<DocumentNote> getOfDocument(Document document);
-    
+
     /**
      * @param docId
      * @return
@@ -50,7 +50,7 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
 
     /**
      * Get the document notes of the given note.
-     * 
+     *
      * @param noteId
      * @return
      */
@@ -58,7 +58,7 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
 
     /**
      * Get the DocumentNotes of the given Person.
-     * 
+     *
      * @param personId
      * @return
      */
@@ -66,7 +66,7 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
 
     /**
      * Get the DocumentNotes of the given Place.
-     * 
+     *
      * @param personId
      * @return
      */
@@ -74,7 +74,7 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
 
     /**
      * Returns all the document notes attached to the term.
-     * 
+     *
      * @param termId
      * @return
      */

@@ -28,8 +28,8 @@ import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
-import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.services.ContentRenderer;
@@ -87,19 +87,18 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
 
     @Override
     @POST
-    public DocumentTO update(DocumentTO info) {
-        Document entity = dao.getById(info.getId());
-        if (entity != null) {
-            dao.save(convert(info, entity));
-        }
-        return info;
+    public DocumentTO create(DocumentTO info) {
+        return convert(dao.save(convert(info, new Document())), new DocumentTO());
     }
 
     @Override
-    @PUT
-    public DocumentTO add(DocumentTO info) {
-        dao.save(convert(info, new Document()));
-        return info;
+    @PUT @Path("{id}")
+    public DocumentTO update(@PathParam("id") Long id, DocumentTO info) {
+        Document entity = dao.getById(id);
+        if (entity == null) {
+            throw new RuntimeException("Entity not found");
+        }
+        return convert(dao.save(convert(info, entity)), new DocumentTO());
     }
 
     @Override
