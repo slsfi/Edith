@@ -1,6 +1,7 @@
 define(['jquery', 'underscore', 'backbone', 'js/vent',
         'handlebars', 'text!templates/documents-page/listing/documents.html', 'dynatree'],
   function($, _, Backbone, vent, Handlebars, template) {
+  
   var DocumentsView = Backbone.View.extend({
     initialize: function() {
       _.bindAll(this, 'render');
@@ -46,7 +47,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
         
       });
     }
-  })
+  });
   
   return DocumentsView;
 });
