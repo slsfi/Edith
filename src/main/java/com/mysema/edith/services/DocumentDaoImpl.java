@@ -107,8 +107,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public Document getById(Long id) {
-        return query().from(document).where(document.id.eq(id)).singleResult(document);
+    public Document getById(Long id) {        
+        return find(Document.class, id);
     }
 
     @Override

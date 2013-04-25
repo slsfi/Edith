@@ -46,7 +46,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public User getById(Long id) {
-        return query().from(user).where(user.id.eq(id)).uniqueResult(user);
+        return find(User.class, id);
     }
 
     @Override

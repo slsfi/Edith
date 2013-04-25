@@ -28,7 +28,6 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
     @Override
     public void remove(Long personId) {
-        // FIXME: Hibernatify!
         Person entity = getById(personId);
         if (entity != null) {
             remove(entity);
@@ -43,7 +42,7 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
     @Override
     public Person getById(Long id) {
-        return query().from(person).where(person.id.eq(id)).uniqueResult(person);
+        return find(Person.class, id);
     }
 
 }

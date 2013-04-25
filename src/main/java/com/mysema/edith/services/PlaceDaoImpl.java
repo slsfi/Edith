@@ -37,7 +37,7 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
 
     @Override
     public Place getById(Long id) {
-        return query().from(place).where(place.id.eq(id)).uniqueResult(place);
+        return find(Place.class, id);
     }
 
 }
