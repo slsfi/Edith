@@ -19,13 +19,12 @@ class WebSecurityModule extends ShiroWebModule {
 
     @Override
     protected void configureShiroWeb() {
-        bindConstant().annotatedWith(Names.named("shiro.loginUrl")).to("/login");
+        bindConstant().annotatedWith(Names.named("shiro.loginUrl")).to("/login.html");
         bindConstant().annotatedWith(Names.named("shiro.unauthorizedUrl")).to("/denied");
         bindRealm().to(UserDaoRealm.class).asEagerSingleton();
 
         addFilterChain("/api/**", AUTHC);
-        addFilterChain("/login", AUTHC);
+        addFilterChain("/login.html", AUTHC);
         addFilterChain("/logout", LOGOUT);
-        //addFilterChain("/**", ANON);
     }
 }
