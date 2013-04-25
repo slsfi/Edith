@@ -11,12 +11,13 @@ import org.hibernate.Session;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.mysema.edith.Identifiable;
 import com.mysema.query.jpa.HQLTemplates;
 import com.mysema.query.jpa.impl.JPADeleteClause;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.EntityPath;
 
-public abstract class AbstractDao<T> implements Dao<T, Long> {
+public abstract class AbstractDao<T extends Identifiable> implements Dao<T, Long> {
 
     @Inject
     private Provider<EntityManager> em;
@@ -45,6 +46,14 @@ public abstract class AbstractDao<T> implements Dao<T, Long> {
         return em.get().merge(entity);
     }
 
+    protected T persistOrMerge(T entity) {
+        if (entity.getId() != null) {
+            return merge(entity);
+        }
+        persist(entity);
+        return entity;
+    }
+    
     protected void remove(Object entity) {
         em.get().remove(entity);
     }

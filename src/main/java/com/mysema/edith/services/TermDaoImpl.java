@@ -36,8 +36,7 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
 
     @Override
     public Term save(Term term) {
-        persist(term);
-        return term;
+        return persistOrMerge(term);
     }
 
 }

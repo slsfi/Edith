@@ -36,8 +36,7 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
     @Override
     public Person save(Person person) {
-        persist(person);
-        return person;
+        return persistOrMerge(person);
     }
 
     @Override

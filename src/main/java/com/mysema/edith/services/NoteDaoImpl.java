@@ -453,11 +453,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     @Override
     public Note save(Note note) {
         note.setEditedOn(System.currentTimeMillis());
-        if (note.getId() != null) {
-            return merge(note);
-        }
-        persist(note);
-        return note;
+        return persistOrMerge(note);
     }
 
     @Override

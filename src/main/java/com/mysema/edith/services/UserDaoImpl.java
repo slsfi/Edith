@@ -108,8 +108,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public User save(User user) {
-        persist(user);
-        return user;
+        return persistOrMerge(user);
     }
 
 }

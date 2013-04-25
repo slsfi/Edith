@@ -31,8 +31,7 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
 
     @Override
     public Place save(Place place) {
-        persist(place);
-        return place;
+        return persistOrMerge(place);
     }
 
     @Override
