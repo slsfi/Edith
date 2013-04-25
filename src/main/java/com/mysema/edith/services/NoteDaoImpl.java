@@ -479,9 +479,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     @Override
     public void saveAsNew(Note note) {
-//        EntityManager em = getEntityManager();
-//        em.unwrap(Session.class).evict(note);
-        evict(note);
+        detach(note);
         note.setId(null);
         note.setDocumentNoteCount(0);
         persist(note);

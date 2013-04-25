@@ -7,8 +7,6 @@ package com.mysema.edith.services;
 
 import javax.persistence.EntityManager;
 
-import org.hibernate.Session;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.mysema.edith.Identifiable;
@@ -30,8 +28,8 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T, Long
         return new JPADeleteClause(em.get(), entity, HQLTemplates.DEFAULT);
     }
 
-    protected void evict(Object entity) {
-        em.get().unwrap(Session.class).evict(entity);
+    protected void detach(Object entity) {
+        em.get().detach(entity);
     }
 
     protected <E> E find(Class<E> type, Long id) {
