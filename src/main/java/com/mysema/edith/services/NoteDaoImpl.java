@@ -25,24 +25,12 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EDITH;
-import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.LinkElement;
-import com.mysema.edith.domain.Note;
-import com.mysema.edith.domain.NoteComment;
-import com.mysema.edith.domain.NoteType;
-import com.mysema.edith.domain.Paragraph;
-import com.mysema.edith.domain.QDocumentNote;
-import com.mysema.edith.domain.QNote;
-import com.mysema.edith.domain.QTerm;
-import com.mysema.edith.domain.StringElement;
-import com.mysema.edith.domain.Term;
-import com.mysema.edith.domain.UrlElement;
-import com.mysema.edith.domain.User;
+import com.mysema.edith.domain.*;
 import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.OrderBy;
 import com.mysema.edith.dto.UserTO;
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.jpa.JPQLSubQuery;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
@@ -102,7 +90,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     }
 
     private JPQLSubQuery sub(EntityPath<?> entityPath) {
-        return new JPQLSubQuery().from(entityPath);
+        return new JPASubQuery().from(entityPath);
     }
 
 //    @Override
