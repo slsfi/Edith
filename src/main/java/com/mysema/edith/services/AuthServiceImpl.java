@@ -27,7 +27,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String getUsername() {
         Subject currentUser = SecurityUtils.getSubject();
-        return currentUser != null ? currentUser.toString() : null;
+        if (currentUser != null) {
+            return currentUser.getPrincipal().toString();
+        } else {
+            return null;
+        }
     }
 
 }
