@@ -23,7 +23,7 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T, Long
     protected JPAQuery query() {
         return new JPAQuery(em.get(), HQLTemplates.DEFAULT);
     }
-
+    
     protected JPADeleteClause delete(EntityPath<?> entity) {
         return new JPADeleteClause(em.get(), entity, HQLTemplates.DEFAULT);
     }

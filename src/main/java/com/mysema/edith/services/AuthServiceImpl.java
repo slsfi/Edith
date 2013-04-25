@@ -5,23 +5,29 @@
  */
 package com.mysema.edith.services;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+
 public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean isAuthenticated() {
-        // TODO Auto-generated method stub
-        return true;
+        Subject currentUser = SecurityUtils.getSubject();
+        return currentUser != null && currentUser.isAuthenticated();
     }
 
     @Override
     public void logout() {
-        // TODO Auto-generated method stub
-        
+        Subject currentUser = SecurityUtils.getSubject();
+        if (currentUser != null) {
+            currentUser.logout();
+        }
     }
 
     @Override
     public String getUsername() {
-        return "timo";
+        Subject currentUser = SecurityUtils.getSubject();
+        return currentUser != null ? currentUser.toString() : null;
     }
 
 }
