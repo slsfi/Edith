@@ -38,7 +38,9 @@ public class NotesResourceTest extends AbstractResourceTest {
     @Test
     public void Create() {
         NoteTO note = new NoteTO();
-        notes.create(note);
+        NoteTO created = notes.create(note);
+        
+        assertNotNull(created.getId());
     }
 
     @Test

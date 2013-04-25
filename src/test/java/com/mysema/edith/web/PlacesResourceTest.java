@@ -34,6 +34,8 @@ public class PlacesResourceTest extends AbstractResourceTest {
         PlaceTO place = new PlaceTO();
         place.setNormalized(new NameForm("a", "b"));
         place.setOtherForms(Sets.newHashSet(new NameForm("c","d")));
-        places.create(place);
+        PlaceTO created = places.create(place);
+        
+        assertNotNull(created.getId());
     }
 }

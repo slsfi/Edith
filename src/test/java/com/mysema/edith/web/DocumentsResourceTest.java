@@ -33,7 +33,9 @@ public class DocumentsResourceTest extends AbstractResourceTest {
         DocumentTO doc = new DocumentTO();
         doc.setPath("abc" + System.currentTimeMillis());
         doc.setTitle("title");
-        documents.create(doc);
+        DocumentTO created = documents.create(doc);
+        
+        assertNotNull(created.getClass());
     }
 
 }
