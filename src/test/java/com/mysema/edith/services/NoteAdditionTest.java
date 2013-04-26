@@ -41,7 +41,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     private final static Pattern WHITESPACE = Pattern.compile("\\s+");
 
     @Inject
-    private DocumentDaoImpl documentRepo;
+    private DocumentDaoImpl documentDao;
 
     @Inject
     private DocumentXMLDao documentXMLDao;
