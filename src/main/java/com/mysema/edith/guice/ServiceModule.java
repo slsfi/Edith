@@ -16,24 +16,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
 import com.google.inject.persist.jpa.JpaPersistModule;
-import com.mysema.edith.services.ContentRenderer;
-import com.mysema.edith.services.ContentRendererImpl;
-import com.mysema.edith.services.DocumentDao;
-import com.mysema.edith.services.DocumentDaoImpl;
-import com.mysema.edith.services.DocumentNoteDao;
-import com.mysema.edith.services.DocumentNoteDaoImpl;
-import com.mysema.edith.services.NoteDao;
-import com.mysema.edith.services.NoteDaoImpl;
-import com.mysema.edith.services.PersonDao;
-import com.mysema.edith.services.PersonDaoImpl;
-import com.mysema.edith.services.PlaceDao;
-import com.mysema.edith.services.PlaceDaoImpl;
-import com.mysema.edith.services.SubversionService;
-import com.mysema.edith.services.SubversionServiceImpl;
-import com.mysema.edith.services.TermDao;
-import com.mysema.edith.services.TermDaoImpl;
-import com.mysema.edith.services.UserDao;
-import com.mysema.edith.services.UserDaoImpl;
+import com.mysema.edith.services.*;
 import com.mysema.edith.web.Converter;
 
 public class ServiceModule extends AbstractModule {
@@ -48,6 +31,7 @@ public class ServiceModule extends AbstractModule {
         bind(DataInitService.class).asEagerSingleton();
         bind(ContentRenderer.class, ContentRendererImpl.class);
         bind(DocumentDao.class, DocumentDaoImpl.class);
+        bind(DocumentXMLDao.class).in(Scopes.SINGLETON);
         bind(DocumentNoteDao.class, DocumentNoteDaoImpl.class);
         bind(NoteDao.class, NoteDaoImpl.class);
         bind(PersonDao.class, PersonDaoImpl.class);

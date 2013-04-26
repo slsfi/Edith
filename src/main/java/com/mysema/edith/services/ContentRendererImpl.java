@@ -53,6 +53,10 @@ import com.mysema.edith.domain.UrlElement;
 import com.mysema.edith.util.ElementContext;
 import com.mysema.edith.util.ParagraphParser;
 
+/**
+ * @author tiwe
+ *
+ */
 public class ContentRendererImpl implements ContentRenderer {
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
