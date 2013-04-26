@@ -39,12 +39,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Collection<User> getAll() {
-        return query().from(user).where(user.active.eq(true)).list(user);
+        return from(user).where(user.active.eq(true)).list(user);
     }
 
     @Override
     public User getByUsername(String username) {
-        return query().from(user).where(user.username.eq(username)).uniqueResult(user);
+        return from(user).where(user.username.eq(username)).uniqueResult(user);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Collection<UserTO> getAllUserInfos() {
-        return query().from(user).where(user.active.eq(true))
+        return from(user).where(user.active.eq(true))
                 .list(ConstructorExpression.create(UserTO.class, user.id, user.username));
     }
 

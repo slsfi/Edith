@@ -29,7 +29,7 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public List<DocumentNote> getOfDocument(Document document) {
-        return query().from(documentNote).where(documentNote.document.eq(document),
+        return from(documentNote).where(documentNote.document.eq(document),
         // FIXME: Commented out, is good?
         // documentNote.revision.loe(),
                 documentNote.deleted.eq(false)).orderBy(documentNote.position.asc())
@@ -38,7 +38,7 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
     
     @Override
     public List<DocumentNote> getOfDocument(Long docId) {
-        return query().from(documentNote).where(documentNote.document.id.eq(docId),
+        return from(documentNote).where(documentNote.document.id.eq(docId),
         // FIXME: Commented out, is good?
         // documentNote.revision.loe(),
                 documentNote.deleted.eq(false)).orderBy(documentNote.position.asc())
@@ -47,7 +47,7 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public List<DocumentNote> getPublishableNotesOfDocument(Document document) {
-        return query().from(documentNote).where(documentNote.document.eq(document),
+        return from(documentNote).where(documentNote.document.eq(document),
         // FIXME: Commented out, is good?
         // documentNote.reevision.loe(docRevision.getRevision()),
                 documentNote.deleted.isFalse(), documentNote.publishable.isTrue())
@@ -95,7 +95,7 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public List<DocumentNote> getOfNote(Long noteId) {
-        return query().from(documentNote)
+        return from(documentNote)
                 .where(documentNote.note.id.eq(noteId), documentNote.deleted.isFalse())
                 .list(documentNote);
     }
@@ -107,27 +107,27 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public long getNoteCountForDocument(Long id) {
-        return query().from(documentNote)
+        return from(documentNote)
                 .where(documentNote.document.id.eq(id), documentNote.deleted.isFalse()).count();
     }
 
     @Override
     public List<DocumentNote> getOfTerm(Long termId) {
-        return query().from(documentNote)
+        return from(documentNote)
                 .where(documentNote.note.term.id.eq(termId), documentNote.deleted.isFalse())
                 .list(documentNote);
     }
 
     @Override
     public List<DocumentNote> getOfPerson(Long personId) {
-        return query().from(documentNote)
+        return from(documentNote)
                 .where(documentNote.note.person.id.eq(personId), documentNote.deleted.isFalse())
                 .list(documentNote);
     }
 
     @Override
     public List<DocumentNote> getOfPlace(Long placeId) {
-        return query().from(documentNote)
+        return from(documentNote)
                 .where(documentNote.note.place.id.eq(placeId), documentNote.deleted.isFalse())
                 .list(documentNote);
     }

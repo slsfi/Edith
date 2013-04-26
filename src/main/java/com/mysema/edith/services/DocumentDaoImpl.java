@@ -471,7 +471,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     private Document getDocumentMetadata(String path) {
-        Document doc = query().from(document).where(document.path.eq(path)).uniqueResult(document);
+        Document doc = from(document).where(document.path.eq(path)).uniqueResult(document);
         if (doc != null) {
             return doc;
         } else {
@@ -614,7 +614,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         Document doc = getById(id);
         String fullPath = doc.getPath();
         String directoryPath = fullPath.substring(0, fullPath.lastIndexOf('/') + 1);
-        List<Document> documents = query().from(document)
+        List<Document> documents = from(document)
                 .where(document.path.contains(doc.getPath())).list(document);
         for (Document d : documents) {
             if (!d.getId().equals(id)) {

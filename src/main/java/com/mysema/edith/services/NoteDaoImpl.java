@@ -229,7 +229,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     @Override
     public List<Long> getOrphanIds() {
-        return query().from(note)
+        return from(note)
                 .where(sub(documentNote).where(documentNote.note.eq(note)).notExists())
                 .list(note.id);
     }
