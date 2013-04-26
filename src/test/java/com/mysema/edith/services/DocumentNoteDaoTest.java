@@ -35,6 +35,7 @@ import com.mysema.edith.domain.Person;
 import com.mysema.edith.domain.Place;
 import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.User;
+import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteSearchTO;
 
 @Transactional
@@ -54,7 +55,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
 
     @Inject
     private DocumentDao documentDao;
-
+    
     private Document document;
 
     private NoteSearchTO searchInfo;
@@ -84,8 +85,12 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         documentNote3 = noteDao.createDocumentNote(createNote(), document, "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
         documentNote4 = noteDao.createDocumentNote(createNote(), document, "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
 
+        DocumentTO documentTO = new DocumentTO();
+        documentTO.setId(document.getId());
+        documentTO.setPath(document.getPath());
+        
         searchInfo = new NoteSearchTO();
-        searchInfo.setCurrentDocument(document);
+        searchInfo.setCurrentDocument(documentTO);
 
         addExtraNote("testo");
         addExtraNote("testo2");

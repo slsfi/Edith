@@ -26,6 +26,7 @@ import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.QNote;
 import com.mysema.edith.domain.QTerm;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteDao;
@@ -127,6 +128,23 @@ public class NotesResource extends AbstractResource<NoteTO> {
             return count / pageSize + 1;
         }
         return count / pageSize;
+    }
+    
+    @POST @Path("query")
+    public Map<String, Object> query(NoteSearchTO search) {
+        SearchResults<Note> results = dao.findNotes(search);
+        
+        List<NoteTO> entries = new ArrayList<NoteTO>();
+        for (Note note : results.getResults()) {
+            entries.add(convert(note, new NoteTO()));
+        }
+        Map<String, Object> rv = new HashMap<String, Object>();
+        rv.put("entries", entries);
+        rv.put("currentPage", search.getPage());
+        rv.put("perPage", search.getPage());
+        rv.put("totalPages", totalPages(results.getLimit(), results.getTotal()));
+        rv.put("totalEntries", results.getTotal());
+        return rv;
     }
 
     @GET @Path("{id}/document-notes")
