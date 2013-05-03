@@ -44,7 +44,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     private DocumentDaoImpl documentDao;
 
     @Inject
-    private DocumentXMLDao documentXMLDao;
+    private DocumentXMLDaoImpl documentXMLDao;
 
     private Long localId;
 
@@ -437,7 +437,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
             while (reader.hasNext()) {                
                 XMLEvent e = reader.nextEvent();
                 if (e.isStartElement()) {
-                    context.push(DocumentXMLDao.extractName(e.asStartElement()));
+                    context.push(DocumentXMLDaoImpl.extractName(e.asStartElement()));
                 } else if (e.isEndElement()) {
                     context.pop();
                 } else if (e.isCharacters()) {

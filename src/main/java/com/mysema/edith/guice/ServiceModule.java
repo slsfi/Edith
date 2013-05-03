@@ -31,7 +31,7 @@ public class ServiceModule extends AbstractModule {
         bind(DataInitService.class).asEagerSingleton();
         bind(ContentRenderer.class, ContentRendererImpl.class);
         bind(DocumentDao.class, DocumentDaoImpl.class);
-        bind(DocumentXMLDao.class).in(Scopes.SINGLETON);
+        bind(DocumentXMLDao.class, DocumentXMLDaoImpl.class);
         bind(DocumentNoteDao.class, DocumentNoteDaoImpl.class);
         bind(NoteDao.class, NoteDaoImpl.class);
         bind(PersonDao.class, PersonDaoImpl.class);

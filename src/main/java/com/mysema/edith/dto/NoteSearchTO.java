@@ -41,7 +41,7 @@ public class NoteSearchTO {
 
     private String fullText;
     
-    private String shortenedSelection, description, lemmaMeaning;
+    private String shortenedSelection, description, lemma, lemmaMeaning;
     
     private Long createdBefore, createdAfter, editedAfter, editedBefore; 
     
@@ -228,6 +228,14 @@ public class NoteSearchTO {
 
     public void setEditedBefore(Long editedBefore) {
         this.editedBefore = editedBefore;
+    }
+
+    public String getLemma() {
+        return lemma;
+    }
+
+    public void setLemma(String lemma) {
+        this.lemma = lemma;
     }
     
 }

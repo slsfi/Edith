@@ -37,7 +37,6 @@ import com.mysema.query.SearchResults;
 import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.Predicate;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
 
@@ -135,6 +134,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         BooleanBuilder builder = new BooleanBuilder();
         BooleanBuilder docNoteFilter = new BooleanBuilder();
 
+        builder.and(note.deleted.isFalse());
+        
         // only orphans
         if (search.isOrphans() && !search.isIncludeAllDocs()) {
             builder.and(note.documentNoteCount.eq(0));
@@ -183,6 +184,11 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         // shortened selection
         if (search.getShortenedSelection() != null) {
             docNoteFilter.and(documentNote.shortenedSelection.containsIgnoreCase(search.getShortenedSelection()));            
+        }
+        
+        // lemma 
+        if (search.getLemma() != null) {
+            builder.and(note.lemma.containsIgnoreCase(search.getLemma()));
         }
         
         // lemma meaning
@@ -253,7 +259,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                 JPASubQuery subQuery = sub(documentNote);
                 subQuery.where(
                         documentNote.note.eq(note), 
-                        documentNote.deleted.eq(false), 
+                        documentNote.deleted.isFalse(), 
                         docNoteFilter);
                 builder.and(subQuery.exists());    
             } else {
@@ -441,48 +447,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return data.counter;
     }
 
-//    @Override
-//    public GridDataSource queryDictionary(String searchTerm) {
-//        // FIXME!!!!
-//        Assert.notNull(searchTerm, "searchTerm");
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(term.basicForm.containsIgnoreCase(searchTerm));
-//            builder.or(term.meaning.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(term, term.basicForm.lower().asc(), false,
-//                    builder.getValue());
-//        }
-//        return createGridDataSource(term, term.basicForm.lower().asc(), false, null);
-//    }
-//
-//    @Override
-//    public GridDataSource queryPersons(String searchTerm) {
-//        Assert.notNull(searchTerm, "searchTerm");
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(person.normalized.first.containsIgnoreCase(searchTerm));
-//            builder.or(person.normalized.last.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(person, person.normalized.last.lower().asc(), false,
-//                    builder.getValue());
-//        }
-//        return createGridDataSource(person, person.normalized.last.asc(), false, null);
-//    }
-//
-//    @Override
-//    public GridDataSource queryPlaces(String searchTerm) {
-//        Assert.notNull(searchTerm, "searchTerm");
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(place.normalized.last.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(place, place.normalized.last.lower().asc(), false,
-//                    builder.getValue());
-//        }
-//        return createGridDataSource(place, place.normalized.last.asc(), false, null);
-//    }
-
     @Override
     public NoteComment removeComment(Long commentId) {
-        // FIXME: Do differently with Hibernate!
         NoteComment comment = find(NoteComment.class, commentId);
         remove(comment);
         comment.getNote().removeComment(comment);
