@@ -14,7 +14,6 @@ import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.dto.NoteSearchTO;
-import com.mysema.query.QueryModifiers;
 import com.mysema.query.SearchResults;
 
 /**

@@ -1,6 +1,5 @@
 package com.mysema.edith.web;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,10 +71,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
         search.setAscending(direction.equals("ASC"));
         
         SearchResults<Note> results = dao.findNotes(search);        
-        List<NoteTO> entries = new ArrayList<NoteTO>();
-        for (Note note : results.getResults()) {
-            entries.add(convert(note, new NoteTO()));
-        }
+        List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
         
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
@@ -98,11 +94,8 @@ public class NotesResource extends AbstractResource<NoteTO> {
     @POST @Path("query")
     public Map<String, Object> query(NoteSearchTO search) {
         SearchResults<Note> results = dao.findNotes(search);
+        List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
         
-        List<NoteTO> entries = new ArrayList<NoteTO>();
-        for (Note note : results.getResults()) {
-            entries.add(convert(note, new NoteTO()));
-        }
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
         rv.put("currentPage", search.getPage());
@@ -115,11 +108,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
     @GET @Path("{id}/document-notes")
     public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
         List<DocumentNote> docNotes = documentNoteDao.getOfNote(id);
-        List<DocumentNoteTO> result = new ArrayList<DocumentNoteTO>(docNotes.size());
-        for (DocumentNote docNote : docNotes) {
-            result.add(convert(docNote, new DocumentNoteTO()));
-        }
-        return result;
+        return convert(docNotes, DocumentNoteTO.class);
     }
 
     @Override

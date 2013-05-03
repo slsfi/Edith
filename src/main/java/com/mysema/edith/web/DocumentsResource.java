@@ -5,7 +5,6 @@
  */
 package com.mysema.edith.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -78,11 +77,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     @GET @Path("{id}/document-notes")
     public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
         List<DocumentNote> docNotes = documentNoteDao.getOfDocument(id);
-        List<DocumentNoteTO> result = new ArrayList<DocumentNoteTO>(docNotes.size());
-        for (DocumentNote docNote : docNotes) {
-            result.add(convert(docNote, new DocumentNoteTO()));
-        }
-        return result;
+        return convert(docNotes, DocumentNoteTO.class);
     }
 
     @Override
@@ -139,10 +134,6 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
             }
             noteComments = dao.getNoteComments(document.getId(), 3);
         }
-        List<NoteCommentTO> result = new ArrayList<NoteCommentTO>();
-        for (NoteComment noteComment : noteComments) {
-            result.add(convert(noteComment, new NoteCommentTO()));
-        }
-        return result;
+        return convert(noteComments, NoteCommentTO.class);
     }
 }
