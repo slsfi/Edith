@@ -276,9 +276,8 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
         String endAnchor = "end" + localId;
         boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
         int offset = 0;
-        int startIndex = getIndex(string, sel.getFirstWord(), sel.getStartIndex());
-        int endIndex = getIndex(string, sel.getLastWord(), sel.getEndIndex())
-                + sel.getLastWord().length();
+        int startIndex = getIndex(string, sel.getFirstChar(), sel.getStartIndex());
+        int endIndex = getIndex(string, sel.getLastChar(), sel.getEndIndex()) + 1;
         for (XMLEvent e : events) {
             boolean handled = false;
             if (e.isStartElement()) {
@@ -358,11 +357,11 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
 
     
 
-    public static int getIndex(String str, String word, int occurrence) {
+    public static int getIndex(String str, char ch, int occurrence) {
         int index = -1;
         int n = occurrence;
-        while (n > 0) {
-            index = str.indexOf(word, index + 1);
+        while (n >= 0) {
+            index = str.indexOf(ch, index + 1);
             if (index == -1) {
                 return -1;
             }

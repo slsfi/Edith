@@ -90,12 +90,12 @@ public class SelectedTextTest {
 
     @Test
     public void Get_First_Word() {
-        assertEquals("lots", selectedText.getFirstWord());
+        assertEquals('l', selectedText.getFirstChar());
     }
 
     @Test
     public void Get_Last_Word() {
-        assertEquals("text", selectedText.getLastWord());
+        assertEquals('t', selectedText.getLastChar());
     }
 
     @Test

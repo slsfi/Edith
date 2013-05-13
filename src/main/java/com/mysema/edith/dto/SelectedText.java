@@ -7,20 +7,18 @@ package com.mysema.edith.dto;
 
 import java.util.regex.Pattern;
 
-import com.mysema.edith.util.StringUtils;
-
 public class SelectedText {
 
     private String selection;
 
     private String startId, endId;
 
-    private int startIndex = 1, endIndex = 1;
-
-    public SelectedText() {
-    }
+    private int startIndex = 0, endIndex = 0;
 
     private static final Pattern HYPHEN = Pattern.compile("-");
+    
+    public SelectedText() {
+    }
 
     public SelectedText(String startId, String endId, int startIndex, int endIndex, String selection) {
         this.startId = startId;
@@ -31,7 +29,7 @@ public class SelectedText {
     }
 
     public SelectedText(String startId, String endId, String selection) {
-        this(startId, endId, 1, 1, selection);
+        this(startId, endId, 0, 0, selection);
     }
 
     public String getEndId() {
@@ -90,14 +88,22 @@ public class SelectedText {
         return endId != null && endId.trim().length() > 0;
     }
 
-    public String getFirstWord() {
-        String[] words = StringUtils.split(selection);
-        return words[0];
+//    public String getFirstWord() {
+//        String[] words = StringUtils.split(selection);
+//        return words[0];
+//    }
+//
+//    public String getLastWord() {
+//        String[] words = StringUtils.split(selection);
+//        return words[words.length - 1];
+//    }
+    
+    public char getFirstChar() {
+        return selection.charAt(0);
     }
-
-    public String getLastWord() {
-        String[] words = StringUtils.split(selection);
-        return words[words.length - 1];
+    
+    public char getLastChar() {
+        return selection.charAt(selection.length() - 1);
     }
 
     public boolean isStartChildOfEnd() {
