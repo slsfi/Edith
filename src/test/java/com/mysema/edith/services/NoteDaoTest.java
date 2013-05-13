@@ -441,7 +441,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         
         assertEquals(1, noteDao.findNotes(search).getTotal());
     }
-
+    
     private void assertRowCount(int expected, NoteSearchTO search) {
         assertEquals(expected, noteDao.findNotes(search).getTotal());
     }

@@ -68,7 +68,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
         search.setPage(page);
         search.setPerPage(perPage);
         search.setOrderBy(order);
-        search.setAscending(direction.equals("ASC"));
+        search.setAscending(direction == null || direction.equals("ASC"));
         
         SearchResults<Note> results = dao.findNotes(search);        
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);

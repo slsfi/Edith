@@ -3,6 +3,7 @@ package com.mysema.edith.web;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -68,6 +69,12 @@ public class NotesResourceTest extends AbstractResourceTest {
 
         assertNotNull(note.getId());
         assertNotNull(note.getTerm().getId());
+    }
+    
+    @Test
+    public void Search() {
+        Map<String, Object> rv = notes.all(null, null, null, null, null);
+        assertNotNull(rv);
     }
 
 }
