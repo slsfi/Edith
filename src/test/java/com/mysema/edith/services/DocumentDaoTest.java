@@ -243,7 +243,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         return note;
     }
 
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Renamed_File_Is_No_Longer_Available_With_Old_Name() throws IOException {
         Document document = getDocument("/letters/letter_to_the_editor.xml");
         documentDao.rename(document.getId(), "letter_to_the_reader.xml");

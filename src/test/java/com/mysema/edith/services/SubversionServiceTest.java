@@ -132,7 +132,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
         assertTrue(result);
     }
 
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Delete() throws Exception {
         String svnPath = documentRoot + "/notesTestData.txt";
         long revision = subversionService.importFile(svnPath, noteTestData);
@@ -312,7 +312,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     }
 
     @SuppressWarnings("deprecation")
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Checkout_Throws_SubversionException() throws Exception {
         SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
         subversionService.setClientManager(clientManagerMock);
@@ -327,7 +327,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
         verify(clientManagerMock, updateClientMock);
     }
 
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Delete_Throws_SubversionException() throws Exception {
         SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
         subversionService.setClientManager(clientManagerMock);
@@ -382,7 +382,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Inject @Named(EDITH.REPO_URL_PROPERTY)
     private String repositoryURL;
 
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Get_File_Items_For_Root_Path_Throws_Exception_For_Path() throws Exception {
         SVNRepository repositoryMock = createMock(SVNRepository.class);
         VersioningDaoImpl versioningService = new VersioningDaoImpl(
@@ -393,7 +393,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
                 null);
         versioningService.setSvnRepository(repositoryMock);
 
-        expect(repositoryMock.getDir(documentRoot, -1, false, Collections.emptyList())).andThrow(new SubversionException());
+        expect(repositoryMock.getDir(documentRoot, -1, false, Collections.emptyList())).andThrow(new VersioningException());
 
         replay(repositoryMock);
         versioningService.getFileItems(documentRoot, -1);

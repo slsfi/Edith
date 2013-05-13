@@ -85,7 +85,7 @@ public class VersioningDaoImpl implements VersioningDao {
         try {
             repoSvnURL = SVNURL.parseURIEncoded(repoURL);
         } catch (SVNException e) {
-            throw new SubversionException(e);
+            throw new VersioningException(e);
         }
         svnRepository = null;
     }
@@ -104,7 +104,7 @@ public class VersioningDaoImpl implements VersioningDao {
             clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, true),
                     destination, SVNRevision.create(revision), SVNRevision.create(revision), true);
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -116,7 +116,7 @@ public class VersioningDaoImpl implements VersioningDao {
                     .doCommit(new File[] { file }, true, file.getName() + " committed", false, true)
                     .getNewRevision();
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -128,11 +128,11 @@ public class VersioningDaoImpl implements VersioningDao {
             // long updateStart = System.currentTimeMillis();
             try {
                 update(userCheckout);
-            } catch (SubversionException e) {
+            } catch (VersioningException e) {
                 try {
                     FileUtils.delete(userCheckout);
                 } catch (IOException e1) {
-                    throw new SubversionException("Exception when cleaning directory", e1);
+                    throw new VersioningException("Exception when cleaning directory", e1);
                 }
                 userCheckout.delete();
                 checkout(userCheckout, revision);
@@ -164,7 +164,7 @@ public class VersioningDaoImpl implements VersioningDao {
 //            FileUtils.copyFile(tmp, file);
             Files.copy(tmp, file);
         } catch (IOException e) {
-            throw new SubversionException(e);
+            throw new VersioningException(e);
         } finally {
             if (tmp != null && !tmp.delete()) {
                 logger.error("Delete of " + tmp.getAbsolutePath() + " failed");
@@ -184,7 +184,7 @@ public class VersioningDaoImpl implements VersioningDao {
             logger.info(clientManager.getCommitClient()
                     .doDelete(new SVNURL[] { targetURL }, "removed " + svnPath).toString());
         } catch (SVNException e) {
-            throw new SubversionException(e.getMessage(), e);
+            throw new VersioningException(e.getMessage(), e);
         }
     }
 
@@ -196,7 +196,7 @@ public class VersioningDaoImpl implements VersioningDao {
             FileUtils.delete(svnCache);
             FileUtils.delete(svnRepo);
         } catch (IOException e) {
-            throw new SubversionException(e.getMessage(), e);
+            throw new VersioningException(e.getMessage(), e);
         }
     }
 
@@ -215,7 +215,7 @@ public class VersioningDaoImpl implements VersioningDao {
             }
             return rv;
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -224,7 +224,7 @@ public class VersioningDaoImpl implements VersioningDao {
         try {
             return svnRepository.getLatestRevision();
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -255,7 +255,7 @@ public class VersioningDaoImpl implements VersioningDao {
             }
             return null;
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
 
     }
@@ -269,7 +269,7 @@ public class VersioningDaoImpl implements VersioningDao {
                     .doImport(file, repoSvnURL.appendPath(svnPath, false), svnPath + " added", true)
                     .getNewRevision();
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
 
     }
@@ -300,7 +300,7 @@ public class VersioningDaoImpl implements VersioningDao {
                 }
             }
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -310,7 +310,7 @@ public class VersioningDaoImpl implements VersioningDao {
             clientManager.getUpdateClient().doUpdate(file, SVNRevision.create(getLatestRevision()),
                     true);
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -335,7 +335,7 @@ public class VersioningDaoImpl implements VersioningDao {
             }
             return fileItems;
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -354,7 +354,7 @@ public class VersioningDaoImpl implements VersioningDao {
             clientManager.getMoveClient().doMove(oldFile, newFile);
             commit(userCheckout);
         } catch (SVNException e) {
-            throw new SubversionException(e.getMessage(), e);
+            throw new VersioningException(e.getMessage(), e);
         }
         return getLatestRevision();
     }
