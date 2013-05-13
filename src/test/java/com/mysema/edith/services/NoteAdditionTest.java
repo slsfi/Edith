@@ -35,11 +35,14 @@ import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.util.ElementContext;
 import com.mysema.edith.util.StringUtils;
 
-
 public class NoteAdditionTest extends AbstractHibernateTest {
 
     private final static Pattern WHITESPACE = Pattern.compile("\\s+");
 
+    private static final String PREFIX = "TEI-text0-body0-";
+    
+    private static final String HEADER_PREFIX = "TEI-teiHeader0-fileDesc0-";
+    
     @Inject
     private DocumentDaoImpl documentDao;
 
@@ -82,10 +85,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     
     @Test
     public void AddNote_end_element_deeply_inside_start_element() throws Exception {
-        String startElement = "play-description-castList-castItem13";
-        String endElement = "play-description-castList-castItem13-roleDesc-ref";
+        String startElement = "play0-description0-castList0-castItem13";
+        String endElement = "play0-description0-castList0-castItem13-roleDesc0-ref0";
         String text = ", kraatari";
-        addNote(new SelectedText(startElement, endElement, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
         String content = getContent();
 //         System.out.println(content);
@@ -94,10 +97,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_end_element_inside_start_element() throws Exception {
-        String startElement = "play-act-stage";
-        String endElement = "play-act-stage-ref";
+        String startElement = "play0-act0-stage0";
+        String endElement = "play0-act0-stage0-ref0";
         String text = "piaksen huo";
-        addNote(new SelectedText(startElement, endElement, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
         String content = getContent();
         // System.out.println(content);
@@ -110,15 +113,15 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     public void AddNote_end_element_inside_start_element_and_start_element_inside_end_element_()
             throws Exception {
-        String startElement = "play-act-stage";
-        String endElement = "play-act-stage-ref2";
+        String startElement = "play0-act0-stage0";
+        String endElement = "play0-act0-stage0-ref2";
         String text = "sivulla ra";
-        addNote(new SelectedText(startElement, endElement, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
-        String startElement2 = "play-act-stage-ref";
-        String endElement2 = "play-act-stage";
+        String startElement2 = "play0-act0-stage0-ref0";
+        String endElement2 = "play0-act0-stage0";
         String text2 = "uone\n: per";
-        addNote(new SelectedText(startElement2, endElement2, text2), new StringReader(
+        addNote(new SelectedText(PREFIX + startElement2, PREFIX + endElement2, text2), new StringReader(
                 target.toString()));
         String content = target.toString();
         // System.out.println(content);
@@ -128,9 +131,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_for_p() throws Exception {
-        String element = "play-act-sp2-p";
+        String element = "play0-act0-sp2-p0";
         String text = "sun ullakosta ottaa";
-        addNote(new SelectedText(element, element, text));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, text));
 
         String content = getContent();
         assertTrue(content.contains("k\u00E4ski " + start(localId) + text + end(localId)
@@ -139,9 +142,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     
     @Test
     public void AddNote_for_speaker() throws Exception {
-        String element = "play-act-sp-speaker";
+        String element = "play0-act0-sp0-speaker0";
         String text = "Esko.";
-        addNote(new SelectedText(element, element, text));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, text));
 
         String content = getContent();
         assertTrue(content.contains("<speaker>" + start(localId) + text + end(localId)
@@ -150,10 +153,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_huge_difference_between_elements() throws Exception {
-        String startElement = "sourceDesc-biblStruct-monogr-imprint-date";
-        String endElement = "play-ref";
+        String startElement = "sourceDesc0-biblStruct0-monogr0-imprint0-date0";
+        String endElement = "play0-ref0";
         String text = "65 [H";
-        addNote(new SelectedText(startElement, endElement, text));
+        addNote(new SelectedText(HEADER_PREFIX + startElement, PREFIX + endElement, text));
 
         String content = getContent();
 //         System.out.println(content);
@@ -163,10 +166,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_line_breaks_in_selection() throws Exception {
-        String startElement = "play-description-castList-castItem8-roleDesc";
-        String endElement = "play-description-castList-castItem9-roleDesc";
+        String startElement = "play0-description0-castList0-castItem8-roleDesc0";
+        String endElement = "play0-description0-castList0-castItem9-roleDesc0";
         String text = " \nori sepp\u00E4\n.\nKarri\n,\ntalon";
-        addNote(new SelectedText(startElement, endElement, 1, 1, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 1, 1, text));
 
         String content = getContent();
         assertTrue(content.contains("nu" + start(localId) + "ori"));
@@ -175,11 +178,11 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_long() throws Exception {
-        String element = "play-act-sp-p";
+        String element = "play0-act0-sp0-p0";
         StringBuilder text = new StringBuilder();
         text.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
         text.append("ja sulhais-vaatteisin puettuna olen, koska h\u00E4n takaisin pal");
-        addNote(new SelectedText(element, element, text.toString()));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, text.toString()));
 
         String content = getContent();
         // System.out.println(content);
@@ -189,10 +192,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_multiple_elements() throws Exception {
-        String start = "play-act-sp2-p";
-        String end = "play-act-sp3-speaker";
+        String start = "play0-act0-sp2-p0";
+        String end = "play0-act0-sp3-speaker0";
         String text = "ja polvip\u00F6ksyt. Esko.";
-        addNote(new SelectedText(start, end, text));
+        addNote(new SelectedText(PREFIX + start, PREFIX + end, text));
 
         String content = getContent();
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
@@ -201,10 +204,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_multiple_elements_2() throws Exception {
-        String start = "play-act-sp2-p";
-        String end = "play-act-sp3-p";
+        String start = "play0-act0-sp2-p0";
+        String end = "play0-act0-sp3-p0";
         String text = "ja polvip\u00F6ksyt. Esko. (panee ty\u00F6ns\u00E4 pois).";
-        addNote(new SelectedText(start, end, text));
+        addNote(new SelectedText(PREFIX + start, PREFIX + end, text));
 
         String content = getContent();
         assertTrue(content.contains(start(localId) + "ja polvip\u00F6ksyt."));
@@ -213,13 +216,13 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_on_top_of_another_note_in_child() throws Exception {
-        String startElement = "play-act-stage-ref";
-        String endElement = "play-act-stage";
+        String startElement = "play0-act0-stage0-ref0";
+        String endElement = "play0-act0-stage0";
         String text = "ne\n: per\u00E4";
-        addNote(new SelectedText(startElement, endElement, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
         String text2 = "uone\n: per\u00E4ll\u00E4 o";
-        addNote(new SelectedText(startElement, endElement, 1, 2, text2), new StringReader(
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 1, 2, text2), new StringReader(
                 target.toString()));
         String content = target.toString();
 //        System.out.println(content);
@@ -228,9 +231,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_one_char() throws Exception {
-        String element = "play-act-stage";
+        String element = "play0-act0-stage0";
         String text = "i";
-        addNote(new SelectedText(element, element, 12, 12, text));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, 12, 12, text));
 
         String content = getContent();
         // System.out.println(content);
@@ -239,14 +242,14 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_role_description() throws Exception {
-        String startElement = "play-description-castList-castItem7-role";
-        String endElement = "play-description-castList-castItem8-roleDesc";
+        String startElement = "play0-description0-castList0-castItem7-role0";
+        String endElement = "play0-description0-castList0-castItem8-roleDesc0";
         String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
 
-        addNote(new SelectedText(startElement, endElement, 3, 1, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 3, 1, text));
 
         String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
-        addNote(new SelectedText(startElement, endElement, 1, 1, newText), new StringReader(target.toString()));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 1, 1, newText), new StringReader(target.toString()));
 
         String content = target.toString();
 //        System.out.println(content);
@@ -257,9 +260,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     public void AddNote_same_element()
             throws Exception {
-        String element = "play-act-sp4-p";
+        String element = "play0-act0-sp4-p0";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
-        addNote(new SelectedText(element, element, text));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, text));
 
         String content = target.toString();
         // System.out.println(content);
@@ -268,9 +271,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_short_note_1() throws Exception {
-        String element = "play-act-stage";
+        String element = "play0-act0-stage0";
         String text = "es";
-        addNote(new SelectedText(element, element, 1, 1, text.toString()));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, 1, 1, text.toString()));
 
         String content = getContent();
 //         System.out.println(content);
@@ -279,9 +282,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_short_note_2() throws Exception {
-        String element = "play-act-stage";
+        String element = "play0-act0-stage0";
         String text = "es";
-        addNote(new SelectedText(element, element, 2, 2, text));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, 2, 2, text));
 
         String content = getContent();
         assertTrue(content.contains("\u00E4\u00E4r" + start(localId) + "es" + end(localId)
@@ -290,9 +293,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_short_note_3() throws Exception {
-        String element = "play-act-stage";
+        String element = "play0-act0-stage0";
         String text = "es";
-        addNote(new SelectedText(element, element, 3, 3, text));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, 3, 3, text));
 
         String content = getContent();
         assertTrue(content.contains("vier" + start(localId) + "es" + end(localId) + "s\u00E4,"));
@@ -300,10 +303,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_start_element_inside_end_element() throws Exception {
-        String startElement = "play-act-stage-ref";
-        String endElement = "play-act-stage";
+        String startElement = "play0-act0-stage0-ref0";
+        String endElement = "play0-act0-stage0";
         String text = "uone\n: per";
-        addNote(new SelectedText(startElement, endElement, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
         String content = getContent();
         // System.out.println(content);
@@ -314,15 +317,15 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     public void AddNote_start_element_inside_end_element_and_end_element_inside_start_element()
             throws Exception {
-        String startElement = "play-act-stage-ref";
-        String endElement = "play-act-stage";
+        String startElement = "play0-act0-stage0-ref0";
+        String endElement = "play0-act0-stage0";
         String text = "uone\n: per";
-        addNote(new SelectedText(startElement, endElement, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
-        String startElement2 = "play-act-stage";
-        String endElement2 = "play-act-stage-ref2";
+        String startElement2 = "play0-act0-stage0";
+        String endElement2 = "play0-act0-stage0-ref2";
         String text2 = "sivulla ra";
-        addNote(new SelectedText(startElement2, endElement2, text2), new StringReader(
+        addNote(new SelectedText(PREFIX + startElement2, PREFIX + endElement2, text2), new StringReader(
                 target.toString()));
         String content = target.toString();
         // System.out.println(content);
@@ -335,10 +338,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_start_element_inside_end_element_end_does_not_escape() throws Exception {
-        String startElement = "play-act-stage-ref";
-        String endElement = "play-act-stage";
+        String startElement = "play0-act0-stage0-ref0";
+        String endElement = "play0-act0-stage0";
         String text = "uone\n: p";
-        addNote(new SelectedText(startElement, endElement, 1, 2, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 1, 2, text));
 
         String content = getContent();
         // System.out.println(content);
@@ -348,10 +351,10 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_start_element_inside_end_element2() throws Exception {
-        String startElement = "play-act-sp3-p-stage";
-        String endElement = "play-act-sp3-p";
+        String startElement = "play0-act0-sp3-p0-stage0";
+        String endElement = "play0-act0-sp3-p0";
         String text = "\u00E4lt\u00E4 ulos) .";
-        addNote(new SelectedText(startElement, endElement, 1, 3, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 1, 3, text));
 
         String content = getContent();
 //         System.out.println(content);
@@ -360,14 +363,14 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_twice_overlapping() throws Exception {
-        String element = "play-act-sp3-p";
+        String element = "play0-act0-sp3-p0";
         String text = "\u00E4st";
 
-        addNote(new SelectedText(element, element, text));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, text));
 
         //T-\u00E4st-\u00E4
         String newText = "T\u00E4st\u00E4";
-        addNote(new SelectedText(element, element, newText), new StringReader(target.toString()));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, newText), new StringReader(target.toString()));
 
         String content = target.toString();
         assertTrue(content.contains(start(localId) + "T" + start(localId) + text + end(localId) + "\u00E4" + end(localId)));
@@ -375,14 +378,14 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_twice_overlapping2() throws Exception {
-        String startElement = "play-description-castList-castItem7-role";
-        String endElement = "play-description-castList-castItem8-roleDesc";
+        String startElement = "play0-description0-castList0-castItem7-role0";
+        String endElement = "play0-description0-castList0-castItem8-roleDesc0";
         String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
 
-        addNote(new SelectedText(startElement, endElement, 3, 1, text));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 3, 1, text));
 
         String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
-        addNote(new SelectedText(startElement, endElement, newText), new StringReader(target.toString()));
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, newText), new StringReader(target.toString()));
 
         String content = target.toString();
         assertTrue(content.contains("Jaa" + start(localId) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
@@ -391,9 +394,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_verify_subelement_not_eaten() throws Exception {
-        String element = "play-act-stage";
+        String element = "play0-act0-stage0";
         String text = "Topi";
-        addNote(new SelectedText(element, element, text));
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, text));
 
         assertTrue(testDocumentContent
                 .contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
@@ -429,7 +432,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     private List<SelectedText> createSelections() throws Exception {
         List<SelectedText> selections = new ArrayList<SelectedText>();
         Map<String, StringBuilder> contextStrings = new HashMap<String, StringBuilder>();
-        ElementContext context = new ElementContext(3);
+        ElementContext context = new ElementContext();
         XMLEventReader reader = XMLInputFactory.newInstance().createXMLEventReader(source);
         String prevCharacters = null;
         String prevContext = null;

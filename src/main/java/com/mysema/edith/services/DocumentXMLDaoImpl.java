@@ -52,6 +52,7 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
     private static class Matched {
 
         private boolean startMatched;
+        
         private boolean endMatched;
 
         public boolean areBothMatched() {
@@ -122,7 +123,7 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
     int addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, Long localId)
             throws NoteAdditionFailedException {
         logger.info(sel.toString());
-        ElementContext context = new ElementContext(3);
+        ElementContext context = new ElementContext();
         /* Used to concat all the strings while buffering. */
         StringBuilder allStrings = new StringBuilder();
         /* Used to concat all end context strings while buffering. */

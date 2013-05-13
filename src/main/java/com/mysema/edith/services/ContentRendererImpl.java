@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,22 +33,11 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EDITH;
-import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.Interval;
-import com.mysema.edith.domain.LinkElement;
-import com.mysema.edith.domain.NameForm;
-import com.mysema.edith.domain.Note;
-import com.mysema.edith.domain.NoteFormat;
-import com.mysema.edith.domain.NoteType;
-import com.mysema.edith.domain.Paragraph;
-import com.mysema.edith.domain.ParagraphElement;
-import com.mysema.edith.domain.Person;
-import com.mysema.edith.domain.Place;
-import com.mysema.edith.domain.UrlElement;
+import com.mysema.edith.domain.*;
 import com.mysema.edith.util.ElementContext;
 import com.mysema.edith.util.ParagraphParser;
 
@@ -61,14 +49,11 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
 
-    private static final Set<String> EMPTY_ELEMENTS = new HashSet<String>(Arrays.asList("anchor",
-            "lb", "pb"));
+    private static final Set<String> EMPTY_ELEMENTS = ImmutableSet.of("anchor", "lb", "pb");
 
-    private static final Set<String> UL_ELEMENTS = new HashSet<String>(Arrays.asList("castGroup",
-            "castList", "listPerson"));
+    private static final Set<String> UL_ELEMENTS = ImmutableSet.of("castGroup", "castList", "listPerson");
 
-    private static final Set<String> LI_ELEMENTS = new HashSet<String>(Arrays.asList("castItem",
-            "person"));
+    private static final Set<String> LI_ELEMENTS = ImmutableSet.of("castItem", "person");
 
     private static final String TYPE = "type";
 
@@ -102,7 +87,6 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private void writeSpan(XMLStreamWriter writer, String attr) throws XMLStreamException {
-//        writer.element("SPAN", CLASS, attr);
         writer.writeStartElement(SPAN);
         writer.writeAttribute(CLASS, attr);
     }
@@ -184,7 +168,6 @@ public class ContentRendererImpl implements ContentRenderer {
 
         for (Map.Entry<Note, List<DocumentNote>> entry : noteToDocumentNotes.entrySet()) {
             Note note = entry.getKey();
-//            writer.element("note", "xml:id", "note" + note.getId());
             writer.writeStartElement("note");
             writer.writeAttribute("xml:id", "note" + note.getId());
             write(writer, "description", note.getDescription());
@@ -227,7 +210,6 @@ public class ContentRendererImpl implements ContentRenderer {
 
             writer.writeStartElement("documentNotes");
             for (DocumentNote dn : entry.getValue()) {
-//                writer.element("documentNote", "xml:id", END + dn.getId());
                 writer.writeStartElement("documentNote");
                 writer.writeAttribute("xml:id", END + dn.getId());
                 write(writer, "longText", dn.getFullSelection());
@@ -262,7 +244,6 @@ public class ContentRendererImpl implements ContentRenderer {
 
     @Override
     public void renderDocumentNotes(List<DocumentNote> documentNotes, XMLStreamWriter writer) throws XMLStreamException {
-//        writer.element("ul", CLASS, "notes");
         writer.writeStartElement("ul");
         writer.writeAttribute(CLASS, "notes");
         for (DocumentNote documentNote : documentNotes) {
@@ -273,19 +254,16 @@ public class ContentRendererImpl implements ContentRenderer {
             }
 
             writer.writeStartElement("li");
-//            writer.element("a", CLASS, "notelink", "href", "#start" + documentNote.getId());
             writer.writeStartElement("a");            
             writer.writeAttribute("href", "#start" + documentNote.getId());
             writer.writeAttribute(CLASS, "notelink");
             if (note.getLemma() != null) {
-//                writer.element(SPAN, CLASS, "lemma");
                 writer.writeStartElement(SPAN);
                 writer.writeAttribute(CLASS, "lemma");
                 writer.writeCharacters(note.getLemma());
                 writer.writeEndElement();
             }
             if (note.getTerm() != null && note.getTerm().getBasicForm() != null) {
-//                writer.element(SPAN, CLASS, "basicForm");
                 writer.writeStartElement(SPAN);
                 writer.writeAttribute(CLASS, "basicForm");
                 writer.writeCharacters(note.getTerm().getBasicForm());
@@ -361,11 +339,9 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.writeCharacters(urlElement.getString());
                 writer.writeEndElement();
             } else {
-//                builder.append(element.toString());
                 writer.writeCharacters(element.toString());
             }
         }
-//        writer.writeRaw(builder.toString());
     }
 
     @Override
@@ -376,7 +352,6 @@ public class ContentRendererImpl implements ContentRenderer {
 
         try {
             writer.writeStartDocument();
-//            writer.element("ul", CLASS, "pages");
             writer.writeStartElement("ul");
             writer.writeAttribute(CLASS, "pages");
             while (true) {
@@ -387,10 +362,8 @@ public class ContentRendererImpl implements ContentRenderer {
                         String page = reader.getAttributeValue(null, "n");
                         if (page != null) {
                             writer.writeStartElement("li");
-//                            writer.element("a", "href", "#page" + page);
                             writer.writeStartElement("a");
                             writer.writeAttribute("href", "#page"+ page);
-//                            writer.writeRaw(page);
                             writer.writeCharacters(page);
                             writer.writeEndElement();
                             writer.writeEndElement();
@@ -408,7 +381,6 @@ public class ContentRendererImpl implements ContentRenderer {
             reader.close();
             is.close();
         }
-
     }
 
     @Override
@@ -478,7 +450,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
         AtomicBoolean noteContent = new AtomicBoolean(false);
         Set<Long> noteIds = new HashSet<Long>();
-        ElementContext context = new ElementContext(3);
+        ElementContext context = new ElementContext();
 
         try {
             while (true) {
@@ -509,14 +481,12 @@ public class ContentRendererImpl implements ContentRenderer {
         String rend = reader.getAttributeValue(null, "rend");
 
         if (UL_ELEMENTS.contains(localName)) {
-//            writer.element("ul", CLASS, localName);
             writer.writeStartElement("ul");
             writer.writeAttribute(CLASS, localName);
             if (path != null) {
                 writer.writeAttribute("id", path);
             }
         } else if (LI_ELEMENTS.contains(localName)) {
-//            writer.element("li", CLASS, localName);
             writer.writeStartElement("li");
             writer.writeAttribute(CLASS, localName);
             if (path != null) {
@@ -524,14 +494,12 @@ public class ContentRendererImpl implements ContentRenderer {
             }
         } else if (localName.equals(DIV)) {
             String type = reader.getAttributeValue(null, TYPE);
-//            writer.element(localName, CLASS, type);
             writer.writeStartElement(localName);
             writer.writeAttribute(CLASS, type);
             if (path != null) {
                 writer.writeAttribute("id", path);
             }
         } else if (localName.equals("TEI") || localName.equals("TEI.2")) {
-//            writer.element(DIV, CLASS, "tei");
             writer.writeStartElement(DIV);
             writer.writeAttribute(CLASS, "tei");
         } else if (localName.equals("lb")) {
@@ -542,11 +510,9 @@ public class ContentRendererImpl implements ContentRenderer {
             if (page != null) {
                 String type = reader.getAttributeValue(null, "type");
                 String cssClass = type != null ? ("page " + type) : "page";
-//                writer.element(DIV, "id", "page" + page, CLASS, cssClass);
                 writer.writeStartElement(DIV);
                 writer.writeAttribute("id", "page"+page);
                 writer.writeAttribute(CLASS, cssClass);
-//                writer.writeRaw(page + ".");
                 writer.writeCharacters(page + ".");
                 writer.writeEndElement();
             }
@@ -560,7 +526,6 @@ public class ContentRendererImpl implements ContentRenderer {
                     return;
                 }
                 // start anchor
-//                writer.element(SPAN, CLASS, "notestart", "id", id);
                 writer.writeStartElement(SPAN);
                 writer.writeAttribute(CLASS, "notestart");
                 writer.writeAttribute("id", id);
@@ -569,7 +534,6 @@ public class ContentRendererImpl implements ContentRenderer {
                 noteContent.set(true);
                 noteIds.add(Long.parseLong(id.substring("start".length())));
             } else if (id.startsWith(END)) {
-//                writer.element(SPAN, "class", "noteanchor", "id", id);
                 writer.writeStartElement(SPAN);
                 writer.writeAttribute("class", "noteanchor");
                 writer.writeAttribute("id", id);
@@ -591,13 +555,11 @@ public class ContentRendererImpl implements ContentRenderer {
             if (unit != null) {
                 cssClass.append(" " + unit);
             }
-//            writer.element(DIV, CLASS, cssClass.toString());
             writer.writeStartElement(DIV);
             writer.writeAttribute(CLASS, cssClass.toString());
 
         } else {
             String cssClass = rend != null ? (name + " " + rend) : name;
-//            writer.element(DIV, CLASS, cssClass);
             writer.writeStartElement(DIV);
             writer.writeAttribute(CLASS, cssClass);
             if (path != null) {
@@ -608,9 +570,9 @@ public class ContentRendererImpl implements ContentRenderer {
     }
 
     private String extractName(XMLStreamReader reader, String localName) {
-        if (localName.equals(DIV)) {
-            return reader.getAttributeValue(null, TYPE);
-        }
+//        if (localName.equals(DIV)) {
+//            return reader.getAttributeValue(null, TYPE);
+//        }
         return localName;
     }
 
@@ -631,14 +593,11 @@ public class ContentRendererImpl implements ContentRenderer {
             for (Long noteId : noteIds) {
                 classes.append(" n").append(noteId);
             }
-//            writer.element(SPAN, CLASS, classes);
             writer.writeStartElement(SPAN);
             writer.writeAttribute(CLASS, classes.toString());
-//            writer.writeRaw(StringEscapeUtils.escapeXml(text));
             writer.writeCharacters(text);
             writer.writeEndElement();
         } else {
-//            writer.writeRaw(StringEscapeUtils.escapeXml(text));
             writer.writeCharacters(text);
         }
     }

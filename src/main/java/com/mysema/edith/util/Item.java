@@ -28,7 +28,7 @@ public class Item implements Cloneable {
         if (intValue == null) {
             intValue = new AtomicInteger(1);
             counts.put(elemName, intValue);
-            return elemName;
+            return elemName + 0;
         }
         intValue.addAndGet(1);
         return elemName + intValue;
