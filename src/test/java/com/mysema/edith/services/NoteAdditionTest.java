@@ -166,15 +166,14 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     }
 
     @Test
-    @Ignore // FIXME, contains line breaks
     public void AddNote_line_breaks_in_selection() throws Exception {
-        String startElement = "div0-description0-castList0-castItem8-roleDesc0";
-        String endElement = "div0-description0-castList0-castItem9-roleDesc0";
-        String text = " \nori sepp\u00E4\n.\nKarri\n,\ntalon";
+        String startElement = "div0-div0-castList0-castItem7-roleDesc0";
+        String endElement = "div0-div0-castList0-castItem8-roleDesc0";
+        String text = "ori sepp\u00E4\n.\nKarri\n,\ntalon";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 0, text));
 
         String content = getContent();
-        System.err.println(content);
+//        System.err.println(content);
         assertTrue(content.contains("nu" + start(localId) + "ori"));
         assertTrue(content.contains("talon" + end(localId) + "is\u00E4nt\u00E4"));
     }
@@ -244,20 +243,20 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     }
 
     @Test
-    @Ignore // FIXME, contains line breaks
+    @Ignore // FIXME
     public void AddNote_role_description() throws Exception {
-        String startElement = "div0-description0-castList0-castItem7-role0";
-        String endElement = "div0-description0-castList0-castItem8-roleDesc0";
-        String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
+        String startElement = "div0-div0-castList0-castItem6-role0";
+        String endElement = "div0-div0-castList0-castItem7-roleDesc0";
+        String text = "a\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,";
 
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 0, text));
 
-        String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
+        String newText = "na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 0, newText), 
                 new StringReader(target.toString()));
 
         String content = target.toString();
-//        System.out.println(content);
+        //System.out.println(content.substring(0, 5000));
         assertTrue(content.contains("Jaa" + start(localId) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
         assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId) + "epp\u00E4</roleDesc>.</castItem>"));
     }
@@ -281,7 +280,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 7, 3, text));
 
         String content = getContent();
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("ed" + start(localId) + "es" + end(localId) + "s\u00E4"));
     }
 
@@ -292,7 +291,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 8, 10, text));
 
         String content = getContent();
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("\u00E4\u00E4r" + start(localId) + "es" + end(localId)
                 + "s\u00E4,"));
     }
@@ -304,7 +303,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 11, 14, text));
 
         String content = getContent();
-        System.out.println(content);
+//        System.out.println(content);
         assertTrue(content.contains("vier" + start(localId) + "es" + end(localId) + "s\u00E4,"));
     }
 
@@ -371,7 +370,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     @Ignore // FIXME
     public void AddNote_twice_overlapping() throws Exception {
-        String element = "div0-div1-sp3-p0";
+        String element = "div0-div1-sp2-p0";
         String text = "\u00E4st";
 
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 1, 1, text));
@@ -382,20 +381,19 @@ public class NoteAdditionTest extends AbstractHibernateTest {
                 new StringReader(target.toString()));
 
         String content = target.toString();
-        System.err.println(content.substring(0, 7000));
+//        System.err.println(content.substring(0, 7000));
         assertTrue(content.contains(start(localId) + "T" + start(localId) + text + end(localId) + "\u00E4" + end(localId)));
     }
 
     @Test
-    @Ignore // FIXME, contains line breaks
     public void AddNote_twice_overlapping2() throws Exception {
-        String startElement = "div0-description0-castList0-castItem7-role0";
-        String endElement = "div0-description0-castList0-castItem8-roleDesc0";
-        String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
+        String startElement = "div0-div0-castList0-castItem6-role0";
+        String endElement = "div0-div0-castList0-castItem7-roleDesc0";
+        String text = "a\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
 
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 2, 0, text));
 
-        String newText = "\nna\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
+        String newText = "na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, newText), new StringReader(target.toString()));
 
         String content = target.toString();
@@ -420,17 +418,11 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     private SelectedText createMultipleElementSelectedText(String prevCharacters, String elementCharacters, String characters, String prevContext, String context) {
         int min = generateRandomNumber(0, prevCharacters.length());
         int max = generateRandomNumber(1, characters.length());
-        String startSelection = prevCharacters.substring(min);
-        String endSelection = characters.substring(0, max);
+        String startSelection = prevCharacters.substring(min).trim(); // XXX no ws at start or end
+        String endSelection = characters.substring(0, max).trim(); // XXX no ws at start or end
         String startId = prevContext;
         String endId = context;
-//        String startWords[] = StringUtils.split(startSelection);
-//        String endWords[] = StringUtils.split(endSelection);
-//        if (startWords.length < 1 || endWords.length < 1) {
-//            return null;
-//        }
-//        String firstWord = startWords[0];
-//        String lastWord = endWords[endWords.length - 1];
+
         char firstChar = startSelection.charAt(0);
         char lastChar = endSelection.charAt(endSelection.length() - 1);
         int startIndex = findStartIndex(prevCharacters, firstChar, min);
@@ -505,14 +497,12 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         
         int min = generateRandomNumber(0, characters.length() - 1);
         int max = generateRandomNumber(min + 1, characters.length());
-        String selection = characters.substring(min, max);
+        String selection = characters.substring(min, max).trim(); // XXX no whitespace at start or end        
+        if (selection.isEmpty()) {
+            return null;
+        }
+        
         String id = context;
-//        String words[] = StringUtils.split(selection);
-//        if (words.length < 1) {
-//            return null;
-//        }
-//        String firstWord = words[0];
-//        String lastWord = words[words.length - 1];
         char firstChar = selection.charAt(0);
         char lastChar = selection.charAt(selection.length() - 1);
         int startIndex = findStartIndex(elementCharacters, firstChar, min + elementCharacters.indexOf(characters));
@@ -542,7 +532,6 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     }
 
     @Test
-    @Ignore // FIXME
     public void Generic_selections_in_cleared_document() throws Exception {        
         List<SelectedText> failedSelectedTexts = new ArrayList<SelectedText>();
         System.err.println("1");
@@ -558,12 +547,14 @@ public class NoteAdditionTest extends AbstractHibernateTest {
             }
         }
         if (!failedSelectedTexts.isEmpty()) {
+            for (SelectedText sel : failedSelectedTexts) {
+                System.err.println(sel);
+            }            
             fail("There were " + failedSelectedTexts.size() + " exceptions out of " + selections.size() + ".");
         }
     }
 
     @Test
-    @Ignore // FIXME
     public void Generic_selections_in_unmodified_document() throws Exception {
         List<SelectedText> failedSelectedTexts = new ArrayList<SelectedText>();
         List<SelectedText> selections = createSelections();
@@ -591,6 +582,9 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 //            }
         }
         if (!failedSelectedTexts.isEmpty()) {
+            for (SelectedText sel : failedSelectedTexts) {
+                System.err.println(sel);
+            }   
             fail("There were " + failedSelectedTexts.size() + " exceptions out of " + selections.size() + ".");
         }
     }
