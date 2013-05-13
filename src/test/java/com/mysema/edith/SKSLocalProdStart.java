@@ -7,7 +7,7 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
 import com.mysema.commons.jetty.JettyHelper;
 
-public class EdithLocalProdStart {
+public class SKSLocalProdStart {
 
     public static void main(String[] args) throws Exception{
         FSRepositoryFactory.setup();
