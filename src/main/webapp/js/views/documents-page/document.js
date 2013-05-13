@@ -98,6 +98,8 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
       console.log({selectionString: str,
                    startChar: startChar,
                    startCharIndex: startCharIndex,
+                   startNode: selection.startNode.parentNode.id,
+                   endNode: selection.endNode.parentNode.id,
                    endChar: endChar,
                    endCharIndex: endCharIndex});
     }
