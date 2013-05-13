@@ -38,15 +38,14 @@ import com.mysema.edith.dto.FileItem;
 import com.mysema.util.FileUtils;
 
 /**
- * SubversionServiceImpl is the default implementation of the SubversionService
+ * VersioningDaoImpl is the default implementation of the VersioningDao
  * interface
  * 
  * @author tiwe
- * @version $Id$
  */
-public class SubversionServiceImpl implements SubversionService {
+public class VersioningDaoImpl implements VersioningDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(SubversionServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(VersioningDaoImpl.class);
 
     static {
         FSRepositoryFactory.setup();
@@ -71,7 +70,7 @@ public class SubversionServiceImpl implements SubversionService {
     private final File workingCopies;
 
     @Inject
-    public SubversionServiceImpl(@Named(EDITH.SVN_CACHE_DIR) String svnCache,
+    public VersioningDaoImpl(@Named(EDITH.SVN_CACHE_DIR) String svnCache,
             @Named(EDITH.REPO_FILE_PROPERTY) String svnRepo,
             @Named(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Named(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,

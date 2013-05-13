@@ -52,7 +52,7 @@ public class ContentRendererTest extends AbstractHibernateTest {
     private ContentRenderer renderer;
 
     @Inject
-    private SubversionService subversionService;
+    private VersioningDao subversionService;
     
     @Inject
     private DocumentDao documentDao;

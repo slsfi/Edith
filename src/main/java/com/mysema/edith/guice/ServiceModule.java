@@ -36,7 +36,7 @@ public class ServiceModule extends AbstractModule {
         bind(NoteDao.class, NoteDaoImpl.class);
         bind(PersonDao.class, PersonDaoImpl.class);
         bind(PlaceDao.class, PlaceDaoImpl.class);
-        bind(SubversionService.class, SubversionServiceImpl.class);
+        bind(VersioningDao.class, VersioningDaoImpl.class);
         bind(TermDao.class, TermDaoImpl.class);
         bind(UserDao.class, UserDaoImpl.class);
     }

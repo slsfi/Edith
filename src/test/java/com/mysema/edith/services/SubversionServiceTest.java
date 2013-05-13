@@ -58,7 +58,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     private static final Logger logger = LoggerFactory.getLogger(SubversionServiceTest.class);
 
     @Inject
-    private SubversionServiceImpl subversionService;
+    private VersioningDaoImpl subversionService;
 
     @Inject
     private AuthService authService;
@@ -385,7 +385,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Test(expected = SubversionException.class)
     public void Get_File_Items_For_Root_Path_Throws_Exception_For_Path() throws Exception {
         SVNRepository repositoryMock = createMock(SVNRepository.class);
-        SubversionServiceImpl versioningService = new SubversionServiceImpl(
+        VersioningDaoImpl versioningService = new VersioningDaoImpl(
                 File.createTempFile("edith", null).getAbsolutePath(),
                 svnRepoPath,
                 repositoryURL,

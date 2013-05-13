@@ -58,7 +58,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
     private DocumentNote documentNote4;
 
     @Inject
-    private SubversionService versioningService;
+    private VersioningDao versioningService;
 
     private boolean initialized = false;
 

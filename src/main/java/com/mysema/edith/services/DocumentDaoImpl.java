@@ -51,7 +51,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     private final String documentRoot;
 
-    private final SubversionService versioningService;
+    private final VersioningDao versioningService;
 
     private final NoteDao noteDao;
 
@@ -62,7 +62,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     private final DocumentXMLDao xmlDao;
 
     @Inject
-    public DocumentDaoImpl(SubversionService versioningService, AuthService authService,
+    public DocumentDaoImpl(VersioningDao versioningService, AuthService authService,
             NoteDao noteDao, DocumentNoteDao documentNoteDao,
             DocumentXMLDao xmlDao,
             @Named(EDITH.SVN_DOCUMENT_ROOT) String documentRoot) {

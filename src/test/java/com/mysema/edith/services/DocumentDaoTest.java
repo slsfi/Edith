@@ -43,7 +43,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     private NoteDao noteDao;
 
     @Inject
-    private SubversionService subversionService;
+    private VersioningDao subversionService;
 
     @Inject
     private UserDao userDao;
