@@ -44,6 +44,7 @@ public class ElementContext implements Cloneable {
             b.append(stack.get(i).getName());
         }
         path = b.toString();
+        System.out.println(path);
         return path;
     }
 

@@ -39,8 +39,6 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
 
     private static final QName XML_ID_QNAME = new QName(XML_NS, "id");
     
-    private static final QName TEI_TYPE_QNAME = new QName(null, "type");
-    
     private static final Logger logger = LoggerFactory.getLogger(DocumentXMLDaoImpl.class);
 
     private final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
@@ -344,18 +342,8 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
     }
     
     public static String extractName(StartElement element) {
-        String localName = element.getName().getLocalPart();
-        String name = localName;
-        if (localName.equals("div")) {
-            Attribute attribute = element.getAttributeByName(TEI_TYPE_QNAME);
-            if (attribute != null) {
-                name = attribute.getValue();
-            }
-        }
-        return name;
+        return element.getName().getLocalPart();
     }
-
-    
 
     public static int getIndex(String str, char ch, int occurrence) {
         int index = -1;

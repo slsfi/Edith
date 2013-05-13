@@ -86,8 +86,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     
     @Test
     public void AddNote_end_element_deeply_inside_start_element() throws Exception {
-        String startElement = "play0-description0-castList0-castItem13";
-        String endElement = "play0-description0-castList0-castItem13-roleDesc0-ref0";
+        String startElement = "div0-div0-castList0-castItem12";
+        String endElement = "div0-div0-castList0-castItem12-roleDesc0-ref0";
         String text = ", kraatari";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
@@ -98,8 +98,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_end_element_inside_start_element() throws Exception {
-        String startElement = "play0-act0-stage0";
-        String endElement = "play0-act0-stage0-ref0";
+        String startElement = "div0-div1-stage0";
+        String endElement = "div0-div1-stage0-ref0";
         String text = "piaksen huo";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
@@ -114,13 +114,13 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     public void AddNote_end_element_inside_start_element_and_start_element_inside_end_element_()
             throws Exception {
-        String startElement = "play0-act0-stage0";
-        String endElement = "play0-act0-stage0-ref2";
+        String startElement = "div0-div1-stage0";
+        String endElement = "div0-div1-stage0-ref1";
         String text = "sivulla ra";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
-        String startElement2 = "play0-act0-stage0-ref0";
-        String endElement2 = "play0-act0-stage0";
+        String startElement2 = "div0-div1-stage0-ref0";
+        String endElement2 = "div0-div1-stage0";
         String text2 = "uone\n: per";
         addNote(new SelectedText(PREFIX + startElement2, PREFIX + endElement2, text2), new StringReader(
                 target.toString()));
@@ -132,7 +132,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_for_p() throws Exception {
-        String element = "play0-act0-sp2-p0";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
 
@@ -143,7 +143,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     
     @Test
     public void AddNote_for_speaker() throws Exception {
-        String element = "play0-act0-sp0-speaker0";
+        String element = "div0-div1-sp0-speaker0";
         String text = "Esko.";
         addNote(new SelectedText(PREFIX + element, PREFIX + element, text));
 
@@ -155,7 +155,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     public void AddNote_huge_difference_between_elements() throws Exception {
         String startElement = "sourceDesc0-biblStruct0-monogr0-imprint0-date0";
-        String endElement = "play0-ref0";
+        String endElement = "div0-ref0";
         String text = "65 [H";
         addNote(new SelectedText(HEADER_PREFIX + startElement, PREFIX + endElement, text));
 
@@ -168,8 +168,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     @Ignore // FIXME, contains line breaks
     public void AddNote_line_breaks_in_selection() throws Exception {
-        String startElement = "play0-description0-castList0-castItem8-roleDesc0";
-        String endElement = "play0-description0-castList0-castItem9-roleDesc0";
+        String startElement = "div0-description0-castList0-castItem8-roleDesc0";
+        String endElement = "div0-description0-castList0-castItem9-roleDesc0";
         String text = " \nori sepp\u00E4\n.\nKarri\n,\ntalon";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 0, text));
 
@@ -181,7 +181,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_long() throws Exception {
-        String element = "play0-act0-sp0-p0";
+        String element = "div0-div1-sp0-p0";
         StringBuilder text = new StringBuilder();
         text.append("matkalle, nimitt\u00E4in h\u00E4\u00E4retkelleni, itsi\u00E4ni sonnustan, ");
         text.append("ja sulhais-vaatteisin puettuna olen, koska h\u00E4n takaisin pal");
@@ -195,8 +195,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_multiple_elements() throws Exception {
-        String start = "play0-act0-sp2-p0";
-        String end = "play0-act0-sp3-speaker0";
+        String start = "div0-div1-sp1-p0";
+        String end = "div0-div1-sp2-speaker0";
         String text = "ja polvip\u00F6ksyt. Esko.";
         addNote(new SelectedText(PREFIX + start, PREFIX + end, text));
 
@@ -207,8 +207,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_multiple_elements_2() throws Exception {
-        String start = "play0-act0-sp2-p0";
-        String end = "play0-act0-sp3-p0";
+        String start = "div0-div1-sp1-p0";
+        String end = "div0-div1-sp2-p0";
         String text = "ja polvip\u00F6ksyt. Esko. (panee ty\u00F6ns\u00E4 pois).";
         addNote(new SelectedText(PREFIX + start, PREFIX + end, text));
 
@@ -219,8 +219,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_on_top_of_another_note_in_child() throws Exception {
-        String startElement = "play0-act0-stage0-ref0";
-        String endElement = "play0-act0-stage0";
+        String startElement = "div0-div1-stage0-ref0";
+        String endElement = "div0-div1-stage0";
         String text = "ne\n: per\u00E4";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
@@ -234,7 +234,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_one_char() throws Exception {
-        String element = "play0-act0-stage0";
+        String element = "div0-div1-stage0";
         String text = "i";
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 11, 11, text));
 
@@ -246,8 +246,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     @Ignore // FIXME, contains line breaks
     public void AddNote_role_description() throws Exception {
-        String startElement = "play0-description0-castList0-castItem7-role0";
-        String endElement = "play0-description0-castList0-castItem8-roleDesc0";
+        String startElement = "div0-description0-castList0-castItem7-role0";
+        String endElement = "div0-description0-castList0-castItem8-roleDesc0";
         String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
 
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 0, text));
@@ -265,7 +265,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     public void AddNote_same_element()
             throws Exception {
-        String element = "play0-act0-sp4-p0";
+        String element = "div0-div1-sp3-p0";
         String text = "min\u00E4; ja nytp\u00E4, luulen,";
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 6, 4, text));
 
@@ -276,7 +276,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_short_note_1() throws Exception {
-        String element = "play0-act0-stage0";
+        String element = "div0-div1-stage0";
         String text = "es";
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 7, 3, text));
 
@@ -287,7 +287,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_short_note_2() throws Exception {
-        String element = "play0-act0-stage0";
+        String element = "div0-div1-stage0";
         String text = "es";
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 8, 10, text));
 
@@ -299,7 +299,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_short_note_3() throws Exception {
-        String element = "play0-act0-stage0";
+        String element = "div0-div1-stage0";
         String text = "es";
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 11, 14, text));
 
@@ -310,8 +310,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_start_element_inside_end_element() throws Exception {
-        String startElement = "play0-act0-stage0-ref0";
-        String endElement = "play0-act0-stage0";
+        String startElement = "div0-div1-stage0-ref0";
+        String endElement = "div0-div1-stage0";
         String text = "uone\n: per";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
@@ -324,13 +324,13 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     public void AddNote_start_element_inside_end_element_and_end_element_inside_start_element()
             throws Exception {
-        String startElement = "play0-act0-stage0-ref0";
-        String endElement = "play0-act0-stage0";
+        String startElement = "div0-div1-stage0-ref0";
+        String endElement = "div0-div1-stage0";
         String text = "uone\n: per";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, text));
 
-        String startElement2 = "play0-act0-stage0";
-        String endElement2 = "play0-act0-stage0-ref2";
+        String startElement2 = "div0-div1-stage0";
+        String endElement2 = "div0-div1-stage0-ref1";
         String text2 = "sivulla ra";
         addNote(new SelectedText(PREFIX + startElement2, PREFIX + endElement2, 6, 0, text2), 
                 new StringReader(target.toString()));
@@ -345,8 +345,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_start_element_inside_end_element_end_does_not_escape() throws Exception {
-        String startElement = "play0-act0-stage0-ref0";
-        String endElement = "play0-act0-stage0";
+        String startElement = "div0-div1-stage0-ref0";
+        String endElement = "div0-div1-stage0";
         String text = "uone\n: p";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 1, text));
 
@@ -358,8 +358,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_start_element_inside_end_element2() throws Exception {
-        String startElement = "play0-act0-sp3-p0-stage0";
-        String endElement = "play0-act0-sp3-p0";
+        String startElement = "div0-div1-sp2-p0-stage0";
+        String endElement = "div0-div1-sp2-p0";
         String text = "\u00E4lt\u00E4 ulos) .";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 2, text));
 
@@ -371,7 +371,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     @Ignore // FIXME
     public void AddNote_twice_overlapping() throws Exception {
-        String element = "play0-act0-sp3-p0";
+        String element = "div0-div1-sp3-p0";
         String text = "\u00E4st";
 
         addNote(new SelectedText(PREFIX + element, PREFIX + element, 1, 1, text));
@@ -389,8 +389,8 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Test
     @Ignore // FIXME, contains line breaks
     public void AddNote_twice_overlapping2() throws Exception {
-        String startElement = "play0-description0-castList0-castItem7-role0";
-        String endElement = "play0-description0-castList0-castItem8-roleDesc0";
+        String startElement = "div0-description0-castList0-castItem7-role0";
+        String endElement = "div0-description0-castList0-castItem8-roleDesc0";
         String text = "\na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
 
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 2, 0, text));
@@ -405,7 +405,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Test
     public void AddNote_verify_subelement_not_eaten() throws Exception {
-        String element = "play0-act0-stage0";
+        String element = "div0-div1-stage0";
         String text = "Topi";
         addNote(new SelectedText(PREFIX + element, PREFIX + element, text));
 

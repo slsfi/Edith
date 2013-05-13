@@ -80,7 +80,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void AddNote() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play0-act0-sp2-p0";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
         DocumentNote note = documentDao.addNote(createNote(), document, 
@@ -128,7 +128,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void RemoveNotes() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play0-act0-sp2-p0";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
         DocumentNote documentNote = documentDao.addNote(createNote(), document, 
@@ -143,7 +143,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void RemoveNotes_Several() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play0-act0-sp2-p0";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
         String text2 = "ottaa";
         String text3 = "ullakosta";
@@ -166,7 +166,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void UpdateNote() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play0-act0-sp2-p0";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
         DocumentNote noteRevision = documentDao.addNote(createNote(), document, 
@@ -185,7 +185,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void UpdateNote2() throws IOException, NoteAdditionFailedException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play0-act0-sp3-p0";
+        String element = "div0-div1-sp2-p0";
         String text = "\u00E4st";
 
         DocumentNote documentNote = documentDao.addNote(createNote(), document, 
@@ -208,7 +208,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Transactional
     public void UpdateNote_With_Publishable_State() throws IOException, NoteAdditionFailedException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play0-act0-sp3-p0";
+        String element = "div0-div1-sp2-p0";
         String text = "\u00E4st";
 
         DocumentNote documentNote = documentDao.addNote(createNote(), document, 
@@ -276,7 +276,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void Note_Comments_Of_Document() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play0-act0-sp2-p0";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
         DocumentNote docNote = documentDao.addNote(createNote(), document,

@@ -51,7 +51,7 @@ public class ElementContextTest {
         assertEquals("baz-bar0-barbazzz0-baz0", context.getPath());
         context.push("bar");
         //assertEquals("baz-bar2", context.getPath());
-        assertEquals("baz-bar0-barbazzz0-baz0-bar2", context.getPath());
+        assertEquals("baz-bar0-barbazzz0-baz0-bar1", context.getPath());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class ElementContextTest {
         context.pop();
         context.push("title");
         //assertEquals("titleStmt-title2", context.getPath());
-        assertEquals("TEI-teiHeader0-fileDesc0-titleStmt0-title2", context.getPath());
+        assertEquals("TEI-teiHeader0-fileDesc0-titleStmt0-title1", context.getPath());
     }
 
     @Test
