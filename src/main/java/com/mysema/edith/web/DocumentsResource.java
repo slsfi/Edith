@@ -130,7 +130,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
                 noteDao.createComment(docNote.getNote(), "Hay");
                 noteDao.createComment(docNote.getNote(), "Bay");
             } catch (Exception e) {
-                System.err.println("nooooooooooo");
+                System.err.println(e);
             }
             noteComments = dao.getNoteComments(document.getId(), 3);
         }
