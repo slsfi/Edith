@@ -280,13 +280,13 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public List<NoteComment> getNoteComments(long id, long limit) {
-        final QNoteComment noteComment = QNoteComment.noteComment;
+        QNoteComment noteComment = QNoteComment.noteComment;
         List<NoteComment> noteComments = query()
-                .from(note, documentNote, noteComment)
+                .from(documentNote)
+                .innerJoin(documentNote.note, note)
+                .innerJoin(note.comments, noteComment)
                 .where(documentNote.document.id.eq(id),
-                       documentNote.deleted.isFalse(),
-                       documentNote.note.eq(note),
-                       noteComment.in(note.comments))
+                       documentNote.deleted.isFalse())
                 .orderBy(noteComment.createdAt.desc())
                 .limit(limit)
                 .list(noteComment);
