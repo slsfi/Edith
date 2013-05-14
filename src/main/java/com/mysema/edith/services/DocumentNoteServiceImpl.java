@@ -40,7 +40,7 @@ public class DocumentNoteServiceImpl implements DocumentNoteService {
     }
     
     @Override
-    public DocumentNote addNote(Note note, Document document, final SelectedText selection) {
+    public DocumentNote attachNote(Note note, Document document, final SelectedText selection) {
         // create stub
         final DocumentNote documentNote = new DocumentNote();
         documentNoteDao.save(documentNote);

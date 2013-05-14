@@ -129,7 +129,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
             String text = "sun ullakosta ottaa";
 
             try {
-                DocumentNote docNote = documentNoteService.addNote(new Note(), document,
+                DocumentNote docNote = documentNoteService.attachNote(new Note(), document,
                         new SelectedText(element, element, text));
                 noteDao.createComment(docNote.getNote(), "Yay");
                 noteDao.createComment(docNote.getNote(), "Hay");

@@ -62,14 +62,7 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     public DocumentNoteTO create(DocumentNoteTO info) {
         return convert(dao.save(convert(info, new DocumentNote())), new DocumentNoteTO());
     }
-    
-    @POST @Path("/selection")
-    public DocumentNoteTO create(SelectionTO sel) throws IOException, NoteAdditionFailedException {
-        Note note = noteDao.getById(sel.getNoteId());
-        Document doc = documentDao.getById(sel.getDocumentId());
-        return convert(documentNoteService.addNote(note, doc, sel.getText()), new DocumentNoteTO());
-    }
-
+        
     @Override
     @PUT @Path("{id}")
     public DocumentNoteTO update(@PathParam("id") Long id, DocumentNoteTO info) {
@@ -78,6 +71,29 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
             throw new RuntimeException("Entity not found");
         }
         return convert(dao.save(convert(info, entity)), new DocumentNoteTO());
+    }
+    
+    @POST @Path("/selection")
+    public DocumentNoteTO create(SelectionTO sel) {        
+        try {
+            Note note = noteDao.getById(sel.getNoteId());
+            Document doc = documentDao.getById(sel.getDocumentId());
+            return convert(documentNoteService.attachNote(note, doc, sel.getText()), new DocumentNoteTO());
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        } catch (NoteAdditionFailedException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+    
+    @PUT @Path("selection/{id}")
+    public DocumentNoteTO update(@PathParam("id") Long id, SelectionTO sel) {        
+        try {
+            DocumentNote documentNote = dao.getById(id);
+            return convert(documentNoteService.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     @Override

@@ -14,7 +14,7 @@ import com.mysema.edith.dto.SelectedText;
 public interface DocumentNoteService {
     
     /**
-     * Add the given note for the given Document
+     * Attach the given note to the given Document
      *
      * @param docRevision
      * @param selection
@@ -22,7 +22,7 @@ public interface DocumentNoteService {
      * @throws IOException
      * @throws NoteAdditionFailedException
      */
-    DocumentNote addNote(Note note, Document document, SelectedText selection) throws IOException,
+    DocumentNote attachNote(Note note, Document document, SelectedText selection) throws IOException,
             NoteAdditionFailedException;
     
     /**
