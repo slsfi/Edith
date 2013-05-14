@@ -12,11 +12,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.dto.FileItemWithDocumentId;
-import com.mysema.edith.dto.SelectedText;
 
 /**
  * @author tiwe

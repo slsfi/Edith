@@ -141,8 +141,6 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         return versioningDao.getStream(document.getPath(), -1);
     }
 
-   
-
     @Override
     public void remove(Document doc) {
         versioningDao.delete(doc.getPath());

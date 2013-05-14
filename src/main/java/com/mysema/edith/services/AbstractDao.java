@@ -48,7 +48,7 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T, Long
         return em.get().merge(entity);
     }
 
-    protected T persistOrMerge(T entity) {
+    protected <E extends Identifiable> E persistOrMerge(E entity) {
         if (entity.getId() != null) {
             return merge(entity);
         }

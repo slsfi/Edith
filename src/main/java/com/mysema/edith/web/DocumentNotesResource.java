@@ -24,7 +24,6 @@ import com.mysema.edith.domain.Note;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.DocumentDao;
-import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteAdditionFailedException;
 import com.mysema.edith.services.NoteDao;
@@ -33,44 +32,41 @@ import com.mysema.edith.services.NoteDao;
 @Path("/documentnotes")
 @Produces(MediaType.APPLICATION_JSON)
 public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
-
-    private final DocumentNoteDao dao;
     
     private final NoteDao noteDao;
     
     private final DocumentDao documentDao;
     
-    private final DocumentNoteService documentNoteService;
+    private final DocumentNoteService service;
 
     @Inject
-    public DocumentNotesResource(DocumentNoteDao dao, NoteDao noteDao, 
-            DocumentDao documentDao, DocumentNoteService documentNoteService) {
-        this.dao = dao;
+    public DocumentNotesResource(NoteDao noteDao, DocumentDao documentDao, 
+            DocumentNoteService service) {
         this.noteDao = noteDao;
         this.documentDao = documentDao;
-        this.documentNoteService = documentNoteService;
+        this.service = service;
     }
 
     @Override
     @GET @Path("{id}")
     public DocumentNoteTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), new DocumentNoteTO());
+        return convert(service.getById(id), new DocumentNoteTO());
     }
 
     @Override
     @POST
     public DocumentNoteTO create(DocumentNoteTO info) {
-        return convert(dao.save(convert(info, new DocumentNote())), new DocumentNoteTO());
+        return convert(service.save(convert(info, new DocumentNote())), new DocumentNoteTO());
     }
         
     @Override
     @PUT @Path("{id}")
     public DocumentNoteTO update(@PathParam("id") Long id, DocumentNoteTO info) {
-        DocumentNote entity = dao.getById(id);
+        DocumentNote entity = service.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), new DocumentNoteTO());
+        return convert(service.save(convert(info, entity)), new DocumentNoteTO());
     }
     
     @POST @Path("/selection")
@@ -78,7 +74,7 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
         try {
             Note note = noteDao.getById(sel.getNoteId());
             Document doc = documentDao.getById(sel.getDocumentId());
-            return convert(documentNoteService.attachNote(note, doc, sel.getText()), new DocumentNoteTO());
+            return convert(service.attachNote(note, doc, sel.getText()), new DocumentNoteTO());
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         } catch (NoteAdditionFailedException e) {
@@ -89,8 +85,8 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     @PUT @Path("selection/{id}")
     public DocumentNoteTO update(@PathParam("id") Long id, SelectionTO sel) {        
         try {
-            DocumentNote documentNote = dao.getById(id);
-            return convert(documentNoteService.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
+            DocumentNote documentNote = service.getById(id);
+            return convert(service.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -99,7 +95,7 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
-        dao.remove(id);
+        service.remove(id);
     }
 
 }

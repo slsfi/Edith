@@ -14,9 +14,9 @@ import com.mysema.edith.services.UserDao;
 public class DataInitService {
 
     @Inject
-    public DataInitService(UserDao userDao, VersioningDao subversionService) throws IOException {
+    public DataInitService(UserDao userDao, VersioningDao versioningDao) throws IOException {
         userDao.addUsersFromCsvFile("/users.csv", "ISO-8859-1");
-        subversionService.initialize();
+        versioningDao.initialize();
     }
     
 }

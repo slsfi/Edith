@@ -19,14 +19,14 @@ import com.mysema.edith.domain.User;
 public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements DocumentNoteDao {
 
     private static final QDocumentNote documentNote = QDocumentNote.documentNote;
-    
-    private final UserDao userDao;
 
+    private final UserDao userDao;
+    
     @Inject
     public DocumentNoteDaoImpl(UserDao userDao) {
         this.userDao = userDao;
     }
-
+    
     @Override
     public List<DocumentNote> getOfDocument(Document document) {
         return from(documentNote)
@@ -75,9 +75,16 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public DocumentNote save(DocumentNote docNote) {
+        long currentTime = System.currentTimeMillis();
         if (docNote.getId() == null) {
-            docNote.setCreatedOn(System.currentTimeMillis());    
+            docNote.setCreatedOn(currentTime);    
         }                
+        if (docNote.getNote() != null) {
+            User createdBy = userDao.getCurrentUser(); 
+            docNote.getNote().setEditedOn(currentTime);
+            docNote.getNote().setLastEditedBy(createdBy);
+            docNote.getNote().getAllEditors().add(createdBy); 
+        }
         return persistOrMerge(docNote);
     }
 

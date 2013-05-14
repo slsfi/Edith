@@ -14,6 +14,12 @@ import com.mysema.edith.dto.SelectedText;
 public interface DocumentNoteService {
     
     /**
+     * @param id
+     * @return
+     */
+    DocumentNote getById(long id);
+    
+    /**
      * Attach the given note to the given Document
      *
      * @param docRevision
@@ -33,6 +39,21 @@ public interface DocumentNoteService {
      * @throws IOException
      */    
     void removeDocumentNotes(Document document, DocumentNote... notes);
+        
+    /**
+     * Remove the DocumentNote with the given id from the related Document and flag it as deleted
+     * 
+     * @param id
+     */
+    void remove(long id);
+    
+    /**
+     * Save or update a DocumentNote instance
+     * 
+     * @param documentNote
+     * @return
+     */
+    DocumentNote save(DocumentNote documentNote);
 
     /**
      * Update the boundaries of the given note

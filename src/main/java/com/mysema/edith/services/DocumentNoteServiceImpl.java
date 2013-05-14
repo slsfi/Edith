@@ -61,6 +61,12 @@ public class DocumentNoteServiceImpl implements DocumentNoteService {
         return updatedDocumentNote;
     }
     
+
+    @Override
+    public DocumentNote getById(long id) {
+        return documentNoteDao.getById(id);
+    }
+    
     @Override
     public void removeDocumentNotes(Document document, final DocumentNote... documentNotes) {
         // remove from XML
@@ -79,7 +85,18 @@ public class DocumentNoteServiceImpl implements DocumentNoteService {
             documentNoteDao.remove(dn);
         }
     }
+    
+    @Override
+    public void remove(long id) {
+        DocumentNote documentNote = documentNoteDao.getById(id);
+        removeDocumentNotes(documentNote.getDocument(), documentNote);
+    }
 
+    @Override
+    public DocumentNote save(DocumentNote documentNote) {
+        return documentNoteDao.save(documentNote);
+    }
+    
     @Override
     public DocumentNote updateNote(final DocumentNote documentNote, final SelectedText selection)
             throws IOException {
