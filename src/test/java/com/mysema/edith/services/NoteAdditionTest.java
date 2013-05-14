@@ -26,7 +26,6 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.inject.Inject;
@@ -66,6 +65,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     }
 
     private void addNote(SelectedText selectedText, /*InputStream reader*/ Reader reader) throws Exception {
+        target = new StringWriter();
         XMLEventReader sourceReader = inFactory.createXMLEventReader(reader);
         XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target);
         documentXMLDao.addNote(sourceReader, targetWriter, selectedText, localId);
@@ -73,8 +73,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
     @Before
     public void setUp() {
-        source = new StringReader(testDocumentContent);
-        target = new StringWriter();
+        source = new StringReader(testDocumentContent);               
         localId = (long) UUID.randomUUID().hashCode();
     }
 
@@ -243,20 +242,19 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     }
 
     @Test
-    @Ignore // FIXME
     public void AddNote_role_description() throws Exception {
         String startElement = "div0-div0-castList0-castItem6-role0";
         String endElement = "div0-div0-castList0-castItem7-roleDesc0";
-        String text = "a\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,";
+        String text = "a\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nn";
 
-        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 0, text));
-
+        addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 2, 0, text));
+        
         String newText = "na\n,\nh\u00E4nen tytt\u00E4rens\u00E4, Topiaksen hoitolapsi\n.\n \nKristo\n,\nnuori s";
         addNote(new SelectedText(PREFIX + startElement, PREFIX + endElement, 0, 0, newText), 
                 new StringReader(target.toString()));
 
         String content = target.toString();
-        //System.out.println(content.substring(0, 5000));
+        //System.out.println(content.substring(0, 8000));
         assertTrue(content.contains("Jaa" + start(localId) + "n" + start(localId) + "a</role>, <roleDesc>h\u00E4nen tytt\u00E4rens\u00E4, Topiaksen\n"));
         assertTrue(content.contains("<castItem><role>Kristo</role>, <roleDesc>n" + end(localId) + "uori s" + end(localId) + "epp\u00E4</roleDesc>.</castItem>"));
     }
@@ -368,7 +366,6 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     }
 
     @Test
-    @Ignore // FIXME
     public void AddNote_twice_overlapping() throws Exception {
         String element = "div0-div1-sp2-p0";
         String text = "\u00E4st";
@@ -377,11 +374,11 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 
         //T-\u00E4st-\u00E4
         String newText = "T\u00E4st\u00E4";
-        addNote(new SelectedText(PREFIX + element, PREFIX + element, 0, 1, newText), 
+        addNote(new SelectedText(PREFIX + element, PREFIX + element, 0, 2, newText), 
                 new StringReader(target.toString()));
 
         String content = target.toString();
-//        System.err.println(content.substring(0, 7000));
+//        System.err.println(content.substring(0, 8000));
         assertTrue(content.contains(start(localId) + "T" + start(localId) + text + end(localId) + "\u00E4" + end(localId)));
     }
 
