@@ -29,7 +29,7 @@ public class SelectedTextTest {
 
     @Test
     public void Get_End_Index() {
-        assertEquals(1, selectedText.getEndIndex());
+        assertEquals(0, selectedText.getEndIndex());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class SelectedTextTest {
 
     @Test
     public void Get_Start_Index() {
-        assertEquals(1, selectedText.getStartIndex());
+        assertEquals(0, selectedText.getStartIndex());
     }
 
     @Test
@@ -148,6 +148,6 @@ public class SelectedTextTest {
 
     @Test
     public void To_String() {
-        assertEquals(START_ID + "[1] , " + END_ID + "[1] : " + SELECTION, selectedText.toString());
+        assertEquals(START_ID + "[0] , " + END_ID + "[0] : " + SELECTION, selectedText.toString());
     }
 }
