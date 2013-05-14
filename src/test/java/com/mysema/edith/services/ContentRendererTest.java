@@ -59,7 +59,6 @@ public class ContentRendererTest extends AbstractHibernateTest {
     
     private XMLOutputFactory factory = XMLOutputFactory.newInstance();
 
-//    private final MarkupWriter writer = new MarkupWriterImpl();
     private StringWriter str = new StringWriter();
     
     private XMLStreamWriter writer;
