@@ -86,15 +86,8 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
         docNote.getNote().setEditedOn(currentTime);
         docNote.getNote().setLastEditedBy(createdBy);
         docNote.getNote().getAllEditors().add(createdBy);
-        // getSession().save(docNote.getNote());
-        // getSession().save(docNote);
-        // FIXME: Hibernatify!
-        // if (docNote.getNote().getComments() != null) {
-        // for (NoteComment comment : docNote.getNote().getComments()) {
-        // getSession().save(comment);
-        // }
-        // }
-        return docNote;
+        
+        return persistOrMerge(docNote);
     }
 
     @Override

@@ -5,6 +5,8 @@
  */
 package com.mysema.edith.web;
 
+import java.io.IOException;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,9 +18,15 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
+import com.mysema.edith.domain.Note;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.SelectionTO;
+import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
+import com.mysema.edith.services.NoteAdditionFailedException;
+import com.mysema.edith.services.NoteDao;
 
 @Transactional
 @Path("/documentnotes")
@@ -26,10 +34,16 @@ import com.mysema.edith.services.DocumentNoteDao;
 public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
 
     private final DocumentNoteDao dao;
+    
+    private final NoteDao noteDao;
+    
+    private final DocumentDao documentDao;
 
     @Inject
-    public DocumentNotesResource(DocumentNoteDao dao) {
+    public DocumentNotesResource(DocumentNoteDao dao, NoteDao noteDao, DocumentDao documentDao) {
         this.dao = dao;
+        this.noteDao = noteDao;
+        this.documentDao = documentDao;
     }
 
     @Override
@@ -42,6 +56,13 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     @POST
     public DocumentNoteTO create(DocumentNoteTO info) {
         return convert(dao.save(convert(info, new DocumentNote())), new DocumentNoteTO());
+    }
+    
+    @POST @Path("/selection")
+    public DocumentNoteTO create(SelectionTO sel) throws IOException, NoteAdditionFailedException {
+        Note note = noteDao.getById(sel.getNoteId());
+        Document doc = documentDao.getById(sel.getDocumentId());
+        return convert(documentDao.addNote(note, doc, sel.getText()), new DocumentNoteTO());
     }
 
     @Override

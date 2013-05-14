@@ -334,7 +334,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         documentNote.setNote(n);
         n.incDocumentNoteCount();
         documentNote.setPosition(position);
-        persist(n);
+        persistOrMerge(n);
         persist(documentNote);
         return documentNote;
     }

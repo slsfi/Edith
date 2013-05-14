@@ -110,7 +110,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
         List<DocumentNote> docNotes = documentNoteDao.getOfNote(id);
         return convert(docNotes, DocumentNoteTO.class);
     }
-
+    
     @Override
     @POST
     public NoteTO create(NoteTO info) {

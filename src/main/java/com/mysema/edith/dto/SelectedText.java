@@ -87,16 +87,6 @@ public class SelectedText {
     private boolean hasEnd() {
         return endId != null && endId.trim().length() > 0;
     }
-
-//    public String getFirstWord() {
-//        String[] words = StringUtils.split(selection);
-//        return words[0];
-//    }
-//
-//    public String getLastWord() {
-//        String[] words = StringUtils.split(selection);
-//        return words[words.length - 1];
-//    }
     
     public char getFirstChar() {
         return selection.charAt(0);
