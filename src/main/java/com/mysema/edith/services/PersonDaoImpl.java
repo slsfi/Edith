@@ -19,8 +19,9 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
     @Override
     public Collection<Person> findByStartOfFirstAndLastName(String partial, int limit) {
         return from(person)
-               .where(person.normalized.first.startsWithIgnoreCase(partial).or(
-                       person.normalized.last.startsWithIgnoreCase(partial)))
+               .where(
+                   person.normalized.first.startsWithIgnoreCase(partial).or(
+                   person.normalized.last.startsWithIgnoreCase(partial)))
                .limit(limit)
                .list(person);
     }

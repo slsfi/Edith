@@ -19,7 +19,8 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
     @Override
     public List<Term> findByStartOfBasicForm(String partial, int maxResults) {
         return from(term)
-               .where(term.basicForm.startsWith(partial)).limit(maxResults)
+               .where(term.basicForm.startsWith(partial))
+               .limit(maxResults)
                .list(term);
     }
 
