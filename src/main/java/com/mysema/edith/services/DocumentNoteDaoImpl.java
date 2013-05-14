@@ -67,26 +67,17 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
     }
 
     @Override
-    // XXX This is not really used anywhere?
     public void remove(DocumentNote docNote) {
-        // XXX What was the point in having .createCopy?
         docNote.setDeleted(true);
         docNote.getNote().decDocumentNoteCount();
-        // getSession().save(docNote);
+        persistOrMerge(docNote);
     }
 
     @Override
     public DocumentNote save(DocumentNote docNote) {
-        if (docNote.getNote() == null) {
-            throw new ServiceException("Note was null for " + docNote);
-        }
-        User createdBy = userDao.getCurrentUser();
-        long currentTime = System.currentTimeMillis();
-        docNote.setCreatedOn(currentTime);
-        docNote.getNote().setEditedOn(currentTime);
-        docNote.getNote().setLastEditedBy(createdBy);
-        docNote.getNote().getAllEditors().add(createdBy);
-        
+        if (docNote.getId() == null) {
+            docNote.setCreatedOn(System.currentTimeMillis());    
+        }                
         return persistOrMerge(docNote);
     }
 

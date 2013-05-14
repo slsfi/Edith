@@ -17,7 +17,6 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
@@ -29,8 +28,6 @@ import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EDITH;
 import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.domain.QDocument;
 import com.mysema.edith.domain.QDocumentNote;
@@ -38,7 +35,6 @@ import com.mysema.edith.domain.QNote;
 import com.mysema.edith.domain.QNoteComment;
 import com.mysema.edith.dto.FileItem;
 import com.mysema.edith.dto.FileItemWithDocumentId;
-import com.mysema.edith.dto.SelectedText;
 
 @Transactional
 public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDao {
@@ -51,26 +47,16 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     private final String documentRoot;
 
-    private final VersioningDao versioningService;
-
-    private final NoteDao noteDao;
-
-    private final AuthService authService;
+    private final VersioningDao versioningDao;
 
     private final DocumentNoteDao documentNoteDao;
-    
-    private final DocumentXMLDao xmlDao;
 
     @Inject
-    public DocumentDaoImpl(VersioningDao versioningService, AuthService authService,
-            NoteDao noteDao, DocumentNoteDao documentNoteDao,
-            DocumentXMLDao xmlDao,
+    public DocumentDaoImpl(VersioningDao versioningDao,
+            DocumentNoteDao documentNoteDao,
             @Named(EDITH.SVN_DOCUMENT_ROOT) String documentRoot) {
         this.documentRoot = documentRoot;
-        this.versioningService = versioningService;
-        this.authService = authService;
-        this.noteDao = noteDao;
-        this.xmlDao = xmlDao;  
+        this.versioningDao = versioningDao;
         this.documentNoteDao = documentNoteDao;
     }
 
@@ -81,7 +67,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public void addDocument(String path, File file) {
-        versioningService.importFile(path, file);
+        versioningDao.importFile(path, file);
     }
 
     @Override
@@ -116,23 +102,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         }
     }
 
-    @Override
-    public DocumentNote addNote(Note note, Document document, final SelectedText selection) {
-        final DocumentNote documentNote = new DocumentNote();
-        persist(documentNote);
-        final AtomicInteger position = new AtomicInteger(0);
-        versioningService.commit(document.getPath(), -1, authService.getUsername(),
-                new UpdateCallback() {
-                    @Override
-                    public void update(InputStream source, OutputStream target) throws IOException {
-                        position.set(xmlDao.addNote(source, target, selection, documentNote));
-                    }
-                });
 
-        DocumentNote updatedDocumentNote = noteDao.createDocumentNote(documentNote, note, document,
-                selection.getSelection(), position.intValue());
-        return updatedDocumentNote;
-    }
 
     @Override
     public Document getDocumentForPath(String svnPath) {
@@ -141,7 +111,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public List<Document> getDocumentsOfFolder(String svnFolder) {
-        Map<String, String> entries = versioningService.getEntries(svnFolder, /* HEAD */-1);
+        Map<String, String> entries = versioningDao.getEntries(svnFolder, /* HEAD */-1);
         List<Document> documents = new ArrayList<Document>(entries.size());
         for (String path : entries.keySet()) {
             documents.add(getDocumentMetadata(path));
@@ -168,50 +138,14 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public InputStream getDocumentStream(Document document) throws IOException {
-        return versioningService.getStream(document.getPath(), -1);
+        return versioningDao.getStream(document.getPath(), -1);
     }
 
-    @Override
-    public void removeDocumentNotes(Document document, final DocumentNote... documentNotes) {
-        long revision;
-        revision = versioningService.commit(document.getPath(), -1, authService.getUsername(),
-                new UpdateCallback() {
-                    @Override
-                    public void update(InputStream source, OutputStream target) {
-                        xmlDao.removeNotes(source, target, documentNotes);
-                    }
-                });
-
-        for (DocumentNote dn : documentNotes) {
-            dn.setRevision(revision);
-            documentNoteDao.remove(dn);
-        }
-    }
-
-    @Override
-    public DocumentNote updateNote(final DocumentNote documentNote, final SelectedText selection)
-            throws IOException {
-        Document doc = documentNote.getDocument();
-        long newRevision;
-        final AtomicInteger position = new AtomicInteger(0);
-        newRevision = versioningService.commit(doc.getPath(), -1, authService.getUsername(),
-                new UpdateCallback() {
-                    @Override
-                    public void update(InputStream source, OutputStream target) {
-                        position.set(xmlDao.updateNote(source, target, selection, documentNote));
-                    }
-                });
-        
-        DocumentNote fetchedDocumentNote = find(DocumentNote.class, documentNote.getId());
-        fetchedDocumentNote.setFullSelection(selection.getSelection());
-        fetchedDocumentNote.setRevision(newRevision);
-        fetchedDocumentNote.setPosition(position.intValue());
-        return fetchedDocumentNote;
-    }
+   
 
     @Override
     public void remove(Document doc) {
-        versioningService.delete(doc.getPath());
+        versioningDao.delete(doc.getPath());
         delete(documentNote).where(documentNote.document.eq(doc)).execute();
         super.remove(doc);
     }
@@ -243,7 +177,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                 d.setPath(d.getPath().replace(doc.getPath(), directoryPath + newPath));
             }
         }
-        versioningService.move(fullPath, directoryPath + newPath);
+        versioningDao.move(fullPath, directoryPath + newPath);
         doc.setPath(directoryPath + newPath);
         doc.setTitle(newPath.substring(newPath.lastIndexOf('/') + 1));
     }
@@ -255,8 +189,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public List<FileItemWithDocumentId> fromPath(String path, Long id) {
-        List<FileItem> files = Strings.isNullOrEmpty(path) ? versioningService.getFileItems(
-                documentRoot, -1) : versioningService.getFileItems(path, -1);
+        List<FileItem> files = Strings.isNullOrEmpty(path) ? versioningDao.getFileItems(
+                documentRoot, -1) : versioningDao.getFileItems(path, -1);
         List<FileItemWithDocumentId> rv = new ArrayList<FileItemWithDocumentId>();
         for (FileItem file : files) {
             Document doc = getDocumentForPath(file.getPath());

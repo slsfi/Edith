@@ -25,6 +25,7 @@ import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
+import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteAdditionFailedException;
 import com.mysema.edith.services.NoteDao;
 
@@ -38,12 +39,16 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     private final NoteDao noteDao;
     
     private final DocumentDao documentDao;
+    
+    private final DocumentNoteService documentNoteService;
 
     @Inject
-    public DocumentNotesResource(DocumentNoteDao dao, NoteDao noteDao, DocumentDao documentDao) {
+    public DocumentNotesResource(DocumentNoteDao dao, NoteDao noteDao, 
+            DocumentDao documentDao, DocumentNoteService documentNoteService) {
         this.dao = dao;
         this.noteDao = noteDao;
         this.documentDao = documentDao;
+        this.documentNoteService = documentNoteService;
     }
 
     @Override
@@ -62,7 +67,7 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     public DocumentNoteTO create(SelectionTO sel) throws IOException, NoteAdditionFailedException {
         Note note = noteDao.getById(sel.getNoteId());
         Document doc = documentDao.getById(sel.getDocumentId());
-        return convert(documentDao.addNote(note, doc, sel.getText()), new DocumentNoteTO());
+        return convert(documentNoteService.addNote(note, doc, sel.getText()), new DocumentNoteTO());
     }
 
     @Override

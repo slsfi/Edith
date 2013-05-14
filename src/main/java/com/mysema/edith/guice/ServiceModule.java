@@ -33,6 +33,7 @@ public class ServiceModule extends AbstractModule {
         bind(DocumentDao.class, DocumentDaoImpl.class);
         bind(DocumentXMLDao.class, DocumentXMLDaoImpl.class);
         bind(DocumentNoteDao.class, DocumentNoteDaoImpl.class);
+        bind(DocumentNoteService.class, DocumentNoteServiceImpl.class);
         bind(NoteDao.class, NoteDaoImpl.class);
         bind(PersonDao.class, PersonDaoImpl.class);
         bind(PlaceDao.class, PlaceDaoImpl.class);

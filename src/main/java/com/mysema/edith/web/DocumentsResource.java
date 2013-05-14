@@ -34,6 +34,7 @@ import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
+import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteDao;
 
 @Transactional
@@ -44,6 +45,8 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     private final DocumentDao dao;
 
     private final DocumentNoteDao documentNoteDao;
+    
+    private final DocumentNoteService documentNoteService;
 
     // TODO: Remove once not needed
     private final NoteDao noteDao;
@@ -60,10 +63,12 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     public DocumentsResource(
             DocumentDao dao,
             DocumentNoteDao documentNoteDao,
+            DocumentNoteService documentNoteService,
             NoteDao noteDao,
             ContentRenderer renderer) {
         this.dao = dao;
         this.documentNoteDao = documentNoteDao;
+        this.documentNoteService = documentNoteService;
         this.noteDao = noteDao;
         this.renderer = renderer;
     }
@@ -124,7 +129,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
             String text = "sun ullakosta ottaa";
 
             try {
-                DocumentNote docNote = dao.addNote(new Note(), document,
+                DocumentNote docNote = documentNoteService.addNote(new Note(), document,
                         new SelectedText(element, element, text));
                 noteDao.createComment(docNote.getNote(), "Yay");
                 noteDao.createComment(docNote.getNote(), "Hay");

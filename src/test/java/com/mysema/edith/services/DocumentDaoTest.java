@@ -42,6 +42,9 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     private DocumentDao documentDao;
 
     @Inject
+    private DocumentNoteService documentNoteService;
+    
+    @Inject
     private NoteDao noteDao;
 
     @Inject
@@ -83,7 +86,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote note = documentDao.addNote(createNote(), document, 
+        DocumentNote note = documentNoteService.addNote(createNote(), document, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
 
         String content = getContent(document.getPath(), -1);
@@ -131,9 +134,9 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote documentNote = documentDao.addNote(createNote(), document, 
+        DocumentNote documentNote = documentNoteService.addNote(createNote(), document, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
-        documentDao.removeDocumentNotes(document, new DocumentNote[] { documentNote });
+        documentNoteService.removeDocumentNotes(document, new DocumentNote[] { documentNote });
 
         String content = getContent(document.getPath(), -1);
         assertFalse(content
@@ -148,14 +151,14 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String text2 = "ottaa";
         String text3 = "ullakosta";
 
-        DocumentNote noteRev = documentDao.addNote(createNote(), document, 
+        DocumentNote noteRev = documentNoteService.addNote(createNote(), document, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
         // note2 won't be removed
-        DocumentNote noteRev2 = documentDao.addNote(createNote(), document, 
+        DocumentNote noteRev2 = documentNoteService.addNote(createNote(), document, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text2));
-        DocumentNote noteRev3 = documentDao.addNote(createNote(), document, 
+        DocumentNote noteRev3 = documentNoteService.addNote(createNote(), document, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 2, text3));
-        documentDao.removeDocumentNotes(document, new DocumentNote[] { noteRev, noteRev3 });
+        documentNoteService.removeDocumentNotes(document, new DocumentNote[] { noteRev, noteRev3 });
 
         String content = getContent(document.getPath(), -1);
         assertFalse(content.contains(start(noteRev.getId()) + text + end(noteRev.getId())));
@@ -169,11 +172,11 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote noteRevision = documentDao.addNote(createNote(), document, 
+        DocumentNote noteRevision = documentNoteService.addNote(createNote(), document, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
 
         String newText = "sun ullakosta";
-        documentDao.updateNote(noteRevision, 
+        documentNoteService.updateNote(noteRevision, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 2, newText));
 
         String content = getContent(document.getPath(), -1);
@@ -188,12 +191,12 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String element = "div0-div1-sp2-p0";
         String text = "\u00E4st";
 
-        DocumentNote documentNote = documentDao.addNote(createNote(), document, 
+        DocumentNote documentNote = documentNoteService.addNote(createNote(), document, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 1, text));
 
         // T-äst-ä
         String newText = "T\u00E4st\u00E4";
-        documentDao.updateNote(documentNote, 
+        documentNoteService.updateNote(documentNote, 
                 new SelectedText(PREFIX + element, PREFIX + element, 0, 2, newText));
 
         String content = getContent(document.getPath(), -1);
@@ -211,12 +214,12 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String element = "div0-div1-sp2-p0";
         String text = "\u00E4st";
 
-        DocumentNote documentNote = documentDao.addNote(createNote(), document, 
+        DocumentNote documentNote = documentNoteService.addNote(createNote(), document, 
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 1, text));
         documentNote.setPublishable(true);
 
         String newText = "T\u00E4st\u00E4";
-        DocumentNote updatedRevision = documentDao.updateNote(documentNote, 
+        DocumentNote updatedRevision = documentNoteService.updateNote(documentNote, 
                 new SelectedText(PREFIX + element, PREFIX + element, 0, 2, newText));
         assertTrue(updatedRevision.isPublishable());
     }
@@ -279,7 +282,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote docNote = documentDao.addNote(createNote(), document,
+        DocumentNote docNote = documentNoteService.addNote(createNote(), document,
                 new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
         noteDao.createComment(docNote.getNote(), "Yay");
         List<NoteComment> comments = documentDao.getNoteComments(document.getId(), 3);

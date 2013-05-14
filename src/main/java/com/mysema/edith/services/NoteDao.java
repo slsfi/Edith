@@ -49,13 +49,6 @@ public interface NoteDao extends Dao<Note, Long> {
      */
     int importNotes(File file);
 
-//    /**
-//     * Query for notes with the given search term
-//     *
-//     * @param searchTerm
-//     * @return
-//     */
-//    GridDataSource queryDictionary(String searchTerm);
 
     /**
      * Removes a NoteComment based on its id. Returns the deleted comment.
