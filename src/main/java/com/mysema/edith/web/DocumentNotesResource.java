@@ -82,7 +82,7 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
         }
     }
     
-    @PUT @Path("selection/{id}")
+    @PUT @Path("/selection/{id}")
     public DocumentNoteTO update(@PathParam("id") Long id, SelectionTO sel) {        
         try {
             DocumentNote documentNote = service.getById(id);
