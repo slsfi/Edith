@@ -5,8 +5,6 @@
  */
 package com.mysema.edith.web;
 
-import java.io.IOException;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -25,7 +23,6 @@ import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteService;
-import com.mysema.edith.services.NoteAdditionFailedException;
 import com.mysema.edith.services.NoteDao;
 
 @Transactional
