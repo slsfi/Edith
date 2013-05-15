@@ -32,15 +32,15 @@ import com.mysema.edith.services.NoteDao;
 @Path("/documentnotes")
 @Produces(MediaType.APPLICATION_JSON)
 public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
-    
+
     private final NoteDao noteDao;
-    
+
     private final DocumentDao documentDao;
-    
+
     private final DocumentNoteService service;
 
     @Inject
-    public DocumentNotesResource(NoteDao noteDao, DocumentDao documentDao, 
+    public DocumentNotesResource(NoteDao noteDao, DocumentDao documentDao,
             DocumentNoteService service) {
         this.noteDao = noteDao;
         this.documentDao = documentDao;
@@ -58,7 +58,7 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     public DocumentNoteTO create(DocumentNoteTO info) {
         return convert(service.save(convert(info, new DocumentNote())), new DocumentNoteTO());
     }
-        
+
     @Override
     @PUT @Path("{id}")
     public DocumentNoteTO update(@PathParam("id") Long id, DocumentNoteTO info) {
@@ -68,10 +68,11 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
         }
         return convert(service.save(convert(info, entity)), new DocumentNoteTO());
     }
-    
+
     @POST @Path("/selection")
-    public DocumentNoteTO create(SelectionTO sel) {        
+    public DocumentNoteTO create(SelectionTO sel) {
         try {
+            // FIXME: DocumentNote doesn't necessarily have a Note
             Note note = noteDao.getById(sel.getNoteId());
             Document doc = documentDao.getById(sel.getDocumentId());
             return convert(service.attachNote(note, doc, sel.getText()), new DocumentNoteTO());
@@ -81,9 +82,9 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-    
+
     @PUT @Path("/selection/{id}")
-    public DocumentNoteTO update(@PathParam("id") Long id, SelectionTO sel) {        
+    public DocumentNoteTO update(@PathParam("id") Long id, SelectionTO sel) {
         try {
             DocumentNote documentNote = service.getById(id);
             return convert(service.updateNote(documentNote, sel.getText()), new DocumentNoteTO());

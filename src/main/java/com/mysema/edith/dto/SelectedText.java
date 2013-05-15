@@ -11,12 +11,14 @@ public class SelectedText {
 
     private String selection;
 
+    // FIXME: Rename to 'startNode' and 'endNode'
     private String startId, endId;
 
+    // FIXME: Rename to 'startCharIndex' and 'endCharIndex'
     private int startIndex = 0, endIndex = 0;
 
     private static final Pattern HYPHEN = Pattern.compile("-");
-    
+
     public SelectedText() {
     }
 
@@ -87,11 +89,11 @@ public class SelectedText {
     private boolean hasEnd() {
         return endId != null && endId.trim().length() > 0;
     }
-    
+
     public char getFirstChar() {
         return selection.charAt(0);
     }
-    
+
     public char getLastChar() {
         return selection.charAt(selection.length() - 1);
     }
