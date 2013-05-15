@@ -89,7 +89,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
             initialized = true;
         }
     }
-
+    
     @Test
     public void GetBy_LocalId_Returns_NonNull_Result() {
         assertNotNull(documentNoteDao.getById(documentNote1.getId()));

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
@@ -83,7 +82,6 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
     }
     
     @Test
-    @Ignore
     public void Create_Selection() throws IOException, NoteAdditionFailedException {
         String PREFIX = "TEI-text0-body0-";
         Document document = documentDao.getDocumentForPath(testDocument);
@@ -98,6 +96,11 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         DocumentNoteTO created = documentNotes.create(selection);
         
         assertNotNull(created.getId());
+    }
+    
+    @Test
+    public void Update_Selection() {
+        // TODO
     }
 
 }
