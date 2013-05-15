@@ -66,25 +66,6 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
         return convert(service.save(convert(info, entity)), new DocumentNoteTO());
     }
 
-    @POST @Path("/selection")
-    public DocumentNoteTO create(SelectionTO sel) {
-        Document doc = documentDao.getById(sel.getDocumentId());;
-        DocumentNote documentNote;
-        if (sel.getNoteId() != null) {
-            Note note = noteDao.getById(sel.getNoteId());
-            documentNote = service.attachNote(note, doc, sel.getText());
-        } else {
-            documentNote = service.attachNote(doc, sel.getText());
-        }               
-        return convert(documentNote, new DocumentNoteTO());
-    }
-
-    @PUT @Path("/selection/{id}")
-    public DocumentNoteTO update(@PathParam("id") Long id, SelectionTO sel) {
-        DocumentNote documentNote = service.getById(id);
-        return convert(service.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
-    }
-
     @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {

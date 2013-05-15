@@ -31,6 +31,7 @@ import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.SelectedText;
+import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
@@ -83,6 +84,25 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
         List<DocumentNote> docNotes = documentNoteDao.getOfDocument(id);
         return convert(docNotes, DocumentNoteTO.class);
+    }
+    
+    @POST @Path("{id}/document-notes")
+    public DocumentNoteTO create(@PathParam("id") Long docId, SelectionTO sel) {
+        Document doc = dao.getById(docId);
+        DocumentNote documentNote;
+        if (sel.getNoteId() != null) {
+            Note note = noteDao.getById(sel.getNoteId());
+            documentNote = documentNoteService.attachNote(note, doc, sel.getText());
+        } else {
+            documentNote = documentNoteService.attachNote(doc, sel.getText());
+        }               
+        return convert(documentNote, new DocumentNoteTO());
+    }
+
+    @PUT @Path("{id}/document-notes/{docnote-id}")
+    public DocumentNoteTO update(@PathParam("docnote-id") Long docNoteId, SelectionTO sel) {
+        DocumentNote documentNote = documentNoteService.getById(docNoteId);
+        return convert(documentNoteService.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
     }
 
     @Override

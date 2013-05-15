@@ -91,27 +91,5 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         
         assertNotNull(created.getId());
     }
-    
-    @Test
-    public void Create_Selection() throws IOException, NoteAdditionFailedException {
-        String PREFIX = "TEI-text0-body0-";
-        Document document = documentDao.getDocumentForPath(testDocument);
-        String element = "div0-div1-sp1-p0";
-        String text = "sun ullakosta ottaa";
-        
-        SelectionTO selection = new SelectionTO();
-        selection.setNoteId(note.getId());
-        selection.setDocumentId(document.getId());
-        selection.setText(new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
-
-        DocumentNoteTO created = documentNotes.create(selection);
-        
-        assertNotNull(created.getId());
-    }
-    
-    @Test
-    public void Update_Selection() {
-        // TODO
-    }
-
+ 
 }

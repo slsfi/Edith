@@ -4,8 +4,6 @@ public class SelectionTO {
     
     private Long noteId;
     
-    private Long documentId;
-    
     private SelectedText text;
 
     public Long getNoteId() {
@@ -14,14 +12,6 @@ public class SelectionTO {
 
     public void setNoteId(Long noteId) {
         this.noteId = noteId;
-    }
-
-    public Long getDocumentId() {
-        return documentId;
-    }
-
-    public void setDocumentId(Long documentId) {
-        this.documentId = documentId;
     }
 
     public SelectedText getText() {
