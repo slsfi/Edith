@@ -6,6 +6,7 @@
 package com.mysema.edith.dto;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.mysema.edith.domain.NoteFormat;
@@ -46,6 +47,8 @@ public class NoteSearchTO {
     private Long createdBefore, createdAfter, editedAfter, editedBefore; 
     
     private Long page, perPage;
+    
+    private List<String> columns;
     
     public NoteSearchTO() {
     }
@@ -236,6 +239,14 @@ public class NoteSearchTO {
 
     public void setLemma(String lemma) {
         this.lemma = lemma;
+    }
+
+    public List<String> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<String> columns) {
+        this.columns = columns;
     }
     
 }

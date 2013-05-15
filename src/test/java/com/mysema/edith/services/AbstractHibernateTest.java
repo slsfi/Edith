@@ -110,7 +110,9 @@ public abstract class AbstractHibernateTest {
                 Statement stmt = connection.createStatement();
                 stmt.execute("set foreign_key_checks=0");
                 for (String table : tables) {
-                    stmt.execute("truncate " + table);
+                    if (!table.toLowerCase().equals("user")) {
+                        stmt.execute("truncate " + table);    
+                    }                    
                 }
                 stmt.execute("set foreign_key_checks=1");
 

@@ -81,9 +81,13 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
         }                
         if (docNote.getNote() != null) {
             User createdBy = userDao.getCurrentUser(); 
-            docNote.getNote().setEditedOn(currentTime);
-            docNote.getNote().setLastEditedBy(createdBy);
-            docNote.getNote().getAllEditors().add(createdBy); 
+            if (createdBy != null) {
+                docNote.getNote().setEditedOn(currentTime);
+                docNote.getNote().setLastEditedBy(createdBy);
+                docNote.getNote().getAllEditors().add(createdBy);    
+            } else {
+                throw new IllegalStateException("No current user");
+            }                      
         }
         return persistOrMerge(docNote);
     }

@@ -45,7 +45,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
     public NoteTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), new NoteTO());
     }
-
+    
     @GET
     public Map<String, Object> all(
             @QueryParam("page") Long page,
@@ -104,6 +104,21 @@ public class NotesResource extends AbstractResource<NoteTO> {
         rv.put("totalEntries", results.getTotal());
         return rv;
     }
+    
+//    @POST @Path("query")
+//    public String queryCsv(NoteSearchTO search) {
+//        search.setPage(null);
+//        search.setPerPage(null);
+//        SearchResults<Note> results = dao.findNotes(search);
+//        List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
+//        
+//        StringBuilder builder = new StringBuilder();
+//        for (Note note : results.getResults()) {
+//            builder.append();
+//        }
+//        
+//        return builder.toString();        
+//    }
 
     @GET @Path("{id}/document-notes")
     public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
