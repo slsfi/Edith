@@ -23,13 +23,13 @@ public class SelectedTextTest {
     }
 
     @Test
-    public void Get_End_Id() {
-        assertEquals(END_ID, selectedText.getEndId());
+    public void Get_End_Node() {
+        assertEquals(END_ID, selectedText.getEndNode());
     }
 
     @Test
-    public void Get_End_Index() {
-        assertEquals(0, selectedText.getEndIndex());
+    public void Get_End_Char_Index() {
+        assertEquals(0, selectedText.getEndCharIndex());
     }
 
     @Test
@@ -38,13 +38,13 @@ public class SelectedTextTest {
     }
 
     @Test
-    public void Get_Start_Id() {
-        assertEquals(START_ID, selectedText.getStartId());
+    public void Get_Start_Node() {
+        assertEquals(START_ID, selectedText.getStartNode());
     }
 
     @Test
-    public void Get_Start_Index() {
-        assertEquals(0, selectedText.getStartIndex());
+    public void Get_Start_Char_Index() {
+        assertEquals(0, selectedText.getStartCharIndex());
     }
 
     @Test

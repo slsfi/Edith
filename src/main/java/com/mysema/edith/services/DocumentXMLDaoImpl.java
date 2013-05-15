@@ -152,7 +152,7 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                     context.push(extractName(event.asStartElement()));
                     if (buffering && !matched.areBothMatched()) {
                         handled = true;
-                        if (context.equalsAny(sel.getStartId())) {
+                        if (context.equalsAny(sel.getStartNode())) {
                             /*
                              * If the end element is inside the start element,
                              * we want to flush the end elements that do not
@@ -176,7 +176,7 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                             allStrings = new StringBuilder();
                             events.clear();
                             handled = false;
-                        } else if (context.equalsAny(sel.getEndId())) {
+                        } else if (context.equalsAny(sel.getEndNode())) {
                             /*
                              * If the start element is inside the end element,
                              * we want to flush the start elements once reaching
@@ -198,7 +198,7 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                             events.add(event);
                         }
                     }
-                    if (context.equalsAny(sel.getStartId(), sel.getEndId())
+                    if (context.equalsAny(sel.getStartNode(), sel.getEndNode())
                             && !matched.areBothMatched()) {
                         buffering = true;
                         startedBuffering = true;
@@ -207,10 +207,10 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                     if (buffering && !matched.areBothMatched()) {
                         events.add(event);
                         handled = true;
-                        if (context.equalsAny(sel.getStartId())) {
+                        if (context.equalsAny(sel.getStartNode())) {
                             startStrings.append(event.asCharacters().getData());
                             allStrings.append(event.asCharacters().getData());
-                        } else if (context.equalsAny(sel.getEndId())) {
+                        } else if (context.equalsAny(sel.getEndNode())) {
                             endStrings.append(event.asCharacters().getData());
                             allStrings.append(event.asCharacters().getData());
                         }
@@ -221,7 +221,7 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                     }
 
                 } else if (event.isEndElement()) {
-                    if (context.equalsAny(sel.getStartId(), sel.getEndId())) {
+                    if (context.equalsAny(sel.getStartNode(), sel.getEndNode())) {
                         flush(writer, position, !matched.isStartMatched() ? allStrings.toString()
                                 : endStrings.toString(), sel, events, context, matched, localId,
                                 endOffset);
@@ -272,28 +272,28 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
             AtomicInteger endOffset) throws XMLStreamException {
         String startAnchor = "start" + localId;
         String endAnchor = "end" + localId;
-        boolean startAndEndInSameElement = sel.getStartId().equals(sel.getEndId());
+        boolean startAndEndInSameElement = sel.getStartNode().equals(sel.getEndNode());
         int offset = 0;
-        int startIndex = getIndex(string, sel.getFirstChar(), sel.getStartIndex());
-        int endIndex = getIndex(string, sel.getLastChar(), sel.getEndIndex()) + 1;
+        int startIndex = getIndex(string, sel.getFirstChar(), sel.getStartCharIndex());
+        int endIndex = getIndex(string, sel.getLastChar(), sel.getEndCharIndex()) + 1;
         for (XMLEvent e : events) {
             boolean handled = false;
             if (e.isStartElement()) {
                 context.push(extractName(e.asStartElement()));
             } else if (e.isEndElement()) {
                 context.pop();
-            } else if (e.isCharacters() && context.equalsAny(sel.getStartId(), sel.getEndId())) {
+            } else if (e.isCharacters() && context.equalsAny(sel.getStartNode(), sel.getEndNode())) {
                 String eventString = e.asCharacters().getData();
                 int relativeStart = startIndex - offset;
                 int relativeEnd = endIndex
-                        - (context.equalsAny(sel.getEndId()) && sel.isStartChildOfEnd() ? endOffset
+                        - (context.equalsAny(sel.getEndNode()) && sel.isStartChildOfEnd() ? endOffset
                                 .intValue() : offset);
                 int index = -1;
                 offset += eventString.length();
-                if (context.equalsAny(sel.getEndId()) && sel.isStartChildOfEnd()) {
+                if (context.equalsAny(sel.getEndNode()) && sel.isStartChildOfEnd()) {
                     endOffset.addAndGet(eventString.length());
                 }
-                if (context.equalsAny(sel.getStartId()) && !matched.isStartMatched()
+                if (context.equalsAny(sel.getStartNode()) && !matched.isStartMatched()
                         && startIndex <= offset) {
                     position.addAndGet(relativeStart);
                     writer.add(eventFactory.createCharacters(eventString
@@ -303,10 +303,10 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                     handled = true;
                     index = relativeStart;
                 }
-                if (context.equalsAny(sel.getEndId())
+                if (context.equalsAny(sel.getEndNode())
                         && matched.isStartMatched()
                         && !matched.isEndMatched()
-                        && endIndex <= (context.equalsAny(sel.getEndId())
+                        && endIndex <= (context.equalsAny(sel.getEndNode())
                                 && sel.isStartChildOfEnd() ? endOffset.intValue() : offset)) {
                     if (!startAndEndInSameElement) {
                         writer.add(eventFactory.createCharacters(eventString.substring(0,

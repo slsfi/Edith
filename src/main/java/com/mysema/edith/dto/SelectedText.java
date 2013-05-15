@@ -11,22 +11,20 @@ public class SelectedText {
 
     private String selection;
 
-    // FIXME: Rename to 'startNode' and 'endNode'
-    private String startId, endId;
+    private String startNode, endNode;
 
-    // FIXME: Rename to 'startCharIndex' and 'endCharIndex'
-    private int startIndex = 0, endIndex = 0;
+    private int startCharIndex = 0, endCharIndex = 0;
 
     private static final Pattern HYPHEN = Pattern.compile("-");
 
     public SelectedText() {
     }
 
-    public SelectedText(String startId, String endId, int startIndex, int endIndex, String selection) {
-        this.startId = startId;
-        this.endId = endId;
-        this.startIndex = startIndex;
-        this.endIndex = endIndex;
+    public SelectedText(String startNode, String endNode, int startCharIndex, int endCharIndex, String selection) {
+        this.startNode = startNode;
+        this.endNode = endNode;
+        this.startCharIndex = startCharIndex;
+        this.endCharIndex = endCharIndex;
         this.selection = selection;
     }
 
@@ -34,44 +32,44 @@ public class SelectedText {
         this(startId, endId, 0, 0, selection);
     }
 
-    public String getEndId() {
-        return endId;
+    public String getEndNode() {
+        return endNode;
     }
 
-    public int getEndIndex() {
-        return endIndex;
+    public int getEndCharIndex() {
+        return endCharIndex;
     }
 
     public String getSelection() {
         return selection;
     }
 
-    public String getStartId() {
-        return startId;
+    public String getStartNode() {
+        return startNode;
     }
 
-    public int getStartIndex() {
-        return startIndex;
+    public int getStartCharIndex() {
+        return startCharIndex;
     }
 
     public void setSelection(String selection) {
         this.selection = selection;
     }
 
-    public void setEndId(String endId) {
-        this.endId = endId;
+    public void setEndNode(String endId) {
+        this.endNode = endId;
     }
 
     public void setEndIndex(int endIndex) {
-        this.endIndex = endIndex;
+        this.endCharIndex = endIndex;
     }
 
-    public void setStartId(String startId) {
-        this.startId = startId;
+    public void setStartNode(String startId) {
+        this.startNode = startId;
     }
 
-    public void setStartIndex(int startIndex) {
-        this.startIndex = startIndex;
+    public void setStartCharIndex(int startIndex) {
+        this.startCharIndex = startIndex;
     }
 
     public boolean isValid() {
@@ -83,11 +81,11 @@ public class SelectedText {
     }
 
     private boolean hasStart() {
-        return startId != null && startId.trim().length() > 0;
+        return startNode != null && startNode.trim().length() > 0;
     }
 
     private boolean hasEnd() {
-        return endId != null && endId.trim().length() > 0;
+        return endNode != null && endNode.trim().length() > 0;
     }
 
     public char getFirstChar() {
@@ -99,15 +97,15 @@ public class SelectedText {
     }
 
     public boolean isStartChildOfEnd() {
-        return startId.startsWith(endId) && endId.length() < startId.length();
+        return startNode.startsWith(endNode) && endNode.length() < startNode.length();
     }
 
     public int howDeepIsStartInEnd() {
-        return howDeepIsElementInElement(startId, endId);
+        return howDeepIsElementInElement(startNode, endNode);
     }
 
     public int howDeepIsEndInStart() {
-        return howDeepIsElementInElement(endId, startId);
+        return howDeepIsElementInElement(endNode, startNode);
     }
 
     private int howDeepIsElementInElement(String el1, String el2) {
@@ -127,14 +125,14 @@ public class SelectedText {
     }
 
     public boolean isEndChildOfStart() {
-        return endId.startsWith(startId) && endId.length() > startId.length();
+        return endNode.startsWith(startNode) && endNode.length() > startNode.length();
     }
 
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append(startId + "[" + startIndex + "] , ");
-        buffer.append(endId + "[" + endIndex + "] : ");
+        buffer.append(startNode + "[" + startCharIndex + "] , ");
+        buffer.append(endNode + "[" + endCharIndex + "] : ");
         buffer.append(selection);
         return buffer.toString();
     }
