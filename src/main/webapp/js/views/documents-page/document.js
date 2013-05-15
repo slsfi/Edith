@@ -24,7 +24,6 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
     var endNode = selection.focusNode;
     var startOffset = selection.anchorOffset;
     var endOffset = selection.focusOffset;
-    console.log(selection.toString());
     var selectionString = selection.toString().trim();
     if (isInverseSelection(selection)) {
       startNode = selection.focusNode;
@@ -33,7 +32,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
       endOffset = selection.anchorOffset;
     }
     if (endOffset === 0) {
-      // FIXME: This is not exhaustive (might be parent)
+      // FIXME: This is not exhaustive (might be parent or sibling even more on the left)
       endNode = endNode.previousSibling;
       endOffset = endNode.textContent.length - 1;
     }
@@ -72,7 +71,11 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
 
     initialize: function() {
       _.bindAll(this, 'render', 'selectionChange');
-      vent.on('document:open', this.render);
+      var self = this;
+      vent.on('document:open', function(id) {
+        self.documentId = id;
+        self.render(id);
+      });
     },
     
     render: function(id) {
@@ -95,13 +98,23 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
       var endChar = str.charAt(str.length - 1);
       var startCharIndex = getCharIndex(selection.startNode.textContent, startChar, selection.startOffset);
       var endCharIndex = getCharIndex(selection.endNode.textContent, endChar, selection.endOffset - 1);
-      console.log({selectionString: str,
-                   startChar: startChar,
-                   startCharIndex: startCharIndex,
-                   startNode: selection.startNode.parentNode.id,
-                   endNode: selection.endNode.parentNode.id,
-                   endChar: endChar,
-                   endCharIndex: endCharIndex});
+      var selection = {selectionString: str,
+                       startChar: startChar,
+                       startCharIndex: startCharIndex,
+                       startNode: selection.startNode.parentNode.id,
+                       endNode: selection.endNode.parentNode.id,
+                       endChar: endChar,
+                       endCharIndex: endCharIndex};
+      $.ajax('api/documentnotes/selection',
+             {type: 'post',
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify({documentId: this.documentId,
+                                    text: {selection: selection.selectionString,
+                                           startId: selection.startNode,
+                                           endId: selection.endNode,
+                                           startIndex: selection.startCharIndex,
+                                           endIndex: selection.endCharIndex}})});
+      
     }
   });
   
