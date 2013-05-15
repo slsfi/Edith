@@ -460,7 +460,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 } else if (event == XMLStreamConstants.END_ELEMENT) {
                     handleEndElement(reader, writer, context);
                 } else if (event == XMLStreamConstants.CHARACTERS) {
-                    handleCharactersElement(reader, writer, noteIds, noteContent);
+                    handleCharactersElement(reader, writer, noteIds, context, noteContent);
                 } else if (event == XMLStreamConstants.END_DOCUMENT) {
                     break;
                 }
@@ -476,7 +476,9 @@ public class ContentRendererImpl implements ContentRenderer {
             Set<Long> publishIds) throws XMLStreamException {
         String localName = reader.getLocalName();
         String name = extractName(reader, localName);
-        context.push(name);
+        if (!name.equals("anchor")) {
+            context.push(name);    
+        }        
         String path = context.getPath();
         String rend = reader.getAttributeValue(null, "rend");
 
@@ -528,6 +530,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 // start anchor
                 writer.writeStartElement(SPAN);
                 writer.writeAttribute(CLASS, "notestart");
+                writer.writeAttribute("data-node", context.getPath());
                 writer.writeAttribute("id", id);
                 writer.writeEndElement();
 
@@ -536,6 +539,7 @@ public class ContentRendererImpl implements ContentRenderer {
             } else if (id.startsWith(END)) {
                 writer.writeStartElement(SPAN);
                 writer.writeAttribute("class", "noteanchor");
+                writer.writeAttribute("data-node", context.getPath());
                 writer.writeAttribute("id", id);
                 writer.writeCharacters(" [*] ");
                 writer.writeEndElement();
@@ -578,15 +582,17 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private void handleEndElement(XMLStreamReader reader, XMLStreamWriter writer,
             ElementContext context) throws XMLStreamException {
-        context.pop();
         String localName = reader.getLocalName();
+        if (!localName.equals("anchor")) {
+            context.pop();
+        }
         if (!EMPTY_ELEMENTS.contains(localName)) {
             writer.writeEndElement();
         }
     }
 
     private void handleCharactersElement(XMLStreamReader reader, XMLStreamWriter writer,
-            Set<Long> noteIds, AtomicBoolean noteContent) throws XMLStreamException {
+            Set<Long> noteIds, ElementContext context, AtomicBoolean noteContent) throws XMLStreamException {
         String text = WHITESPACE.matcher(reader.getText()).replaceAll(" ");
         if (noteContent.get() && !text.trim().isEmpty()) {
             StringBuilder classes = new StringBuilder("notecontent");
@@ -595,6 +601,7 @@ public class ContentRendererImpl implements ContentRenderer {
             }
             writer.writeStartElement(SPAN);
             writer.writeAttribute(CLASS, classes.toString());
+            writer.writeAttribute("data-node", context.getPath());
             writer.writeCharacters(text);
             writer.writeEndElement();
         } else {
