@@ -82,6 +82,17 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
     }
     
     @Test
+    public void Create_without_Note() {
+        Document document = documentDao.getDocumentForPath(testDocument);
+        DocumentNoteTO info = new DocumentNoteTO();
+        info.setDocument(document.getId());
+        info.setFullSelection("a");
+        DocumentNoteTO created = documentNotes.create(info);
+        
+        assertNotNull(created.getId());
+    }
+    
+    @Test
     public void Create_Selection() throws IOException, NoteAdditionFailedException {
         String PREFIX = "TEI-text0-body0-";
         Document document = documentDao.getDocumentForPath(testDocument);

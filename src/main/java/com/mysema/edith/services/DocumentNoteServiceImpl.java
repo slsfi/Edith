@@ -39,6 +39,10 @@ public class DocumentNoteServiceImpl implements DocumentNoteService {
         this.versioningDao = versioningDao;
     }
     
+    public DocumentNote attachNote(Document document, SelectedText selection) {
+        return attachNote(noteDao.save(new Note()), document, selection);
+    }
+    
     @Override
     public DocumentNote attachNote(Note note, Document document, final SelectedText selection) {
         // create stub
@@ -98,8 +102,7 @@ public class DocumentNoteServiceImpl implements DocumentNoteService {
     }
     
     @Override
-    public DocumentNote updateNote(final DocumentNote documentNote, final SelectedText selection)
-            throws IOException {
+    public DocumentNote updateNote(final DocumentNote documentNote, final SelectedText selection) {
         Document doc = documentNote.getDocument();
         
         // update in XML

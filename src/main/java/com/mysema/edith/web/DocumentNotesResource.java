@@ -71,26 +71,21 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
 
     @POST @Path("/selection")
     public DocumentNoteTO create(SelectionTO sel) {
-        try {
-            // FIXME: DocumentNote doesn't necessarily have a Note
+        Document doc = documentDao.getById(sel.getDocumentId());;
+        DocumentNote documentNote;
+        if (sel.getNoteId() != null) {
             Note note = noteDao.getById(sel.getNoteId());
-            Document doc = documentDao.getById(sel.getDocumentId());
-            return convert(service.attachNote(note, doc, sel.getText()), new DocumentNoteTO());
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        } catch (NoteAdditionFailedException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+            documentNote = service.attachNote(note, doc, sel.getText());
+        } else {
+            documentNote = service.attachNote(doc, sel.getText());
+        }               
+        return convert(documentNote, new DocumentNoteTO());
     }
 
     @PUT @Path("/selection/{id}")
     public DocumentNoteTO update(@PathParam("id") Long id, SelectionTO sel) {
-        try {
-            DocumentNote documentNote = service.getById(id);
-            return convert(service.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+        DocumentNote documentNote = service.getById(id);
+        return convert(service.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
     }
 
     @Override
