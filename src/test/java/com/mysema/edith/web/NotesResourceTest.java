@@ -1,9 +1,14 @@
 package com.mysema.edith.web;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map;
+
+import javax.ws.rs.core.Response;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +16,7 @@ import org.junit.Test;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
+import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.dto.TermTO;
 import com.mysema.edith.services.NoteDao;
@@ -75,6 +81,31 @@ public class NotesResourceTest extends AbstractResourceTest {
     public void Search() {
         Map<String, Object> rv = notes.all(null, null, null, null, null);
         assertNotNull(rv);
+    }
+    
+    @Test
+    public void Query() {
+        NoteSearchTO search = new NoteSearchTO();
+        Map<String, Object> result = notes.query(search);
+        assertNotNull(result);
+    }
+    
+    @Test
+    public void Query_Csv() {
+        NoteSearchTO search = new NoteSearchTO();
+        search.setColumns(Arrays.asList("lemma", "description", "subtextSources", "editedOn", 
+                "term.basicForm", "term.meaning")); 
+        Response result = notes.queryCsv(search);
+        String csv = result.getEntity().toString();
+        assertTrue(csv.startsWith("lemma;description;subtextSources;editedOn;term.basicForm;term.meaning"));        
+    }
+    
+    @Test
+    public void Query_Csv_No_Columns() {
+        NoteSearchTO search = new NoteSearchTO();
+        Response result = notes.queryCsv(search);
+        String csv = result.getEntity().toString();
+        assertEquals("", csv);
     }
 
 }

@@ -13,7 +13,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
@@ -23,7 +25,9 @@ import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteDao;
+import com.mysema.edith.util.StringUtils;
 import com.mysema.query.SearchResults;
+import com.mysema.util.BeanMap;
 
 @Transactional
 @Path("/notes")
@@ -92,6 +96,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
     }
     
     @POST @Path("query")
+    @Produces("application/json")
     public Map<String, Object> query(NoteSearchTO search) {
         SearchResults<Note> results = dao.findNotes(search);
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
@@ -105,20 +110,39 @@ public class NotesResource extends AbstractResource<NoteTO> {
         return rv;
     }
     
-//    @POST @Path("query")
-//    public String queryCsv(NoteSearchTO search) {
-//        search.setPage(null);
-//        search.setPerPage(null);
-//        SearchResults<Note> results = dao.findNotes(search);
-//        List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
-//        
-//        StringBuilder builder = new StringBuilder();
-//        for (Note note : results.getResults()) {
-//            builder.append();
-//        }
-//        
-//        return builder.toString();        
-//    }
+    @POST @Path("query")
+    @Produces("application/json")
+    public Response queryCsv(NoteSearchTO search) {        
+        search.setPage(null);
+        search.setPerPage(null);
+        SearchResults<Note> results = dao.findNotes(search);
+        
+        StringBuilder builder = new StringBuilder();
+        if (search.getColumns() != null && !search.getColumns().isEmpty()) {
+            builder.append(StringUtils.join(search.getColumns(), ";"));
+            builder.append("\n");
+            for (Note note : results.getResults()) {
+                BeanMap noteBean = new BeanMap(note);
+                BeanMap termBean = note.getTerm() != null ? new BeanMap(note.getTerm()) : new BeanMap();
+                List<String> values = Lists.newArrayList();
+                for (String column : search.getColumns()) {  
+                    Object value = null;
+                    if (column.startsWith("term")) {
+                        value = termBean.get(column.substring(column.indexOf(".")+1));
+                    } else {
+                        value = noteBean.get(column);
+                    }
+                    values.add(value != null ? value.toString() : "");
+                }
+                builder.append(StringUtils.join(values, ";"));
+                builder.append("\n");
+            }            
+        }       
+        
+        return Response.ok(builder.toString(), "text/csv")
+                .header("Content-Disposition", "attachment; filename=results.csv")
+                .build();
+    }
 
     @GET @Path("{id}/document-notes")
     public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {

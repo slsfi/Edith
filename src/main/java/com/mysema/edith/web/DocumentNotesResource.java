@@ -16,31 +16,19 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.Note;
 import com.mysema.edith.dto.DocumentNoteTO;
-import com.mysema.edith.dto.SelectionTO;
-import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteService;
-import com.mysema.edith.services.NoteDao;
 
 @Transactional
 @Path("/documentnotes")
 @Produces(MediaType.APPLICATION_JSON)
 public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
 
-    private final NoteDao noteDao;
-
-    private final DocumentDao documentDao;
-
     private final DocumentNoteService service;
 
     @Inject
-    public DocumentNotesResource(NoteDao noteDao, DocumentDao documentDao,
-            DocumentNoteService service) {
-        this.noteDao = noteDao;
-        this.documentDao = documentDao;
+    public DocumentNotesResource(DocumentNoteService service) {
         this.service = service;
     }
 
