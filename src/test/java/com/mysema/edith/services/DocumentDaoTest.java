@@ -75,7 +75,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void AddDocuments_From_Zip() {
         File file = new File("src/test/resources/tei.zip");
-        assertEquals(5, documentDao.addDocumentsFromZip("/documents/parent", file));
+        assertEquals(5, documentDao.addDocumentsFromZip("/documents/parent", file).size());
 
         assertEquals(5, subversionService.getFileItems("/documents/parent", -1).size());
     }
