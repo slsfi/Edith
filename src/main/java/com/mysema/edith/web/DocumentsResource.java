@@ -5,9 +5,11 @@
  */
 package com.mysema.edith.web;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -37,6 +39,7 @@ import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteDao;
+import com.sun.jersey.multipart.FormDataParam;
 
 @Transactional
 @Path("/documents")
@@ -126,8 +129,18 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
+    
+    @POST 
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public DocumentTO addDocument(@FormDataParam("path") String path, @FormDataParam("file") File file) {
+        return convert(dao.addDocument(path, file), new DocumentTO());
+    }
 
-    // TODO addDocumentsFromZip
+    @POST @Path("from-zip")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public List<DocumentTO> addDocumentsFromZip(@FormDataParam("path") String path, @FormDataParam("file") File file) {
+        return convert(dao.addDocumentsFromZip(path, file), DocumentTO.class);
+    }
 
     @GET
     @Path("{id}/raw")

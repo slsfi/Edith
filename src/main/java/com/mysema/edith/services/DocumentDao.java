@@ -27,7 +27,7 @@ public interface DocumentDao extends Dao<Document, Long> {
      * @param svnPath
      * @param file
      */
-    void addDocument(String svnPath, File file);
+    Document addDocument(String svnPath, File file);
 
     /**
      * Import documents from the given ZIP file
@@ -36,7 +36,7 @@ public interface DocumentDao extends Dao<Document, Long> {
      * @param file
      * @return amount of imported documents
      */
-    int addDocumentsFromZip(String parentSvnPath, File file);
+    List<Document> addDocumentsFromZip(String parentSvnPath, File file);
 
     /**
      * Get a Document handle for the given path

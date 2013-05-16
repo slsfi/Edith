@@ -22,6 +22,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -66,17 +67,18 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public void addDocument(String path, File file) {
+    public Document addDocument(String path, File file) {
         versioningDao.importFile(path, file);
+        return createDocument(path, file.getName());
     }
 
     @Override
-    public int addDocumentsFromZip(String parentPath, File file) {
+    public List<Document> addDocumentsFromZip(String parentPath, File file) {
         try {
             String parent = parentPath.endsWith("/") ? parentPath : parentPath + "/";
             ZipFile zipFile = new ZipFile(file);
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
-            int rv = 0;
+            List<Document> rv = Lists.newArrayList();
             while (entries.hasMoreElements()) {
                 ZipArchiveEntry entry = entries.nextElement();
                 if (!entry.getName().endsWith(".xml")) {
@@ -92,17 +94,15 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                     in.close();
                     out.close();
                 }
-                addDocument(parent + entry.getName(), outFile);
+                Document document = addDocument(parent + entry.getName(), outFile);
                 outFile.delete();
-                rv++;
+                rv.add(document);
             }
             return rv;
         } catch (IOException e) {
             throw new ServiceException(e);
         }
     }
-
-
 
     @Override
     public Document getDocumentForPath(String svnPath) {
