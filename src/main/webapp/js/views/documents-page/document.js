@@ -117,29 +117,25 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
           baseSelection.startOffset + additionalStartOffset);
       var endCharIndex = getCharIndex(previousFromEnd + baseSelection.endNode.textContent, endChar,
           (baseSelection.endOffset - 1) + additionalEndOffset);
-      var selection = {selectionString: str,
-                       startChar: startChar,
+      var startParent = baseSelection.startNode.parentNode;
+      var endParent = baseSelection.endNode.parentNode;
+      var selection = {selection: str,
+//                       startChar: startChar,
                        startCharIndex: startCharIndex,
-                       startNode: baseSelection.startNode.parentNode.id,
-                       endNode: baseSelection.endNode.parentNode.id,
-                       endChar: endChar,
+                       startNode: startParent.id || startParent.attributes.getNamedItem('data-node').nodeValue,
+                       endNode: endParent.id || endParent.attributes.getNamedItem('data-node').nodeValue,
+//                       endChar: endChar,
                        endCharIndex: endCharIndex};
       var self = this;
-      if (confirm('Annotate?')) {
-        $.ajax('api/documentnotes/selection',
+      if (str && confirm('Annotate?')) {
+        $.ajax('api/documents/' + this.documentId + '/document-notes',
                {type: 'post',
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({documentId: this.documentId,
-                                      text: {selection: selection.selectionString,
-                                             startId: selection.startNode,
-                                             endId: selection.endNode,
-                                             startIndex: selection.startCharIndex,
-                                             endIndex: selection.endCharIndex}}),
+                data: JSON.stringify({text: selection}),
                 success: function(resp) {
                   self.render(self.documentId);
                 }});
       }
-      
     }
   });
   
