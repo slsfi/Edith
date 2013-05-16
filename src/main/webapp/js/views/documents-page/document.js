@@ -69,7 +69,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
     var sibling = node.previousSibling;
     if (sibling) {
       var str = '';
-      if (sibling.nodeType === 3) {
+      if (sibling.nodeType === 3 || sibling.className.indexOf('notecontent') !== -1) {
         str = sibling.textContent;
       }
       return previousSiblingsToString(sibling) + str;
@@ -107,6 +107,9 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
     selectionChange: function() {
       var baseSelection = getSelection();
       var str = baseSelection.selectionString;
+      if (!str) {
+        return;
+      }
       var startChar = str.charAt(0);
       var endChar = str.charAt(str.length - 1);
       var previousFromStart = previousSiblingsToString(baseSelection.startNode);
@@ -127,7 +130,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
 //                       endChar: endChar,
                        endCharIndex: endCharIndex};
       var self = this;
-      if (str && confirm('Annotate?')) {
+      if (confirm('Annotate?')) {
         $.ajax('api/documents/' + this.documentId + '/document-notes',
                {type: 'post',
                 contentType: "application/json; charset=utf-8",
