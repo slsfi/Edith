@@ -541,7 +541,6 @@ public class ContentRendererImpl implements ContentRenderer {
                 writer.writeAttribute("class", "noteanchor");
                 writer.writeAttribute("data-node", context.getPath());
                 writer.writeAttribute("id", id);
-                writer.writeCharacters(" [*] ");
                 writer.writeEndElement();
 
                 noteIds.remove(Long.parseLong(id.substring(END.length())));
