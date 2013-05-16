@@ -79,7 +79,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
 
   var documentNoteTemplate = Handlebars.compile(documentNoteTemplate);
   var DocumentView = Backbone.View.extend({
-    events: {'mouseup': 'selectionChange' },
+    events: {'mouseup': 'selectionChange'},
 
     initialize: function() {
       _.bindAll(this, 'render', 'selectionChange');
@@ -125,18 +125,20 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
                        endChar: endChar,
                        endCharIndex: endCharIndex};
       var self = this;
-      $.ajax('api/documentnotes/selection',
-             {type: 'post',
-              contentType: "application/json; charset=utf-8",
-              data: JSON.stringify({documentId: this.documentId,
-                                    text: {selection: selection.selectionString,
-                                           startId: selection.startNode,
-                                           endId: selection.endNode,
-                                           startIndex: selection.startCharIndex,
-                                           endIndex: selection.endCharIndex}}),
-              success: function(resp) {
-                self.render(self.documentId);
-              }});
+      if (confirm('Annotate?')) {
+        $.ajax('api/documentnotes/selection',
+               {type: 'post',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({documentId: this.documentId,
+                                      text: {selection: selection.selectionString,
+                                             startId: selection.startNode,
+                                             endId: selection.endNode,
+                                             startIndex: selection.startCharIndex,
+                                             endIndex: selection.endCharIndex}}),
+                success: function(resp) {
+                  self.render(self.documentId);
+                }});
+      }
       
     }
   });
