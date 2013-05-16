@@ -110,7 +110,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
         return rv;
     }
     
-    @POST @Path("query")
+    @POST @Path("query2") // XXX temporarily, to avoid conflicts
     @Produces("application/json")
     public Response queryCsv(NoteSearchTO search) {        
         search.setPage(null);
