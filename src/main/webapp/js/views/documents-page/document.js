@@ -65,9 +65,21 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
     return ++idx;
   }
 
+  var previousSiblingsToString = function(node) {
+    var sibling = node.previousSibling;
+    if (sibling) {
+      var str = '';
+      if (sibling.nodeType === 3) {
+        str = sibling.textContent;
+      }
+      return previousSiblingsToString(sibling) + str;
+    }
+    return '';
+  }
+
   var documentNoteTemplate = Handlebars.compile(documentNoteTemplate);
   var DocumentView = Backbone.View.extend({
-    events: {'mouseup': 'selectionChange' },
+    events: {'mouseup': 'selectionChange'},
 
     initialize: function() {
       _.bindAll(this, 'render', 'selectionChange');
@@ -83,6 +95,7 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
       // FIXME: We know better
       $.get('/api/documents/' + id + '/raw', function(data) {
         self.$('#documentView').html(data);
+        self.$('.notecontent').css('background', 'lightblue');
       });
       $.get('/api/documents/' + id + '/document-notes', function(data) {
         _(data).each(function(documentNote) {
@@ -92,28 +105,40 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
     },
 
     selectionChange: function() {
-      var selection = getSelection();
-      var str = selection.selectionString;
+      var baseSelection = getSelection();
+      var str = baseSelection.selectionString;
       var startChar = str.charAt(0);
       var endChar = str.charAt(str.length - 1);
-      var startCharIndex = getCharIndex(selection.startNode.textContent, startChar, selection.startOffset);
-      var endCharIndex = getCharIndex(selection.endNode.textContent, endChar, selection.endOffset - 1);
+      var previousFromStart = previousSiblingsToString(baseSelection.startNode);
+      var additionalStartOffset = previousFromStart.length;
+      var previousFromEnd = previousSiblingsToString(baseSelection.endNode);
+      var additionalEndOffset = previousFromEnd.length;
+      var startCharIndex = getCharIndex(previousFromStart + baseSelection.startNode.textContent, startChar,
+          baseSelection.startOffset + additionalStartOffset);
+      var endCharIndex = getCharIndex(previousFromEnd + baseSelection.endNode.textContent, endChar,
+          (baseSelection.endOffset - 1) + additionalEndOffset);
       var selection = {selectionString: str,
                        startChar: startChar,
                        startCharIndex: startCharIndex,
-                       startNode: selection.startNode.parentNode.id,
-                       endNode: selection.endNode.parentNode.id,
+                       startNode: baseSelection.startNode.parentNode.id,
+                       endNode: baseSelection.endNode.parentNode.id,
                        endChar: endChar,
                        endCharIndex: endCharIndex};
-      $.ajax('api/documentnotes/selection',
-             {type: 'post',
-              contentType: "application/json; charset=utf-8",
-              data: JSON.stringify({documentId: this.documentId,
-                                    text: {selection: selection.selectionString,
-                                           startId: selection.startNode,
-                                           endId: selection.endNode,
-                                           startIndex: selection.startCharIndex,
-                                           endIndex: selection.endCharIndex}})});
+      var self = this;
+      if (confirm('Annotate?')) {
+        $.ajax('api/documentnotes/selection',
+               {type: 'post',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({documentId: this.documentId,
+                                      text: {selection: selection.selectionString,
+                                             startId: selection.startNode,
+                                             endId: selection.endNode,
+                                             startIndex: selection.startCharIndex,
+                                             endIndex: selection.endCharIndex}}),
+                success: function(resp) {
+                  self.render(self.documentId);
+                }});
+      }
       
     }
   });
