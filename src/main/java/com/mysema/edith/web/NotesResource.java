@@ -96,7 +96,6 @@ public class NotesResource extends AbstractResource<NoteTO> {
     }
     
     @POST @Path("query")
-    @Produces("application/json")
     public Map<String, Object> query(NoteSearchTO search) {
         SearchResults<Note> results = dao.findNotes(search);
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
@@ -110,8 +109,8 @@ public class NotesResource extends AbstractResource<NoteTO> {
         return rv;
     }
     
-    @POST @Path("query2") // XXX temporarily, to avoid conflicts
-    @Produces("application/json")
+    @POST @Path("query")
+    @Produces("text/csv")
     public Response queryCsv(NoteSearchTO search) {        
         search.setPage(null);
         search.setPerPage(null);
