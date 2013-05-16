@@ -6,6 +6,7 @@
 package com.mysema.edith.services;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,6 +49,12 @@ public interface NoteDao extends Dao<Note, Long> {
      * @throws Exception
      */
     int importNotes(File file);
+    
+    /**
+     * @param stream
+     * @return
+     */
+    int importNotes(InputStream stream);
 
 
     /**

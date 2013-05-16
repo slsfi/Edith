@@ -9,5 +9,11 @@
     <script data-main="note-import-page" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js"></script>
   </head>
   <body>
+  
+    <form method="post" action="api/notes/import" enctype="multipart/form-data">    
+      <input name="file" type="file"/>      
+      <input type="submit"/>    
+    </form>
+  
   </body>
 </html>

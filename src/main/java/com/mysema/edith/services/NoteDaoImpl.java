@@ -10,6 +10,7 @@ import static com.mysema.query.support.Expressions.stringPath;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -388,16 +389,22 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             }
         }
     }
+    
+    public int importNotes(File file) {
+        try {
+            return importNotes(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new ServiceException(e);
+        }
+    }
 
     @Override
-    public int importNotes(File file) {
+    public int importNotes(InputStream stream) {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = null;
         try {
-            reader = factory.createXMLStreamReader(new FileInputStream(file));
+            reader = factory.createXMLStreamReader(stream);
         } catch (XMLStreamException e) {
-            throw new ServiceException(e);
-        } catch (FileNotFoundException e) {
             throw new ServiceException(e);
         }
 

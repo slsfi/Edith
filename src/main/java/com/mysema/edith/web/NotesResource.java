@@ -1,9 +1,11 @@
 package com.mysema.edith.web;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -28,6 +30,8 @@ import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.util.StringUtils;
 import com.mysema.query.SearchResults;
 import com.mysema.util.BeanMap;
+
+import com.sun.jersey.multipart.FormDataParam;
 
 @Transactional
 @Path("/notes")
@@ -163,6 +167,12 @@ public class NotesResource extends AbstractResource<NoteTO> {
             throw new RuntimeException("Entity not found");
         }
         return convert(dao.save(convert(info, entity)), new NoteTO());
+    }
+    
+    @POST @Path("import")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public int importNotes(@FormDataParam("file") InputStream stream) {
+        return dao.importNotes(stream);
     }
 
     @Override
