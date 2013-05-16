@@ -6,19 +6,22 @@
 package com.mysema.edith.dto;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.NoteFormat;
+import com.mysema.edith.domain.NoteStatus;
 import com.mysema.edith.domain.NoteType;
 import com.mysema.edith.domain.TermLanguage;
 
 public class NoteSearchTO {
 
-    private Set<Document> documents = new HashSet<Document>();
+    private Set<DocumentTO> documents = new HashSet<DocumentTO>();
 
     private Set<String> paths = new HashSet<String>();
 
+    private NoteStatus noteStatus;
+    
     private Set<NoteType> noteTypes = new HashSet<NoteType>();
 
     private Set<NoteFormat> noteFormats = new HashSet<NoteFormat>();
@@ -27,7 +30,7 @@ public class NoteSearchTO {
 
     private TermLanguage language;
 
-    private OrderBy orderBy;
+    private String orderBy;
 
     private boolean ascending = true;
 
@@ -35,22 +38,30 @@ public class NoteSearchTO {
 
     private boolean includeAllDocs = false;
 
-    private Document currentDocument;
+    private DocumentTO currentDocument;
 
     private String fullText;
-
+    
+    private String shortenedSelection, description, lemma, lemmaMeaning;
+    
+    private Long createdBefore, createdAfter, editedAfter, editedBefore; 
+    
+    private Long page, perPage;
+    
+    private List<String> columns;
+    
     public NoteSearchTO() {
     }
 
-    public NoteSearchTO(Document document) {
+    public NoteSearchTO(DocumentTO document) {
         currentDocument = document;
     }
 
-    public Set<Document> getDocuments() {
+    public Set<DocumentTO> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(Set<DocumentTO> documents) {
         this.documents = documents;
     }
 
@@ -86,11 +97,11 @@ public class NoteSearchTO {
         this.creators = creators;
     }
 
-    public OrderBy getOrderBy() {
+    public String getOrderBy() {
         return orderBy;
     }
 
-    public void setOrderBy(OrderBy orderBy) {
+    public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
     }
 
@@ -110,11 +121,11 @@ public class NoteSearchTO {
         this.orphans = orphans;
     }
 
-    public void setCurrentDocument(Document currentDocument) {
+    public void setCurrentDocument(DocumentTO currentDocument) {
         this.currentDocument = currentDocument;
     }
 
-    public Document getCurrentDocument() {
+    public DocumentTO getCurrentDocument() {
         return currentDocument;
     }
 
@@ -141,13 +152,101 @@ public class NoteSearchTO {
     public boolean isIncludeAllDocs() {
         return includeAllDocs;
     }
-
-    @Override
-    public String toString() {
-        return "DocumentNoteSearchInfo [noteTypes=" + noteTypes + ", noteFormats=" + noteFormats
-                + ", creators=" + creators + ", language=" + language + ", orderBy=" + orderBy
-                + ", ascending=" + ascending + ", orphans=" + orphans + ", includeAllDocs="
-                + includeAllDocs + ", fullText=" + fullText + "]";
+    
+    public Long getPage() {
+        return page;
     }
 
+    public void setPage(Long page) {
+        this.page = page;
+    }
+
+    public Long getPerPage() {
+        return perPage;
+    }
+
+    public void setPerPage(Long perPage) {
+        this.perPage = perPage;
+    }
+
+    public NoteStatus getNoteStatus() {
+        return noteStatus;
+    }
+
+    public void setNoteStatus(NoteStatus noteStatus) {
+        this.noteStatus = noteStatus;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLemmaMeaning() {
+        return lemmaMeaning;
+    }
+
+    public void setLemmaMeaning(String lemmaMeaning) {
+        this.lemmaMeaning = lemmaMeaning;
+    }
+
+    public String getShortenedSelection() {
+        return shortenedSelection;
+    }
+
+    public void setShortenedSelection(String shortenedSelection) {
+        this.shortenedSelection = shortenedSelection;
+    }
+
+    public Long getCreatedBefore() {
+        return createdBefore;
+    }
+
+    public void setCreatedBefore(Long createdBefore) {
+        this.createdBefore = createdBefore;
+    }
+
+    public Long getCreatedAfter() {
+        return createdAfter;
+    }
+
+    public void setCreatedAfter(Long createdAfter) {
+        this.createdAfter = createdAfter;
+    }
+
+    public Long getEditedAfter() {
+        return editedAfter;
+    }
+
+    public void setEditedAfter(Long editedAfter) {
+        this.editedAfter = editedAfter;
+    }
+
+    public Long getEditedBefore() {
+        return editedBefore;
+    }
+
+    public void setEditedBefore(Long editedBefore) {
+        this.editedBefore = editedBefore;
+    }
+
+    public String getLemma() {
+        return lemma;
+    }
+
+    public void setLemma(String lemma) {
+        this.lemma = lemma;
+    }
+
+    public List<String> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<String> columns) {
+        this.columns = columns;
+    }
+    
 }

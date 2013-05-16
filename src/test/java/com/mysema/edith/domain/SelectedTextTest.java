@@ -23,13 +23,13 @@ public class SelectedTextTest {
     }
 
     @Test
-    public void Get_End_Id() {
-        assertEquals(END_ID, selectedText.getEndId());
+    public void Get_End_Node() {
+        assertEquals(END_ID, selectedText.getEndNode());
     }
 
     @Test
-    public void Get_End_Index() {
-        assertEquals(1, selectedText.getEndIndex());
+    public void Get_End_Char_Index() {
+        assertEquals(0, selectedText.getEndCharIndex());
     }
 
     @Test
@@ -38,13 +38,13 @@ public class SelectedTextTest {
     }
 
     @Test
-    public void Get_Start_Id() {
-        assertEquals(START_ID, selectedText.getStartId());
+    public void Get_Start_Node() {
+        assertEquals(START_ID, selectedText.getStartNode());
     }
 
     @Test
-    public void Get_Start_Index() {
-        assertEquals(1, selectedText.getStartIndex());
+    public void Get_Start_Char_Index() {
+        assertEquals(0, selectedText.getStartCharIndex());
     }
 
     @Test
@@ -90,12 +90,12 @@ public class SelectedTextTest {
 
     @Test
     public void Get_First_Word() {
-        assertEquals("lots", selectedText.getFirstWord());
+        assertEquals('l', selectedText.getFirstChar());
     }
 
     @Test
     public void Get_Last_Word() {
-        assertEquals("text", selectedText.getLastWord());
+        assertEquals('t', selectedText.getLastChar());
     }
 
     @Test
@@ -148,6 +148,6 @@ public class SelectedTextTest {
 
     @Test
     public void To_String() {
-        assertEquals(START_ID + "[1] , " + END_ID + "[1] : " + SELECTION, selectedText.toString());
+        assertEquals(START_ID + "[0] , " + END_ID + "[0] : " + SELECTION, selectedText.toString());
     }
 }

@@ -18,9 +18,10 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
 
     @Override
     public List<Term> findByStartOfBasicForm(String partial, int maxResults) {
-        return query().from(term)
-                .where(term.basicForm.startsWith(partial)).limit(maxResults)
-                .list(term);
+        return from(term)
+               .where(term.basicForm.startsWith(partial))
+               .limit(maxResults)
+               .list(term);
     }
 
     @Override
@@ -31,13 +32,12 @@ public class TermDaoImpl extends AbstractDao<Term> implements TermDao {
 
     @Override
     public Term getById(Long id) {
-        return query().from(term).where(term.id.eq(id)).uniqueResult(term);
+        return find(Term.class, id);
     }
 
     @Override
     public Term save(Term term) {
-        persist(term);
-        return term;
+        return persistOrMerge(term);
     }
 
 }

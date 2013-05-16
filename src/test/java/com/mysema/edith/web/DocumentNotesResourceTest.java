@@ -2,8 +2,9 @@ package com.mysema.edith.web;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
@@ -16,11 +17,13 @@ import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.SelectedText;
+import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.DocumentDao;
+import com.mysema.edith.services.NoteAdditionFailedException;
 import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.services.UserDao;
 
-@Ignore
 public class DocumentNotesResourceTest extends AbstractResourceTest {
     
     @Inject @Named(EdithTestConstants.TEST_DOCUMENT_KEY)
@@ -28,7 +31,7 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
     
     @Inject
     private DocumentNotesResource documentNotes;
-    
+        
     @Inject
     private DocumentDao documentDao;
     
@@ -67,13 +70,26 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
     }
     
     @Test
-    public void Add() {
+    public void Create() {
         Document document = documentDao.getDocumentForPath(testDocument);
         DocumentNoteTO info = new DocumentNoteTO();
         info.setDocument(document.getId());
         info.setFullSelection("a");
         info.setNote(note.getId());
-        documentNotes.create(info);
+        DocumentNoteTO created = documentNotes.create(info);
+        
+        assertNotNull(created.getId());
     }
-
+    
+    @Test
+    public void Create_without_Note() {
+        Document document = documentDao.getDocumentForPath(testDocument);
+        DocumentNoteTO info = new DocumentNoteTO();
+        info.setDocument(document.getId());
+        info.setFullSelection("a");
+        DocumentNoteTO created = documentNotes.create(info);
+        
+        assertNotNull(created.getId());
+    }
+ 
 }

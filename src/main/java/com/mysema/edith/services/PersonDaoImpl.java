@@ -18,17 +18,16 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
     @Override
     public Collection<Person> findByStartOfFirstAndLastName(String partial, int limit) {
-        return query()
-                .from(person)
-                .where(person.normalized.first.startsWithIgnoreCase(partial).or(
-                       person.normalized.last.startsWithIgnoreCase(partial)))
-                .limit(limit)
-                .list(person);
+        return from(person)
+               .where(
+                   person.normalized.first.startsWithIgnoreCase(partial).or(
+                   person.normalized.last.startsWithIgnoreCase(partial)))
+               .limit(limit)
+               .list(person);
     }
 
     @Override
     public void remove(Long personId) {
-        // FIXME: Hibernatify!
         Person entity = getById(personId);
         if (entity != null) {
             remove(entity);
@@ -37,13 +36,12 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
     @Override
     public Person save(Person person) {
-        persist(person);
-        return person;
+        return persistOrMerge(person);
     }
 
     @Override
     public Person getById(Long id) {
-        return query().from(person).where(person.id.eq(id)).uniqueResult(person);
+        return find(Person.class, id);
     }
 
 }

@@ -43,15 +43,15 @@ public final class StringUtils {
         return str == null || str.trim().isEmpty();
     }
 
-    public static int countMatches(String str, String substring) {
-        if (Strings.isNullOrEmpty(str) || Strings.isNullOrEmpty(substring)) {
+    public static int countMatches(String str, char ch) {
+        if (Strings.isNullOrEmpty(str)) {
             return 0;
         } else {
             int matches = 0;
             int offset = 0;
-            while (str.indexOf(substring, offset) >= 0) {
+            while (str.indexOf(ch, offset) >= 0) {
                 matches++;
-                offset = str.indexOf(substring, offset) + substring.length();
+                offset = str.indexOf(ch, offset) + 1;
             }
             return matches;    
         }               

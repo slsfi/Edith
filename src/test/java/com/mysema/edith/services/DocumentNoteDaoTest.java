@@ -10,7 +10,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,17 +23,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EdithTestConstants;
-import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.Interval;
-import com.mysema.edith.domain.NameForm;
-import com.mysema.edith.domain.Note;
-import com.mysema.edith.domain.NoteFormat;
-import com.mysema.edith.domain.NoteType;
-import com.mysema.edith.domain.Person;
-import com.mysema.edith.domain.Place;
-import com.mysema.edith.domain.Term;
-import com.mysema.edith.domain.User;
+import com.mysema.edith.domain.*;
+import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteSearchTO;
 
 @Transactional
@@ -54,7 +44,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
 
     @Inject
     private DocumentDao documentDao;
-
+    
     private Document document;
 
     private NoteSearchTO searchInfo;
@@ -68,7 +58,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
     private DocumentNote documentNote4;
 
     @Inject
-    private SubversionService versioningService;
+    private VersioningDao versioningService;
 
     private boolean initialized = false;
 
@@ -84,8 +74,12 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
         documentNote3 = noteDao.createDocumentNote(createNote(), document, "tulee, niin seisoo s\u00E4\u00E4t\u00F6s-kirjassa.");
         documentNote4 = noteDao.createDocumentNote(createNote(), document, "kummallenkin m\u00E4\u00E4r\u00E4tty, niin emmep\u00E4 tiet\u00E4isi t\u00E4ss\u00E4");
 
+        DocumentTO documentTO = new DocumentTO();
+        documentTO.setId(document.getId());
+        documentTO.setPath(document.getPath());
+        
         searchInfo = new NoteSearchTO();
-        searchInfo.setCurrentDocument(document);
+        searchInfo.setCurrentDocument(documentTO);
 
         addExtraNote("testo");
         addExtraNote("testo2");
@@ -95,7 +89,7 @@ public class DocumentNoteDaoTest extends AbstractHibernateTest {
             initialized = true;
         }
     }
-
+    
     @Test
     public void GetBy_LocalId_Returns_NonNull_Result() {
         assertNotNull(documentNoteDao.getById(documentNote1.getId()));

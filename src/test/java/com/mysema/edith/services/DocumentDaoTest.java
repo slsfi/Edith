@@ -35,15 +35,20 @@ import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.SelectedText;
 
 public class DocumentDaoTest extends AbstractHibernateTest {
+    
+    private static final String PREFIX = "TEI-text0-body0-";
 
     @Inject
     private DocumentDao documentDao;
 
     @Inject
+    private DocumentNoteService documentNoteService;
+    
+    @Inject
     private NoteDao noteDao;
 
     @Inject
-    private SubversionService subversionService;
+    private VersioningDao subversionService;
 
     @Inject
     private UserDao userDao;
@@ -78,13 +83,14 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void AddNote() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp2-p";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote note = documentDao.addNote(createNote(), document, new SelectedText(element,
-                element, text));
+        DocumentNote note = documentNoteService.attachNote(createNote(), document, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
 
         String content = getContent(document.getPath(), -1);
+//        System.err.println(content);
         Long localId = note.getId();
         assertTrue(content.contains(start(localId) + text + end(localId)));
     }
@@ -125,12 +131,12 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void RemoveNotes() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp2-p";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote documentNote = documentDao.addNote(createNote(), document, new SelectedText(
-                element, element, text));
-        documentDao.removeDocumentNotes(document, new DocumentNote[] { documentNote });
+        DocumentNote documentNote = documentNoteService.attachNote(createNote(), document, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
+        documentNoteService.removeDocumentNotes(document, new DocumentNote[] { documentNote });
 
         String content = getContent(document.getPath(), -1);
         assertFalse(content
@@ -140,19 +146,19 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void RemoveNotes_Several() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp2-p";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
         String text2 = "ottaa";
         String text3 = "ullakosta";
 
-        DocumentNote noteRev = documentDao.addNote(createNote(), document, new SelectedText(
-                element, element, text));
+        DocumentNote noteRev = documentNoteService.attachNote(createNote(), document, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
         // note2 won't be removed
-        DocumentNote noteRev2 = documentDao.addNote(createNote(), document, new SelectedText(
-                element, element, text2));
-        DocumentNote noteRev3 = documentDao.addNote(createNote(), document, new SelectedText(
-                element, element, text3));
-        documentDao.removeDocumentNotes(document, new DocumentNote[] { noteRev, noteRev3 });
+        DocumentNote noteRev2 = documentNoteService.attachNote(createNote(), document, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text2));
+        DocumentNote noteRev3 = documentNoteService.attachNote(createNote(), document, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 2, text3));
+        documentNoteService.removeDocumentNotes(document, new DocumentNote[] { noteRev, noteRev3 });
 
         String content = getContent(document.getPath(), -1);
         assertFalse(content.contains(start(noteRev.getId()) + text + end(noteRev.getId())));
@@ -163,14 +169,15 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void UpdateNote() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp2-p";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote noteRevision = documentDao.addNote(createNote(), document, new SelectedText(
-                element, element, text));
+        DocumentNote noteRevision = documentNoteService.attachNote(createNote(), document, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
 
         String newText = "sun ullakosta";
-        documentDao.updateNote(noteRevision, new SelectedText(element, element, newText));
+        documentNoteService.updateNote(noteRevision, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 2, newText));
 
         String content = getContent(document.getPath(), -1);
         Long localId = noteRevision.getId();
@@ -181,15 +188,16 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void UpdateNote2() throws IOException, NoteAdditionFailedException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp3-p";
+        String element = "div0-div1-sp2-p0";
         String text = "\u00E4st";
 
-        DocumentNote documentNote = documentDao.addNote(createNote(), document, new SelectedText(
-                element, element, text));
+        DocumentNote documentNote = documentNoteService.attachNote(createNote(), document, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 1, text));
 
         // T-äst-ä
         String newText = "T\u00E4st\u00E4";
-        documentDao.updateNote(documentNote, new SelectedText(element, element, newText));
+        documentNoteService.updateNote(documentNote, 
+                new SelectedText(PREFIX + element, PREFIX + element, 0, 2, newText));
 
         String content = getContent(document.getPath(), -1);
         Long id = documentNote.getId();
@@ -203,16 +211,16 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Transactional
     public void UpdateNote_With_Publishable_State() throws IOException, NoteAdditionFailedException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp3-p";
+        String element = "div0-div1-sp2-p0";
         String text = "\u00E4st";
 
-        DocumentNote documentNote = documentDao.addNote(createNote(), document, new SelectedText(
-                element, element, text));
+        DocumentNote documentNote = documentNoteService.attachNote(createNote(), document, 
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 1, text));
         documentNote.setPublishable(true);
 
         String newText = "T\u00E4st\u00E4";
-        DocumentNote updatedRevision = documentDao.updateNote(documentNote, new SelectedText(
-                element, element, newText));
+        DocumentNote updatedRevision = documentNoteService.updateNote(documentNote, 
+                new SelectedText(PREFIX + element, PREFIX + element, 0, 2, newText));
         assertTrue(updatedRevision.isPublishable());
     }
 
@@ -241,7 +249,7 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         return note;
     }
 
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Renamed_File_Is_No_Longer_Available_With_Old_Name() throws IOException {
         Document document = getDocument("/letters/letter_to_the_editor.xml");
         documentDao.rename(document.getId(), "letter_to_the_reader.xml");
@@ -271,11 +279,11 @@ public class DocumentDaoTest extends AbstractHibernateTest {
     @Test
     public void Note_Comments_Of_Document() throws Exception {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
-        String element = "play-act-sp2-p";
+        String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
 
-        DocumentNote docNote = documentDao.addNote(createNote(), document,
-                new SelectedText(element, element, text));
+        DocumentNote docNote = documentNoteService.attachNote(createNote(), document,
+                new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
         noteDao.createComment(docNote.getNote(), "Yay");
         List<NoteComment> comments = documentDao.getNoteComments(document.getId(), 3);
         assertFalse(comments.isEmpty());

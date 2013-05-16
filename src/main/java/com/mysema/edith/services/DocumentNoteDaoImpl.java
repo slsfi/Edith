@@ -19,39 +19,43 @@ import com.mysema.edith.domain.User;
 public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements DocumentNoteDao {
 
     private static final QDocumentNote documentNote = QDocumentNote.documentNote;
-    
-    private final UserDao userDao;
 
+    private final UserDao userDao;
+    
     @Inject
     public DocumentNoteDaoImpl(UserDao userDao) {
         this.userDao = userDao;
     }
-
+    
     @Override
     public List<DocumentNote> getOfDocument(Document document) {
-        return query().from(documentNote).where(documentNote.document.eq(document),
-        // FIXME: Commented out, is good?
-        // documentNote.revision.loe(),
-                documentNote.deleted.eq(false)).orderBy(documentNote.position.asc())
-                .list(documentNote);
+        return from(documentNote)
+            .where(
+                documentNote.document.eq(document),
+                documentNote.deleted.eq(false))
+             .orderBy(documentNote.position.asc())
+             .list(documentNote);
     }
     
     @Override
     public List<DocumentNote> getOfDocument(Long docId) {
-        return query().from(documentNote).where(documentNote.document.id.eq(docId),
-        // FIXME: Commented out, is good?
-        // documentNote.revision.loe(),
-                documentNote.deleted.eq(false)).orderBy(documentNote.position.asc())
-                .list(documentNote);
+        return from(documentNote)
+            .where(
+                documentNote.document.id.eq(docId),
+                documentNote.deleted.eq(false))
+            .orderBy(documentNote.position.asc())
+            .list(documentNote);
     }
 
     @Override
     public List<DocumentNote> getPublishableNotesOfDocument(Document document) {
-        return query().from(documentNote).where(documentNote.document.eq(document),
-        // FIXME: Commented out, is good?
-        // documentNote.reevision.loe(docRevision.getRevision()),
-                documentNote.deleted.isFalse(), documentNote.publishable.isTrue())
-                .orderBy(documentNote.position.asc()).list(documentNote);
+        return from(documentNote)
+            .where(
+                documentNote.document.eq(document),
+                documentNote.deleted.isFalse(), 
+                documentNote.publishable.isTrue())
+             .orderBy(documentNote.position.asc())
+             .list(documentNote);
     }
     
     @Override
@@ -63,40 +67,37 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
     }
 
     @Override
-    // XXX This is not really used anywhere?
     public void remove(DocumentNote docNote) {
-        // XXX What was the point in having .createCopy?
         docNote.setDeleted(true);
         docNote.getNote().decDocumentNoteCount();
-        // getSession().save(docNote);
+        persistOrMerge(docNote);
     }
 
     @Override
     public DocumentNote save(DocumentNote docNote) {
-        if (docNote.getNote() == null) {
-            throw new ServiceException("Note was null for " + docNote);
-        }
-        User createdBy = userDao.getCurrentUser();
         long currentTime = System.currentTimeMillis();
-        docNote.setCreatedOn(currentTime);
-        docNote.getNote().setEditedOn(currentTime);
-        docNote.getNote().setLastEditedBy(createdBy);
-        docNote.getNote().getAllEditors().add(createdBy);
-        // getSession().save(docNote.getNote());
-        // getSession().save(docNote);
-        // FIXME: Hibernatify!
-        // if (docNote.getNote().getComments() != null) {
-        // for (NoteComment comment : docNote.getNote().getComments()) {
-        // getSession().save(comment);
-        // }
-        // }
-        return docNote;
+        if (docNote.getId() == null) {
+            docNote.setCreatedOn(currentTime);    
+        }                
+        if (docNote.getNote() != null) {
+            User createdBy = userDao.getCurrentUser(); 
+            if (createdBy != null) {
+                docNote.getNote().setEditedOn(currentTime);
+                docNote.getNote().setLastEditedBy(createdBy);
+                docNote.getNote().getAllEditors().add(createdBy);    
+            } else {
+                throw new IllegalStateException("No current user");
+            }                      
+        }
+        return persistOrMerge(docNote);
     }
 
     @Override
     public List<DocumentNote> getOfNote(Long noteId) {
-        return query().from(documentNote)
-                .where(documentNote.note.id.eq(noteId), documentNote.deleted.isFalse())
+        return from(documentNote)
+                .where(
+                    documentNote.note.id.eq(noteId), 
+                    documentNote.deleted.isFalse())
                 .list(documentNote);
     }
 
@@ -107,28 +108,37 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
 
     @Override
     public long getNoteCountForDocument(Long id) {
-        return query().from(documentNote)
-                .where(documentNote.document.id.eq(id), documentNote.deleted.isFalse()).count();
+        return from(documentNote)
+                .where(
+                    documentNote.document.id.eq(id), 
+                    documentNote.deleted.isFalse())
+                .count();
     }
 
     @Override
     public List<DocumentNote> getOfTerm(Long termId) {
-        return query().from(documentNote)
-                .where(documentNote.note.term.id.eq(termId), documentNote.deleted.isFalse())
+        return from(documentNote)
+                .where(
+                    documentNote.note.term.id.eq(termId), 
+                    documentNote.deleted.isFalse())
                 .list(documentNote);
     }
 
     @Override
     public List<DocumentNote> getOfPerson(Long personId) {
-        return query().from(documentNote)
-                .where(documentNote.note.person.id.eq(personId), documentNote.deleted.isFalse())
+        return from(documentNote)
+                .where(
+                    documentNote.note.person.id.eq(personId), 
+                    documentNote.deleted.isFalse())
                 .list(documentNote);
     }
 
     @Override
     public List<DocumentNote> getOfPlace(Long placeId) {
-        return query().from(documentNote)
-                .where(documentNote.note.place.id.eq(placeId), documentNote.deleted.isFalse())
+        return from(documentNote)
+                .where(
+                    documentNote.note.place.id.eq(placeId), 
+                    documentNote.deleted.isFalse())
                 .list(documentNote);
     }
 

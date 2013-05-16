@@ -13,6 +13,8 @@ import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
+import com.mysema.edith.dto.NoteSearchTO;
+import com.mysema.query.SearchResults;
 
 /**
  * @author tiwe
@@ -47,13 +49,6 @@ public interface NoteDao extends Dao<Note, Long> {
      */
     int importNotes(File file);
 
-//    /**
-//     * Query for notes with the given search term
-//     *
-//     * @param searchTerm
-//     * @return
-//     */
-//    GridDataSource queryDictionary(String searchTerm);
 
     /**
      * Removes a NoteComment based on its id. Returns the deleted comment.
@@ -63,34 +58,18 @@ public interface NoteDao extends Dao<Note, Long> {
      */
     NoteComment removeComment(Long commentId);
 
-//    /**
-//     * @param searchTerm
-//     * @return
-//     */
-//    GridDataSource queryPersons(String searchTerm);
-//
-//    /**
-//     * @param searchTerm
-//     * @return
-//     */
-//    GridDataSource queryPlaces(String searchTerm);
-//
-//    /**
-//     * @param searchTerm
-//     * @return
-//     */
-//    GridDataSource queryNotes(String searchTerm);
-
     /**
      * @return
      */
     List<Long> getOrphanIds();
 
-//    /**
-//     * @param search
-//     * @return
-//     */
-//    GridDataSource findNotes(NoteSearchInfo search);
+    /**
+     * 
+     * @param search
+     * @param modifiers
+     * @return
+     */
+    SearchResults<Note> findNotes(NoteSearchTO search);
 
     /**
      * @param editedNote

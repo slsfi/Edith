@@ -5,7 +5,6 @@
  */
 package com.mysema.edith.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,9 +31,11 @@ import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.SelectedText;
+import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
+import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteDao;
 
 @Transactional
@@ -45,6 +46,8 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     private final DocumentDao dao;
 
     private final DocumentNoteDao documentNoteDao;
+    
+    private final DocumentNoteService documentNoteService;
 
     // TODO: Remove once not needed
     private final NoteDao noteDao;
@@ -61,10 +64,12 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     public DocumentsResource(
             DocumentDao dao,
             DocumentNoteDao documentNoteDao,
+            DocumentNoteService documentNoteService,
             NoteDao noteDao,
             ContentRenderer renderer) {
         this.dao = dao;
         this.documentNoteDao = documentNoteDao;
+        this.documentNoteService = documentNoteService;
         this.noteDao = noteDao;
         this.renderer = renderer;
     }
@@ -78,11 +83,26 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     @GET @Path("{id}/document-notes")
     public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
         List<DocumentNote> docNotes = documentNoteDao.getOfDocument(id);
-        List<DocumentNoteTO> result = new ArrayList<DocumentNoteTO>(docNotes.size());
-        for (DocumentNote docNote : docNotes) {
-            result.add(convert(docNote, new DocumentNoteTO()));
-        }
-        return result;
+        return convert(docNotes, DocumentNoteTO.class);
+    }
+    
+    @POST @Path("{id}/document-notes")
+    public DocumentNoteTO create(@PathParam("id") Long docId, SelectionTO sel) {
+        Document doc = dao.getById(docId);
+        DocumentNote documentNote;
+        if (sel.getNoteId() != null) {
+            Note note = noteDao.getById(sel.getNoteId());
+            documentNote = documentNoteService.attachNote(note, doc, sel.getText());
+        } else {
+            documentNote = documentNoteService.attachNote(doc, sel.getText());
+        }               
+        return convert(documentNote, new DocumentNoteTO());
+    }
+
+    @PUT @Path("{id}/document-notes/{docnote-id}")
+    public DocumentNoteTO update(@PathParam("docnote-id") Long docNoteId, SelectionTO sel) {
+        DocumentNote documentNote = documentNoteService.getById(docNoteId);
+        return convert(documentNoteService.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
     }
 
     @Override
@@ -129,20 +149,16 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
             String text = "sun ullakosta ottaa";
 
             try {
-                DocumentNote docNote = dao.addNote(new Note(), document,
+                DocumentNote docNote = documentNoteService.attachNote(new Note(), document,
                         new SelectedText(element, element, text));
                 noteDao.createComment(docNote.getNote(), "Yay");
                 noteDao.createComment(docNote.getNote(), "Hay");
                 noteDao.createComment(docNote.getNote(), "Bay");
             } catch (Exception e) {
-                System.err.println("nooooooooooo");
+                System.err.println(e);
             }
             noteComments = dao.getNoteComments(document.getId(), 3);
         }
-        List<NoteCommentTO> result = new ArrayList<NoteCommentTO>();
-        for (NoteComment noteComment : noteComments) {
-            result.add(convert(noteComment, new NoteCommentTO()));
-        }
-        return result;
+        return convert(noteComments, NoteCommentTO.class);
     }
 }

@@ -27,18 +27,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     private final AuthService authService;
 
-//    private final SaltSource saltSource;
-//
-//    private final PasswordEncoder passwordEncoder;
-
-//    @Inject
-//    public UserDaoImpl(AuthService authService, SaltSource saltSource,
-//            PasswordEncoder passwordEncoder) {
-//        this.authService = authService;
-//        this.saltSource = saltSource;
-//        this.passwordEncoder = passwordEncoder;
-//    }
-
     @Inject
     public UserDaoImpl(AuthService authService) {
         this.authService = authService;
@@ -46,17 +34,17 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public User getById(Long id) {
-        return query().from(user).where(user.id.eq(id)).uniqueResult(user);
+        return find(User.class, id);
     }
 
     @Override
     public Collection<User> getAll() {
-        return query().from(user).where(user.active.eq(true)).list(user);
+        return from(user).where(user.active.eq(true)).list(user);
     }
 
     @Override
     public User getByUsername(String username) {
-        return query().from(user).where(user.username.eq(username)).uniqueResult(user);
+        return from(user).where(user.username.eq(username)).uniqueResult(user);
     }
 
     @Override
@@ -66,13 +54,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Collection<UserTO> getAllUserInfos() {
-        return query().from(user).where(user.active.eq(true))
+        return from(user).where(user.active.eq(true))
                 .list(ConstructorExpression.create(UserTO.class, user.id, user.username));
     }
 
     @Override
     public List<User> addUsersFromCsvFile(String filePath, String encoding) throws IOException {
-
         // "/users.csv"), "ISO-8859-1"
         List<String> lines = Resources.readLines(UserDaoImpl.class.getResource(filePath), Charset.forName(encoding));
         List<User> users = new ArrayList<User>();
@@ -86,6 +73,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             user.setFirstName(values[0]);
             user.setLastName(values[1]);
             user.setUsername(values[2]);
+            user.setPassword(values[2]); // TODO use hash instead
             user.setEmail(values[3]);
             if (values[3].endsWith("mysema.com")) {
                 user.setProfile(Profile.Admin);
@@ -93,14 +81,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
                 user.setProfile(Profile.User);
             }
 
-            // encode password
-//            UserDetailsImpl userDetails = new UserDetailsImpl(user.getUsername(),
-//                    user.getPassword(), user.getProfile().getAuthorities());
-//            String password = passwordEncoder.encodePassword(user.getUsername(),
-//                    saltSource.getSalt(userDetails));
-//            user.setPassword(password);
-
-            persist(user);
+            persistOrMerge(user);
             users.add(user);
         }
         return users;
@@ -108,8 +89,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public User save(User user) {
-        persist(user);
-        return user;
+        return persistOrMerge(user);
     }
 
 }

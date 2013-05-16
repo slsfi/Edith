@@ -53,12 +53,12 @@ import com.mysema.edith.EdithTestConstants;
 import com.mysema.edith.dto.FileItem;
 
 
-public class SubversionServiceTest extends AbstractHibernateTest {
+public class VersioningDaoTest extends AbstractHibernateTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(SubversionServiceTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(VersioningDaoTest.class);
 
     @Inject
-    private SubversionServiceImpl subversionService;
+    private VersioningDaoImpl versioningDao;
 
     @Inject
     private AuthService authService;
@@ -85,7 +85,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Before
     public void setUp() throws Exception {
         svnRepo = new File(svnRepoPath);
-        subversionService.initialize();
+        versioningDao.initialize();
         checkoutDirectory = new File("target/checkout");
         anotherCheckoutDirectory = new File("target/anotherCheckout");
         testFile = new File("target/testFile.txt");
@@ -107,7 +107,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
         }
 
         // recover the svn repository from the copy
-        subversionService.destroy();
+        versioningDao.destroy();
         if (!svnRepoCopy.renameTo(svnRepo)) {
             logger.error("Rename of " + svnRepoCopy.getPath() + " to " + svnRepo.getPath()
                     + " failed");
@@ -116,33 +116,33 @@ public class SubversionServiceTest extends AbstractHibernateTest {
 
     @Test
     public void ImportFile() throws Exception {
-        long currentRevision = subversionService.getLatestRevision();
+        long currentRevision = versioningDao.getLatestRevision();
         long expected = currentRevision + 1;
         String newPath = documentRoot + "/" + UUID.randomUUID().toString();
-        assertEquals(expected, subversionService.importFile(newPath, noteTestData));
+        assertEquals(expected, versioningDao.importFile(newPath, noteTestData));
     }
 
     @Test
     public void GetStream() throws Exception {
         String svnPath = documentRoot + "/notesTestData.txt";
-        long revision = subversionService.importFile(svnPath, noteTestData);
+        long revision = versioningDao.importFile(svnPath, noteTestData);
         InputStream expected = register(new FileInputStream(noteTestData));
-        InputStream actual = register(subversionService.getStream(svnPath, revision));
+        InputStream actual = register(versioningDao.getStream(svnPath, revision));
         boolean result = IOUtils.contentEquals(expected, actual);
         assertTrue(result);
     }
 
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Delete() throws Exception {
         String svnPath = documentRoot + "/notesTestData.txt";
-        long revision = subversionService.importFile(svnPath, noteTestData);
+        long revision = versioningDao.importFile(svnPath, noteTestData);
         InputStream expected = register(new FileInputStream(noteTestData));
-        InputStream actual = register(subversionService.getStream(svnPath, revision));
+        InputStream actual = register(versioningDao.getStream(svnPath, revision));
         boolean result = IOUtils.contentEquals(expected, actual);
         assertTrue(result);
-        subversionService.delete(svnPath);
-        assertEquals(revision + 1, subversionService.getLatestRevision());
-        register(subversionService.getStream(svnPath, -1));
+        versioningDao.delete(svnPath);
+        assertEquals(revision + 1, versioningDao.getLatestRevision());
+        register(versioningDao.getStream(svnPath, -1));
     }
 
     @Test
@@ -154,8 +154,8 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     public void GetEntries() {
         String svnPath = documentRoot;
         String filename = "testFile.txt";
-        subversionService.importFile(svnPath + "/" + filename, testFile);
-        Map<String, String> entries = subversionService.getEntries(svnPath, subversionService
+        versioningDao.importFile(svnPath + "/" + filename, testFile);
+        Map<String, String> entries = versioningDao.getEntries(svnPath, versioningDao
                 .getLatestRevision());
         assertTrue(entries.values().contains(filename));
         // There should be other files as well
@@ -165,8 +165,8 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Test
     public void Checkout() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
-        subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, -1);
+        versioningDao.importFile(svnPath, testFile);
+        versioningDao.checkout(checkoutDirectory, -1);
         assertTrue(new File(checkoutDirectory + "/testFile.txt").exists());
     }
 
@@ -174,19 +174,19 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Test
     public void Update() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
-        subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, -1);
+        versioningDao.importFile(svnPath, testFile);
+        versioningDao.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        subversionService.commit(modifiedFile);
+        versioningDao.commit(modifiedFile);
 
-        subversionService.checkout(anotherCheckoutDirectory, -1);
+        versioningDao.checkout(anotherCheckoutDirectory, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
-        subversionService.commit(modifiedFile);
+        versioningDao.commit(modifiedFile);
 
         File updatedFile = new File(anotherCheckoutDirectory + "/testFile.txt");
-        subversionService.update(updatedFile);
+        versioningDao.update(updatedFile);
 
         assertTrue(FileUtils.contentEquals(modifiedFile, updatedFile));
     }
@@ -195,20 +195,20 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Ignore
     public void Update_Conflict() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
-        subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, -1);
+        versioningDao.importFile(svnPath, testFile);
+        versioningDao.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        subversionService.commit(modifiedFile);
+        versioningDao.commit(modifiedFile);
 
-        subversionService.checkout(anotherCheckoutDirectory, -1);
+        versioningDao.checkout(anotherCheckoutDirectory, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
-        subversionService.commit(modifiedFile);
+        versioningDao.commit(modifiedFile);
 
         File updatedFile = new File(anotherCheckoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(updatedFile, "jeejee");
-        subversionService.update(updatedFile);
+        versioningDao.update(updatedFile);
 
         FileUtils.contentEquals(modifiedFile, updatedFile);
     }
@@ -216,8 +216,8 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Test
     public void Commit() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
-        long oldRevision = subversionService.importFile(svnPath, testFile);
-        subversionService.commit(svnPath, subversionService.getLatestRevision(), authService
+        long oldRevision = versioningDao.importFile(svnPath, testFile);
+        versioningDao.commit(svnPath, versioningDao.getLatestRevision(), authService
                 .getUsername(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
@@ -229,7 +229,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
                 }
             }
         });
-        long currentRevision = subversionService.commit(svnPath, subversionService
+        long currentRevision = versioningDao.commit(svnPath, versioningDao
                 .getLatestRevision(), authService.getUsername(), new UpdateCallback() {
             @Override
             public void update(InputStream source, OutputStream target) {
@@ -258,13 +258,13 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Test
     public void Commit_File() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
-        subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, -1);
+        versioningDao.importFile(svnPath, testFile);
+        versioningDao.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        long revision = subversionService.commit(modifiedFile);
+        long revision = versioningDao.commit(modifiedFile);
         InputStream modifiedStream = register(new FileInputStream(modifiedFile));
-        assertTrue(IOUtils.contentEquals(modifiedStream, register(subversionService.getStream(
+        assertTrue(IOUtils.contentEquals(modifiedStream, register(versioningDao.getStream(
                 svnPath, revision))));
     }
 
@@ -272,21 +272,21 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Test(expected = RuntimeException.class)
     public void Commit_File_Results_In_Conflict() throws Exception {
         String svnPath = documentRoot + "/testFile.txt";
-        subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, -1);
+        versioningDao.importFile(svnPath, testFile);
+        versioningDao.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        subversionService.commit(modifiedFile);
+        versioningDao.commit(modifiedFile);
 
-        subversionService.checkout(anotherCheckoutDirectory, -1);
+        versioningDao.checkout(anotherCheckoutDirectory, -1);
 
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\nbaz\nfoobar");
-        subversionService.commit(modifiedFile);
+        versioningDao.commit(modifiedFile);
 
         File updatedFile = new File(anotherCheckoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(updatedFile, "jeejee");
         try {
-            subversionService.commit(updatedFile);
+            versioningDao.commit(updatedFile);
         } catch (RuntimeException e) {
             throw e;
         }
@@ -294,28 +294,28 @@ public class SubversionServiceTest extends AbstractHibernateTest {
 
     @Test
     public void GetLatestRevision() {
-        long revision = subversionService.getLatestRevision();
+        long revision = versioningDao.getLatestRevision();
         long expected = revision + 1;
-        subversionService.importFile(documentRoot + "/foobar", noteTestData);
-        assertEquals(expected, subversionService.getLatestRevision());
+        versioningDao.importFile(documentRoot + "/foobar", noteTestData);
+        assertEquals(expected, versioningDao.getLatestRevision());
     }
 
     @Test
     public void GetLatestRevision_String() throws IOException {
         String svnPath = documentRoot + "/testFile.txt";
-        subversionService.importFile(svnPath, testFile);
-        subversionService.checkout(checkoutDirectory, -1);
+        versioningDao.importFile(svnPath, testFile);
+        versioningDao.checkout(checkoutDirectory, -1);
         File modifiedFile = new File(checkoutDirectory + "/testFile.txt");
         FileUtils.writeStringToFile(modifiedFile, "foo\nbar\n");
-        long revision = subversionService.commit(modifiedFile);
-        assertEquals(revision, subversionService.getLatestRevision());
+        long revision = versioningDao.commit(modifiedFile);
+        assertEquals(revision, versioningDao.getLatestRevision());
     }
 
     @SuppressWarnings("deprecation")
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Checkout_Throws_SubversionException() throws Exception {
         SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
-        subversionService.setClientManager(clientManagerMock);
+        versioningDao.setClientManager(clientManagerMock);
         SVNUpdateClient updateClientMock = createMock(SVNUpdateClient.class);
         expect(clientManagerMock.getUpdateClient()).andReturn(updateClientMock);
         expect(
@@ -323,20 +323,20 @@ public class SubversionServiceTest extends AbstractHibernateTest {
                         eq(SVNRevision.UNDEFINED), eq(SVNRevision.UNDEFINED), eq(true))).andThrow(
                 createSvnException());
         replay(clientManagerMock, updateClientMock);
-        subversionService.checkout(null, -1);
+        versioningDao.checkout(null, -1);
         verify(clientManagerMock, updateClientMock);
     }
 
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Delete_Throws_SubversionException() throws Exception {
         SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
-        subversionService.setClientManager(clientManagerMock);
+        versioningDao.setClientManager(clientManagerMock);
         SVNCommitClient commitClientMock = createMock(SVNCommitClient.class);
         expect(clientManagerMock.getCommitClient()).andReturn(commitClientMock);
         expect(commitClientMock.doDelete(isA(SVNURL[].class), isA(String.class))).andThrow(
                 createSvnException());
         replay(clientManagerMock, commitClientMock);
-        subversionService.delete("foo/bar");
+        versioningDao.delete("foo/bar");
         verify(clientManagerMock, commitClientMock);
     }
 
@@ -356,13 +356,13 @@ public class SubversionServiceTest extends AbstractHibernateTest {
 
     @Test
     public void Root_Path_Contains_File_Items() {
-        List<FileItem> items = subversionService.getFileItems(documentRoot, -1);
+        List<FileItem> items = versioningDao.getFileItems(documentRoot, -1);
         assertFalse(items.isEmpty());
     }
 
     @Test
     public void Root_Path_Contains_File_Items_That_Have_Fields_Set() {
-        List<FileItem> items = subversionService.getFileItems(documentRoot, -1);
+        List<FileItem> items = versioningDao.getFileItems(documentRoot, -1);
         FileItem item = null;
         String title = "Nummisuutarit rakenteistettuna.xml";
         for (FileItem fi : items) {
@@ -382,10 +382,10 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     @Inject @Named(EDITH.REPO_URL_PROPERTY)
     private String repositoryURL;
 
-    @Test(expected = SubversionException.class)
+    @Test(expected = VersioningException.class)
     public void Get_File_Items_For_Root_Path_Throws_Exception_For_Path() throws Exception {
         SVNRepository repositoryMock = createMock(SVNRepository.class);
-        SubversionServiceImpl versioningService = new SubversionServiceImpl(
+        VersioningDaoImpl versioningService = new VersioningDaoImpl(
                 File.createTempFile("edith", null).getAbsolutePath(),
                 svnRepoPath,
                 repositoryURL,
@@ -393,7 +393,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
                 null);
         versioningService.setSvnRepository(repositoryMock);
 
-        expect(repositoryMock.getDir(documentRoot, -1, false, Collections.emptyList())).andThrow(new SubversionException());
+        expect(repositoryMock.getDir(documentRoot, -1, false, Collections.emptyList())).andThrow(new VersioningException());
 
         replay(repositoryMock);
         versioningService.getFileItems(documentRoot, -1);
@@ -404,7 +404,7 @@ public class SubversionServiceTest extends AbstractHibernateTest {
     public void Move_Bumps_Revision() {
         String oldPath = documentRoot + "/" + "Nummisuutarit rakenteistettuna.xml";
         String newPath = documentRoot + "/" + "Pummisuutarit.xml";
-        long oldRevision = subversionService.getLatestRevision();
-        assertEquals(oldRevision + 1, subversionService.move(oldPath, newPath));
+        long oldRevision = versioningDao.getLatestRevision();
+        assertEquals(oldRevision + 1, versioningDao.move(oldPath, newPath));
     }
 }

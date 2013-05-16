@@ -5,16 +5,16 @@
  */
 package com.mysema.edith.services;
 
-public class SubversionException extends RuntimeException {
+public class VersioningException extends RuntimeException {
     private static final long serialVersionUID = 2137588590021188211L;
 
-    public SubversionException() {}
+    public VersioningException() {}
 
-    public SubversionException(Throwable t) {
+    public VersioningException(Throwable t) {
         super(t);
     }
 
-    public SubversionException(String msg, Throwable t) {
+    public VersioningException(String msg, Throwable t) {
         super(msg, t);
     }
 }

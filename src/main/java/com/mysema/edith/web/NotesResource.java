@@ -1,13 +1,9 @@
 package com.mysema.edith.web;
 
-import static com.mysema.query.support.Expressions.stringPath;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,23 +13,21 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
-import com.mysema.edith.domain.QNote;
-import com.mysema.edith.domain.QTerm;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteDao;
+import com.mysema.edith.util.StringUtils;
 import com.mysema.query.SearchResults;
-import com.mysema.query.jpa.HQLTemplates;
-import com.mysema.query.jpa.impl.JPAQuery;
-import com.mysema.query.types.expr.BooleanExpression;
-import com.mysema.query.types.path.StringPath;
+import com.mysema.util.BeanMap;
 
 @Transactional
 @Path("/notes")
@@ -43,15 +37,6 @@ public class NotesResource extends AbstractResource<NoteTO> {
     private final NoteDao dao;
 
     private final DocumentNoteDao documentNoteDao;
-
-    @Inject
-    private Provider<EntityManager> em;
-
-    private JPAQuery query() {
-        return new JPAQuery(em.get(), HQLTemplates.DEFAULT);
-    }
-
-    private static final QNote note = QNote.note;
 
     @Inject
     public NotesResource(NoteDao dao, DocumentNoteDao documentNoteDao) {
@@ -64,7 +49,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
     public NoteTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), new NoteTO());
     }
-
+    
     @GET
     public Map<String, Object> all(
             @QueryParam("page") Long page,
@@ -72,50 +57,31 @@ public class NotesResource extends AbstractResource<NoteTO> {
             @QueryParam("order") String order,
             @QueryParam("direction") String direction,
             @QueryParam("query") String query) {
-        // TODO: Move query into DAO-layer?
-        QTerm term = QTerm.term;
-        StringPath path = null;
-        if (order == null) {
-            path = note.lemma;
-        } else if (order.startsWith("term.")) {
-            path = stringPath(term, order.substring(1 + order.indexOf('.')));
-        } else {
-            path = stringPath(note, order);
-        }
+        
         if (perPage == null) {
             perPage = 25L;
-        }
-        if (perPage <= 0) {
+        } else if (perPage <= 0) {
             perPage = (long) Integer.MAX_VALUE;
-        }
+        }        
         if (page == null) {
             page = 1L;
         }
-        BooleanExpression filter = null;
-        if (query != null) {
-            // TODO: use other fields as well?
-            filter = note.lemma.containsIgnoreCase(query);
-        }
-        long limit = perPage;
-        long offset = (page - 1) * limit;
-
-        SearchResults<Note> results = query()
-                .from(note)
-                .leftJoin(note.term, term)
-                .where(note.deleted.isFalse().and(filter))
-                .orderBy(direction == null || direction.equals("ASC") ? path.asc() : path.desc())
-                .limit(limit)
-                .offset(offset)
-                .listResults(note);
-        List<NoteTO> entries = new ArrayList<NoteTO>();
-        for (Note note : results.getResults()) {
-            entries.add(convert(note, new NoteTO()));
-        }
+        
+        NoteSearchTO search = new NoteSearchTO();
+        search.setLemma(query);
+        search.setPage(page);
+        search.setPerPage(perPage);
+        search.setOrderBy(order);
+        search.setAscending(direction == null || direction.equals("ASC"));
+        
+        SearchResults<Note> results = dao.findNotes(search);        
+        List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
+        
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
         rv.put("currentPage", page);
         rv.put("perPage", perPage);
-        rv.put("totalPages", totalPages(limit, results.getTotal()));
+        rv.put("totalPages", totalPages(results.getLimit(), results.getTotal()));
         rv.put("totalEntries", results.getTotal());
         return rv;
     }
@@ -128,17 +94,61 @@ public class NotesResource extends AbstractResource<NoteTO> {
         }
         return count / pageSize;
     }
+    
+    @POST @Path("query")
+    public Map<String, Object> query(NoteSearchTO search) {
+        SearchResults<Note> results = dao.findNotes(search);
+        List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
+        
+        Map<String, Object> rv = new HashMap<String, Object>();
+        rv.put("entries", entries);
+        rv.put("currentPage", search.getPage());
+        rv.put("perPage", search.getPage());
+        rv.put("totalPages", totalPages(results.getLimit(), results.getTotal()));
+        rv.put("totalEntries", results.getTotal());
+        return rv;
+    }
+    
+    @POST @Path("query")
+    @Produces("text/csv")
+    public Response queryCsv(NoteSearchTO search) {        
+        search.setPage(null);
+        search.setPerPage(null);
+        SearchResults<Note> results = dao.findNotes(search);
+        
+        StringBuilder builder = new StringBuilder();
+        if (search.getColumns() != null && !search.getColumns().isEmpty()) {
+            builder.append(StringUtils.join(search.getColumns(), ";"));
+            builder.append("\n");
+            for (Note note : results.getResults()) {
+                BeanMap noteBean = new BeanMap(note);
+                BeanMap termBean = note.getTerm() != null ? new BeanMap(note.getTerm()) : new BeanMap();
+                List<String> values = Lists.newArrayList();
+                for (String column : search.getColumns()) {  
+                    Object value = null;
+                    if (column.startsWith("term")) {
+                        value = termBean.get(column.substring(column.indexOf(".")+1));
+                    } else {
+                        value = noteBean.get(column);
+                    }
+                    values.add(value != null ? value.toString() : "");
+                }
+                builder.append(StringUtils.join(values, ";"));
+                builder.append("\n");
+            }            
+        }       
+        
+        return Response.ok(builder.toString(), "text/csv")
+                .header("Content-Disposition", "attachment; filename=results.csv")
+                .build();
+    }
 
     @GET @Path("{id}/document-notes")
     public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
         List<DocumentNote> docNotes = documentNoteDao.getOfNote(id);
-        List<DocumentNoteTO> result = new ArrayList<DocumentNoteTO>(docNotes.size());
-        for (DocumentNote docNote : docNotes) {
-            result.add(convert(docNote, new DocumentNoteTO()));
-        }
-        return result;
+        return convert(docNotes, DocumentNoteTO.class);
     }
-
+    
     @Override
     @POST
     public NoteTO create(NoteTO info) {

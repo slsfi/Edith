@@ -12,20 +12,24 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 
 import com.mysema.commons.jetty.JettyHelper;
 
-public class EdithNormalStart {
+public final class SKSStart {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
+        String root = "target/sks-dev";
         FSRepositoryFactory.setup();
-        File svnRepo = new File("target/repo");
+        File rootFile = new File(root);
+        File svnRepo = new File(rootFile, "repo");
 
+        System.setProperty("hibernate.connection.url", 
+                "jdbc:mysql://localhost:3306/edith?useUnicode=true&characterEncoding=UTF-8");
         System.setProperty("org.mortbay.jetty.webapp.parentLoaderPriority", "true");
-        System.setProperty("production.mode", "true");
+        System.setProperty("production.mode", "false");
         System.setProperty(EDITH.REPO_FILE_PROPERTY, svnRepo.getAbsolutePath());
         System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
-        
         System.setProperty(EDITH.EXTENDED_TERM, "false");
         
         JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
     }
+
 
 }

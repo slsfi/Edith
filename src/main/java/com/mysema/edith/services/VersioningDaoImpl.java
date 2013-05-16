@@ -38,15 +38,14 @@ import com.mysema.edith.dto.FileItem;
 import com.mysema.util.FileUtils;
 
 /**
- * SubversionServiceImpl is the default implementation of the SubversionService
+ * VersioningDaoImpl is the default implementation of the VersioningDao
  * interface
  * 
  * @author tiwe
- * @version $Id$
  */
-public class SubversionServiceImpl implements SubversionService {
+public class VersioningDaoImpl implements VersioningDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(SubversionServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(VersioningDaoImpl.class);
 
     static {
         FSRepositoryFactory.setup();
@@ -71,7 +70,7 @@ public class SubversionServiceImpl implements SubversionService {
     private final File workingCopies;
 
     @Inject
-    public SubversionServiceImpl(@Named(EDITH.SVN_CACHE_DIR) String svnCache,
+    public VersioningDaoImpl(@Named(EDITH.SVN_CACHE_DIR) String svnCache,
             @Named(EDITH.REPO_FILE_PROPERTY) String svnRepo,
             @Named(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Named(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
@@ -86,7 +85,7 @@ public class SubversionServiceImpl implements SubversionService {
         try {
             repoSvnURL = SVNURL.parseURIEncoded(repoURL);
         } catch (SVNException e) {
-            throw new SubversionException(e);
+            throw new VersioningException(e);
         }
         svnRepository = null;
     }
@@ -105,7 +104,7 @@ public class SubversionServiceImpl implements SubversionService {
             clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, true),
                     destination, SVNRevision.create(revision), SVNRevision.create(revision), true);
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -117,7 +116,7 @@ public class SubversionServiceImpl implements SubversionService {
                     .doCommit(new File[] { file }, true, file.getName() + " committed", false, true)
                     .getNewRevision();
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -129,11 +128,11 @@ public class SubversionServiceImpl implements SubversionService {
             // long updateStart = System.currentTimeMillis();
             try {
                 update(userCheckout);
-            } catch (SubversionException e) {
+            } catch (VersioningException e) {
                 try {
                     FileUtils.delete(userCheckout);
                 } catch (IOException e1) {
-                    throw new SubversionException("Exception when cleaning directory", e1);
+                    throw new VersioningException("Exception when cleaning directory", e1);
                 }
                 userCheckout.delete();
                 checkout(userCheckout, revision);
@@ -165,7 +164,7 @@ public class SubversionServiceImpl implements SubversionService {
 //            FileUtils.copyFile(tmp, file);
             Files.copy(tmp, file);
         } catch (IOException e) {
-            throw new SubversionException(e);
+            throw new VersioningException(e);
         } finally {
             if (tmp != null && !tmp.delete()) {
                 logger.error("Delete of " + tmp.getAbsolutePath() + " failed");
@@ -185,7 +184,7 @@ public class SubversionServiceImpl implements SubversionService {
             logger.info(clientManager.getCommitClient()
                     .doDelete(new SVNURL[] { targetURL }, "removed " + svnPath).toString());
         } catch (SVNException e) {
-            throw new SubversionException(e.getMessage(), e);
+            throw new VersioningException(e.getMessage(), e);
         }
     }
 
@@ -197,7 +196,7 @@ public class SubversionServiceImpl implements SubversionService {
             FileUtils.delete(svnCache);
             FileUtils.delete(svnRepo);
         } catch (IOException e) {
-            throw new SubversionException(e.getMessage(), e);
+            throw new VersioningException(e.getMessage(), e);
         }
     }
 
@@ -216,7 +215,7 @@ public class SubversionServiceImpl implements SubversionService {
             }
             return rv;
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -225,7 +224,7 @@ public class SubversionServiceImpl implements SubversionService {
         try {
             return svnRepository.getLatestRevision();
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -256,7 +255,7 @@ public class SubversionServiceImpl implements SubversionService {
             }
             return null;
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
 
     }
@@ -270,7 +269,7 @@ public class SubversionServiceImpl implements SubversionService {
                     .doImport(file, repoSvnURL.appendPath(svnPath, false), svnPath + " added", true)
                     .getNewRevision();
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
 
     }
@@ -301,7 +300,7 @@ public class SubversionServiceImpl implements SubversionService {
                 }
             }
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -311,7 +310,7 @@ public class SubversionServiceImpl implements SubversionService {
             clientManager.getUpdateClient().doUpdate(file, SVNRevision.create(getLatestRevision()),
                     true);
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -336,7 +335,7 @@ public class SubversionServiceImpl implements SubversionService {
             }
             return fileItems;
         } catch (SVNException s) {
-            throw new SubversionException(s.getMessage(), s);
+            throw new VersioningException(s.getMessage(), s);
         }
     }
 
@@ -355,7 +354,7 @@ public class SubversionServiceImpl implements SubversionService {
             clientManager.getMoveClient().doMove(oldFile, newFile);
             commit(userCheckout);
         } catch (SVNException e) {
-            throw new SubversionException(e.getMessage(), e);
+            throw new VersioningException(e.getMessage(), e);
         }
         return getLatestRevision();
     }

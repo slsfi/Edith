@@ -5,6 +5,7 @@
  */
 package com.mysema.edith.guice;
 
+import org.apache.shiro.guice.web.GuiceShiroFilter;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import com.google.inject.Scopes;
@@ -36,6 +37,7 @@ public class WebModule extends ServletModule {
         bind(GuiceContainer.class);
         bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
         serve("/api/*").with(GuiceContainer.class);
+        filter("/*").through(GuiceShiroFilter.class);
     }
 
 }

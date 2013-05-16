@@ -26,12 +26,10 @@ public class Item implements Cloneable {
     public String getName(String elemName) {
         AtomicInteger intValue = counts.get(elemName);
         if (intValue == null) {
-            intValue = new AtomicInteger(1);
+            intValue = new AtomicInteger(0);
             counts.put(elemName, intValue);
-            return elemName;
         }
-        intValue.addAndGet(1);
-        return elemName + intValue;
+        return elemName + intValue.getAndAdd(1);
     }
 
     @Override

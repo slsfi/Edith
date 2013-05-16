@@ -5,6 +5,8 @@
  */
 package com.mysema.edith.services;
 
+import static com.mysema.query.support.Expressions.stringPath;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,25 +27,14 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EDITH;
-import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.LinkElement;
-import com.mysema.edith.domain.Note;
-import com.mysema.edith.domain.NoteComment;
-import com.mysema.edith.domain.NoteType;
-import com.mysema.edith.domain.Paragraph;
-import com.mysema.edith.domain.QDocumentNote;
-import com.mysema.edith.domain.QNote;
-import com.mysema.edith.domain.QTerm;
-import com.mysema.edith.domain.StringElement;
-import com.mysema.edith.domain.Term;
-import com.mysema.edith.domain.UrlElement;
-import com.mysema.edith.domain.User;
+import com.mysema.edith.domain.*;
+import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteSearchTO;
-import com.mysema.edith.dto.OrderBy;
 import com.mysema.edith.dto.UserTO;
 import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.JPQLSubQuery;
+import com.mysema.query.QueryModifiers;
+import com.mysema.query.SearchResults;
+import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.ComparableExpressionBase;
@@ -54,6 +45,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     private static final QNote note = QNote.note;
 
+    private static final QTerm term = QTerm.term;
+    
     private static final QDocumentNote documentNote = QDocumentNote.documentNote;
 
     private static final class LoopContext {
@@ -101,18 +94,48 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return comment;
     }
 
-    private JPQLSubQuery sub(EntityPath<?> entityPath) {
-        return new JPQLSubQuery().from(entityPath);
+    private JPASubQuery sub(EntityPath<?> entityPath) {
+        return new JPASubQuery().from(entityPath);
+    }
+    
+    private QueryModifiers getModifiers(NoteSearchTO search) {
+        Long limit = search.getPerPage();
+        if (limit == null) {
+            limit = 25L;
+        }
+        Long offset = null;
+        if (search.getPage() != null) {
+            offset = (search.getPage() - 1) * limit;
+        }
+        return new QueryModifiers(limit, offset);
+    }
+    
+    public SearchResults<DocumentNote> findDocumentNotes(NoteSearchTO search) {
+        return from(documentNote)
+              .innerJoin(documentNote.note, note)
+              .leftJoin(note.term, term)
+              .where(notesQuery(search, false))
+              .orderBy(getOrderBy(search))
+              .restrict(getModifiers(search))
+              .listResults(documentNote);
+    }
+    
+    @Override
+    public SearchResults<Note> findNotes(NoteSearchTO search) {
+        return from(note)
+              .leftJoin(note.term, QTerm.term)
+              .where(notesQuery(search, true))
+              .orderBy(getOrderBy(search))
+              .restrict(getModifiers(search))
+              .listResults(note);
     }
 
-//    @Override
-//    public GridDataSource findNotes(NoteSearchInfo search) {
-//        return createGridDataSource(note, getOrderBy(search), false, notesQuery(search).getValue());
-//    }
-
-    private BooleanBuilder notesQuery(NoteSearchTO search) {
+    private BooleanBuilder notesQuery(NoteSearchTO search, boolean searchNotes) {
         BooleanBuilder builder = new BooleanBuilder();
+        BooleanBuilder docNoteFilter = new BooleanBuilder();
 
+        builder.and(note.deleted.isFalse());
+        
         // only orphans
         if (search.isOrphans() && !search.isIncludeAllDocs()) {
             builder.and(note.documentNoteCount.eq(0));
@@ -128,19 +151,18 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         // or documents and paths from selection
         else if (!search.isIncludeAllDocs()
                 && (!search.getPaths().isEmpty() || !search.getDocuments().isEmpty())) {
-
             BooleanBuilder filter = new BooleanBuilder();
             for (String path : search.getPaths()) {
                 filter.or(documentNote.document.path.startsWith(path));
             }
             if (!search.getDocuments().isEmpty()) {
-                filter.or(documentNote.document.in(search.getDocuments()));
-            }
-
-            JPQLSubQuery subQuery = sub(documentNote);
-            subQuery.where(documentNote.note.eq(note), documentNote.deleted.eq(false), filter);
-
-            builder.and(subQuery.exists());
+                List<Long> docIds = new ArrayList<Long>(search.getDocuments().size());
+                for (DocumentTO doc : search.getDocuments()) {
+                    docIds.add(doc.getId());
+                }
+                filter.or(documentNote.document.id.in(docIds));
+            }            
+            docNoteFilter.and(filter);            
         }
 
         // language
@@ -149,20 +171,34 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
 
         // fulltext
-        if (Strings.isNullOrEmpty(search.getFullText())) {
+        if (!Strings.isNullOrEmpty(search.getFullText())) {
+            QTerm term = QTerm.term;
             BooleanBuilder filter = new BooleanBuilder();
             for (StringPath path : Arrays.asList(note.lemma, note.description, note.sources,
-                    note.comments.any().message)) {
+                    note.comments.any().message, term.basicForm, term.meaning)) {
                 filter.or(path.containsIgnoreCase(search.getFullText()));
             }
-            // NOTE : this needs to be separate because otherwise there is an
-            // implicit inner join to term, which is an optional property
-            QTerm term = QTerm.term;
-            filter.or(sub(term).where(
-                    term.eq(note.term),
-                    term.basicForm.containsIgnoreCase(search.getFullText()).or(
-                            term.meaning.containsIgnoreCase(search.getFullText()))).exists());
             builder.and(filter);
+        }
+        
+        // shortened selection
+        if (search.getShortenedSelection() != null) {
+            docNoteFilter.and(documentNote.shortenedSelection.containsIgnoreCase(search.getShortenedSelection()));            
+        }
+        
+        // lemma 
+        if (search.getLemma() != null) {
+            builder.and(note.lemma.containsIgnoreCase(search.getLemma()));
+        }
+        
+        // lemma meaning
+        if (search.getLemmaMeaning() != null) {
+            builder.and(note.lemmaMeaning.containsIgnoreCase(search.getLemmaMeaning()));
+        }
+        
+        // description
+        if (search.getDescription() != null) {
+            builder.and(note.description.containsIgnoreCase(search.getDescription()));
         }
 
         // creators
@@ -192,56 +228,65 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             }
             builder.and(filter);
         }
+        
+        // status
+        if (search.getNoteStatus() != null) {
+            builder.and(note.status.eq(search.getNoteStatus()));
+        }
 
+        // created before
+        if (search.getCreatedBefore() != null) {
+            docNoteFilter.and(documentNote.createdOn.lt(search.getCreatedBefore()));
+        }
+        
+        // created after
+        if (search.getCreatedAfter() != null) {
+            docNoteFilter.and(documentNote.createdOn.gt(search.getCreatedAfter()));
+        }
+        
+        // edited before
+        if (search.getEditedBefore() != null) {
+            builder.and(note.editedOn.lt(search.getEditedBefore()));
+        }
+        
+        // edited after
+        if (search.getEditedAfter() != null) {
+            builder.and(note.editedOn.gt(search.getEditedAfter()));
+        }
+        
+        if (docNoteFilter.hasValue()) {
+            if (searchNotes) {
+                JPASubQuery subQuery = sub(documentNote);
+                subQuery.where(
+                        documentNote.note.eq(note), 
+                        documentNote.deleted.isFalse(), 
+                        docNoteFilter);
+                builder.and(subQuery.exists());    
+            } else {
+                builder.and(docNoteFilter);
+            }
+        }
+        
         return builder;
     }
-
-//    @Override
-//    public GridDataSource queryNotes(String searchTerm) {
-//        Assert.notNull(searchTerm, "searchTerm");
-//        BooleanBuilder builder = new BooleanBuilder();
-//        if (!searchTerm.equals("*")) {
-//            for (StringPath path : Arrays
-//                    .asList(note.lemma, note.term.basicForm, note.term.meaning)) {
-//                // ,
-//                // documentNote.description, FIXME
-//                // note.subtextSources)
-//                builder.or(path.containsIgnoreCase(searchTerm));
-//            }
-//        }
-//        builder.and(note.deleted.isFalse());
-//
-//        // return createGridDataSource(note, note.term.basicForm.lower().asc(),
-//        // false, builder.getValue());
-//        return createGridDataSource(note, note.lemma.asc(), false, builder.getValue());
-//    }
-
+    
     private OrderSpecifier<?> getOrderBy(NoteSearchTO searchInfo) {
-        ComparableExpressionBase<?> comparable = null;
-        OrderBy orderBy = searchInfo.getOrderBy() == null ? OrderBy.LEMMA : searchInfo.getOrderBy();
-        switch (orderBy) {
-        case KEYTERM:
-            comparable = note.term.basicForm;
-            break;
-        case DATE:
-            comparable = note.editedOn;
-            break;
-        case USER:
-            comparable = note.lastEditedBy.username.toLowerCase();
-            break;
-        case STATUS:
-            comparable = note.status;// .ordinal();
-            break;
-        default:
-            comparable = note.lemma.toLowerCase();
-            break;
-        }
-        return searchInfo.isAscending() ? comparable.asc() : comparable.desc();
+        ComparableExpressionBase<?> path = null;
+        String order = searchInfo.getOrderBy();
+        QTerm term = QTerm.term;
+        if (order == null) {
+            path = note.lemma;
+        } else if (order.startsWith("term.")) {
+            path = stringPath(term, order.substring(1 + order.indexOf('.')));
+        } else {
+            path = stringPath(note, order);
+        }        
+        return searchInfo.isAscending() ? path.asc() : path.desc();
     }
 
     @Override
     public List<Long> getOrphanIds() {
-        return query().from(note)
+        return from(note)
                 .where(sub(documentNote).where(documentNote.note.eq(note)).notExists())
                 .list(note.id);
     }
@@ -289,7 +334,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         documentNote.setNote(n);
         n.incDocumentNoteCount();
         documentNote.setPosition(position);
-        persist(n);
+        persistOrMerge(n);
         persist(documentNote);
         return documentNote;
     }
@@ -402,48 +447,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return data.counter;
     }
 
-//    @Override
-//    public GridDataSource queryDictionary(String searchTerm) {
-//        // FIXME!!!!
-//        Assert.notNull(searchTerm, "searchTerm");
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(term.basicForm.containsIgnoreCase(searchTerm));
-//            builder.or(term.meaning.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(term, term.basicForm.lower().asc(), false,
-//                    builder.getValue());
-//        }
-//        return createGridDataSource(term, term.basicForm.lower().asc(), false, null);
-//    }
-//
-//    @Override
-//    public GridDataSource queryPersons(String searchTerm) {
-//        Assert.notNull(searchTerm, "searchTerm");
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(person.normalized.first.containsIgnoreCase(searchTerm));
-//            builder.or(person.normalized.last.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(person, person.normalized.last.lower().asc(), false,
-//                    builder.getValue());
-//        }
-//        return createGridDataSource(person, person.normalized.last.asc(), false, null);
-//    }
-//
-//    @Override
-//    public GridDataSource queryPlaces(String searchTerm) {
-//        Assert.notNull(searchTerm, "searchTerm");
-//        if (!searchTerm.equals("*")) {
-//            BooleanBuilder builder = new BooleanBuilder();
-//            builder.or(place.normalized.last.containsIgnoreCase(searchTerm));
-//            return createGridDataSource(place, place.normalized.last.lower().asc(), false,
-//                    builder.getValue());
-//        }
-//        return createGridDataSource(place, place.normalized.last.asc(), false, null);
-//    }
-
     @Override
     public NoteComment removeComment(Long commentId) {
-        // FIXME: Do differently with Hibernate!
         NoteComment comment = find(NoteComment.class, commentId);
         remove(comment);
         comment.getNote().removeComment(comment);
@@ -453,11 +458,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     @Override
     public Note save(Note note) {
         note.setEditedOn(System.currentTimeMillis());
-        if (note.getId() != null) {
-            return merge(note);
-        }
-        persist(note);
-        return note;
+        return persistOrMerge(note);
     }
 
     @Override
@@ -483,9 +484,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     @Override
     public void saveAsNew(Note note) {
-//        EntityManager em = getEntityManager();
-//        em.unwrap(Session.class).evict(note);
-        evict(note);
+        detach(note);
         note.setId(null);
         note.setDocumentNoteCount(0);
         persist(note);

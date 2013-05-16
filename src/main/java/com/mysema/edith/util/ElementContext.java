@@ -7,18 +7,11 @@ package com.mysema.edith.util;
 
 import java.util.Stack;
 
-
 public class ElementContext implements Cloneable {
 
     private Stack<Item> stack = new Stack<Item>();
 
-    private final int offset;
-
     private String path = null;
-
-    public ElementContext(int offset) {
-        this.offset = offset;
-    }
 
     public void push(String name) {
         String s = name;
@@ -43,18 +36,15 @@ public class ElementContext implements Cloneable {
         if (path != null) {
             return path;
         }
-        if (stack.size() > offset) {
-            StringBuilder b = new StringBuilder();
-            for (int i = offset; i < stack.size(); i++) {
-                if (i > offset) {
-                    b.append("-");
-                }
-                b.append(stack.get(i).getName());
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < stack.size(); i++) {
+            if (i > 0) {
+                b.append("-");
             }
-            path = b.toString();
-            return path;
+            b.append(stack.get(i).getName());
         }
-        return null;
+        path = b.toString();
+        return path;
     }
 
     @Override

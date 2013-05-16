@@ -52,14 +52,13 @@ public class ContentRendererTest extends AbstractHibernateTest {
     private ContentRenderer renderer;
 
     @Inject
-    private SubversionService subversionService;
+    private VersioningDao subversionService;
     
     @Inject
     private DocumentDao documentDao;
     
     private XMLOutputFactory factory = XMLOutputFactory.newInstance();
 
-//    private final MarkupWriter writer = new MarkupWriterImpl();
     private StringWriter str = new StringWriter();
     
     private XMLStreamWriter writer;

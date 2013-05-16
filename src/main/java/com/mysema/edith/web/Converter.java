@@ -117,7 +117,7 @@ public class Converter {
                 targetValue = targetColl;
                 if (sourceColl != null && !sourceColl.isEmpty()) {
                     Type genericType = target.getReadMethod(entry.getKey()).getGenericReturnType();
-                    Class elementType = ReflectionUtils.getTypeParameter(genericType, 0);
+                    Class elementType = ReflectionUtils.getTypeParameterAsClass(genericType, 0);
                     if (!elementType.isInstance(sourceColl.iterator().next())) {
                         for (Object obj : sourceColl) {
                             targetColl.add(convert(obj, elementType));

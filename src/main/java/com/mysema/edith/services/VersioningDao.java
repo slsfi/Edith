@@ -14,12 +14,11 @@ import java.util.Map;
 import com.mysema.edith.dto.FileItem;
 
 /**
- * SubversionService provides Subversion client functionality
+ * VersioningDao provides file versioning functionality
  * 
  * @author tiwe
- * @version $Id$
  */
-public interface SubversionService {
+public interface VersioningDao {
     /**
      * Commits changes of a file into the repository.
      * 

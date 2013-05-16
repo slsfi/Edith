@@ -30,6 +30,7 @@ require([], function() {
       },
               
       listing: function() {
+        console.log('navigating...')
         this.hideAll();
         this.views.listing.$el.show();
       },
@@ -43,5 +44,12 @@ require([], function() {
     
     var router = new DocumentsRouter();
     Backbone.history.start();
+
+    // To enable persistent document listing view when navigating
+    // on documents page. TODO: Think of a better way to do this.
+    $('#documents-page').click(function(ev) {
+      ev.preventDefault();
+      router.navigate('', {trigger: true});
+    });
   });
 });

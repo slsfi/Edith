@@ -12,11 +12,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.dto.FileItemWithDocumentId;
-import com.mysema.edith.dto.SelectedText;
 
 /**
  * @author tiwe
@@ -42,18 +39,6 @@ public interface DocumentDao extends Dao<Document, Long> {
     int addDocumentsFromZip(String parentSvnPath, File file);
 
     /**
-     * Add the given note for the given Document
-     *
-     * @param docRevision
-     * @param selection
-     * @return
-     * @throws IOException
-     * @throws NoteAdditionFailedException
-     */
-    DocumentNote addNote(Note note, Document document, SelectedText selection) throws IOException,
-            NoteAdditionFailedException;
-
-    /**
      * Get a Document handle for the given path
      *
      * @param svnPath
@@ -77,28 +62,6 @@ public interface DocumentDao extends Dao<Document, Long> {
      * @throws IOException
      */
     InputStream getDocumentStream(Document document) throws IOException;
-
-    /**
-     * Remove the given anchors from the given Document
-     *
-     * @param docRevision
-     * @param notes
-     * @throws IOException
-     */
-    @Deprecated
-    // Move to service
-    void removeDocumentNotes(Document document, DocumentNote... notes);
-
-    /**
-     * Update the boundaries of the given note
-     *
-     * @param note
-     * @param selection
-     * @throws IOException
-     */
-    @Deprecated
-    // Move to service
-    DocumentNote updateNote(DocumentNote note, SelectedText selection) throws IOException;
 
     /**
      * Remove the given document
@@ -137,5 +100,10 @@ public interface DocumentDao extends Dao<Document, Long> {
      */
     Document save(Document doc);
 
+    /**
+     * @param id
+     * @param limit
+     * @return
+     */
     List<NoteComment> getNoteComments(long id, long limit);
 }

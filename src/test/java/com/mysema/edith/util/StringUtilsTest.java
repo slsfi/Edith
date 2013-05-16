@@ -35,13 +35,10 @@ public class StringUtilsTest {
     
     @Test
     public void CountMatches() {
-        assertEquals(0, StringUtils.countMatches(null, "*"));
-        assertEquals(0, StringUtils.countMatches("", "*"));
-        assertEquals(0, StringUtils.countMatches("abba", null));
-        assertEquals(0, StringUtils.countMatches("abba", ""));
-        assertEquals(2, StringUtils.countMatches("abba", "a"));
-        assertEquals(1, StringUtils.countMatches("abba", "ab"));
-        assertEquals(0, StringUtils.countMatches("abba", "xxx"));
+        assertEquals(0, StringUtils.countMatches(null, '*'));
+        assertEquals(0, StringUtils.countMatches("", '*'));
+        assertEquals(2, StringUtils.countMatches("abba", 'a'));
+        assertEquals(0, StringUtils.countMatches("abba", 'x'));
         
     }
 

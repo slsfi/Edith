@@ -18,9 +18,9 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
 
     @Override
     public Collection<Place> findByStartOfName(String partial, int limit) {
-        return query().from(place)
-                .where(place.normalized.last.startsWithIgnoreCase(partial))
-                .limit(limit).list(place);
+        return from(place)
+               .where(place.normalized.last.startsWithIgnoreCase(partial))
+               .limit(limit).list(place);
     }
 
     @Override
@@ -31,13 +31,12 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
 
     @Override
     public Place save(Place place) {
-        persist(place);
-        return place;
+        return persistOrMerge(place);
     }
 
     @Override
     public Place getById(Long id) {
-        return query().from(place).where(place.id.eq(id)).uniqueResult(place);
+        return find(Place.class, id);
     }
 
 }
