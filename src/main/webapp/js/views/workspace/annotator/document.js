@@ -83,7 +83,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
     initialize: function() {
       _.bindAll(this, 'render', 'selectionChange');
       var self = this;
-      vent.on('document:open', function(id) {
+      vent.on('document:open annotation:created', function(id) {
         self.documentId = id;
         self.render(id);
       });
@@ -94,7 +94,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
       // FIXME: We know better
       $.get('/api/documents/' + id + '/raw', function(data) {
         self.$el.html(data);
-        self.$('.notecontent').css('background', 'lightblue');
       });
     },
 
@@ -130,7 +129,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({text: selection}),
                 success: function(resp) {
-                  self.render(self.documentId);
+                  // TODO: Other info besides document id?
+                  vent.trigger('annotation:created', self.documentId);
                 }});
       }
     }

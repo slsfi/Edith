@@ -6,7 +6,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
   var NoteList = Backbone.View.extend({
     initialize: function() {
       _.bindAll(this, 'render');
-      vent.on('document:open', this.render);
+      vent.on('document:open annotation:created', this.render);
     },
 
     render: function(id) {
