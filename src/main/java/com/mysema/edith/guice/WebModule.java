@@ -5,9 +5,12 @@
  */
 package com.mysema.edith.guice;
 
+import java.util.Map;
+
 import org.apache.shiro.guice.web.GuiceShiroFilter;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
+import com.google.common.collect.Maps;
 import com.google.inject.Scopes;
 import com.google.inject.servlet.ServletModule;
 import com.mysema.edith.web.DocumentNotesResource;
@@ -38,7 +41,10 @@ public class WebModule extends ServletModule {
         
         bind(GuiceContainer.class);
         bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
-        serve("/api/*").with(GuiceContainer.class);
+        
+        Map<String, String> parameters = Maps.newHashMap();
+        parameters.put("com.sun.jersey.spi.container.ContainerResponseFilters", CharsetResponseFilter.class.getName());        
+        serve("/api/*").with(GuiceContainer.class, parameters);
         filter("/*").through(GuiceShiroFilter.class);
     }
 
