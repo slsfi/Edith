@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'vent',
       new DocumentsView({el: this.$('#documents')});
       new CommentsView({el: this.$('#comments')});
     }
-  })
+  });
 
   return DocumentManagement;
 });

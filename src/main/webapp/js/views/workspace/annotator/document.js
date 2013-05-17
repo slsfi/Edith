@@ -118,8 +118,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
       var selection = {selection: str,
 //                       startChar: startChar,
                        startCharIndex: startCharIndex,
-                       startNode: startParent.id || startParent.attributes.getNamedItem('data-node').nodeValue,
-                       endNode: endParent.id || endParent.attributes.getNamedItem('data-node').nodeValue,
+                       startNode: startParent.id || startParent.getAttribute('data-node'),
+                       endNode: endParent.id || endParent.getAttribute('data-node'),
 //                       endChar: endChar,
                        endCharIndex: endCharIndex};
       var self = this;
