@@ -5,8 +5,8 @@ require([], function() {
            'views/workspace/annotator', 'views/workspace/document-management',
            'text!/templates/header.html'],
           function($, _, Backbone, Handlebars, vent, localize, Annotator, DocumentManagement, headerTemplate) {
-    var headerTmpl = Handlebars.compile(headerTemplate);
-    $('#header').append(headerTmpl());
+    var headerTemplate = Handlebars.compile(headerTemplate);
+    $('#header').append(headerTemplate());
     var WorkspaceRouter = Backbone.Router.extend({
       views: {},
 

@@ -4,12 +4,12 @@ require([], function() {
   require(['jquery', 'underscore', 'backbone', 'handlebars', 'localize', 'text!/templates/header.html',
            'text!/templates/note-import.html'],
           function($, _, Backbone, Handlebars, localize, headerTemplate, importTemplate) {
-    var headerTmpl = Handlebars.compile(headerTemplate);
-    $('body').prepend(headerTmpl());
+    var headerTemplate = Handlebars.compile(headerTemplate);
+    $('body').prepend(headerTemplate());
     
-    var importTmpl = Handlebars.compile(importTemplate);
+    var importTemplate = Handlebars.compile(importTemplate);
 
-    $('#content').html(importTmpl());
+    $('#content').html(importTemplate());
     
     var NoteImport = Backbone.View.extend({
       events: {'submit .import': 'submit'},

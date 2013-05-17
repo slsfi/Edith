@@ -1,7 +1,9 @@
-define(['jquery', 'underscore', 'backbone', 'vent',
+define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
         'handlebars', 'text!/templates/workspace/document-management/documents.html', 'dynatree'],
-  function($, _, Backbone, vent, Handlebars, template) {
+  function($, _, Backbone, vent, localize, Handlebars, template) {
 
+  var template = Handlebars.compile(template);
+  
   var DocumentsView = Backbone.View.extend({
     events: {'submit .import': 'submit'},
 
@@ -11,7 +13,7 @@ define(['jquery', 'underscore', 'backbone', 'vent',
     },
 
     render: function() {
-      this.$el.html(template);
+      this.$el.html(template());
       var self = this;
       this.$('#directoryTree').dynatree({
         initAjax: {

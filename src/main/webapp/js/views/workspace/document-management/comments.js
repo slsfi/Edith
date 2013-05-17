@@ -1,6 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'vent',
+define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
         'handlebars', 'text!/templates/workspace/document-management/comments.html'],
-  function($, _, Backbone, vent, Handlebars, template) {
+  function($, _, Backbone, vent, localize, Handlebars, template) {
   var template = Handlebars.compile(template);
 
   var CommentsView = Backbone.View.extend({
