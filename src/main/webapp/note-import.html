@@ -10,10 +10,14 @@
   </head>
   <body>
   
-    <form method="post" action="api/notes/import" enctype="multipart/form-data">    
+    <h2>Import notes</h2>
+  
+    <form id="import" method="post" enctype="multipart/form-data">    
       <input name="file" type="file"/>      
       <input type="submit"/>    
     </form>
+  
+    <div class="alert fade in" style="display:none;"></div>
   
   </body>
 </html>
