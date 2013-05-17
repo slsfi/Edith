@@ -1,8 +1,8 @@
 require.config(window.rconfig);
 
 require([], function() {
-  require(['jquery', 'underscore', 'backbone', 'slickback', 'slickgrid', 'text!/templates/header.html'],
-          function($, _, Backbone, Slickback, Slick, headerTemplate) {
+  require(['jquery', 'underscore', 'backbone', 'slickback', 'slickgrid', 'localize', 'text!/templates/header.html'],
+          function($, _, Backbone, Slickback, Slick, localize, headerTemplate) {
     $('body').prepend(headerTemplate);
 
     var Note = Backbone.Model.extend({

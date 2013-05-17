@@ -1,10 +1,15 @@
 require.config(window.rconfig);
 
 require([], function() {
-  require(['jquery', 'underscore', 'backbone', 'text!/templates/header.html'],
-          function($, _, Backbone, headerTemplate) {
+  require(['jquery', 'underscore', 'backbone', 'handlebars', 'localize', 'text!/templates/header.html',
+           'text!/templates/note-import.html'],
+          function($, _, Backbone, Handlebars, localize, headerTemplate, importTemplate) {
     $('body').prepend(headerTemplate);
+    
+    var importTmpl = Handlebars.compile(importTemplate);
 
+    $('#content').html(importTmpl());
+    
     var NoteImport = Backbone.View.extend({
       events: {'submit .import': 'submit'},
 
@@ -28,6 +33,6 @@ require([], function() {
       }
     });
 
-    new NoteImport({el: $('body')});
+    new NoteImport({el: $('#content')});
   });
 });

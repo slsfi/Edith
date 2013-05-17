@@ -1,10 +1,10 @@
 require.config(window.rconfig);
 
 require([], function() {
-  require(['jquery', 'underscore', 'backbone', 'vent',
+  require(['jquery', 'underscore', 'backbone', 'vent', 'localize',
            'views/workspace/annotator', 'views/workspace/document-management',
            'text!/templates/header.html'],
-          function($, _, Backbone, vent, Annotator, DocumentManagement, headerTemplate) {
+          function($, _, Backbone, vent, localize, Annotator, DocumentManagement, headerTemplate) {
     $('#header').append(headerTemplate);
     var WorkspaceRouter = Backbone.Router.extend({
       views: {},
