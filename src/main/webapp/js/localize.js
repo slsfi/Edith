@@ -4,7 +4,7 @@ define(['jquery', 'handlebars', 'json!/api/localizations', 'sprintf'],
     var localize = function(key) {
       var args = Array.prototype.slice.call(arguments);
       args[0] = localizations[key];
-      return sprintf.apply(this, args);
+      return args[0] ? sprintf.apply(this, args) : key;      
     };
   
     Handlebars.registerHelper('localize', function() {
