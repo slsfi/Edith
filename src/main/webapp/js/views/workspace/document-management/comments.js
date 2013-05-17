@@ -1,8 +1,8 @@
-define(['jquery', 'underscore', 'backbone', 'js/vent',
-        'handlebars', 'text!templates/documents-page/listing/comments.html'],
+define(['jquery', 'underscore', 'backbone', 'vent',
+        'handlebars', 'text!/templates/workspace/document-management/comments.html'],
   function($, _, Backbone, vent, Handlebars, template) {
   var template = Handlebars.compile(template);
-  
+
   var CommentsView = Backbone.View.extend({
     initialize: function() {
       _.bindAll(this, 'render');
@@ -13,11 +13,11 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
       var self = this;
       vent.on('folder:select', function() { self.$el.empty(); });
     },
-    
+
     render: function(data) {
       this.$el.html(template(data));
     }
   })
-  
+
   return CommentsView;
 });

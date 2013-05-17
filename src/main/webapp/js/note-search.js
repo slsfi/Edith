@@ -1,7 +1,7 @@
 require.config(window.rconfig);
 
 require([], function() {
-  require(['jquery', 'underscore', 'backbone', 'slickback', 'slickgrid', 'text!templates/header.html'],
+  require(['jquery', 'underscore', 'backbone', 'slickback', 'slickgrid', 'text!/templates/header.html'],
           function($, _, Backbone, Slickback, Slick, headerTemplate) {
     $('body').prepend(headerTemplate);
 
@@ -13,13 +13,13 @@ require([], function() {
         });
       }
     });
-    
+
     var NotesCollection = Slickback.PaginatedCollection.extend({
       model: Note,
       url: '/api/notes',
 
       setRefreshHints: function() {
-        // Called when changing page size. TODO: Implement functionality? 
+        // Called when changing page size. TODO: Implement functionality?
       }
     });
 
@@ -37,11 +37,11 @@ require([], function() {
       forceFitColumns: true,
       autoEdit: false
     };
-    
+
     var grid = new Slick.Grid('#noteGrid', notes, columns, options);
     grid.setSelectionModel(new Slick.RowSelectionModel());
     var pager = new Slick.Controls.Pager(notes, grid, $('#notePager'));
-    
+
     grid.onSort.subscribe(function(e, msg) {
       notes.extendScope({
         order: msg.sortCol.field,
@@ -49,7 +49,7 @@ require([], function() {
       });
       notes.fetchWithScope();
     });
-    
+
     notes.onRowCountChanged.subscribe(function() {
       grid.updateRowCount();
       grid.render();
@@ -59,17 +59,17 @@ require([], function() {
       grid.invalidateAllRows();
       grid.render();
     });
-    
+
     notes.on('change', function() {
       // FIXME: Inline CSS bad
       $(grid.getActiveCellNode()).css('background', 'red');
     });
 
     notes.fetchWithPagination();
-    
+
     var NoteSearch = Backbone.View.extend({
       events: {'keyup': 'search'},
-      
+
       initialize: function() {
         _.bindAll(this, 'render');
       },
@@ -81,16 +81,16 @@ require([], function() {
         notes.fetchWithScope();
       }
     });
-    
+
     var noteSearch = new NoteSearch({el: $('#noteSearch')});
-    
+
     var DeleteNotes = Backbone.View.extend({
       events: {'click': 'remove'},
-      
+
       initialize: function() {
         _.bindAll(this, 'remove');
       },
-      
+
       remove: function() {
         var rows = grid.getSelectedRows();
         _.each(rows, function(row) {
@@ -98,14 +98,14 @@ require([], function() {
         });
       }
     });
-    
+
     var SaveNotes = Backbone.View.extend({
       events: {'click': 'save'},
-      
+
       initialize: function() {
         _.bindAll(this, 'save');
       },
-      
+
       save: function() {
         var dirty = notes.filter(function(note) { return note.dirty; });
         var reset = _.after(dirty.length, function() {
@@ -116,8 +116,8 @@ require([], function() {
         });
       }
     });
-    
+
     var deleteNotes = new DeleteNotes({el: $('#deleteNotes')});
-    var saveNotes = new SaveNotes({el: $('#saveNotes')}); 
+    var saveNotes = new SaveNotes({el: $('#saveNotes')});
   });
 });

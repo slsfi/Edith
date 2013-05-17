@@ -1,6 +1,5 @@
-define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
-        'text!/templates/documents-page/document-note.html'],
-       function($, _, Backbone, vent, Handlebars, documentNoteTemplate) {
+define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
+       function($, _, Backbone, vent, Handlebars) {
   var isInverseSelection = function(selection) {
     if (selection.anchorNode === selection.focusNode) {
       return selection.anchorOffset > selection.focusOffset;
@@ -89,18 +88,13 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
         self.render(id);
       });
     },
-    
+
     render: function(id) {
       var self = this;
       // FIXME: We know better
       $.get('/api/documents/' + id + '/raw', function(data) {
-        self.$('#documentView').html(data);
+        self.$el.html(data);
         self.$('.notecontent').css('background', 'lightblue');
-      });
-      $.get('/api/documents/' + id + '/document-notes', function(data) {
-        _(data).each(function(documentNote) {
-          self.$('#documentNoteListing').append(documentNoteTemplate(documentNote));
-        });
       });
     },
 
@@ -141,6 +135,6 @@ define(['jquery', 'underscore', 'backbone', 'js/vent', 'handlebars',
       }
     }
   });
-  
+
   return DocumentView;
 });
