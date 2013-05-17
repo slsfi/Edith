@@ -57,7 +57,7 @@ window.rconfig = {
       exports: 'sprintf'
     },
     'bootstrap': { deps: ['jquery'] },
-    'handlebars': { exports: 'Handlebars' },
+    'handlebars': { exports: 'Handlebars' },    
     'jqueryui': { deps: ['jquery'] },
     'moment': { exports: 'moment'}
   }
