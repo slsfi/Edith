@@ -13,6 +13,7 @@ import com.google.inject.servlet.ServletModule;
 import com.mysema.edith.web.DocumentNotesResource;
 import com.mysema.edith.web.DocumentsResource;
 import com.mysema.edith.web.FilesResource;
+import com.mysema.edith.web.LocalizationsResource;
 import com.mysema.edith.web.NotesResource;
 import com.mysema.edith.web.PersonsResource;
 import com.mysema.edith.web.PlacesResource;
@@ -33,7 +34,8 @@ public class WebModule extends ServletModule {
         bind(TermsResource.class).in(Scopes.SINGLETON);
         bind(UsersResource.class).in(Scopes.SINGLETON);
         bind(FilesResource.class).in(Scopes.SINGLETON);
-
+        bind(LocalizationsResource.class).in(Scopes.SINGLETON);
+        
         bind(GuiceContainer.class);
         bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
         serve("/api/*").with(GuiceContainer.class);
