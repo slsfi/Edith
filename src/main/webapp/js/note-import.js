@@ -4,7 +4,8 @@ require([], function() {
   require(['jquery', 'underscore', 'backbone', 'handlebars', 'localize', 'text!/templates/header.html',
            'text!/templates/note-import.html'],
           function($, _, Backbone, Handlebars, localize, headerTemplate, importTemplate) {
-    $('body').prepend(headerTemplate);
+    var headerTmpl = Handlebars.compile(headerTemplate);
+    $('body').prepend(headerTmpl());
     
     var importTmpl = Handlebars.compile(importTemplate);
 
