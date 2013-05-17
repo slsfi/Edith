@@ -6,7 +6,7 @@ require([], function() {
     $('body').prepend(headerTemplate);
     
     var NoteImport = Backbone.View.extend({
-      events: {'submit #import': 'submit'},
+      events: {'submit .import': 'submit'},
       
       initialize: function() {
         _.bindAll(this);
@@ -14,14 +14,14 @@ require([], function() {
       
       submit: function() {
         var self = this;        
-        var formData = new FormData(this.$("#import").get(0));
-        $.ajax('api/notes/import',
+        var formData = new FormData(this.$(".import").get(0));
+        $.ajax('api/notes',
             {type: 'post', 
              processData: false,
              contentType: false,
              data: formData,
              success: function(data) {
-               //console.log(data);
+               console.log(data);
                self.$(".alert").html("Imported " + data + " notes").show();
              }});
         return false;

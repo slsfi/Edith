@@ -6,6 +6,7 @@
 package com.mysema.edith.web;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +40,7 @@ import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteDao;
+import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
 @Transactional
@@ -132,14 +134,18 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     
     @POST 
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public DocumentTO addDocument(@FormDataParam("path") String path, @FormDataParam("file") File file) {
-        return convert(dao.addDocument(path, file), new DocumentTO());
-    }
-
-    @POST @Path("from-zip")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public List<DocumentTO> addDocumentsFromZip(@FormDataParam("path") String path, @FormDataParam("file") File file) {
-        return convert(dao.addDocumentsFromZip(path, file), DocumentTO.class);
+    public List<DocumentTO> addDocuments(@FormDataParam("path") String path, 
+            @FormDataParam("file") File file,
+            @FormDataParam("file") FormDataContentDisposition fileInfo) {
+        path = path != null ? path : documentRoot;
+        String name = fileInfo.getFileName();
+        List<Document> docs;        
+        if (name.endsWith(".zip")) {
+            docs = dao.addDocumentsFromZip(path != null ? path : documentRoot, file);
+        } else {
+            docs = Collections.singletonList(dao.addDocument(path+"/"+name, file));    
+        }
+        return convert(docs, DocumentTO.class);        
     }
 
     @GET

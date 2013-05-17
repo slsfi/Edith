@@ -3,8 +3,10 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
   function($, _, Backbone, vent, Handlebars, template) {
   
   var DocumentsView = Backbone.View.extend({
+    events: {'submit .import': 'submit'},
+    
     initialize: function() {
-      _.bindAll(this, 'render');
+      _.bindAll(this);
       this.render();
     },
     
@@ -46,7 +48,24 @@ define(['jquery', 'underscore', 'backbone', 'js/vent',
         }
         
       });
+    },
+    
+    submit: function() {
+      var self = this;        
+      var formData = new FormData(this.$(".import").get(0));
+      $.ajax('api/documents',
+          {type: 'post', 
+           processData: false,
+           contentType: false,
+           data: formData,
+           success: function(data) {
+             console.log("success");
+             // TODO use proper event for this
+             self.$('#directoryTree').dynatree("getTree").reload();
+           }});
+      return false;
     }
+    
   });
   
   return DocumentsView;

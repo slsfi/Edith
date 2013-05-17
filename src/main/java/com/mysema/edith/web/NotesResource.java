@@ -169,7 +169,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
         return convert(dao.save(convert(info, entity)), new NoteTO());
     }
     
-    @POST @Path("import")
+    @POST 
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public int importNotes(@FormDataParam("file") InputStream stream) {
         return dao.importNotes(stream);
