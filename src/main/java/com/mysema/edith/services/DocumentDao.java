@@ -91,7 +91,7 @@ public interface DocumentDao extends Dao<Document, Long> {
      * @param id
      * @param newPath
      */
-    void rename(Long id, String newPath);
+    Document rename(Long id, String newPath);
 
     /**
      * @param path
@@ -111,4 +111,5 @@ public interface DocumentDao extends Dao<Document, Long> {
      * @return
      */
     List<NoteComment> getNoteComments(long id, long limit);
+
 }

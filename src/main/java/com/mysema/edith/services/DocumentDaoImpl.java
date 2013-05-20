@@ -177,7 +177,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public void rename(Long id, String newPath) {
+    public Document rename(Long id, String newPath) {
         Document doc = getById(id);
         String fullPath = doc.getPath();
         String directoryPath = fullPath.substring(0, fullPath.lastIndexOf('/') + 1);
@@ -191,6 +191,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         versioningDao.move(fullPath, directoryPath + newPath);
         doc.setPath(directoryPath + newPath);
         doc.setTitle(newPath.substring(newPath.lastIndexOf('/') + 1));
+        return doc;
     }
 
     @Override
@@ -237,4 +238,5 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
                 .list(noteComment);
         return noteComments;
     }
+
 }

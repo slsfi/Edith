@@ -17,7 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
     },
     
     render: function() {
-      this.$el.append(actionsTemplate());
+      this.$el.append(actionsTemplate(this.model.data));
     },
     
     deleteItem: function() {
@@ -33,7 +33,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
     },
     
     renameItem: function() {
-      console.log("rename");
+      var newName = prompt(localize('rename'), this.model.data.title);
+      if (newName) {
+        $.ajax('api/files', 
+            {type: 'put',
+             data: { path: this.model.data.path, name: newName },
+             success: function(data) { vent.trigger('document:rename', data); }
+        });
+    }
     }
   });
   
@@ -42,12 +49,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
     initialize: function() {
       _.bindAll(this);
-      var self = this;
-      vent.on('document:delete', function(data) {
-        self.$('#directoryTree').dynatree("getTree").reload();
-      });
-      
+      vent.on('document:delete', this.reload);
+      vent.on('document:rename', this.reload);
       this.render();
+    },
+    
+    reload: function() {
+      this.$('#directoryTree').dynatree('getTree').reload();
     },
 
     render: function() {
@@ -113,8 +121,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
               contentType: false,
               data: formData,
               success: function(data) {
-                // TODO use proper event for this
-                self.$('#directoryTree').dynatree("getTree").reload();
+                self.reload();
               }});
       return false;
     }
