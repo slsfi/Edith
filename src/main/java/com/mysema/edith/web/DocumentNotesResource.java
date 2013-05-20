@@ -21,7 +21,7 @@ import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.services.DocumentNoteService;
 
 @Transactional
-@Path("/documentnotes")
+@Path("/document-notes")
 @Produces(MediaType.APPLICATION_JSON)
 public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
 
