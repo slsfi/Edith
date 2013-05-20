@@ -1,8 +1,11 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
-        'handlebars', 'text!/templates/workspace/document-management/documents.html', 'dynatree'],
-  function($, _, Backbone, vent, localize, Handlebars, template) {
+        'handlebars', 'text!/templates/workspace/document-management/documents.html', 
+        'text!/templates/workspace/document-management/actions.html', 'dynatree'],
+  function($, _, Backbone, vent, localize, Handlebars, template, actionsTemplate) {
 
   var template = Handlebars.compile(template);
+  
+  var actionsTemplate = Handlebars.compile(actionsTemplate);
   
   var DocumentItemView = Backbone.View.extend({
     events: {'click .delete': 'deleteItem',
@@ -14,11 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
     },
     
     render: function() {
-      // TODO use template
-      this.$el.append(["<span class='actions' style='display:none;'>",
-                    "<a href='#' class='delete'>delete</a>",
-                    "<a href='#' class='rename'>rename</a>",
-                    "</span"].join(""));
+      this.$el.append(actionsTemplate());
     },
     
     deleteItem: function() {
