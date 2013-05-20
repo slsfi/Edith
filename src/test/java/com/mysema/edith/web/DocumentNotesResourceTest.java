@@ -2,8 +2,6 @@ package com.mysema.edith.web;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,10 +15,7 @@ import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.DocumentNoteTO;
-import com.mysema.edith.dto.SelectedText;
-import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.DocumentDao;
-import com.mysema.edith.services.NoteAdditionFailedException;
 import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.services.UserDao;
 

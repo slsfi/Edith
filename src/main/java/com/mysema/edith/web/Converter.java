@@ -130,7 +130,7 @@ public class Converter {
             } else if (Map.class.isAssignableFrom(type)) {
                 throw new UnsupportedOperationException();
             // direct
-            } else if (sourceType.equals(type)) {
+            } else if (type.isAssignableFrom(sourceType)) {
                 targetValue = sourceValue;
             // other
             } else { 
