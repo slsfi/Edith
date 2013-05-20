@@ -2,6 +2,8 @@ package com.mysema.edith.web;
 
 import java.util.List;
 
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -30,6 +32,11 @@ public class FilesResource {
             @QueryParam("id") Long id,
             @QueryParam("path") String path) {
         return dao.fromPath(path, id);
+    }
+    
+    @DELETE
+    public void delete(@FormParam("path") String path) {
+        dao.removeByPath(path);
     }
 
 }

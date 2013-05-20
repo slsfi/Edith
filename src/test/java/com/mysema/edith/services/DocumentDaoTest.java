@@ -233,12 +233,29 @@ public class DocumentDaoTest extends AbstractHibernateTest {
         documentDao.remove(document);
         documentDao.getDocumentStream(document);
     }
-
+    
     @Test(expected = RuntimeException.class)
     public void Remove_All() throws IOException {
         Document document = getDocument("/Nummisuutarit rakenteistettuna.xml");
         documentDao.removeAll(Collections.singleton(document));
         documentDao.getDocumentStream(document);
+    }
+    
+    @Test
+    public void Remove_By_Path() {
+        File file = new File("src/test/resources/tei.zip");
+        String parent = "/documents/parent" + System.currentTimeMillis();
+        documentDao.addDocumentsFromZip(parent, file);        
+        documentDao.removeByPath(parent);
+    }
+    
+    @Test
+    public void Remove_By_Path2() {
+        File file = new File("src/test/resources/tei.zip");
+        String parent = "/documents/parent" + System.currentTimeMillis();
+        for (Document doc : documentDao.addDocumentsFromZip(parent, file)) {
+            documentDao.removeByPath(doc.getPath());
+        }
     }
 
     private Note createNote() {

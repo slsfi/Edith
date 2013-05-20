@@ -74,6 +74,11 @@ public interface DocumentDao extends Dao<Document, Long> {
      * Remove the document by id.
      */
     void remove(Long id);
+    
+    /**
+     * @param path
+     */
+    void removeByPath(String path);
 
     /**
      * Remove the given documents

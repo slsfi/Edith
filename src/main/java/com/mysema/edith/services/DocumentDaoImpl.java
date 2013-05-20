@@ -155,6 +155,19 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             remove(document);
         }
     }
+    
+    @Override
+    public void removeByPath(String path) {
+        boolean directMatch = false;
+        for (Document doc : from(document)
+                .where(document.path.startsWith(path)).list(document)) {
+            directMatch |= doc.getPath().equals(path);
+            remove(doc);
+        }
+        if (!directMatch) {
+            versioningDao.delete(path);    
+        }        
+    }
 
     @Override
     public void removeAll(Collection<Document> documents) {
