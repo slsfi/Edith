@@ -36,7 +36,7 @@ import com.sun.jersey.multipart.FormDataParam;
 @Transactional
 @Path("/notes")
 @Produces(MediaType.APPLICATION_JSON)
-public class NotesResource extends AbstractResource<NoteTO> {
+public class NotesResource extends AbstractResource {
 
     private final NoteDao dao;
 
@@ -50,7 +50,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
 
     @GET @Path("{id}")
     public NoteTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), new NoteTO());
+        return convert(dao.getById(id), NoteTO.class);
     }
 
     @GET
@@ -154,7 +154,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
 
     @POST
     public NoteTO create(NoteTO info) {
-        return convert(dao.save(convert(info, new Note())), new NoteTO());
+        return convert(dao.save(convert(info, new Note())), NoteTO.class);
     }
 
     @PUT @Path("{id}")
@@ -163,7 +163,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), new NoteTO());
+        return convert(dao.save(convert(info, entity)), NoteTO.class);
     }
 
     @POST

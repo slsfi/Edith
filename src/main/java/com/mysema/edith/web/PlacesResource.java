@@ -23,7 +23,7 @@ import com.mysema.edith.services.PlaceDao;
 @Transactional
 @Path("/places")
 @Produces(MediaType.APPLICATION_JSON)
-public class PlacesResource extends AbstractResource<PlaceTO> {
+public class PlacesResource extends AbstractResource {
 
     private final PlaceDao dao;
 
@@ -34,12 +34,12 @@ public class PlacesResource extends AbstractResource<PlaceTO> {
 
     @GET @Path("{id}")
     public PlaceTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), new PlaceTO());
+        return convert(dao.getById(id), PlaceTO.class);
     }
 
     @POST
     public PlaceTO create(PlaceTO info) {
-        return convert(dao.save(convert(info, new Place())), new PlaceTO());
+        return convert(dao.save(convert(info, new Place())), PlaceTO.class);
     }
 
     @PUT @Path("{id}")
@@ -48,7 +48,7 @@ public class PlacesResource extends AbstractResource<PlaceTO> {
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), new PlaceTO());
+        return convert(dao.save(convert(info, entity)), PlaceTO.class);
     }
 
     @DELETE @Path("{id}")

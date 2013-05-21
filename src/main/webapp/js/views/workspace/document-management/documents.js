@@ -54,13 +54,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
     },
     
     reload: function() {
-      this.$('#directoryTree').dynatree('getTree').reload();
+      this.$('#directory-tree').dynatree('getTree').reload();
     },
 
     render: function() {
       this.$el.html(template());
       var self = this;
-      this.$('#directoryTree').dynatree({
+      this.$('#directory-tree').dynatree({
         initAjax: {
           url: '/api/files'
         },
@@ -100,11 +100,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
       });
             
-      this.$("#directoryTree").on("mouseenter", "li", function() {
+      this.$("#directory-tree").on("mouseenter", "li", function() {
         $(this).find(".actions").show();
       });      
       
-      this.$("#directoryTree").on("mouseleave", "li", function() {
+      this.$("#directory-tree").on("mouseleave", "li", function() {
         $(this).find(".actions").hide();
       });
       

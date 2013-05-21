@@ -18,7 +18,7 @@ import com.mysema.edith.services.TermDao;
 @Transactional
 @Path("/terms")
 @Produces(MediaType.APPLICATION_JSON)
-public class TermsResource extends AbstractResource<TermTO> {
+public class TermsResource extends AbstractResource {
 
     private final TermDao dao;
 
@@ -29,12 +29,12 @@ public class TermsResource extends AbstractResource<TermTO> {
 
     @GET @Path("{id}")
     public TermTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), new TermTO());
+        return convert(dao.getById(id), TermTO.class);
     }
 
     @POST
     public TermTO create(TermTO info) {
-        return convert(dao.save(convert(info, new Term())), new TermTO());
+        return convert(dao.save(convert(info, Term.class)), TermTO.class);
     }
 
     @PUT @Path("{id}")
@@ -43,7 +43,7 @@ public class TermsResource extends AbstractResource<TermTO> {
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), new TermTO());
+        return convert(dao.save(convert(info, entity)), TermTO.class);
     }
 
     @DELETE @Path("{id}")

@@ -9,13 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.mysema.edith.Identifiable;
 
-public abstract class AbstractResource<Type> {
+public abstract class AbstractResource {
 
     @Inject
     private Converter converter;
 
-    protected <F, T> T convert(F source, T target) {
+    protected <F, T> T convert(F source, Class<T> target) {
+        return converter.convert(source, target);
+    }
+    
+    protected <F, T extends Identifiable> T convert(F source, T target) {
         return converter.convert(source, target);
     }
 

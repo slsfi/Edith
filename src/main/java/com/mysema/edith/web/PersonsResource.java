@@ -23,7 +23,7 @@ import com.mysema.edith.services.PersonDao;
 @Transactional
 @Path("/persons")
 @Produces(MediaType.APPLICATION_JSON)
-public class PersonsResource extends AbstractResource<PersonTO> {
+public class PersonsResource extends AbstractResource {
 
     private final PersonDao dao;
 
@@ -34,12 +34,12 @@ public class PersonsResource extends AbstractResource<PersonTO> {
 
     @GET @Path("{id}")
     public PersonTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), new PersonTO());
+        return convert(dao.getById(id), PersonTO.class);
     }
 
     @POST
     public PersonTO create(PersonTO info) {
-        return convert(dao.save(convert(info, new Person())), new PersonTO());
+        return convert(dao.save(convert(info, Person.class)), PersonTO.class);
     }
 
     @PUT @Path("{id}")
@@ -48,7 +48,7 @@ public class PersonsResource extends AbstractResource<PersonTO> {
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), new PersonTO());
+        return convert(dao.save(convert(info, entity)), PersonTO.class);
     }
 
     @DELETE @Path("{id}")

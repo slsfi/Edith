@@ -28,7 +28,7 @@ import com.mysema.edith.services.DocumentNoteService;
 @Transactional
 @Path("/document-notes")
 @Produces(MediaType.APPLICATION_JSON)
-public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
+public class DocumentNotesResource extends AbstractResource {
 
     private final DocumentNoteService service;
 
@@ -42,16 +42,16 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
                                   @QueryParam("note") boolean note) {
         Map<String, Object> rv = new HashMap<String, Object>();
         DocumentNote documentNote = service.getById(id);
-        rv.put("documentNote", convert(documentNote, new DocumentNoteTO()));
+        rv.put("documentNote", convert(documentNote, DocumentNoteTO.class));
         if (note) {
-            rv.put("note", convert(documentNote.getNote(), new NoteTO()));
+            rv.put("note", convert(documentNote.getNote(), NoteTO.class));
         }
         return rv;
     }
 
     @POST
     public DocumentNoteTO create(DocumentNoteTO info) {
-        return convert(service.save(convert(info, new DocumentNote())), new DocumentNoteTO());
+        return convert(service.save(convert(info, new DocumentNote())), DocumentNoteTO.class);
     }
 
     @PUT @Path("{id}")
@@ -60,7 +60,7 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(service.save(convert(info, entity)), new DocumentNoteTO());
+        return convert(service.save(convert(info, entity)), DocumentNoteTO.class);
     }
 
     @DELETE @Path("{id}")

@@ -46,7 +46,7 @@ import com.sun.jersey.multipart.FormDataParam;
 @Transactional
 @Path("/documents")
 @Produces(MediaType.APPLICATION_JSON)
-public class DocumentsResource extends AbstractResource<DocumentTO>{
+public class DocumentsResource extends AbstractResource {
 
     private final DocumentDao dao;
 
@@ -81,7 +81,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
 
     @GET @Path("{id}")
     public DocumentTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), new DocumentTO());
+        return convert(dao.getById(id), DocumentTO.class);
     }
 
     @GET @Path("{id}/document-notes")
@@ -100,18 +100,18 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
         } else {
             documentNote = documentNoteService.attachNote(doc, sel.getText());
         }
-        return convert(documentNote, new DocumentNoteTO());
+        return convert(documentNote, DocumentNoteTO.class);
     }
 
     @PUT @Path("{id}/document-notes/{docnote-id}")
     public DocumentNoteTO update(@PathParam("docnote-id") Long docNoteId, SelectionTO sel) {
         DocumentNote documentNote = documentNoteService.getById(docNoteId);
-        return convert(documentNoteService.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
+        return convert(documentNoteService.updateNote(documentNote, sel.getText()), DocumentNoteTO.class);
     }
 
     @POST
     public DocumentTO create(DocumentTO info) {
-        return convert(dao.save(convert(info, new Document())), new DocumentTO());
+        return convert(dao.save(convert(info, Document.class)), DocumentTO.class);
     }
 
     @PUT @Path("{id}")
@@ -120,7 +120,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), new DocumentTO());
+        return convert(dao.save(convert(info, entity)), DocumentTO.class);
     }
 
     @DELETE @Path("{id}")

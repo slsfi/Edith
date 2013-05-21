@@ -18,7 +18,7 @@ import com.mysema.edith.services.UserDao;
 @Transactional
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
-public class UsersResource extends AbstractResource<UserTO> {
+public class UsersResource extends AbstractResource {
 
     private final UserDao dao;
 
@@ -29,17 +29,17 @@ public class UsersResource extends AbstractResource<UserTO> {
 
     @GET @Path("current")
     public UserTO getCurrent() {
-        return convert(dao.getCurrentUser(), new UserTO());
+        return convert(dao.getCurrentUser(), UserTO.class);
     }
 
     @GET @Path("{id}")
     public UserTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), new UserTO());
+        return convert(dao.getById(id), UserTO.class);
     }
 
     @POST
     public UserTO create(UserTO info) {
-        return convert(dao.save(convert(info, new User())), new UserTO());
+        return convert(dao.save(convert(info, User.class)), UserTO.class);
     }
 
     @PUT @Path("{id}")
@@ -48,7 +48,7 @@ public class UsersResource extends AbstractResource<UserTO> {
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), new UserTO());
+        return convert(dao.save(convert(info, entity)), UserTO.class);
     }
 
     @DELETE @Path("{id}")
