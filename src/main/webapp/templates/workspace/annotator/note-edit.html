@@ -7,7 +7,8 @@
   <button>Tallenna</button> <button>Poista</button>
 
   <h4>Viitteen muokkaus:</h4>
-Muokattu + muokkaaja + muokkaajat (read-only)
+  <div>{{ note.editedOn }} {{ note.lastEditedBy.username }} {{#each note.allEditors }} ({{ this.username }}) {{/each}}</div>
+  Muokattu + muokkaaja + muokkaajat (read-only)
 Viitteen tyyppi (checkboxes)
 Perusmuoto
 Perusmuodon kieli (select)

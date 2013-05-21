@@ -11,34 +11,36 @@ import com.mysema.edith.domain.NoteFormat;
 import com.mysema.edith.domain.NoteType;
 
 public class NoteTO {
-    
+
     private Long id;
-    
+
     private String lemma;
-    
+
     private TermTO term;
-    
+
     private Long editedOn;
-    
+
     private UserTO lastEditedBy;
-    
+
     private String sources;
-    
+
     private String subtextSources;
-    
+
     private boolean deleted;
-    
+
     private String description;
-    
+
     private Set<NoteType> types;
-    
+
     private NoteFormat format;
-    
+
     private String lemmaMeaning;
-    
+
     private PersonTO person;
-    
+
     private PlaceTO place;
+
+    private Set<UserTO> allEditors;
 
     public Long getId() {
         return id;
@@ -151,7 +153,12 @@ public class NoteTO {
     public void setPlace(PlaceTO place) {
         this.place = place;
     }
-    
-    
 
+    public Set<UserTO> getAllEditors() {
+        return allEditors;
+    }
+
+    public void setAllEditors(Set<UserTO> allEditors) {
+        this.allEditors = allEditors;
+    }
 }

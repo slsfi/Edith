@@ -14,8 +14,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                            });
     },
 
-    render: function(note) {
-      this.$el.html(this.template(note));
+    render: function(data) {
+      var documentNote = data.documentNote;
+      documentNote.note = data.note;
+      this.$el.html(this.template(documentNote));
     }
   });
 
