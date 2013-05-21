@@ -31,5 +31,4 @@ public final class SKSStart {
         JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
     }
 
-
 }

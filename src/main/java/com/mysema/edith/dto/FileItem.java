@@ -20,7 +20,7 @@ public class FileItem {
         this.title = title;
         this.path = path;
         this.isFolder = isFolder;
-        isLazy = isFolder;
+        this.isLazy = isFolder;
         this.children = children;
         this.hasChildren = hasChildren;
     }

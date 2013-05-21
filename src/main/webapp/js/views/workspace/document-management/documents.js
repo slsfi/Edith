@@ -49,8 +49,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
     initialize: function() {
       _.bindAll(this);
-      vent.on('document:delete', this.reload);
-      vent.on('document:rename', this.reload);
+      vent.on('document:delete document:rename', this.reload);
       this.render();
     },
     
@@ -101,28 +100,24 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
       });
             
-      $("#directoryTree").on("mouseenter", ".dynatree-node", function() {
-        var node = $.ui.dynatree.getNode(this);
+      this.$("#directoryTree").on("mouseenter", "li", function() {
         $(this).find(".actions").show();
       });      
-      $("#directoryTree").on("mouseleave", ".dynatree-node", function() {
-        var node = $.ui.dynatree.getNode(this);
+      
+      this.$("#directoryTree").on("mouseleave", "li", function() {
         $(this).find(".actions").hide();
       });
       
     },
 
     submit: function() {
-      var self = this;
       var formData = new FormData(this.$(".import").get(0));
       $.ajax('api/documents',
              {type: 'post',
               processData: false,
               contentType: false,
               data: formData,
-              success: function(data) {
-                self.reload();
-              }});
+              success: this.reload});
       return false;
     }
 
