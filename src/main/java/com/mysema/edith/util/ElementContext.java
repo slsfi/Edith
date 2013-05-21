@@ -21,6 +21,10 @@ public class ElementContext implements Cloneable {
         stack.push(new Item(s));
         path = null;
     }
+    
+    public String peek() {
+        return stack.peek().toString();
+    } 
 
     public void pop() {
         stack.pop();

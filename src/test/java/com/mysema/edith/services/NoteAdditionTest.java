@@ -60,15 +60,15 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     @Inject @Named(EdithTestConstants.TEST_DOCUMENT_CONTENT_KEY)
     private String testDocumentContent;
 
-    private void addNote(SelectedText selectedText) throws Exception {
-        addNote(selectedText, source);
+    private int addNote(SelectedText selectedText) throws Exception {
+        return addNote(selectedText, source);
     }
 
-    private void addNote(SelectedText selectedText, /*InputStream reader*/ Reader reader) throws Exception {
+    private int addNote(SelectedText selectedText, /*InputStream reader*/ Reader reader) throws Exception {
         target = new StringWriter();
         XMLEventReader sourceReader = inFactory.createXMLEventReader(reader);
         XMLEventWriter targetWriter = outFactory.createXMLEventWriter(target);
-        documentXMLDao.addNote(sourceReader, targetWriter, selectedText, localId);
+        return documentXMLDao.addNote(sourceReader, targetWriter, selectedText, localId);
     }
 
     @Before
@@ -411,6 +411,108 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         assertTrue(content.contains(start(localId) + text + end(localId)));
         assertTrue(content.contains("<ref xml:id=\"ref.4\" target=\"note.4\">rahi</ref>"));
     }
+    
+    @Test
+    public void AddNote_with_comment() throws Exception {
+        String xml = "<a><b><c><p rend='normalizedIndent'>" +
+            "Så mycket nu om flickorna, sedan wi denna gången förbigå det vexande slägtet. (Bland fruarna dansa:" + 
+            "<persName rend='underline'>Johanna Frosterus</persName>, den bästa valseuse<!--foreign?--> i"  +
+            "<placeName>NyCarleby</placeName>, <persName rend='underline'>Fru Synnerberg</persName>, fruarne" + 
+            "<persName rend='underline'>Turdin</persName>, <persName rend='underline'>Hammarin</persName>," + 
+            "<persName rend='underline'>Lithén</persName> och <persName rend='underline'>Benzelstjerna</persName>.)" +
+            "</p></c></b></a>"; 
+        
+        String start = "a-b0-c0-p0-persName0";
+        String end = start;        
+        addNote(new SelectedText(start, end, "Johanna"), new StringReader(xml));  
+        
+        String content = target.toString();
+//        System.out.println(content);
+        assertTrue(content.contains("valseuse<!--foreign?--> i"));
+    } 
+    
+    @Test
+    public void AddNote_with_quotes() throws Exception {
+        String xml = "<a><b><c><p rend='normalizedIndent'>" +
+                "Så mycket nu om flickorna, \"sedan wi denna gången förbigå det vexande slägtet\". (Bland fruarna dansa:" + 
+                "<persName rend='underline'>Johanna Frosterus</persName>, den bästa valseuse<!--foreign?--> i"  +
+                "<placeName>NyCarleby</placeName>, <persName rend='underline'>Fru Synnerberg</persName>, fruarne" + 
+                "<persName rend='underline'>Turdin</persName>, <persName rend='underline'>Hammarin</persName>," + 
+                "<persName rend='underline'>Lithén</persName> och <persName rend='underline'>Benzelstjerna</persName>.)" +
+                "</p></c></b></a>"; 
+            
+        String start = "a-b0-c0-p0";
+        String end = start;        
+        addNote(new SelectedText(start, end, 0, 1, "\"sedan wi denna gången förbigå det vexande slägtet\""), new StringReader(xml));  
+            
+        String content = target.toString();
+        System.out.println(content);
+        assertTrue(content.contains(
+                "/>\"sedan wi denna gången förbigå det vexande slägtet\"<"));
+    } 
+    
+    @Test
+    public void Add_Note_For_Split_Word_Deeply_Nested() throws Exception {
+        String start = "div0-div1-sp1-p0-place0-subst0-add0";
+        String end = "div0-div1-sp1-p0-place0";
+        String text = "M\nazara";
+        addNote(new SelectedText(PREFIX + start, PREFIX + end, 0, 2, text));
+
+        String content = getContent();
+        assertTrue(content.contains("<place><subst><del>m</del><add>" +
+                                    start(localId) +
+                                    "M</add></subst>azara" +
+                                    end(localId) + "</place> win</p>"));
+    }
+
+    @Test
+    public void Add_Note_For_Split_Word_Two_Words_Deeply_Nested() throws Exception {
+        String start = "div0-div1-sp1-p0-place0-subst0-add0";
+        String end = "div0-div1-sp1-p0";
+        String text = "M\nazara win";
+        addNote(new SelectedText(PREFIX + start, PREFIX + end, 0, 8, text));
+
+        String content = getContent();
+        System.err.println(content);
+        assertTrue(content.contains("<subst><del>m</del><add>" +
+                                    start(localId) +
+                                    "M</add></subst>azara</place> win" +
+                                    end(localId) + "</p>"));
+    } 
+    
+    @Test
+    public void Position_In_Order() throws Exception {
+        // play-act-sp-p[1] , play-act-sp-p[1] : Jaana
+        int pos1 = addNote(new SelectedText(PREFIX + "div0-div1-sp0-p0", PREFIX + "div0-div1-sp0-p0", 0, 2, "Jaana"));        
+        // play-act-sp-p[1] , play-act-sp-p[1] : kylään
+        int pos2 = addNote(new SelectedText(PREFIX + "div0-div1-sp0-p0", PREFIX + "div0-div1-sp0-p0", 0, 3, "kylään"), new StringReader(target.toString()));        
+        // play-act-sp2-p[1] , play-act-sp2-p[1] : käski
+        int pos3 = addNote(new SelectedText(PREFIX + "div0-div1-sp1-p0", PREFIX + "div0-div1-sp1-p0", 0, 0, "käski"), new StringReader(target.toString()));        
+        // play-act-sp-p[1] , play-act-sp-p[1] : äitini
+        int pos4 = addNote(new SelectedText(PREFIX + "div0-div1-sp0-p0", PREFIX + "div0-div1-sp0-p0", 0, 0, "äitini"), new StringReader(target.toString()));
+        // play-act-sp2-p[1] , play-act-sp2-p[1] : päälles
+        int pos5 = addNote(new SelectedText(PREFIX + "div0-div1-sp1-p0", PREFIX + "div0-div1-sp1-p0", 0, 3, "päälles"), new StringReader(target.toString()));
+        // play-act-sp2-p[1] , play-act-sp2-p[1] : ullakosta
+        // 3359 -> 3372
+        int pos6 = addNote(new SelectedText(PREFIX + "div0-div1-sp1-p0", PREFIX + "div0-div1-sp1-p0", 1, 1, "ullakosta"), new StringReader(target.toString()));
+        // play-act-sp-p[1] , play-act-sp-p[1] : takaisin
+        // 3037 -> 3244
+        int pos7 = addNote(new SelectedText(PREFIX + "div0-div1-sp0-p0", PREFIX + "div0-div1-sp0-p0", 14, 16, "takaisin"), new StringReader(target.toString())); // FIXME
+        
+        // Jaana, äitini, takaisin, ullakosta, päälles
+        assertTrue(pos4 > pos1);
+        assertTrue(pos7 > pos4);
+        assertTrue(pos6 > pos7);
+        assertTrue(pos5 > pos6);
+        
+        System.out.println(pos1);
+        System.out.println(pos2);
+        System.out.println(pos3);
+        System.out.println(pos4);
+        System.out.println(pos5);
+        System.out.println(pos6);
+        System.out.println(pos7);
+    } 
 
     private SelectedText createMultipleElementSelectedText(String prevCharacters, String elementCharacters, String characters, String prevContext, String context) {
         int min = generateRandomNumber(0, prevCharacters.length());

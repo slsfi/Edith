@@ -130,6 +130,8 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
         StringBuilder endStrings = new StringBuilder();
         /* Used to store all the events while buffering. */
         List<XMLEvent> events = new ArrayList<XMLEvent>();
+        ElementContext bufferedContext = null;
+        boolean nested = sel.isStartChildOfEnd(); 
         AtomicInteger endOffset = new AtomicInteger(0);
 
         // Some sort of absolute position to have elements in order
@@ -202,6 +204,7 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                             && !matched.areBothMatched()) {
                         buffering = true;
                         startedBuffering = true;
+                        bufferedContext = (ElementContext) context.clone(); 
                     }
                 } else if (event.isCharacters()) {
                     if (buffering && !matched.areBothMatched()) {
@@ -216,14 +219,18 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                         }
                     }
 
-                    if (!buffering) {
+                    if (!buffering && !matched.areBothMatched()) {
                         position.addAndGet(event.asCharacters().getData().length());
                     }
 
                 } else if (event.isEndElement()) {
                     if (context.equalsAny(sel.getStartNode(), sel.getEndNode())) {
+                        if (context.equalsAny(sel.getEndNode()) && buffering) {
+                            // XXX: Superhacky
+                            bufferedContext.pop();
+                        } 
                         flush(writer, position, !matched.isStartMatched() ? allStrings.toString()
-                                : endStrings.toString(), sel, events, context, matched, localId,
+                                : endStrings.toString(), sel, events, nested ? bufferedContext : context, matched, localId, 
                                 endOffset);
                         buffering = false;
                         events.clear();
@@ -242,6 +249,11 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
                      */
                     if (startedBuffering && (sel.isStartChildOfEnd() || sel.isEndChildOfStart())) {
                         buffering = !matched.areBothMatched();
+                    }
+                } else if (event.getEventType() == XMLEvent.COMMENT) {
+                    if (buffering) {
+                        events.add(event);
+                        handled = true;
                     }
                 }
                 if (!handled) {
@@ -280,7 +292,7 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
             boolean handled = false;
             if (e.isStartElement()) {
                 context.push(extractName(e.asStartElement()));
-            } else if (e.isEndElement()) {
+            } else if (e.isEndElement() && !sel.getEndNode().equals(context.getPath())) { 
                 context.pop();
             } else if (e.isCharacters() && context.equalsAny(sel.getStartNode(), sel.getEndNode())) {
                 String eventString = e.asCharacters().getData();

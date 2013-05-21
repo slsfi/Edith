@@ -39,7 +39,12 @@ public class Item implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Item item = (Item) super.clone();
+        Item item = null;
+        try {
+            item = (Item) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        } 
         item.counts = new HashMap<String, AtomicInteger>();
         for (String key : counts.keySet()) {
             item.counts.put(key, counts.get(key));
