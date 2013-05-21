@@ -1,1 +1,17 @@
-{{ id }}
+<div>
+  <h4>Esiintymä</h4>
+  <div>Valinta tekstissä: {{ fullSelection }}</div>
+  <div>Lyhennetty valinta: {{ shortenedSelection }}</div>
+  <div>Lemman positio: {{ lemmaPosition }}</div>
+  <div>Julkaistavissa: <input type="checkbox" value="{{ publishable }}"></input></div>
+  <button>Tallenna</button> <button>Poista</button>
+
+  <h4>Viitteen muokkaus:</h4>
+Muokattu + muokkaaja + muokkaajat (read-only)
+Viitteen tyyppi (checkboxes)
+Perusmuoto
+Perusmuodon kieli (select)
+Kuvaus (richtext)
+Lähteet (richtext)
+Tila (select)
+Tallenna (button)
