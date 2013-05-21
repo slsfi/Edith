@@ -8,7 +8,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       _.bindAll(this, 'render');
       var self = this;
       vent.on('note:open', function(id) {
-                             $.getJSON('/api/document-notes/' + id, self.render);
+                             $.getJSON('/api/document-notes/' + id,
+                                       {note: true},
+                                       self.render);
                            });
     },
 

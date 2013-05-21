@@ -8,25 +8,25 @@ package com.mysema.edith.dto;
 public class DocumentNoteTO {
 
     private Long id;
-    
+
     private Long document;
-    
+
     private boolean publishable;
-    
+
     private Long revision;
-    
+
     private boolean deleted;
-    
+
     private String fullSelection;
-    
+
     private int position;
-    
+
     private long createdOn;
-    
+
     private String shortenedSelection;
-    
+
     private String lemmaPosition;
-    
+
     private Long note;
 
     public Long getId() {
@@ -116,6 +116,6 @@ public class DocumentNoteTO {
     public void setNote(Long note) {
         this.note = note;
     }
-    
-    
+
+
 }

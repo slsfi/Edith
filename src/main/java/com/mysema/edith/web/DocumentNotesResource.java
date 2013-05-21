@@ -5,6 +5,9 @@
  */
 package com.mysema.edith.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -19,6 +22,7 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteService;
 
 @Transactional
@@ -34,9 +38,15 @@ public class DocumentNotesResource extends AbstractResource<DocumentNoteTO>{
     }
 
     @GET @Path("{id}")
-    public DocumentNoteTO getById(@PathParam("id") Long id,
+    public Map<String, Object> getById(@PathParam("id") Long id,
                                   @QueryParam("note") boolean note) {
-        return convert(service.getById(id), new DocumentNoteTO());
+        Map<String, Object> rv = new HashMap<String, Object>();
+        DocumentNote documentNote = service.getById(id);
+        rv.put("documentNote", convert(documentNote, new DocumentNoteTO()));
+        if (note) {
+            rv.put("note", convert(documentNote.getNote(), new NoteTO()));
+        }
+        return rv;
     }
 
     @POST
