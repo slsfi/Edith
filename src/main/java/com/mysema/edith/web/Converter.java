@@ -57,7 +57,7 @@ public class Converter {
             } else if (targetClass.isInstance(source)) {
                 return (T) source;
             } else if (source != null) {
-                return (T) convertBean(new BeanMap(source), new BeanMap(targetClass.newInstance()));
+                return convert(source, targetClass.newInstance());
             } else {
                 return null;
             }
@@ -74,7 +74,9 @@ public class Converter {
      */
     public <F, T> T convert(F source, T target) {
         try {
-            if (source != null) {
+            if (source instanceof Map) {
+                return (T) convertBean((Map)source, new BeanMap(target));
+            } else if (source != null) {
                 return (T) convertBean(new BeanMap(source), new BeanMap(target));
             } else {
                 return null;
@@ -85,8 +87,7 @@ public class Converter {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-    
-    
+        
     /**
      * @param source
      * @param target
@@ -95,10 +96,10 @@ public class Converter {
      * @throws IllegalAccessException
      */
     @SuppressWarnings("rawtypes")
-    private Object convertBean(BeanMap source, BeanMap target) throws InstantiationException, IllegalAccessException {
+    private Object convertBean(Map<String, Object> source, BeanMap target) throws InstantiationException, IllegalAccessException {
         for (Map.Entry<String, Object> entry : source.entrySet()) {
-            Class<?> type = target.getType(entry.getKey());
-            if (type != null && target.getWriteMethod(entry.getKey()) != null) {
+            Class<?> targetType = target.getType(entry.getKey());
+            if (targetType != null && target.getWriteMethod(entry.getKey()) != null) {
                 boolean primitive = target.getType(entry.getKey()).isPrimitive();
                 if (entry.getKey().equals("class") || (primitive && entry.getValue() == null)) {
                     continue;
@@ -107,13 +108,15 @@ public class Converter {
                 continue;
             }
                         
-            Class<?> sourceType = source.getType(entry.getKey());
-            Object sourceValue = source.get(entry.getKey());
+            Object sourceValue = source.get(entry.getKey());            
+            Class<?> sourceType = sourceValue != null ? sourceValue.getClass() : Object.class;
             Object targetValue = null;
+            if (sourceValue == null) {
+                // do nothing
             // collection
-            if (Collection.class.isAssignableFrom(type) && Collection.class.isAssignableFrom(sourceType)) {
+            } else if (Collection.class.isAssignableFrom(targetType) && Collection.class.isAssignableFrom(sourceType)) {
                 Collection sourceColl = (Collection)sourceValue;
-                Collection targetColl = (Collection) containerTypes.get(type).newInstance();
+                Collection targetColl = (Collection) containerTypes.get(targetType).newInstance();
                 targetValue = targetColl;
                 if (sourceColl != null && !sourceColl.isEmpty()) {
                     Type genericType = target.getReadMethod(entry.getKey()).getGenericReturnType();
@@ -127,14 +130,17 @@ public class Converter {
                     }
                 }
             // map
-            } else if (Map.class.isAssignableFrom(type)) {
+            } else if (Map.class.isAssignableFrom(targetType)) {
                 throw new UnsupportedOperationException();
             // direct
-            } else if (type.isAssignableFrom(sourceType)) {
+            } else if (targetType.isAssignableFrom(sourceType)) {
                 targetValue = sourceValue;
+            // enum
+            } else if (targetType.isEnum()) {
+                targetValue = Enum.valueOf((Class)targetType, sourceValue.toString());
             // other
             } else { 
-                targetValue = convert(sourceValue, type);
+                targetValue = convert(sourceValue, targetType);
             }
             target.put(entry.getKey(), targetValue);
         }

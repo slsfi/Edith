@@ -2,8 +2,11 @@ package com.mysema.edith.web;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
+
 import org.junit.Test;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
@@ -135,6 +138,23 @@ public class ConverterTest {
         
         UserTO info = converter.convert(user, new UserTO());
         assertEquals("x", info.getUsername());
+    }
+    
+    @Test
+    public void From_Map() {
+        Map<String, String> contents = Maps.newHashMap();
+        contents.put("username", "x");
+        contents.put("email", "a@b.com");
+        contents.put("firstName", "a");
+        contents.put("lastName", "b");
+        contents.put("profile", "User");
+        
+        User user = converter.convert(contents, new User());
+        assertEquals("x", user.getUsername());
+        assertEquals("a@b.com", user.getEmail());
+        assertEquals("a", user.getFirstName());
+        assertEquals("b", user.getLastName());
+        assertEquals(Profile.User, user.getProfile());
     }
 
 }
