@@ -20,24 +20,24 @@ import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.services.UserDao;
 
 public class DocumentNotesResourceTest extends AbstractResourceTest {
-    
+
     @Inject @Named(EdithTestConstants.TEST_DOCUMENT_KEY)
     private String testDocument;
-    
+
     @Inject
     private DocumentNotesResource documentNotes;
-        
+
     @Inject
     private DocumentDao documentDao;
-    
-    @Inject 
+
+    @Inject
     private NoteDao noteDao;
-    
+
     @Inject
     private UserDao userDao;
-    
+
     private Note note;
-    
+
     private Note createNote(User editor) {
         Note note = new Note();
         note.setTerm(new Term());
@@ -45,25 +45,25 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         note.setLastEditedBy(editor);
         return note;
     }
-    
+
     @Before
     public void setUp() {
         User editor = new User();
         editor.setUsername("test"+System.currentTimeMillis());
         userDao.save(editor);
-        
+
         note  = createNote(editor);
         noteDao.save(note);
     }
-    
+
     @Test
     public void GetById() {
         Document document = documentDao.getDocumentForPath(testDocument);
-        DocumentNote documentNote = noteDao.createDocumentNote(note, document, 
+        DocumentNote documentNote = noteDao.createDocumentNote(note, document,
                 "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
-        assertNotNull(documentNotes.getById(documentNote.getId()));
+        assertNotNull(documentNotes.getById(documentNote.getId(), false));
     }
-    
+
     @Test
     public void Create() {
         Document document = documentDao.getDocumentForPath(testDocument);
@@ -72,10 +72,10 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         info.setFullSelection("a");
         info.setNote(note.getId());
         DocumentNoteTO created = documentNotes.create(info);
-        
+
         assertNotNull(created.getId());
     }
-    
+
     @Test
     public void Create_without_Note() {
         Document document = documentDao.getDocumentForPath(testDocument);
@@ -83,8 +83,8 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         info.setDocument(document.getId());
         info.setFullSelection("a");
         DocumentNoteTO created = documentNotes.create(info);
-        
+
         assertNotNull(created.getId());
     }
- 
+
 }

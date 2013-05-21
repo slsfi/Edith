@@ -31,20 +31,17 @@ public class UsersResource extends AbstractResource<UserTO> {
     public UserTO getCurrent() {
         return convert(dao.getCurrentUser(), new UserTO());
     }
-    
-    @Override
+
     @GET @Path("{id}")
     public UserTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), new UserTO());
     }
 
-    @Override
     @POST
     public UserTO create(UserTO info) {
         return convert(dao.save(convert(info, new User())), new UserTO());
     }
 
-    @Override
     @PUT @Path("{id}")
     public UserTO update(@PathParam("id") Long id, UserTO info) {
         User entity = dao.getById(id);
@@ -54,7 +51,6 @@ public class UsersResource extends AbstractResource<UserTO> {
         return convert(dao.save(convert(info, entity)), new UserTO());
     }
 
-    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         throw new UnsupportedOperationException();

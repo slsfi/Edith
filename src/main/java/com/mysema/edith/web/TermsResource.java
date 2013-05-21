@@ -27,19 +27,16 @@ public class TermsResource extends AbstractResource<TermTO> {
         this.dao = dao;
     }
 
-    @Override
     @GET @Path("{id}")
     public TermTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), new TermTO());
     }
 
-    @Override
     @POST
     public TermTO create(TermTO info) {
         return convert(dao.save(convert(info, new Term())), new TermTO());
     }
 
-    @Override
     @PUT @Path("{id}")
     public TermTO update(@PathParam("id") Long id, TermTO info) {
         Term entity = dao.getById(id);
@@ -49,7 +46,6 @@ public class TermsResource extends AbstractResource<TermTO> {
         return convert(dao.save(convert(info, entity)), new TermTO());
     }
 
-    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);

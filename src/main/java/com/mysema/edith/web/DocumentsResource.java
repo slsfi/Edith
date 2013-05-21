@@ -51,7 +51,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
     private final DocumentDao dao;
 
     private final DocumentNoteDao documentNoteDao;
-    
+
     private final DocumentNoteService documentNoteService;
 
     // TODO: Remove once not needed
@@ -79,7 +79,6 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
         this.renderer = renderer;
     }
 
-    @Override
     @GET @Path("{id}")
     public DocumentTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), new DocumentTO());
@@ -90,7 +89,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
         List<DocumentNote> docNotes = documentNoteDao.getOfDocument(id);
         return convert(docNotes, DocumentNoteTO.class);
     }
-    
+
     @POST @Path("{id}/document-notes")
     public DocumentNoteTO create(@PathParam("id") Long docId, SelectionTO sel) {
         Document doc = dao.getById(docId);
@@ -100,7 +99,7 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
             documentNote = documentNoteService.attachNote(note, doc, sel.getText());
         } else {
             documentNote = documentNoteService.attachNote(doc, sel.getText());
-        }               
+        }
         return convert(documentNote, new DocumentNoteTO());
     }
 
@@ -110,13 +109,11 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
         return convert(documentNoteService.updateNote(documentNote, sel.getText()), new DocumentNoteTO());
     }
 
-    @Override
     @POST
     public DocumentTO create(DocumentTO info) {
         return convert(dao.save(convert(info, new Document())), new DocumentTO());
     }
 
-    @Override
     @PUT @Path("{id}")
     public DocumentTO update(@PathParam("id") Long id, DocumentTO info) {
         Document entity = dao.getById(id);
@@ -126,26 +123,25 @@ public class DocumentsResource extends AbstractResource<DocumentTO>{
         return convert(dao.save(convert(info, entity)), new DocumentTO());
     }
 
-    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);
     }
-    
-    @POST 
+
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public List<DocumentTO> addDocuments(@FormDataParam("path") String path, 
+    public List<DocumentTO> addDocuments(@FormDataParam("path") String path,
             @FormDataParam("file") File file,
             @FormDataParam("file") FormDataContentDisposition fileInfo) {
         path = path != null ? path : documentRoot;
         String name = fileInfo.getFileName();
-        List<Document> docs;        
+        List<Document> docs;
         if (name.endsWith(".zip")) {
             docs = dao.addDocumentsFromZip(path != null ? path : documentRoot, file);
         } else {
-            docs = Collections.singletonList(dao.addDocument(path+"/"+name, file));    
+            docs = Collections.singletonList(dao.addDocument(path+"/"+name, file));
         }
-        return convert(docs, DocumentTO.class);        
+        return convert(docs, DocumentTO.class);
     }
 
     @GET

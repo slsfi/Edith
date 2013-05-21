@@ -32,19 +32,16 @@ public class PlacesResource extends AbstractResource<PlaceTO> {
         this.dao = dao;
     }
 
-    @Override
     @GET @Path("{id}")
     public PlaceTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), new PlaceTO());
     }
 
-    @Override
     @POST
     public PlaceTO create(PlaceTO info) {
         return convert(dao.save(convert(info, new Place())), new PlaceTO());
     }
 
-    @Override
     @PUT @Path("{id}")
     public PlaceTO update(@PathParam("id") Long id, PlaceTO info) {
         Place entity = dao.getById(id);
@@ -54,7 +51,6 @@ public class PlacesResource extends AbstractResource<PlaceTO> {
         return convert(dao.save(convert(info, entity)), new PlaceTO());
     }
 
-    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);

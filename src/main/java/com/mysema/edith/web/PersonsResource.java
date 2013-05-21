@@ -32,19 +32,16 @@ public class PersonsResource extends AbstractResource<PersonTO> {
         this.dao = dao;
     }
 
-    @Override
     @GET @Path("{id}")
     public PersonTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), new PersonTO());
     }
 
-    @Override
     @POST
     public PersonTO create(PersonTO info) {
         return convert(dao.save(convert(info, new Person())), new PersonTO());
     }
 
-    @Override
     @PUT @Path("{id}")
     public PersonTO update(@PathParam("id") Long id, PersonTO info) {
         Person entity = dao.getById(id);
@@ -54,7 +51,6 @@ public class PersonsResource extends AbstractResource<PersonTO> {
         return convert(dao.save(convert(info, entity)), new PersonTO());
     }
 
-    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);

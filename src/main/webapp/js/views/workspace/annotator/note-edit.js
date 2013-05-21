@@ -19,3 +19,4 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
   return NoteEdit;
 });
+

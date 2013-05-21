@@ -48,12 +48,11 @@ public class NotesResource extends AbstractResource<NoteTO> {
         this.documentNoteDao = documentNoteDao;
     }
 
-    @Override
     @GET @Path("{id}")
     public NoteTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), new NoteTO());
     }
-    
+
     @GET
     public Map<String, Object> all(
             @QueryParam("page") Long page,
@@ -61,26 +60,26 @@ public class NotesResource extends AbstractResource<NoteTO> {
             @QueryParam("order") String order,
             @QueryParam("direction") String direction,
             @QueryParam("query") String query) {
-        
+
         if (perPage == null) {
             perPage = 25L;
         } else if (perPage <= 0) {
             perPage = (long) Integer.MAX_VALUE;
-        }        
+        }
         if (page == null) {
             page = 1L;
         }
-        
+
         NoteSearchTO search = new NoteSearchTO();
         search.setLemma(query);
         search.setPage(page);
         search.setPerPage(perPage);
         search.setOrderBy(order);
         search.setAscending(direction == null || direction.equals("ASC"));
-        
-        SearchResults<Note> results = dao.findNotes(search);        
+
+        SearchResults<Note> results = dao.findNotes(search);
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
-        
+
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
         rv.put("currentPage", page);
@@ -98,12 +97,12 @@ public class NotesResource extends AbstractResource<NoteTO> {
         }
         return count / pageSize;
     }
-    
+
     @POST @Path("query")
     public Map<String, Object> query(NoteSearchTO search) {
         SearchResults<Note> results = dao.findNotes(search);
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
-        
+
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
         rv.put("currentPage", search.getPage());
@@ -112,14 +111,14 @@ public class NotesResource extends AbstractResource<NoteTO> {
         rv.put("totalEntries", results.getTotal());
         return rv;
     }
-    
+
     @POST @Path("query")
     @Produces("text/csv")
-    public Response queryCsv(NoteSearchTO search) {        
+    public Response queryCsv(NoteSearchTO search) {
         search.setPage(null);
         search.setPerPage(null);
         SearchResults<Note> results = dao.findNotes(search);
-        
+
         StringBuilder builder = new StringBuilder();
         if (search.getColumns() != null && !search.getColumns().isEmpty()) {
             builder.append(StringUtils.join(search.getColumns(), ";"));
@@ -128,7 +127,7 @@ public class NotesResource extends AbstractResource<NoteTO> {
                 BeanMap noteBean = new BeanMap(note);
                 BeanMap termBean = note.getTerm() != null ? new BeanMap(note.getTerm()) : new BeanMap();
                 List<String> values = Lists.newArrayList();
-                for (String column : search.getColumns()) {  
+                for (String column : search.getColumns()) {
                     Object value = null;
                     if (column.startsWith("term")) {
                         value = termBean.get(column.substring(column.indexOf(".")+1));
@@ -139,9 +138,9 @@ public class NotesResource extends AbstractResource<NoteTO> {
                 }
                 builder.append(StringUtils.join(values, ";"));
                 builder.append("\n");
-            }            
-        }       
-        
+            }
+        }
+
         return Response.ok(builder.toString(), "text/csv")
                 .header("Content-Disposition", "attachment; filename=results.csv")
                 .build();
@@ -152,14 +151,12 @@ public class NotesResource extends AbstractResource<NoteTO> {
         List<DocumentNote> docNotes = documentNoteDao.getOfNote(id);
         return convert(docNotes, DocumentNoteTO.class);
     }
-    
-    @Override
+
     @POST
     public NoteTO create(NoteTO info) {
         return convert(dao.save(convert(info, new Note())), new NoteTO());
     }
 
-    @Override
     @PUT @Path("{id}")
     public NoteTO update(@PathParam("id") Long id, NoteTO info) {
         Note entity = dao.getById(id);
@@ -168,14 +165,13 @@ public class NotesResource extends AbstractResource<NoteTO> {
         }
         return convert(dao.save(convert(info, entity)), new NoteTO());
     }
-    
-    @POST 
+
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public int importNotes(@FormDataParam("file") InputStream stream) {
         return dao.importNotes(stream);
     }
 
-    @Override
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
         dao.remove(id);

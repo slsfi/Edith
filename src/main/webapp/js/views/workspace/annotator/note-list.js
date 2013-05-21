@@ -43,3 +43,4 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
   return NoteList;
 });
+

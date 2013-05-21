@@ -10,20 +10,20 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
-public abstract class AbstractResource<Type> implements Resource<Type> {
-    
+public abstract class AbstractResource<Type> {
+
     @Inject
     private Converter converter;
-    
+
     protected <F, T> T convert(F source, T target) {
         return converter.convert(source, target);
     }
-    
+
     protected <F, T> List<T> convert(List<F> source, Class<T> targetClass) {
         try {
             List<T> result = new ArrayList<T>(source.size());
-            for (F obj : source) {            
-                result.add(converter.convert(obj, targetClass.newInstance()));            
+            for (F obj : source) {
+                result.add(converter.convert(obj, targetClass.newInstance()));
             }
             return result;
         } catch (InstantiationException e) {
