@@ -8,6 +8,7 @@ package com.mysema.edith.dto;
 import java.util.Set;
 
 import com.mysema.edith.domain.NoteFormat;
+import com.mysema.edith.domain.NoteStatus;
 import com.mysema.edith.domain.NoteType;
 
 public class NoteTO {
@@ -41,6 +42,8 @@ public class NoteTO {
     private PlaceTO place;
 
     private Set<UserTO> allEditors;
+
+    private NoteStatus status;
 
     public Long getId() {
         return id;
@@ -160,5 +163,13 @@ public class NoteTO {
 
     public void setAllEditors(Set<UserTO> allEditors) {
         this.allEditors = allEditors;
+    }
+
+    public NoteStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(NoteStatus status) {
+        this.status = status;
     }
 }

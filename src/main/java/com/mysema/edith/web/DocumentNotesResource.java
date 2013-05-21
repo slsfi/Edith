@@ -54,6 +54,7 @@ public class DocumentNotesResource extends AbstractResource {
         return convert(service.save(convert(info, new DocumentNote())), DocumentNoteTO.class);
     }
 
+    // TODO: Use java.util.Map as changesets
     @PUT @Path("{id}")
     public DocumentNoteTO update(@PathParam("id") Long id, DocumentNoteTO info) {
         DocumentNote entity = service.getById(id);

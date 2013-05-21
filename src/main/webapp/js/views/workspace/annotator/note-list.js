@@ -1,6 +1,13 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         'text!/templates/workspace/annotator/note-item.html'],
        function($, _, Backbone, vent, Handlebars, noteItemTemplate) {
+
+  Handlebars.registerHelper('when-contains', function(coll, x, options) {
+    if (_.contains(coll, x)) {
+      return options.fn(this);
+    }
+  });
+
   // TODO: What happens upon delete/re-render?
   var NoteListItem = Backbone.View.extend({
     tagName: 'li',
