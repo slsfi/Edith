@@ -35,7 +35,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     render: function() {
-      this.$el.html(this.template(this.documentNote));
+      this.$el.html(this.template(this.documentNote))
+              .effect('highlight', {color: 'lightblue'}, 500);
     },
 
     saveDocumentNote: function(evt) {
@@ -58,6 +59,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
               success: function(data) {
                 vent.trigger('document-note:open', data.id);
               }});
+      this.$el.html('saving...');
     },
   });
 
@@ -79,7 +81,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     render: function() {
-      this.$el.html(this.template(this.note));
+      this.$el.html(this.template(this.note))
+              .effect('highlight', {color: 'lightblue'}, 500);
     },
 
     saveNote: function(evt) {
@@ -114,6 +117,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         success: function(data) {
           vent.trigger('note:open', data.id);
         }});
+      this.$el.html('saving...');
     }
   });
 
