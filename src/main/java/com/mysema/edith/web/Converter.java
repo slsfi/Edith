@@ -129,9 +129,6 @@ public class Converter {
                         targetColl.addAll(sourceColl);
                     }
                 }
-            // map
-            } else if (Map.class.isAssignableFrom(targetType)) {
-                throw new UnsupportedOperationException();
             // direct
             } else if (targetType.isAssignableFrom(sourceType)) {
                 targetValue = sourceValue;

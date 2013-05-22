@@ -5,6 +5,8 @@
  */
 package com.mysema.edith.web;
 
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -43,7 +45,7 @@ public class PlacesResource extends AbstractResource {
     }
 
     @PUT @Path("{id}")
-    public PlaceTO update(@PathParam("id") Long id, PlaceTO info) {
+    public PlaceTO update(@PathParam("id") Long id,  Map<String, Object> info) {
         Place entity = dao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");

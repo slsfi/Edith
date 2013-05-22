@@ -1,5 +1,7 @@
 package com.mysema.edith.web;
 
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -43,7 +45,7 @@ public class UsersResource extends AbstractResource {
     }
 
     @PUT @Path("{id}")
-    public UserTO update(@PathParam("id") Long id, UserTO info) {
+    public UserTO update(@PathParam("id") Long id,  Map<String, Object> info) {
         User entity = dao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");

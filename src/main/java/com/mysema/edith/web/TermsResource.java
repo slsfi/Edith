@@ -1,5 +1,7 @@
 package com.mysema.edith.web;
 
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -38,7 +40,7 @@ public class TermsResource extends AbstractResource {
     }
 
     @PUT @Path("{id}")
-    public TermTO update(@PathParam("id") Long id, TermTO info) {
+    public TermTO update(@PathParam("id") Long id,  Map<String, Object> info) {
         Term entity = dao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");

@@ -158,7 +158,7 @@ public class NotesResource extends AbstractResource {
     }
 
     @PUT @Path("{id}")
-    public NoteTO update(@PathParam("id") Long id, NoteTO info) {
+    public NoteTO update(@PathParam("id") Long id,  Map<String, Object> info) {
         Note entity = dao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");

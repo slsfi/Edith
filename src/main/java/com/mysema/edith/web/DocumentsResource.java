@@ -8,6 +8,7 @@ package com.mysema.edith.web;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -115,7 +116,7 @@ public class DocumentsResource extends AbstractResource {
     }
 
     @PUT @Path("{id}")
-    public DocumentTO update(@PathParam("id") Long id, DocumentTO info) {
+    public DocumentTO update(@PathParam("id") Long id,  Map<String, Object> info) {
         Document entity = dao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");

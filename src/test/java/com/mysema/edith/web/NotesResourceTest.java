@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
@@ -22,7 +23,7 @@ import com.mysema.edith.dto.TermTO;
 import com.mysema.edith.services.NoteDao;
 
 public class NotesResourceTest extends AbstractResourceTest {
-
+    
     @Inject
     private NoteDao noteDao;
 
@@ -71,7 +72,12 @@ public class NotesResourceTest extends AbstractResourceTest {
         TermTO term = new TermTO();
         term.setBasicForm("talo");
         note.setTerm(term);
-        note = notes.update(note.getId(), note);
+        
+        Map<String, Object> contents = Maps.newHashMap();
+        contents.put("lemma", note.getLemma());
+        contents.put("term", term);
+        contents.put("id", note.getId());
+        note = notes.update(note.getId(), contents);
 
         assertNotNull(note.getId());
         assertNotNull(note.getTerm().getId());
