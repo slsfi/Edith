@@ -29,8 +29,8 @@
     <option value="OTHER" {{#when-eq term.language 'OTHER'}} selected {{/when-eq}}>muu</option>
   </select>
 </div>
-<div>Kuvaus: <input name="term.meaning" type="textarea" value="{{ term.meaning }}"></input></div>
-<div>Lähteet: <input name="sources" type="textarea" value="{{ sources }}"></input></div>
+<div>Kuvaus: <textarea class="wysiwyg" name="term.meaning" rows="8" cols="50">{{ term.meaning }}</textarea></div>
+<div>Lähteet: <textarea class="wysiwyg" name="sources" rows="8" cols="50">{{ sources }}</textarea></div>
 <div>Tila:
   <select name="status">
     <option value="INITIAL" {{#when-eq status 'INITIAL'}} selected {{/when-eq}}>alustava</input>

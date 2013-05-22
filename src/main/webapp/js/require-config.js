@@ -17,7 +17,9 @@ window.rconfig = {
     'slickgrid-rowselectionmodel': 'libs/slickgrid/slick.rowselectionmodel',
     slickback: 'libs/slickback/slickback.full',
     json: 'libs/require/json',
-    sprintf: 'libs/sprintf/sprintf'
+    sprintf: 'libs/sprintf/sprintf',
+    ckeditor: 'libs/ckeditor/ckeditor',
+    'ckeditor-jquery': 'libs/ckeditor/adapters/jquery'
   },
   shim: {
     'jquery': { exports: '$' },
@@ -55,6 +57,12 @@ window.rconfig = {
     },
     'sprintf': {
       exports: 'sprintf'
+    },
+    'ckeditor': {
+      exports: 'CKEDITOR'
+    },
+    'ckeditor-jquery': {
+      deps: ['jquery', 'ckeditor']
     },
     'bootstrap': { deps: ['jquery'] },
     'handlebars': { exports: 'Handlebars' },    

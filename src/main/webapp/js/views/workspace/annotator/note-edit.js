@@ -1,9 +1,10 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         'text!/templates/workspace/annotator/note-edit.html',
         'text!/templates/workspace/annotator/document-note-form.html',
-        'text!/templates/workspace/annotator/note-form.html'],
+        'text!/templates/workspace/annotator/note-form.html',
+        'ckeditor', 'ckeditor-jquery'],
        function($, _, Backbone, vent, Handlebars, noteEditTemplate,
-                documentNoteFormTemplate, noteFormTemplate) {
+                documentNoteFormTemplate, noteFormTemplate, CKEditor, ckEditorJquery) {
   Handlebars.registerHelper('when-contains', function(coll, x, options) {
     if (_.contains(coll, x)) {
       return options.fn(this);
@@ -59,9 +60,25 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
               success: function(data) {
                 vent.trigger('document-note:open', data.id);
               }});
-      this.$el.html('saving...');
     },
   });
+
+  var ckEditorSetup = {removePlugins: 'elementspath',
+                       height: '40px',
+                       skin: 'kama',
+                       entities: false,
+                       extraPlugins: 'autogrow',
+                       autoGrow_minHeight: '40',
+                       resize_enabled: false,
+                       startupFocus: false,
+                       toolbarCanCollapse: false,
+                       toolbar: 'edith',
+                       toolbar_edith: [{name: 'basicstyles',
+                                        items: ['SpecialChar', 'Bold','Italic',
+                                                'Underline', 'Subscript',
+                                                'Superscript', '-', 'RemoveFormat']},
+                                                {name: 'links', items: ['Link', 'Unlink']},
+                                                {name: 'document', items: ['Source']}]};
 
   var NoteForm = Backbone.View.extend({
     events: {'click #save-note': 'saveNote'},
@@ -81,13 +98,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     render: function() {
+      _(CKEditor.instances).each(function(editor) {
+        editor.destroy();
+      });
       this.$el.html(this.template(this.note))
               .effect('highlight', {color: 'lightblue'}, 500);
+      this.$('.wysiwyg').ckeditor(ckEditorSetup)
     },
 
     saveNote: function(evt) {
       evt.preventDefault();
-      console.log('saving note');
       var arr = this.$el.serializeArray();
       var data = _(arr).reduce(function(acc, field) {
                                  var name = field.name;
@@ -117,7 +137,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         success: function(data) {
           vent.trigger('note:open', data.id);
         }});
-      this.$el.html('saving...');
     }
   });
 
