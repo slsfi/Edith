@@ -20,10 +20,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
   var DocumentNoteForm = Backbone.View.extend({
     template: Handlebars.compile(documentNoteFormTemplate),
 
-    events: {'click #save-document-note': 'saveDocumentNote'},
+    events: {'click #save-document-note': 'saveDocumentNote',
+             'keyup input': 'setDirty'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'saveDocumentNote');
+      _.bindAll(this, 'render', 'saveDocumentNote', 'setDirty');
       var self = this;
       vent.on('document-note:open document-note:change',
               function(documentNote) {
@@ -38,6 +39,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
               .effect('highlight', {color: 'lightblue'}, 500);
     },
 
+    setDirty: function() {
+      this.isDirty = true;
+      console.log('diiiiiirtyyyyy');
+    },
+    
     saveDocumentNote: function(evt) {
       evt.preventDefault();
       var arr = this.$el.serializeArray();
@@ -79,19 +85,22 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                                                 {name: 'document', items: ['Source']}]};
 
   var NoteForm = Backbone.View.extend({
-    events: {'click #save-note': 'saveNote'},
-
+    events: {'click #save-note': 'saveNote',
+             'keyup input': 'setDirty',
+             'change input': 'setDirty',
+             'change select': 'setDirty'}
+  
     template: Handlebars.compile(noteFormTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'render', 'saveNote');
+      _.bindAll(this, 'render', 'saveNote', 'setDirty');
       var self = this;
       vent.on('note:change', function(note) {
                                self.note = note;
                                self.render();
                              });
       vent.on('note:open', function(noteId) {
-                             $.getJSON('/api/notes' + noteId,
+                             $.getJSON('/api/notes/' + noteId,
                                        function(note) {
                                          self.note = note;
                                          self.render();
@@ -106,6 +115,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$el.html(this.template(this.note))
               .effect('highlight', {color: 'lightblue'}, 500);
       this.$('.wysiwyg').ckeditor(ckEditorSetup)
+    },
+    
+    setDirty: function() {
+      this.isDirty = true;
+      console.log('diiiiiirtyyyyy');
     },
 
     saveNote: function(evt) {
