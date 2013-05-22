@@ -50,14 +50,16 @@ public class Converter {
             
             if (source == null) {
                 return null;
+            // direct
+            } else if (targetClass.isInstance(source)) {
+                return (T) source;
             // id to bean
             } else if (source instanceof Long && Identifiable.class.isAssignableFrom(targetClass)) {
                 return em.get().find(targetClass, source);
             // bean to id
             } else if (source instanceof Identifiable && targetClass.equals(Long.class)) {
                 return (T) ((Identifiable)source).getId();
-            } else if (targetClass.isInstance(source)) {
-                return (T) source;
+            // enum
             } else if (targetClass.isEnum()) {    
                 return (T) Enum.valueOf((Class)targetClass, source.toString());
             } else {
