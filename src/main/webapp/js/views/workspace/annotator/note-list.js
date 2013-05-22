@@ -13,6 +13,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       _.bindAll(this, 'render', 'open');
       this.documentNote = this.options.data;
       this.render();
+      var self = this;
+      vent.on('document-note:change', function(documentNote) {
+        if (documentNote.id === self.documentNote.id) {
+          self.documentNote = documentNote;
+          self.render();
+        }
+      })
     },
 
     render: function() {
@@ -21,7 +28,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     open: function(evt) {
       evt.preventDefault(); 
-      vent.trigger('document-note:open', this.documentNote.id);
+      vent.trigger('document-note:open', this.documentNote);
     }
   });
 

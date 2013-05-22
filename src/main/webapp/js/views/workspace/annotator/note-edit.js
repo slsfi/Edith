@@ -25,14 +25,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     initialize: function() {
       _.bindAll(this, 'render', 'saveDocumentNote');
       var self = this;
-      vent.on('document-note:open', function(documentNoteId) {
-                                      $.getJSON('/api/document-notes/' + documentNoteId,
-                                                function(documentNote) {
-                                                  vent.trigger('note:open', documentNote.note);
-                                                  self.documentNote = documentNote;
-                                                  self.render();
-                                                });
-                                    });
+      vent.on('document-note:open document-note:change',
+              function(documentNote) {
+                vent.trigger('note:open', documentNote.note);
+                self.documentNote = documentNote;
+                self.render();
+              });
     },
 
     render: function() {
@@ -58,7 +56,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
               contentType: "application/json; charset=utf-8",
               data: JSON.stringify(data),
               success: function(data) {
-                vent.trigger('document-note:open', data.id);
+                vent.trigger('document-note:change', data);
               }});
     },
   });
@@ -86,15 +84,19 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     template: Handlebars.compile(noteFormTemplate),
 
     initialize: function() {
-    _.bindAll(this, 'render', 'saveNote');
-    var self = this;
-    vent.on('note:open', function(id) {
-                           $.getJSON('/api/notes/' + id,
-                                     function(note) {
-                                       self.note = note;
-                                       self.render();
-                                     });
-                         });
+      _.bindAll(this, 'render', 'saveNote');
+      var self = this;
+      vent.on('note:change', function(note) {
+                               self.note = note;
+                               self.render();
+                             });
+      vent.on('note:open', function(noteId) {
+                             $.getJSON('/api/notes' + noteId,
+                                       function(note) {
+                                         self.note = note;
+                                         self.render();
+                                       })
+                           });
     },
 
     render: function() {
@@ -135,7 +137,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(data),
         success: function(data) {
-          vent.trigger('note:open', data.id);
+          vent.trigger('note:change', data);
         }});
     }
   });
