@@ -61,7 +61,7 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         Document document = documentDao.getDocumentForPath(testDocument);
         DocumentNote documentNote = noteDao.createDocumentNote(note, document,
                 "l\u00E4htee h\u00E4ihins\u00E4 Mikko Vilkastuksen");
-        assertNotNull(documentNotes.getById(documentNote.getId(), false));
+        assertNotNull(documentNotes.getById(documentNote.getId()));
     }
 
     @Test

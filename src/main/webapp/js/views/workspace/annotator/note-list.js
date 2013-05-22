@@ -1,13 +1,6 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         'text!/templates/workspace/annotator/note-item.html'],
        function($, _, Backbone, vent, Handlebars, noteItemTemplate) {
-
-  Handlebars.registerHelper('when-contains', function(coll, x, options) {
-    if (_.contains(coll, x)) {
-      return options.fn(this);
-    }
-  });
-
   // TODO: What happens upon delete/re-render?
   var NoteListItem = Backbone.View.extend({
     tagName: 'li',
@@ -18,16 +11,17 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     initialize: function() {
       _.bindAll(this, 'render', 'open');
+      this.documentNote = this.options.data;
       this.render();
     },
 
     render: function() {
-      this.$el.html(this.template(this.options.data));
+      this.$el.html(this.template(this.documentNote));
     },
 
     open: function(evt) {
       evt.preventDefault(); 
-      vent.trigger('note:open', this.options.data.id);
+      vent.trigger('document-note:open', this.documentNote.id);
     }
   });
 
@@ -41,8 +35,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$el.empty();
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
-        _(data).each(function(note) {
-          self.$el.append(new NoteListItem({data: note}).el);
+        _(data).each(function(documentNote) {
+          self.$el.append(new NoteListItem({data: documentNote}).el);
         });
       });
     }

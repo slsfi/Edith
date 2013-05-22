@@ -1,55 +1,8 @@
 <div>
   <form id="document-note">
-    <h4>Esiintymä</h4>
-    <div>Valinta tekstissä: {{ fullSelection }}</div>
-    <div>Lyhennetty valinta: <input type="text" name="shortenedSelection" value="{{ shortenedSelection }}"></input></div>
-    <div>Lemman positio: <input type="text" name="lemmaPosition" value="{{ lemmaPosition }}"></input></div>
-    <div>Julkaistavissa: <input type="checkbox" name="publishable" {{#if publishable }} checked {{/if}}></input></div>
-    <button id="save-document-note">Tallenna</button> <button>Poista</button>
   </form>
 
   <form id="note">
-    <h4>Viitteen muokkaus:</h4>
-    <div>Muokkaajat:
-      {{ note.editedOn }}
-      {{ note.lastEditedBy.username }}
-      {{#each note.allEditors }} ({{ this.username }}) {{/each}}
-    </div>
-    <div>Tyypit:
-      Sananselitys <input type="checkbox" {{#when-contains note.types 'WORD_EXPLANATION'}} }} checked {{/when-contains}}></input> 
-      Kirjallinen <input type="checkbox" {{#when-contains note.types 'LITERARY'}} }} checked {{/when-contains}}></input> 
-      Historiallinen <input type="checkbox" {{#when-contains note.types 'HISTORICAL'}} }} checked {{/when-contains}}></input> 
-      Sananparsi <input type="checkbox" {{#when-contains note.types 'DICTUM'}} }} checked {{/when-contains}}></input> 
-      Tekstikriittinen <input type="checkbox" {{#when-contains note.types 'CRITIQUE'}} }} checked {{/when-contains}}></input> 
-      Otsikko <input type="checkbox" {{#when-contains note.types 'TITLE'}} }} checked {{/when-contains}}></input> 
-      Käännös <input type="checkbox" {{#when-contains note.types 'TRANSLATION'}} }} checked {{/when-contains}}></input> 
-      Viite <input type="checkbox" {{#when-contains note.types 'VIITE'}} }} checked {{/when-contains}}></input> 
-    </div>
-    <div>Perusmuoto: <input type="text" value="{{ note.term.basicForm }}"></input></div>
-    <div>Perusmuodon kieli:
-      {{ note.term.language }}
-      <select>
-        <option {{#when-contains note.term.language 'FINNISH'}} selected {{/when-contains}}>suomi</option>
-        <option {{#when-contains note.term.language 'SWEDISH'}} selected {{/when-contains}}>ruotsi</option>
-        <option {{#when-contains note.term.language 'FRENCH'}} selected {{/when-contains}}>ranska</option>
-        <option {{#when-contains note.term.language 'LATIN'}} selected {{/when-contains}}>latina</option>
-        <option {{#when-contains note.term.language 'GERMAN'}} selected {{/when-contains}}>saksa</option>
-        <option {{#when-contains note.term.language 'RUSSIAN'}} selected {{/when-contains}}>venäjä</option>
-        <option {{#when-contains note.term.language 'ENGLISH'}} selected {{/when-contains}}>englanti</option>
-        <option {{#when-contains note.term.language 'ITALIAN'}} selected {{/when-contains}}>italia</option>
-        <option {{#when-contains note.term.language 'GREEK'}} selected {{/when-contains}}>kreikka</option>
-        <option {{#when-contains note.term.language 'OTHER'}} selected {{/when-contains}}>muu</option>
-      </select>
-    </div>
-    <div>Kuvaus: <input type="textarea" value="{{ note.term.description }}"></input></div>
-    <div>Lähteet: <input type="textarea" value="{{ note.sources }}"></input></div>
-    <div>Tila: {{ note.status }}
-      <select>
-        <option value="luonnos">luonnos</input>
-        <option value="valmis">valmis</input>
-      </select>
-    </div>
-    <div><button id="save-note">Tallenna</button></div>
   </form>
 </div>
 
