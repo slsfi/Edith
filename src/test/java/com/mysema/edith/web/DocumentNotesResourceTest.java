@@ -2,6 +2,8 @@ package com.mysema.edith.web;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +17,7 @@ import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.services.UserDao;
@@ -87,4 +90,10 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         assertNotNull(created.getId());
     }
 
+    @Test
+    public void Query() {
+        NoteSearchTO search = new NoteSearchTO();
+        Map<String, Object> result = documentNotes.query(search);
+        assertNotNull(result);
+    }
 }

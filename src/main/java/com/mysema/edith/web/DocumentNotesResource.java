@@ -5,6 +5,8 @@
  */
 package com.mysema.edith.web;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.DELETE;
@@ -20,7 +22,10 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.services.DocumentNoteService;
+import com.mysema.edith.services.NoteDao;
+import com.mysema.query.SearchResults;
 
 @Transactional
 @Path("/document-notes")
@@ -28,10 +33,13 @@ import com.mysema.edith.services.DocumentNoteService;
 public class DocumentNotesResource extends AbstractResource {
 
     private final DocumentNoteService service;
+    
+    private final NoteDao dao;
 
     @Inject
-    public DocumentNotesResource(DocumentNoteService service) {
+    public DocumentNotesResource(DocumentNoteService service, NoteDao dao) {
         this.service = service;
+        this.dao = dao;
     }
 
     @GET @Path("{id}")
@@ -39,6 +47,20 @@ public class DocumentNotesResource extends AbstractResource {
         return convert(service.getById(id), DocumentNoteTO.class);
     }
 
+    @POST @Path("query")
+    public Map<String, Object> query(NoteSearchTO search) {
+        SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
+        List<DocumentNoteTO> entries = convert(results.getResults(), DocumentNoteTO.class);
+
+        Map<String, Object> rv = new HashMap<String, Object>();
+        rv.put("entries", entries);
+        rv.put("currentPage", search.getPage());
+        rv.put("perPage", search.getPage());
+        rv.put("totalPages", totalPages(results.getLimit(), results.getTotal()));
+        rv.put("totalEntries", results.getTotal());
+        return rv;
+    }
+        
     @POST
     public DocumentNoteTO create(DocumentNoteTO info) {
         return convert(service.save(convert(info, new DocumentNote())), DocumentNoteTO.class);

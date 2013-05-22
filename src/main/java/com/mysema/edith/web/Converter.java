@@ -113,12 +113,11 @@ public class Converter {
             }
                         
             Object sourceValue = source.get(entry.getKey());            
-            Class<?> sourceType = sourceValue != null ? sourceValue.getClass() : Object.class;
-            Object targetValue = null;
+            Object targetValue;
             if (sourceValue == null) {
-                // do nothing
+                targetValue = null;
             // collection
-            } else if (Collection.class.isAssignableFrom(targetType) && Collection.class.isAssignableFrom(sourceType)) {
+            } else if (Collection.class.isAssignableFrom(targetType) && Collection.class.isInstance(sourceValue)) {
                 Collection sourceColl = (Collection)sourceValue;
                 Collection targetColl = (Collection) containerTypes.get(targetType).newInstance();
                 targetValue = targetColl;
@@ -134,7 +133,7 @@ public class Converter {
                     }
                 }
             // direct
-            } else if (targetType.isAssignableFrom(sourceType)) {
+            } else if (targetType.isInstance(sourceValue)) {
                 targetValue = sourceValue;
             // other
             } else { 

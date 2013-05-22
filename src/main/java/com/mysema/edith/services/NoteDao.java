@@ -71,13 +71,19 @@ public interface NoteDao extends Dao<Note, Long> {
     List<Long> getOrphanIds();
 
     /**
+     * @param search
+     * @return
+     */
+    SearchResults<DocumentNote> findDocumentNotes(NoteSearchTO search);
+    
+    /**
      * 
      * @param search
      * @param modifiers
      * @return
      */
     SearchResults<Note> findNotes(NoteSearchTO search);
-
+    
     /**
      * @param editedNote
      */

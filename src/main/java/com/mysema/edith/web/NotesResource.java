@@ -89,15 +89,6 @@ public class NotesResource extends AbstractResource {
         return rv;
     }
 
-    private static final long totalPages(long pageSize, long count) {
-        if (count == 0) {
-            return 1;
-        } else if (count % pageSize != 0) {
-            return count / pageSize + 1;
-        }
-        return count / pageSize;
-    }
-
     @POST @Path("query")
     public Map<String, Object> query(NoteSearchTO search) {
         SearchResults<Note> results = dao.findNotes(search);

@@ -38,4 +38,13 @@ public abstract class AbstractResource {
         }
     }
 
+    protected static final long totalPages(long pageSize, long count) {
+        if (count == 0) {
+            return 1;
+        } else if (count % pageSize != 0) {
+            return count / pageSize + 1;
+        }
+        return count / pageSize;
+    }
+
 }
