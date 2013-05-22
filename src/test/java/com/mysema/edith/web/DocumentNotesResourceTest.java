@@ -89,6 +89,12 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
 
         assertNotNull(created.getId());
     }
+    
+    @Test
+    public void Search() {
+        Map<String, Object> rv = documentNotes.all(null, null, null, null, null);
+        assertNotNull(rv);
+    }
 
     @Test
     public void Query() {

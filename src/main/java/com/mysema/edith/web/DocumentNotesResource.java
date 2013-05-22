@@ -16,6 +16,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
@@ -45,6 +46,42 @@ public class DocumentNotesResource extends AbstractResource {
     @GET @Path("{id}")
     public DocumentNoteTO getById(@PathParam("id") Long id) {
         return convert(service.getById(id), DocumentNoteTO.class);
+    }
+    
+    @GET
+    public Map<String, Object> all(
+            @QueryParam("page") Long page,
+            @QueryParam("per_page") Long perPage,
+            @QueryParam("order") String order,
+            @QueryParam("direction") String direction,
+            @QueryParam("query") String query) {
+
+        if (perPage == null) {
+            perPage = 25L;
+        } else if (perPage <= 0) {
+            perPage = (long) Integer.MAX_VALUE;
+        }
+        if (page == null) {
+            page = 1L;
+        }
+
+        NoteSearchTO search = new NoteSearchTO();
+        search.setLemma(query);
+        search.setPage(page);
+        search.setPerPage(perPage);
+        search.setOrderBy(order);
+        search.setAscending(direction == null || direction.equals("ASC"));
+
+        SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
+        List<DocumentNoteTO> entries = convert(results.getResults(), DocumentNoteTO.class);
+
+        Map<String, Object> rv = new HashMap<String, Object>();
+        rv.put("entries", entries);
+        rv.put("currentPage", page);
+        rv.put("perPage", perPage);
+        rv.put("totalPages", totalPages(results.getLimit(), results.getTotal()));
+        rv.put("totalEntries", results.getTotal());
+        return rv;
     }
 
     @POST @Path("query")
