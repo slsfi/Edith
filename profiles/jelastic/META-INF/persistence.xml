@@ -6,10 +6,10 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <properties>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-      <property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.7:3306/topelius_notes" />
+      <property name="hibernate.connection.url" value="jdbc:mysql://mysql-edith2.jelastic.planeetta.net/edith" />
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" />
-      <property name="hibernate.connection.username" value="topeliusapp" />
-      <property name="hibernate.connection.password" value="Kuddnas10" />
+      <property name="hibernate.connection.username" value="edith" />
+      <property name="hibernate.connection.password" value="edith" />
 
       <property name="hbm2ddl.auto" value="none" />
       <property name="hibernate.show_sql" value="false" />

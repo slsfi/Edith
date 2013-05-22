@@ -398,6 +398,28 @@
         <extraResources>profiles/standalone</extraResources>
       </properties>
     </profile>
+    
+    <profile>
+      <id>jelastic</id>
+      <properties>
+        <extraResources>profiles/jelastic</extraResources>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.jelastic</groupId>
+            <artifactId>jelastic-maven-plugin</artifactId>
+            <version>1.7-SNAPSHOT</version>
+            <configuration>
+              <email>jelastic@mysema.com</email>
+              <password>${jelastic.password}</password>
+              <environment>edith2</environment>           
+              <api_hoster>app.jelastic.planeetta.net</api_hoster>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>      
+    </profile>    
   </profiles>
 
   <build>
@@ -522,5 +544,19 @@
       </plugin>
     </plugins>
   </build>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype-oss-public</id>
+      <url>https://oss.sonatype.org/content/groups/public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+  
 </project>
 
