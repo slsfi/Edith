@@ -48,18 +48,20 @@ public class Converter {
                 targetClass = Primitives.wrap(targetClass);
             }
             
+            if (source == null) {
+                return null;
             // id to bean
-            if (source instanceof Long && Identifiable.class.isAssignableFrom(targetClass)) {
+            } else if (source instanceof Long && Identifiable.class.isAssignableFrom(targetClass)) {
                 return em.get().find(targetClass, source);
             // bean to id
             } else if (source instanceof Identifiable && targetClass.equals(Long.class)) {
                 return (T) ((Identifiable)source).getId();
             } else if (targetClass.isInstance(source)) {
                 return (T) source;
-            } else if (source != null) {
-                return convert(source, targetClass.newInstance());
+            } else if (targetClass.isEnum()) {    
+                return (T) Enum.valueOf((Class)targetClass, source.toString());
             } else {
-                return null;
+                return convert(source, targetClass.newInstance());
             }
         } catch (InstantiationException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -132,9 +134,6 @@ public class Converter {
             // direct
             } else if (targetType.isAssignableFrom(sourceType)) {
                 targetValue = sourceValue;
-            // enum
-            } else if (targetType.isEnum()) {
-                targetValue = Enum.valueOf((Class)targetType, sourceValue.toString());
             // other
             } else { 
                 targetValue = convert(sourceValue, targetType);
