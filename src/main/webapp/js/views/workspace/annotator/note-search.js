@@ -22,22 +22,23 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   
   var documentNotes = new DocumentNotesCollection();
   
-  var columns = [{sortable: true, id: 'fullSelection', name:'Full selection', field: 'fullSelection'},
-                 {sortable: true, id: 'shortenedSelection', name: 'Shortened selection', field: 'shortenedSelection'},
-                 {sortable: true, id: 'lemmaPosition', name: 'Lemma position', field: 'lemmaPosition'}];
-  // TODO note and term columns
+  var columns = [{sortable: true, id: 'shortenedSelection', name: 'Shortened selection', field: 'shortenedSelection'},
+                 {sortable: true, id: 'fullSelection', width: 200, name: 'Full selection', field: 'fullSelection'},
+                 {sortable: true, id: 'description', name: 'Description', field: 'note.description'},
+                 // TODO document
+                 ];
   
   var options = {
     formatterFactory: Slickback.BackboneModelFormatterFactory,
-    editable: true,
+    //editable: true,
     autoHeight: true,
-    forceFitColumns: true,
-    autoEdit: false
+    autoEdit: false,
+    defaultColumnWidth: 120
   };
   
   var NoteSearch = Backbone.View.extend({
     
-    events: {'keyup #documentNoteSearch': 'search'},
+    events: {'keyup .search': 'search'},
     
     initialize: function() {
       _.bindAll(this, 'render', 'search');
@@ -46,7 +47,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     
     search: function() {
       documentNotes.extendScope({
-        query: this.$("#documentNoteSearch").val()
+        query: this.$(".search").val()
       });
       documentNotes.fetchWithScope();
     },
@@ -54,9 +55,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     render: function() {
       this.$el.html(searchTemplate);
       
-      var grid = new Slick.Grid('#documentNoteGrid', documentNotes, columns, options);
+      var grid = new Slick.Grid(this.$('.documentNoteGrid'), documentNotes, columns, options);
       grid.setSelectionModel(new Slick.RowSelectionModel());
-      var pager = new Slick.Controls.Pager(documentNotes, grid, this.$('#documentNotePager'));
+      var pager = new Slick.Controls.Pager(documentNotes, grid, this.$('.documentNotePager'));
       
       grid.onSort.subscribe(function(e, msg) {
         documentNotes.extendScope({

@@ -183,22 +183,22 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
         
         // shortened selection
-        if (search.getShortenedSelection() != null) {
+        if (!Strings.isNullOrEmpty(search.getShortenedSelection())) {
             docNoteFilter.and(documentNote.shortenedSelection.containsIgnoreCase(search.getShortenedSelection()));            
         }
         
         // lemma 
-        if (search.getLemma() != null) {
+        if (!Strings.isNullOrEmpty(search.getLemma())) {
             builder.and(note.lemma.containsIgnoreCase(search.getLemma()));
         }
         
         // lemma meaning
-        if (search.getLemmaMeaning() != null) {
+        if (!Strings.isNullOrEmpty(search.getLemmaMeaning())) {
             builder.and(note.lemmaMeaning.containsIgnoreCase(search.getLemmaMeaning()));
         }
         
         // description
-        if (search.getDescription() != null) {
+        if (!Strings.isNullOrEmpty(search.getDescription())) {
             builder.and(note.description.containsIgnoreCase(search.getDescription()));
         }
 
