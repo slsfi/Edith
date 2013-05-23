@@ -28,10 +28,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       var self = this;
       vent.on('document-note:open document-note:change',
               function(documentNote) {
+                if ((self.isDirty || self.hasDirtyChildren) &&
+                    !confirm('U haz unsaved changes, continue?')) {
+                  return;
+                }
                 vent.trigger('note:open', documentNote.note);
                 self.documentNote = documentNote;
                 self.render();
               });
+      vent.on('note:dirty', function() { self.hasDirtyChildren = true; });
+      vent.on('note:change', function() { self.hasDirtyChildren = false; });
     },
 
     render: function() {
@@ -41,7 +47,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     setDirty: function() {
       this.isDirty = true;
-      console.log('diiiiiirtyyyyy');
+      this.$('#save-document-note').removeAttr('disabled');
     },
     
     saveDocumentNote: function(evt) {
@@ -56,12 +62,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       } else {
         data.publishable = false;
       }
+      var self = this;
       $.ajax({url: '/api/document-notes/' + this.documentNote.id,
               type: 'PUT',
               dataType: 'json',
               contentType: "application/json; charset=utf-8",
               data: JSON.stringify(data),
               success: function(data) {
+                self.isDirty = false;
                 vent.trigger('document-note:change', data);
               }});
     },
@@ -88,7 +96,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     events: {'click #save-note': 'saveNote',
              'keyup input': 'setDirty',
              'change input': 'setDirty',
-             'change select': 'setDirty'}
+             'change select': 'setDirty'},
   
     template: Handlebars.compile(noteFormTemplate),
 
@@ -104,7 +112,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                                        function(note) {
                                          self.note = note;
                                          self.render();
-                                       })
+                                       });
                            });
     },
 
@@ -118,8 +126,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
     
     setDirty: function() {
-      this.isDirty = true;
-      console.log('diiiiiirtyyyyy');
+      this.$('#save-note').removeAttr('disabled');
+      vent.trigger('note:dirty');
     },
 
     saveNote: function(evt) {
@@ -145,6 +153,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                            return field.value;
                          });
       data.types = types;
+      var self = this;
       $.ajax({url: '/api/notes/' + this.note.id,
         type: 'PUT',
         dataType: 'json',
