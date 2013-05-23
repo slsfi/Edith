@@ -33,19 +33,25 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
   });
 
   var NoteList = Backbone.View.extend({
+    events: {'click #create-note': 'createNote'},
+    
     initialize: function() {
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'createNote');
       vent.on('document:open annotation:created', this.render);
     },
 
     render: function(id) {
-      this.$el.empty();
+      this.$('ul').empty();
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
         _(data).each(function(documentNote) {
-          self.$el.append(new NoteListItem({data: documentNote}).el);
+          self.$('ul').append(new NoteListItem({data: documentNote}).el);
         });
       });
+    },
+    
+    createNote: function() {
+      vent.trigger('note:create');
     }
   });
 
