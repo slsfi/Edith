@@ -28,6 +28,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       var self = this;
       vent.on('document-note:open document-note:change',
               function(documentNote) {
+                // TODO: Hook into 'unload' event
                 if ((self.isDirty || self.hasDirtyChildren) &&
                     !confirm('U haz unsaved changes, continue?')) {
                   return;
