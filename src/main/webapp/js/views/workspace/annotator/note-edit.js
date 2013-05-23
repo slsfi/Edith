@@ -24,7 +24,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
              'keyup input': 'setDirty'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'saveDocumentNote', 'setDirty');
+      _.bindAll(this, 'render', 'saveDocumentNote', 'setDirty', 'update');
       var self = this;
       vent.on('document-note:open document-note:change',
               function(documentNote) {
@@ -37,8 +37,18 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                 self.documentNote = documentNote;
                 self.render();
               });
+      vent.on('note:create', function() {
+        // TODO: Hook into 'unload' event
+        if ((self.isDirty || self.hasDirtyChildren) &&
+            !confirm('U haz unsaved changes, continue?')) {
+          return;
+        }
+        self.documentNote = null;
+        self.$el.empty();
+      });
       vent.on('note:dirty', function() { self.hasDirtyChildren = true; });
       vent.on('note:change', function() { self.hasDirtyChildren = false; });
+      vent.on('document:selection', this.update);
     },
 
     render: function() {
@@ -51,6 +61,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$('#save-document-note').removeAttr('disabled');
     },
     
+    update: function(documentId, selection) {
+      if (!this.documentNote) {
+        this.documentNote = {};
+      }
+      this.documentNote.fullSelection = selection.selection;
+      this.render();
+      this.setDirty();
+    },
+
     saveDocumentNote: function(evt) {
       evt.preventDefault();
       var arr = this.$el.serializeArray();

@@ -123,16 +123,17 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
 //                       endChar: endChar,
                        endCharIndex: endCharIndex};
       var self = this;
-      if (confirm('Annotate?')) {
-        $.ajax('api/documents/' + this.documentId + '/document-notes',
-               {type: 'post',
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({text: selection}),
-                success: function(resp) {
-                  // TODO: Other info besides document id?
-                  vent.trigger('annotation:created', self.documentId);
-                }});
-      }
+      vent.trigger('document:selection', this.documentId, selection);
+//      if (confirm('Annotate?')) {
+//        $.ajax('api/documents/' + this.documentId + '/document-notes',
+//               {type: 'post',
+//                contentType: "application/json; charset=utf-8",
+//                data: JSON.stringify({text: selection}),
+//                success: function(resp) {
+//                  // TODO: Other info besides document id?
+//                  vent.trigger('annotation:created', self.documentId);
+//                }});
+//      }
     }
   });
 
