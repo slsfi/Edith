@@ -79,7 +79,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                        height: '40px',
                        skin: 'kama',
                        entities: false,
-                       extraPlugins: 'autogrow',
+                       extraPlugins: 'autogrow,onchange',
                        autoGrow_minHeight: '40',
                        resize_enabled: false,
                        startupFocus: false,
@@ -126,10 +126,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       });
       this.$el.html(this.template(this.note))
               .effect('highlight', {color: 'lightblue'}, 500);
-      this.$('.wysiwyg').ckeditor(ckEditorSetup)
+      this.$('.wysiwyg').ckeditor(ckEditorSetup);
+      var self = this;
+      _.each(CKEditor.instances,
+             function(editor) {
+               editor.on('change', function() { self.setDirty(); });
+             });
     },
     
     setDirty: function() {
+      console.log('dirty')
       this.$('#save-note').removeAttr('disabled');
       vent.trigger('note:dirty');
     },
