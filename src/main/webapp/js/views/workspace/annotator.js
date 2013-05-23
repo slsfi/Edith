@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'bootstrap',
     initialize: function() {
       _.bindAll(this, 'render', 'switchTabFromClick');
       var self = this;
-      vent.on('note:open', function() {
+      vent.on('document-note:open', function() {
         self.switchTab('note-edit');
         self.$('.nav-tabs a[data-target="note-edit"]').tab('show');
       });
