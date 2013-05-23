@@ -24,10 +24,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
              'keyup input': 'setDirty'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'saveDocumentNote', 'setDirty');
+      _.bindAll(this, 'render', 'saveDocumentNote', 'setDirty', 'update');
       var self = this;
       vent.on('document-note:open document-note:change',
               function(documentNote) {
+                // TODO: Hook into 'unload' event
                 if ((self.isDirty || self.hasDirtyChildren) &&
                     !confirm('U haz unsaved changes, continue?')) {
                   return;
@@ -36,8 +37,18 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                 self.documentNote = documentNote;
                 self.render();
               });
+      vent.on('note:create', function() {
+        // TODO: Hook into 'unload' event
+        if ((self.isDirty || self.hasDirtyChildren) &&
+            !confirm('U haz unsaved changes, continue?')) {
+          return;
+        }
+        self.documentNote = null;
+        self.$el.empty();
+      });
       vent.on('note:dirty', function() { self.hasDirtyChildren = true; });
       vent.on('note:change', function() { self.hasDirtyChildren = false; });
+      vent.on('document:selection', this.update);
     },
 
     render: function() {
@@ -50,6 +61,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$('#save-document-note').removeAttr('disabled');
     },
     
+    update: function(documentId, selection) {
+      if (!this.documentNote) {
+        this.documentNote = {};
+      }
+      this.documentNote.fullSelection = selection.selection;
+      this.render();
+      this.setDirty();
+    },
+
     saveDocumentNote: function(evt) {
       evt.preventDefault();
       var arr = this.$el.serializeArray();
@@ -79,7 +99,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                        height: '40px',
                        skin: 'kama',
                        entities: false,
-                       extraPlugins: 'autogrow',
+                       extraPlugins: 'autogrow,onchange',
                        autoGrow_minHeight: '40',
                        resize_enabled: false,
                        startupFocus: false,
@@ -126,10 +146,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       });
       this.$el.html(this.template(this.note))
               .effect('highlight', {color: 'lightblue'}, 500);
-      this.$('.wysiwyg').ckeditor(ckEditorSetup)
+      this.$('.wysiwyg').ckeditor(ckEditorSetup);
+      var self = this;
+      _.each(CKEditor.instances,
+             function(editor) {
+               editor.on('change', function() { self.setDirty(); });
+             });
     },
     
     setDirty: function() {
+      console.log('dirty')
       this.$('#save-note').removeAttr('disabled');
       vent.trigger('note:dirty');
     },

@@ -91,7 +91,15 @@ public class NotesResourceTest extends AbstractResourceTest {
     
     @Test
     public void Query() {
+        NoteSearchTO search = new NoteSearchTO();        
+        Map<String, Object> result = notes.query(search);
+        assertNotNull(result);
+    }
+    
+    @Test
+    public void Query_Order() {
         NoteSearchTO search = new NoteSearchTO();
+        search.setOrderBy("lemma");
         Map<String, Object> result = notes.query(search);
         assertNotNull(result);
     }

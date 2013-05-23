@@ -87,7 +87,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
           }
         },
         
-        onCreate: function(node, span) {
+        onRender: function(node, span) {
           new DocumentItemView({el: $(span), model: node});
         },
 

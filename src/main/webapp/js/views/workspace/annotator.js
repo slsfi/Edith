@@ -2,11 +2,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'bootstrap',
         'text!/templates/workspace/annotator.html',
         'views/workspace/annotator/document',
         'views/workspace/annotator/note-list',
-        'views/workspace/annotator/note-edit'],
-        function($, _, Backbone, vent, Bootstrap, template, Document, NoteList, NoteEdit) {
-
-  // TODO: Move into dedicated files and implement
-  var NoteSearch = Backbone.View;
+        'views/workspace/annotator/note-edit',
+        'views/workspace/annotator/note-search'],
+        function($, _, Backbone, vent, Bootstrap, template,
+                 Document, NoteList, NoteEdit, NoteSearch) {
 
   var AnnotatorView = Backbone.View.extend({
     events: {'shown a[data-toggle="tab"]': 'switchTabFromClick'},

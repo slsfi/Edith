@@ -64,7 +64,7 @@ public class DocumentNotesResource extends AbstractResource {
         if (page == null) {
             page = 1L;
         }
-
+        
         NoteSearchTO search = new NoteSearchTO();
         search.setLemma(query);
         search.setPage(page);

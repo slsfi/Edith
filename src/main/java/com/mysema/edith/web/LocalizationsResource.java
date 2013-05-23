@@ -15,7 +15,7 @@ import com.google.common.collect.Maps;
 @Path("/localizations")
 @Produces(MediaType.APPLICATION_JSON)
 public class LocalizationsResource {
-
+    
     @GET
     public Map<String, String> get(@Context HttpServletRequest req) {
         ResourceBundle bundle = ResourceBundle.getBundle("app", req.getLocale());

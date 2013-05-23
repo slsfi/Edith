@@ -102,4 +102,12 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         Map<String, Object> result = documentNotes.query(search);
         assertNotNull(result);
     }
+    
+    @Test
+    public void Query_Order() {
+        NoteSearchTO search = new NoteSearchTO();
+        search.setOrderBy("fullSelection");
+        Map<String, Object> result = documentNotes.query(search);
+        assertNotNull(result);
+    }
 }

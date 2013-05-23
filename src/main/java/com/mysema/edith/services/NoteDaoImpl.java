@@ -116,7 +116,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
               .innerJoin(documentNote.note, note)
               .leftJoin(note.term, term)
               .where(notesQuery(search, false))
-              .orderBy(getOrderBy(search))
+              .orderBy(getOrderBy(search, false))
               .restrict(getModifiers(search))
               .listResults(documentNote);
     }
@@ -126,7 +126,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return from(note)
               .leftJoin(note.term, QTerm.term)
               .where(notesQuery(search, true))
-              .orderBy(getOrderBy(search))
+              .orderBy(getOrderBy(search, true))
               .restrict(getModifiers(search))
               .listResults(note);
     }
@@ -183,22 +183,22 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
         
         // shortened selection
-        if (search.getShortenedSelection() != null) {
+        if (!Strings.isNullOrEmpty(search.getShortenedSelection())) {
             docNoteFilter.and(documentNote.shortenedSelection.containsIgnoreCase(search.getShortenedSelection()));            
         }
         
         // lemma 
-        if (search.getLemma() != null) {
+        if (!Strings.isNullOrEmpty(search.getLemma())) {
             builder.and(note.lemma.containsIgnoreCase(search.getLemma()));
         }
         
         // lemma meaning
-        if (search.getLemmaMeaning() != null) {
+        if (!Strings.isNullOrEmpty(search.getLemmaMeaning())) {
             builder.and(note.lemmaMeaning.containsIgnoreCase(search.getLemmaMeaning()));
         }
         
         // description
-        if (search.getDescription() != null) {
+        if (!Strings.isNullOrEmpty(search.getDescription())) {
             builder.and(note.description.containsIgnoreCase(search.getDescription()));
         }
 
@@ -271,16 +271,18 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return builder;
     }
     
-    private OrderSpecifier<?> getOrderBy(NoteSearchTO searchInfo) {
+    private OrderSpecifier<?> getOrderBy(NoteSearchTO searchInfo, boolean searchNotes) {
         ComparableExpressionBase<?> path = null;
         String order = searchInfo.getOrderBy();
         QTerm term = QTerm.term;
         if (order == null) {
             path = note.lemma;
-        } else if (order.startsWith("term.")) {
-            path = stringPath(term, order.substring(1 + order.indexOf('.')));
+        } else if (order.contains("term.")) {
+            path = stringPath(term, order.substring(1 + order.lastIndexOf('.')));
+        } else if (order.startsWith("note.")) {    
+            path = stringPath(note, order.substring(1 + order.lastIndexOf('.')));
         } else {
-            path = stringPath(note, order);
+            path = stringPath(searchNotes ? note : documentNote, order);
         }        
         return searchInfo.isAscending() ? path.asc() : path.desc();
     }
