@@ -4,7 +4,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'bootstrap',
         'views/workspace/annotator/note-list',
         'views/workspace/annotator/note-edit',
         'views/workspace/annotator/note-search'],
-        function($, _, Backbone, vent, Bootstrap, template, Document, NoteList, NoteEdit, NoteSearch) {
+        function($, _, Backbone, vent, Bootstrap, template,
+                 Document, NoteList, NoteEdit, NoteSearch) {
 
   var AnnotatorView = Backbone.View.extend({
     events: {'shown a[data-toggle="tab"]': 'switchTabFromClick'},
