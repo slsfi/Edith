@@ -114,6 +114,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                                          self.render();
                                        });
                            });
+      vent.on('note:create', function() {
+                               self.note = {};
+                               self.render();
+                             });
     },
 
     render: function() {
@@ -154,14 +158,19 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                          });
       data.types = types;
       var self = this;
-      $.ajax({url: '/api/notes/' + this.note.id,
-        type: 'PUT',
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(data),
-        success: function(data) {
-          vent.trigger('note:change', data);
-        }});
+      var request = {url: '/api/notes/' + this.note.id,
+                     type: 'PUT',
+                     dataType: 'json',
+                     contentType: "application/json; charset=utf-8",
+                     data: JSON.stringify(data),
+                     success: function(data) {
+                       vent.trigger('note:change', data);
+                     }};
+      if (!this.note.id) {
+        request.url = '/api/notes/';
+        request.type = 'POST';
+      }
+      $.ajax(request);
     }
   });
 
