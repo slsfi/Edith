@@ -1,0 +1,49 @@
+
+html, body, form { 
+    margin: 0; 
+    padding: 0; 
+}
+
+/* Hiding the regular scroll bars */
+body {
+    overflow: hidden;
+    max-height: 100%;
+}
+
+/**
+* 2-column basic layout using div's
+*/
+
+.header {
+    height: 8em;
+}
+
+.abs-page-container {
+  margin:0; 
+  padding:0;
+  position: absolute;
+  top: 9.2em;
+  left: 0em;
+  right: 0em;
+  bottom: 0em;
+}
+
+.abs-left-container {
+    position: absolute;
+    top: 0em;
+    left: 0em;
+    bottom: 0em;
+    width: 50%;
+    overflow: auto;
+}
+
+.abs-right-container {
+    position: absolute;
+    top: 0em;
+    right: 0em; 
+    bottom: 0em;
+    width: 50%;  
+    overflow: hidden;
+}
+
+
