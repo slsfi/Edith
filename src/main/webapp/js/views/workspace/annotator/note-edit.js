@@ -83,15 +83,36 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         data.publishable = false;
       }
       var self = this;
-      $.ajax({url: '/api/document-notes/' + this.documentNote.id,
-              type: 'PUT',
-              dataType: 'json',
-              contentType: "application/json; charset=utf-8",
-              data: JSON.stringify(data),
-              success: function(data) {
-                self.isDirty = false;
-                vent.trigger('document-note:change', data);
-              }});
+      var request = {url: '/api/document-notes/' + this.documentNote.id,
+                     type: 'PUT',
+                     dataType: 'json',
+                     contentType: "application/json; charset=utf-8",
+                     data: JSON.stringify(data),
+                     success: function(data) {
+                       console.log('in success: ' + data.note);
+                       self.isDirty = false;
+                       vent.trigger('document-note:change', data);
+                     }};
+      if (this.documentNote.id) {
+        $.ajax(request);
+      } else if (!this.documentNote.id && this.documentNote.note) {
+        request.url = '/api/document-notes/';
+        request.type = 'POST';
+        $.ajax(request);
+      } else {
+        var proceed = confirm('Note will be stored as well?');
+        if (proceed) {
+          this.options.saveNote(function(note) {
+            request.url = '/api/document-notes/';
+            request.type = 'POST';
+            data.note = note.id;
+            request.data = JSON.stringify(data);
+            console.log('in saving note: ', note.id);
+            $.ajax(request);
+          });
+        }
+      }
+
     },
   });
 
@@ -121,7 +142,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     template: Handlebars.compile(noteFormTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'render', 'saveNote', 'setDirty');
+      _.bindAll(this, 'render', 'saveNote', 'saveNoteExt', 'setDirty');
       var self = this;
       vent.on('note:change', function(note) {
                                self.note = note;
@@ -160,8 +181,47 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       vent.trigger('note:dirty');
     },
 
+    // FIXME: Dirty copypasting
+    saveNoteExt: function(callback) {
+      var arr = this.$el.serializeArray();
+      var data = _(arr).reduce(function(acc, field) {
+                                 var name = field.name;
+                                 var value = field.value;
+                                 var xs = name.split('.');
+                                 if (xs.length > 2) {
+                                   throw 'Only once nested paths are supported'
+                                 } else if (xs.length === 2) {
+                                   var o = acc[xs[0]] || {};
+                                   o[xs[1]] = value;
+                                   acc[xs[0]] = o;
+                                 } else {
+                                   acc[name] = value;
+                                 }
+                                 return acc;
+                               }, {});
+      var types = _(this.$('input[name="types"]').serializeArray())
+                    .map(function(field) {
+                           return field.value;
+                         });
+      data.types = types;
+      var self = this;
+      var request = {url: '/api/notes/' + this.note.id,
+                     type: 'PUT',
+                     dataType: 'json',
+                     contentType: "application/json; charset=utf-8",
+                     data: JSON.stringify(data),
+                     success: function(data) {
+                       callback(data);
+                       vent.trigger('note:change', data);
+                     }};
+      if (!this.note.id) {
+        request.url = '/api/notes/';
+        request.type = 'POST';
+      }
+      $.ajax(request);
+    },
+
     saveNote: function(evt) {
-      evt.preventDefault();
       var arr = this.$el.serializeArray();
       var data = _(arr).reduce(function(acc, field) {
                                  var name = field.name;
@@ -211,8 +271,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     render: function() {
       this.$el.html(this.template);
-      new DocumentNoteForm({el: this.$('form#document-note')});
-      new NoteForm({el: this.$('form#note')});
+      var noteForm = new NoteForm({el: this.$('form#note')});
+      new DocumentNoteForm({el: this.$('form#document-note'), saveNote: noteForm.saveNoteExt});
     }
   });
 
