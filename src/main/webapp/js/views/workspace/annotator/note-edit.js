@@ -152,11 +152,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                                self.render();
                              });
       vent.on('note:open', function(noteId) {
-                             $.getJSON('/api/notes/' + noteId,
-                                       function(note) {
-                                         self.note = note;
-                                         self.render();
-                                       });
+                             if (noteId !== self.note.id) {
+                               $.getJSON('/api/notes/' + noteId,
+                                         function(note) {
+                                           self.note = note;
+                                           self.render();
+                                         });
+                             }
                            });
       vent.on('note:create', function() {
                                self.note = {};
