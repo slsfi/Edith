@@ -1,5 +1,6 @@
 package com.mysema.edith.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.DELETE;
@@ -27,6 +28,11 @@ public class UsersResource extends AbstractResource {
     @Inject
     public UsersResource(UserDao dao) {
         this.dao = dao;
+    }
+    
+    @GET
+    public List<UserTO> all() {
+        return convert(dao.getAll(), UserTO.class);
     }
 
     @GET @Path("current")

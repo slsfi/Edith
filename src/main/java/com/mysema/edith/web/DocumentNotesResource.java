@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.FullDocumentNoteTO;
 import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteDao;
@@ -73,7 +74,7 @@ public class DocumentNotesResource extends AbstractResource {
         search.setAscending(direction == null || direction.equals("ASC"));
 
         SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
-        List<DocumentNoteTO> entries = convert(results.getResults(), DocumentNoteTO.class);
+        List<FullDocumentNoteTO> entries = convert(results.getResults(), FullDocumentNoteTO.class);
 
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
@@ -87,7 +88,7 @@ public class DocumentNotesResource extends AbstractResource {
     @POST @Path("query")
     public Map<String, Object> query(NoteSearchTO search) {
         SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
-        List<DocumentNoteTO> entries = convert(results.getResults(), DocumentNoteTO.class);
+        List<FullDocumentNoteTO> entries = convert(results.getResults(), FullDocumentNoteTO.class);
 
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);

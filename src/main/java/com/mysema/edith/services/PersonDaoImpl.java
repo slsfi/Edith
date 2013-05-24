@@ -5,7 +5,7 @@
  */
 package com.mysema.edith.services;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Person;
@@ -17,7 +17,7 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
     private static final QPerson person = QPerson.person;
 
     @Override
-    public Collection<Person> findByStartOfFirstAndLastName(String partial, int limit) {
+    public List<Person> findByStartOfFirstAndLastName(String partial, int limit) {
         return from(person)
                .where(
                    person.normalized.first.startsWithIgnoreCase(partial).or(

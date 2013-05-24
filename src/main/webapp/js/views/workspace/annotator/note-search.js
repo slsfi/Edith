@@ -2,6 +2,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         'text!/templates/workspace/annotator/note-search.html'],
        function($, _, Backbone, vent, Handlebars, Slickback, Slick, localize, searchTemplate) {
   
+  var searchTemplate = Handlebars.compile(searchTemplate);
+  
   var DocumentNote = Backbone.Model.extend({
     initialize: function() {
       var self = this;
@@ -20,12 +22,25 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     }
   });
   
+
   var documentNotes = new DocumentNotesCollection();
   
-  var columns = [{sortable: true, id: 'shortenedSelection', name: 'Shortened selection', field: 'shortenedSelection'},
-                 {sortable: true, id: 'fullSelection', width: 200, name: 'Full selection', field: 'fullSelection'},
-                 {sortable: true, id: 'description', name: 'Description', field: 'note.description'},
-                 // TODO document
+  var UsersCollection = Backbone.Collection.exnend({
+    model: Backbone.Model,
+    url: '/api/users'
+  });
+  
+  var users = new UsersCollection();
+  users.fetch();
+  
+  var columns = [{sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), field: 'shortenedSelection'},
+                 {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
+                 // TODO types
+                 {sortable: true, id: 'description', name: localize('description-label'), field: 'note.description'},
+                 {sortable: true, id: 'editedOn', name: 'Edited on', field: 'note.editedOn'},
+                 {sortable: true, id: 'lastEditedBy', name: 'Last edited by', field: 'note.lastEditedBy.username'},
+                 {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
+                 {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'} 
                  ];
   
   var options = {
@@ -33,8 +48,46 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     editable: true,
     autoHeight: true,
     autoEdit: false,
-    defaultColumnWidth: 120
+    defaultColumnWidth: 100
   };
+  
+  var GridView = Backbone.View.extend({
+    
+    initialize: function() {
+      _.bindAll(this);
+      this.render();
+    },
+    
+    render: function() {
+      var grid = new Slick.Grid(this.$el, documentNotes, columns, options);
+      grid.setSelectionModel(new Slick.RowSelectionModel());
+      
+      var pager = new Slick.Controls.Pager(documentNotes, grid, this.options.$pager);
+      
+      grid.onSort.subscribe(function(e, msg) {
+        documentNotes.extendScope({
+          order: msg.sortCol.field,
+          direction: (msg.sortAsc ? 'ASC' : 'DESC')
+        })
+        documentNotes.fetchWithScope();
+      });
+      
+      documentNotes.onRowCountChanged.subscribe(function() {
+        grid.updateRowCount();
+        grid.render();
+      });
+      
+      documentNotes.onRowsChanged.subscribe(function() {
+        grid.invalidateAllRows();
+        grid.render();
+      });
+      
+      documentNotes.on('change', function() {
+        $(grid.getActiveCellNode()).css('background', 'red');
+      });
+    }
+    
+  });
   
   var NoteSearch = Backbone.View.extend({
     
@@ -59,35 +112,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     },
   
     render: function() {
-      this.$el.html(searchTemplate);
-      
-      var grid = new Slick.Grid(this.$('.documentNoteGrid'), documentNotes, columns, options);
-      grid.setSelectionModel(new Slick.RowSelectionModel());
-      var pager = new Slick.Controls.Pager(documentNotes, grid, this.$('.documentNotePager'));
-      
-      grid.onSort.subscribe(function(e, msg) {
-        documentNotes.extendScope({
-          order: msg.sortCol.field,
-          direction: (msg.sortAsc ? 'ASC' : 'DESC')
-        })
-        documentNotes.fetchWithScope();
-      });
-      
-      documentNotes.onRowCountChanged.subscribe(function() {
-        grid.updateRowCount();
-        grid.render();
-      });
-      
-      documentNotes.onRowsChanged.subscribe(function() {
-        grid.invalidateAllRows();
-        grid.render();
-      });
-      
-      documentNotes.on('change', function() {
-        $(grid.getActiveCellNode()).css('background', 'red');
-      });
-      
-      //documentNotes.fetchWithPagination();
+      this.$el.html(searchTemplate());
+      new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});      
     }
     
   });

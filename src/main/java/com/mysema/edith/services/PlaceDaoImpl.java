@@ -5,7 +5,7 @@
  */
 package com.mysema.edith.services;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Place;
@@ -17,7 +17,7 @@ public class PlaceDaoImpl extends AbstractDao<Place> implements PlaceDao {
     private static final QPlace place = QPlace.place;
 
     @Override
-    public Collection<Place> findByStartOfName(String partial, int limit) {
+    public List<Place> findByStartOfName(String partial, int limit) {
         return from(place)
                .where(place.normalized.last.startsWithIgnoreCase(partial))
                .limit(limit).list(place);

@@ -5,7 +5,7 @@
  */
 package com.mysema.edith.services;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.mysema.edith.domain.Place;
 
@@ -20,7 +20,7 @@ public interface PlaceDao extends Dao<Place, Long> {
      * @param limit
      * @return
      */
-    Collection<Place> findByStartOfName(String partial, int limit);
+    List<Place> findByStartOfName(String partial, int limit);
 
     /**
      * @param placeId

@@ -6,11 +6,9 @@
 package com.mysema.edith.services;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.UserTO;
 
 /**
  * @author tiwe
@@ -35,11 +33,6 @@ public interface UserDao extends Dao<User, Long> {
     User getCurrentUser();
 
     /**
-     * @return
-     */
-    Collection<UserTO> getAllUserInfos();
-
-    /**
      * @param filePath
      * @param encoding
      * @return
@@ -55,6 +48,6 @@ public interface UserDao extends Dao<User, Long> {
     /**
      * @return
      */
-    Collection<User> getAll();
+    List<User> getAll();
 
 }

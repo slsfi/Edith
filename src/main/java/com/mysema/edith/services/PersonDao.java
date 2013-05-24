@@ -5,7 +5,7 @@
  */
 package com.mysema.edith.services;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.mysema.edith.domain.Person;
 
@@ -20,7 +20,7 @@ public interface PersonDao extends Dao<Person, Long> {
      * @param limit
      * @return
      */
-    Collection<Person> findByStartOfFirstAndLastName(String partial, int limit);
+    List<Person> findByStartOfFirstAndLastName(String partial, int limit);
 
     /**
      * @param personId
