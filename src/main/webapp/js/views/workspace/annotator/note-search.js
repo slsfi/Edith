@@ -25,7 +25,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
 
   var documentNotes = new DocumentNotesCollection();
   
-  var UsersCollection = Backbone.Collection.exnend({
+  var UsersCollection = Backbone.Collection.extend({
     model: Backbone.Model,
     url: '/api/users'
   });
@@ -89,6 +89,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     
   });
   
+  var userOption = Handlebars.compile("<option value='{{id}}'>{{username}}</option>");
+  
   var NoteSearch = Backbone.View.extend({
     
     events: {'keyup .search': 'search'},
@@ -113,7 +115,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   
     render: function() {
       this.$el.html(searchTemplate());
-      new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});      
+      new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
+      
+      var cb = function() { this.$(".creators").html(_.map(users.toJSON(), userOption).join("")); };
+      if (users.length > 0) cb(); else users.fetch({success: cb});
     }
     
   });
