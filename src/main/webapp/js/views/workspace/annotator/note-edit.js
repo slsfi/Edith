@@ -152,13 +152,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                                self.render();
                              });
       vent.on('note:open', function(noteId) {
-                             if (noteId !== self.note.id) {
-                               $.getJSON('/api/notes/' + noteId,
-                                         function(note) {
-                                           self.note = note;
-                                           self.render();
-                                         });
+                             if (self.note && (noteId === self.note.id)) {
+                               return;
                              }
+                             $.getJSON('/api/notes/' + noteId,
+                                       function(note) {
+                                         self.note = note;
+                                         self.render();
+                                       });
                            });
       vent.on('note:create', function() {
                                self.note = {};
@@ -226,6 +227,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     saveNote: function(evt) {
+      evt.preventDefault();
       var arr = this.$el.serializeArray();
       var data = _(arr).reduce(function(acc, field) {
                                  var name = field.name;
