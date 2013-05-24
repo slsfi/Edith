@@ -28,14 +28,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'bootstrap',
                     noteSearch: new NoteSearch({el: this.$('#note-search')})};
     },
 
-    switchTab: function(tabName) {
+    switchTab: function(tabName) {      
       _.each(this.views, function(view) {
                            if (view.el.id === tabName) {
                              view.$el.show();
+                             vent.trigger('tab:open', view);
                            } else {
                              view.$el.hide();
                            }
-                        });
+                        });      
     },
 
     switchTabFromClick: function(evt) {

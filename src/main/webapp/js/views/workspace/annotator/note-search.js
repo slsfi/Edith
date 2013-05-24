@@ -30,7 +30,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   
   var options = {
     formatterFactory: Slickback.BackboneModelFormatterFactory,
-    //editable: true,
+    editable: true,
     autoHeight: true,
     autoEdit: false,
     defaultColumnWidth: 120
@@ -41,7 +41,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     events: {'keyup .search': 'search'},
     
     initialize: function() {
+      var self = this;
       _.bindAll(this, 'render', 'search');
+      vent.on('tab:open', function(view) {
+        if (view === self) {
+          documentNotes.fetchWithPagination();
+        }
+      });
       this.render();
     },
     
@@ -81,7 +87,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         $(grid.getActiveCellNode()).css('background', 'red');
       });
       
-      documentNotes.fetchWithPagination();
+      //documentNotes.fetchWithPagination();
     }
     
   });

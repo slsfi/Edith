@@ -66,7 +66,7 @@ public class DocumentNotesResource extends AbstractResource {
         }
         
         NoteSearchTO search = new NoteSearchTO();
-        search.setLemma(query);
+        search.setFullText(query);
         search.setPage(page);
         search.setPerPage(perPage);
         search.setOrderBy(order);
