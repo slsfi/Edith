@@ -131,11 +131,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
                } else {
                  acc[field.name] = field.value;       
                }  
-             }                     
+             }     
              return acc;
            }, {});
-      console.log(data);
+      console.log(JSON.stringify(data));
       
+      // TODO this should replace scope, at least the form elements
       documentNotes.extendScope(data);
       documentNotes.fetchWithScope();
     },
