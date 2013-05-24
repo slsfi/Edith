@@ -99,7 +99,7 @@ public class NotesResourceTest extends AbstractResourceTest {
     @Test
     public void Query_Order() {
         NoteSearchTO search = new NoteSearchTO();
-        search.setOrderBy("lemma");
+        search.setOrder("lemma");
         Map<String, Object> result = notes.query(search);
         assertNotNull(result);
     }

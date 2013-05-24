@@ -252,17 +252,17 @@ public class NoteDaoTest extends AbstractHibernateTest {
         Note note3 = createNote("note3");
 
         NoteSearchTO search = new NoteSearchTO();
-        search.setFullText("foo");
+        search.setQuery("foo");
         assertRowCount(0, search);
 
-        search.setFullText("note");
+        search.setQuery("note");
         assertRowCount(3, search);
 
         search.setOrphans(true);
         assertRowCount(3, search);
 
         Document document = documentDao.getDocumentForPath(testDocument);
-        search.getDocuments().add(convert(document));
+        search.getDocuments().add(document.getId());
         search.setOrphans(false);
         assertRowCount(0, search);
 
@@ -278,7 +278,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         noteDao.createDocumentNote(note2, otherDoc, "b");
 
         //notes 1 and 2 should be found
-        search.getDocuments().add(convert(otherDoc));
+        search.getDocuments().add(otherDoc.getId());
         assertRowCount(2, search);
         assertRowValues(search, note1, note2);
 
@@ -288,7 +288,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertRowValues(search, note3);
 
         //with all, we get all + orphans
-        search.setDocuments(Collections.<DocumentTO>emptySet());
+        search.setDocuments(Collections.<Long>emptySet());
         search.setIncludeAllDocs(true);
         assertRowCount(3, search);
 
@@ -305,7 +305,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         noteDao.save(note);
         
         NoteSearchTO search = new NoteSearchTO();
-        search.setFullText(lemma);
+        search.setQuery(lemma);
         SearchResults<Note> ds = noteDao.findNotes(search);
         assertEquals(1l, ds.getTotal());
     }
@@ -318,8 +318,8 @@ public class NoteDaoTest extends AbstractHibernateTest {
         Document document = documentDao.getDocumentForPath(testDocument);
         
         NoteSearchTO search = new NoteSearchTO();
-        search.setDocuments(Collections.singleton(convert(document)));
-        search.setFullText(lemma);
+        search.setDocuments(Collections.singleton(document.getId()));
+        search.setQuery(lemma);
         SearchResults<Note> ds = noteDao.findNotes(search);
         assertEquals(0, ds.getTotal());
         
@@ -336,7 +336,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         
         NoteSearchTO search = new NoteSearchTO();
         search.setIncludeAllDocs(true);
-        search.setFullText(lemma);
+        search.setQuery(lemma);
         SearchResults<Note> ds = noteDao.findNotes(search);
         assertEquals(0, ds.getTotal());
         
@@ -352,7 +352,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
 
         User user = userDao.getCurrentUser();
         NoteSearchTO search = new NoteSearchTO();
-        search.getCreators().add(new UserTO(user.getId(), user.getUsername()));
+        search.getCreators().add(user.getId());
         noteDao.findNotes(search);
         // TODO
     }
@@ -385,7 +385,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
     public void Find_With_Order_Date() {
         noteDao.importNotes(noteTestData);
         NoteSearchTO search = new NoteSearchTO();
-        search.setOrderBy(DATE);
+        search.setOrder(DATE);
         SearchResults<Note> data = noteDao.findNotes(search);
         assertTrue(data.getTotal() > 0);
     }
@@ -394,7 +394,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
     public void Find_With_Order_Keyterm() {
         noteDao.importNotes(noteTestData);
         NoteSearchTO search = new NoteSearchTO();
-        search.setOrderBy(KEYTERM);
+        search.setOrder(KEYTERM);
         SearchResults<Note> data = noteDao.findNotes(search);
         assertTrue(data.getTotal() > 0);                
     }
@@ -403,7 +403,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
     public void Find_With_Order_Lemma() {
         noteDao.importNotes(noteTestData);
         NoteSearchTO search = new NoteSearchTO();
-        search.setOrderBy(LEMMA);
+        search.setOrder(LEMMA);
         SearchResults<Note> data = noteDao.findNotes(search);
         assertTrue(data.getTotal() > 0);
     }
@@ -412,7 +412,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
     public void Find_With_Order_Status() {
         noteDao.importNotes(noteTestData);
         NoteSearchTO search = new NoteSearchTO();
-        search.setOrderBy(STATUS);
+        search.setOrder(STATUS);
         SearchResults<Note> data = noteDao.findNotes(search);
         assertTrue(data.getTotal() > 0);
     }
@@ -421,7 +421,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
     public void Find_With_Order_User() {
         noteDao.importNotes(noteTestData);
         NoteSearchTO search = new NoteSearchTO();
-        search.setOrderBy(STATUS);
+        search.setOrder(STATUS);
         noteDao.findNotes(search);
         // TODO
     }
@@ -514,7 +514,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
 
     private void assertFullText(String fulltext, int expected) {
         NoteSearchTO search = new NoteSearchTO();
-        search.setFullText(fulltext);
+        search.setQuery(fulltext);
         assertEquals(expected, noteDao.findNotes(search).getTotal());
     }
 

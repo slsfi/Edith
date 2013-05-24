@@ -16,7 +16,7 @@ import com.mysema.edith.domain.TermLanguage;
 
 public class NoteSearchTO {
 
-    private Set<DocumentTO> documents = new HashSet<DocumentTO>();
+    private Set<Long> documents = new HashSet<Long>();
 
     private Set<String> paths = new HashSet<String>();
 
@@ -26,11 +26,11 @@ public class NoteSearchTO {
 
     private Set<NoteFormat> noteFormats = new HashSet<NoteFormat>();
 
-    private Set<UserTO> creators = new HashSet<UserTO>();
+    private Set<Long> creators = new HashSet<Long>();
 
     private TermLanguage language;
 
-    private String orderBy;
+    private String order;
 
     private boolean ascending = true;
 
@@ -40,7 +40,7 @@ public class NoteSearchTO {
 
     private DocumentTO currentDocument;
 
-    private String fullText;
+    private String query;
     
     private String shortenedSelection, description, lemma, lemmaMeaning;
     
@@ -57,11 +57,11 @@ public class NoteSearchTO {
         currentDocument = document;
     }
 
-    public Set<DocumentTO> getDocuments() {
+    public Set<Long> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Set<DocumentTO> documents) {
+    public void setDocuments(Set<Long> documents) {
         this.documents = documents;
     }
 
@@ -89,20 +89,20 @@ public class NoteSearchTO {
         this.noteFormats = noteFormats;
     }
 
-    public Set<UserTO> getCreators() {
+    public Set<Long> getCreators() {
         return creators;
     }
 
-    public void setCreators(Set<UserTO> creators) {
+    public void setCreators(Set<Long> creators) {
         this.creators = creators;
     }
 
-    public String getOrderBy() {
-        return orderBy;
+    public String getOrder() {
+        return order;
     }
 
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
+    public void setOrder(String order) {
+        this.order = order;
     }
 
     public boolean isAscending() {
@@ -129,12 +129,12 @@ public class NoteSearchTO {
         return currentDocument;
     }
 
-    public void setFullText(String fullText) {
-        this.fullText = fullText;
+    public void setQuery(String query) {
+        this.query = query;
     }
 
-    public String getFullText() {
-        return fullText;
+    public String getQuery() {
+        return query;
     }
 
     public TermLanguage getLanguage() {
@@ -247,6 +247,14 @@ public class NoteSearchTO {
 
     public void setColumns(List<String> columns) {
         this.columns = columns;
+    }
+    
+    public String getDirection() {
+        return ascending ? "ASC" : "DESC";
+    }
+    
+    public void setDirection(String direction) {
+        ascending = direction == null || direction.equals("ASC");
     }
     
 }

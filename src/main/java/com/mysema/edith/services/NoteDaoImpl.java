@@ -29,9 +29,7 @@ import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EDITH;
 import com.mysema.edith.domain.*;
-import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteSearchTO;
-import com.mysema.edith.dto.UserTO;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.QueryModifiers;
 import com.mysema.query.SearchResults;
@@ -157,11 +155,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                 filter.or(documentNote.document.path.startsWith(path));
             }
             if (!search.getDocuments().isEmpty()) {
-                List<Long> docIds = new ArrayList<Long>(search.getDocuments().size());
-                for (DocumentTO doc : search.getDocuments()) {
-                    docIds.add(doc.getId());
-                }
-                filter.or(documentNote.document.id.in(docIds));
+                filter.or(documentNote.document.id.in(search.getDocuments()));
             }            
             docNoteFilter.and(filter);            
         }
@@ -172,12 +166,12 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
 
         // fulltext
-        if (!Strings.isNullOrEmpty(search.getFullText())) {
+        if (!Strings.isNullOrEmpty(search.getQuery())) {
             QTerm term = QTerm.term;
             BooleanBuilder filter = new BooleanBuilder();
             for (StringPath path : Arrays.asList(note.lemma, note.description, note.sources,
                     note.comments.any().message, term.basicForm, term.meaning)) {
-                filter.or(path.containsIgnoreCase(search.getFullText()));
+                filter.or(path.containsIgnoreCase(search.getQuery()));
             }
             builder.and(filter);
         }
@@ -205,14 +199,10 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         // creators
         if (!search.getCreators().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
-            Collection<String> usernames = new ArrayList<String>(search.getCreators().size());
-            for (UserTO userInfo : search.getCreators()) {
-                filter.or(note.allEditors.contains(userDao.getByUsername(userInfo.getUsername())));
-                usernames.add(userInfo.getUsername());
+            for (Long userId : search.getCreators()) {
+                User user = userDao.getById(userId);
+                filter.or(note.allEditors.contains(user));
             }
-            // FIXME This is kind of useless except that we have broken data in
-            // production.
-            filter.or(note.lastEditedBy.username.in(usernames));
             builder.and(filter);
         }
 
@@ -273,7 +263,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     
     private OrderSpecifier<?> getOrderBy(NoteSearchTO searchInfo, boolean searchNotes) {
         ComparableExpressionBase<?> path = null;
-        String order = searchInfo.getOrderBy();
+        String order = searchInfo.getOrder();
         QTerm term = QTerm.term;
         if (order == null) {
             path = note.lemma;

@@ -15,10 +15,23 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   
   var DocumentNotesCollection = Slickback.PaginatedCollection.extend({
     model: DocumentNote,
-    url: '/api/document-notes',
+    url: '/api/document-notes/query',
     
     setRefreshHints: function() {
       // TODO
+    },
+    
+    sync: function(method, coll, options) {
+      var data = options.data;
+      if (data.per_page) {
+        data.perPage = data.per_page;
+        delete data.per_page;
+      }
+      $.ajax('api/document-notes/query',
+        {type: 'post',
+         contentType: 'application/json;charset=utf-8',
+         data: JSON.stringify(data),
+         success: options.success});
     }
   });
   
@@ -93,7 +106,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   
   var NoteSearch = Backbone.View.extend({
     
-    events: {'keyup .search': 'search'},
+    events: {'keyup .search': 'search',
+             'change .creators': 'search'},
     
     initialize: function() {
       var self = this;
@@ -108,7 +122,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     
     search: function() {
       documentNotes.extendScope({
-        query: this.$(".search").val()
+        query: this.$(".search").val(),
+        creators: [this.$(".creators").val()]
+        // TODO currentDocument
       });
       documentNotes.fetchWithScope();
     },
@@ -117,7 +133,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       this.$el.html(searchTemplate());
       new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
       
-      var cb = function() { this.$(".creators").html(_.map(users.toJSON(), userOption).join("")); };
+      var cb = function() { 
+        this.$(".creators").html(_.map(users.toJSON(), userOption).join("")); 
+      };
       if (users.length > 0) cb(); else users.fetch({success: cb});
     }
     

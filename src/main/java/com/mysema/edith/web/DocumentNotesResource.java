@@ -67,10 +67,10 @@ public class DocumentNotesResource extends AbstractResource {
         }
         
         NoteSearchTO search = new NoteSearchTO();
-        search.setFullText(query);
+        search.setQuery(query);
         search.setPage(page);
         search.setPerPage(perPage);
-        search.setOrderBy(order);
+        search.setOrder(order);
         search.setAscending(direction == null || direction.equals("ASC"));
 
         SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
@@ -86,7 +86,7 @@ public class DocumentNotesResource extends AbstractResource {
     }
 
     @POST @Path("query")
-    public Map<String, Object> query(NoteSearchTO search) {
+    public Map<String, Object> query(NoteSearchTO search) {        
         SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
         List<FullDocumentNoteTO> entries = convert(results.getResults(), FullDocumentNoteTO.class);
 

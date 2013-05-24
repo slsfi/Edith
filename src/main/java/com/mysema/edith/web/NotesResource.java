@@ -74,7 +74,7 @@ public class NotesResource extends AbstractResource {
         search.setLemma(query);
         search.setPage(page);
         search.setPerPage(perPage);
-        search.setOrderBy(order);
+        search.setOrder(order);
         search.setAscending(direction == null || direction.equals("ASC"));
 
         SearchResults<Note> results = dao.findNotes(search);
@@ -90,7 +90,7 @@ public class NotesResource extends AbstractResource {
     }
 
     @POST @Path("query")
-    public Map<String, Object> query(NoteSearchTO search) {
+    public Map<String, Object> query(NoteSearchTO search) {        
         SearchResults<Note> results = dao.findNotes(search);
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
 

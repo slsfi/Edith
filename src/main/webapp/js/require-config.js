@@ -4,7 +4,7 @@ window.rconfig = {
     jqueryui: 'libs/jquery/jquery-ui',
     dynatree: 'libs/dynatree/jquery.dynatree-1.2.4',
     underscore: 'libs/underscore/underscore',
-    backbone: 'libs/backbone/backbone.min',
+    backbone: 'libs/backbone/backbone',
     handlebars: 'libs/handlebars/handlebars.min',
     bootstrap: 'libs/bootstrap/bootstrap.min',
     moment: 'libs/moment/moment.min',
