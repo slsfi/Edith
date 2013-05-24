@@ -19,13 +19,13 @@ body {
 }
 
 .abs-page-container {
-  margin:0; 
-  padding:0;
-  position: absolute;
-  top: 9.2em;
-  left: 0em;
-  right: 0em;
-  bottom: 0em;
+    margin:0; 
+    padding:0;
+    position: absolute;
+    top: 9.2em;
+    left: 0em;
+    right: 0em;
+    bottom: 0em;
 }
 
 .abs-left-container {
@@ -46,4 +46,6 @@ body {
     overflow: hidden;
 }
 
-
+.content {
+    padding: 1em;	
+}

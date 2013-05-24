@@ -1,8 +1,8 @@
 .scrollable-area {
   position: absolute;
   top: 5em;
-  left: 0em;
+  left: 1em;
   bottom: 0em;
-  right: 0em;
+  right: 1em;
   overflow: auto;
 }
