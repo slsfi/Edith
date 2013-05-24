@@ -48,7 +48,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       });
       vent.on('note:dirty', function() { self.hasDirtyChildren = true; });
       vent.on('note:change', function() { self.hasDirtyChildren = false; });
-      vent.on('document:selection', this.update);
+      vent.on('document:selection', function(documentId, selection) {
+        if (self.$el.is(':visible')) {
+          self.update(documentId, selection)
+        }
+      });
     },
 
     render: function() {
@@ -63,7 +67,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     
     update: function(documentId, selection) {
       if (!this.documentNote) {
-        this.documentNote = {};
+        this.documentNote = {document: documentId};
       }
       this.documentNote.fullSelection = selection.selection;
       this.render();
@@ -89,7 +93,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                      contentType: "application/json; charset=utf-8",
                      data: JSON.stringify(data),
                      success: function(data) {
-                       console.log('in success: ' + data.note);
                        self.isDirty = false;
                        vent.trigger('document-note:change', data);
                      }};
@@ -107,7 +110,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
             request.type = 'POST';
             data.note = note.id;
             request.data = JSON.stringify(data);
-            console.log('in saving note: ', note.id);
             $.ajax(request);
           });
         }
@@ -176,7 +178,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
     
     setDirty: function() {
-      console.log('dirty')
       this.$('#save-note').removeAttr('disabled');
       vent.trigger('note:dirty');
     },
