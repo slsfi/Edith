@@ -25,12 +25,12 @@ require([], function() {
     });
 
     var notes = new NotesCollection();
-    var columns = [{sortable: true, defaultSortAsc: true, id: 'lemma', name: 'Lemma', field: 'lemma', editor: Slickback.TextCellEditor},
-                   {sortable: true, maxWidth: 300, id: 'description', name: 'Description', field: 'description'},
-                   {sortable: true,  id: 'subtextSources', name: 'Subtext sources', field: 'subtextSources'},
-                   {sortable: true,  id: 'editedOn', name: 'Edited on', field: 'editedOn'},
-                   {sortable: true,  id: 'basicForm', name: 'Basic form', field: 'term.basicForm'},
-                   {id: 'meaning', name: 'Meaning', field: 'term.meaning'}];
+    var columns = [{sortable: true, defaultSortAsc: true, id: 'lemma', name: localize('lemma-label'), field: 'lemma', editor: Slickback.TextCellEditor},
+                   {sortable: true, maxWidth: 300, id: 'description', name: localize('description-label'), field: 'description'},
+                   {sortable: true,  id: 'subtextSources', name: localize('subtextSources-label'), field: 'subtextSources'},
+                   {sortable: true,  id: 'editedOn', name: localize('editedOn-label'), field: 'editedOn'},
+                   {sortable: true,  id: 'basicForm', name: localize('basicForm-label'), field: 'term.basicForm'},
+                   {id: 'meaning', name: localize('meaning-label'), field: 'term.meaning'}];
     var options = {
       formatterFactory: Slickback.BackboneModelFormatterFactory,
       editable: true,

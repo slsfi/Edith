@@ -50,8 +50,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
                  {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
                  // TODO types
                  {sortable: true, id: 'description', name: localize('description-label'), field: 'note.description'},
-                 {sortable: true, id: 'editedOn', name: 'Edited on', field: 'note.editedOn'},
-                 {sortable: true, id: 'lastEditedBy', name: 'Last edited by', field: 'note.lastEditedBy.username'},
+                 {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn'},
+                 {sortable: true, id: 'lastEditedBy', name: localize('lastEditedBy-label'), field: 'note.lastEditedBy.username'},
                  {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
                  {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'} 
                  ];
