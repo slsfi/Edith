@@ -107,7 +107,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var NoteSearch = Backbone.View.extend({
     
     events: {'keyup .search': 'search',
-             'change .creators': 'search'},
+             'change form input': 'search',
+             'change form select': 'search'},
     
     initialize: function() {
       var self = this;
@@ -121,11 +122,21 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     },
     
     search: function() {
-      documentNotes.extendScope({
-        query: this.$(".search").val(),
-        creators: [this.$(".creators").val()]
-        // TODO currentDocument
-      });
+      var arr = this.$("form").serializeArray();
+      var data = _(arr).reduce(function(acc, field) {
+             if (field.value) {
+               if (field.name == 'creators' || field.name == 'types') {
+                 if (!acc[field.name]) acc[field.name] = [];
+                 acc[field.name].push(field.value);
+               } else {
+                 acc[field.name] = field.value;       
+               }  
+             }                     
+             return acc;
+           }, {});
+      console.log(data);
+      
+      documentNotes.extendScope(data);
       documentNotes.fetchWithScope();
     },
   
@@ -134,7 +145,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
       
       var cb = function() { 
-        this.$(".creators").html(_.map(users.toJSON(), userOption).join("")); 
+        var userOpts = _.map(users.toJSON(), userOption).join("");
+        this.$(".creators").html(userOption({}) + userOpts); 
       };
       if (users.length > 0) cb(); else users.fetch({success: cb});
     }

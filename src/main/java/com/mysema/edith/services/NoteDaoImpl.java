@@ -207,22 +207,22 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
 
         // formats
-        if (!search.getNoteFormats().isEmpty()) {
-            builder.and(note.format.in(search.getNoteFormats()));
+        if (!search.getFormats().isEmpty()) {
+            builder.and(note.format.in(search.getFormats()));
         }
 
         // types
-        if (!search.getNoteTypes().isEmpty()) {
+        if (!search.getTypes().isEmpty()) {
             BooleanBuilder filter = new BooleanBuilder();
-            for (NoteType type : search.getNoteTypes()) {
+            for (NoteType type : search.getTypes()) {
                 filter.or(note.types.contains(type));
             }
             builder.and(filter);
         }
         
         // status
-        if (search.getNoteStatus() != null) {
-            builder.and(note.status.eq(search.getNoteStatus()));
+        if (search.getStatus() != null) {
+            builder.and(note.status.eq(search.getStatus()));
         }
 
         // created before

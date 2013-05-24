@@ -28,7 +28,7 @@ window.rconfig = {
     },
     'underscore': { exports: '_' },
     'backbone': {
-      deps: ['underscore', 'jquery'],
+      deps: ['underscore', 'jquery', 'bootstrap'],
       exports: 'Backbone'
     },
     'jqueryeventdrag': {

@@ -20,11 +20,11 @@ public class NoteSearchTO {
 
     private Set<String> paths = new HashSet<String>();
 
-    private NoteStatus noteStatus;
+    private NoteStatus status;
     
-    private Set<NoteType> noteTypes = new HashSet<NoteType>();
+    private Set<NoteType> types = new HashSet<NoteType>();
 
-    private Set<NoteFormat> noteFormats = new HashSet<NoteFormat>();
+    private Set<NoteFormat> formats = new HashSet<NoteFormat>();
 
     private Set<Long> creators = new HashSet<Long>();
 
@@ -73,20 +73,20 @@ public class NoteSearchTO {
         return paths;
     }
 
-    public Set<NoteType> getNoteTypes() {
-        return noteTypes;
+    public Set<NoteType> getTypes() {
+        return types;
     }
 
-    public void setNoteTypes(Set<NoteType> noteTypes) {
-        this.noteTypes = noteTypes;
+    public void setTypes(Set<NoteType> types) {
+        this.types = types;
     }
 
-    public Set<NoteFormat> getNoteFormats() {
-        return noteFormats;
+    public Set<NoteFormat> getFormats() {
+        return formats;
     }
 
-    public void setNoteFormats(Set<NoteFormat> noteFormats) {
-        this.noteFormats = noteFormats;
+    public void setFormats(Set<NoteFormat> formats) {
+        this.formats = formats;
     }
 
     public Set<Long> getCreators() {
@@ -169,12 +169,12 @@ public class NoteSearchTO {
         this.perPage = perPage;
     }
 
-    public NoteStatus getNoteStatus() {
-        return noteStatus;
+    public NoteStatus getStatus() {
+        return status;
     }
 
-    public void setNoteStatus(NoteStatus noteStatus) {
-        this.noteStatus = noteStatus;
+    public void setStatus(NoteStatus status) {
+        this.status = status;
     }
 
     public String getDescription() {

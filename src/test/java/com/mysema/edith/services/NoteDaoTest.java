@@ -364,7 +364,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         createNote("note3");
 
         NoteSearchTO search = new NoteSearchTO();
-        search.getNoteFormats().add(NoteFormat.NOTE);
+        search.getFormats().add(NoteFormat.NOTE);
         noteDao.findNotes(search);
         // TODO
     }
@@ -376,7 +376,7 @@ public class NoteDaoTest extends AbstractHibernateTest {
         createNote("note3");
 
         NoteSearchTO search = new NoteSearchTO();
-        search.getNoteTypes().add(NoteType.CRITIQUE);
+        search.getTypes().add(NoteType.CRITIQUE);
         noteDao.findNotes(search);
         // TODO
     }
