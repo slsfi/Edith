@@ -96,6 +96,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                        self.isDirty = false;
                        vent.trigger('document-note:change', data);
                      }};
+      // TODO: Actual attaching to document
       if (this.documentNote.id) {
         $.ajax(request);
       } else if (!this.documentNote.id && this.documentNote.note) {
