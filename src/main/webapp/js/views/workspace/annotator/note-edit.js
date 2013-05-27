@@ -83,6 +83,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         data.publishable = false;
       }
       data.id = this.documentNote.id;
+      if (!data.id) {
+        // 'shortenedSelection' is generated in the backend
+        if (!data.shortenedSelection) {
+          delete data.shortenedSelection;
+        }
+      }
       data.selection = this.selection;
       data.document = this.document;
       return data;
@@ -99,8 +105,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                      dataType: 'json',
                      contentType: "application/json; charset=utf-8",
                      data: JSON.stringify(data),
-                     success: function(data) {
-                       vent.trigger('document-note:change', data);
+                     success: function(documentNote) {
+                       vent.trigger('document-note:change', documentNote);
+                       if (data.selection) {
+                         console.log('we haz annotation');
+                         vent.trigger('annotation:change', documentNote.document.id);
+                       }
                      }};
       if (!data.id) {
         request.url = '/api/document-notes/';
@@ -294,6 +304,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                        success: function(data) {
                          vent.trigger('document-note:change', data);
                          vent.trigger('note:change', data.note);
+                         vent.trigger('annotation:change', data.document.id);
                        }};
         $.ajax(request);
       }

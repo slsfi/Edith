@@ -83,7 +83,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
     initialize: function() {
       _.bindAll(this, 'render', 'selectionChange');
       var self = this;
-      vent.on('document:open annotation:created', function(id) {
+      vent.on('document:open annotation:change', function(id) {
         self.documentId = id;
         self.render(id);
       });
@@ -124,16 +124,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
                        endCharIndex: endCharIndex};
       var self = this;
       vent.trigger('document:selection', this.documentId, selection);
-//      if (confirm('Annotate?')) {
-//        $.ajax('api/documents/' + this.documentId + '/document-notes',
-//               {type: 'post',
-//                contentType: "application/json; charset=utf-8",
-//                data: JSON.stringify({text: selection}),
-//                success: function(resp) {
-//                  // TODO: Other info besides document id?
-//                  vent.trigger('annotation:created', self.documentId);
-//                }});
-//      }
     }
   });
 

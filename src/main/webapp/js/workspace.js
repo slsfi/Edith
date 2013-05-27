@@ -36,7 +36,7 @@ require([], function() {
 
       openAnnotator: function(id) {
         this.hideAll();
-        vent.trigger('document:open', id);
+        vent.trigger('document:open', parseInt(id));
         this.views.annotator.$el.show();
       }
     });
