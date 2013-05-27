@@ -57,7 +57,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       if (!this.documentNote) {
         this.documentNote = {};
       }
-      this.documentNote.document = documentId;
+      this.document = documentId;
       this.selection = selection;
       this.documentNote.fullSelection = selection.selection;
       this.render();
@@ -84,6 +84,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       }
       data.id = this.documentNote.id;
       data.selection = this.selection;
+      data.document = this.document;
       return data;
     },
     
