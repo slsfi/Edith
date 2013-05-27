@@ -197,7 +197,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
 
         // creators
-        if (!search.getCreators().isEmpty()) {
+        if (!isNullOrEmpty(search.getCreators())) {
             BooleanBuilder filter = new BooleanBuilder();
             for (Long userId : search.getCreators()) {
                 User user = userDao.getById(userId);
@@ -207,12 +207,12 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
 
         // formats
-        if (!search.getFormats().isEmpty()) {
+        if (!isNullOrEmpty(search.getFormats())) {
             builder.and(note.format.in(search.getFormats()));
         }
 
         // types
-        if (!search.getTypes().isEmpty()) {
+        if (!isNullOrEmpty(search.getTypes())) {
             BooleanBuilder filter = new BooleanBuilder();
             for (NoteType type : search.getTypes()) {
                 filter.or(note.types.contains(type));
@@ -259,6 +259,10 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
         
         return builder;
+    }
+    
+    private static boolean isNullOrEmpty(Collection<?> coll) {
+        return coll == null || coll.isEmpty();
     }
     
     private OrderSpecifier<?> getOrderBy(NoteSearchTO searchInfo, boolean searchNotes) {
