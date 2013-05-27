@@ -26,7 +26,6 @@ import com.mysema.edith.EdithTestConstants;
 import com.mysema.edith.domain.*;
 import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteSearchTO;
-import com.mysema.edith.dto.UserTO;
 import com.mysema.query.SearchResults;
 
 @Transactional

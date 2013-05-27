@@ -84,6 +84,21 @@ public class NoteAdditionTest extends AbstractHibernateTest {
     }
     
     @Test
+    public void AddNote_header() throws Exception {        
+        String startNode = "TEI-teiHeader0-fileDesc0-sourceDesc0-biblStruct0-monogr0-author0";
+        String endNode = "TEI-teiHeader0-fileDesc0-sourceDesc0-biblStruct0-monogr0-author0";
+        String selection = "ivi, Aleksi";
+        int startCharIndex = 0;
+        int endCharIndex = 2;
+        
+        addNote(new SelectedText(startNode, endNode, startCharIndex, endCharIndex, selection));
+        
+        String content = getContent();
+        assertTrue(content.contains(start(localId)+"ivi,Aleksi"+end(localId)));
+        
+    }
+    
+    @Test
     public void AddNote_end_element_deeply_inside_start_element() throws Exception {
         String startElement = "div0-div0-castList0-castItem12";
         String endElement = "div0-div0-castList0-castItem12-roleDesc0-ref0";

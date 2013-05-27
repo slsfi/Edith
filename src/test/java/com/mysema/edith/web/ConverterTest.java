@@ -17,6 +17,7 @@ import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.dto.PersonTO;
 import com.mysema.edith.dto.PlaceTO;
+import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.dto.UserTO;
 
 public class ConverterTest {
@@ -171,4 +172,26 @@ public class ConverterTest {
         assertTrue(note.getTypes().contains(NoteType.WORD_EXPLANATION));
     }
 
+    @Test
+    public void SelectedText() {
+        String startNode = "TEI-teiHeader0-fileDesc0-sourceDesc0-biblStruct0-monogr0-author0";
+        String endNode = "TEI-teiHeader0-fileDesc0-sourceDesc0-biblStruct0-monogr0-author0";
+        String selection = "ivi, Aleksi";
+        int startCharIndex = 0;
+        int endCharIndex = 2;
+        
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("startNode", startNode);
+        info.put("endNode", endNode);
+        info.put("selection", selection);
+        info.put("startCharIndex", startCharIndex);
+        info.put("endCharIndex", endCharIndex);
+        
+        SelectedText text = converter.convert(info, SelectedText.class);
+        assertEquals(startNode, text.getStartNode());
+        assertEquals(endNode, text.getEndNode());
+        assertEquals(selection, text.getSelection());
+        assertEquals(startCharIndex, text.getStartCharIndex());
+        assertEquals(endCharIndex, text.getEndCharIndex());
+    }
 }

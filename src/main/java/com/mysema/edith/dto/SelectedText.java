@@ -60,7 +60,7 @@ public class SelectedText {
         this.endNode = endId;
     }
 
-    public void setEndIndex(int endIndex) {
+    public void setEndCharIndex(int endIndex) {
         this.endCharIndex = endIndex;
     }
 
