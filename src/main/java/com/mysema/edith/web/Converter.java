@@ -53,6 +53,9 @@ public class Converter {
             // direct
             } else if (targetClass.isInstance(source)) {
                 return (T) source;
+            // (int) id to bean    
+            } else if (source instanceof Integer && Identifiable.class.isAssignableFrom(targetClass)) {
+                return em.get().find(targetClass, ((Integer)source).longValue());
             // id to bean
             } else if (source instanceof Long && Identifiable.class.isAssignableFrom(targetClass)) {
                 return em.get().find(targetClass, source);

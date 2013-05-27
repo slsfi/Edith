@@ -29,7 +29,6 @@ import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteCommentTO;
-import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
