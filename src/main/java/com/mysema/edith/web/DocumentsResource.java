@@ -92,6 +92,7 @@ public class DocumentsResource extends AbstractResource {
     }
 
     @POST @Path("{id}/document-notes")
+    @Deprecated
     public DocumentNoteTO create(@PathParam("id") Long docId, SelectionTO sel) {
         Document doc = dao.getById(docId);
         DocumentNote documentNote;
@@ -105,6 +106,7 @@ public class DocumentsResource extends AbstractResource {
     }
 
     @PUT @Path("{id}/document-notes/{docnote-id}")
+    @Deprecated
     public DocumentNoteTO update(@PathParam("docnote-id") Long docNoteId, SelectionTO sel) {
         DocumentNote documentNote = documentNoteService.getById(docNoteId);
         return convert(documentNoteService.updateNote(documentNote, sel.getText()), DocumentNoteTO.class);

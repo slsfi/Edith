@@ -2,11 +2,13 @@ package com.mysema.edith.web;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -18,7 +20,10 @@ import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.NoteSearchTO;
+import com.mysema.edith.dto.SelectedText;
+import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.DocumentDao;
+import com.mysema.edith.services.NoteAdditionFailedException;
 import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.services.UserDao;
 
@@ -70,10 +75,10 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
     @Test
     public void Create() {
         Document document = documentDao.getDocumentForPath(testDocument);
-        DocumentNoteTO info = new DocumentNoteTO();
-        info.setDocument(document.getId());
-        info.setFullSelection("a");
-        info.setNote(note.getId());
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("document", document.getId());
+        info.put("fullSelection", "a");
+        info.put("note", note.getId());
         DocumentNoteTO created = documentNotes.create(info);
 
         assertNotNull(created.getId());
@@ -82,11 +87,28 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
     @Test
     public void Create_without_Note() {
         Document document = documentDao.getDocumentForPath(testDocument);
-        DocumentNoteTO info = new DocumentNoteTO();
-        info.setDocument(document.getId());
-        info.setFullSelection("a");
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("document", document.getId());
+        info.put("fullSelection", "a");
         DocumentNoteTO created = documentNotes.create(info);
 
+        assertNotNull(created.getId());
+    }
+    
+    @Test
+    public void Create_Selection() throws IOException, NoteAdditionFailedException {
+        String PREFIX = "TEI-text0-body0-";
+        Document document = documentDao.getDocumentForPath(testDocument);
+        String element = "div0-div1-sp1-p0";
+        String text = "sun ullakosta ottaa";
+        
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("document", document.getId());
+        info.put("note", note.getId());
+        info.put("selection", new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
+
+        DocumentNoteTO created = documentNotes.create(info);
+        
         assertNotNull(created.getId());
     }
     

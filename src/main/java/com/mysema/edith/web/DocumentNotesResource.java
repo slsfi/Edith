@@ -21,10 +21,13 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
+import com.mysema.edith.domain.Note;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.FullDocumentNoteTO;
 import com.mysema.edith.dto.NoteSearchTO;
+import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteDao;
 import com.mysema.query.SearchResults;
@@ -100,8 +103,22 @@ public class DocumentNotesResource extends AbstractResource {
     }
         
     @POST
-    public DocumentNoteTO create(DocumentNoteTO info) {
-        return convert(service.save(convert(info, new DocumentNote())), DocumentNoteTO.class);
+    public DocumentNoteTO create(Map<String, Object> info) {
+        Object selection = info.remove("selection");
+        DocumentNote documentNote;
+        if (selection != null) {
+            SelectedText text = convert(selection, SelectedText.class);
+            Document doc = convert(info.get("document"), Document.class);
+            if (info.containsKey("note")) {
+                Note note = convert(info.get("note"), Note.class);
+                documentNote = service.attachNote(note, doc, text);
+            } else {
+                documentNote = service.attachNote(doc, text);
+            }            
+        } else {
+            documentNote = new DocumentNote();
+        }
+        return convert(service.save(convert(info, documentNote)), DocumentNoteTO.class);
     }
 
     @PUT @Path("{id}")
@@ -110,8 +127,11 @@ public class DocumentNotesResource extends AbstractResource {
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        System.err.println(entity);
-        System.err.println(info);
+        Object selection = info.remove("selection");
+        if (selection != null) {
+            SelectedText text = convert(selection, SelectedText.class);
+            entity = service.updateNote(entity, text);
+        }        
         return convert(service.save(convert(info, entity)), DocumentNoteTO.class);
     }
 
