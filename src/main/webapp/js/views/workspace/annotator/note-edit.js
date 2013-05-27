@@ -83,6 +83,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         data.publishable = false;
       }
       data.id = this.documentNote.id;
+      data.selection = this.selection;
       return data;
     },
     

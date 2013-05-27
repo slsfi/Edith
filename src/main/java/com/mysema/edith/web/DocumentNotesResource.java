@@ -38,7 +38,7 @@ import com.mysema.query.SearchResults;
 public class DocumentNotesResource extends AbstractResource {
 
     private final DocumentNoteService service;
-    
+
     private final NoteDao dao;
 
     @Inject
@@ -51,7 +51,7 @@ public class DocumentNotesResource extends AbstractResource {
     public DocumentNoteTO getById(@PathParam("id") Long id) {
         return convert(service.getById(id), DocumentNoteTO.class);
     }
-    
+
     @GET
     public Map<String, Object> all(
             @QueryParam("page") Long page,
@@ -68,7 +68,7 @@ public class DocumentNotesResource extends AbstractResource {
         if (page == null) {
             page = 1L;
         }
-        
+
         NoteSearchTO search = new NoteSearchTO();
         search.setQuery(query);
         search.setPage(page);
@@ -89,7 +89,7 @@ public class DocumentNotesResource extends AbstractResource {
     }
 
     @POST @Path("query")
-    public Map<String, Object> query(NoteSearchTO search) {        
+    public Map<String, Object> query(NoteSearchTO search) {
         SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
         List<FullDocumentNoteTO> entries = convert(results.getResults(), FullDocumentNoteTO.class);
 
@@ -101,7 +101,7 @@ public class DocumentNotesResource extends AbstractResource {
         rv.put("totalEntries", results.getTotal());
         return rv;
     }
-        
+
     @POST
     public DocumentNoteTO create(Map<String, Object> info) {
         Object selection = info.remove("selection");
@@ -114,7 +114,7 @@ public class DocumentNotesResource extends AbstractResource {
                 documentNote = service.attachNote(note, doc, text);
             } else {
                 documentNote = service.attachNote(doc, text);
-            }            
+            }
         } else {
             documentNote = new DocumentNote();
         }
@@ -131,7 +131,7 @@ public class DocumentNotesResource extends AbstractResource {
         if (selection != null) {
             SelectedText text = convert(selection, SelectedText.class);
             entity = service.updateNote(entity, text);
-        }        
+        }
         return convert(service.save(convert(info, entity)), DocumentNoteTO.class);
     }
 
