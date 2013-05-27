@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.web;
 
 import java.io.File;
@@ -160,23 +155,6 @@ public class DocumentsResource extends AbstractResource {
     @Path("{id}/note-comments")
     public List<NoteCommentTO> getLatestComments(@PathParam("id") Long id) {
         List<NoteComment> noteComments = dao.getNoteComments(id, 3);
-        // TODO: Remove once there is an UI implementation for adding comments
-        if (noteComments.isEmpty()) {
-            Document document = dao.getDocumentForPath(documentRoot + "/Nummisuutarit rakenteistettuna.xml");
-            String element = "play-act-sp2-p";
-            String text = "sun ullakosta ottaa";
-
-            try {
-                DocumentNote docNote = documentNoteService.attachNote(new Note(), document,
-                        new SelectedText(element, element, text));
-                noteDao.createComment(docNote.getNote(), "Yay");
-                noteDao.createComment(docNote.getNote(), "Hay");
-                noteDao.createComment(docNote.getNote(), "Bay");
-            } catch (Exception e) {
-                System.err.println(e);
-            }
-            noteComments = dao.getNoteComments(document.getId(), 3);
-        }
         return convert(noteComments, NoteCommentTO.class);
     }
 }
