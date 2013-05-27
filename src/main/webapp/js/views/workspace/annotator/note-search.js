@@ -156,6 +156,20 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       if (users.length > 0) cb(); else users.fetch({success: cb});
       
       this.$(".date").datepicker({ dateFormat: localize('dateformat') });
+      
+      this.$('.directory-tree').dynatree({
+        initAjax: {
+          url: '/api/files'
+        },
+
+        onLazyRead: function(node) {
+          node.appendAjax({
+            url: '/api/files/',
+            data: 'path=' + node.data.path
+          });
+        }
+
+      });
     }
     
   });
