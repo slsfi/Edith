@@ -131,6 +131,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
                } else {
                  acc[field.name] = field.value;       
                }  
+             } else {
+               acc[field.name] = null;
              }     
              return acc;
            }, {});
@@ -150,6 +152,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         this.$(".creators").html(userOption({}) + userOpts); 
       };
       if (users.length > 0) cb(); else users.fetch({success: cb});
+      
+      this.$(".date").datepicker();
     }
     
   });
