@@ -98,5 +98,4 @@ public class NoteConversionTest {
         assertEquals(docNote.getNote().getId(), docNote2.getNote().getId());
     }
     
-
 }

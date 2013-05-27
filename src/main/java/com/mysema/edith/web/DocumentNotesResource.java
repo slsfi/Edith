@@ -24,7 +24,6 @@ import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
-import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.FullDocumentNoteTO;
 import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.SelectedText;
@@ -48,8 +47,8 @@ public class DocumentNotesResource extends AbstractResource {
     }
 
     @GET @Path("{id}")
-    public DocumentNoteTO getById(@PathParam("id") Long id) {
-        return convert(service.getById(id), DocumentNoteTO.class);
+    public FullDocumentNoteTO getById(@PathParam("id") Long id) {
+        return convert(service.getById(id), FullDocumentNoteTO.class);
     }
 
     @GET
@@ -102,10 +101,23 @@ public class DocumentNotesResource extends AbstractResource {
         return rv;
     }
 
+    private Note getNote(Map<String, Object> noteInfo) {
+        Note note;
+        if (noteInfo.containsKey("id")) {
+            note = dao.getById(Long.parseLong(noteInfo.get("id").toString()));
+        } else {
+            note = new Note();
+        }
+        return dao.save(note);
+    }
+        
     @POST
-    public DocumentNoteTO create(Map<String, Object> info) {
+    public FullDocumentNoteTO create(Map<String, Object> info) {
         Object selection = info.remove("selection");
         DocumentNote documentNote;
+        if (info.get("note") instanceof Map) {
+            info.put("note", getNote((Map<String, Object>) info.get("note")));
+        }
         if (selection != null) {
             SelectedText text = convert(selection, SelectedText.class);
             Document doc = convert(info.get("document"), Document.class);
@@ -118,21 +130,23 @@ public class DocumentNotesResource extends AbstractResource {
         } else {
             documentNote = new DocumentNote();
         }
-        return convert(service.save(convert(info, documentNote)), DocumentNoteTO.class);
+        return convert(service.save(convert(info, documentNote)), FullDocumentNoteTO.class);
     }
 
     @PUT @Path("{id}")
-    public DocumentNoteTO update(@PathParam("id") Long id, Map<String, Object> info) {
+    public FullDocumentNoteTO update(@PathParam("id") Long id, Map<String, Object> info) {
         DocumentNote entity = service.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");
+        }
+        if (info.get("note") instanceof Map) {
+            info.put("note", getNote((Map<String, Object>) info.get("note")));
         }
         Object selection = info.remove("selection");
         if (selection != null) {
             SelectedText text = convert(selection, SelectedText.class);
             entity = service.updateNote(entity, text);
-        }
-        return convert(service.save(convert(info, entity)), DocumentNoteTO.class);
+        return convert(service.save(convert(info, entity)), FullDocumentNoteTO.class);
     }
 
     @DELETE @Path("{id}")

@@ -59,6 +59,9 @@ public class Converter {
             // bean to id
             } else if (source instanceof Identifiable && targetClass.equals(Long.class)) {
                 return (T) ((Identifiable)source).getId();
+            // number to id
+            } else if (source instanceof Number && targetClass.equals(Long.class)) {
+                return (T) Long.valueOf(((Number)source).longValue());
             // enum
             } else if (targetClass.isEnum()) {    
                 return (T) Enum.valueOf((Class)targetClass, source.toString());
@@ -140,10 +143,8 @@ public class Converter {
                 targetValue = convert(sourceValue, targetType);
             }
             target.put(entry.getKey(), targetValue);
-        }
-        
+        }        
         return target.getBean();
-
     }
     
 }

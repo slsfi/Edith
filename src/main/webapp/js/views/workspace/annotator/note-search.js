@@ -1,6 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', 'slickgrid', 'localize',
+define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', 'slickgrid', 'moment', 'localize',
         'text!/templates/workspace/annotator/note-search.html'],
-       function($, _, Backbone, vent, Handlebars, Slickback, Slick, localize, searchTemplate) {
+       function($, _, Backbone, vent, Handlebars, Slickback, Slick, moment, localize, searchTemplate) {
   
   var searchTemplate = Handlebars.compile(searchTemplate);
   
@@ -104,6 +104,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   
   var userOption = Handlebars.compile("<option value='{{id}}'>{{username}}</option>");
   
+  var dateFields = ['createdAfter', 'createdBefore', 'editedAfter', 'editedBefore'];
+  
   var NoteSearch = Backbone.View.extend({
     
     events: {'keyup .search': 'search',
@@ -136,9 +138,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
              }     
              return acc;
            }, {});
-      console.log(JSON.stringify(data));
       
-      // TODO this should replace scope, at least the form elements
       documentNotes.extendScope(data);
       documentNotes.fetchWithScope();
     },
@@ -153,7 +153,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       };
       if (users.length > 0) cb(); else users.fetch({success: cb});
       
-      this.$(".date").datepicker();
+      this.$(".date").datepicker({ dateFormat: localize('dateformat') });
     }
     
   });

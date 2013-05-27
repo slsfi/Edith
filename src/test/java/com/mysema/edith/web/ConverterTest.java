@@ -56,6 +56,15 @@ public class ConverterTest {
         assertEquals(Long.valueOf(2), docNoteInfo.getDocument());
         assertEquals(Long.valueOf(3), docNoteInfo.getNote());
     }
+    
+    @Test
+    public void DocumentNoteInfo2() {
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("id", Integer.valueOf(1));
+        
+        DocumentNoteTO docNoteInfo = converter.convert(info, DocumentNoteTO.class);
+        assertEquals(Long.valueOf(1), docNoteInfo.getId());
+    }
 
     @Test
     public void NoteInfo() {

@@ -50,12 +50,12 @@
         </select>
         
         <label for="createdOn">{{localize 'createdOn-label'}}</label>
-        <input type="text" class="date" name="createdAfter"/>
-        <input type="text" class="date" name="createdBefore"/>        
+        {{localize 'from'}} <input type="text" class="date input-small" name="createdAfter"/>
+        {{localize 'to'}} <input type="text" class="date input-small" name="createdBefore"/>        
         
         <label for="editedOn">{{localize 'editedOn-label'}}</label>
-        <input type="text" class="date" name="editedAfter"/>
-        <input type="text" class="date" name="editedBefore"/>
+        {{localize 'from'}} <input type="text" class="date input-small" name="editedAfter"/>
+        {{localize 'to'}} <input type="text" class="date input-small" name="editedBefore"/>
         
         <label for="status">{{localize 'status-label'}}</label>
         <!-- TODO -->
