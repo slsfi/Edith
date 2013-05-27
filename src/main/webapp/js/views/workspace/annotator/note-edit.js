@@ -41,8 +41,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     open: function(documentNote, options) {
-      var self = this;
-      console.log(documentNote);
+      this.isDirty = false;
       this.documentNote = documentNote;
       this.render();
     },
@@ -51,10 +50,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.isDirty = true;
       this.$('#save-document-note').removeAttr('disabled');
     },
-    
+
     annotate: function() {
       // TODO: implement
-    }
+    },
 
     save: function() {
       var arr = this.$el.serializeArray();
@@ -138,6 +137,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
     
     open: function(note) {
+      this.isDirty = false;
       this.note = note;
       this.render();
     },
@@ -176,6 +176,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                      contentType: "application/json; charset=utf-8",
                      data: JSON.stringify(data),
                      success: function(data) {
+                       self.isDirty = false;
                        vent.trigger('note:change', data);
                      }};
       if (!this.note.id) {
@@ -200,6 +201,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
           self.annotate(documentId, selection);
         }
       });
+      vent.on('note:create', this.create);
       vent.on('document-note:open', this.open);
       this.render();
     },
@@ -237,7 +239,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
           return;
         }
       }
-      noteForm.open({});
+      this.noteForm.open({});
     },
 
     annotate: function(documentId, selection) {
