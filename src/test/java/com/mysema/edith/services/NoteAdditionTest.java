@@ -94,7 +94,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         addNote(new SelectedText(startNode, endNode, startCharIndex, endCharIndex, selection));
         
         String content = getContent();
-        assertTrue(content.contains(start(localId)+"ivi,Aleksi"+end(localId)));
+        assertTrue(content.contains(start(localId)+"ivi, Aleksi"+end(localId)));
         
     }
     
