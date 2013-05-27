@@ -146,6 +146,7 @@ public class DocumentNotesResource extends AbstractResource {
         if (selection != null) {
             SelectedText text = convert(selection, SelectedText.class);
             entity = service.updateNote(entity, text);
+        }
         return convert(service.save(convert(info, entity)), FullDocumentNoteTO.class);
     }
 
