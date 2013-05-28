@@ -278,10 +278,17 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.noteId = noteId;
       this.render();
     },
+    
+    close: function() {
+      this.noteId = null;
+      this.comment = null;
+      this.render();
+    },
 
     edit: function() {
       // TODO: Switch to vent and separate edit view
       var content = prompt('New comment');
+      // TODO: Note not persisted?
       var self = this;
       var request = {url: '/api/notes/' + self.noteId + '/comment',
                      type: 'PUT',
@@ -289,7 +296,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                      contentType: "application/json; charset=utf-8",
                      data: JSON.stringify({message: content}),
                      success: function(comment) {
-                       self.open(comment)
+                       self.open(comment, self.noteId);
                      }};
       $.ajax(request);
     }
@@ -346,6 +353,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         }
       }
       this.documentNoteForm.close();
+      this.comment.close();
       this.noteForm.open({});
       this.noteForm.setDirty();
     },
