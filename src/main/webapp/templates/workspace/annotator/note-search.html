@@ -58,7 +58,12 @@
         {{localize 'to'}} <input type="text" class="date input-small" name="editedBefore"/>
         
         <label for="status">{{localize 'status-label'}}</label>
-        <!-- TODO -->
+        <select name="status">
+          <option value=""></option>
+          <option value="INITIAL">{{localize 'INITIAL'}}</option>
+          <option value="DRAFT">{{localize 'DRAFT'}}</option>
+          <option value="FINISHED">{{localize 'FINISHED'}}</option>
+        </select>
         
         <label for="shortenedSelection">{{localize 'shortenedSelection-label'}}</label>
         <input type="text" name="shortenedSelection"/>

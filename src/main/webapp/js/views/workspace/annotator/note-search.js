@@ -105,7 +105,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var userOption = Handlebars.compile("<option value='{{id}}'>{{username}}</option>");
   
   var dateFields = ['createdAfter', 'createdBefore', 'editedAfter', 'editedBefore'];
-  
+    
   var NoteSearch = Backbone.View.extend({
     
     events: {'keyup .search': 'search',
@@ -141,6 +141,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
              return acc;
            }, {});
       
+      // tree nodes
+      var nodes = this.$(".directory-tree").dynatree("getSelectedNodes");
+      data.documents = _.map(nodes, function(n) { return n.data.documentId; });
+      
       documentNotes.extendScope(data);
       documentNotes.fetchWithScope();
     },
@@ -158,6 +162,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       this.$(".date").datepicker({ dateFormat: localize('dateformat') });
       
       this.$('.directory-tree').dynatree({
+        checkbox: true,
+        selectMode: 3,
         initAjax: {
           url: '/api/files'
         },
@@ -167,8 +173,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
             url: '/api/files/',
             data: 'path=' + node.data.path
           });
-        }
-
+        },
+        
       });
     }
     
