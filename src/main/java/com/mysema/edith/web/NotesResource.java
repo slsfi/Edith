@@ -62,21 +62,14 @@ public class NotesResource extends AbstractResource {
     public NoteCommentTO getCommentByNoteId(@PathParam("id") Long id) {
         return convert(commentDao.getOneOfNote(id), NoteCommentTO.class);
     }
-    
-    @POST @Path("{id}/comment")
-    public NoteCommentTO create(@PathParam("id") Long id, NoteCommentTO info) {
-        NoteComment comment = convert(info, NoteComment.class);
-        comment.setNote(dao.getById(id));
-        return convert(commentDao.save(comment), NoteCommentTO.class);
-    }
-    
+        
     @PUT @Path("{id}/comment")
-    public NoteTO updateComment(@PathParam("id") Long id,  Map<String, Object> info) {
+    public NoteCommentTO setComment(@PathParam("id") Long id,  Map<String, Object> info) {
         NoteComment entity = commentDao.getOneOfNote(id);
         if (entity == null) {
-            throw new RuntimeException("Entity not found");
+            entity = new NoteComment();
         }
-        return convert(commentDao.save(convert(info, entity)), NoteTO.class);
+        return convert(commentDao.save(convert(info, entity)), NoteCommentTO.class);
     }
     
     @DELETE @Path("{id}/comment")

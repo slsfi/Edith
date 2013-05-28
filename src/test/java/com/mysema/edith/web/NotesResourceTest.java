@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -137,35 +136,20 @@ public class NotesResourceTest extends AbstractResourceTest {
     }
     
     @Test
-    public void CreateComment_By_NoteId() {
-        NoteCommentTO comment = new NoteCommentTO();
-        comment.setMessage("msg");
-        comment.setUsername("timo");
+    public void CreateOrUpdateComment_By_NoteId() {
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("message", "msg");
         
-        NoteCommentTO comment2 = notes.create(1l, comment);
-        assertEquals(comment.getMessage(), comment2.getMessage());
-        assertEquals(comment.getUsername(), comment2.getUsername());
-    }
-    
-    @Test
-    public void UpdateComment_By_NoteId() {
-        NoteCommentTO comment = new NoteCommentTO();
-        comment.setMessage("msg");
-        comment.setUsername("timo");        
-        NoteCommentTO comment2 = notes.create(1l, comment);
-        
-        comment2.setMessage("msg2");
-        notes.updateComment(1l, Collections.<String, Object>singletonMap("message", "msg2"));
-        
-        assertEquals("msg2", notes.getCommentByNoteId(1l).getMessage());
+        NoteCommentTO comment = notes.setComment(1l, info);
+        assertEquals("msg", comment.getMessage());
+        assertEquals("timo", comment.getUsername());
     }
     
     @Test
     public void DeleteComment_By_NoteId() {
-        NoteCommentTO comment = new NoteCommentTO();
-        comment.setMessage("msg");
-        comment.setUsername("timo");        
-        notes.create(1l, comment);
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("message", "msg");        
+        notes.setComment(1l, info);
         notes.deleteComment(1l);
         
         assertNull(notes.getCommentByNoteId(1l));
