@@ -294,6 +294,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         this.documentNoteForm.save(documentNote);
       } else {
         // Need to save DocumentNote and Note
+        if (!confirm('Note will be saved as well?')) {
+          return;
+        }
         var data = documentNote;
         data.note = this.noteForm.extract();
         var request = {url: '/api/document-notes/',

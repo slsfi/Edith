@@ -37,7 +37,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     
     initialize: function() {
       _.bindAll(this, 'render', 'createNote');
-      vent.on('document:open annotation:created', this.render);
+      // XXX: Ghosts?
+      vent.on('document:open annotation:change', this.render);
     },
 
     render: function(id) {
