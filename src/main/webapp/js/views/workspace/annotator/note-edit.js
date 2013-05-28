@@ -24,12 +24,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     initialize: function() {
       _.bindAll(this, 'render', 'save', 'setDirty', 'annotate', 'extract',
-                      'hasPersistedNote', 'close');
+                      'hasPersistedNote', 'close', 'isPersisted');
       var self = this;
       vent.on('document-note:change', function(documentNote) {
-                                        self.documentNote = documentNote;
-                                        self.isDirty = false;
-                                        self.render();
+                                        if (documentNote) {
+                                          self.documentNote = documentNote;
+                                          self.isDirty = false;
+                                          self.render();
+                                        } else {
+                                          self.close();
+                                        }
                                       });
       this.render();
     },
@@ -40,9 +44,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       }
       this.$el.html(this.template(this.documentNote))
               .effect('highlight', {color: 'lightblue'}, 500);
+      if (this.isPersisted()) {
+        this.$('#delete-document-note').removeAttr('disabled');
+      }
     },
 
-    open: function(documentNote, options) {
+    open: function(documentNote) {
       this.isDirty = false;
       this.documentNote = documentNote;
       this.render();
@@ -53,9 +60,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$('#save-document-note').removeAttr('disabled');
     },
 
-    annotate: function(documentId, selection) {
+    annotate: function(documentId, noteId, selection) {
       if (!this.documentNote) {
-        this.documentNote = {};
+        this.documentNote = {note: noteId};
       }
       this.document = documentId;
       this.selection = selection;
@@ -106,10 +113,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                      contentType: "application/json; charset=utf-8",
                      data: JSON.stringify(data),
                      success: function(documentNote) {
+                       documentNote.document = documentNote.document.id;
                        vent.trigger('document-note:change', documentNote);
                        if (data.selection) {
-                         console.log('we haz annotation');
-                         vent.trigger('annotation:change', documentNote.document.id);
+                         vent.trigger('annotation:change', documentNote.document);
                        }
                      }};
       if (!data.id) {
@@ -118,6 +125,25 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       }
       $.ajax(request);
     },
+    
+    isPersisted: function() {
+      return this.documentNote.id != null;
+    },
+    
+    remove: function() {
+      var self = this;
+      var request = {url: '/api/document-notes/' + this.documentNote.id,
+                     type: 'DELETE',
+                     dataType: 'json',
+                     contentType: "application/json; charset=utf-8",
+                     success: function(data) {
+                       vent.trigger('annotation:change', self.documentNote.document);
+                       // TODO: Note's DocumentNote count?
+//                       vent.trigger('note:change', self.note.id);
+                       vent.trigger('document-note:change', data);
+                     }};
+      $.ajax(request);
+    }
   });
 
   var ckEditorSetup = {removePlugins: 'elementspath',
@@ -232,15 +258,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     template: Handlebars.compile(noteEditTemplate),
 
     events: {'click #save-document-note': 'saveDocumentNote',
-             'click #save-note': 'saveNote'},
+             'click #save-note': 'saveNote',
+             'click #delete-document-note': 'deleteDocumentNote'},
 
     initialize: function() {
       _.bindAll(this, 'render', 'open', 'create', 'annotate', 
-                      'saveDocumentNote', 'saveNote');
+                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote');
       var self = this;
       vent.on('document:selection', function(documentId, selection) {
         if (self.$el.is(':visible')) {
-          self.annotate(documentId, selection);
+          self.annotate(documentId, self.noteForm.note.id, selection);
         }
       });
       vent.on('note:create', this.create);
@@ -276,14 +303,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.noteForm.setDirty();
     },
 
-    annotate: function(documentId, selection) {
+    annotate: function(documentId, noteId, selection) {
       // XXX: Do we need dirty checks?
 //      if (this.documentNoteForm.isDirty) {
 //        if (!confirm('U haz unsaved changes, continue?')) {
 //          return;
 //        }
 //      }
-      this.documentNoteForm.annotate(documentId, selection);
+      this.documentNoteForm.annotate(documentId, this.noteForm.note.id, selection);
     },
 
     saveDocumentNote: function(evt) {
@@ -305,9 +332,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                        contentType: "application/json; charset=utf-8",
                        data: JSON.stringify(data),
                        success: function(data) {
+                         data.document = data.document.id;
                          vent.trigger('document-note:change', data);
                          vent.trigger('note:change', data.note);
-                         vent.trigger('annotation:change', data.document.id);
+                         vent.trigger('annotation:change', data.document);
                        }};
         $.ajax(request);
       }
@@ -316,6 +344,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     saveNote: function(evt) {
       evt.preventDefault();
       this.noteForm.save(this.noteForm.extract());
+    },
+    
+    deleteDocumentNote: function(evt) {
+      evt.preventDefault();
+      if (confirm('Delete document note?')) {
+        this.documentNoteForm.remove();
+      }
     }
   });
 

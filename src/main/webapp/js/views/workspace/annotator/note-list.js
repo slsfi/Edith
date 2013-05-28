@@ -15,7 +15,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.render();
       var self = this;
       vent.on('document-note:change', function(documentNote) {
-        if (documentNote.id === self.documentNote.id) {
+        if (documentNote && documentNote.id === self.documentNote.id) {
           self.documentNote = documentNote;
           self.render();
         }
