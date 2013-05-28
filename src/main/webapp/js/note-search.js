@@ -1,10 +1,15 @@
 require.config(window.rconfig);
 
 require([], function() {
-  require(['jquery', 'underscore', 'backbone', 'handlebars', 'slickback', 'slickgrid', 'localize', 'text!/templates/header.html'],
-          function($, _, Backbone, Handlebars, Slickback, Slick, localize, headerTemplate) {
+  require(['jquery', 'underscore', 'backbone', 'handlebars', 'slickback', 'slickgrid', 'localize', 
+           'text!/templates/header.html', 'text!/templates/note-search.html'],
+          function($, _, Backbone, Handlebars, Slickback, Slick, localize, headerTemplate, searchTemplate) {
     var headerTemplate = Handlebars.compile(headerTemplate);
     $('body').prepend(headerTemplate());
+    
+    var searchTemplate = Handlebars.compile(searchTemplate);
+    
+    $('#content').html(searchTemplate());
 
     var Note = Backbone.Model.extend({
       initialize: function() {

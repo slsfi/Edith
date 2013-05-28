@@ -1,6 +1,5 @@
 <form>
-<input name="query" type="text" class="query"></input>
-<p>{{localize 'creator-label'}} <select name="creators" class="creators"></select></p>
+<input name="query" type="text" placeholder="{{localize 'search'}}" class="query"></input>
 
 <div class="accordion" id="searchAccordion">
   <div class="accordion-group">
@@ -24,6 +23,9 @@
     </div>
     <div id="advancedSearch" class="accordion-body collapse">
       <div class="accordion-inner">
+        <label for="creators">{{localize 'creator-label'}}</label> 
+        <select name="creators" class="creators"></select></p>
+      
         <label for="types">{{localize 'type-label'}}</label>
         {{localize 'WORD_EXPLANATION'}} <input value="WORD_EXPLANATION" name="types" type="checkbox"/>
         {{localize 'LITERARY'}} <input value="LITERARY" name="types" type="checkbox"/>
