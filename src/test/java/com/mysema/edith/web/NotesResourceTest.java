@@ -2,10 +2,12 @@ package com.mysema.edith.web;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -17,6 +19,7 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
+import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.dto.TermTO;
@@ -125,6 +128,48 @@ public class NotesResourceTest extends AbstractResourceTest {
     @Test
     public void Import_Notes() {
         // TODO
+    }
+    
+    @Test
+    public void GetComment_By_NoteId() {
+        //notes.deleteComment(1l);
+        assertNull(notes.getCommentByNoteId(1l));
+    }
+    
+    @Test
+    public void CreateComment_By_NoteId() {
+        NoteCommentTO comment = new NoteCommentTO();
+        comment.setMessage("msg");
+        comment.setUsername("timo");
+        
+        NoteCommentTO comment2 = notes.create(1l, comment);
+        assertEquals(comment.getMessage(), comment2.getMessage());
+        assertEquals(comment.getUsername(), comment2.getUsername());
+    }
+    
+    @Test
+    public void UpdateComment_By_NoteId() {
+        NoteCommentTO comment = new NoteCommentTO();
+        comment.setMessage("msg");
+        comment.setUsername("timo");        
+        NoteCommentTO comment2 = notes.create(1l, comment);
+        
+        comment2.setMessage("msg2");
+        notes.updateComment(1l, Collections.<String, Object>singletonMap("message", "msg2"));
+        
+        assertEquals("msg2", notes.getCommentByNoteId(1l).getMessage());
+    }
+    
+    @Test
+    public void DeleteComment_By_NoteId() {
+        NoteCommentTO comment = new NoteCommentTO();
+        comment.setMessage("msg");
+        comment.setUsername("timo");        
+        notes.create(1l, comment);
+        notes.deleteComment(1l);
+        
+        assertNull(notes.getCommentByNoteId(1l));
+        
     }
 
 }

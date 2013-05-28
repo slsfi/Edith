@@ -22,15 +22,17 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
+import com.mysema.edith.domain.NoteComment;
 import com.mysema.edith.dto.DocumentNoteTO;
+import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
+import com.mysema.edith.services.NoteCommentDao;
 import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.util.StringUtils;
 import com.mysema.query.SearchResults;
 import com.mysema.util.BeanMap;
-
 import com.sun.jersey.multipart.FormDataParam;
 
 @Transactional
@@ -39,18 +41,50 @@ import com.sun.jersey.multipart.FormDataParam;
 public class NotesResource extends AbstractResource {
 
     private final NoteDao dao;
+    
+    private final NoteCommentDao commentDao;
 
     private final DocumentNoteDao documentNoteDao;
 
     @Inject
-    public NotesResource(NoteDao dao, DocumentNoteDao documentNoteDao) {
+    public NotesResource(NoteDao dao, NoteCommentDao commentDao, DocumentNoteDao documentNoteDao) {
         this.dao = dao;
+        this.commentDao = commentDao;
         this.documentNoteDao = documentNoteDao;
     }
 
     @GET @Path("{id}")
     public NoteTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), NoteTO.class);
+    }
+    
+    @GET @Path("{id}/comment")
+    public NoteCommentTO getCommentByNoteId(@PathParam("id") Long id) {
+        return convert(commentDao.getOneOfNote(id), NoteCommentTO.class);
+    }
+    
+    @POST @Path("{id}/comment")
+    public NoteCommentTO create(@PathParam("id") Long id, NoteCommentTO info) {
+        NoteComment comment = convert(info, NoteComment.class);
+        comment.setNote(dao.getById(id));
+        return convert(commentDao.save(comment), NoteCommentTO.class);
+    }
+    
+    @PUT @Path("{id}/comment")
+    public NoteTO updateComment(@PathParam("id") Long id,  Map<String, Object> info) {
+        NoteComment entity = commentDao.getOneOfNote(id);
+        if (entity == null) {
+            throw new RuntimeException("Entity not found");
+        }
+        return convert(commentDao.save(convert(info, entity)), NoteTO.class);
+    }
+    
+    @DELETE @Path("{id}/comment")
+    public void deleteComment(@PathParam("id") Long id) {
+        List<NoteComment> comments = commentDao.getOfNote(id);
+        for (NoteComment comment : comments) {
+            commentDao.remove(comment);
+        }
     }
 
     @GET
