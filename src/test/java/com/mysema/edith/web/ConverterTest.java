@@ -14,6 +14,7 @@ import com.google.common.collect.Sets;
 import com.mysema.edith.domain.*;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.DocumentTO;
+import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.dto.PersonTO;
 import com.mysema.edith.dto.PlaceTO;
@@ -193,5 +194,23 @@ public class ConverterTest {
         assertEquals(selection, text.getSelection());
         assertEquals(startCharIndex, text.getStartCharIndex());
         assertEquals(endCharIndex, text.getEndCharIndex());
+    }
+    
+    @Test
+    public void String_to_Number() {
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("page", "2");
+        
+        NoteSearchTO search = converter.convert(info, NoteSearchTO.class);
+        assertEquals(Long.valueOf(2), search.getPage());
+    }
+    
+    @Test
+    public void Number_to_Number() {
+        Map<String, Object> info = Maps.newHashMap();
+        info.put("page", 2);
+        
+        NoteSearchTO search = converter.convert(info, NoteSearchTO.class);
+        assertEquals(Long.valueOf(2), search.getPage());
     }
 }

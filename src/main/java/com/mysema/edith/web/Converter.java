@@ -6,6 +6,7 @@
 package com.mysema.edith.web;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.mysema.edith.Identifiable;
 import com.mysema.util.BeanMap;
+import com.mysema.util.MathUtils;
 import com.mysema.util.ReflectionUtils;
 
 @SuppressWarnings("unchecked")
@@ -59,12 +61,18 @@ public class Converter {
             // id to bean
             } else if (source instanceof Long && Identifiable.class.isAssignableFrom(targetClass)) {
                 return em.get().find(targetClass, source);
+            // id (string) to bean    
+            } else if (source instanceof String && Identifiable.class.isAssignableFrom(targetClass)) {
+                return em.get().find(targetClass, Long.valueOf((String)source));
             // bean to id
             } else if (source instanceof Identifiable && targetClass.equals(Long.class)) {
                 return (T) ((Identifiable)source).getId();
-            // number to id
-            } else if (source instanceof Number && targetClass.equals(Long.class)) {
-                return (T) Long.valueOf(((Number)source).longValue());
+            // number to number
+            } else if (source instanceof Number && Number.class.isAssignableFrom(targetClass)) {
+                return (T) MathUtils.cast((Number)source, (Class)targetClass);
+            // string to number
+            } else if (source instanceof String && Number.class.isAssignableFrom(targetClass)) {
+                return (T) MathUtils.cast(new BigDecimal((String)source), (Class)targetClass);
             // enum
             } else if (targetClass.isEnum()) {    
                 return (T) Enum.valueOf((Class)targetClass, source.toString());
