@@ -2,9 +2,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         'text!/templates/workspace/annotator/note-edit.html',
         'text!/templates/workspace/annotator/document-note-form.html',
         'text!/templates/workspace/annotator/note-form.html',
+        'text!/templates/workspace/annotator/comment.html',
         'ckeditor', 'ckeditor-jquery'],
        function($, _, Backbone, vent, Handlebars, noteEditTemplate,
-                documentNoteFormTemplate, noteFormTemplate, CKEditor, ckEditorJquery) {
+                documentNoteFormTemplate, noteFormTemplate, commentTemplate,
+                CKEditor, ckEditorJquery) {
   Handlebars.registerHelper('when-contains', function(coll, x, options) {
     if (_.contains(coll, x)) {
       return options.fn(this);
@@ -254,6 +256,45 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     }
   });
 
+  var Comment = Backbone.View.extend({
+    template: Handlebars.compile(commentTemplate),
+
+    events: {'click #edit-comment': 'edit'},
+
+    initialize: function() {
+      _.bindAll(this, 'render', 'open', 'edit');
+      this.render();
+    },
+
+    render: function() {
+      this.$el.html(this.template(this.comment || {}));
+      if (this.comment) {
+        this.$('.content').show();
+      }
+    },
+
+    open: function(comment, noteId) {
+      this.comment = comment;
+      this.noteId = noteId;
+      this.render();
+    },
+
+    edit: function() {
+      // TODO: Switch to vent and separate edit view
+      var content = prompt('New comment');
+      var self = this;
+      var request = {url: '/api/notes/' + self.noteId + '/comment',
+                     type: 'PUT',
+                     dataType: 'json',
+                     contentType: "application/json; charset=utf-8",
+                     data: JSON.stringify({message: content}),
+                     success: function(comment) {
+                       self.open(comment)
+                     }};
+      $.ajax(request);
+    }
+  });
+
   var NoteEdit = Backbone.View.extend({
     template: Handlebars.compile(noteEditTemplate),
 
@@ -279,6 +320,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$el.html(this.template);
       this.noteForm = new NoteForm({el: this.$('form#note')});
       this.documentNoteForm = new DocumentNoteForm({el: this.$('form#document-note')});
+      this.comment = new Comment({el: this.$('div#comment')})
     },
 
     open: function(documentNote) {
@@ -289,7 +331,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       }
       this.documentNoteForm.open(documentNote);
       $.getJSON('/api/notes/' + documentNote.note,
-                this.noteForm.open)
+                this.noteForm.open);
+      var self = this;
+      $.getJSON('/api/notes/' + documentNote.note + '/comment',
+                function(comment) {
+                  self.comment.open(comment, documentNote.note);
+                });
     },
 
     create: function() {
