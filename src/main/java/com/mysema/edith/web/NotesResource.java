@@ -41,7 +41,7 @@ import com.sun.jersey.multipart.FormDataParam;
 public class NotesResource extends AbstractResource {
 
     private final NoteDao dao;
-    
+
     private final NoteCommentDao commentDao;
 
     private final DocumentNoteDao documentNoteDao;
@@ -57,21 +57,22 @@ public class NotesResource extends AbstractResource {
     public NoteTO getById(@PathParam("id") Long id) {
         return convert(dao.getById(id), NoteTO.class);
     }
-    
+
     @GET @Path("{id}/comment")
     public NoteCommentTO getCommentByNoteId(@PathParam("id") Long id) {
         return convert(commentDao.getOneOfNote(id), NoteCommentTO.class);
     }
-        
+
     @PUT @Path("{id}/comment")
     public NoteCommentTO setComment(@PathParam("id") Long id,  Map<String, Object> info) {
         NoteComment entity = commentDao.getOneOfNote(id);
         if (entity == null) {
             entity = new NoteComment();
+            entity.setNote(dao.getById(id));
         }
         return convert(commentDao.save(convert(info, entity)), NoteCommentTO.class);
     }
-    
+
     @DELETE @Path("{id}/comment")
     public void deleteComment(@PathParam("id") Long id) {
         List<NoteComment> comments = commentDao.getOfNote(id);
@@ -117,7 +118,7 @@ public class NotesResource extends AbstractResource {
     }
 
     @POST @Path("query")
-    public Map<String, Object> query(NoteSearchTO search) {        
+    public Map<String, Object> query(NoteSearchTO search) {
         SearchResults<Note> results = dao.findNotes(search);
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
 
