@@ -154,6 +154,8 @@ public class NotesResource extends AbstractResource {
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
+        info.remove("lastEditedBy");
+        info.remove("allEditors");
         return convert(dao.save(convert(info, entity)), NoteTO.class);
     }
 
