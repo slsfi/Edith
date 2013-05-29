@@ -1,9 +1,9 @@
 require.config(window.rconfig);
 
 require([], function() {
-  require(['jquery', 'underscore', 'backbone', 'handlebars', 'slickback', 'slickgrid', 'localize', 
+  require(['jquery', 'underscore', 'backbone', 'handlebars', 'slickback', 'slickgrid', 'localize', 'moment', 
            'text!/templates/header.html', 'text!/templates/note-search.html'],
-          function($, _, Backbone, Handlebars, Slickback, Slick, localize, headerTemplate, searchTemplate) {
+          function($, _, Backbone, Handlebars, Slickback, Slick, localize, moment, headerTemplate, searchTemplate) {
     var headerTemplate = Handlebars.compile(headerTemplate);
     $('body').prepend(headerTemplate());
     
@@ -28,12 +28,17 @@ require([], function() {
         // Called when changing page size. TODO: Implement functionality?
       }
     });
+    
+    var DateFormatter = function(row, cell, value, columnDef, data) {
+      var value = data.get('editedOn');
+      return moment.unix(value / 1000).format("DD.MM.YYYY");
+    };
 
     var notes = new NotesCollection();
     var columns = [{sortable: true, defaultSortAsc: true, id: 'lemma', name: localize('lemma-label'), field: 'lemma', editor: Slickback.TextCellEditor},
                    {sortable: true, maxWidth: 300, id: 'description', name: localize('description-label'), field: 'description'},
                    {sortable: true,  id: 'subtextSources', name: localize('subtextSources-label'), field: 'subtextSources'},
-                   {sortable: true,  id: 'editedOn', name: localize('editedOn-label'), field: 'editedOn'},
+                   {sortable: true,  id: 'editedOn', name: localize('editedOn-label'), field: 'editedOn', formatter: DateFormatter},
                    {sortable: true,  id: 'basicForm', name: localize('basicForm-label'), field: 'term.basicForm'},
                    {id: 'meaning', name: localize('meaning-label'), field: 'term.meaning'}];
     var options = {

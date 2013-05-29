@@ -46,19 +46,29 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var users = new UsersCollection();
   users.fetch();
   
+  var LinkFormatter = function(row, cell, value, columnDef, data) {
+    var value = data.get('shortenedSelection');
+    return value;
+  };
+  
+  var DateFormatter = function(row, cell, value, columnDef, data) {
+    var value = data.get('note').editedOn;
+    return moment.unix(value / 1000).format("DD.MM.YYYY");
+  };
+  
   var allColumns = [
-      {sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), field: 'shortenedSelection'},
+      {sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), 
+        field: 'shortenedSelection', formatter: LinkFormatter},
       {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
       // TODO types
       {sortable: true, id: 'description', name: localize('description-label'), field: 'note.description'},
-      {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn'},
+      {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn', formatter: DateFormatter},
       {sortable: true, id: 'lastEditedBy', name: localize('lastEditedBy-label'), field: 'note.lastEditedBy.username'},
       {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
       {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'}];
   
   var options = {
     formatterFactory: Slickback.BackboneModelFormatterFactory,
-    editable: true,
     autoHeight: true,
     autoEdit: false,
     defaultColumnWidth: 100
