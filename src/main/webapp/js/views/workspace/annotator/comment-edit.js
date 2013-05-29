@@ -11,7 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       var self = this;
       vent.on('comment:edit', function(noteId, comment) {
         self.noteId = noteId;
-        self.comment = comment;
+        self.comment = comment || {};
         self.render();
       });
     },

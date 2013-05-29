@@ -7,10 +7,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     template: Handlebars.compile(noteItemTemplate),
 
-    events: {'click': 'open'},
+    events: {'click a': 'click',
+             'click #edit-note': 'edit',
+             'click #comment-note': 'comment'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'open');
+      _.bindAll(this, 'render', 'click', 'select', 'edit', 'comment');
       this.documentNote = this.options.data;
       this.render();
       var self = this;
@@ -19,16 +21,39 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
           self.documentNote = documentNote;
           self.render();
         }
-      })
+      });
+      vent.on('document-note:select', this.select);
     },
 
     render: function() {
       this.$el.html(this.template(this.documentNote));
     },
 
-    open: function(evt) {
-      evt.preventDefault(); 
+    click: function(evt) {
+      evt.preventDefault();
+      vent.trigger('document-note:select', this.documentNote.id);
+    },
+
+    select: function(id) {
+      if (this.documentNote.id !== id) {
+        this.$el.css('background', 'white');
+        this.$('button').hide();
+        return;
+      }
+      this.$el.css('background', 'lightgrey');
+      this.$('button').show();
+    },
+
+    edit: function() {
       vent.trigger('document-note:open', this.documentNote);
+    },
+
+    comment: function() {
+      var noteId = this.documentNote.note;
+      $.getJSON('/api/notes/' + noteId + '/comment',
+          function(comment) {
+            vent.trigger('comment:edit', noteId, comment);
+          });
     }
   });
 

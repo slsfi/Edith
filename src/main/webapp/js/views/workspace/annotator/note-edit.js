@@ -268,14 +268,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     render: function() {
-      this.$el.html(this.template(this.comment || {}));
+      this.$el.html(this.template(this.comment || {}));
       if (this.comment) {
         this.$('.content').show();
       }
     },
 
     open: function(comment, noteId) {
-      this.comment = comment;
+      this.comment = comment || {};
       this.noteId = noteId;
       this.render();
       this.$el.effect('highlight', {color: 'lightblue'}, 500);
@@ -288,7 +288,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     edit: function() {
-      vent.trigger('comment:edit', this.noteId, this.comment || {});
+      vent.trigger('comment:edit', this.noteId, this.comment);
     }
   });
 
