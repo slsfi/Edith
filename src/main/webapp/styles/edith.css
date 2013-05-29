@@ -14,3 +14,7 @@
 #content {
     padding: 1em;       
 }
+
+.ui-widget {
+    font-size: 1em;
+}
