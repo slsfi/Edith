@@ -1,6 +1,7 @@
 package com.mysema.edith.web;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
+import com.mysema.edith.dto.DocumentNoteListItemTO;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteCommentTO;
@@ -34,6 +36,7 @@ import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.DocumentNoteService;
+import com.mysema.edith.services.NoteCommentDao;
 import com.mysema.edith.services.NoteDao;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
@@ -43,7 +46,7 @@ import com.sun.jersey.multipart.FormDataParam;
 @Produces(MediaType.APPLICATION_JSON)
 public class DocumentsResource extends AbstractResource {
 
-    private final DocumentDao dao;
+    private final DocumentDao documentDao;
 
     private final DocumentNoteDao documentNoteDao;
 
@@ -51,6 +54,8 @@ public class DocumentsResource extends AbstractResource {
 
     // TODO: Remove once not needed
     private final NoteDao noteDao;
+
+    private final NoteCommentDao commentDao;
 
     private final ContentRenderer renderer;
 
@@ -66,29 +71,36 @@ public class DocumentsResource extends AbstractResource {
             DocumentNoteDao documentNoteDao,
             DocumentNoteService documentNoteService,
             NoteDao noteDao,
+            NoteCommentDao commentDao,
             ContentRenderer renderer) {
-        this.dao = dao;
+        documentDao = dao;
         this.documentNoteDao = documentNoteDao;
         this.documentNoteService = documentNoteService;
         this.noteDao = noteDao;
+        this.commentDao = commentDao;
         this.renderer = renderer;
     }
 
     @GET @Path("{id}")
     public DocumentTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), DocumentTO.class);
+        return convert(documentDao.getById(id), DocumentTO.class);
     }
 
     @GET @Path("{id}/document-notes")
-    public List<DocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
-        List<DocumentNote> docNotes = documentNoteDao.getOfDocument(id);
-        return convert(docNotes, DocumentNoteTO.class);
+    public List<DocumentNoteListItemTO> getDocumentNotes(@PathParam("id") Long id) {
+        List<DocumentNoteListItemTO> rv = new ArrayList<DocumentNoteListItemTO>();
+        for (DocumentNote domain : documentNoteDao.getOfDocument(id)) {
+            DocumentNoteListItemTO x = convert(domain, DocumentNoteListItemTO.class);
+            x.setComment(convert(commentDao.getOneOfNote(domain.getNote().getId()), NoteCommentTO.class));
+            rv.add(x);
+        }
+        return rv;
     }
 
     @POST @Path("{id}/document-notes")
     @Deprecated
     public DocumentNoteTO create(@PathParam("id") Long docId, SelectionTO sel) {
-        Document doc = dao.getById(docId);
+        Document doc = documentDao.getById(docId);
         DocumentNote documentNote;
         if (sel.getNoteId() != null) {
             Note note = noteDao.getById(sel.getNoteId());
@@ -99,30 +111,30 @@ public class DocumentsResource extends AbstractResource {
         return convert(documentNote, DocumentNoteTO.class);
     }
 
-    @PUT @Path("{id}/document-notes/{docnote-id}")
+    @PUT @Path("{id}/document-notes/{doc-note-id}")
     @Deprecated
-    public DocumentNoteTO update(@PathParam("docnote-id") Long docNoteId, SelectionTO sel) {
+    public DocumentNoteTO update(@PathParam("doc-note-id") Long docNoteId, SelectionTO sel) {
         DocumentNote documentNote = documentNoteService.getById(docNoteId);
         return convert(documentNoteService.updateNote(documentNote, sel.getText()), DocumentNoteTO.class);
     }
 
     @POST
     public DocumentTO create(DocumentTO info) {
-        return convert(dao.save(convert(info, Document.class)), DocumentTO.class);
+        return convert(documentDao.save(convert(info, Document.class)), DocumentTO.class);
     }
 
     @PUT @Path("{id}")
     public DocumentTO update(@PathParam("id") Long id,  Map<String, Object> info) {
-        Document entity = dao.getById(id);
+        Document entity = documentDao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), DocumentTO.class);
+        return convert(documentDao.save(convert(info, entity)), DocumentTO.class);
     }
 
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
-        dao.remove(id);
+        documentDao.remove(id);
     }
 
     @POST
@@ -134,9 +146,9 @@ public class DocumentsResource extends AbstractResource {
         String name = fileInfo.getFileName();
         List<Document> docs;
         if (name.endsWith(".zip")) {
-            docs = dao.addDocumentsFromZip(path != null ? path : documentRoot, file);
+            docs = documentDao.addDocumentsFromZip(path != null ? path : documentRoot, file);
         } else {
-            docs = Collections.singletonList(dao.addDocument(path+"/"+name, file));
+            docs = Collections.singletonList(documentDao.addDocument(path+"/"+name, file));
         }
         return convert(docs, DocumentTO.class);
     }
@@ -147,13 +159,13 @@ public class DocumentsResource extends AbstractResource {
             @Context HttpServletResponse response,
             @PathParam("id") Long id) throws Exception {
     	response.setContentType("text/html; charset=utf-8");
-        renderer.renderDocument(dao.getById(id), factory.createXMLStreamWriter(response.getWriter()));
+        renderer.renderDocument(documentDao.getById(id), factory.createXMLStreamWriter(response.getWriter()));
     }
 
     @GET
     @Path("{id}/note-comments")
     public List<NoteCommentTO> getLatestComments(@PathParam("id") Long id) {
-        List<NoteComment> noteComments = dao.getNoteComments(id, 3);
+        List<NoteComment> noteComments = documentDao.getNoteComments(id, 3);
         return convert(noteComments, NoteCommentTO.class);
     }
 }
