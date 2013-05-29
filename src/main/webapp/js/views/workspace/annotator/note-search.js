@@ -46,15 +46,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var users = new UsersCollection();
   users.fetch();
   
-  var columns = [{sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), field: 'shortenedSelection'},
-                 {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
-                 // TODO types
-                 {sortable: true, id: 'description', name: localize('description-label'), field: 'note.description'},
-                 {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn'},
-                 {sortable: true, id: 'lastEditedBy', name: localize('lastEditedBy-label'), field: 'note.lastEditedBy.username'},
-                 {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
-                 {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'} 
-                 ];
+  var allColumns = [
+      {sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), field: 'shortenedSelection'},
+      {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
+      // TODO types
+      {sortable: true, id: 'description', name: localize('description-label'), field: 'note.description'},
+      {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn'},
+      {sortable: true, id: 'lastEditedBy', name: localize('lastEditedBy-label'), field: 'note.lastEditedBy.username'},
+      {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
+      {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'}];
   
   var options = {
     formatterFactory: Slickback.BackboneModelFormatterFactory,
@@ -72,7 +72,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     },
     
     render: function() {
-      var grid = new Slick.Grid(this.$el, documentNotes, columns, options);
+      var grid = new Slick.Grid(this.$el, documentNotes, allColumns, options);
+      this.grid = grid;
       grid.setSelectionModel(new Slick.RowSelectionModel());
       
       var pager = new Slick.Controls.Pager(documentNotes, grid, this.options.$pager);
@@ -150,8 +151,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     },
   
     render: function() {
+      var self = this;
       this.$el.html(searchTemplate());
-      new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
+      var gridView = new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
       
       var cb = function() { 
         var userOpts = _.map(users.toJSON(), userOption).join("");
@@ -160,6 +162,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       if (users.length > 0) cb(); else users.fetch({success: cb});
       
       this.$(".date").datepicker({ dateFormat: localize('dateformat') });
+      
+      this.$(".columns").multiselect({
+        onChange:function(element, checked){
+          var columns = self.$(".columns option:selected")
+            .map(function(idx, el) {
+              return allColumns[$(el).val()];
+            });
+          gridView.grid.setColumns(columns);
+        }
+      });
       
       this.$('.directory-tree').dynatree({
         checkbox: true,

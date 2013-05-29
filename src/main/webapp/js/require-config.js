@@ -7,6 +7,7 @@ window.rconfig = {
     backbone: 'libs/backbone/backbone',
     handlebars: 'libs/handlebars/handlebars.min',
     bootstrap: 'libs/bootstrap/bootstrap.min',
+    'bootstrap-multiselect': 'libs/bootstrap/bootstrap-multiselect',
     moment: 'libs/moment/moment.min',
     text: 'libs/require/text',
     jqueryeventdrag: 'libs/jquery/jquery.event.drag',
@@ -28,7 +29,7 @@ window.rconfig = {
     },
     'underscore': { exports: '_' },
     'backbone': {
-      deps: ['underscore', 'jquery', 'bootstrap'],
+      deps: ['underscore', 'jquery', 'bootstrap', 'bootstrap-multiselect'],
       exports: 'Backbone'
     },
     'jqueryeventdrag': {
@@ -65,6 +66,7 @@ window.rconfig = {
       deps: ['jquery', 'ckeditor']
     },
     'bootstrap': { deps: ['jquery'] },
+    'bootstrap-multiselect': { deps: ['bootstrap'] },
     'handlebars': { exports: 'Handlebars' },    
     'jqueryui': { deps: ['jquery'] },
     'moment': { exports: 'moment'}
