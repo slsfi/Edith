@@ -3,9 +3,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'bootstrap',
         'views/workspace/annotator/document',
         'views/workspace/annotator/note-list',
         'views/workspace/annotator/note-edit',
-        'views/workspace/annotator/note-search'],
+        'views/workspace/annotator/note-search',
+        'views/workspace/annotator/comment-edit'],
         function($, _, Backbone, vent, Bootstrap, template,
-                 Document, NoteList, NoteEdit, NoteSearch) {
+                 Document, NoteList, NoteEdit, NoteSearch, CommentEdit) {
 
   var AnnotatorView = Backbone.View.extend({
     events: {'shown a[data-toggle="tab"]': 'switchTabFromClick'},
@@ -26,6 +27,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'bootstrap',
       this.views = {noteList: new NoteList({el: this.$('#note-list')}),
                     noteEdit: new NoteEdit({el: this.$('#note-edit')}),
                     noteSearch: new NoteSearch({el: this.$('#note-search')})};
+      this.commentEdit = new CommentEdit({el: this.$('#comment-edit')});
     },
 
     switchTab: function(tabName) {      

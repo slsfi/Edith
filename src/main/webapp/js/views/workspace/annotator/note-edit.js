@@ -263,6 +263,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     initialize: function() {
       _.bindAll(this, 'render', 'open', 'edit');
+      vent.on('comment:change', this.open);
       this.render();
     },
 
@@ -277,6 +278,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.comment = comment;
       this.noteId = noteId;
       this.render();
+      this.$el.effect('highlight', {color: 'lightblue'}, 500);
     },
     
     close: function() {
@@ -286,19 +288,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     edit: function() {
-      // TODO: Switch to vent and separate edit view
-      var content = prompt('New comment');
-      // TODO: Note not persisted?
-      var self = this;
-      var request = {url: '/api/notes/' + self.noteId + '/comment',
-                     type: 'PUT',
-                     dataType: 'json',
-                     contentType: "application/json; charset=utf-8",
-                     data: JSON.stringify({message: content}),
-                     success: function(comment) {
-                       self.open(comment, self.noteId);
-                     }};
-      $.ajax(request);
+      vent.trigger('comment:edit', this.noteId, this.comment || {});
     }
   });
 
