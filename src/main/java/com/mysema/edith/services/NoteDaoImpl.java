@@ -44,7 +44,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     private static final QNote note = QNote.note;
 
     private static final QTerm term = QTerm.term;
-    
+
     private static final QDocumentNote documentNote = QDocumentNote.documentNote;
 
     private static final class LoopContext {
@@ -95,7 +95,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
     private JPASubQuery sub(EntityPath<?> entityPath) {
         return new JPASubQuery().from(entityPath);
     }
-    
+
     private QueryModifiers getModifiers(NoteSearchTO search) {
         Long limit = search.getPerPage();
         if (limit == null) {
@@ -107,7 +107,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
         return new QueryModifiers(limit, offset);
     }
-    
+
     public SearchResults<DocumentNote> findDocumentNotes(NoteSearchTO search) {
         return from(documentNote)
               .innerJoin(documentNote.note, note)
@@ -117,7 +117,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
               .restrict(getModifiers(search))
               .listResults(documentNote);
     }
-    
+
     @Override
     public SearchResults<Note> findNotes(NoteSearchTO search) {
         return from(note)
@@ -133,7 +133,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         BooleanBuilder docNoteFilter = new BooleanBuilder();
 
         builder.and(note.deleted.isFalse());
-        
+
         // only orphans
         if (search.isOrphans() && !search.isIncludeAllDocs()) {
             builder.and(note.documentNoteCount.eq(0));
@@ -155,8 +155,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             }
             if (!search.getDocuments().isEmpty()) {
                 filter.or(documentNote.document.id.in(search.getDocuments()));
-            }            
-            docNoteFilter.and(filter);            
+            }
+            docNoteFilter.and(filter);
         }
 
         // language
@@ -172,24 +172,27 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                     note.comments.any().message, term.basicForm, term.meaning)) {
                 filter.or(path.containsIgnoreCase(search.getQuery()));
             }
+            if (!searchNotes) {
+                filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
+            }
             builder.and(filter);
         }
-        
+
         // shortened selection
         if (!Strings.isNullOrEmpty(search.getShortenedSelection())) {
-            docNoteFilter.and(documentNote.shortenedSelection.containsIgnoreCase(search.getShortenedSelection()));            
+            docNoteFilter.and(documentNote.shortenedSelection.containsIgnoreCase(search.getShortenedSelection()));
         }
-        
-        // lemma 
+
+        // lemma
         if (!Strings.isNullOrEmpty(search.getLemma())) {
             builder.and(note.lemma.containsIgnoreCase(search.getLemma()));
         }
-        
+
         // lemma meaning
         if (!Strings.isNullOrEmpty(search.getLemmaMeaning())) {
             builder.and(note.lemmaMeaning.containsIgnoreCase(search.getLemmaMeaning()));
         }
-        
+
         // description
         if (!Strings.isNullOrEmpty(search.getDescription())) {
             builder.and(note.description.containsIgnoreCase(search.getDescription()));
@@ -218,7 +221,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             }
             builder.and(filter);
         }
-        
+
         // status
         if (search.getStatus() != null) {
             builder.and(note.status.eq(search.getStatus()));
@@ -228,42 +231,42 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         if (search.getCreatedBefore() != null) {
             docNoteFilter.and(documentNote.createdOn.lt(search.getCreatedBefore()));
         }
-        
+
         // created after
         if (search.getCreatedAfter() != null) {
             docNoteFilter.and(documentNote.createdOn.gt(search.getCreatedAfter()));
         }
-        
+
         // edited before
         if (search.getEditedBefore() != null) {
             builder.and(note.editedOn.lt(search.getEditedBefore()));
         }
-        
+
         // edited after
         if (search.getEditedAfter() != null) {
             builder.and(note.editedOn.gt(search.getEditedAfter()));
         }
-        
+
         if (docNoteFilter.hasValue()) {
             if (searchNotes) {
                 JPASubQuery subQuery = sub(documentNote);
                 subQuery.where(
-                        documentNote.note.eq(note), 
-                        documentNote.deleted.isFalse(), 
+                        documentNote.note.eq(note),
+                        documentNote.deleted.isFalse(),
                         docNoteFilter);
-                builder.and(subQuery.exists());    
+                builder.and(subQuery.exists());
             } else {
                 builder.and(docNoteFilter);
             }
         }
-        
+
         return builder;
     }
-    
+
     private static boolean isNullOrEmpty(Collection<?> coll) {
         return coll == null || coll.isEmpty();
     }
-    
+
     private OrderSpecifier<?> getOrderBy(NoteSearchTO searchInfo, boolean searchNotes) {
         ComparableExpressionBase<?> path = null;
         String order = searchInfo.getOrder();
@@ -272,11 +275,11 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             path = note.lemma;
         } else if (order.contains("term.")) {
             path = stringPath(term, order.substring(1 + order.lastIndexOf('.')));
-        } else if (order.startsWith("note.")) {    
+        } else if (order.startsWith("note.")) {
             path = stringPath(note, order.substring(1 + order.lastIndexOf('.')));
         } else {
             path = stringPath(searchNotes ? note : documentNote, order);
-        }        
+        }
         return searchInfo.isAscending() ? path.asc() : path.desc();
     }
 
@@ -384,7 +387,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             }
         }
     }
-    
+
     public int importNotes(File file) {
         try {
             return importNotes(new FileInputStream(file));
