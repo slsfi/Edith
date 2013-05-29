@@ -145,8 +145,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       var self = this;
       _.bindAll(this, 'render', 'search');
       vent.on('tab:open', function(view) {
-        if (view === self) {
+        if (view === self && !self.initialized) {
           documentNotes.fetchWithPagination();
+          self.initialized = true;
         }
       });
       this.render();
