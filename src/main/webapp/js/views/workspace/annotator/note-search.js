@@ -10,6 +10,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       this.on('change', function() {
         self.dirty = true;
       });
+    },
+    
+    toFlat: function() {
+      var flat = this.toJSON();
+      flat.note = flat.note.id;
+      flat.document = flat.document.id;
+      return flat;
     }
   });
   
@@ -46,9 +53,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var users = new UsersCollection();
   users.fetch();
   
+  var noteLinkTemplate = Handlebars.compile("<a href='#' class='note-link' data-id='{{id}}'>{{value}}</a>");
+  
   var LinkFormatter = function(row, cell, value, columnDef, data) {
-    var value = data.get('shortenedSelection');
-    return value;
+    return noteLinkTemplate({
+      id: data.get('id'), 
+      value: data.get('shortenedSelection')});
   };
   
   var DateFormatter = function(row, cell, value, columnDef, data) {
@@ -76,9 +86,17 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   
   var GridView = Backbone.View.extend({
     
+    events: {'click .note-link': 'open'},
+    
     initialize: function() {
       _.bindAll(this);
       this.render();
+    },
+    
+    open: function(evt) {
+      evt.preventDefault(); 
+      var id = parseInt($(evt.target).attr('data-id'));                  
+      vent.trigger('document-note:open', documentNotes.get(id).toFlat());
     },
     
     render: function() {
