@@ -13,30 +13,31 @@ import com.mysema.edith.domain.QNoteComment;
  *
  */
 public class NoteCommentDaoImpl extends AbstractDao<NoteComment> implements NoteCommentDao {
-    
+
     private static final QNoteComment noteComment = QNoteComment.noteComment;
 
     private final AuthService authService;
-    
+
     @Inject
     public NoteCommentDaoImpl(AuthService authService) {
         this.authService = authService;
     }
-    
+
     @Override
     public List<NoteComment> getOfNote(long noteId) {
         return from(noteComment)
                 .where(noteComment.note.id.eq(noteId))
                 .list(noteComment);
     }
-    
+
     @Override
     public NoteComment getOneOfNote(long noteId) {
         return from(noteComment)
                 .where(noteComment.note.id.eq(noteId))
+                .orderBy(noteComment.createdAt.desc())
                 .singleResult(noteComment);
     }
-        
+
     @Override
     public NoteComment getById(Long id) {
         return find(NoteComment.class, id);
@@ -46,7 +47,7 @@ public class NoteCommentDaoImpl extends AbstractDao<NoteComment> implements Note
     public NoteComment save(NoteComment comment) {
         comment.setCreatedAt(new DateTime());
         comment.setUsername(authService.getUsername());
-       return persistOrMerge(comment);
+        return persistOrMerge(comment);
     }
 
     @Override
