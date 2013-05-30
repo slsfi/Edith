@@ -66,11 +66,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     return moment.unix(value / 1000).format("DD.MM.YYYY");
   };
   
+  var TypesFormatter = function(row, cell, value, columnDef, data) {
+    var types = data.get('note').types;
+    return _.map(types, localize).join(", ");
+  };
+  
   var allColumns = [
       {sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), 
         field: 'shortenedSelection', formatter: LinkFormatter},
       {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
-      // TODO types
+      {sortable: false, id: 'types', name: localize('types-label'), field: 'note.types', formatter: TypesFormatter},
       {sortable: true, id: 'description', name: localize('description-label'), field: 'note.description'},
       {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn', formatter: DateFormatter},
       {sortable: true, id: 'lastEditedBy', name: localize('lastEditedBy-label'), field: 'note.lastEditedBy.username'},
