@@ -14,6 +14,7 @@ import com.google.common.collect.Sets;
 import com.mysema.edith.domain.*;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.DocumentTO;
+import com.mysema.edith.dto.FullDocumentNoteTO;
 import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.dto.PersonTO;
@@ -58,14 +59,28 @@ public class ConverterTest {
         assertEquals(Long.valueOf(2), docNoteInfo.getDocument());
         assertEquals(Long.valueOf(3), docNoteInfo.getNote());
     }
-    
+
     @Test
     public void DocumentNoteInfo2() {
         Map<String, Object> info = Maps.newHashMap();
         info.put("id", Integer.valueOf(1));
-        
+
         DocumentNoteTO docNoteInfo = converter.convert(info, DocumentNoteTO.class);
         assertEquals(Long.valueOf(1), docNoteInfo.getId());
+    }
+
+    @Test
+    public void DocumentNoteInfo3() {
+        DocumentNote documentNote = new DocumentNote();
+        Note note = new Note();
+        NoteComment comment = new NoteComment();
+        comment.setMessage("My message");
+        comment.setUsername("john");
+        note.addComment(comment);
+        documentNote.setNote(note);
+
+        FullDocumentNoteTO info = converter.convert(documentNote, FullDocumentNoteTO.class);
+        assertEquals("My message", info.getNote().getComment().getMessage());
     }
 
     @Test
@@ -180,14 +195,14 @@ public class ConverterTest {
         String selection = "ivi, Aleksi";
         int startCharIndex = 0;
         int endCharIndex = 2;
-        
+
         Map<String, Object> info = Maps.newHashMap();
         info.put("startNode", startNode);
         info.put("endNode", endNode);
         info.put("selection", selection);
         info.put("startCharIndex", startCharIndex);
         info.put("endCharIndex", endCharIndex);
-        
+
         SelectedText text = converter.convert(info, SelectedText.class);
         assertEquals(startNode, text.getStartNode());
         assertEquals(endNode, text.getEndNode());
@@ -195,21 +210,21 @@ public class ConverterTest {
         assertEquals(startCharIndex, text.getStartCharIndex());
         assertEquals(endCharIndex, text.getEndCharIndex());
     }
-    
+
     @Test
     public void String_to_Number() {
         Map<String, Object> info = Maps.newHashMap();
         info.put("page", "2");
-        
+
         NoteSearchTO search = converter.convert(info, NoteSearchTO.class);
         assertEquals(Long.valueOf(2), search.getPage());
     }
-    
+
     @Test
     public void Number_to_Number() {
         Map<String, Object> info = Maps.newHashMap();
         info.put("page", 2);
-        
+
         NoteSearchTO search = converter.convert(info, NoteSearchTO.class);
         assertEquals(Long.valueOf(2), search.getPage());
     }

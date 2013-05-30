@@ -123,6 +123,14 @@ public class Note implements Identifiable {
         return comments;
     }
 
+    public NoteComment getComment() {
+        if (!comments.isEmpty()) {
+            return comments.iterator().next();
+        } else {
+            return null;
+        }
+    }
+
     public void setComments(Set<NoteComment> comments) {
         this.comments = comments;
     }

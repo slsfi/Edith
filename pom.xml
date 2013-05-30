@@ -18,7 +18,7 @@
     <hibernate.version>4.1.7.Final</hibernate.version>
     <hibernate.validator.version>4.3.0.Final</hibernate.validator.version>    
     <jetty.version>6.1.15</jetty.version>
-    <querydsl.version>3.1.1</querydsl.version>
+    <querydsl.version>3.2.0</querydsl.version>
     <guice.version>3.0</guice.version>    
     <jersey.version>1.14</jersey.version>
   </properties>

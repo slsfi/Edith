@@ -45,6 +45,8 @@ public class NoteTO {
 
     private NoteStatus status;
 
+    private NoteCommentTO comment;
+
     public Long getId() {
         return id;
     }
@@ -172,4 +174,13 @@ public class NoteTO {
     public void setStatus(NoteStatus status) {
         this.status = status;
     }
+
+    public NoteCommentTO getComment() {
+        return comment;
+    }
+
+    public void setComment(NoteCommentTO comment) {
+        this.comment = comment;
+    }
+
 }

@@ -1,9 +1,9 @@
 package com.mysema.edith.dto;
 
 public class FullDocumentNoteTO extends AbstractDocumentNoteTO {
-    
+
     private DocumentTO document;
-    
+
     private NoteTO note;
 
     public DocumentTO getDocument() {
@@ -21,5 +21,5 @@ public class FullDocumentNoteTO extends AbstractDocumentNoteTO {
     public void setNote(NoteTO note) {
         this.note = note;
     }
-    
+
 }

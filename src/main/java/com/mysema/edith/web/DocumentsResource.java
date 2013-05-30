@@ -1,7 +1,6 @@
 package com.mysema.edith.web;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +26,9 @@ import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
-import com.mysema.edith.dto.DocumentNoteListItemTO;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.DocumentTO;
+import com.mysema.edith.dto.FullDocumentNoteTO;
 import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.ContentRenderer;
@@ -87,14 +86,8 @@ public class DocumentsResource extends AbstractResource {
     }
 
     @GET @Path("{id}/document-notes")
-    public List<DocumentNoteListItemTO> getDocumentNotes(@PathParam("id") Long id) {
-        List<DocumentNoteListItemTO> rv = new ArrayList<DocumentNoteListItemTO>();
-        for (DocumentNote domain : documentNoteDao.getOfDocument(id)) {
-            DocumentNoteListItemTO x = convert(domain, DocumentNoteListItemTO.class);
-            x.setComment(convert(commentDao.getOneOfNote(domain.getNote().getId()), NoteCommentTO.class));
-            rv.add(x);
-        }
-        return rv;
+    public List<FullDocumentNoteTO> getDocumentNotes(@PathParam("id") Long id) {
+        return convert(documentNoteDao.getOfDocument(id), FullDocumentNoteTO.class);
     }
 
     @POST @Path("{id}/document-notes")
