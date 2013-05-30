@@ -50,14 +50,12 @@ public class DocumentsResource extends AbstractResource {
 
     private final DocumentNoteService documentNoteService;
 
-    // TODO: Remove once not needed
     private final NoteDao noteDao;
 
     private final ContentRenderer renderer;
 
     private static final XMLOutputFactory factory = XMLOutputFactory.newInstance();
 
-    // TODO: Remove once not needed
     @Inject @Named(EDITH.SVN_DOCUMENT_ROOT)
     private String documentRoot;
 
