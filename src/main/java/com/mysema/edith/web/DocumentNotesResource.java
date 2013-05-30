@@ -101,16 +101,18 @@ public class DocumentNotesResource extends AbstractResource {
         return rv;
     }
 
-    private Note getNote(Map<String, Object> noteInfo) {
+    private Note getNote(Map<String, Object> info) {
         Note note;
-        if (noteInfo.containsKey("id")) {
-            note = dao.getById(Long.parseLong(noteInfo.get("id").toString()));
+        if (info.containsKey("id")) {
+            note = dao.getById(Long.parseLong(info.get("id").toString()));
         } else {
             note = new Note();
         }
-        return dao.save(note);
+        info.remove("lastEditedBy");
+        info.remove("allEditors");
+        return dao.save(convert(info, note));
     }
-        
+
     @POST
     public FullDocumentNoteTO create(Map<String, Object> info) {
         Object selection = info.remove("selection");
