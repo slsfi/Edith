@@ -35,7 +35,6 @@ import com.mysema.edith.services.ContentRenderer;
 import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.DocumentNoteService;
-import com.mysema.edith.services.NoteCommentDao;
 import com.mysema.edith.services.NoteDao;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
@@ -54,8 +53,6 @@ public class DocumentsResource extends AbstractResource {
     // TODO: Remove once not needed
     private final NoteDao noteDao;
 
-    private final NoteCommentDao commentDao;
-
     private final ContentRenderer renderer;
 
     private static final XMLOutputFactory factory = XMLOutputFactory.newInstance();
@@ -70,13 +67,11 @@ public class DocumentsResource extends AbstractResource {
             DocumentNoteDao documentNoteDao,
             DocumentNoteService documentNoteService,
             NoteDao noteDao,
-            NoteCommentDao commentDao,
             ContentRenderer renderer) {
         documentDao = dao;
         this.documentNoteDao = documentNoteDao;
         this.documentNoteService = documentNoteService;
         this.noteDao = noteDao;
-        this.commentDao = commentDao;
         this.renderer = renderer;
     }
 

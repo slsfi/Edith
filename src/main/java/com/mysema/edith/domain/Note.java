@@ -18,6 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 
 import com.mysema.edith.Identifiable;
+import com.mysema.edith.dto.NoteCommentComparator;
 import com.mysema.edith.util.StringUtils;
 
 @Entity
@@ -124,11 +125,7 @@ public class Note implements Identifiable {
     }
 
     public NoteComment getComment() {
-        if (!comments.isEmpty()) {
-            return comments.iterator().next();
-        } else {
-            return null;
-        }
+        return NoteCommentComparator.getLatest(comments);
     }
 
     public void setComments(Set<NoteComment> comments) {
