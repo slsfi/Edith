@@ -100,11 +100,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
       });
             
-      this.$("#directory-tree").on("mouseenter", "li", function() {
+      this.$("#directory-tree").on("mouseenter", ".dynatree-node", function() {
         $(this).find(".actions").show();
       });      
       
-      this.$("#directory-tree").on("mouseleave", "li", function() {
+      this.$("#directory-tree").on("mouseleave", ".dynatree-node", function() {
         $(this).find(".actions").hide();
       });
       

@@ -18,3 +18,7 @@
 .ui-widget {
     font-size: 1em;
 }
+
+.dynatree-node {
+    padding-right: 1em;	
+}
