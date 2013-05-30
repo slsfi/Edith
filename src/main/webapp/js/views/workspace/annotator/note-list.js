@@ -49,7 +49,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     comment: function() {
-      var noteId = this.documentNote.note;
+      var noteId = this.documentNote.note.id;
       $.getJSON('/api/notes/' + noteId + '/comment',
           function(comment) {
             vent.trigger('comment:edit', noteId, comment);

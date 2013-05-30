@@ -327,14 +327,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         }
       }
       this.documentNoteForm.open(documentNote);
-      $.getJSON('/api/notes/' + documentNote.note,
-                this.noteForm.open);
-      var self = this;
-      this.comment.close();
-      $.getJSON('/api/notes/' + documentNote.note + '/comment',
-                function(comment) {
-                  self.comment.open(comment, documentNote.note);
-                });
+      this.noteForm.open(documentNote.note);
+      this.comment.open(documentNote.note.comment, documentNote.note.id);
     },
 
     create: function() {
