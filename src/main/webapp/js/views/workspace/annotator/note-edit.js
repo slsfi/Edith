@@ -263,7 +263,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     initialize: function() {
       _.bindAll(this, 'render', 'open', 'edit');
-      vent.on('comment:change', this.open);
+      var self = this;
+      vent.on('comment:change', function(comment, noteId) {
+                                  if (self.$el.is(':visible')) {
+                                    self.open(comment, noteId);
+                                  }
+                                });
       this.render();
     },
 

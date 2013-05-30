@@ -22,11 +22,24 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
           self.render();
         }
       });
+      vent.on('comment:change', function(comment, noteId) {
+        if (noteId === self.documentNote.note.id) {
+          self.documentNote.note.comment = comment;
+          self.render();
+        }
+      });
       vent.on('document-note:select', this.select);
     },
 
     render: function() {
       this.$el.html(this.template(this.documentNote));
+      if (this.selected) {
+        this.$el.css('background', 'lightgrey');
+        this.$('button').show();
+      } else {
+        this.$el.css('background', 'white');
+        this.$('button').hide();
+      }
     },
 
     click: function(evt) {
@@ -35,13 +48,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     select: function(id) {
-      if (this.documentNote.id !== id) {
-        this.$el.css('background', 'white');
-        this.$('button').hide();
-        return;
-      }
-      this.$el.css('background', 'lightgrey');
-      this.$('button').show();
+      this.selected = this.documentNote.id === id;
+      this.render();
     },
 
     edit: function() {
