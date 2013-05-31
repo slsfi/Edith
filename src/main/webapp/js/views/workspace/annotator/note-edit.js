@@ -280,7 +280,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     open: function(comment, noteId) {
-      this.comment = comment || {};
+      this.comment = comment;
       this.noteId = noteId;
       this.render();
       this.$el.effect('highlight', {color: 'lightblue'}, 500);
