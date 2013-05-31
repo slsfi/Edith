@@ -38,13 +38,15 @@ public class WebModule extends ServletModule {
         bind(UsersResource.class).in(Scopes.SINGLETON);
         bind(FilesResource.class).in(Scopes.SINGLETON);
         bind(LocalizationsResource.class).in(Scopes.SINGLETON);
-        
+
         bind(GuiceContainer.class);
         bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
-        
+        bind(NoCacheFilter.class).in(Scopes.SINGLETON);
+
         Map<String, String> parameters = Maps.newHashMap();
-        parameters.put("com.sun.jersey.spi.container.ContainerResponseFilters", CharsetResponseFilter.class.getName());        
+        parameters.put("com.sun.jersey.spi.container.ContainerResponseFilters", CharsetResponseFilter.class.getName());
         serve("/api/*").with(GuiceContainer.class, parameters);
+        filter("/workspace.html").through(NoCacheFilter.class);
         filter("/*").through(GuiceShiroFilter.class);
     }
 
