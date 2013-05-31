@@ -222,6 +222,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
           });
         },
         
+        onSelect: function() {
+          self.search();
+        }
+        
       });
     }
     
