@@ -1108,6 +1108,9 @@
                  return null;
                }
                for (var i = 1; i < ss.length; ++i) {
+                 if (entity === null) {
+                   return null;
+                 }
                  entity = entity[ss[i]];
                }
                return entity;

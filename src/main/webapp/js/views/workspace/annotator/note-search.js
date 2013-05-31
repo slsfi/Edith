@@ -81,7 +81,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       {sortable: true, id: 'lastEditedBy', name: localize('lastEditedBy-label'), field: 'note.lastEditedBy.username'},
       {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
       {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'},
-      {sortable: false, id: 'comment', name: localize('comment'), field: 'note.comment'}];
+      {sortable: false, id: 'comment', name: localize('comment'), field: 'note.comment.message'}];
   
   var options = {
     formatterFactory: Slickback.BackboneModelFormatterFactory,
