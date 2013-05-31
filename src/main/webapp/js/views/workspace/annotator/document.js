@@ -78,10 +78,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
 
   var documentNoteTemplate = Handlebars.compile(documentNoteTemplate);
   var DocumentView = Backbone.View.extend({
-    events: {'mouseup': 'selectionChange'},
+    events: {'mouseup': 'selectionChange',
+             'click .noteanchor': 'selectNote'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'selectionChange');
+      _.bindAll(this, 'render', 'selectionChange', 'selectNote');
       var self = this;
       vent.on('document:open annotation:change', function(id) {
         self.documentId = id;
@@ -95,6 +96,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
       $.get('/api/documents/' + id + '/raw', function(data) {
         self.$el.html(data);
       });
+    },
+    
+    selectNote: function(evt) {
+      var id = parseInt($(evt.target).attr('id').substring(3));
+      vent.trigger('document-note:select', id);
     },
 
     selectionChange: function() {

@@ -223,7 +223,7 @@
 }    
 
 .tei .notecontent{
-    color: #990202;    
+    color: #990202;
 }
 
 /*.tei .notecontent:hover{
@@ -234,9 +234,14 @@
     border-bottom: solid 2px;
 }
 
-.tei .noteanchor{
+.tei .noteanchor {
     color: #020299;    
-    cursor: pointer;
+    cursor: pointer;    
+}
+
+.tei .noteanchor:after {
+    color: #020299;
+    content: "[*]";
 }
 
 .tei .hi, .tei .emph {
