@@ -1,13 +1,15 @@
-define(['jquery', 'underscore', 'backbone', 'vent', 'bootstrap',
+define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap',
         'text!/templates/workspace/annotator.html',
         'views/workspace/annotator/document',
         'views/workspace/annotator/note-list',
         'views/workspace/annotator/note-edit',
         'views/workspace/annotator/note-search',
         'views/workspace/annotator/comment-edit'],
-        function($, _, Backbone, vent, Bootstrap, template,
+        function($, _, Backbone, Handlebars, vent, Bootstrap, template,
                  Document, NoteList, NoteEdit, NoteSearch, CommentEdit) {
 
+  var template = Handlebars.compile(template);
+  
   var AnnotatorView = Backbone.View.extend({
     events: {'shown a[data-toggle="tab"]': 'switchTabFromClick'},
 
@@ -22,7 +24,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'bootstrap',
     },
 
     render: function() {
-      this.$el.html(template);
+      this.$el.html(template());
       new Document({el: this.$('#document')}),
       this.views = {noteList: new NoteList({el: this.$('#note-list')}),
                     noteEdit: new NoteEdit({el: this.$('#note-edit')}),
