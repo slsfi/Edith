@@ -1,5 +1,6 @@
 package com.mysema.edith.web;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
@@ -94,7 +95,7 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
 
         assertNotNull(created.getId());
     }
-    
+
     @Test
     @Ignore
     public void Create_Selection() throws IOException, NoteAdditionFailedException {
@@ -102,21 +103,24 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         Document document = documentDao.getDocumentForPath(testDocument);
         String element = "div0-div1-sp1-p0";
         String text = "sun ullakosta ottaa";
-        
+
         Map<String, Object> info = Maps.newHashMap();
         info.put("document", document.getId());
         info.put("note", note.getId());
         info.put("selection", new SelectedText(PREFIX + element, PREFIX + element, 1, 4, text));
 
         FullDocumentNoteTO created = documentNotes.create(info);
-        
+
         assertNotNull(created.getId());
     }
-    
+
     @Test
     public void Search() {
         Map<String, Object> rv = documentNotes.all(null, null, null, null, null);
         assertNotNull(rv);
+
+        assertEquals(1l, rv.get("currentPage"));
+        assertEquals(25l, rv.get("perPage"));
     }
 
     @Test
@@ -124,8 +128,11 @@ public class DocumentNotesResourceTest extends AbstractResourceTest {
         NoteSearchTO search = new NoteSearchTO();
         Map<String, Object> result = documentNotes.query(search);
         assertNotNull(result);
+
+        assertEquals(1l, result.get("currentPage"));
+        assertEquals(25l, result.get("perPage"));
     }
-    
+
     @Test
     public void Query_Order() {
         NoteSearchTO search = new NoteSearchTO();

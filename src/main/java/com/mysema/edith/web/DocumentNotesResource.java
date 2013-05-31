@@ -71,8 +71,8 @@ public class DocumentNotesResource extends AbstractResource {
 
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
-        rv.put("currentPage", page);
-        rv.put("perPage", perPage);
+        rv.put("currentPage", search.getPage());
+        rv.put("perPage", search.getPerPage());
         rv.put("totalPages", totalPages(results.getLimit(), results.getTotal()));
         rv.put("totalEntries", results.getTotal());
         return rv;

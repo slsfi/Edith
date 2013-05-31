@@ -25,7 +25,7 @@ import com.mysema.edith.dto.TermTO;
 import com.mysema.edith.services.NoteDao;
 
 public class NotesResourceTest extends AbstractResourceTest {
-    
+
     @Inject
     private NoteDao noteDao;
 
@@ -49,7 +49,7 @@ public class NotesResourceTest extends AbstractResourceTest {
     public void Create() {
         NoteTO note = new NoteTO();
         NoteTO created = notes.create(note);
-        
+
         assertNotNull(created.getId());
     }
 
@@ -74,7 +74,7 @@ public class NotesResourceTest extends AbstractResourceTest {
         TermTO term = new TermTO();
         term.setBasicForm("talo");
         note.setTerm(term);
-        
+
         Map<String, Object> contents = Maps.newHashMap();
         contents.put("lemma", note.getLemma());
         contents.put("term", term);
@@ -84,20 +84,26 @@ public class NotesResourceTest extends AbstractResourceTest {
         assertNotNull(note.getId());
         assertNotNull(note.getTerm().getId());
     }
-    
+
     @Test
     public void Search() {
         Map<String, Object> rv = notes.all(null, null, null, null, null);
         assertNotNull(rv);
+
+        assertEquals(1l, rv.get("currentPage"));
+        assertEquals(25l, rv.get("perPage"));
     }
-    
+
     @Test
     public void Query() {
-        NoteSearchTO search = new NoteSearchTO();        
+        NoteSearchTO search = new NoteSearchTO();
         Map<String, Object> result = notes.query(search);
         assertNotNull(result);
+
+        assertEquals(1l, result.get("currentPage"));
+        assertEquals(25l, result.get("perPage"));
     }
-    
+
     @Test
     public void Query_Order() {
         NoteSearchTO search = new NoteSearchTO();
@@ -105,17 +111,17 @@ public class NotesResourceTest extends AbstractResourceTest {
         Map<String, Object> result = notes.query(search);
         assertNotNull(result);
     }
-    
+
     @Test
     public void Query_Csv() {
         NoteSearchTO search = new NoteSearchTO();
-        search.setColumns(Arrays.asList("lemma", "description", "subtextSources", "editedOn", 
-                "term.basicForm", "term.meaning")); 
+        search.setColumns(Arrays.asList("lemma", "description", "subtextSources", "editedOn",
+                "term.basicForm", "term.meaning"));
         Response result = notes.queryCsv(search);
         String csv = result.getEntity().toString();
-        assertTrue(csv.startsWith("lemma;description;subtextSources;editedOn;term.basicForm;term.meaning"));        
+        assertTrue(csv.startsWith("lemma;description;subtextSources;editedOn;term.basicForm;term.meaning"));
     }
-    
+
     @Test
     public void Query_Csv_No_Columns() {
         NoteSearchTO search = new NoteSearchTO();
@@ -123,37 +129,37 @@ public class NotesResourceTest extends AbstractResourceTest {
         String csv = result.getEntity().toString();
         assertEquals("", csv);
     }
-    
+
     @Test
     public void Import_Notes() {
         // TODO
     }
-    
+
     @Test
     public void GetComment_By_NoteId() {
         //notes.deleteComment(1l);
         assertNull(notes.getCommentByNoteId(1l));
     }
-    
+
     @Test
     public void CreateOrUpdateComment_By_NoteId() {
         Map<String, Object> info = Maps.newHashMap();
         info.put("message", "msg");
-        
+
         NoteCommentTO comment = notes.setComment(1l, info);
         assertEquals("msg", comment.getMessage());
         assertEquals("timo", comment.getUsername());
     }
-    
+
     @Test
     public void DeleteComment_By_NoteId() {
         Map<String, Object> info = Maps.newHashMap();
-        info.put("message", "msg");        
+        info.put("message", "msg");
         notes.setComment(1l, info);
         notes.deleteComment(1l);
-        
+
         assertNull(notes.getCommentByNoteId(1l));
-        
+
     }
 
 }
