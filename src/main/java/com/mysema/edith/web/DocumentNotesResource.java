@@ -58,22 +58,13 @@ public class DocumentNotesResource extends AbstractResource {
             @QueryParam("order") String order,
             @QueryParam("direction") String direction,
             @QueryParam("query") String query) {
-
-        if (perPage == null) {
-            perPage = 25L;
-        } else if (perPage <= 0) {
-            perPage = (long) Integer.MAX_VALUE;
-        }
-        if (page == null) {
-            page = 1L;
-        }
-
         NoteSearchTO search = new NoteSearchTO();
         search.setQuery(query);
         search.setPage(page);
         search.setPerPage(perPage);
         search.setOrder(order);
         search.setAscending(direction == null || direction.equals("ASC"));
+        normalize(search);
 
         SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
         List<FullDocumentNoteTO> entries = convert(results.getResults(), FullDocumentNoteTO.class);
@@ -89,13 +80,14 @@ public class DocumentNotesResource extends AbstractResource {
 
     @POST @Path("query")
     public Map<String, Object> query(NoteSearchTO search) {
+        normalize(search);
         SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
         List<FullDocumentNoteTO> entries = convert(results.getResults(), FullDocumentNoteTO.class);
 
         Map<String, Object> rv = new HashMap<String, Object>();
         rv.put("entries", entries);
         rv.put("currentPage", search.getPage());
-        rv.put("perPage", search.getPage());
+        rv.put("perPage", search.getPerPage());
         rv.put("totalPages", totalPages(results.getLimit(), results.getTotal()));
         rv.put("totalEntries", results.getTotal());
         return rv;

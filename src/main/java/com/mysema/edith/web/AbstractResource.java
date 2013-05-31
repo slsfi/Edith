@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.mysema.edith.Identifiable;
+import com.mysema.edith.dto.NoteSearchTO;
 
 public abstract class AbstractResource {
 
@@ -19,7 +20,7 @@ public abstract class AbstractResource {
     protected <F, T> T convert(F source, Class<T> target) {
         return converter.convert(source, target);
     }
-    
+
     protected <F, T extends Identifiable> T convert(F source, T target) {
         return converter.convert(source, target);
     }
@@ -36,6 +37,18 @@ public abstract class AbstractResource {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    protected static NoteSearchTO normalize(NoteSearchTO search) {
+        if (search.getPerPage() == null) {
+            search.setPerPage(25L);
+        } else if (search.getPerPage() <= 0) {
+            search.setPerPage(Long.valueOf(Integer.MAX_VALUE));
+        }
+        if (search.getPage() == null) {
+            search.setPage(1L);
+        }
+        return search;
     }
 
     protected static final long totalPages(long pageSize, long count) {

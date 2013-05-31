@@ -21,7 +21,7 @@ public class NoteSearchTO {
     private Set<String> paths = new HashSet<String>();
 
     private NoteStatus status;
-    
+
     private Set<NoteType> types = new HashSet<NoteType>();
 
     private Set<NoteFormat> formats = new HashSet<NoteFormat>();
@@ -41,15 +41,15 @@ public class NoteSearchTO {
     private DocumentTO currentDocument;
 
     private String query;
-    
+
     private String shortenedSelection, description, lemma, lemmaMeaning;
-    
-    private Long createdBefore, createdAfter, editedAfter, editedBefore; 
-    
-    private Long page, perPage;
-    
+
+    private Long createdBefore, createdAfter, editedAfter, editedBefore;
+
+    private Long page = 1l, perPage = 25l;
+
     private List<String> columns;
-    
+
     public NoteSearchTO() {
     }
 
@@ -152,7 +152,7 @@ public class NoteSearchTO {
     public boolean isIncludeAllDocs() {
         return includeAllDocs;
     }
-    
+
     public Long getPage() {
         return page;
     }
@@ -248,13 +248,13 @@ public class NoteSearchTO {
     public void setColumns(List<String> columns) {
         this.columns = columns;
     }
-    
+
     public String getDirection() {
         return ascending ? "ASC" : "DESC";
     }
-    
+
     public void setDirection(String direction) {
         ascending = direction == null || direction.equals("ASC");
     }
-    
+
 }

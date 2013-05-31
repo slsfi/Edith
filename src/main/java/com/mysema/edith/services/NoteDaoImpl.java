@@ -98,9 +98,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     private QueryModifiers getModifiers(NoteSearchTO search) {
         Long limit = search.getPerPage();
-        if (limit == null) {
-            limit = 25L;
-        }
         Long offset = null;
         if (search.getPage() != null) {
             offset = (search.getPage() - 1) * limit;
