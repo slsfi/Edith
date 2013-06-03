@@ -1,6 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', 'slickgrid', 'moment', 'localize',
-        'text!/templates/workspace/annotator/note-search.html'],
-       function($, _, Backbone, vent, Handlebars, Slickback, Slick, moment, localize, searchTemplate) {
+        'text!/templates/workspace/annotator/note-search.html',
+        'views/workspace/annotator/metadata-field-select'],
+       function($, _, Backbone, vent, Handlebars, Slickback, Slick, moment, localize, searchTemplate,
+                MetadataFieldSelect) {
   
   var searchTemplate = Handlebars.compile(searchTemplate);
   
@@ -156,6 +158,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
           self.initialized = true;
         }
       });
+      vent.on('metadata-field-select:change', function(columns) {
+        self.gridView.grid.setColumns(_.filter(allColumns, function(col) {
+          return _.contains(columns, col.id);
+        }));
+      });
       this.render();
     },
     
@@ -188,7 +195,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     render: function() {
       var self = this;
       this.$el.html(searchTemplate());
-      var gridView = new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
+      this.gridView = new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
       
       var cb = function() { 
         var userOpts = _.map(users.toJSON(), userOption).join("");
@@ -198,15 +205,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       
       this.$(".date").datepicker({ dateFormat: localize('dateformat') });
       
-      this.$(".columns").multiselect({
-        onChange:function(element, checked){
-          var columns = self.$(".columns option:selected")
-            .map(function(idx, el) {
-              return allColumns[$(el).val()];
-            });
-          gridView.grid.setColumns(columns);
-        }
-      });
+      new MetadataFieldSelect({el: this.$('.metadata-field-select')});
       
       this.$('.directory-tree').dynatree({
         checkbox: true,
