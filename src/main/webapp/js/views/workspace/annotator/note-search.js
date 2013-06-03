@@ -78,7 +78,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         field: 'shortenedSelection', formatter: LinkFormatter},
       {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
       {sortable: false, id: 'types', name: localize('types-label'), field: 'note.types', formatter: TypesFormatter},
-      {sortable: true, id: 'description', name: localize('description-label'), field: 'note.description'},
+      {sortable: true, id: 'description', name: localize('description-label'), field: 'note.term.meaning'},
       {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn', formatter: DateFormatter},
       {sortable: true, id: 'lastEditedBy', name: localize('lastEditedBy-label'), field: 'note.lastEditedBy.username'},
       {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
@@ -159,9 +159,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         }
       });
       vent.on('metadata-field-select:change', function(columns) {
-        self.gridView.grid.setColumns(_.filter(allColumns, function(col) {
-          return _.contains(columns, col.id);
-        }));
+        if (self.$el.is(':visible')) {
+          self.gridView.grid.setColumns(_.filter(allColumns, function(col) {
+            return _.contains(columns, col.id);
+          }));
+        }
       });
       this.render();
     },

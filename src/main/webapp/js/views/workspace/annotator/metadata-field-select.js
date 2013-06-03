@@ -10,14 +10,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
     
     render: function() {
+      var self = this;
       this.$el.html(this.template);
       this.$('select').multiselect({
-        onChange:function(element, checked){
-          var columns =  self.$('option:selected').map(function(idx, el) {
-                                                         return $(el).val();
-                                                       });
-          vent.trigger('metadata-field-select:change', columns);
-        }
+        onChange: function(element, checked) {
+                    var columns =  self.$('option:selected')
+                                       .map(function(idx, el) {
+                                              return $(el).val();
+                                            });
+                    vent.trigger('metadata-field-select:change', columns);
+                  }
       });
     }
   });

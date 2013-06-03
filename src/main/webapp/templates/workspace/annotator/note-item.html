@@ -1,5 +1,13 @@
-<a href="#">{{ shortenedSelection }}, {{ fullSelection }}, {{ type }}, {{ keyword }}, {{ editedOn }},
-  {{ editedBy }}, {{ status }}, {{ document.title }}, {{ note.comment.message }},
-  {{ note }}</a>
+<a href="#">
+  <span class="shortenedSelection">{{ shortenedSelection }}</span>
+  <span class="fullSelection">{{ fullSelection }}</span>
+  <span class="types">{{ note.types }}</span>
+  <span class="description">{{ note.term.meaning }}</span>
+  <span class="editedOn">{{ note.editedOn }}</span>
+  <span class="lastEditedBy">{{ note.lastEditedBy.username }}</span>
+  <span class="status">{{ note.status }}</span>
+  <span class="document">{{ document.title }}</span>
+  <span class="comment">{{ note.comment.message }}</span>
+</a>
 <button id="edit-note" style="display:none;">Edit</button>
 <button id="comment-note" style="display:none;">Comment</button>

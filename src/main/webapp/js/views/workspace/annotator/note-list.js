@@ -1,6 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
-        'text!/templates/workspace/annotator/note-item.html'],
-       function($, _, Backbone, vent, Handlebars, noteItemTemplate) {
+        'text!/templates/workspace/annotator/note-item.html',
+        'views/workspace/annotator/metadata-field-select'],
+       function($, _, Backbone, vent, Handlebars, noteItemTemplate,
+                MetadataFieldSelect) {
   // TODO: What happens upon delete/re-render?
   var NoteListItem = Backbone.View.extend({
     tagName: 'li',
@@ -22,6 +24,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
           self.render();
         }
       });
+      vent.on('note:change', function(note) {
+        if (note.id === self.documentNote.note.id) {
+          self.documentNote.note = note;
+          self.render();
+        }
+      });
       vent.on('comment:change', function(comment, noteId) {
         if (noteId === self.documentNote.note.id) {
           self.documentNote.note.comment = comment;
@@ -29,6 +37,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         }
       });
       vent.on('document-note:select', this.select);
+      vent.on('metadata-field-select:change', function(columns) {
+        if (self.$el.is(':visible')) {
+          self.$('span').hide();
+          _.each(columns, function(column) {
+            self.$('.' + column).show();
+          });
+        }
+      });
     },
 
     render: function() {
@@ -75,11 +91,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     render: function(id) {
-      this.$('ul').empty();
+      new MetadataFieldSelect({el: this.$('.metadata-field-select')});
+      this.$('ul.notes').empty();
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
         _(data).each(function(documentNote) {
-          self.$('ul').append(new NoteListItem({data: documentNote}).el);
+          self.$('ul.notes').append(new NoteListItem({data: documentNote}).el);
         });
       });
     },
