@@ -88,6 +88,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
         self.documentId = id;
         self.render(id);
       });
+      vent.on('document-note:select', function(id, skipScroll) {
+        if (skipScroll) {
+          return;
+        }
+        var elem = self.$('#start' + id);
+        if (elem.size() == 1) {
+          elem[0].scrollIntoView(true);
+        }
+      });
     },
 
     render: function(id) {
@@ -100,7 +109,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
     
     selectNote: function(evt) {
       var id = parseInt($(evt.target).attr('id').substring(3));
-      vent.trigger('document-note:select', id);
+      vent.trigger('document-note:select', id, true);
     },
 
     selectionChange: function() {
