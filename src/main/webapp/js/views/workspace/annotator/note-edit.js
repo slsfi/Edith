@@ -306,15 +306,17 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     initialize: function() {
       _.bindAll(this, 'render', 'open', 'create', 'annotate', 
-                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote');
+                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote',
+                      'createDocumentNote');
       var self = this;
       vent.on('document:selection', function(documentId, selection) {
         if (self.$el.is(':visible')) {
-          self.annotate(documentId, self.noteForm.note.id, selection);
+          self.annotate(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
         }
       });
       vent.on('note:create', this.create);
       vent.on('document-note:open', this.open);
+      vent.on('document-note:create', this.createDocumentNote);
       this.render();
     },
 
@@ -346,6 +348,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.comment.close();
       this.noteForm.open({});
       this.noteForm.setDirty();
+      vent.trigger('note:new');
+    },
+
+    createDocumentNote: function(documentId, selection) {
+      this.documentNoteForm.annotate(documentId, null, selection);
     },
 
     annotate: function(documentId, noteId, selection) {
@@ -355,7 +362,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 //          return;
 //        }
 //      }
-      this.documentNoteForm.annotate(documentId, this.noteForm.note.id, selection);
+      this.documentNoteForm.annotate(documentId, noteId, selection);
     },
 
     saveDocumentNote: function(evt) {

@@ -10,7 +10,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
 
   var whitespaceRe = new RegExp(/\s+/g);
 
-  var getSelection = function() {
+  var getBaseSelection = function() {
     var selection = null;
     if (window.getSelection) {
       selection = window.getSelection();
@@ -18,6 +18,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
       selection = document.getSelection();
     } else {
       selection = document.selection.createRange().text;
+    }
+    if (selection.toString() === '') {
+      return;
     }
     var startNode = selection.anchorNode;
     var endNode = selection.focusNode;
@@ -82,7 +85,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
              'click .noteanchor': 'selectNote'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'selectionChange', 'selectNote');
+      _.bindAll(this, 'render', 'selectionChange', 'selectNote', 'getSelection');
       var self = this;
       vent.on('document:open annotation:change', function(id) {
         self.documentId = id;
@@ -95,6 +98,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
         var elem = self.$('#start' + id);
         if (elem.size() == 1) {
           elem[0].scrollIntoView(true);
+        }
+      });
+      vent.on('note:new', function() {
+        var selection = self.getSelection();
+        if (selection) {
+          vent.trigger('document-note:create', self.documentId, selection);
         }
       });
     },
@@ -112,12 +121,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
       vent.trigger('document-note:select', id, true);
     },
 
-    selectionChange: function() {
-      var baseSelection = getSelection();
-      var str = baseSelection.selectionString;
-      if (!str) {
+    getSelection: function() {
+      var baseSelection = getBaseSelection();
+      if (!baseSelection) {
         return;
       }
+      var str = baseSelection.selectionString;
       var startChar = str.charAt(0);
       var endChar = str.charAt(str.length - 1);
       var previousFromStart = previousSiblingsToString(baseSelection.startNode);
@@ -137,7 +146,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
                        endNode: endParent.id || endParent.getAttribute('data-node'),
 //                       endChar: endChar,
                        endCharIndex: endCharIndex};
-      var self = this;
+      return selection;
+    },
+
+    selectionChange: function() {
+      var selection = this.getSelection();
       vent.trigger('document:selection', this.documentId, selection);
     }
   });
