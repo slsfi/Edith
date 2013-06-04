@@ -1,6 +1,7 @@
 package com.mysema.edith.web;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +146,8 @@ public class DocumentsResource extends AbstractResource {
             @Context HttpServletResponse response,
             @PathParam("id") Long id) throws Exception {
     	response.setContentType("text/html; charset=utf-8");
-        renderer.renderDocument(documentDao.getById(id), factory.createXMLStreamWriter(response.getWriter()));
+    	PrintWriter writer = response.getWriter();
+        renderer.renderDocument(documentDao.getById(id), factory.createXMLStreamWriter(writer));
     }
 
     @GET

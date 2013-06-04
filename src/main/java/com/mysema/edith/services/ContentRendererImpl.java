@@ -254,7 +254,7 @@ public class ContentRendererImpl implements ContentRenderer {
             }
 
             writer.writeStartElement("li");
-            writer.writeStartElement("a");            
+            writer.writeStartElement("a");
             writer.writeAttribute("href", "#start" + documentNote.getId());
             writer.writeAttribute(CLASS, "notelink");
             if (note.getLemma() != null) {
@@ -321,7 +321,7 @@ public class ContentRendererImpl implements ContentRenderer {
 //                builder.append(result);
                 writer.writeStartElement("a");
                 if (linkElement.getReference() != null) {
-                    writer.writeAttribute("href", bibliographUrl + linkElement.getReference());                    
+                    writer.writeAttribute("href", bibliographUrl + linkElement.getReference());
                 }
                 writer.writeCharacters(linkElement.getString());
                 writer.writeEndElement();
@@ -466,6 +466,7 @@ public class ContentRendererImpl implements ContentRenderer {
                 }
             }
         } finally {
+            writer.flush();
             reader.close();
             is.close();
         }
@@ -477,8 +478,8 @@ public class ContentRendererImpl implements ContentRenderer {
         String localName = reader.getLocalName();
         String name = extractName(reader, localName);
         if (!name.equals("anchor")) {
-            context.push(name);    
-        }        
+            context.push(name);
+        }
         String path = context.getPath();
         String rend = reader.getAttributeValue(null, "rend");
 
