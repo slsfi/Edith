@@ -5,7 +5,7 @@ require([], function() {
            'text!/templates/note-import.html'],
           function($, _, Backbone, Handlebars, localize, headerTemplate, importTemplate) {
     var headerTemplate = Handlebars.compile(headerTemplate);
-    $('body').prepend(headerTemplate());
+    $('#header').append(headerTemplate());
     
     var importTemplate = Handlebars.compile(importTemplate);
 

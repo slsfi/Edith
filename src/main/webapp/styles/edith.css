@@ -1,3 +1,19 @@
+.tab-operations {
+    border: 1px solid #CBE86B;
+    background-color: rgba(203, 232, 107, 0.20);
+    padding: 0.8em;
+    height: 30px;
+    line-height: 30px;
+}
+    
+    .tab-operations button {
+        margin-right: 0.5em;
+    }
+    
+    .tab-operations .metadata-field-select {
+        display: inline-block;
+    }
+
 .scrollable-area {
     position: absolute;
     top: 5em;
@@ -6,6 +22,31 @@
     right: 1em;
     overflow: auto;
 }
+
+#note-list .scrollable-area {
+    top: 126px;
+}
+
+ul.notes {
+    margin-left: 0;
+    list-style-type: none;
+}
+
+    ul.notes li:nth-child(1) {
+        margin-top: 5px;
+    }
+
+    ul.notes li .metadata {
+        margin: 0.2em 1em 0.4em 11px;
+        padding: 0.2em 0.4em;
+        font-size: 90%;
+        line-height: 1;
+        font-style: italic;
+    }
+
+        ul.notes li .metadata span {
+            display: block;
+        }
 
 .login {
     padding: 5em;       

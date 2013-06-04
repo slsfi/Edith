@@ -5,7 +5,7 @@ require([], function() {
            'text!/templates/header.html', 'text!/templates/note-search.html'],
           function($, _, Backbone, Handlebars, Slickback, Slick, localize, moment, headerTemplate, searchTemplate) {
     var headerTemplate = Handlebars.compile(headerTemplate);
-    $('body').prepend(headerTemplate());
+    $('#header').append(headerTemplate());
     
     var searchTemplate = Handlebars.compile(searchTemplate);
     

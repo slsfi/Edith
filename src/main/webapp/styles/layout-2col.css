@@ -15,16 +15,23 @@ body {
 */
 
 .header {
-    height: 8em;
+    position: absolute;
+    top: 0;
+    height: 3.9em;
+    width: 100%;
+    padding-left: 1em;
+    padding-top: 1.1em;
+    border-bottom: 1px solid #CBE86B;
+    background-color: rgba(203, 232, 107, 0.20);
 }
 
 .abs-page-container {
     margin:0; 
     padding:0;
     position: absolute;
-    top: 9.2em;
-    left: 0em;
-    right: 0em;
+    top: 5em;
+    left: 1em;
+    right: 1em;
     bottom: 0em;
 }
 

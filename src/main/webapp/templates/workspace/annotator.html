@@ -10,10 +10,15 @@
       <li class="active"><a href="#" data-target="note-list" data-toggle="tab">{{localize 'notes'}}</a></li>
       <li><a href="#" data-target="note-search" data-toggle="tab">{{localize 'notesearch'}}</a></li>
     </ul>
-    <div id="note-list" class="scrollable-area">
-      <button id="create-note">Luo viite</button>
-      <div class="metadata-field-select"></div>
-      <ul class="notes"></ul>
+    <div id="note-list">
+      <div class="tab-operations">
+        <button id="create-note">Luo viite</button>
+        <div class="metadata-field-select"></div>
+      </div>
+
+      <div class="scrollable-area">
+        <ul class="notes"></ul>
+      </div>
     </div>
     <div id="note-search" class="scrollable-area" style="display: none;">
       note search

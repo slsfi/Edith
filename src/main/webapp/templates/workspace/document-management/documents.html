@@ -1,10 +1,12 @@
-<h2>{{localize 'documents'}}</h2>
+<div class="abs-left-container">
+  <h2>{{localize 'documents'}}</h2>
 
-<p>{{localize 'add-documents'}}</p>
+  <p>{{localize 'add-documents'}}</p>
 
-<form class="import" method="post" enctype="multipart/form-data">
-  <input name="file" type="file"/>
-  <input type="submit" value="{{localize 'submit'}}"/>
-</form>
+  <form class="import" method="post" enctype="multipart/form-data">
+    <input name="file" type="file"/>
+    <input type="submit" value="{{localize 'submit'}}"/>
+  </form>
 
-<div id="directory-tree"></div>
+  <div id="directory-tree"></div>
+</div>
