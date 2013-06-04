@@ -151,7 +151,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
 
     selectionChange: function() {
       var selection = this.getSelection();
-      vent.trigger('document:selection', this.documentId, selection);
+      if (selection) {
+        vent.trigger('document:selection', this.documentId, selection);
+      }
     }
   });
 

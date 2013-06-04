@@ -2,10 +2,9 @@ require.config(window.rconfig);
 
 require([], function() {
   require(['jquery', 'underscore', 'backbone', 'handlebars', 'slickback', 'slickgrid', 'localize', 'moment', 
-           'text!/templates/header.html', 'text!/templates/note-search.html'],
-          function($, _, Backbone, Handlebars, Slickback, Slick, localize, moment, headerTemplate, searchTemplate) {
-    var headerTemplate = Handlebars.compile(headerTemplate);
-    $('#header').append(headerTemplate());
+           'header', 'text!/templates/note-search.html'],
+          function($, _, Backbone, Handlebars, Slickback, Slick, localize, moment, Header, searchTemplate) {
+    new Header({el: $('#header')});
     
     var searchTemplate = Handlebars.compile(searchTemplate);
     

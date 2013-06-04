@@ -1,11 +1,10 @@
 require.config(window.rconfig);
 
 require([], function() {
-  require(['jquery', 'underscore', 'backbone', 'handlebars', 'localize', 'text!/templates/header.html',
+  require(['jquery', 'underscore', 'backbone', 'handlebars', 'localize', 'header',
            'text!/templates/note-import.html'],
-          function($, _, Backbone, Handlebars, localize, headerTemplate, importTemplate) {
-    var headerTemplate = Handlebars.compile(headerTemplate);
-    $('#header').append(headerTemplate());
+          function($, _, Backbone, Handlebars, localize, Header, importTemplate) {
+    new Header({el: $('#header')});
     
     var importTemplate = Handlebars.compile(importTemplate);
 
