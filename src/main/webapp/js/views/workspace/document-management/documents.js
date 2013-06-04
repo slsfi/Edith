@@ -40,7 +40,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
              data: { path: this.model.data.path, name: newName },
              success: function(data) { vent.trigger('document:rename', data); }
         });
-    }
+      }
     }
   });
   
