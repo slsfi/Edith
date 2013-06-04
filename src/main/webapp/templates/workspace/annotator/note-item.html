@@ -1,5 +1,8 @@
-<a href="#">
-  <span class="shortenedSelection">{{ shortenedSelection }}</span>
+<span class="shortenedSelection">
+  <a href="#">{{ shortenedSelection }}</a></span>
+</span>
+
+<div class="metadata">
   <span class="fullSelection">{{ fullSelection }}</span>
   <span class="types">{{ note.types }}</span>
   <span class="description">{{ note.term.meaning }}</span>
@@ -8,6 +11,10 @@
   <span class="status">{{ note.status }}</span>
   <span class="document">{{ document.title }}</span>
   <span class="comment">{{ note.comment.message }}</span>
-</a>
-<button id="edit-note" style="display:none;">Edit</button>
-<button id="comment-note" style="display:none;">Comment</button>
+
+  <div id="buttons">
+    <button id="edit-note">Edit</button>
+    <button id="comment-note">Comment</button>
+  </div>
+</div>
+

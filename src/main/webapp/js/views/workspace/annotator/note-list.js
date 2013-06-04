@@ -50,11 +50,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     render: function() {
       this.$el.html(this.template(this.documentNote));
       if (this.selected) {
-        this.$el.css('background', 'lightgrey');
-        this.$('button').show();
+        this.$el.css('background', '#EEE');
+        this.$('#buttons').show();
       } else {
         this.$el.css('background', 'white');
-        this.$('button').hide();
+        this.$('#buttons').hide();
       }
     },
 
