@@ -1,0 +1,9 @@
+
+forge "http://forge.puppetlabs.com"
+
+mod "puppetlabs/apt"
+mod "puppetlabs/stdlib"
+mod "puppetlabs/java"
+mod "puppetlabs/git"
+mod "puppetlabs/mysql"
+mod "maestrodev/maven"

@@ -1,0 +1,22 @@
+Vagrant::Config.run do |config|
+
+  config.vm.box = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+
+  # Boot with a GUI so you can see the screen. Good for debugging startup issues. (Default is headless)
+  #config.vm.boot_mode = :gui
+
+
+  config.vm.define "edith-server" do |edith|
+    edith.vm.network :hostonly, "33.33.33.10"
+    edith.vm.forward_port 8080, 8080
+    edith.vm.forward_port 3306, 3306
+    edith.vm.host_name = "edith-server.local"
+    edith.vm.share_folder "edith", "/opt/edith", ".."
+    edith.vm.provision :puppet, :module_path => "modules" do |puppet|
+      puppet.manifests_path = "manifests"
+      puppet.manifest_file = "site.pp"
+    end
+  end
+
+end
