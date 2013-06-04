@@ -1,22 +1,28 @@
-define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap',
+define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap', 'localize',
         'text!/templates/workspace/annotator.html',
         'views/workspace/annotator/document',
         'views/workspace/annotator/note-list',
         'views/workspace/annotator/note-edit',
         'views/workspace/annotator/note-search',
         'views/workspace/annotator/comment-edit'],
-        function($, _, Backbone, Handlebars, vent, Bootstrap, template,
+        function($, _, Backbone, Handlebars, vent, Bootstrap, localize, template,
                  Document, NoteList, NoteEdit, NoteSearch, CommentEdit) {
 
   var template = Handlebars.compile(template);
   
   var AnnotatorView = Backbone.View.extend({
-    events: {'shown a[data-toggle="tab"]': 'switchTabFromClick'},
+    events: {'click a[data-toggle="tab"]': 'switchTabFromClick'},
 
     initialize: function() {
       _.bindAll(this, 'render', 'switchTabFromClick');
       var self = this;
       vent.on('document-note:open note:create', function() {
+        if (!self.noteEditInitialized) {
+          self.$('.nav-tabs').append('<li><a href="#" data-target="note-edit" data-toggle="tab">' +
+                                     localize('edit') +
+                                     '</a></li>');
+          self.noteEditInitialized = true;
+        }
         self.switchTab('note-edit');
         self.$('.nav-tabs a[data-target="note-edit"]').tab('show');
       });
