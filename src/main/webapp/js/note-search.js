@@ -43,7 +43,7 @@ require([], function() {
     var options = {
       formatterFactory: Slickback.BackboneModelFormatterFactory,
       editable: true,
-      autoHeight: true,
+      //autoHeight: true,
       forceFitColumns: true,
       autoEdit: false
     };
