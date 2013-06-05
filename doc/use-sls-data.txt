@@ -1,0 +1,15 @@
+- Copy files from gdrive: https://docs.google.com/a/mysema.com/folder/d/0B9D_URglK_1UX2Z1Q1d6dnJWNk0/edit
+- Copy them to [project]/etc/sls-dump
+- cd [project]
+
+cd etc/sls-dump 
+tar xzf sls-edith-svn.tar.gz
+gunzip slsdump.sql.gz
+rm -rf ../../target/sls-dev/repo-sls
+cp -R edith ../../target/sls-dev/repo-sls
+cd ../.. 
+mvn -Pprod dbmaintain:clearDatabase dbmaintain:updateDatabase
+mysql -uedith -pedith edith < etc/sls-dump/slsdump.sql
+
+set MAVEN_OPTS=-Xmx512M && mvn exec:java -Dexec.mainClass=fi.finlit.edith.SLSEdithDebugStart -Dexec.classpathScope=test
+
