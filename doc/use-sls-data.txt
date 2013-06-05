@@ -11,5 +11,5 @@ cd ../..
 mvn -Pprod dbmaintain:clearDatabase dbmaintain:updateDatabase
 mysql -uedith -pedith edith < etc/sls-dump/slsdump.sql
 
-set MAVEN_OPTS=-Xmx512M && mvn exec:java -Dexec.mainClass=fi.finlit.edith.SLSEdithDebugStart -Dexec.classpathScope=test
+set MAVEN_OPTS=-Xmx512M && mvn exec:java -Dexec.mainClass=fi.finlit.edith.SLSStart -Dexec.classpathScope=test
 
