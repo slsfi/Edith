@@ -1,87 +1,98 @@
+<!-- TODO: Externalize -->
+<style>
+.selected {background: yellow;}
+</style>
+
 <form>
-<input name="query" type="text" placeholder="{{localize 'search'}}" class="query"></input>
+  <input name="query" type="text" placeholder="{{localize 'search'}}" class="query"></input>
 
-<div class="accordion" id="searchAccordion">
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#searchAccordion" href="#documentSearch">
-        {{localize 'document-label'}}
-      </a>
+  <div class="accordion" id="searchAccordion">
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#searchAccordion" href="#documentSearch">
+          {{localize 'document-label'}}
+        </a>
+      </div>
+      <div id="documentSearch" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <div class="directory-tree"></div>
+        </div>
+      </div>
     </div>
-    <div id="documentSearch" class="accordion-body collapse">
-      <div class="accordion-inner">
-        <div class="directory-tree"></div>
+
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#searchAccordion" href="#advancedSearch">
+         {{localize 'advancedSearch-label'}}
+        </a>
+      </div>
+      <div id="advancedSearch" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <label for="creators">{{localize 'creator-label'}}</label>
+          <select name="creators" class="creators"></select></p>
+        
+          <label for="types">{{localize 'type-label'}}</label>
+          {{localize 'WORD_EXPLANATION'}} <input value="WORD_EXPLANATION" name="types" type="checkbox"/>
+          {{localize 'LITERARY'}} <input value="LITERARY" name="types" type="checkbox"/>
+          {{localize 'HISTORICAL'}} <input value="HISTORICAL" name="types" type="checkbox"/>
+          {{localize 'DICTUM'}} <input value="DICTUM" name="types" type="checkbox"/>
+          {{localize 'CRITIQUE'}} <input value="CRITIQUE" name="types" type="checkbox"/>
+          {{localize 'TITLE'}} <input value="TITLE" name="types" type="checkbox"/>
+          {{localize 'TRANSLATION'}} <input value="TRANSLATION" name="types" type="checkbox"/>
+          {{localize 'REFERENCE'}} <input value="REFERENCE" name="types" type="checkbox"/>
+
+          <label for="language">{{localize 'basicFormLanguage-label'}}</label>
+          <select name="language">
+            <option value=""></option>
+            <option value="FINNISH">{{localize 'FINNISH'}}</option>
+            <option value="SWEDISH">{{localize 'SWEDISH'}}</option>
+            <option value="FRENCH">{{localize 'FRENCH'}}</option>
+            <option value="LATIN">{{localize 'LATIN'}}</option>
+            <option value="GERMAN">{{localize 'GERMAN'}}</option>
+            <option value="RUSSIAN">{{localize 'RUSSIAN'}}</option>
+            <option value="ENGLISH">{{localize 'ENGLISH'}}</option>
+            <option value="ITALIAN">{{localize 'ITALIAN'}}</option>
+            <option value="GREEK">{{localize 'GREEK'}}</option>
+            <option value="OTHER">{{localize 'OTHER'}}</option>
+          </select>
+
+          <label for="createdOn">{{localize 'createdOn-label'}}</label>
+          {{localize 'from'}} <input type="text" class="date input-small" name="createdAfter"/>
+          {{localize 'to'}} <input type="text" class="date input-small" name="createdBefore"/>
+
+          <label for="editedOn">{{localize 'editedOn-label'}}</label>
+          {{localize 'from'}} <input type="text" class="date input-small" name="editedAfter"/>
+          {{localize 'to'}} <input type="text" class="date input-small" name="editedBefore"/>
+
+          <label for="status">{{localize 'status-label'}}</label>
+          <select name="status">
+            <option value=""></option>
+            <option value="INITIAL">{{localize 'INITIAL'}}</option>
+            <option value="DRAFT">{{localize 'DRAFT'}}</option>
+            <option value="FINISHED">{{localize 'FINISHED'}}</option>
+          </select>
+
+          <label for="shortenedSelection">{{localize 'shortenedSelection-label'}}</label>
+          <input type="text" name="shortenedSelection"/>
+
+          <label for="description">{{localize 'description-label'}}</label>
+          <input type="text" name="description"/>
+
+          <label for="lemmaMeaning">{{localize 'lemmaMeaning-label'}}</label>
+          <input type="text" name="lemmaMeaning"/>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#searchAccordion" href="#advancedSearch">
-       {{localize 'advancedSearch-label'}}
-      </a>
-    </div>
-    <div id="advancedSearch" class="accordion-body collapse">
-      <div class="accordion-inner">
-        <label for="creators">{{localize 'creator-label'}}</label> 
-        <select name="creators" class="creators"></select></p>
-      
-        <label for="types">{{localize 'type-label'}}</label>
-        {{localize 'WORD_EXPLANATION'}} <input value="WORD_EXPLANATION" name="types" type="checkbox"/>
-        {{localize 'LITERARY'}} <input value="LITERARY" name="types" type="checkbox"/>
-        {{localize 'HISTORICAL'}} <input value="HISTORICAL" name="types" type="checkbox"/>
-        {{localize 'DICTUM'}} <input value="DICTUM" name="types" type="checkbox"/>
-        {{localize 'CRITIQUE'}} <input value="CRITIQUE" name="types" type="checkbox"/>
-        {{localize 'TITLE'}} <input value="TITLE" name="types" type="checkbox"/>
-        {{localize 'TRANSLATION'}} <input value="TRANSLATION" name="types" type="checkbox"/>
-        {{localize 'REFERENCE'}} <input value="REFERENCE" name="types" type="checkbox"/>
-        
-        <label for="language">{{localize 'basicFormLanguage-label'}}</label>
-        <select name="language">
-          <option value=""></option>
-          <option value="FINNISH">{{localize 'FINNISH'}}</option>
-          <option value="SWEDISH">{{localize 'SWEDISH'}}</option>
-          <option value="FRENCH">{{localize 'FRENCH'}}</option>
-          <option value="LATIN">{{localize 'LATIN'}}</option>
-          <option value="GERMAN">{{localize 'GERMAN'}}</option>
-          <option value="RUSSIAN">{{localize 'RUSSIAN'}}</option>
-          <option value="ENGLISH">{{localize 'ENGLISH'}}</option>
-          <option value="ITALIAN">{{localize 'ITALIAN'}}</option>
-          <option value="GREEK">{{localize 'GREEK'}}</option>
-          <option value="OTHER">{{localize 'OTHER'}}</option>
-        </select>
-        
-        <label for="createdOn">{{localize 'createdOn-label'}}</label>
-        {{localize 'from'}} <input type="text" class="date input-small" name="createdAfter"/>
-        {{localize 'to'}} <input type="text" class="date input-small" name="createdBefore"/>        
-        
-        <label for="editedOn">{{localize 'editedOn-label'}}</label>
-        {{localize 'from'}} <input type="text" class="date input-small" name="editedAfter"/>
-        {{localize 'to'}} <input type="text" class="date input-small" name="editedBefore"/>
-        
-        <label for="status">{{localize 'status-label'}}</label>
-        <select name="status">
-          <option value=""></option>
-          <option value="INITIAL">{{localize 'INITIAL'}}</option>
-          <option value="DRAFT">{{localize 'DRAFT'}}</option>
-          <option value="FINISHED">{{localize 'FINISHED'}}</option>
-        </select>
-        
-        <label for="shortenedSelection">{{localize 'shortenedSelection-label'}}</label>
-        <input type="text" name="shortenedSelection"/>
-        
-        <label for="description">{{localize 'description-label'}}</label>
-        <input type="text" name="description"/>
-        
-        <label for="lemmaMeaning">{{localize 'lemmaMeaning-label'}}</label>
-        <input type="text" name="lemmaMeaning"/>
-      </div>
-    </div>
-  </div>
-</div>
 </form>
 
 <div class="metadata-field-select"></div>
 
 <div class="documentNoteGrid"></div>
 <div class="documentNotePager"></div>
+<div class="actions">
+  <button class="select">Select</button>
+  <button class="comment">Comment</button>
+  <button class="edit-note">Edit note</button>
+  <button class="edit-instance">Edit instance</button>
+</div>

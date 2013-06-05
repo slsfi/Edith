@@ -305,9 +305,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
              'click #delete-document-note': 'deleteDocumentNote'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'open', 'create', 'annotate', 
-                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote',
-                      'createDocumentNote');
+      _.bindAll(this, 'render', 'openNote', 'openDocumentNote', 'create', 'annotate',
+                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote', 'createDocumentNote');
       var self = this;
       vent.on('document:selection', function(documentId, selection) {
         if (self.$el.is(':visible')) {
@@ -315,7 +314,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         }
       });
       vent.on('note:create', this.create);
-      vent.on('document-note:open', this.open);
+      vent.on('document-note:open', this.openDocumentNote);
+      vent.on('note:open', this.openNote);
       vent.on('document-note:create', this.createDocumentNote);
       this.render();
     },
@@ -327,7 +327,18 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.comment = new Comment({el: this.$('div#comment')})
     },
 
-    open: function(documentNote) {
+    openNote: function(note) {
+      if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
+        if (!confirm('U haz unsaved changes, continue?')) {
+          return;
+        }
+      }
+      this.documentNoteForm.close();
+      this.noteForm.open(note);
+      this.comment.open(note.comment, note.id);
+    },
+
+    openDocumentNote: function(documentNote) {
       if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
         if (!confirm('U haz unsaved changes, continue?')) {
           return;
@@ -370,6 +381,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       var self = this;
       var documentNote = this.documentNoteForm.extract();
       if (this.documentNoteForm.hasPersistedNote()) {
+        documentNote.note = this.noteForm.note.id;
         this.documentNoteForm.save(documentNote);
       } else {
         // Need to save DocumentNote and Note

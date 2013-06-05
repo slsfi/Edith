@@ -16,7 +16,7 @@ define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap', '
     initialize: function() {
       _.bindAll(this, 'render', 'switchTabFromClick');
       var self = this;
-      vent.on('document-note:open note:create', function() {
+      vent.on('document-note:open note:open note:create', function() {
         if (!self.noteEditInitialized) {
           self.$('.nav-tabs').append('<li><a href="#" data-target="note-edit" data-toggle="tab">' +
                                      localize('edit') +

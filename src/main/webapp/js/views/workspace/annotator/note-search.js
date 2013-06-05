@@ -12,13 +12,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       this.on('change', function() {
         self.dirty = true;
       });
-    },
-    
-    toFlat: function() {
-      var flat = this.toJSON();
-      flat.note = flat.note.id;
-      flat.document = flat.document.id;
-      return flat;
     }
   });
   
@@ -93,18 +86,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   };
   
   var GridView = Backbone.View.extend({
-    
-    events: {'click .note-link': 'open'},
-    
     initialize: function() {
-      _.bindAll(this);
+      _.bindAll(this, 'render', 'getSelected');
       this.render();
     },
-    
-    open: function(evt) {
-      evt.preventDefault(); 
-      var id = parseInt($(evt.target).attr('data-id'));                  
-      vent.trigger('document-note:open', documentNotes.get(id).toFlat());
+
+    getSelected: function() {
+      return (this.grid.getData().models[this.grid.getSelectedRows()[0]]).toJSON();
     },
     
     render: function() {
@@ -147,11 +135,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     
     events: {'keyup .search': 'search',
              'change form input': 'search',
-             'change form select': 'search'},
+             'change form select': 'search',
+             'click .select': 'select',
+             'click .comment': 'comment',
+             'click .edit-note': 'editNote',
+             'click .edit-instance': 'editInstance'},
     
     initialize: function() {
       var self = this;
-      _.bindAll(this, 'render', 'search');
+      _.bindAll(this, 'render', 'search', 'select', 'comment', 'editNote', 'editInstance');
       vent.on('tab:open', function(view) {
         if (view === self && !self.initialized) {
           documentNotes.fetchWithPagination();
@@ -228,8 +220,29 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         }
         
       });
-    }
+    },
+
+    select: function() {
+      var documentNote = this.gridView.getSelected();
+      // TODO: Handle case in which instance in different document
+      vent.trigger('document-note:select', documentNote.id);
+    },
     
+    comment: function() {
+      var documentNote = this.gridView.getSelected();
+      vent.trigger('comment:edit', documentNote.note.id, documentNote.note.comment);
+    },
+
+    editNote: function() {
+      var documentNote = this.gridView.getSelected();
+      vent.trigger('note:open', documentNote.note);
+    },
+
+    editInstance: function() {
+      var documentNote = this.gridView.getSelected();
+      // TODO: Handle case in which instance in different document
+      vent.trigger('document-note:open', documentNote);
+    }
   });
   
   return NoteSearch;   
