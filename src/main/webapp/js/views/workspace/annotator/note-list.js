@@ -65,6 +65,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     select: function(id) {
       this.selected = this.documentNote.id === id;
+      if (this.selected) {
+        this.el.scrollIntoView(true);
+      }
       this.render();
     },
 
