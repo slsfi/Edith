@@ -112,7 +112,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
       var self = this;
 
       $.get('/api/documents/' + id, function(data) {
-       $('#document-title').html(data)
+        //TODO Fix this to own view or something
+        var title = _.last(data.path.split("/documents/trunk/"))
+        window.document.title = title
+        $('#document-title').html(title)
       }); 
 
       $.get('/api/documents/' + id + '/raw', function(data) {
