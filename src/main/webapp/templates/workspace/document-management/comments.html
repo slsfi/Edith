@@ -1,5 +1,5 @@
 <h2>{{localize 'comments'}}</h2>
 {{#each this}}
   <div>{{message}}</div>
-  <div>{{username}} @ {{createdAt}}</div>
+  <div>{{username}} @ {{ dateFormat createdAt }}</div>
 {{/each}}

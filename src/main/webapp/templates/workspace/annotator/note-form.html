@@ -1,6 +1,6 @@
 <h4>Viitteen muokkaus</h4>
 <div>Muokkaajat:
-  {{ editedOn }}
+  {{ dateFormat editedOn }}
   {{ lastEditedBy.username }}
   {{#each allEditors }} ({{ this.username }}) {{/each}}
 </div>
