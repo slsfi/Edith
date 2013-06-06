@@ -90,6 +90,36 @@ form.import input {
     height: auto;
 }
 
+#note-edit h4 {
+    padding: 10px;
+    background-color: #F2F2F2;
+}
+
+    #note-edit #comment h4 {
+        margin-top: 0;
+    }
+
+#note-edit form .control-group {
+    margin-top: 5px;
+    display: block;
+    height: 32px;
+}
+
+#note-edit form .control-label {
+    float: left;
+    width: 150px;
+    margin: 0;
+    display: inline-block;
+}
+
+#note-edit form .controls {
+    display: inline-block;
+}
+
+#note-edit form input {
+    margin-top: -4px;
+}
+
 #directory-tree .dynatree-container {
     margin: 10px 0 0 0;
 }
