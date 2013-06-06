@@ -1,11 +1,18 @@
 require.config(window.rconfig);
 
 require([], function() {
-  require(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'localize',
+  require(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'localize', 'moment',
            'views/workspace/annotator', 'views/workspace/document-management',
            'header'],
-          function($, _, Backbone, Handlebars, vent, localize, Annotator, DocumentManagement, Header) {
+          function($, _, Backbone, Handlebars, vent, localize, moment, Annotator, DocumentManagement, Header) {
     new Header({el: $('#header')});
+
+
+    Handlebars.registerHelper('dateFormat', function(timestamp, block) {
+      var f = block.hash.format || "D.M.YYYY";
+      return moment.unix(timestamp/1000).format(f);
+    });
+
     var WorkspaceRouter = Backbone.Router.extend({
       views: {},
 
@@ -49,6 +56,9 @@ require([], function() {
       ev.preventDefault();
       router.navigate('', {trigger: true});
     });
+
+
   });
+
 });
 
