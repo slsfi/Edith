@@ -1,10 +1,10 @@
-define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
+define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
         'text!/templates/workspace/annotator/note-edit.html',
         'text!/templates/workspace/annotator/document-note-form.html',
         'text!/templates/workspace/annotator/note-form.html',
         'text!/templates/workspace/annotator/comment.html',
         'ckeditor', 'ckeditor-jquery'],
-       function($, _, Backbone, vent, Handlebars, noteEditTemplate,
+       function($, _, Backbone, vent, Handlebars, localize, noteEditTemplate,
                 documentNoteFormTemplate, noteFormTemplate, commentTemplate,
                 CKEditor, ckEditorJquery) {
   Handlebars.registerHelper('when-contains', function(coll, x, options) {
@@ -329,7 +329,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     openNote: function(note) {
       if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
-        if (!confirm('U haz unsaved changes, continue?')) {
+        if (!confirm(localize('dirty-dialog-confirm'))) {
           return;
         }
       }
@@ -340,7 +340,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     openDocumentNote: function(documentNote) {
       if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
-        if (!confirm('U haz unsaved changes, continue?')) {
+        if (!confirm(localize('dirty-dialog-confirm'))) {
           return;
         }
       }
@@ -351,7 +351,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     create: function() {
       if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
-        if (!confirm('U haz unsaved changes, continue?')) {
+        if (!confirm(localize('dirty-dialog-confirm'))) {
           return;
         }
       }

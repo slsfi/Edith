@@ -224,7 +224,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       var documentNote = this.gridView.getSelected();
       if (this.documentId === documentNote.document.id) {
         vent.trigger('document-note:select', documentNote.id);
-      } else if (confirm('Note instance in different document, proceed?')) {
+      } else if (confirm(localize('confirm-document-change'))) {
         vent.once('document:loaded', function(documentId) {
           vent.trigger('document-note:select', documentNote.id);
         });
@@ -246,7 +246,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       var documentNote = this.gridView.getSelected();
       if (this.documentId === documentNote.document.id) {
         vent.trigger('document-note:open', documentNote);
-      } else if (confirm('Note instance in different document, proceed?')) {
+      } else if (confirm(localize('confirm-document-change'))) {
         vent.once('document:loaded', function(documentId) {
           vent.trigger('document-note:select', documentNote.id);
         });
