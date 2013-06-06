@@ -101,6 +101,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         })
         documentNotes.fetchWithScope();
       });
+
+      grid.onClick.subscribe(function() {
+        self.$('button').removeAttr('disabled');
+      });
       
       documentNotes.onRowCountChanged.subscribe(function() {
         grid.updateRowCount();
