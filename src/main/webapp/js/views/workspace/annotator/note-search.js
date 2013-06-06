@@ -48,14 +48,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var users = new UsersCollection();
   users.fetch();
   
-  var noteLinkTemplate = Handlebars.compile("<a href='#' class='note-link' data-id='{{id}}'>{{value}}</a>");
-  
-  var LinkFormatter = function(row, cell, value, columnDef, data) {
-    return noteLinkTemplate({
-      id: data.get('id'), 
-      value: data.get('shortenedSelection')});
-  };
-  
   var DateFormatter = function(row, cell, value, columnDef, data) {
     var value = data.get('note').editedOn;
     return moment.unix(value / 1000).format("DD.MM.YYYY");
@@ -68,7 +60,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   
   var allColumns = [
       {sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), 
-        field: 'shortenedSelection', formatter: LinkFormatter},
+        field: 'shortenedSelection'},
       {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
       {sortable: false, id: 'types', name: localize('types-label'), field: 'note.types', formatter: TypesFormatter},
       {sortable: true, id: 'description', name: localize('description-label'), field: 'note.term.meaning'},
@@ -132,7 +124,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var dateFields = ['createdAfter', 'createdBefore', 'editedAfter', 'editedBefore'];
     
   var NoteSearch = Backbone.View.extend({
-    
     events: {'keyup .search': 'search',
              'change form input': 'search',
              'change form select': 'search',
@@ -156,6 +147,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
             return _.contains(columns, col.id);
           }));
         }
+      });
+      vent.on('document:open', function(documentId) {
+        self.documentId = documentId;
       });
       this.render();
     },
@@ -224,8 +218,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
 
     select: function() {
       var documentNote = this.gridView.getSelected();
-      // TODO: Handle case in which instance in different document
-      vent.trigger('document-note:select', documentNote.id);
+      if (this.documentId === documentNote.document.id) {
+        vent.trigger('document-note:select', documentNote.id);
+      } else if (confirm('Note instance in different document, proceed?')) {
+        vent.once('document:loaded', function(documentId) {
+          vent.trigger('document-note:select', documentNote.id);
+        });
+        vent.trigger('route:change', 'documents/' + documentNote.document.id);
+      }
     },
     
     comment: function() {
@@ -240,8 +240,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
 
     editInstance: function() {
       var documentNote = this.gridView.getSelected();
-      // TODO: Handle case in which instance in different document
-      vent.trigger('document-note:open', documentNote);
+      if (this.documentId === documentNote.document.id) {
+        vent.trigger('document-note:open', documentNote);
+      } else if (confirm('Note instance in different document, proceed?')) {
+        vent.once('document:loaded', function(documentId) {
+          vent.trigger('document-note:select', documentNote.id);
+        });
+        vent.trigger('route:change', 'documents/' + documentNote.document.id);
+        vent.trigger('document-note:open', documentNote);
+      }
     }
   });
   

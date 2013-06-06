@@ -114,6 +114,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
       $.get('/api/documents/' + id + '/raw', function(data) {
         self.$el.html(data)
                 .effect('highlight', {color: 'lightblue'}, 500);
+        vent.trigger('document:loaded', id);
       });
     },
     
