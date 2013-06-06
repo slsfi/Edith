@@ -7,8 +7,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
     initialize: function() {
       _.bindAll(this, 'render');
       var render = this.render;
-      vent.on('document:select', function(id) {
-        $.get('/api/documents/' + id + '/note-comments', render);
+      vent.on('document:select', function(node) {
+        $.get('/api/documents/' + node.documentId + '/note-comments', render);
       });
       var self = this;
       vent.on('folder:select', function() { self.$el.empty(); });

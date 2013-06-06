@@ -1,48 +1,9 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
         'handlebars', 'text!/templates/workspace/document-management/documents.html', 
-        'text!/templates/workspace/document-management/actions.html', 'dynatree'],
-  function($, _, Backbone, vent, localize, Handlebars, template, actionsTemplate) {
+        'dynatree'],
+  function($, _, Backbone, vent, localize, Handlebars, template) {
 
   var template = Handlebars.compile(template);
-  
-  var actionsTemplate = Handlebars.compile(actionsTemplate);
-  
-  var DocumentItemView = Backbone.View.extend({
-    events: {'click .delete': 'deleteItem',
-             'click .rename': 'renameItem'},
-    
-    initialize: function() {
-      _.bindAll(this);
-      this.render();
-    },
-    
-    render: function() {
-      this.$el.append(actionsTemplate(this.model.data));
-    },
-    
-    deleteItem: function() {
-      var self = this;
-      var msg = this.model.data.isFolder ? 'remove-folder-confirm' : 'remove-file-confirm';
-      if (confirm(localize(msg))) {
-        $.ajax('api/files',
-            {type: 'delete',
-             data: { path: this.model.data.path },
-             success: function() { vent.trigger('document:delete', self.model.data); } 
-        });
-      }
-    },
-    
-    renameItem: function() {
-      var newName = prompt(localize('rename'), this.model.data.title);
-      if (newName) {
-        $.ajax('api/files', 
-            {type: 'put',
-             data: { path: this.model.data.path, name: newName },
-             success: function(data) { vent.trigger('document:rename', data); }
-        });
-      }
-    }
-  });
   
   var DocumentsView = Backbone.View.extend({
     events: {'submit .import': 'submit'},
@@ -67,9 +28,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
         onClick: function(node) {
           if (!node.data.isFolder) {
-            vent.trigger('document:select', node.data.documentId);
+            vent.trigger('document:select', node.data);
           } else {
-            vent.trigger('folder:select');
+            vent.trigger('folder:select', node.data);
           }
         },
 
@@ -87,10 +48,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
           }
         },
         
-        onRender: function(node, span) {
-          new DocumentItemView({el: $(span), model: node});
-        },
-
         onLazyRead: function(node) {
           node.appendAjax({
             url: '/api/files/',
