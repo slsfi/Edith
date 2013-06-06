@@ -30,7 +30,7 @@ require([], function() {
     
     var DateFormatter = function(row, cell, value, columnDef, data) {
       var value = data.get('editedOn');
-      return moment.unix(value / 1000).format("DD.MM.YYYY");
+      return moment.unix(value / 1000).format("D.M.YYYY");
     };
 
     var notes = new NotesCollection();
