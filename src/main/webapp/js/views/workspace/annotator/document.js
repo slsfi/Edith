@@ -110,7 +110,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
 
     render: function(id) {
       var self = this;
-      // FIXME: We know better
+
+      $.get('/api/documents/' + id, function(data) {
+       $('#document-title').html(data)
+      }); 
+
       $.get('/api/documents/' + id + '/raw', function(data) {
         self.$el.html(data)
                 .effect('highlight', {color: 'lightblue'}, 500);

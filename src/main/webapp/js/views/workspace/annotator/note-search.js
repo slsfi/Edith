@@ -88,7 +88,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     },
     
     render: function() {
-      var grid = new Slick.Grid(this.$el, documentNotes, allColumns, options);
+       grid = new Slick.Grid(this.$el, documentNotes, allColumns, options);
       this.grid = grid;
       grid.setSelectionModel(new Slick.RowSelectionModel());
       
