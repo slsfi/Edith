@@ -2,14 +2,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
         'handlebars', 'text!/templates/workspace/document-management/document-actions.html'],
   function($, _, Backbone, vent, localize, Handlebars, template) {
   var template = Handlebars.compile(template);
-  var selectedNode;
 
   var DocumentActionsView = Backbone.View.extend({
     events: {'click #delete': 'delete',
              'click #rename': 'rename'},  
 
+    selectedNode: {},
+
     initialize: function() {
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'select', 'delete', 'rename');
       this.render();
 
       vent.on('document:select', this.select);
@@ -21,24 +22,20 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
     },
 
     select: function(data) {
-      selectedNode = data;
-      $('#document-actions button').each(function() {
-        $(this).removeAttr('disabled');
-      });
+      this.selectedNode = data;
+      this.$('button').removeAttr('disabled');
     },
 
     delete: function() {
       var self = this;
-      var msg = selectedNode.isFolder ? 'remove-folder-confirm' : 'remove-file-confirm';
+      var msg = self.selectedNode.isFolder ? 'remove-folder-confirm' : 'remove-file-confirm';
       if (confirm(localize(msg))) {
         $.ajax('api/files',
                 {type: 'delete',
-                 data: { path: selectedNode.path },
+                 data: { path: self.selectedNode.path },
                  success: function() { 
-                   vent.trigger('document:delete', selectedNode); 
-                   $('#document-actions button').each(function() {
-                     $(this).attr('disabled', 'disabled');
-                   });
+                   vent.trigger('document:delete', this.selectedNode); 
+                   self.$('button').attr('disabled', 'disabled');
                  }  
         });
       }
@@ -46,16 +43,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
     rename: function() {
       var self = this;
-      var newName = prompt(localize('rename'), selectedNode.title);
+      var newName = prompt(localize('rename'), self.selectedNode.title);
       if (newName) {
         $.ajax('api/files', 
                 {type: 'put',
-                  data: { path: selectedNode.path, name: newName },
+                  data: { path: self.selectedNode.path, name: newName },
                   success: function(data) { 
                     vent.trigger('document:rename', data); 
-                    $('#document-actions button').each(function() {
-                      $(this).attr('disabled', 'disabled');
-                    });
+                    self.$('button').attr('disabled', 'disabled');
                   }
         });
       }
