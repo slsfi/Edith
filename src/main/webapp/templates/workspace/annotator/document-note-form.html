@@ -1,28 +1,28 @@
 <h4>Esiintymä</h4>
-  <div class="control-group">
-    <label class="control-label">Valinta tekstissä:</label>
-    <div>{{ fullSelection }}</div>
+<div class="control-group">
+  <label class="control-label">{{ localize 'fullSelection-label' }}</label>
+  <div>{{ fullSelection }}</div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="shortenedSelection">{{ localize 'shortenedSelection-label' }}</label>
+  <div class="controls">
+    <input type="text" id="shortenedSelection" name="shortenedSelection" value="{{ shortenedSelection }}"></input>
   </div>
-  <div class="control-group">
-    <label class="control-label" for="shortenedSelection">Lyhennetty valinta:</label>
-    <div class="controls">
-      <input type="text" id="shortenedSelection" name="shortenedSelection" value="{{ shortenedSelection }}"></input>
-    </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="lemmaPosition">{{ localize 'lemmaPosition-label' }}</label>
+  <div class="controls">
+    <input type="text" id="lemmaPosition" name="lemmaPosition" value="{{ lemmaPosition }}"></input>
   </div>
-  <div class="control-group">
-    <label class="control-label" for="lemmaPosition">Lemman positio:</label> 
-    <div class="controls">
-      <input type="text" id="lemmaPosition" name="lemmaPosition" value="{{ lemmaPosition }}"></input>
-    </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="publishable">{{ localize 'publishable-label' }}</label>
+  <div class="controls">
+    <input type="checkbox" name="publishable" {{#if publishable }} checked {{/if}}></input>
   </div>
-  <div class="control-group">
-    <label class="control-label" for="publishable">Julkaistavissa:</label> 
-    <div class="controls">
-      <input type="checkbox" name="publishable" {{#if publishable }} checked {{/if}}></input>
-    </div>
+</div>
+<div class="control-group">
+  <div class="controls">
+    <button id="save-document-note" disabled>{{ localize 'save' }}</button> <button id="delete-document-note" disabled>{{ localize 'delete' }}</button>
   </div>
-  <div class="control-group">
-    <div class="controls">
-      <button id="save-document-note" disabled>Tallenna</button> <button id="delete-document-note" disabled>Poista</button>
-    </div>
-  </div>
+</div>
