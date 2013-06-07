@@ -385,7 +385,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
         this.documentNoteForm.save(documentNote);
       } else {
         // Need to save DocumentNote and Note
-        if (!confirm('Note will be saved as well?')) {
+        if (!confirm(localize('save-note-confirm'))) {
           return;
         }
         var data = documentNote;
