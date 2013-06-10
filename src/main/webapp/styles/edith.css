@@ -76,6 +76,10 @@ ul.notes {
                     display: none;
                 }
 
+                ul.notes li .metadata span.highlight p {
+                    margin: 2px 0;
+                }
+
                 ul.notes li .metadata span.description {
                     border-left: 3px solid #AAE;
                 }
