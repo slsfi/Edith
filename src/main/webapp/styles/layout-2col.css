@@ -1,13 +1,13 @@
 
 html, body, form { 
-    margin: 0; 
-    padding: 0; 
+  margin: 0; 
+  padding: 0; 
 }
 
 /* Hiding the regular scroll bars */
 body {
-    overflow: hidden;
-    max-height: 100%;
+  overflow: hidden;
+  max-height: 100%;
 }
 
 /**
@@ -15,44 +15,44 @@ body {
 */
 
 .header {
-    position: absolute;
-    top: 0;
-    height: 3.9em;
-    width: 100%;
-    padding-left: 1em;
-    padding-top: 1.1em;
-    border-bottom: 1px solid #CBE86B;
-    background-color: #f4fae0;
+  position: absolute;
+  top: 0;
+  height: 3.9em;
+  width: 100%;
+  padding-left: 1em;
+  padding-top: 1.1em;
+  border-bottom: 1px solid #CBE86B;
+  background-color: #f4fae0;
 }
 
 .abs-page-container {
-    margin:0; 
-    padding:0;
-    position: absolute;
-    top: 5em;
-    left: 1em;
-    right: 1em;
-    bottom: 0em;
+  margin:0; 
+  padding:0;
+  position: absolute;
+  top: 5em;
+  left: 1em;
+  right: 1em;
+  bottom: 0em;
 }
 
 .abs-left-container {
-    position: absolute;
-    top: 0em;
-    left: 0em;
-    bottom: 0em;
-    width: 40%;
-    /*overflow: auto;*/
+  position: absolute;
+  top: 0em;
+  left: 0em;
+  bottom: 0em;
+  width: 40%;
+  /*overflow: auto;*/
 }
 
 .abs-right-container {
-    position: absolute;
-    top: 0em;
-    right: 0em; 
-    bottom: 0em;
-    width: 60%;  
-    /*overflow: hidden;*/
+  position: absolute;
+  top: 0em;
+  right: 0em; 
+  bottom: 0em;
+  width: 60%;  
+  /*overflow: hidden;*/
 }
 
 .content {
-    padding: 1em;	
+  padding: 1em; 
 }

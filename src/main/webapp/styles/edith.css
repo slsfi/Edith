@@ -1,168 +1,168 @@
 .navbar .active>a.edith-nav-link, .navbar .active>a.edith-nav-link:hover {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    background: #f4fae0;
-    font-weight: bold;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background: #f4fae0;
+  font-weight: bold;
 }
 
 #document-management #comments .comment:last-child hr  {
-    display: none;
+  display: none;
 }
 
 .tab-operations {
-    border: 1px solid #CBE86B;
-    background-color: #f4fae0;
-    padding: 0.8em;
-    height: 30px;
-    line-height: 30px;
+  border: 1px solid #CBE86B;
+  background-color: #f4fae0;
+  padding: 0.8em;
+  height: 30px;
+  line-height: 30px;
 }
-    
-    .tab-operations button {
-        margin-right: 0.5em;
-    }
-    
-    .tab-operations .metadata-field-select {
-        display: inline-block;
-    }
+
+  .tab-operations button {
+    margin-right: 0.5em;
+  }
+
+  .tab-operations .metadata-field-select {
+    display: inline-block;
+  }
 
 .login {
-    padding: 5em;       
+  padding: 5em;       
 }
 
 .form-login {
-    margin-top: 2em;
+  margin-top: 2em;
 }
 
 .form-login .control-label {
-    padding-top: 0;
+  padding-top: 0;
 }
 
 .scrollable-area {
-    position: absolute;
-    top: 5em;
-    left: 1em;
-    bottom: 0em;
-    right: 1em;
-    overflow: auto;
+  position: absolute;
+  top: 5em;
+  left: 1em;
+  bottom: 0em;
+  right: 1em;
+  overflow: auto;
 }
 
 #note-list .scrollable-area {
-    top: 126px;
+  top: 126px;
 }
 
 ul.notes {
-    margin-left: 0;
-    list-style-type: none;
+  margin-left: 0;
+  list-style-type: none;
 }
 
-    ul.notes li:first-of-type {
-        padding-top: 5px;
+  ul.notes li:first-of-type {
+    padding-top: 5px;
+  }
+
+  ul.notes li .metadata {
+    margin: 0 1em 0.2em 10px;
+    padding: 0.2em 0.4em;
+    font-size: 90%;
+    line-height: 1;
+  }
+
+    ul.notes li .metadata span {
+      display: block;
     }
 
-    ul.notes li .metadata {
-        margin: 0 1em 0.2em 10px;
-        padding: 0.2em 0.4em;
-        font-size: 90%;
-        line-height: 1;
+      ul.notes li .metadata span.highlight {
+        margin: 0.5em 0.5em 0 0.5em;
+        padding: 0.5em;
+      }
+
+        ul.notes li .metadata span.highlight:empty {
+          display: none;
+        }
+
+        ul.notes li .metadata span.highlight p {
+          margin: 2px 0;
+        }
+
+      ul.notes li .metadata span.description {
+        border-left: 3px solid #AAE;
+      }
+
+      ul.notes li .metadata span.comment {
+        border-left: 3px solid #EAA;
+      }
+
+
+
+    ul.notes li .metadata #buttons {
+      display: none;
+      margin: 5px 0 5px;
     }
-
-        ul.notes li .metadata span {
-            display: block;
-        }
-
-            ul.notes li .metadata span.highlight {
-                margin: 0.5em 0.5em 0 0.5em;
-                padding: 0.5em;
-            }
-
-                ul.notes li .metadata span.highlight:empty {
-                    display: none;
-                }
-
-                ul.notes li .metadata span.highlight p {
-                    margin: 2px 0;
-                }
-
-                ul.notes li .metadata span.description {
-                    border-left: 3px solid #AAE;
-                }
-
-                ul.notes li .metadata span.comment {
-                    border-left: 3px solid #EAA;
-                }
-
-
-
-        ul.notes li .metadata #buttons {
-            display: none;
-            margin: 5px 0 5px;
-        }
 
 
 #content {
-    padding: 1em;       
+  padding: 1em;       
 }
 
 .ui-widget {
-    font-size: 1em;
+  font-size: 1em;
 }
 
 .add-documents {
-    display: inline-block;
-    float: left;
-    margin-right: 20px;
+  display: inline-block;
+  float: left;
+  margin-right: 20px;
 }
 
 form.import {
-    margin: 10px 0 15px 0;
+  margin: 10px 0 15px 0;
 }
 
-form.import input {
+  form.import input {
     display: inline-block;
     line-height: 1;
     margin-bottom: 10px;
     height: auto;
-}
+  }
 
 #note-edit h4 {
-    padding: 10px;
-    background-color: #F2F2F2;
+  padding: 10px;
+  background-color: #F2F2F2;
 }
 
-    #note-edit #comment h4 {
-        margin-top: 0;
-    }
+#note-edit #comment h4 {
+  margin-top: 0;
+}
 
 #note-edit form .control-group {
-    margin-top: 5px;
-    display: block;
-    min-height: 30px;
+  margin-top: 5px;
+  display: block;
+  min-height: 30px;
 }
 
 #note-edit form .control-label {
-    float: left;
-    width: 150px;
-    margin: 0;
+  float: left;
+  width: 150px;
+  margin: 0;
 }
 
 #note-edit form .controls {
-    display: table-cell;
+  display: table-cell;
 }
 
 #note-edit form input {
-    margin-top: -4px;
+  margin-top: -4px;
 }
 
 #directory-tree .dynatree-container {
-    margin: 10px 0 0 0;
+  margin: 10px 0 0 0;
 }
 
 .dynatree-node {
-    padding-right: 1em;	
+  padding-right: 1em;	
 }
 
 .documentNoteGrid {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
