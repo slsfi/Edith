@@ -67,15 +67,24 @@ ul.notes {
             display: block;
         }
 
-            ul.notes li .metadata span.comment {
+            ul.notes li .metadata span.highlight {
                 margin: 0.5em 0.5em 0 0.5em;
                 padding: 0.5em;
-                border-left: 3px solid #DDD;
             }
 
-                ul.notes li .metadata span.comment:empty {
+                ul.notes li .metadata span.highlight:empty {
                     display: none;
                 }
+
+                ul.notes li .metadata span.description {
+                    border-left: 3px solid #AAE;
+                }
+
+                ul.notes li .metadata span.comment {
+                    border-left: 3px solid #EAA;
+                }
+
+
 
         ul.notes li .metadata #buttons {
             display: none;
