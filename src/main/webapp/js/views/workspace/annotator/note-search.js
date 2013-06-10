@@ -33,7 +33,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         {type: 'post',
          contentType: 'application/json;charset=utf-8',
          data: JSON.stringify(data),
-         success: options.success});
+         success: options.success
+        });
     }
   });
   
@@ -48,9 +49,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var users = new UsersCollection();
   users.fetch();
   
-  var DateFormatter = function(row, cell, value, columnDef, data) {
+  var EditedByFormatter = function(row, cell, value, columnDef, data) {
     var value = data.get('note').editedOn;
-    return moment.unix(value / 1000).format("DD.MM.YYYY");
+    var editedBy = data.get('note').lastEditedBy.username;
+    return moment.unix(value / 1000).format("D.M.YY") + " (" + editedBy + ")";
+
   };
   
   var TypesFormatter = function(row, cell, value, columnDef, data) {
@@ -64,8 +67,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
       {sortable: false, id: 'types', name: localize('types-label'), field: 'note.types', formatter: TypesFormatter},
       {sortable: true, id: 'description', name: localize('description-label'), field: 'note.term.meaning'},
-      {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn', formatter: DateFormatter},
-      {sortable: true, id: 'lastEditedBy', name: localize('lastEditedBy-label'), field: 'note.lastEditedBy.username'},
+      {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn', formatter: EditedByFormatter},
       {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
       {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'},
       {sortable: false, id: 'comment', name: localize('comment'), field: 'note.comment.message'}];
@@ -73,6 +75,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
   var options = {
     formatterFactory: Slickback.BackboneModelFormatterFactory,
     autoHeight: true,
+    forceFitColumns: true,
     autoEdit: false,
     defaultColumnWidth: 100
   };
