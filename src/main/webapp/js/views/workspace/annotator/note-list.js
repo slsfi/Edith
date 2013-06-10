@@ -42,7 +42,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         if (self.$el.is(':visible')) {
           self.$('span').hide();
           _.each(columns, function(column) {
-            self.$('.' + column).show();
+            var el = self.$('.' + column);
+            if (el.text().length > 0) {
+              self.$('.' + column).show();
+            }
           });
         }
       });
