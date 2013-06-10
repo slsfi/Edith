@@ -20,7 +20,8 @@ window.rconfig = {
     json: 'libs/require/json',
     sprintf: 'libs/sprintf/sprintf',
     ckeditor: 'libs/ckeditor/ckeditor',
-    'ckeditor-jquery': 'libs/ckeditor/adapters/jquery'
+    'ckeditor-jquery': 'libs/ckeditor/adapters/jquery',
+    spin: 'libs/spin/spin'
   },
   shim: {
     'jquery': { exports: '$' },
@@ -64,6 +65,9 @@ window.rconfig = {
     },
     'ckeditor-jquery': {
       deps: ['jquery', 'ckeditor']
+    },
+    spin: {
+      exports: 'Spinner'
     },
     'bootstrap': { deps: ['jquery'] },
     'bootstrap-multiselect': { deps: ['bootstrap'] },

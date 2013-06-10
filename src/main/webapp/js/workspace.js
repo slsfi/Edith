@@ -7,7 +7,6 @@ require([], function() {
           function($, _, Backbone, Handlebars, vent, localize, moment, Annotator, DocumentManagement, Header) {
     new Header({el: $('#header')});
 
-
     Handlebars.registerHelper('dateFormat', function(timestamp, block) {
       var f = block.hash.format || "D.M.YYYY";
       return moment.unix(timestamp/1000).format(f);
@@ -57,8 +56,6 @@ require([], function() {
       router.navigate('', {trigger: true});
     });
 
-
   });
-
 });
 

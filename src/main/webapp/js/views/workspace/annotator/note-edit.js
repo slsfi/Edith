@@ -1,10 +1,10 @@
-define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
+define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 'spinner',
         'text!/templates/workspace/annotator/note-edit.html',
         'text!/templates/workspace/annotator/document-note-form.html',
         'text!/templates/workspace/annotator/note-form.html',
         'text!/templates/workspace/annotator/comment.html',
         'ckeditor', 'ckeditor-jquery'],
-       function($, _, Backbone, vent, Handlebars, localize, noteEditTemplate,
+       function($, _, Backbone, vent, Handlebars, localize, spinner, noteEditTemplate,
                 documentNoteFormTemplate, noteFormTemplate, commentTemplate,
                 CKEditor, ckEditorJquery) {
   Handlebars.registerHelper('when-contains', function(coll, x, options) {
@@ -109,6 +109,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
     
     save: function(data) {
       var self = this;
+      spinner('document-note:change');
       var request = {url: '/api/document-notes/' + data.id,
                      type: 'PUT',
                      dataType: 'json',
@@ -133,6 +134,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
     },
     
     remove: function() {
+      spinner('annotation:change', 'document-note:change');
       var self = this;
       var request = {url: '/api/document-notes/' + this.documentNote.id,
                      type: 'DELETE',
@@ -238,6 +240,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
     },
 
     save: function(data) {
+      spinner('note:change');
       var self = this;
       var request = {url: '/api/notes/' + data.id,
                      type: 'PUT',
@@ -252,6 +255,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
         request.url = '/api/notes/';
         request.type = 'POST';
       }
+      _(CKEditor.instances).each(function(editor) {
+        editor.destroy();
+      });
       $.ajax(request);
     }
   });
@@ -390,6 +396,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
         }
         var data = documentNote;
         data.note = this.noteForm.extract();
+        spinner('document-note:change', 'note:change', 'annotation:change');
         var request = {url: '/api/document-notes/',
                        type: 'POST',
                        dataType: 'json',

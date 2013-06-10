@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
-       function($, _, Backbone, vent, Handlebars) {
+define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner'],
+       function($, _, Backbone, vent, Handlebars, spinner) {
   var isInverseSelection = function(selection) {
     if (selection.anchorNode === selection.focusNode) {
       return selection.anchorOffset > selection.focusOffset;
@@ -109,8 +109,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars'],
     },
 
     render: function(id) {
+      spinner('document:loaded');
       var self = this;
-
       $.get('/api/documents/' + id, function(data) {
         //TODO Fix this to own view or something
         var title = _.last(data.path.split("/documents/trunk/"))

@@ -1,8 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
-        'localize',
+        'localize', 'spinner',
         'text!/templates/workspace/annotator/note-item.html',
         'views/workspace/annotator/metadata-field-select'],
-       function($, _, Backbone, vent, Handlebars, localize, noteItemTemplate,
+       function($, _, Backbone, vent, Handlebars, localize, spinner, noteItemTemplate,
                 MetadataFieldSelect) {
   // TODO: What happens upon delete/re-render?
   var NoteListItem = Backbone.View.extend({
@@ -81,10 +81,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     comment: function() {
       var noteId = this.documentNote.note.id;
+      spinner('comment:edit');
       $.getJSON('/api/notes/' + noteId + '/comment',
-          function(comment) {
-            vent.trigger('comment:edit', noteId, comment);
-          });
+                function(comment) {
+                  vent.trigger('comment:edit', noteId, comment);
+                });
     }
   });
 
@@ -100,8 +101,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     render: function(id) {
       new MetadataFieldSelect({el: this.$('.metadata-field-select')});
       this.$('ul.notes').empty();
+      spinner('document-notes:loaded');
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
+        vent.trigger('document-notes:loaded');
         _(data).each(function(documentNote) {
           self.$('ul.notes').append(new NoteListItem({data: documentNote}).el);
         });

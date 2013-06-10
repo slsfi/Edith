@@ -23,6 +23,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     save: function() {
       var message = this.$('textarea').val();
+      spinner('comment:change');
       // TODO: What if note is not already persisted?
       var self = this;
       var request = {url: '/api/notes/' + self.noteId + '/comment',
