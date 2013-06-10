@@ -53,6 +53,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
     open: function(documentNote) {
       this.isDirty = false;
+      this.selection = null;
       this.documentNote = documentNote;
       this.render();
     },
@@ -119,6 +120,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                        documentNote.document = documentNote.document.id;
                        vent.trigger('document-note:change', documentNote);
                        if (data.selection) {
+                         self.selection = null;
                          vent.trigger('annotation:change', documentNote.document);
                        }
                      }};
@@ -403,6 +405,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                        contentType: "application/json; charset=utf-8",
                        data: JSON.stringify(data),
                        success: function(data) {
+                         self.documentNoteForm.selection = null;
                          data.document = data.document.id;
                          vent.trigger('document-note:change', data);
                          vent.trigger('note:change', data.note);
