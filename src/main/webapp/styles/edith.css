@@ -6,6 +6,10 @@
     font-weight: bold;
 }
 
+#document-management #comments .comment:last-child hr  {
+    display: none;
+}
+
 .tab-operations {
     border: 1px solid #CBE86B;
     background-color: #f4fae0;
