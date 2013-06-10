@@ -52,7 +52,7 @@ ul.notes {
     list-style-type: none;
 }
 
-    ul.notes li:nth-child(1) {
+    ul.notes li:first-of-type {
         padding-top: 5px;
     }
 
@@ -61,12 +61,21 @@ ul.notes {
         padding: 0.2em 0.4em;
         font-size: 90%;
         line-height: 1;
-        font-style: italic;
     }
 
         ul.notes li .metadata span {
             display: block;
         }
+
+            ul.notes li .metadata span.comment {
+                margin: 0.5em 0.5em 0 0.5em;
+                padding: 0.5em;
+                border-left: 3px solid #DDD;
+            }
+
+                ul.notes li .metadata span.comment:empty {
+                    display: none;
+                }
 
         ul.notes li .metadata #buttons {
             display: none;
