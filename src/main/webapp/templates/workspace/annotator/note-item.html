@@ -8,8 +8,8 @@
   <span class="lastEditedBy">{{ note.lastEditedBy.username }}, {{ dateFormat note.editedOn }}</span>
   <span class="status">{{ note.status }}</span>
   <span class="document">{{ document.title }}</span>
-  <span class="highlight description">{{ note.term.meaning }}</span>
-  <span class="highlight comment">{{ note.comment.message }}</span>
+  <span class="highlight description">{{{ note.term.meaning }}}</span>
+  <span class="highlight comment">{{{ note.comment.message }}}</span>
 
   <div id="buttons">
     <button id="edit-note">{{ localize 'edit' }}</button>
