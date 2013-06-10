@@ -1,7 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
+        'localize',
         'text!/templates/workspace/annotator/note-item.html',
         'views/workspace/annotator/metadata-field-select'],
-       function($, _, Backbone, vent, Handlebars, noteItemTemplate,
+       function($, _, Backbone, vent, Handlebars, localize, noteItemTemplate,
                 MetadataFieldSelect) {
   // TODO: What happens upon delete/re-render?
   var NoteListItem = Backbone.View.extend({

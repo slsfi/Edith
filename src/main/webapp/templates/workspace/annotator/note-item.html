@@ -4,7 +4,7 @@
 
 <div class="metadata">
   <span class="fullSelection">{{ fullSelection }}</span>
-  <span class="types">{{ note.types }}</span>
+  <span class="types">{{#each note.types }} {{ localize this }} {{/each}}</span>
   <span class="lastEditedBy">{{ note.lastEditedBy.username }}, {{ dateFormat note.editedOn }}</span>
   <span class="status">{{ note.status }}</span>
   <span class="document">{{ document.title }}</span>
