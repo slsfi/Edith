@@ -120,18 +120,18 @@ form.import input {
 #note-edit form .control-group {
     margin-top: 5px;
     display: block;
-    height: 32px;
+    min-height: 30px;
 }
 
 #note-edit form .control-label {
     float: left;
     width: 150px;
     margin: 0;
-    display: inline-block;
+    display:;
 }
 
 #note-edit form .controls {
-    display: inline-block;
+    display: table-cell;
 }
 
 #note-edit form input {
