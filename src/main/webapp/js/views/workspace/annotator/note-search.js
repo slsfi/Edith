@@ -1,8 +1,9 @@
-define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', 'slickgrid', 'moment', 'localize',
+define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
+        'slickgrid', 'moment', 'localize', 'spinner',
         'text!/templates/workspace/annotator/note-search.html',
         'views/workspace/annotator/metadata-field-select'],
-       function($, _, Backbone, vent, Handlebars, Slickback, Slick, moment, localize, searchTemplate,
-                MetadataFieldSelect) {
+       function($, _, Backbone, vent, Handlebars, Slickback, Slick, moment,
+                localize, spinner, searchTemplate, MetadataFieldSelect) {
   
   var searchTemplate = Handlebars.compile(searchTemplate);
   
@@ -30,11 +31,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         delete data.per_page;
       }
       $.ajax('api/document-notes/query',
-        {type: 'post',
-         contentType: 'application/json;charset=utf-8',
-         data: JSON.stringify(data),
-         success: options.success
-        });
+             {type: 'post',
+              contentType: 'application/json;charset=utf-8',
+              data: JSON.stringify(data),
+              success: function(response) {
+                         vent.trigger('document-note-search:reset');
+                         options.success(response);
+                       }
+      });
     }
   });
   
@@ -101,7 +105,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
         documentNotes.extendScope({
           order: msg.sortCol.field,
           direction: (msg.sortAsc ? 'ASC' : 'DESC')
-        })
+        });
+        spinner('document-note-search:reset');
         documentNotes.fetchWithScope();
       });
 
@@ -144,6 +149,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       _.bindAll(this, 'render', 'search', 'select', 'comment', 'editNote', 'editInstance');
       vent.on('tab:open', function(view) {
         if (view === self && !self.initialized) {
+          spinner('document-note-search:reset');
           documentNotes.fetchWithPagination();
           self.initialized = true;
         }
@@ -162,6 +168,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
     },
     
     search: function() {
+      spinner('document-note-search:reset');
       var arr = this.$("form").serializeArray();
       var data = _(arr).reduce(function(acc, field) {
              if (field.value) {
@@ -184,6 +191,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback', '
       data.documents = _.map(nodes, function(n) { return n.data.documentId; });
       
       documentNotes.extendScope(data);
+      spinner(''); 
       documentNotes.fetchWithScope();
     },
   
