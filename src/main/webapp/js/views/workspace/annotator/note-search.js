@@ -69,12 +69,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       {sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), 
         field: 'shortenedSelection'},
       {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
-      {sortable: false, id: 'types', name: localize('types-label'), field: 'note.types', formatter: TypesFormatter},
+      {sortable: false, id: 'types', name: localize('type-label'), field: 'note.types', formatter: TypesFormatter},
       {sortable: true, id: 'description', name: localize('description-label'), field: 'note.term.meaning'},
       {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn', formatter: EditedByFormatter},
       {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
       {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'},
-      {sortable: false, id: 'comment', name: localize('comment'), field: 'note.comment.message'}];
+      {sortable: false, id: 'comment', name: localize('comment-label'), field: 'note.comment.message'}];
   
   var options = {
     formatterFactory: Slickback.BackboneModelFormatterFactory,
