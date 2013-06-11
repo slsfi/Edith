@@ -1,6 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
+define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner',
         'text!/templates/workspace/annotator/comment-edit.html'],
-       function($, _, Backbone, vent, Handlebars, commentEditTemplate) {
+       function($, _, Backbone, vent, Handlebars, spinner, commentEditTemplate) {
   var CommentEdit = Backbone.View.extend({
     template: Handlebars.compile(commentEditTemplate),
 
