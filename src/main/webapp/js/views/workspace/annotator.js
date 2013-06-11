@@ -26,6 +26,7 @@ define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap', '
         self.switchTab('note-edit');
         self.$('.nav-tabs a[data-target="note-edit"]').tab('show');
       });
+
       this.render();
     },
 

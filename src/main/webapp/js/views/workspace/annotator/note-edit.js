@@ -29,7 +29,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
              'click #update-full-selection': 'annotate'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'save', 'setDirty', 'enableAnnotation', 'annotate', 'extract',
+      _.bindAll(this, 'render', 'save', 'setDirty', 'toggleAnnotationEnabled', 'annotate', 'extract',
                       'hasPersistedNote', 'close', 'isPersisted');
       var self = this;
       vent.on('document-note:change', function(documentNote) {
@@ -67,14 +67,19 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       this.$('#save-document-note').removeAttr('disabled');
     },
 
-    enableAnnotation: function(documentId, noteId, selection) {
-      this.$('#update-full-selection').removeAttr('disabled');
-      this.currentSelection = {'documentId': documentId, 'noteId': noteId, 'selection': selection};
+    toggleAnnotationEnabled: function(documentId, noteId, selection) {
+      if (selection && selection.selection.length > 0) {
+        this.$('#update-full-selection').removeAttr('disabled');
+        this.currentSelection = {'documentId': documentId, 'noteId': noteId, 'selection': selection};
+      } else {
+        this.$('#update-full-selection').attr('disabled', 'disabled');
+        this.currentSelection = {};
+      }
     },
 
     annotate: function() {      
       if (!this.documentNote) {
-        this.documentNote = {note: currentSelection.noteId};
+        this.documentNote = {note: this.currentSelection.noteId};
       }
       this.document = this.currentSelection.documentId;
       this.selection = this.currentSelection.selection;
@@ -327,9 +332,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       _.bindAll(this, 'render', 'openNote', 'openDocumentNote', 'create',
                       'saveDocumentNote', 'saveNote', 'deleteDocumentNote', 'createDocumentNote');
       var self = this;
-      vent.on('document:selection', function(documentId, selection) {
+      vent.on('document:selection-change', function(documentId, selection) {
         if (self.$el.is(':visible')) {
-          self.documentNoteForm.enableAnnotation(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
+          self.documentNoteForm.toggleAnnotationEnabled(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
         }
       });
       vent.on('note:create', this.create);
@@ -382,7 +387,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     },
 
     createDocumentNote: function(documentId, selection) {
-      this.documentNoteForm.annotate(documentId, null, selection);
+      this.documentNoteForm.toggleAnnotationEnabled(documentId, null, selection);
+      this.documentNoteForm.annotate();
     },
 
     saveDocumentNote: function(evt) {

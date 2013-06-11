@@ -93,9 +93,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     events: {'click #create-note': 'createNote'},
     
     initialize: function() {
-      _.bindAll(this, 'render', 'createNote');
+      _.bindAll(this, 'render', 'createNote', 'toggleCreateButton');
       // XXX: Ghosts?
       vent.on('document:open annotation:change', this.render);
+      vent.on('document:selection-change', this.toggleCreateButton);
     },
 
     render: function(id) {
@@ -109,6 +110,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
           self.$('ul.notes').append(new NoteListItem({data: documentNote}).el);
         });
       });
+    },
+
+    toggleCreateButton: function(documentId, selection) {
+      if (selection && selection.selection.length > 0) {
+        this.$('#create-note').removeAttr('disabled');
+      } else {
+        this.$('#create-note').attr('disabled', 'disabled');
+      }
     },
     
     createNote: function() {

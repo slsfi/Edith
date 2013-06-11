@@ -160,9 +160,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner'],
 
     selectionChange: function() {
       var selection = this.getSelection();
-      if (selection) {
-        vent.trigger('document:selection', this.documentId, selection);
-      }
+      vent.trigger('document:selection-change', this.documentId, selection);
     }
   });
 
