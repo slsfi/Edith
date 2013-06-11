@@ -111,7 +111,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       });
 
       grid.onClick.subscribe(function() {
-        self.$('button').removeAttr('disabled');
+        self.$('button.grid-action').removeAttr('disabled');
       });
       
       documentNotes.onRowCountChanged.subscribe(function() {
