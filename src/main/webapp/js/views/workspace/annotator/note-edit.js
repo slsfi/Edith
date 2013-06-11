@@ -20,12 +20,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
   });
 
   var DocumentNoteForm = Backbone.View.extend({
+    // used when updating the annotation
+    currentSelection: {},
+
     template: Handlebars.compile(documentNoteFormTemplate),
 
-    events: {'keyup input': 'setDirty'},
+    events: {'keyup input': 'setDirty',
+             'click #update-full-selection': 'annotate'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'save', 'setDirty', 'annotate', 'extract',
+      _.bindAll(this, 'render', 'save', 'setDirty', 'enableAnnotation', 'annotate', 'extract',
                       'hasPersistedNote', 'close', 'isPersisted');
       var self = this;
       vent.on('document-note:change', function(documentNote) {
@@ -63,15 +67,22 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       this.$('#save-document-note').removeAttr('disabled');
     },
 
-    annotate: function(documentId, noteId, selection) {
+    enableAnnotation: function(documentId, noteId, selection) {
+      this.$('#update-full-selection').removeAttr('disabled');
+      this.currentSelection = {'documentId': documentId, 'noteId': noteId, 'selection': selection};
+    },
+
+    annotate: function() {      
       if (!this.documentNote) {
-        this.documentNote = {note: noteId};
+        this.documentNote = {note: currentSelection.noteId};
       }
-      this.document = documentId;
-      this.selection = selection;
-      this.documentNote.fullSelection = selection.selection;
+      this.document = this.currentSelection.documentId;
+      this.selection = this.currentSelection.selection;
+      this.documentNote.fullSelection = this.currentSelection.selection.selection;
       this.render();
       this.setDirty();
+      this.$('#update-full-selection').attr('disabled', 'disabled');
+      this.currentSelection = {};
     },
     
     close: function() {
@@ -313,12 +324,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
              'click #delete-document-note': 'deleteDocumentNote'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'openNote', 'openDocumentNote', 'create', 'annotate',
+      _.bindAll(this, 'render', 'openNote', 'openDocumentNote', 'create',
                       'saveDocumentNote', 'saveNote', 'deleteDocumentNote', 'createDocumentNote');
       var self = this;
       vent.on('document:selection', function(documentId, selection) {
         if (self.$el.is(':visible')) {
-          self.annotate(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
+          self.documentNoteForm.enableAnnotation(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
         }
       });
       vent.on('note:create', this.create);
@@ -372,16 +383,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
     createDocumentNote: function(documentId, selection) {
       this.documentNoteForm.annotate(documentId, null, selection);
-    },
-
-    annotate: function(documentId, noteId, selection) {
-      // XXX: Do we need dirty checks?
-//      if (this.documentNoteForm.isDirty) {
-//        if (!confirm('U haz unsaved changes, continue?')) {
-//          return;
-//        }
-//      }
-      this.documentNoteForm.annotate(documentId, noteId, selection);
     },
 
     saveDocumentNote: function(evt) {

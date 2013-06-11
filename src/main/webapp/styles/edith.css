@@ -150,7 +150,7 @@ form.import {
   display: table-cell;
 }
 
-#note-edit form input {
+#note-edit form input, #note-edit form button {
   margin-top: -4px;
 }
 
