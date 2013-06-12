@@ -21,15 +21,17 @@ define(['jquery', 'spin', 'vent'],
 
   var sp = new Spinner(options);
   var $el = $('#spinner');
+  var events = {};
 
   var spinner = function() {
     sp.spin($el.show().get(0));
-    var events = arguments;
-    var n = 0;
-    _.each(events, function(evt) {
+    _.each(arguments, function(arg) {
+                        events[arg] = true;
+                      });
+    _.each(events, function(x, evt) {
                      vent.once(evt, function() {
-                       ++n;
-                       if (n >= events.length) {
+                       delete events[evt];
+                       if (_.isEmpty(events)) {
                          $el.hide();
                          sp.stop();
                        }
