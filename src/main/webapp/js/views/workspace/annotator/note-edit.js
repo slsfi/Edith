@@ -3,10 +3,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
         'text!/templates/workspace/annotator/document-note-form.html',
         'text!/templates/workspace/annotator/note-form.html',
         'text!/templates/workspace/annotator/comment.html',
-        'ckeditor', 'ckeditor-jquery'],
+        'ckeditor', 'ckeditor-jquery', 'ckeditor-setup'],
        function($, _, Backbone, vent, Handlebars, localize, spinner, noteEditTemplate,
                 documentNoteFormTemplate, noteFormTemplate, commentTemplate,
-                CKEditor, ckEditorJquery) {
+                CKEditor, ckEditorJquery, ckEditorSetup) {
   Handlebars.registerHelper('when-contains', function(coll, x, options) {
     if (_.contains(coll, x)) {
       return options.fn(this);
@@ -168,22 +168,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     }
   });
 
-  var ckEditorSetup = {removePlugins: 'elementspath',
-                       height: '40px',
-                       skin: 'kama',
-                       entities: false,
-                       extraPlugins: 'autogrow,onchange',
-                       autoGrow_minHeight: '40',
-                       resize_enabled: false,
-                       startupFocus: false,
-                       toolbarCanCollapse: false,
-                       toolbar: 'edith',
-                       toolbar_edith: [{name: 'basicstyles',
-                                        items: ['SpecialChar', 'Bold','Italic',
-                                                'Underline', 'Subscript',
-                                                'Superscript', '-', 'RemoveFormat']},
-                                                {name: 'links', items: ['Link', 'Unlink']},
-                                                {name: 'document', items: ['Source']}]};
 
   var NoteForm = Backbone.View.extend({
     events: {'keyup input': 'setDirty',

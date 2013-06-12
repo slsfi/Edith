@@ -8,14 +8,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
   var NoteListItem = Backbone.View.extend({
     tagName: 'li',
 
-    template: Handlebars.compile(noteItemTemplate),
-
-    events: {'click a': 'click',
-             'click #edit-note': 'edit',
+    events: {'click #edit-note': 'edit',
              'click #comment-note': 'comment'},
 
+    template: Handlebars.compile(noteItemTemplate),
+
     initialize: function() {
-      _.bindAll(this, 'render', 'click', 'select', 'edit', 'comment');
+      _.bindAll(this, 'render', 'edit', 'comment');
       this.documentNote = this.options.data;
       this.render();
       var self = this;
@@ -37,7 +36,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
           self.render();
         }
       });
-      vent.on('document-note:select', this.select);
       vent.on('metadata-field-select:change', function(columns) {
         if (self.$el.is(':visible')) {
           self.$('span').hide();
@@ -53,26 +51,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     render: function() {
       this.$el.html(this.template(this.documentNote));
-      if (this.selected) {
-        this.$el.css('background', '#EEE');
-        this.$('#buttons').show();
-      } else {
-        this.$el.css('background', 'white');
-        this.$('#buttons').hide();
-      }
-    },
-
-    click: function(evt) {
-      evt.preventDefault();
-      vent.trigger('document-note:select', this.documentNote.id);
-    },
-
-    select: function(id) {
-      this.selected = this.documentNote.id === id;
-      if (this.selected) {
-        this.el.scrollIntoView(true);
-      }
-      this.render();
+      this.$el.attr('data-id', this.documentNote.id);
     },
 
     edit: function() {
@@ -86,17 +65,19 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                 function(comment) {
                   vent.trigger('comment:edit', noteId, comment);
                 });
-    }
+    },
   });
 
   var NoteList = Backbone.View.extend({
-    events: {'click #create-note': 'createNote'},
-    
+    events: {'click #create-note': 'createNote',
+             'click #select-note': 'clickNote'},
+
     initialize: function() {
-      _.bindAll(this, 'render', 'createNote', 'toggleCreateButton');
-      // XXX: Ghosts?
+      _.bindAll(this, 'render', 'createNote', 'toggleCreateButton',
+                'selectNote', 'clickNote');
       vent.on('document:open annotation:change', this.render);
       vent.on('document:selection-change', this.toggleCreateButton);
+      vent.on('document-note:select', this.selectNote);
     },
 
     render: function(id) {
@@ -109,6 +90,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         _(data).each(function(documentNote) {
           self.$('ul.notes').append(new NoteListItem({data: documentNote}).el);
         });
+        console.log(self.$el);
+        self.$('.note-buttons').hide();
       });
     },
 
@@ -119,10 +102,25 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         this.$('#create-note').attr('disabled', 'disabled');
       }
     },
-    
+
+    selectNote: function(id) {
+      this.$('li').removeClass('selected');
+      this.$('.note-buttons').hide();
+      var $el = this.$('[data-id="' + id + '"]');
+      $el.addClass('selected');
+      $el.find('.note-buttons').show();
+      $el.get(0).scrollIntoView(true);
+
+    },
+
+    clickNote: function(evt) {
+      evt.preventDefault();
+      var id = $(evt.target).attr('data-id');
+      vent.trigger('document-note:select', id);
+    },
+
     createNote: function() {
       var selection = rawSelection();
-     
       if (selection.toString() === '') {
         alert(localize('no-text-selected'));
       } else {

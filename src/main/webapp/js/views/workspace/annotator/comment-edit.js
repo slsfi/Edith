@@ -1,6 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner',
+        'ckeditor', 'ckeditor-jquery', 'ckeditor-setup',
         'text!/templates/workspace/annotator/comment-edit.html'],
-       function($, _, Backbone, vent, Handlebars, spinner, commentEditTemplate) {
+       function($, _, Backbone, vent, Handlebars, spinner, CKEditor,
+                ckEditorJquery, ckEditorSetup, commentEditTemplate) {
   var CommentEdit = Backbone.View.extend({
     template: Handlebars.compile(commentEditTemplate),
 
@@ -19,6 +21,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner',
     render: function() {
       this.$el.modal({show: true});
       this.$el.html(this.template(this.comment));
+      this.$('.wysiwyg').ckeditor(ckEditorSetup);
     },
 
     save: function() {
