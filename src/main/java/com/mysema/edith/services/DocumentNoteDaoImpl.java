@@ -116,6 +116,19 @@ public class DocumentNoteDaoImpl extends AbstractDao<DocumentNote> implements Do
     }
 
     @Override
+    public Long getLastNoteTimestampForDocument(Long id) {
+        List<Long> editedOn = from(documentNote)
+                                .where(
+                                    documentNote.document.id.eq(id), 
+                                    documentNote.deleted.isFalse())
+                                .orderBy(documentNote.note.editedOn.desc())
+                                .limit(1)
+                                .list(documentNote.note.editedOn);
+
+        return (editedOn.isEmpty() ? 0 : editedOn.get(0));
+    }
+
+    @Override
     public List<DocumentNote> getOfTerm(Long termId) {
         return from(documentNote)
                 .where(

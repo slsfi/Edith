@@ -208,7 +208,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             Document doc = getDocumentForPath(file.getPath());
             rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.getIsFolder(),
                     file.getChildren(), file.getHasChildren(), doc.getId(), doc.getId().equals(id),
-                    documentNoteDao.getNoteCountForDocument(doc.getId())));
+                    documentNoteDao.getNoteCountForDocument(doc.getId()), 
+                    documentNoteDao.getLastNoteTimestampForDocument(doc.getId())));
         }
         Collections.sort(rv, new Comparator<FileItemWithDocumentId>() {
             @Override

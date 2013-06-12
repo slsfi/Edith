@@ -14,13 +14,16 @@ public class FileItemWithDocumentId extends FileItem {
 
     private final long noteCount;
 
+    private final Long lastNote;
+
     public FileItemWithDocumentId(String title, String path, boolean isFolder,
             List<FileItem> children, boolean hasChildren, Long documentId, boolean isSelected,
-            long noteCount) {
+            long noteCount, Long lastNote) {
         super(title, path, isFolder, children, hasChildren);
         this.documentId = documentId;
         this.isSelected = isSelected;
         this.noteCount = noteCount;
+        this.lastNote = lastNote;
     }
 
     public Long getDocumentId() {
@@ -33,5 +36,9 @@ public class FileItemWithDocumentId extends FileItem {
 
     public long getNoteCount() {
         return noteCount;
+    }
+
+    public Long getLastNote() {
+        return lastNote;
     }
 }

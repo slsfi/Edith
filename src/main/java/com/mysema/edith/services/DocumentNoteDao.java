@@ -98,4 +98,10 @@ public interface DocumentNoteDao extends Dao<DocumentNote, Long> {
      */
     long getNoteCountForDocument(Long id);
 
+    /**
+     * @param id
+     * @return
+     */
+    Long getLastNoteTimestampForDocument(Long id);
+
 }

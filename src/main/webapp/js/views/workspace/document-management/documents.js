@@ -1,9 +1,22 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
         'handlebars', 'text!/templates/workspace/document-management/documents.html', 
+        'text!/templates/workspace/document-management/document-info.html',
         'dynatree'],
-  function($, _, Backbone, vent, localize, Handlebars, template) {
+  function($, _, Backbone, vent, localize, Handlebars, template, docInfoTemplate, dynatree) {
 
   var template = Handlebars.compile(template);
+  var docInfoTemplate = Handlebars.compile(docInfoTemplate);
+
+  var DocumentItemView = Backbone.View.extend({
+    initialize: function() {
+      _.bindAll(this);
+      this.render();
+    },
+
+    render: function() {
+      this.$el.append(docInfoTemplate(this.model));
+    }
+  });
   
   var DocumentsView = Backbone.View.extend({
     events: {'submit .import': 'submit'},
@@ -40,29 +53,18 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
           }
         },
         
-        onActivate: function(node) {
-          if (node.data.isFolder) {
-            // TODO: Open + delete links?
-          } else {
-            // TODO: Open + delete links?
-          }
+        onRender: function(node, span) {
+          if (!node.data.isFolder) {
+            new DocumentItemView({el: $(span), model: node.data});
+          } 
         },
-        
+
         onLazyRead: function(node) {
           node.appendAjax({
             url: '/api/files/',
             data: 'path=' + node.data.path
           });
         }
-
-      });
-            
-      this.$("#directory-tree").on("mouseenter", ".dynatree-node", function() {
-        $(this).find(".actions").show();
-      });      
-      
-      this.$("#directory-tree").on("mouseleave", ".dynatree-node", function() {
-        $(this).find(".actions").hide();
       });
       
     },
@@ -82,3 +84,4 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
   return DocumentsView;
 });
+

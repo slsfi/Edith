@@ -6,6 +6,15 @@
   font-weight: bold;
 }
 
+#document-management .document-info {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px;
+  font-size: 80%;
+  line-height: 1;
+  color: #AAA;
+}
+
 #document-management #comments .comment:last-child hr  {
   display: none;
 }
