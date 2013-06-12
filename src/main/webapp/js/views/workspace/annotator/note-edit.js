@@ -413,7 +413,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     
     deleteDocumentNote: function(evt) {
       evt.preventDefault();
-      if (confirm('Delete document note?')) {
+      if (confirm(localize('confirm-document-note-delete'))) {
         this.documentNoteForm.remove();
       }
     }
