@@ -108,6 +108,9 @@ ul.notes {
       margin: 5px 0 5px;
     }
 
+#document {
+  margin-bottom: 50px;
+}
 
 #content {
   padding: 1em;       
