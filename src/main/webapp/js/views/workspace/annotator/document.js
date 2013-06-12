@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner'],
-       function($, _, Backbone, vent, Handlebars, spinner) {
+define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'raw-selection'],
+       function($, _, Backbone, vent, Handlebars, spinner, rawSelection) {
   var isInverseSelection = function(selection) {
     if (selection.anchorNode === selection.focusNode) {
       return selection.anchorOffset > selection.focusOffset;
@@ -11,17 +11,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner'],
   var whitespaceRe = new RegExp(/\s+/g);
 
   var getBaseSelection = function() {
-    var selection = null;
-    if (window.getSelection) {
-      selection = window.getSelection();
-    } else if (document.getSelection) {
-      selection = document.getSelection();
-    } else {
-      selection = document.selection.createRange().text;
-    }
+    var selection = rawSelection();
+
     if (selection.toString() === '') {
       return;
     }
+    
     var startNode = selection.anchorNode;
     var endNode = selection.focusNode;
     var startOffset = selection.anchorOffset;
@@ -87,6 +82,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner'],
     initialize: function() {
       _.bindAll(this, 'render', 'selectionChange', 'selectNote', 'getSelection');
       var self = this;
+        
       vent.on('document:open annotation:change', function(id) {
         self.documentId = id;
         self.render(id);
@@ -102,7 +98,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner'],
       });
       vent.on('note:new', function() {
         var selection = self.getSelection();
-        if (selection) {
+        if (selection && selection.selection.length > 0) {
           vent.trigger('document-note:create', self.documentId, selection);
         }
       });

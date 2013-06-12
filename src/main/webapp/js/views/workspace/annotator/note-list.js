@@ -1,8 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
-        'localize', 'spinner',
+        'localize', 'spinner', 'raw-selection',
         'text!/templates/workspace/annotator/note-item.html',
         'views/workspace/annotator/metadata-field-select'],
-       function($, _, Backbone, vent, Handlebars, localize, spinner, noteItemTemplate,
+       function($, _, Backbone, vent, Handlebars, localize, spinner, rawSelection, noteItemTemplate,
                 MetadataFieldSelect) {
   // TODO: What happens upon delete/re-render?
   var NoteListItem = Backbone.View.extend({
@@ -121,7 +121,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
     
     createNote: function() {
-      vent.trigger('note:create');
+      var selection = rawSelection();
+     
+      if (selection.toString() === '') {
+        alert(localize('no-text-selected'));
+      } else {
+        vent.trigger('note:create');
+      }
     }
   });
 
