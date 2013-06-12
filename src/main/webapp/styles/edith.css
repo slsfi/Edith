@@ -182,6 +182,11 @@ form.import {
   margin-top: 10px;
 }
 
+  div.documentNoteGrid div.selected {
+     background: #dcdcdc;
+  }
+
+
 #spinner {
   position: absolute;
   top: 0;
