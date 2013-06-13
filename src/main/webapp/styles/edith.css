@@ -19,6 +19,13 @@
   display: none;
 }
 
+
+#document-title {
+  margin: 22px 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #DDD;
+}
+
 .tab-operations {
   border: 1px solid #CBE86B;
   background-color: #f4fae0;
