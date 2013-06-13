@@ -11,3 +11,4 @@ devops/*.lock
 .classpath
 .project
 .settings
+etc/*dump
