@@ -50,6 +50,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     render: function() {
+      this.attributes = {'data-id': this.documentNote.id};
       this.$el.html(this.template(this.documentNote));
       this.$el.attr('data-id', this.documentNote.id);
     },
@@ -106,7 +107,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     selectNote: function(id) {
       this.$('li').removeClass('selected');
       this.$('.note-buttons').hide();
-      var $el = this.$('[data-id="' + id + '"]');
+      var $el = this.$('li[data-id="' + id + '"]');
       $el.addClass('selected');
       $el.find('.note-buttons').show();
       $el.get(0).scrollIntoView(true);

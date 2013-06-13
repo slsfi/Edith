@@ -69,6 +69,10 @@ ul.notes {
     padding-top: 5px;
   }
 
+  ul.notes li.selected {
+    background: #dcdcdc;
+  }
+
   ul.notes li .metadata {
     margin: 0 1em 0.2em 10px;
     padding: 0.2em 0.4em;
@@ -177,6 +181,11 @@ form.import {
 .documentNoteGrid {
   margin-top: 10px;
 }
+
+  div.documentNoteGrid div.selected {
+     background: #dcdcdc;
+  }
+
 
 #spinner {
   position: absolute;

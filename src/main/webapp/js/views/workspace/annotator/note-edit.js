@@ -159,7 +159,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                      dataType: 'json',
                      contentType: "application/json; charset=utf-8",
                      success: function(data) {
-                       vent.trigger('annotation:change', self.documentNote.document);
+                       vent.trigger('annotation:change', self.documentNote.document.id);
                        // TODO: Note's DocumentNote count?
 //                       vent.trigger('note:change', self.note.id);
                        vent.trigger('document-note:change', data);
@@ -413,7 +413,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     
     deleteDocumentNote: function(evt) {
       evt.preventDefault();
-      if (confirm('Delete document note?')) {
+      if (confirm(localize('confirm-document-note-delete'))) {
         this.documentNoteForm.remove();
       }
     }
