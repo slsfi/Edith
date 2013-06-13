@@ -184,6 +184,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                self.note = note;
                                self.render();
                              });
+
       this.render();
     },
 
@@ -191,6 +192,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       if (!this.note) {
         return;
       }
+
       _(CKEditor.instances).each(function(editor) {
         editor.destroy();
       });
@@ -202,6 +204,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
              function(editor) {
                editor.on('change', function() { self.setDirty(); });
              });
+      this.$('#type-select').multiselect({});
     },
     
     open: function(note) {
@@ -232,7 +235,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                  }
                                  return acc;
                                }, {});
-      var types = _(this.$('input[name="types"]').serializeArray())
+
+      var types = _(this.$('select[name="type"]').serializeArray())
                     .map(function(field) {
                            return field.value;
                          });

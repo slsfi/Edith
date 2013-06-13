@@ -14,7 +14,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     template: Handlebars.compile(noteItemTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'render', 'edit', 'comment');
+      _.bindAll(this, 'showFieldsAccordingToSelection', 'render', 'edit', 'comment');
+      this.metadataSelect = this.options.metadataSelect;
       this.documentNote = this.options.data;
       this.render();
       var self = this;
@@ -38,13 +39,20 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       });
       vent.on('metadata-field-select:change', function(columns) {
         if (self.$el.is(':visible')) {
-          self.$('span').hide();
-          _.each(columns, function(column) {
-            var el = self.$('.' + column);
-            if (el.text().length > 0) {
-              self.$('.' + column).show();
-            }
-          });
+          self.showFieldsAccordingToSelection(columns);
+        }
+      });
+
+    },
+
+    showFieldsAccordingToSelection: function(columns) {
+      this.$('span').removeClass('selected-metadata');
+      this.$('span').addClass('unselected-metadata');
+      _.each(columns, function(column) {
+        var el = this.$('.' + column);
+        if (el.text().length > 0) {
+          this.$('.' + column).removeClass('unselected-metadata');
+           this.$('.' + column).addClass('selected-metadata');
         }
       });
     },
@@ -53,6 +61,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.attributes = {'data-id': this.documentNote.id};
       this.$el.html(this.template(this.documentNote));
       this.$el.attr('data-id', this.documentNote.id);
+      this.showFieldsAccordingToSelection(this.metadataSelect.getColumns());
     },
 
     edit: function() {
@@ -82,16 +91,17 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     render: function(id) {
-      new MetadataFieldSelect({el: this.$('.metadata-field-select')});
+      var metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select')});
       this.$('ul.notes').empty();
       spinner('document-notes:loaded');
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
         vent.trigger('document-notes:loaded');
         _(data).each(function(documentNote) {
-          self.$('ul.notes').append(new NoteListItem({data: documentNote}).el);
+          var item = new NoteListItem({metadataSelect: metadataSelect, data: documentNote});
+          self.$('ul.notes').append(item.el);
+          item.render();
         });
-        console.log(self.$el);
         self.$('.note-buttons').hide();
       });
     },

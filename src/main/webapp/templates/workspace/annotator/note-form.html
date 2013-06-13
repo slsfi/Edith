@@ -1,42 +1,90 @@
 <h4>{{ localize 'noteEdit' }}</h4>
-<div>
-  
-  {{ dateFormat editedOn }}
-  {{ lastEditedBy.username }}
-  {{#each allEditors }} {{ this.username }} {{/each}}
-</div>
-<div>{{ localize 'type-label' }}
-  {{ localize 'WORD_EXPLANATION' }} <input value="WORD_EXPLANATION" name="types" type="checkbox" {{#when-contains types 'WORD_EXPLANATION'}} }} checked {{/when-contains}}></input>
-  {{ localize 'LITERARY' }} <input value="LITERARY" name="types" type="checkbox" {{#when-contains types 'LITERARY'}} }} checked {{/when-contains}}></input>
-  {{ localize 'HISTORICAL' }} <input value="HISTORICAL" name="types" type="checkbox" {{#when-contains types 'HISTORICAL'}} }} checked {{/when-contains}}></input>
-  {{ localize 'DICTUM' }} <input value="DICTUM" name="types" type="checkbox" {{#when-contains types 'DICTUM'}} }} checked {{/when-contains}}></input>
-  {{ localize 'CRITIQUE' }} <input value="CRITIQUE" name="types" type="checkbox" {{#when-contains types 'CRITIQUE'}} }} checked {{/when-contains}}></input>
-  {{ localize 'TITLE' }} <input value="TITLE" name="types" type="checkbox" {{#when-contains types 'TITLE'}} }} checked {{/when-contains}}></input>
-  {{ localize 'TRANSLATION' }} <input value="TRANSLATION" name="types" type="checkbox" {{#when-contains types 'TRANSLATION'}} }} checked {{/when-contains}}></input>
-  {{ localize 'REFERENCE' }} <input value="REFERENCE" name="types" type="checkbox" {{#when-contains types 'REFERENCE'}} }} checked {{/when-contains}}></input>
-</div>
-<div>{{ localize 'basicForm-label' }}: <input type="text" name="term.basicForm" value="{{ term.basicForm }}"></input></div>
-<div>{{ localize 'basicFormLanguage-label' }}:
-  <select name="term.language">
-    <option value="FINNISH" {{#when-eq term.language 'FINNISH'}} selected {{/when-eq}}>{{ localize 'FINNISH' }}</option>
-    <option value="SWEDISH" {{#when-eq term.language 'SWEDISH'}} selected {{/when-eq}}>{{ localize 'SWEDISH' }}</option>
-    <option value="FRENCH" {{#when-eq term.language 'FRENCH'}} selected {{/when-eq}}>{{ localize 'FRENCH' }}</option>
-    <option value="LATIN" {{#when-eq term.language 'LATIN'}} selected {{/when-eq}}>{{ localize 'LATIN' }}</option>
-    <option value="GERMAN" {{#when-eq term.language 'GERMAN'}} selected {{/when-eq}}>{{ localize 'GERMAN' }}</option>
-    <option value="RUSSIAN" {{#when-eq term.language 'RUSSIAN'}} selected {{/when-eq}}>{{ localize 'RUSSIAN' }}</option>
-    <option value="ENGLISH" {{#when-eq term.language 'ENGLISH'}} selected {{/when-eq}}>{{ localize 'ENGLISH' }}</option>
-    <option value="ITALIAN" {{#when-eq term.language 'ITALIAN'}} selected {{/when-eq}}>{{ localize 'ITALIAN' }}</option>
-    <option value="GREEK" {{#when-eq term.language 'GREEK'}} selected {{/when-eq}}>{{ localize 'GREEK' }}</option>
-    <option value="OTHER" {{#when-eq term.language 'OTHER'}} selected {{/when-eq}}>{{ localize 'OTHER' }}</option>
-  </select>
-</div>
-<div>{{ localize 'basicFormMeaning-label' }}: <textarea class="wysiwyg" name="term.meaning" rows="8" cols="50">{{ term.meaning }}</textarea></div>
-<div>{{ localize 'sources-label' }}: <textarea class="wysiwyg" name="sources" rows="8" cols="50">{{ sources }}</textarea></div>
-<div>{{ localize 'status-label' }}:
-  <select name="status">
-    <option value="INITIAL" {{#when-eq status 'INITIAL'}} selected {{/when-eq}}>{{ localize 'INITIAL' }}</input>
-    <option value="DRAFT" {{#when-eq status 'DRAFT'}} selected {{/when-eq}}>{{ localize 'DRAFT' }}</input>
-    <option value="FINISHED" {{#when-eq status 'FINISHED'}} selected {{/when-eq}}>{{ localize 'FINISHED' }}</input>
-  </select>
-</div>
-<div><button id="save-note" disabled>{{ localize 'save' }}</button></div>
+<form>
+  {{#if editedOn}}
+    <div class="control-group">
+      <label class="control-label">{{localize 'last-edited'}}</label>
+      <div class="controls">{{ dateFormat editedOn }} ({{ lastEditedBy.username }})</div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">{{localize 'all-editors'}}</label>
+      <div class="controls">{{#each allEditors }} {{ this.username }} {{/each}}</div>
+    </div>
+  {{/if}}
+
+  <div class="control-group">
+    <label for="type" class="control-label">
+      {{localize 'type-label'}}
+    </label>
+    <div class="controls">
+      <select id="type-select" name="type" multiple="multiple">
+        <option value="WORD_EXPLANATION" {{#when-contains types 'WORD_EXPLANATION'}}selected{{/when-contains}}>{{localize 'WORD_EXPLANATION'}}</option>
+        <option value="LITERARY" {{#when-contains types 'LITERARY'}}selected{{/when-contains}}>{{localize 'LITERARY'}}</option>
+        <option value="HISTORICAL" {{#when-contains types 'HISTORICAL'}}selected{{/when-contains}}>{{localize 'HISTORICAL'}}</option>
+        <option value="DICTUM" {{#when-contains types 'DICTUM'}}selected{{/when-contains}}>{{localize 'DICTUM'}}</option>
+        <option value="CRITIQUE" {{#when-contains types 'CRITIQUE'}}selected{{/when-contains}}>{{localize 'CRITIQUE'}}</option>
+        <option value="TITLE" {{#when-contains types 'TITLE'}}selected{{/when-contains}}>{{localize 'TITLE'}}</option>
+        <option value="TRANSLATION" {{#when-contains types 'TRANSLATION'}}selected{{/when-contains}}>{{localize 'TRANSLATION'}}</option>
+        <option value="REFERENCE" {{#when-contains types 'REFERENCE'}}selected{{/when-contains}}>{{localize 'REFERENCE'}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="control-group">
+    <label for="term.basicForm" class="control-label">{{localize 'basicForm-label'}}</label>
+    <div class="controls">
+      <input type="text" name="term.basicForm" value="{{ term.basicForm }}"></input>
+    </div>
+  </div>
+  <div class="control-group">
+    <label for="term.language" class="control-label">{{localize 'basicFormLanguage-label'}}</label>
+    <div class="controls">
+      <select name="term.language">
+        <option value="FINNISH" {{#when-eq term.language 'FINNISH'}} selected {{/when-eq}}>{{ localize 'FINNISH' }}</option>
+        <option value="SWEDISH" {{#when-eq term.language 'SWEDISH'}} selected {{/when-eq}}>{{ localize 'SWEDISH' }}</option>
+        <option value="FRENCH" {{#when-eq term.language 'FRENCH'}} selected {{/when-eq}}>{{ localize 'FRENCH' }}</option>
+        <option value="LATIN" {{#when-eq term.language 'LATIN'}} selected {{/when-eq}}>{{ localize 'LATIN' }}</option>
+        <option value="GERMAN" {{#when-eq term.language 'GERMAN'}} selected {{/when-eq}}>{{ localize 'GERMAN' }}</option>
+        <option value="RUSSIAN" {{#when-eq term.language 'RUSSIAN'}} selected {{/when-eq}}>{{ localize 'RUSSIAN' }}</option>
+        <option value="ENGLISH" {{#when-eq term.language 'ENGLISH'}} selected {{/when-eq}}>{{ localize 'ENGLISH' }}</option>
+        <option value="ITALIAN" {{#when-eq term.language 'ITALIAN'}} selected {{/when-eq}}>{{ localize 'ITALIAN' }}</option>
+        <option value="GREEK" {{#when-eq term.language 'GREEK'}} selected {{/when-eq}}>{{ localize 'GREEK' }}</option>
+        <option value="OTHER" {{#when-eq term.language 'OTHER'}} selected {{/when-eq}}>{{ localize 'OTHER' }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="control-group">
+    <label for="status" class="control-label">{{ localize 'status-label' }}</label>
+    <div class="control-group">
+      <select name="status">
+        <option value="INITIAL" {{#when-eq status 'INITIAL'}} selected {{/when-eq}}>{{ localize 'INITIAL' }}</option>
+        <option value="DRAFT" {{#when-eq status 'DRAFT'}} selected {{/when-eq}}>{{ localize 'DRAFT' }}</option>
+        <option value="FINISHED" {{#when-eq status 'FINISHED'}} selected {{/when-eq}}>{{ localize 'FINISHED' }}</option>
+      </select>
+    </div>
+  </div>
+
+  <hr></hr>
+
+  <div class="control-group">
+    <label for="term.meaning" class="control-label">{{ localize 'basicFormMeaning-label' }}</label>
+    <div class="controls">
+      <textarea class="wysiwyg" name="term.meaning" rows="8" cols="50">{{ term.meaning }}</textarea>
+    </div>
+  </div>
+
+  <hr></hr>
+
+  <div class="control-group">
+    <label for="sources" class="control-label">{{ localize 'sources-label' }}</label>
+    <div class="controls">
+      <textarea class="wysiwyg" name="sources" rows="8" cols="50">{{ sources }}</textarea>
+    </div>
+  </div>
+
+  <hr></hr>
+
+  <div class="control-group">
+    <div>
+      <button id="save-note" disabled>{{ localize 'save' }}</button>
+    </div>
+  </div>
+</form>

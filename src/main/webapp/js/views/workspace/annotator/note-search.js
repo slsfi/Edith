@@ -146,7 +146,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     
     initialize: function() {
       var self = this;
-      _.bindAll(this, 'render', 'search', 'select', 'comment', 'editNote', 'editInstance');
+      _.bindAll(this, 'filterColumnsAccordingToSelection', 'render', 'search', 'select', 'comment', 'editNote', 'editInstance');
       vent.on('tab:open', function(view) {
         if (view === self && !self.initialized) {
           spinner('document-note-search:reset');
@@ -156,15 +156,19 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       });
       vent.on('metadata-field-select:change', function(columns) {
         if (self.$el.is(':visible')) {
-          self.gridView.grid.setColumns(_.filter(allColumns, function(col) {
-            return _.contains(columns, col.id);
-          }));
+          self.filterColumnsAccordingToSelection(columns);
         }
       });
       vent.on('document:open', function(documentId) {
         self.documentId = documentId;
       });
       this.render();
+    },
+
+    filterColumnsAccordingToSelection: function(columns) {
+      this.gridView.grid.setColumns(_.filter(allColumns, function(col) {
+        return _.contains(columns, col.id);
+      }));
     },
     
     search: function() {
@@ -199,7 +203,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       var self = this;
       this.$el.html(searchTemplate());
       this.gridView = new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
-      
+      this.metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select')});     
+      this.filterColumnsAccordingToSelection(this.metadataSelect.getColumns());
+
       var cb = function() { 
         var userOpts = _.map(users.toJSON(), userOption).join("");
         this.$(".creators").html(userOption({}) + userOpts); 
@@ -207,8 +213,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       if (users.length > 0) cb(); else users.fetch({success: cb});
       
       this.$(".date").datepicker({ dateFormat: localize('dateformat') });
-      
-      new MetadataFieldSelect({el: this.$('.metadata-field-select')});
       
       this.$('.directory-tree').dynatree({
         checkbox: true,

@@ -5,7 +5,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     template: Handlebars.compile(template),
     
     initialize: function() {
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'getColumns');
       this.render();
     },
     
@@ -14,13 +14,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$el.html(this.template);
       this.$('select').multiselect({
         onChange: function(element, checked) {
-                    var columns =  self.$('option:selected')
-                                       .map(function(idx, el) {
-                                              return $(el).val();
-                                            });
-                    vent.trigger('metadata-field-select:change', columns);
+                    vent.trigger('metadata-field-select:change', self.getColumns());
                   }
       });
+    },
+
+    getColumns: function() {
+      return this.$('option:selected').map(function(idx, el) {
+                                             return $(el).val();
+                                           });
     }
   });
   
