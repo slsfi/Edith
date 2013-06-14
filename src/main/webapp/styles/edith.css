@@ -171,30 +171,52 @@ form.import {
   margin-bottom: 20px;
 }
 
-#note-edit form .control-group {
+form .control-group {
   margin-top: 5px;
   display: block;
   min-height: 28px;
 }
 
-#note-edit form .control-label {
+#note-search form .control-group {
+  min-height: 35px;
+}
+
+form .control-label {
   float: left;
-  width: 150px;
+  width: 165px;
   margin: 0;
 }
 
-#note-edit form .controls {
-  margin: 0 30px 0 150px;
+form .controls {
+  margin: 0 30px 0 165px;
 }
 
+form .controls .control-detail {
+  display: inline-block; 
+  line-height: 3px;
+  padding-bottom: 10px;
+}
 
-#note-edit form input, #note-edit form .btn-group, #note-edit form textarea {
+form .controls .control-detail:nth-of-type(2) {
+  margin-left: 10px;
+}
+
+form input, form .btn-group, form textarea, form select {
   margin-top: -4px;
   margin-bottom: 5px;
 }
 
+#note-search input.query {
+  margin-top: 5px;
+}
+
 #note-search .actions {
   margin: 5px 0px 20px 4px;
+}
+
+#note-search .metadata-field-select {
+  margin-left: 1px;
+  margin-top: 20px;
 }
 
 #directory-tree .dynatree-container {
@@ -207,6 +229,7 @@ form.import {
 
 .documentNoteGrid {
   margin-top: 10px;
+  margin-left: 2px;
 }
 
   div.documentNoteGrid div.selected {

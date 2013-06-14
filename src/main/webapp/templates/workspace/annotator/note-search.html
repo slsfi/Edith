@@ -23,58 +23,98 @@
       </div>
       <div id="advancedSearch" class="accordion-body collapse">
         <div class="accordion-inner">
-          <label for="creators">{{localize 'creator-label'}}</label>
-          <select name="creators" class="creators"></select></p>
+          <form>
+            <div class="control-group">
+              <label for="creators" class="control-label">{{localize 'creator-label'}}</label>
+              <div class="controls">
+                <select name="creators" class="creators"></select></p>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="type" class="control-label">{{localize 'type-label'}}</label>
+              <div class="controls">
+                <select multiple="multiple" name="type" id="type-select" class="multiselect">
+                  <option value="WORD_EXPLANATION">{{localize 'WORD_EXPLANATION'}}</option> 
+                  <option value="LITERARY">{{localize 'LITERARY'}}</option> 
+                  <option value="HISTORICAL">{{localize 'HISTORICAL'}}</option> 
+                  <option value="DICTUM">{{localize 'DICTUM'}}</option> 
+                  <option value="CRITIQUE">{{localize 'CRITIQUE'}}</option> 
+                  <option value="TITLE">{{localize 'TITLE'}}</option> 
+                  <option value="TRANSLATION">{{localize 'TRANSLATION'}}</option> 
+                  <option value="REFERENCE">{{localize 'REFERENCE'}}</option> 
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group"><label for="language" class="control-label">{{localize 'basicFormLanguage-label'}}</label>
+              <div class="controls">
+                <select name="language" id="language-select" class="multiselect" multiple="multiple">
+                  <option value="FINNISH">{{localize 'FINNISH'}}</option>
+                  <option value="SWEDISH">{{localize 'SWEDISH'}}</option>
+                  <option value="FRENCH">{{localize 'FRENCH'}}</option>
+                  <option value="LATIN">{{localize 'LATIN'}}</option>
+                  <option value="GERMAN">{{localize 'GERMAN'}}</option>
+                  <option value="RUSSIAN">{{localize 'RUSSIAN'}}</option>
+                  <option value="ENGLISH">{{localize 'ENGLISH'}}</option>
+                  <option value="ITALIAN">{{localize 'ITALIAN'}}</option>
+                  <option value="GREEK">{{localize 'GREEK'}}</option>
+                  <option value="OTHER">{{localize 'OTHER'}}</option>
+                </select>
+              </div>
+            </div>
         
-          <label for="types">{{localize 'type-label'}}</label>
-          {{localize 'WORD_EXPLANATION'}} <input value="WORD_EXPLANATION" name="types" type="checkbox"/>
-          {{localize 'LITERARY'}} <input value="LITERARY" name="types" type="checkbox"/>
-          {{localize 'HISTORICAL'}} <input value="HISTORICAL" name="types" type="checkbox"/>
-          {{localize 'DICTUM'}} <input value="DICTUM" name="types" type="checkbox"/>
-          {{localize 'CRITIQUE'}} <input value="CRITIQUE" name="types" type="checkbox"/>
-          {{localize 'TITLE'}} <input value="TITLE" name="types" type="checkbox"/>
-          {{localize 'TRANSLATION'}} <input value="TRANSLATION" name="types" type="checkbox"/>
-          {{localize 'REFERENCE'}} <input value="REFERENCE" name="types" type="checkbox"/>
+            <div class="control-group">
+              <label for="createdOn" class="control-label">{{localize 'createdOn-label'}}</label>
+              <div class="controls">
+                <span class="control-detail">{{localize 'from'}}</span> <input type="text" class="date input-small" name="createdAfter"/> 
+                <span class="control-detail">{{localize 'to'}}</span> <input type="text" class="date input-small" name="createdBefore"/>
+              </div>
+            </div>
 
-          <label for="language">{{localize 'basicFormLanguage-label'}}</label>
-          <select name="language">
-            <option value=""></option>
-            <option value="FINNISH">{{localize 'FINNISH'}}</option>
-            <option value="SWEDISH">{{localize 'SWEDISH'}}</option>
-            <option value="FRENCH">{{localize 'FRENCH'}}</option>
-            <option value="LATIN">{{localize 'LATIN'}}</option>
-            <option value="GERMAN">{{localize 'GERMAN'}}</option>
-            <option value="RUSSIAN">{{localize 'RUSSIAN'}}</option>
-            <option value="ENGLISH">{{localize 'ENGLISH'}}</option>
-            <option value="ITALIAN">{{localize 'ITALIAN'}}</option>
-            <option value="GREEK">{{localize 'GREEK'}}</option>
-            <option value="OTHER">{{localize 'OTHER'}}</option>
-          </select>
+            <div class="control-group"><label for="editedOn" class="control-label">{{localize 'editedOn-label'}}</label>
+              <div class="controls">
+                <span class="control-detail">
+                  {{localize 'from'}}  
+                </span>
+                <input type="text" class="date input-small" name="editedAfter"/>
+                <span class="control-detail">
+                  {{localize 'to'}}
+                </span>
+                <input type="text" class="date input-small" name="editedBefore"/>
+              </div>
+            </div>
+            
+            <div class="control-group"><label for="status" class="control-label">{{localize 'status-label'}}</label>
+              <div class="controls">
+                <select name="status" id="status-select" multiple="multiple" class="multiselect">
+                  <option value="INITIAL">{{localize 'INITIAL'}}</option>
+                  <option value="DRAFT">{{localize 'DRAFT'}}</option>
+                  <option value="FINISHED">{{localize 'FINISHED'}}</option>
+                </select>
+              </div>
+            </div>
 
-          <label for="createdOn">{{localize 'createdOn-label'}}</label>
-          {{localize 'from'}} <input type="text" class="date input-small" name="createdAfter"/>
-          {{localize 'to'}} <input type="text" class="date input-small" name="createdBefore"/>
 
-          <label for="editedOn">{{localize 'editedOn-label'}}</label>
-          {{localize 'from'}} <input type="text" class="date input-small" name="editedAfter"/>
-          {{localize 'to'}} <input type="text" class="date input-small" name="editedBefore"/>
-
-          <label for="status">{{localize 'status-label'}}</label>
-          <select name="status">
-            <option value=""></option>
-            <option value="INITIAL">{{localize 'INITIAL'}}</option>
-            <option value="DRAFT">{{localize 'DRAFT'}}</option>
-            <option value="FINISHED">{{localize 'FINISHED'}}</option>
-          </select>
-
-          <label for="shortenedSelection">{{localize 'shortenedSelection-label'}}</label>
-          <input type="text" name="shortenedSelection"/>
-
-          <label for="description">{{localize 'description-label'}}</label>
-          <input type="text" name="description"/>
-
-          <label for="lemmaMeaning">{{localize 'lemmaMeaning-label'}}</label>
-          <input type="text" name="lemmaMeaning"/>
+            <div class="control-group">
+              <label for="shortenedSelection" class="control-label">{{localize 'shortenedSelection-label'}}</label>
+              <div class="controls">
+                <input type="text" name="shortenedSelection"/>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="description" class="control-label">{{localize 'description-label'}}</label>
+              <div class="controls">
+               <input type="text" name="description"/>       
+             </div> 
+            </div>
+            <div class="control-group">
+              <label for="lemmaMeaning" class="control-label">{{localize 'lemmaMeaning-label'}}</label>
+              <div class="controls">
+                <input type="text" name="lemmaMeaning"/>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

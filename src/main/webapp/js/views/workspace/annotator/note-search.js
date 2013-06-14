@@ -8,12 +8,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
   var searchTemplate = Handlebars.compile(searchTemplate);
   
   var DocumentNote = Backbone.Model.extend({
+
     initialize: function() {
       var self = this;
       this.on('change', function() {
         self.dirty = true;
       });
     }
+
   });
   
   var DocumentNotesCollection = Slickback.PaginatedCollection.extend({
@@ -23,13 +25,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     setRefreshHints: function() {
       // TODO
     },
-    
+
     sync: function(method, coll, options) {
       var data = options.data;
       if (data.per_page) {
         data.perPage = data.per_page;
         delete data.per_page;
       }
+
       $.ajax('api/document-notes/query',
              {type: 'post',
               contentType: 'application/json;charset=utf-8',
@@ -233,6 +236,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         }
         
       });
+      this.$('.multiselect').multiselect({});
     },
 
     select: function() {

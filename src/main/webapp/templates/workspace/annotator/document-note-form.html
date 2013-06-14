@@ -1,32 +1,34 @@
 <h4>{{localize 'document-note'}}</h4>
-<div class="control-group">
-  <label class="control-label">{{ localize 'fullSelection-label' }}</label>
-  <div class="controls">{{ fullSelection }} &nbsp;<button id="update-full-selection" disabled="disabled">{{localize 'update-full-selection'}}</button></div>
+<form>
+  <div class="control-group">
+    <label class="control-label">{{ localize 'fullSelection-label' }}</label>
+    <div class="controls">{{ fullSelection }} &nbsp;<button id="update-full-selection" disabled="disabled">{{localize 'update-full-selection'}}</button></div>
 
-</div>
-<div class="control-group">
-  <label class="control-label" for="shortenedSelection">{{ localize 'shortenedSelection-label' }}</label>
-  <div class="controls">
-    <input type="text" id="shortenedSelection" name="shortenedSelection" value="{{ shortenedSelection }}"></input>
   </div>
-</div>
-<div class="control-group">
-  <label class="control-label" for="lemmaPosition">{{ localize 'lemmaPosition-label' }}</label>
-  <div class="controls">
-    <input type="text" id="lemmaPosition" name="lemmaPosition" value="{{ lemmaPosition }}"></input>
+  <div class="control-group">
+    <label class="control-label" for="shortenedSelection">{{ localize 'shortenedSelection-label' }}</label>
+    <div class="controls">
+      <input type="text" id="shortenedSelection" name="shortenedSelection" value="{{ shortenedSelection }}"></input>
+    </div>
   </div>
-</div>
-<div class="control-group">
-  <label class="control-label" for="publishable">{{ localize 'publishable-label' }}</label>
-  <div class="controls">
-    <input type="checkbox" name="publishable" {{#if publishable }} checked {{/if}}></input>
+  <div class="control-group">
+    <label class="control-label" for="lemmaPosition">{{ localize 'lemmaPosition-label' }}</label>
+    <div class="controls">
+      <input type="text" id="lemmaPosition" name="lemmaPosition" value="{{ lemmaPosition }}"></input>
+    </div>
   </div>
-</div>
+  <div class="control-group">
+    <label class="control-label" for="publishable">{{ localize 'publishable-label' }}</label>
+    <div class="controls">
+      <input type="checkbox" name="publishable" {{#if publishable }} checked {{/if}}></input>
+    </div>
+  </div>
 
-<hr></hr>
+  <hr></hr>
 
-<div class="control-group">
-  <div>
-    <button id="save-document-note" disabled>{{ localize 'save' }}</button> <button id="delete-document-note" disabled>{{ localize 'delete' }}</button>
+  <div class="control-group">
+    <div>
+      <button id="save-document-note" disabled>{{ localize 'save' }}</button> <button id="delete-document-note" disabled>{{ localize 'delete' }}</button>
+    </div>
   </div>
-</div>
+</form>
