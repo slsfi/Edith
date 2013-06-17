@@ -33,6 +33,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         delete data.per_page;
       }
 
+      // Backbone 1.0 compatibility
+      options.reset = true;
+
       $.ajax('api/document-notes/query',
              {type: 'post',
               contentType: 'application/json;charset=utf-8',
