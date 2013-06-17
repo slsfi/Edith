@@ -219,8 +219,14 @@ form input, form .btn-group, form textarea, form select {
   margin-top: 20px;
 }
 
+#note-search .dynatree-container {
+  margin-left: 0;
+}
+
 #directory-tree .dynatree-container {
   margin: 10px 0 0 0;
+  height: 400px;
+  overflow: scroll;
 }
 
 .dynatree-node {
