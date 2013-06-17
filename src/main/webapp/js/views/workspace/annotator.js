@@ -16,7 +16,8 @@ define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap', '
     initialize: function() {
       _.bindAll(this, 'render', 'switchTabFromClick');
       var self = this;
-      vent.on('document-note:open note:open note:create', function() {
+
+      vent.on('document-note:open note:open note:create note:link-existing', function() {
         if (!self.noteEditInitialized) {
           self.$('.nav-tabs').append('<li><a href="#" data-target="note-edit" data-toggle="tab">' +
                                      localize('edit') +
@@ -25,6 +26,11 @@ define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap', '
         }
         self.switchTab('note-edit');
         self.$('.nav-tabs a[data-target="note-edit"]').tab('show');
+      });
+
+      vent.on('document-note:select', function() {
+        self.switchTab('note-list');
+        self.$('.nav-tabs a[data-target="note-list"]').tab('show');
       });
 
       this.render();
