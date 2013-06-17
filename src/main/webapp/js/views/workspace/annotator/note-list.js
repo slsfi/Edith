@@ -96,13 +96,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       spinner('document-notes:loaded');
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
-        vent.trigger('document-notes:loaded');
         _(data).each(function(documentNote) {
           var item = new NoteListItem({metadataSelect: metadataSelect, data: documentNote});
           self.$('ul.notes').append(item.el);
           item.render();
         });
         self.$('.note-buttons').hide();
+        vent.trigger('document-notes:loaded');
       });
     },
 
@@ -121,7 +121,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       $el.addClass('selected');
       $el.find('.note-buttons').show();
       $el.get(0).scrollIntoView(true);
-
     },
 
     clickNote: function(evt) {

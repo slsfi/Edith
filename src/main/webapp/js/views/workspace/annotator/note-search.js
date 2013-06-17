@@ -246,9 +246,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       if (this.documentId === documentNote.document.id) {
         vent.trigger('document-note:select', documentNote.id);
       } else if (confirm(localize('confirm-document-change'))) {
-        vent.once('document:loaded', function(documentId) {
+        var select = _.after(2, function(documentId) {
           vent.trigger('document-note:select', documentNote.id);
         });
+        vent.once('document:loaded', select);
+        vent.once('document-notes:loaded', select);
         vent.trigger('route:change', 'documents/' + documentNote.document.id);
       }
     },
@@ -268,9 +270,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       if (this.documentId === documentNote.document.id) {
         vent.trigger('document-note:open', documentNote);
       } else if (confirm(localize('confirm-document-change'))) {
-        vent.once('document:loaded', function(documentId) {
+        var select = _.after(2, function(documentId) {
           vent.trigger('document-note:select', documentNote.id);
         });
+        vent.once('document:loaded', select);
+        vent.once('document-notes:loaded', select);
         vent.trigger('route:change', 'documents/' + documentNote.document.id);
         vent.trigger('document-note:open', documentNote);
       }
