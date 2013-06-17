@@ -201,7 +201,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       data.documents = _.map(nodes, function(n) { return n.data.documentId; });
       
       documentNotes.extendScope(data);
-      spinner(''); 
       documentNotes.fetchWithScope();
     },
   
