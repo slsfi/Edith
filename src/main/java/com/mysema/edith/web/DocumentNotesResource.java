@@ -47,8 +47,12 @@ public class DocumentNotesResource extends AbstractResource {
     }
 
     @GET @Path("{id}")
-    public FullDocumentNoteTO getById(@PathParam("id") Long id) {
-        return convert(service.getById(id), FullDocumentNoteTO.class);
+    public Object getById(@PathParam("id") Long id) {
+        DocumentNote entity = service.getById(id);
+        if (entity != null) {
+            return convert(entity, FullDocumentNoteTO.class);
+        }
+        return NOT_FOUND;
     }
 
     @GET

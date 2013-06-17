@@ -75,8 +75,12 @@ public class DocumentsResource extends AbstractResource {
     }
 
     @GET @Path("{id}")
-    public DocumentTO getById(@PathParam("id") Long id) {
-        return convert(documentDao.getById(id), DocumentTO.class);
+    public Object getById(@PathParam("id") Long id) {
+        Document entity = documentDao.getById(id);
+        if (entity != null) {
+            return convert(entity, DocumentTO.class);
+        }
+        return NOT_FOUND;
     }
 
     @GET @Path("{id}/document-notes")

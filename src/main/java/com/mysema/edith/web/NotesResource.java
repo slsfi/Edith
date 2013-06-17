@@ -54,8 +54,12 @@ public class NotesResource extends AbstractResource {
     }
 
     @GET @Path("{id}")
-    public NoteTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), NoteTO.class);
+    public Object getById(@PathParam("id") Long id) {
+        Note entity = dao.getById(id);
+        if (entity != null) {
+            return convert(entity, NoteTO.class);
+        }
+        return NOT_FOUND;
     }
 
     @GET @Path("{id}/comment")

@@ -29,7 +29,7 @@ public class UsersResource extends AbstractResource {
     public UsersResource(UserDao dao) {
         this.dao = dao;
     }
-    
+
     @GET
     public List<UserTO> all() {
         return convert(dao.getAll(), UserTO.class);
@@ -41,8 +41,12 @@ public class UsersResource extends AbstractResource {
     }
 
     @GET @Path("{id}")
-    public UserTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), UserTO.class);
+    public Object getById(@PathParam("id") Long id) {
+        User entity = dao.getById(id);
+        if (entity != null) {
+            return convert(entity, UserTO.class);
+        }
+        return NOT_FOUND;
     }
 
     @POST

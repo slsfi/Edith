@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.web;
 
 import java.util.Map;
@@ -35,8 +30,12 @@ public class PlacesResource extends AbstractResource {
     }
 
     @GET @Path("{id}")
-    public PlaceTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), PlaceTO.class);
+    public Object getById(@PathParam("id") Long id) {
+        Place entity = dao.getById(id);
+        if (entity != null) {
+            return convert(entity, PlaceTO.class);
+        }
+        return NOT_FOUND;
     }
 
     @POST

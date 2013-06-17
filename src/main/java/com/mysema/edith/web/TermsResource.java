@@ -30,8 +30,12 @@ public class TermsResource extends AbstractResource {
     }
 
     @GET @Path("{id}")
-    public TermTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), TermTO.class);
+    public Object getById(@PathParam("id") Long id) {
+        Term entity = dao.getById(id);
+        if (entity != null) {
+            return convert(entity, TermTO.class);
+        }
+        return NOT_FOUND;
     }
 
     @POST

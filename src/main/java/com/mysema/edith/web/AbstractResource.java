@@ -8,6 +8,9 @@ package com.mysema.edith.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import com.google.inject.Inject;
 import com.mysema.edith.Identifiable;
 import com.mysema.edith.dto.NoteSearchTO;
@@ -59,5 +62,7 @@ public abstract class AbstractResource {
         }
         return count / pageSize;
     }
+
+    protected static final Response NOT_FOUND = Response.status(Status.NOT_FOUND).build();
 
 }

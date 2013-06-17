@@ -35,8 +35,12 @@ public class PersonsResource extends AbstractResource {
     }
 
     @GET @Path("{id}")
-    public PersonTO getById(@PathParam("id") Long id) {
-        return convert(dao.getById(id), PersonTO.class);
+    public Object getById(@PathParam("id") Long id) {
+        Person entity = dao.getById(id);
+        if (entity != null) {
+            return convert(entity, PersonTO.class);
+        }
+        return NOT_FOUND;
     }
 
     @POST
