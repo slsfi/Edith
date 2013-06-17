@@ -23,6 +23,11 @@ define(['jquery', 'spin', 'vent'],
   var $el = $('#spinner');
   var events = {};
 
+  vent.on('ajax:error', function() {
+    sp.stop();
+    $el.hide();
+  });
+
   var spinner = function() {
     sp.spin($el.show().get(0));
     _.each(arguments, function(arg) {

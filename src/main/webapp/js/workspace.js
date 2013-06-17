@@ -5,6 +5,12 @@ require([], function() {
            'views/workspace/annotator', 'views/workspace/document-management',
            'header'],
           function($, _, Backbone, Handlebars, vent, localize, moment, Annotator, DocumentManagement, Header) {
+
+    $(document).ajaxError(function(event, jqxhr, settings, exception) {
+                            console.log(event, jqxhr, settings, exception);
+                            vent.trigger('ajax:error');
+                          });
+
     new Header({el: $('#header')});
 
     Handlebars.registerHelper('dateFormat', function(timestamp, block) {

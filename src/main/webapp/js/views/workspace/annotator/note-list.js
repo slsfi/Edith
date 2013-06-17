@@ -48,11 +48,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     showFieldsAccordingToSelection: function(columns) {
       this.$('span').removeClass('selected-metadata');
       this.$('span').addClass('unselected-metadata');
+      var self = this;
       _.each(columns, function(column) {
-        var el = this.$('.' + column);
+        var el = self.$('.' + column);
         if (el.text().length > 0) {
-          this.$('.' + column).removeClass('unselected-metadata');
-           this.$('.' + column).addClass('selected-metadata');
+          self.$('.' + column).removeClass('unselected-metadata');
+          self.$('.' + column).addClass('selected-metadata');
         }
       });
     },
@@ -97,9 +98,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
         _(data).each(function(documentNote) {
-          var item = new NoteListItem({metadataSelect: metadataSelect, data: documentNote});
-          self.$('ul.notes').append(item.el);
-          item.render();
+          self.$('ul.notes').append(new NoteListItem({metadataSelect: metadataSelect,
+                                                      data: documentNote}).el);
         });
         self.$('.note-buttons').hide();
         vent.trigger('document-notes:loaded');
