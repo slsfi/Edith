@@ -145,6 +145,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     events: {'keyup .search': 'search',
              'change form input': 'search',
              'change form select': 'search',
+             'click .annotate': 'annotate',
              'click .select': 'select',
              'click .comment': 'comment',
              'click .edit-note': 'editNote',
@@ -152,7 +153,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     
     initialize: function() {
       var self = this;
-      _.bindAll(this, 'filterColumnsAccordingToSelection', 'render', 'search', 'select', 'comment', 'editNote', 'editInstance');
+      _.bindAll(this, 'filterColumnsAccordingToSelection', 'render', 'search', 'annotate', 'select', 'comment', 'editNote', 'editInstance');
       vent.on('tab:open', function(view) {
         if (view === self && !self.initialized) {
           spinner('document-note-search:reset');
@@ -239,6 +240,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         
       });
       this.$('.multiselect').multiselect({});
+    },
+
+    annotate: function() {
+      console.log('Annotating');
     },
 
     select: function() {
