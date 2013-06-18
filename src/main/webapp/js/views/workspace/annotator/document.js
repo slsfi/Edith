@@ -83,7 +83,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
       _.bindAll(this, 'render', 'selectionChange', 'selectNote', 'getSelection');
       var self = this;
         
-      vent.on('document:open annotation:change', function(id) {
+      vent.on('document:open annotation:change document-note:deleted', function(id) {
         self.documentId = id;
         self.render(id);
       });

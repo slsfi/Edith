@@ -86,7 +86,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     initialize: function() {
       _.bindAll(this, 'render', 'createNote', 'toggleCreateButton',
                 'selectNote', 'clickNote');
-      vent.on('document:open annotation:change', this.render);
+      vent.on('document:open annotation:change document-note:deleted', this.render);
       vent.on('document:selection-change', this.toggleCreateButton);
       vent.on('document-note:select', this.selectNote);
     },

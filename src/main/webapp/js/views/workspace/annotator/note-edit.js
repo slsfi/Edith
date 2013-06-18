@@ -33,14 +33,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                       'hasPersistedNote', 'close', 'isPersisted');
       var self = this;
       vent.on('document-note:change', function(documentNote) {
-                                        if (documentNote) {
-                                          self.documentNote = documentNote;
-                                          self.isDirty = false;
-                                          self.render();
-                                        } else {
-                                          self.close();
-                                        }
+                                        self.documentNote = documentNote;
+                                        self.isDirty = false;
+                                        self.render();
                                       });
+      vent.on('document-note:deleted', this.close);
       this.render();
     },
 
@@ -160,17 +157,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     },
     
     remove: function() {
-      spinner('annotation:change', 'document-note:change');
+      spinner('document-note:deleted');
       var self = this;
       var request = {url: '/api/document-notes/' + this.documentNote.id,
                      type: 'DELETE',
                      dataType: 'json',
                      contentType: "application/json; charset=utf-8",
                      success: function(data) {
-                       vent.trigger('annotation:change', self.documentNote.document.id);
                        // TODO: Note's DocumentNote count?
 //                       vent.trigger('note:change', self.note.id);
-                       vent.trigger('document-note:change', data);
+                       vent.trigger('document-note:deleted', self.documentNote.document.id);
                      }};
       $.ajax(request);
     }

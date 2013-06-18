@@ -8,6 +8,7 @@ window.rconfig = {
     handlebars: 'libs/handlebars/handlebars.min',
     bootstrap: 'libs/bootstrap/bootstrap.min',
     'bootstrap-multiselect': 'libs/bootstrap/bootstrap-multiselect',
+    'bootstrap-notify': 'libs/bootstrap/bootstrap-notify',
     moment: 'libs/moment/moment.min',
     text: 'libs/require/text',
     jqueryeventdrag: 'libs/jquery/jquery.event.drag',
@@ -71,6 +72,7 @@ window.rconfig = {
     },
     'bootstrap': { deps: ['jquery'] },
     'bootstrap-multiselect': { deps: ['bootstrap'] },
+    'bootstrap-notify': { deps: ['bootstrap'] },
     'handlebars': { exports: 'Handlebars' },    
     'jqueryui': { deps: ['jquery'] },
     'moment': { exports: 'moment'}

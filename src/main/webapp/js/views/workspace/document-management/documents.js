@@ -71,12 +71,16 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
     submit: function() {
       var formData = new FormData(this.$(".import").get(0));
+      var self = this;
       $.ajax('api/documents',
              {type: 'post',
               processData: false,
               contentType: false,
               data: formData,
-              success: this.reload});
+              success: function() {
+                self.reload();
+                vent.trigger('documents:reset');
+              }});
       return false;
     }
 
