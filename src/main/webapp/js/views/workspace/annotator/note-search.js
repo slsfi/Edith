@@ -106,6 +106,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       grid.setSelectionModel(new Slick.RowSelectionModel());
       
       var pager = new Slick.Controls.Pager(documentNotes, grid, this.options.$pager);
+      this.options.$pager.find('.ui-icon').click(function(evt) {
+        var $el = $(evt.target); 
+        if (!$el.hasClass('ui-state-disabled') && !$el.hasClass('ui-icon-lightbulb')) {
+          spinner('document-note-search:reset'); 
+        }
+      });
       
       grid.onSort.subscribe(function(e, msg) {
         documentNotes.extendScope({
@@ -129,7 +135,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         grid.invalidateAllRows();
         grid.render();
       });
-      
+
       documentNotes.on('change', function() {
         $(grid.getActiveCellNode()).css('background', 'red');
       });
