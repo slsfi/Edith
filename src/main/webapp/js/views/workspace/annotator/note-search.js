@@ -252,7 +252,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         }
         
       });
-      this.$('.multiselect').multiselect({});
+      this.$('#advancedSearch .multiselect').multiselect({});
     },
 
     annotate: function() {
