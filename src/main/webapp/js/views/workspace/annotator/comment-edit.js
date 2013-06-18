@@ -19,7 +19,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner',
     },
 
     render: function() {
-      this.$el.modal({show: true});
+      this.$el.modal({show: true, backdrop: 'static', keyboard: 'false'});
       this.$el.html(this.template(this.comment));
       this.$('.wysiwyg').ckeditor(ckEditorSetup);
     },
