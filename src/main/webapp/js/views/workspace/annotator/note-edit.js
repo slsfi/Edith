@@ -29,7 +29,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
              'click #update-full-selection': 'annotate'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'save', 'setDirty', 'toggleAnnotationEnabled', 'annotate', 'extract',
+      _.bindAll(this, 'render', 'save', 'setDirty', 'linkToExistingNote', 'toggleAnnotationEnabled', 'annotate', 'extract',
                       'hasPersistedNote', 'close', 'isPersisted');
       var self = this;
       vent.on('document-note:change', function(documentNote) {
@@ -65,6 +65,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     setDirty: function() {
       this.isDirty = true;
       this.$('#save-document-note').removeAttr('disabled');
+    },
+
+    linkToExistingNote: function(note) {
+      if (!this.documentNote) {
+        this.documentNote = {note: note};
+      } else {
+        this.documentNote.note = note;
+      }
     },
 
     toggleAnnotationEnabled: function(documentId, noteId, selection) {
@@ -318,10 +326,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
     initialize: function() {
       _.bindAll(this, 'render', 'openNote', 'openDocumentNote', 'create',
-                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote', 'createDocumentNote');
+                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote', 'createDocumentNote', 'linkExistingDocumentNote');
       var self = this;
       vent.on('document:selection-change', function(documentId, selection) {
-        if (self.$el.is(':visible')) {
+          if (self.$el.is(':visible')) {
           self.documentNoteForm.toggleAnnotationEnabled(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
         }
       });
@@ -329,6 +337,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       vent.on('document-note:open', this.openDocumentNote);
       vent.on('note:open', this.openNote);
       vent.on('document-note:create', this.createDocumentNote);
+      vent.on('note:link-existing', this.linkExistingDocumentNote);
       this.render();
     },
 
@@ -420,6 +429,20 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       if (confirm(localize('confirm-document-note-delete'))) {
         this.documentNoteForm.remove();
       }
+    },
+
+    linkExistingDocumentNote: function(documentNote) {
+      if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
+        if (!confirm(localize('dirty-dialog-confirm'))) {
+          return;
+        }
+      }
+      
+      this.documentNoteForm.close();
+      this.documentNoteForm.linkToExistingNote(documentNote);
+      this.comment.close();
+      this.noteForm.open(documentNote);
+      vent.trigger('note:new');
     }
   });
 

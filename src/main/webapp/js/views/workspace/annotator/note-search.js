@@ -1,9 +1,9 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
-        'slickgrid', 'moment', 'localize', 'spinner',
+        'slickgrid', 'moment', 'localize', 'spinner', 'raw-selection',
         'text!/templates/workspace/annotator/note-search.html',
         'views/workspace/annotator/metadata-field-select'],
        function($, _, Backbone, vent, Handlebars, Slickback, Slick, moment,
-                localize, spinner, searchTemplate, MetadataFieldSelect) {
+                localize, spinner, rawSelection, searchTemplate, MetadataFieldSelect) {
   
   var searchTemplate = Handlebars.compile(searchTemplate);
   
@@ -153,7 +153,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     
     initialize: function() {
       var self = this;
-      _.bindAll(this, 'filterColumnsAccordingToSelection', 'saveSelection', 'render', 'search', 'annotate', 'select', 'comment', 'editNote', 'editInstance');
+      _.bindAll(this, 'filterColumnsAccordingToSelection', 'render', 'search', 'annotate', 'select', 'comment', 'editNote', 'editInstance');
       
       vent.on('tab:open', function(view) {
         if (view === self && !self.initialized) {
@@ -173,14 +173,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         self.documentId = documentId;
       });
 
-      vent.on('document:selection-change', function(documentId, selection) {
-        if (self.$el.is(':visible')) {
-          self.saveSelection(documentId, selection);
-        }
-      });
-
-      self.currentSelection = {};
-
       this.render();
     },
 
@@ -188,14 +180,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       this.gridView.grid.setColumns(_.filter(allColumns, function(col) {
         return _.contains(columns, col.id);
       }));
-    },
-
-    saveSelection: function(documentId, selection) {
-      if (selection && selection.selection.length > 0) {
-        this.currentSelection = {'documentId': documentId, 'noteId': null, 'selection': selection};
-      } else {
-        this.currentSelection = {};
-      }
     },
 
     search: function() {
@@ -263,8 +247,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     },
 
     annotate: function() {
-      console.log('Annotating');
-      console.log(this.currentSelection);
+      var selection = rawSelection();
+      if (selection.toString() === '') {
+        alert(localize('no-text-selected'));
+      } else {
+
+        vent.trigger('note:link-existing', this.gridView.getSelected().note);
+      }
     },
 
     select: function() {
