@@ -105,8 +105,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       this.grid = grid;
       grid.setSelectionModel(new Slick.RowSelectionModel());
       
-      var pager = new Slick.Controls.Pager(documentNotes, grid, this.options.$pager);
-      this.options.$pager.find('.ui-icon').click(function(evt) {
+      var $pagers = this.options.$pagers;
+      $pagers.each(function(idx, pager) {
+        new Slick.Controls.Pager(documentNotes, grid, $(pager));
+      });
+      $pagers.find('.ui-icon').click(function(evt) {
         var $el = $(evt.target); 
         if (!$el.hasClass('ui-state-disabled') && !$el.hasClass('ui-icon-lightbulb')) {
           spinner('document-note-search:reset'); 
@@ -218,7 +221,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     render: function() {
       var self = this;
       this.$el.html(searchTemplate());
-      this.gridView = new GridView({el: this.$('.documentNoteGrid'), $pager: this.$('.documentNotePager')});     
+      this.gridView = new GridView({el: this.$('.documentNoteGrid'), $pagers: this.$('.documentNotePager')});     
       this.metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select')});     
       this.filterColumnsAccordingToSelection(this.metadataSelect.getColumns());
 
