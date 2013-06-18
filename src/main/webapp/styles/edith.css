@@ -24,6 +24,8 @@
   margin: 22px 0 0 14px;
   padding-bottom: 8px;
   border-bottom: 1px solid #DDD;
+  font-weight: bold;
+  text-align: center;
 }
 
 .tab-operations {
@@ -256,8 +258,3 @@ form input, form .btn-group, form textarea, form select {
   display: none;
 }
 
-#document-title {
-  font-weight: bold;
-  text-align: center;
-  padding-top: 1.5em;
-}
