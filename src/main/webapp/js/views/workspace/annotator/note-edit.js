@@ -204,7 +204,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       }
 
       _(CKEditor.instances).each(function(editor) {
-        editor.destroy();
+        editor.destroy(true);
       });
       this.$el.html(this.template(this.note))
               .effect('highlight', {color: 'lightblue'}, 500);
@@ -272,7 +272,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
         request.type = 'POST';
       }
       _(CKEditor.instances).each(function(editor) {
-        editor.destroy();
+        editor.destroy(true);
       });
       $.ajax(request);
     }
@@ -291,7 +291,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                     self.open(comment, noteId);
                                   }
                                 });
-      this.render();
+      vent.on('note:change', function(note) {
+                               if (self.$el.is(':visible')) {
+                                 if (note.id) {
+                                   self.open(note.comment, note.id);
+                                 } else {
+                                   self.close();
+                                 }
+                               }
+                             });
     },
 
     render: function() {
@@ -311,7 +319,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     close: function() {
       this.noteId = null;
       this.comment = null;
-      this.render();
+      this.$el.empty();
     },
 
     edit: function() {
