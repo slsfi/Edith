@@ -249,3 +249,9 @@ form input, form .btn-group, form textarea, form select {
   color: white;
   display: none;
 }
+
+#document-title {
+  font-weight: bold;
+  text-align: center;
+  padding-top: 1.5em;
+}
