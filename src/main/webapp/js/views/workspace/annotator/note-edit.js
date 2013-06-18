@@ -60,8 +60,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     },
 
     setDirty: function() {
+      if (this.$('input[name=shortenedSelection]').val() === '') {
+        this.$('input[name=shortenedSelection]').parent().parent().addClass('error');
+        this.$('#save-document-note').attr('disabled', 'disabled');
+      } else {
+        this.$('input[name=shortenedSelection]').parent().parent().removeClass('error');
+        this.$('#save-document-note').removeAttr('disabled');
+      }
       this.isDirty = true;
-      this.$('#save-document-note').removeAttr('disabled');
     },
 
     linkToExistingNote: function(note) {
