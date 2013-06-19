@@ -7,8 +7,7 @@ require([], function() {
           function($, _, Backbone, Handlebars, vent, localize, moment, Annotator, DocumentManagement, Header, BootstrapNotify) {
 
     $(document).ajaxError(function(event, jqxhr, settings, exception) {
-                            console.log(event, jqxhr, settings, exception);
-                            vent.trigger('ajax:error');
+                            vent.trigger('ajax:error', jqxhr);
                           });
 
     var Notifications = Backbone.View.extend({
@@ -20,16 +19,17 @@ require([], function() {
         var error = function(message) {
           self.$el.notify({message: {text: message}, fadeOut: {enabled: false}, type: 'error'}).show() 
         }
-        vent.on('ajax:error', function() {
-          error(localize('error-message'));
+        vent.on('ajax:error', function(jqxhr) {
+          error(localize('error-message') + ': HTTP ' + jqxhr.status + ', ' + jqxhr.statusText);
         });
         _.each({'document-note:change': localize('instance-saved-message'),
                 'annotation:change': localize('annotation-saved-message'),
                 'document-note:deleted': localize('instance-deleted-message'),
                 'note:change': localize('note-saved-message'),
                 'comment:change': localize('comment-saved-message'),
-                'document:delete': localize('document-renamed-message'),
-                'documents:reset': localize('document-deleted-message')},
+                'documents:reset': localize('documents-uploaded-message'),
+                'document:delete': localize('document-deleted-message'),
+                'document:rename': localize('document-rename-message')},
                function(msg, evt) {
                  vent.on(evt, function() { success(msg) });
                });
