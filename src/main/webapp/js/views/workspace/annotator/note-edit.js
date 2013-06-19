@@ -393,7 +393,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       }
       this.documentNoteForm.close();
       this.comment.close();
-      this.noteForm.open({});
+      this.noteForm.open({term: {language: 'SWEDISH'}});
       this.noteForm.setDirty();
       vent.trigger('note:new');
     },
