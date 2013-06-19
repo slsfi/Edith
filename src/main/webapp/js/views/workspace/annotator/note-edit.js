@@ -451,7 +451,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       }
     },
 
-    linkExistingDocumentNote: function(documentNote) {
+    linkExistingDocumentNote: function(note) {
       if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
         if (!confirm(localize('dirty-dialog-confirm'))) {
           return;
@@ -459,9 +459,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       }
       
       this.documentNoteForm.close();
-      this.documentNoteForm.linkToExistingNote(documentNote);
+      this.documentNoteForm.linkToExistingNote(note);
       this.comment.close();
-      this.noteForm.open(documentNote);
+      this.comment.open(note.comment, note.id);
+      this.noteForm.open(note);
       vent.trigger('note:new');
     }
   });

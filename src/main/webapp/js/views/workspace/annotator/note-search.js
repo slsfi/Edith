@@ -259,7 +259,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       if (selection.toString() === '') {
         alert(localize('no-text-selected'));
       } else {
-
         vent.trigger('note:link-existing', this.gridView.getSelected().note);
       }
     },
