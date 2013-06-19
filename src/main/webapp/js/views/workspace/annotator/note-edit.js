@@ -95,6 +95,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       this.document = this.currentSelection.documentId;
       this.selection = this.currentSelection.selection;
       this.documentNote.fullSelection = this.currentSelection.selection.selection;
+      this.documentNote.shortenedSelection = this.currentSelection.selection.selection;
       this.render();
       this.setDirty();
       this.$('#update-full-selection').attr('disabled', 'disabled');
