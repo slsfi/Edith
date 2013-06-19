@@ -105,6 +105,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         return new QueryModifiers(limit, offset);
     }
 
+    @Override
     public SearchResults<DocumentNote> findDocumentNotes(NoteSearchTO search) {
         return from(documentNote)
               .innerJoin(documentNote.note, note)
@@ -385,6 +386,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
     }
 
+    @Override
     public int importNotes(File file) {
         try {
             return importNotes(new FileInputStream(file));
