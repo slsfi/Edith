@@ -1,12 +1,13 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 'spinner',
         'text!/templates/workspace/annotator/note-edit.html',
         'text!/templates/workspace/annotator/document-note-form.html',
+        'text!/templates/workspace/annotator/document-note-form-stub.html',
         'text!/templates/workspace/annotator/note-form.html',
         'text!/templates/workspace/annotator/comment.html',
         'ckeditor', 'ckeditor-jquery', 'ckeditor-setup'],
        function($, _, Backbone, vent, Handlebars, localize, spinner, noteEditTemplate,
-                documentNoteFormTemplate, noteFormTemplate, commentTemplate,
-                CKEditor, ckEditorJquery, ckEditorSetup) {
+                documentNoteFormTemplate, documentNoteFormStubTemplate, noteFormTemplate,
+                commentTemplate, CKEditor, ckEditorJquery, ckEditorSetup) {
   Handlebars.registerHelper('when-contains', function(coll, x, options) {
     if (_.contains(coll, x)) {
       return options.fn(this);
@@ -24,9 +25,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     currentSelection: {},
 
     template: Handlebars.compile(documentNoteFormTemplate),
+    stubTemplate: Handlebars.compile(documentNoteFormStubTemplate),
 
     events: {'keyup input': 'setDirty',
-             'click #update-full-selection': 'annotate'},
+             'click #update-full-selection': 'annotate',
+             'click #create-document-note': 'annotate'},
 
     initialize: function() {
       _.bindAll(this, 'render', 'save', 'setDirty', 'linkToExistingNote', 'toggleAnnotationEnabled', 'annotate', 'extract',
@@ -43,12 +46,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
     render: function() {
       if (!this.documentNote) {
-        return;
-      }
-      this.$el.html(this.template(this.documentNote))
-              .effect('highlight', {color: 'lightblue'}, 500);
-      if (this.isPersisted()) {
-        this.$('#delete-document-note').removeAttr('disabled');
+        this.$el.html(this.stubTemplate);
+      } else {
+        this.$el.html(this.template(this.documentNote))
+                .effect('highlight', {color: 'lightblue'}, 500);
+        if (this.isPersisted()) {
+          this.$('#delete-document-note').removeAttr('disabled');
+        }
       }
     },
 
@@ -81,8 +85,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     toggleAnnotationEnabled: function(documentId, noteId, selection) {
       if (selection && selection.selection.length > 0) {
         this.$('#update-full-selection').removeAttr('disabled');
+        this.$('#create-document-note').removeAttr('disabled');
         this.currentSelection = {'documentId': documentId, 'noteId': noteId, 'selection': selection};
       } else {
+        this.$('#create-document-note').attr('disabled', 'disabled');
         this.$('#update-full-selection').attr('disabled', 'disabled');
         this.currentSelection = {};
       }
@@ -106,7 +112,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       this.documentNote = null;
       this.selection = null;
       this.isDirty = false;
-      this.$el.empty();
+      this.render();
     },
 
     extract: function() {
@@ -145,11 +151,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                      contentType: "application/json; charset=utf-8",
                      data: JSON.stringify(data),
                      success: function(documentNote) {
-                       documentNote.document = documentNote.document.id;
                        vent.trigger('document-note:change', documentNote);
                        if (data.selection) {
                          self.selection = null;
-                         vent.trigger('annotation:change', documentNote.document);
+                         vent.trigger('annotation:change', documentNote.document.id);
                        }
                      }};
       if (!data.id) {
@@ -344,7 +349,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                       'saveDocumentNote', 'saveNote', 'deleteDocumentNote', 'createDocumentNote', 'linkExistingDocumentNote');
       var self = this;
       vent.on('document:selection-change', function(documentId, selection) {
-          if (self.$el.is(':visible')) {
+        if (self.$el.is(':visible')) {
           self.documentNoteForm.toggleAnnotationEnabled(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
         }
       });
