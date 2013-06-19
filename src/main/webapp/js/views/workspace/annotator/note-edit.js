@@ -247,6 +247,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                  return acc;
                                }, {});
 
+      if (data.term.language === '') {
+        data.term.language = null;
+      }
+
       var types = _(this.$('select[name="type"]').serializeArray())
                     .map(function(field) {
                            return field.value;

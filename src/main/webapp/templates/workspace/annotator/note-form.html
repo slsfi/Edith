@@ -38,6 +38,7 @@
     <label for="term.language" class="control-label">{{localize 'basicFormLanguage-label'}}</label>
     <div class="controls">
       <select name="term.language">
+        <option></option>
         <option value="FINNISH" {{#when-eq term.language 'FINNISH'}} selected {{/when-eq}}>{{ localize 'FINNISH' }}</option>
         <option value="SWEDISH" {{#when-eq term.language 'SWEDISH'}} selected {{/when-eq}}>{{ localize 'SWEDISH' }}</option>
         <option value="FRENCH" {{#when-eq term.language 'FRENCH'}} selected {{/when-eq}}>{{ localize 'FRENCH' }}</option>
