@@ -157,12 +157,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
              'click .annotate': 'annotate',
              'click .select': 'select',
              'click .comment': 'comment',
-             'click .edit-note': 'editNote',
-             'click .edit-instance': 'editInstance'},
+             'click .edit-note': 'editNote'},
     
     initialize: function() {
       var self = this;
-      _.bindAll(this, 'filterColumnsAccordingToSelection', 'render', 'search', 'annotate', 'select', 'comment', 'editNote', 'editInstance');
+      _.bindAll(this, 'filterColumnsAccordingToSelection', 'render', 'search', 'annotate', 'select', 'comment', 'editNote');
       
       vent.on('tab:open', function(view) {
         if (view === self && !self.initialized) {
@@ -287,21 +286,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     editNote: function() {
       var documentNote = this.gridView.getSelected();
       vent.trigger('note:open', documentNote.note);
-    },
-
-    editInstance: function() {
-      var documentNote = this.gridView.getSelected();
-      if (this.documentId === documentNote.document.id) {
-        vent.trigger('document-note:open', documentNote);
-      } else if (confirm(localize('confirm-document-change'))) {
-        var select = _.after(2, function(documentId) {
-          vent.trigger('document-note:select', documentNote.id);
-        });
-        vent.once('document:loaded', select);
-        vent.once('document-notes:loaded', select);
-        vent.trigger('route:change', 'documents/' + documentNote.document.id);
-        vent.trigger('document-note:open', documentNote);
-      }
     }
   });
   
