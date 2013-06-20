@@ -142,7 +142,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     
   });
   
-  var userOption = Handlebars.compile('<option value='{{id}}'>{{username}}</option>');
+  var userOption = Handlebars.compile('<option value="{{id}}">{{username}}</option>');
   
   var dateFields = ['createdAfter', 'createdBefore', 'editedAfter', 'editedBefore'];
     
@@ -222,6 +222,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       this.metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select'), defaultSelection: ['description', 'document']});     
       this.filterColumnsAccordingToSelection(this.metadataSelect.getColumns());
 
+      // XXX: Trigger rendering only after all the data is loaded, this seems odd
       var cb = function() { 
         var userOpts = _.map(users.toJSON(), userOption).join('');
         this.$('.creators').html(userOption({}) + userOpts); 
