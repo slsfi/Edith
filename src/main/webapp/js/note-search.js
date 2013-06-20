@@ -48,7 +48,7 @@ require([], function() {
       autoEdit: false
     };
 
-     grid = new Slick.Grid('#noteGrid', notes, columns, options);
+    var grid = new Slick.Grid('#noteGrid', notes, columns, options);
     grid.setSelectionModel(new Slick.RowSelectionModel());
     var pager = new Slick.Controls.Pager(notes, grid, $('#notePager'));
 
