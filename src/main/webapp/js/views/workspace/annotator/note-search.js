@@ -57,7 +57,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
   });
   
   var users = new UsersCollection();
-  users.fetch();
   
   var EditedByFormatter = function(row, cell, value, columnDef, data) {
     var value = data.get('note').editedOn;
@@ -177,7 +176,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         self.documentId = documentId;
       });
 
-      this.render();
+      users.on('reset', this.render);
+      users.fetch({reset: true});
     },
 
     filterColumnsAccordingToSelection: function(columns) {
@@ -222,16 +222,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       this.metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select'), defaultSelection: ['description', 'document']});     
       this.filterColumnsAccordingToSelection(this.metadataSelect.getColumns());
 
-      // XXX: Trigger rendering only after all the data is loaded, this seems odd
-      var cb = function() { 
-        var userOpts = _.map(users.toJSON(), userOption).join('');
-        this.$('.creators').html(userOption({}) + userOpts); 
-      };
-      if (users.length > 0) {
-        cb();
-      } else {
-        users.fetch({success: cb});
-      }
+      var userOpts = _.map(users.toJSON(), userOption).join('');
+      this.$('.creators').html(userOption({}) + userOpts); 
       
       this.$('.date').datepicker({ dateFormat: localize('dateformat') });
       
