@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -23,6 +24,7 @@ import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
+import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.NoteSearchTO;
@@ -30,6 +32,7 @@ import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteCommentDao;
 import com.mysema.edith.services.NoteDao;
+import com.mysema.edith.services.UserDao;
 import com.mysema.edith.util.StringUtils;
 import com.mysema.query.SearchResults;
 import com.mysema.util.BeanMap;
@@ -40,22 +43,26 @@ import com.sun.jersey.multipart.FormDataParam;
 @Produces(MediaType.APPLICATION_JSON)
 public class NotesResource extends AbstractResource {
 
-    private final NoteDao dao;
+    private final NoteDao noteDao;
 
     private final NoteCommentDao commentDao;
 
     private final DocumentNoteDao documentNoteDao;
 
+    private final UserDao userDao;
+
     @Inject
-    public NotesResource(NoteDao dao, NoteCommentDao commentDao, DocumentNoteDao documentNoteDao) {
-        this.dao = dao;
+    public NotesResource(NoteDao noteDao, NoteCommentDao commentDao,
+                         DocumentNoteDao documentNoteDao, UserDao userDao) {
+        this.noteDao = noteDao;
         this.commentDao = commentDao;
         this.documentNoteDao = documentNoteDao;
+        this.userDao = userDao;
     }
 
     @GET @Path("{id}")
     public Object getById(@PathParam("id") Long id) {
-        Note entity = dao.getById(id);
+        Note entity = noteDao.getById(id);
         if (entity != null) {
             return convert(entity, NoteTO.class);
         }
@@ -72,7 +79,7 @@ public class NotesResource extends AbstractResource {
         NoteComment entity = commentDao.getOneOfNote(id);
         if (entity == null) {
             entity = new NoteComment();
-            entity.setNote(dao.getById(id));
+            entity.setNote(noteDao.getById(id));
         }
         return convert(commentDao.save(convert(info, entity)), NoteCommentTO.class);
     }
@@ -101,7 +108,7 @@ public class NotesResource extends AbstractResource {
         search.setAscending(direction == null || direction.equals("ASC"));
         normalize(search);
 
-        SearchResults<Note> results = dao.findNotes(search);
+        SearchResults<Note> results = noteDao.findNotes(search);
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
 
         Map<String, Object> rv = new HashMap<String, Object>();
@@ -116,7 +123,7 @@ public class NotesResource extends AbstractResource {
     @POST @Path("query")
     public Map<String, Object> query(NoteSearchTO search) {
         normalize(search);
-        SearchResults<Note> results = dao.findNotes(search);
+        SearchResults<Note> results = noteDao.findNotes(search);
         List<NoteTO> entries = convert(results.getResults(), NoteTO.class);
 
         Map<String, Object> rv = new HashMap<String, Object>();
@@ -134,7 +141,7 @@ public class NotesResource extends AbstractResource {
     public Response queryCsv(NoteSearchTO search) {
         search.setPage(null);
         search.setPerPage(null);
-        SearchResults<Note> results = dao.findNotes(search);
+        SearchResults<Note> results = noteDao.findNotes(search);
 
         StringBuilder builder = new StringBuilder();
         if (search.getColumns() != null && !search.getColumns().isEmpty()) {
@@ -171,29 +178,30 @@ public class NotesResource extends AbstractResource {
 
     @POST
     public NoteTO create(NoteTO info) {
-        return convert(dao.save(convert(info, new Note())), NoteTO.class);
+        return convert(noteDao.save(convert(info, new Note())), NoteTO.class);
     }
 
     @PUT @Path("{id}")
     public NoteTO update(@PathParam("id") Long id,  Map<String, Object> info) {
-        Note entity = dao.getById(id);
+        Note entity = noteDao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
         info.remove("lastEditedBy");
         info.remove("allEditors");
-        return convert(dao.save(convert(info, entity)), NoteTO.class);
+        entity.getAllEditors().add(userDao.getCurrentUser());
+        return convert(noteDao.save(convert(info, entity)), NoteTO.class);
     }
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public int importNotes(@FormDataParam("file") InputStream stream) {
-        return dao.importNotes(stream);
+        return noteDao.importNotes(stream);
     }
 
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
-        dao.remove(id);
+        noteDao.remove(id);
     }
 
 }
