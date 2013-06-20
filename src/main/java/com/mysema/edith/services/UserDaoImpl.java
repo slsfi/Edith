@@ -8,7 +8,6 @@ package com.mysema.edith.services;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.common.io.Resources;
@@ -17,8 +16,6 @@ import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.Profile;
 import com.mysema.edith.domain.QUser;
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.UserTO;
-import com.mysema.query.types.ConstructorExpression;
 
 @Transactional
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {

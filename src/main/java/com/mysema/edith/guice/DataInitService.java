@@ -8,8 +8,8 @@ package com.mysema.edith.guice;
 import java.io.IOException;
 
 import com.google.inject.Inject;
-import com.mysema.edith.services.VersioningDao;
 import com.mysema.edith.services.UserDao;
+import com.mysema.edith.services.VersioningDao;
 
 public class DataInitService {
 
