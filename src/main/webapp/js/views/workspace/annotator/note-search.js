@@ -212,6 +212,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       // tree nodes
       var nodes = this.$(".directory-tree").dynatree("getSelectedNodes");
       data.documents = _.map(nodes, function(n) { return n.data.documentId; });
+      data.paths = _.map(nodes, function(n) { return n.data.path });
       
       documentNotes.extendScope(data);
       documentNotes.fetchWithScope();
@@ -219,6 +220,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
   
     render: function() {
       var self = this;
+
       this.$el.html(searchTemplate());
       this.gridView = new GridView({el: this.$('.documentNoteGrid'), $pagers: this.$('.documentNotePager')});     
       this.metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select'), defaultSelection: ['description', 'document']});     
@@ -242,14 +244,21 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         onLazyRead: function(node) {
           node.appendAjax({
             url: '/api/files/',
-            data: 'path=' + node.data.path
+            data: 'path=' + node.data.path,
+            success: function(node) {
+              if(node.isSelected()){
+                $.each(node.childList, function(){
+                  this._select(true,false,true);
+                });
+              }
+            }
           });
         },
         
         onSelect: function() {
           self.search();
         }
-        
+
       });
       this.$('#advancedSearch .multiselect').multiselect({});
     },
