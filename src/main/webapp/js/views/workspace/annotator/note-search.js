@@ -226,7 +226,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         var userOpts = _.map(users.toJSON(), userOption).join('');
         this.$('.creators').html(userOption({}) + userOpts); 
       };
-      if (users.length > 0) cb(); else users.fetch({success: cb});
+      if (users.length > 0) {
+        cb();
+      } else {
+        users.fetch({success: cb});
+      }
       
       this.$('.date').datepicker({ dateFormat: localize('dateformat') });
       
