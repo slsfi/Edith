@@ -260,7 +260,21 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         }
 
       });
-      this.$('#advancedSearch .multiselect').multiselect({});
+      this.$('#advancedSearch .multiselect').multiselect({
+        buttonText: function(options, select) {
+          if (options.length == 0) {
+            return localize('nothing-selected');
+          } else if (options.length > 4) {
+            return options.length + ' ' + localize('n-selected') + ' <b class="caret"></b>';
+          } else {
+            var selected = '';
+            options.each(function() {
+              selected += $(this).text() + ', ';
+            });
+            return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+          }
+        },
+      });
     },
 
     annotate: function() {
