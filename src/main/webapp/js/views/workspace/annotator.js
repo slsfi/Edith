@@ -17,6 +17,14 @@ define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap', '
       _.bindAll(this, 'render', 'switchTabFromClick');
       var self = this;
 
+      vent.on('document:open', function() {
+        if (self.noteEditInitialized) {
+          self.$('.nav-tabs li').last().remove();
+          self.noteEditInitialized = false;
+          self.switchTab('note-list');
+          self.$('.nav-tabs a[data-target="note-list"]').tab('show');
+        }
+      });
       vent.on('document-note:open note:open note:create note:link-existing', function() {
         if (!self.noteEditInitialized) {
           self.$('.nav-tabs').append('<li><a href="#" data-target="note-edit" data-toggle="tab">' +

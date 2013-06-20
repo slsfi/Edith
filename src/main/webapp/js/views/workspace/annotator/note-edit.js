@@ -32,7 +32,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
              'click #create-document-note': 'annotate'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'save', 'setDirty', 'linkToExistingNote', 'toggleAnnotationEnabled', 'annotate', 'extract',
+      _.bindAll(this, 'render', 'save', 'setDirty', 'attach', 'toggleAnnotationEnabled', 'annotate', 'extract',
                       'hasPersistedNote', 'close', 'isPersisted');
       var self = this;
       vent.on('document-note:change', function(documentNote) {
@@ -74,7 +74,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       this.isDirty = true;
     },
 
-    linkToExistingNote: function(note) {
+    attach: function(note) {
       if (!this.documentNote) {
         this.documentNote = {note: note};
       } else {
@@ -346,7 +346,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
     initialize: function() {
       _.bindAll(this, 'render', 'openNote', 'openDocumentNote', 'create',
-                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote', 'createDocumentNote', 'linkExistingDocumentNote');
+                      'saveDocumentNote', 'saveNote', 'deleteDocumentNote', 'createDocumentNote', 'attach');
       var self = this;
       vent.on('document:selection-change', function(documentId, selection) {
         if (self.$el.is(':visible')) {
@@ -357,7 +357,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       vent.on('document-note:open', this.openDocumentNote);
       vent.on('note:open', this.openNote);
       vent.on('document-note:create', this.createDocumentNote);
-      vent.on('note:link-existing', this.linkExistingDocumentNote);
+      vent.on('note:link-existing', this.attach);
+      vent.on('document:open', function() {
+
+      });
       this.render();
     },
 
@@ -451,7 +454,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       }
     },
 
-    linkExistingDocumentNote: function(note) {
+    attach: function(note) {
       if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
         if (!confirm(localize('dirty-dialog-confirm'))) {
           return;
@@ -459,7 +462,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       }
       
       this.documentNoteForm.close();
-      this.documentNoteForm.linkToExistingNote(note);
+      this.documentNoteForm.attach(note);
       this.comment.close();
       this.comment.open(note.comment, note.id);
       this.noteForm.open(note);
