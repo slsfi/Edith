@@ -62,13 +62,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
   var EditedByFormatter = function(row, cell, value, columnDef, data) {
     var value = data.get('note').editedOn;
     var editedBy = data.get('note').lastEditedBy.username;
-    return moment.unix(value / 1000).format("D.M.YY") + " (" + editedBy + ")";
+    return moment.unix(value / 1000).format('D.M.YY') + ' (' + editedBy + ')';
 
   };
   
   var TypesFormatter = function(row, cell, value, columnDef, data) {
     var types = data.get('note').types;
-    return _.map(types, localize).join(", ");
+    return _.map(types, localize).join(', ');
   };
   
   var allColumns = [
@@ -142,7 +142,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     
   });
   
-  var userOption = Handlebars.compile("<option value='{{id}}'>{{username}}</option>");
+  var userOption = Handlebars.compile('<option value='{{id}}'>{{username}}</option>');
   
   var dateFields = ['createdAfter', 'createdBefore', 'editedAfter', 'editedBefore'];
     
@@ -188,7 +188,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
 
     search: function() {
       spinner('document-note-search:reset');
-      var arr = this.$("form").serializeArray();
+      var arr = this.$('form').serializeArray();
       var data = _(arr).reduce(function(acc, field) {
              if (field.value) {
                if (field.name == 'creators' || field.name == 'types') {
@@ -206,7 +206,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
            }, {});
       
       // tree nodes
-      var nodes = this.$(".directory-tree").dynatree("getSelectedNodes");
+      var nodes = this.$('.directory-tree').dynatree('getSelectedNodes');
       data.documents = _.map(nodes, function(n) { return n.data.documentId; });
       data.paths = _.map(nodes, function(n) { return n.data.path });
       
@@ -223,12 +223,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       this.filterColumnsAccordingToSelection(this.metadataSelect.getColumns());
 
       var cb = function() { 
-        var userOpts = _.map(users.toJSON(), userOption).join("");
-        this.$(".creators").html(userOption({}) + userOpts); 
+        var userOpts = _.map(users.toJSON(), userOption).join('');
+        this.$('.creators').html(userOption({}) + userOpts); 
       };
       if (users.length > 0) cb(); else users.fetch({success: cb});
       
-      this.$(".date").datepicker({ dateFormat: localize('dateformat') });
+      this.$('.date').datepicker({ dateFormat: localize('dateformat') });
       
       this.$('.directory-tree').dynatree({
         checkbox: true,
