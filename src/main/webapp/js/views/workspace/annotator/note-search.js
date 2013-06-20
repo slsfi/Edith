@@ -138,10 +138,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         grid.invalidateAllRows();
         grid.render();
       });
-
-      documentNotes.on('change', function() {
-        $(grid.getActiveCellNode()).css('background', 'red');
-      });
     }
     
   });
