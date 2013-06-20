@@ -192,7 +192,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       var data = _(arr).reduce(function(acc, field) {
              if (field.value) {
                if (field.name == 'creators' || field.name == 'types') {
-                 if (!acc[field.name]) acc[field.name] = [];
+                 if (!acc[field.name]) {
+                   acc[field.name] = [];
+                 }
                  acc[field.name].push(field.value);
                } else if (dateFields.indexOf(field.name) > -1) {  
                  acc[field.name] = moment(field.value, 'DD.MM.YYYY').valueOf();
