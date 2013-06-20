@@ -239,9 +239,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
             url: '/api/files/',
             data: 'path=' + node.data.path,
             success: function(node) {
-              if(node.isSelected()){
+              if (node.isSelected()) {
                 $.each(node.childList, function(){
-                  this._select(true,false,true);
+                  this._select(true, false, true);
                 });
               }
             }
