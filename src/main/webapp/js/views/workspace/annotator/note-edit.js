@@ -212,6 +212,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       _(CKEditor.instances).each(function(editor) {
         editor.destroy(true);
       });
+      this.note.allEditors = _(this.note.allEditors)
+                               .map(function(user) { 
+                                      return user.username;
+                                    })
+                               .join(', ');
       this.$el.html(this.template(this.note))
               .effect('highlight', {color: 'lightblue'}, 500);
       this.$('.wysiwyg').ckeditor(ckEditorSetup);
