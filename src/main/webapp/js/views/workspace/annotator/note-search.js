@@ -221,7 +221,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       var self = this;
       this.$el.html(searchTemplate());
       this.gridView = new GridView({el: this.$('.documentNoteGrid'), $pagers: this.$('.documentNotePager')});     
-      this.metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select')});     
+      this.metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select'), defaultSelection: ['description', 'document']});     
       this.filterColumnsAccordingToSelection(this.metadataSelect.getColumns());
 
       var cb = function() { 

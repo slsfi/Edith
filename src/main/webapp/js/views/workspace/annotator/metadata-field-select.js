@@ -3,8 +3,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
        function($, _, Backbone, vent, Handlebars, template) {
   var MetadataFieldSelect = Backbone.View.extend({
     template: Handlebars.compile(template),
+
+    defaultSelection: ['description', 'editedOn'],
     
     initialize: function() {
+      if (this.options.defaultSelection) {
+        this.defaultSelection = this.options.defaultSelection;
+      }
+      
       _.bindAll(this, 'render', 'getColumns');
       this.render();
     },
@@ -12,6 +18,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     render: function() {
       var self = this;
       this.$el.html(this.template);
+      _.each(this.defaultSelection, function(option) {
+        this.$('option[value="' + option + '"]').attr('selected', 'selected');
+      });
       this.$('select').multiselect({
         onChange: function(element, checked) {
                     vent.trigger('metadata-field-select:change', self.getColumns());
