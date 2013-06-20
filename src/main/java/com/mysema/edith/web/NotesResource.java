@@ -189,7 +189,9 @@ public class NotesResource extends AbstractResource {
         }
         info.remove("lastEditedBy");
         info.remove("allEditors");
-        entity.getAllEditors().add(userDao.getCurrentUser());
+        User user = userDao.getCurrentUser();
+        entity.getAllEditors().add(user);
+        entity.setLastEditedBy(user);
         return convert(noteDao.save(convert(info, entity)), NoteTO.class);
     }
 
