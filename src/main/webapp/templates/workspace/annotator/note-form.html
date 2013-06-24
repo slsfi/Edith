@@ -86,6 +86,7 @@
   <div class="control-group">
     <div>
       <button id="save-note" disabled>{{ localize 'save' }}</button>
+      <button id="delete-note" {{#if id}} {{#if documentNoteCount}} disabled {{/if}} {{/if}}>{{ localize 'delete' }}</button>
     </div>
   </div>
 </form>

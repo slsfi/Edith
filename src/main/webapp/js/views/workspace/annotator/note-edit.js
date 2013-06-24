@@ -176,8 +176,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                      dataType: 'json',
                      contentType: "application/json; charset=utf-8",
                      success: function(data) {
-                       // TODO: Note's DocumentNote count?
-//                       vent.trigger('note:change', self.note.id);
                        vent.trigger('document-note:deleted', self.documentNote.document.id);
                      }};
       $.ajax(request);
@@ -193,14 +191,27 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     template: Handlebars.compile(noteFormTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'render', 'save', 'setDirty', 'open', 'extract');
+      _.bindAll(this, 'render', 'save', 'setDirty', 'open', 'extract', 'remove', 'close');
       var self = this;
       vent.on('note:change', function(note) {
                                self.isDirty = false;
                                self.note = note;
                                self.render();
                              });
-
+      vent.on('document-note:deleted', function() {
+                                         var request = {url: '/api/notes/' + self.note.id,
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        contentType: "application/json; charset=utf-8",
+                                                        success: function(data) {
+                                                                   // TODO: Perhaps publish this?
+                                                                   self.isDirty = false;
+                                                                   self.note = data;
+                                                                   self.render();
+                                                                 }};
+                                         $.ajax(request);
+                                       });
+      vent.on('note:deleted', this.close);
       this.render();
     },
 
@@ -246,6 +257,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       this.isDirty = false;
       this.note = note;
       this.render();
+    },
+
+    close: function() {
+      this.isDirty = false;
+      this.note = null;
+      this.$el.empty();
     },
 
     setDirty: function() {
@@ -304,7 +321,20 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
         editor.destroy(true);
       });
       $.ajax(request);
-    }
+    },
+
+    remove: function() {
+      spinner('note:deleted');
+      var self = this;
+      var request = {url: '/api/notes/' + this.note.id,
+                     type: 'DELETE',
+                     dataType: 'json',
+                     contentType: "application/json; charset=utf-8",
+                     success: function(data) {
+                       vent.trigger('note:deleted');
+                     }};
+      $.ajax(request);
+}
   });
 
   var Comment = Backbone.View.extend({
@@ -313,7 +343,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     events: {'click #edit-comment': 'edit'},
 
     initialize: function() {
-      _.bindAll(this, 'render', 'open', 'edit');
+      _.bindAll(this, 'render', 'open', 'edit', 'close');
       var self = this;
       vent.on('comment:change', function(comment, noteId) {
                                   if (self.$el.is(':visible')) {
@@ -329,6 +359,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                  }
                                }
                              });
+      vent.on('note:deleted', this.close);
     },
 
     render: function() {
@@ -361,7 +392,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
     events: {'click #save-document-note': 'saveDocumentNote',
              'click #save-note': 'saveNote',
-             'click #delete-document-note': 'deleteDocumentNote'},
+             'click #delete-document-note': 'deleteDocumentNote',
+             'click #delete-note': 'deleteNote'},
 
     initialize: function() {
       _.bindAll(this, 'render', 'openNote', 'openDocumentNote', 'create',
@@ -452,10 +484,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                        data: JSON.stringify(data),
                        success: function(data) {
                          self.documentNoteForm.selection = null;
-                         data.document = data.document.id;
                          vent.trigger('document-note:change', data);
                          vent.trigger('note:change', data.note);
-                         vent.trigger('annotation:change', data.document);
+                         vent.trigger('annotation:change', data.document.id);
                        }};
         $.ajax(request);
       }
@@ -469,7 +500,24 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     deleteDocumentNote: function(evt) {
       evt.preventDefault();
       if (confirm(localize('confirm-document-note-delete'))) {
+        if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
+          if (!confirm(localize('dirty-dialog-confirm'))) {
+            return;
+          }
+        }
         this.documentNoteForm.remove();
+      }
+    },
+
+    deleteNote: function(evt) {
+      evt.preventDefault();
+      if (confirm(localize('confirm-note-delete'))) {
+        if (this.noteForm.isDirty || this.documentNoteForm.isDirty) {
+          if (!confirm(localize('dirty-dialog-confirm'))) {
+            return;
+          }
+        }
+        this.noteForm.remove();
       }
     },
 

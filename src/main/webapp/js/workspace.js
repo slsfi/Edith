@@ -25,11 +25,12 @@ require([], function() {
         _.each({'document-note:change': localize('instance-saved-message'),
                 'annotation:change': localize('annotation-saved-message'),
                 'document-note:deleted': localize('instance-deleted-message'),
+                'note:deleted': localize('note-deleted-message'),
                 'note:change': localize('note-saved-message'),
                 'comment:change': localize('comment-saved-message'),
                 'documents:reset': localize('documents-uploaded-message'),
-                'document:delete': localize('document-deleted-message'),
-                'document:rename': localize('document-rename-message')},
+                'document:deleted': localize('document-deleted-message'),
+                'document:renamed': localize('document-renamed-message')},
                function(msg, evt) {
                  vent.on(evt, function() { success(msg) });
                });

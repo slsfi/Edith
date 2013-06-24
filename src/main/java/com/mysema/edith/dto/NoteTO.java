@@ -47,6 +47,8 @@ public class NoteTO {
 
     private NoteCommentTO comment;
 
+    private int documentNoteCount;
+
     public Long getId() {
         return id;
     }
@@ -183,4 +185,11 @@ public class NoteTO {
         this.comment = comment;
     }
 
+    public int getDocumentNoteCount() {
+        return documentNoteCount;
+    }
+
+    public void setDocumentNoteCount(int documentNoteCount) {
+        this.documentNoteCount = documentNoteCount;
+    }
 }

@@ -17,7 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap', '
       _.bindAll(this, 'render', 'switchTabFromClick');
       var self = this;
 
-      vent.on('document:open', function() {
+      vent.on('document:open note:deleted', function() {
         if (self.noteEditInitialized) {
           self.$('.nav-tabs li').last().remove();
           self.noteEditInitialized = false;

@@ -23,7 +23,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
     initialize: function() {
       _.bindAll(this);
-      vent.on('document:delete document:rename', this.reload);
+      vent.on('document:deleted document:renamed', this.reload);
       this.render();
     },
     

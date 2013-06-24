@@ -34,7 +34,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
                 {type: 'delete',
                  data: { path: self.selectedNode.path },
                  success: function() { 
-                   vent.trigger('document:delete', this.selectedNode); 
+                   vent.trigger('document:deleted', this.selectedNode);
                    self.$('button').attr('disabled', 'disabled');
                  }  
         });
@@ -49,7 +49,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
                 {type: 'put',
                   data: { path: self.selectedNode.path, name: newName },
                   success: function(data) { 
-                    vent.trigger('document:rename', data); 
+                    vent.trigger('document:renamed', data);
                     self.$('button').attr('disabled', 'disabled');
                   }
         });
