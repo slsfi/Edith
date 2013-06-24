@@ -1,11 +1,17 @@
 <h2>{{localize 'documents'}}</h2>
 
-<p class="add-documents">{{localize 'add-documents'}}:</p>
+<a href="#" data-toggle="collapse" data-target="#document-upload">
+  {{localize 'add-documents'}}
+</a>
+ 
+<div id="document-upload" class="collapse">
+  <form class="form-inline import" method="post" enctype="multipart/form-data">
+    <input name="file" type="file"/>
+    <input type="submit" svalue="{{localize 'submit'}}"/>
+  </form>
+</div>
 
-<form class="form-inline import" method="post" enctype="multipart/form-data">
-  <input name="file" type="file"/>
-  <input type="submit" svalue="{{localize 'submit'}}"/>
-</form>
+<hr></hr>
 
 <div id="document-actions"></div>
 
