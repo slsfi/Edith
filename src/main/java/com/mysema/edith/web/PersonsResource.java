@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.web;
 
 import java.util.Map;
@@ -27,16 +22,16 @@ import com.mysema.edith.services.PersonDao;
 @Produces(MediaType.APPLICATION_JSON)
 public class PersonsResource extends AbstractResource {
 
-    private final PersonDao dao;
+    private final PersonDao personDao;
 
     @Inject
-    public PersonsResource(PersonDao dao) {
-        this.dao = dao;
+    public PersonsResource(PersonDao personDao) {
+        this.personDao = personDao;
     }
 
     @GET @Path("{id}")
     public Object getById(@PathParam("id") Long id) {
-        Person entity = dao.getById(id);
+        Person entity = personDao.getById(id);
         if (entity != null) {
             return convert(entity, PersonTO.class);
         }
@@ -45,21 +40,21 @@ public class PersonsResource extends AbstractResource {
 
     @POST
     public PersonTO create(PersonTO info) {
-        return convert(dao.save(convert(info, Person.class)), PersonTO.class);
+        return convert(personDao.save(convert(info, Person.class)), PersonTO.class);
     }
 
     @PUT @Path("{id}")
     public PersonTO update(@PathParam("id") Long id,  Map<String, Object> info) {
-        Person entity = dao.getById(id);
+        Person entity = personDao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), PersonTO.class);
+        return convert(personDao.save(convert(info, entity)), PersonTO.class);
     }
 
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
-        dao.remove(id);
+        personDao.remove(id);
     }
 
 }

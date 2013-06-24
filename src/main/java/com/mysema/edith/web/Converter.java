@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.web;
 
 import java.lang.reflect.Type;
@@ -27,18 +22,18 @@ import com.mysema.util.ReflectionUtils;
 
 @SuppressWarnings("unchecked")
 public class Converter {
-    
+
     private static final Map<Class<?>, Class<?>> containerTypes = Maps.newHashMap();
-    
+
     static {
         containerTypes.put(List.class, ArrayList.class);
         containerTypes.put(Set.class, HashSet.class);
         containerTypes.put(Collection.class, ArrayList.class);
     }
-    
+
     @Inject
     private Provider<EntityManager> em;
-    
+
     /**
      * @param source
      * @param targetClass
@@ -49,19 +44,19 @@ public class Converter {
             if (targetClass.isPrimitive()) {
                 targetClass = Primitives.wrap(targetClass);
             }
-            
+
             if (source == null) {
                 return null;
             // direct
             } else if (targetClass.isInstance(source)) {
                 return (T) source;
-            // (int) id to bean    
+            // (int) id to bean
             } else if (source instanceof Integer && Identifiable.class.isAssignableFrom(targetClass)) {
                 return em.get().find(targetClass, ((Integer)source).longValue());
             // id to bean
             } else if (source instanceof Long && Identifiable.class.isAssignableFrom(targetClass)) {
                 return em.get().find(targetClass, source);
-            // id (string) to bean    
+            // id (string) to bean
             } else if (source instanceof String && Identifiable.class.isAssignableFrom(targetClass)) {
                 return em.get().find(targetClass, Long.valueOf((String)source));
             // bean to id
@@ -74,7 +69,7 @@ public class Converter {
             } else if (source instanceof String && Number.class.isAssignableFrom(targetClass)) {
                 return (T) MathUtils.cast(new BigDecimal((String)source), (Class)targetClass);
             // enum
-            } else if (targetClass.isEnum()) {    
+            } else if (targetClass.isEnum()) {
                 return (T) Enum.valueOf((Class)targetClass, source.toString());
             } else {
                 return convert(source, targetClass.newInstance());
@@ -85,7 +80,7 @@ public class Converter {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-    
+
     /**
      * @param source
      * @param target
@@ -105,7 +100,7 @@ public class Converter {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-        
+
     /**
      * @param source
      * @param target
@@ -121,12 +116,12 @@ public class Converter {
                 boolean primitive = target.getType(entry.getKey()).isPrimitive();
                 if (entry.getKey().equals("class") || (primitive && entry.getValue() == null)) {
                     continue;
-                }    
+                }
             } else {
                 continue;
             }
-                        
-            Object sourceValue = source.get(entry.getKey());            
+
+            Object sourceValue = source.get(entry.getKey());
             Object targetValue;
             if (sourceValue == null) {
                 targetValue = null;
@@ -141,7 +136,7 @@ public class Converter {
                     if (!elementType.isInstance(sourceColl.iterator().next())) {
                         for (Object obj : sourceColl) {
                             targetColl.add(convert(obj, elementType));
-                        }       
+                        }
                     } else {
                         targetColl.addAll(sourceColl);
                     }
@@ -150,12 +145,12 @@ public class Converter {
             } else if (targetType.isInstance(sourceValue)) {
                 targetValue = sourceValue;
             // other
-            } else { 
+            } else {
                 targetValue = convert(sourceValue, targetType);
             }
             target.put(entry.getKey(), targetValue);
-        }        
+        }
         return target.getBean();
     }
-    
+
 }

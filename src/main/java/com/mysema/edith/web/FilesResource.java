@@ -24,32 +24,32 @@ import com.mysema.edith.services.DocumentDao;
 @Produces(MediaType.APPLICATION_JSON)
 public class FilesResource {
 
-    private final DocumentDao dao;
+    private final DocumentDao documentDao;
 
     @Inject
-    public FilesResource(DocumentDao dao) {
-        this.dao = dao;
+    public FilesResource(DocumentDao documentDao) {
+        this.documentDao = documentDao;
     }
 
     @GET
     public List<FileItemWithDocumentId> getFiles(
             @QueryParam("id") Long id,
             @QueryParam("path") String path) {
-        return dao.fromPath(path, id);
+        return documentDao.fromPath(path, id);
     }
     
     @DELETE
     public void delete(@FormParam("path") String path) {
-        dao.removeByPath(path);
+        documentDao.removeByPath(path);
     }
     
     @PUT 
     public FileItem move(@FormParam("path") String path, @FormParam("name") String name) {
-        Document doc = dao.getDocumentForPath(path);
+        Document doc = documentDao.getDocumentForPath(path);
         if (doc == null) {
             throw new RuntimeException("Document not found " + path);
         }
-        doc = dao.rename(doc.getId(), name);
+        doc = documentDao.rename(doc.getId(), name);
         return new FileItem(doc.getTitle(), doc.getPath(), false, Collections.<FileItem>emptyList(), false);
     }
 

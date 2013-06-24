@@ -22,16 +22,16 @@ import com.mysema.edith.services.TermDao;
 @Produces(MediaType.APPLICATION_JSON)
 public class TermsResource extends AbstractResource {
 
-    private final TermDao dao;
+    private final TermDao termDao;
 
     @Inject
-    public TermsResource(TermDao dao) {
-        this.dao = dao;
+    public TermsResource(TermDao termDao) {
+        this.termDao = termDao;
     }
 
     @GET @Path("{id}")
     public Object getById(@PathParam("id") Long id) {
-        Term entity = dao.getById(id);
+        Term entity = termDao.getById(id);
         if (entity != null) {
             return convert(entity, TermTO.class);
         }
@@ -40,21 +40,21 @@ public class TermsResource extends AbstractResource {
 
     @POST
     public TermTO create(TermTO info) {
-        return convert(dao.save(convert(info, Term.class)), TermTO.class);
+        return convert(termDao.save(convert(info, Term.class)), TermTO.class);
     }
 
     @PUT @Path("{id}")
     public TermTO update(@PathParam("id") Long id,  Map<String, Object> info) {
-        Term entity = dao.getById(id);
+        Term entity = termDao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), TermTO.class);
+        return convert(termDao.save(convert(info, entity)), TermTO.class);
     }
 
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
-        dao.remove(id);
+        termDao.remove(id);
     }
 
 }

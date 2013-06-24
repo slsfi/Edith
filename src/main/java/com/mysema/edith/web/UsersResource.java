@@ -23,26 +23,26 @@ import com.mysema.edith.services.UserDao;
 @Produces(MediaType.APPLICATION_JSON)
 public class UsersResource extends AbstractResource {
 
-    private final UserDao dao;
+    private final UserDao userDao;
 
     @Inject
-    public UsersResource(UserDao dao) {
-        this.dao = dao;
+    public UsersResource(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     @GET
     public List<UserTO> all() {
-        return convert(dao.getAll(), UserTO.class);
+        return convert(userDao.getAll(), UserTO.class);
     }
 
     @GET @Path("current")
     public UserTO getCurrent() {
-        return convert(dao.getCurrentUser(), UserTO.class);
+        return convert(userDao.getCurrentUser(), UserTO.class);
     }
 
     @GET @Path("{id}")
     public Object getById(@PathParam("id") Long id) {
-        User entity = dao.getById(id);
+        User entity = userDao.getById(id);
         if (entity != null) {
             return convert(entity, UserTO.class);
         }
@@ -51,16 +51,16 @@ public class UsersResource extends AbstractResource {
 
     @POST
     public UserTO create(UserTO info) {
-        return convert(dao.save(convert(info, User.class)), UserTO.class);
+        return convert(userDao.save(convert(info, User.class)), UserTO.class);
     }
 
     @PUT @Path("{id}")
     public UserTO update(@PathParam("id") Long id,  Map<String, Object> info) {
-        User entity = dao.getById(id);
+        User entity = userDao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), UserTO.class);
+        return convert(userDao.save(convert(info, entity)), UserTO.class);
     }
 
     @DELETE @Path("{id}")

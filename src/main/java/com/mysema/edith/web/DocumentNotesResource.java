@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.web;
 
 import java.util.HashMap;
@@ -38,12 +33,12 @@ public class DocumentNotesResource extends AbstractResource {
 
     private final DocumentNoteService service;
 
-    private final NoteDao dao;
+    private final NoteDao noteDao;
 
     @Inject
-    public DocumentNotesResource(DocumentNoteService service, NoteDao dao) {
+    public DocumentNotesResource(DocumentNoteService service, NoteDao noteDao) {
         this.service = service;
-        this.dao = dao;
+        this.noteDao = noteDao;
     }
 
     @GET @Path("{id}")
@@ -70,7 +65,7 @@ public class DocumentNotesResource extends AbstractResource {
         search.setAscending(direction == null || direction.equals("ASC"));
         normalize(search);
 
-        SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
+        SearchResults<DocumentNote> results = noteDao.findDocumentNotes(search);
         List<FullDocumentNoteTO> entries = convert(results.getResults(), FullDocumentNoteTO.class);
 
         Map<String, Object> rv = new HashMap<String, Object>();
@@ -85,7 +80,7 @@ public class DocumentNotesResource extends AbstractResource {
     @POST @Path("query")
     public Map<String, Object> query(NoteSearchTO search) {
         normalize(search);
-        SearchResults<DocumentNote> results = dao.findDocumentNotes(search);
+        SearchResults<DocumentNote> results = noteDao.findDocumentNotes(search);
         List<FullDocumentNoteTO> entries = convert(results.getResults(), FullDocumentNoteTO.class);
 
         Map<String, Object> rv = new HashMap<String, Object>();
@@ -100,13 +95,13 @@ public class DocumentNotesResource extends AbstractResource {
     private Note getNote(Map<String, Object> info) {
         Note note;
         if (info.containsKey("id")) {
-            note = dao.getById(Long.parseLong(info.get("id").toString()));
+            note = noteDao.getById(Long.parseLong(info.get("id").toString()));
         } else {
             note = new Note();
         }
         info.remove("lastEditedBy");
         info.remove("allEditors");
-        return dao.save(convert(info, note));
+        return noteDao.save(convert(info, note));
     }
 
     @POST

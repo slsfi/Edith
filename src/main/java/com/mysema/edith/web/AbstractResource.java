@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.web;
 
 import java.util.ArrayList;

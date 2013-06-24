@@ -22,16 +22,16 @@ import com.mysema.edith.services.PlaceDao;
 @Produces(MediaType.APPLICATION_JSON)
 public class PlacesResource extends AbstractResource {
 
-    private final PlaceDao dao;
+    private final PlaceDao placeDao;
 
     @Inject
-    public PlacesResource(PlaceDao dao) {
-        this.dao = dao;
+    public PlacesResource(PlaceDao placeDao) {
+        this.placeDao = placeDao;
     }
 
     @GET @Path("{id}")
     public Object getById(@PathParam("id") Long id) {
-        Place entity = dao.getById(id);
+        Place entity = placeDao.getById(id);
         if (entity != null) {
             return convert(entity, PlaceTO.class);
         }
@@ -40,21 +40,21 @@ public class PlacesResource extends AbstractResource {
 
     @POST
     public PlaceTO create(PlaceTO info) {
-        return convert(dao.save(convert(info, new Place())), PlaceTO.class);
+        return convert(placeDao.save(convert(info, new Place())), PlaceTO.class);
     }
 
     @PUT @Path("{id}")
     public PlaceTO update(@PathParam("id") Long id,  Map<String, Object> info) {
-        Place entity = dao.getById(id);
+        Place entity = placeDao.getById(id);
         if (entity == null) {
             throw new RuntimeException("Entity not found");
         }
-        return convert(dao.save(convert(info, entity)), PlaceTO.class);
+        return convert(placeDao.save(convert(info, entity)), PlaceTO.class);
     }
 
     @DELETE @Path("{id}")
     public void delete(@PathParam("id") Long id) {
-        dao.remove(id);
+        placeDao.remove(id);
     }
 
 }
