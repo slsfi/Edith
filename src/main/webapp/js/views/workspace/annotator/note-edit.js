@@ -101,7 +101,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       }
     },
 
-    annotate: function() {      
+    annotate: function(evt) { 
+      if (evt) { evt.preventDefault(); }
       if (!this.documentNote) {
         this.documentNote = {note: this.currentSelection.noteId};
       }
