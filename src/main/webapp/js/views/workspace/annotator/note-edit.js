@@ -271,7 +271,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     },
     
     extract: function() {
-      var arr = this.$el.serializeArray();
+      var arr = this.$el.children().serializeArray();
       var data = _(arr).reduce(function(acc, field) {
                                  var name = field.name;
                                  var value = field.value;
@@ -417,8 +417,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
     render: function() {
       this.$el.html(this.template);
-      this.noteForm = new NoteForm({el: this.$('form#note')});
-      this.documentNoteForm = new DocumentNoteForm({el: this.$('form#document-note')});
+      this.noteForm = new NoteForm({el: this.$('div#note')});
+      this.documentNoteForm = new DocumentNoteForm({el: this.$('div#document-note')});
       this.comment = new Comment({el: this.$('div#comment')})
     },
 
