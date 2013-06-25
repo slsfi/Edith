@@ -96,15 +96,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$('ul.notes').empty();
       spinner('document-notes:loaded');
       var self = this;
-      var dataStart = new Date().getTime();
       $.get('/api/documents/' + id + '/document-notes', function(data) {
-        console.log('list data loaded in: ' + (new Date().getTime() - dataStart));
-        var start = new Date().getTime();
         _(data).each(function(documentNote) {
           self.$('ul.notes').append(new NoteListItem({metadataSelect: metadataSelect,
                                                       data: documentNote}).el);
         });
-        console.log('list rendered in: ' + (new Date().getTime() - start));
         self.$('.note-buttons').hide();
         vent.trigger('document-notes:loaded');
       });
