@@ -292,7 +292,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
         data.term.language = null;
       }
 
-      var types = _(this.$('select[name="type"]').serializeArray())
+      var types = _(this.$('select[name="types"]').serializeArray())
                     .map(function(field) {
                            return field.value;
                          });
