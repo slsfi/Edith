@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
@@ -474,6 +475,12 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
     @Override
     public Note save(Note note) {
+        User user = userDao.getCurrentUser();
+        if (note.getAllEditors() == null) {
+            note.setAllEditors(new HashSet<User>());
+        }
+        note.getAllEditors().add(user);
+        note.setLastEditedBy(user);
         note.setEditedOn(System.currentTimeMillis());
         return persistOrMerge(note);
     }

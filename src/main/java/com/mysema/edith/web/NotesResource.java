@@ -23,7 +23,6 @@ import com.google.inject.persist.Transactional;
 import com.mysema.edith.domain.DocumentNote;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.NoteComment;
-import com.mysema.edith.domain.User;
 import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.NoteCommentTO;
 import com.mysema.edith.dto.NoteSearchTO;
@@ -31,7 +30,6 @@ import com.mysema.edith.dto.NoteTO;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.NoteCommentDao;
 import com.mysema.edith.services.NoteDao;
-import com.mysema.edith.services.UserDao;
 import com.mysema.edith.util.StringUtils;
 import com.mysema.query.SearchResults;
 import com.mysema.util.BeanMap;
@@ -48,15 +46,12 @@ public class NotesResource extends AbstractResource {
 
     private final DocumentNoteDao documentNoteDao;
 
-    private final UserDao userDao;
-
     @Inject
     public NotesResource(NoteDao noteDao, NoteCommentDao commentDao,
-                         DocumentNoteDao documentNoteDao, UserDao userDao) {
+                         DocumentNoteDao documentNoteDao) {
         this.noteDao = noteDao;
         this.commentDao = commentDao;
         this.documentNoteDao = documentNoteDao;
-        this.userDao = userDao;
     }
 
     @GET @Path("{id}")
@@ -188,9 +183,6 @@ public class NotesResource extends AbstractResource {
         }
         info.remove("lastEditedBy");
         info.remove("allEditors");
-        User user = userDao.getCurrentUser();
-        entity.getAllEditors().add(user);
-        entity.setLastEditedBy(user);
         return convert(noteDao.save(convert(info, entity)), NoteTO.class);
     }
 
