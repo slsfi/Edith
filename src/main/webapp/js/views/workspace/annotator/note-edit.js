@@ -40,6 +40,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                         self.isDirty = false;
                                         self.render();
                                       });
+      vent.on('note:change', function(note) {
+        if (self.documentNote) {
+          self.documentNote.note = note;
+        } else {
+          self.documentNote = {note: note};
+        }
+      });
       vent.on('document-note:deleted', this.close);
       this.render();
     },
