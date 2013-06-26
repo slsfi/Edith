@@ -418,7 +418,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       vent.on('document-note:create', this.createDocumentNote);
       vent.on('note:link-existing', this.attach);
       vent.on('document:open', function() {
-
+        self.noteForm.close();
+        self.comment.close();
+        self.documentNoteForm.close();
       });
       this.render();
     },
