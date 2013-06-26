@@ -191,7 +191,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       var arr = this.$('form').serializeArray();
       var data = _(arr).reduce(function(acc, field) {
              if (field.value) {
-               if (field.name == 'creators') {
+               if (field.name == 'creators' || field.name == 'types') {
                  if (!acc[field.name]) {
                    acc[field.name] = [];
                  }
