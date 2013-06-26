@@ -191,7 +191,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       var arr = this.$('form').serializeArray();
       var data = _(arr).reduce(function(acc, field) {
              if (field.value) {
-               if (field.name == 'creators' || field.name == 'types') {
+               if (field.name == 'creators') {
                  if (!acc[field.name]) {
                    acc[field.name] = [];
                  }
@@ -206,7 +206,21 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
              }     
              return acc;
            }, {});
-      
+
+      // clean data to make sure documentNotes.extendScope works properly
+
+      if (!data.types) {
+        data.types = [];
+      }
+
+      if (!data.language) {
+        data.language = null;
+      }
+
+      if (!data.status) {
+        data.status = null;
+      }
+
       // tree nodes
       var nodes = this.$('.directory-tree').dynatree('getSelectedNodes');
       data.documents = _.map(nodes, function(n) { return n.data.documentId; });
