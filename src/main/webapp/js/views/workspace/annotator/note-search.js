@@ -148,7 +148,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
   var NoteSearch = Backbone.View.extend({
     events: {'keyup .search': 'search',
              'change form input': 'search',
-             'change form select': 'search',
+             'change form select[name="creators"]': 'search',
              'click .annotate': 'annotate',
              'click .select': 'select',
              'click .comment': 'comment',
