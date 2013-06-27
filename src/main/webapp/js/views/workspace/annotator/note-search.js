@@ -176,6 +176,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         self.documentId = documentId;
       });
 
+      vent.on('documents:reset document:deleted document:renamed', function() {
+        self.$('.directory-tree').dynatree('getTree').reload();
+      });
+
       users.on('reset', this.render);
       users.fetch({reset: true});
     },
