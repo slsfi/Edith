@@ -139,7 +139,7 @@ public class DocumentsResource extends AbstractResource {
         if (name.endsWith(".zip")) {
             docs = documentDao.addDocumentsFromZip(path != null ? path : documentRoot, file);
         } else {
-            docs = Collections.singletonList(documentDao.addDocument(path+"/"+name, file));
+            docs = Collections.singletonList(documentDao.addDocument(path + "/" + name, file));
         }
         return convert(docs, DocumentTO.class);
     }

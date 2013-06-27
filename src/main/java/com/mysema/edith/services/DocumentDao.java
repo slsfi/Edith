@@ -22,12 +22,12 @@ import com.mysema.edith.dto.FileItemWithDocumentId;
 public interface DocumentDao extends Dao<Document, Long> {
 
     /**
-     * Import the given File to the given svnPath
+     * Import the given File to the given path
      *
-     * @param svnPath
+     * @param path
      * @param file
      */
-    Document addDocument(String svnPath, File file);
+    Document addDocument(String path, File file);
 
     /**
      * Import documents from the given ZIP file
@@ -74,7 +74,7 @@ public interface DocumentDao extends Dao<Document, Long> {
      * Remove the document by id.
      */
     void remove(Long id);
-    
+
     /**
      * @param path
      */

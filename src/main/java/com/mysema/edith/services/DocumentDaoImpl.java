@@ -62,14 +62,14 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public Document getById(Long id) {        
+    public Document getById(Long id) {
         return find(Document.class, id);
     }
 
     @Override
     public Document addDocument(String path, File file) {
         versioningDao.importFile(path, file);
-        return createDocument(path, file.getName());
+        return createDocument(path);
     }
 
     @Override
@@ -123,15 +123,14 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         Document doc = from(document).where(document.path.eq(path)).uniqueResult(document);
         if (doc != null) {
             return doc;
-        } else {
-            return createDocument(path, path.substring(path.lastIndexOf('/') + 1));
         }
+        return createDocument(path);
     }
 
-    private Document createDocument(String path, String title) {
+    private Document createDocument(String path) {
         Document doc = new Document();
         doc.setPath(path);
-        doc.setTitle(title);
+        doc.setTitle(path.contains("/") ? path.substring(1 + path.lastIndexOf('/')) : path);
         persist(doc);
         return doc;
     }
@@ -155,7 +154,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             remove(document);
         }
     }
-    
+
     @Override
     public void removeByPath(String path) {
         boolean directMatch = false;
@@ -165,8 +164,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             remove(doc);
         }
         if (!directMatch) {
-            versioningDao.delete(path);    
-        }        
+            versioningDao.delete(path);
+        }
     }
 
     @Override
@@ -208,7 +207,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
             Document doc = getDocumentForPath(file.getPath());
             rv.add(new FileItemWithDocumentId(file.getTitle(), file.getPath(), file.getIsFolder(),
                     file.getChildren(), file.getHasChildren(), doc.getId(), doc.getId().equals(id),
-                    documentNoteDao.getNoteCountForDocument(doc.getId()), 
+                    documentNoteDao.getNoteCountForDocument(doc.getId()),
                     documentNoteDao.getLastNoteTimestampForDocument(doc.getId())));
         }
         Collections.sort(rv, new Comparator<FileItemWithDocumentId>() {
