@@ -43,6 +43,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
           if (!node.data.isFolder) {
             vent.trigger('document:select', node.data);
           } else {
+            self.$('input[name=path]').val(node.data.path);
             vent.trigger('folder:select', node.data);
           }
         },
@@ -69,7 +70,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
       
     },
 
-    submit: function() {
+    submit: function(evt) {
+      evt.preventDefault();
       var formData = new FormData(this.$(".import").get(0));
       var self = this;
       $.ajax('api/documents',
@@ -80,8 +82,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
               success: function() {
                 self.reload();
                 vent.trigger('documents:reset');
+                self.$('input[name=path]').val('');
               }});
-      return false;
     }
 
   });
