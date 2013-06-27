@@ -39,7 +39,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
           url: '/api/files'
         },
 
-        onClick: function(node) {
+        onActivate: function(node) {
           if (!node.data.isFolder) {
             vent.trigger('document:select', node.data);
           } else {
