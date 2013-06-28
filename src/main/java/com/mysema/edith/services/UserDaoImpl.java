@@ -64,7 +64,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             user.setFirstName(values[0]);
             user.setLastName(values[1]);
             user.setUsername(values[2]);
-            user.setPassword(values[2]); // TODO use hash instead
+            user.setPassword("EdithTwoPointZero20"); // TODO use hash instead
             user.setEmail(values[3]);
             if (values[3].endsWith("mysema.com")) {
                 user.setProfile(Profile.Admin);
