@@ -8,7 +8,9 @@ package com.mysema.edith.services;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.io.Resources;
 import com.google.inject.Inject;
@@ -51,6 +53,10 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public List<User> addUsersFromCsvFile(String filePath, String encoding) throws IOException {
+        Map<String, User> usersByUsername = new HashMap<String, User>();
+        for (User user : getAll()) {
+            usersByUsername.put(user.getUsername(), user);
+        }
         // "/users.csv"), "ISO-8859-1"
         List<String> lines = Resources.readLines(UserDaoImpl.class.getResource(filePath), Charset.forName(encoding));
         List<User> users = new ArrayList<User>();
@@ -74,6 +80,10 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
             persistOrMerge(user);
             users.add(user);
+            usersByUsername.remove(user.getUsername());
+        }
+        for (User user : usersByUsername.values()) {
+            user.setActive(false);
         }
         return users;
     }

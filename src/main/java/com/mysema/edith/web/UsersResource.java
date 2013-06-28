@@ -3,7 +3,6 @@ package com.mysema.edith.web;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -62,10 +61,4 @@ public class UsersResource extends AbstractResource {
         }
         return convert(userDao.save(convert(info, entity)), UserTO.class);
     }
-
-    @DELETE @Path("{id}")
-    public void delete(@PathParam("id") Long id) {
-        throw new UnsupportedOperationException();
-    }
-
 }
