@@ -7,13 +7,24 @@ a {
   font-size: 1.0em;
 }
 
-.navbar .active>a.edith-nav-link, .navbar .active>a.edith-nav-link:hover {
+
+#header .navbar .active>a.edith-nav-link, .navbar .active>a.edith-nav-link:hover {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
   background: #F0F2EB;
   font-weight: bold;
 }
+
+#header .logos {
+  float: right;
+  display: block;
+  margin: -8px 40px 0 0;
+}
+
+  #header .logos img:first-child {
+    padding-right: 20px;
+  }
 
 #document-management .document-info {
   display: inline-block;
