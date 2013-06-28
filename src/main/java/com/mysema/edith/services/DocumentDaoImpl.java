@@ -68,7 +68,12 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
 
     @Override
     public Document addDocument(String path, File file) {
-        versioningDao.importFile(path, file);
+        // TODO: Remove try-catch once we have been able to import SLS data.
+        try {
+            versioningDao.importFile(path, file);
+        } catch (VersioningException e) {
+            System.err.println("already imported? " + e.getMessage());
+        }
         return createDocument(path);
     }
 
