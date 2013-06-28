@@ -37,6 +37,7 @@ import com.mysema.edith.services.DocumentDao;
 import com.mysema.edith.services.DocumentNoteDao;
 import com.mysema.edith.services.DocumentNoteService;
 import com.mysema.edith.services.NoteDao;
+import com.mysema.edith.util.StringUtils;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
@@ -133,11 +134,11 @@ public class DocumentsResource extends AbstractResource {
     public List<DocumentTO> addDocuments(@FormDataParam("path") String path,
             @FormDataParam("file") File file,
             @FormDataParam("file") FormDataContentDisposition fileInfo) {
-        path = path != null ? path : documentRoot;
+        path = StringUtils.isBlank(path) ? documentRoot : path;
         String name = fileInfo.getFileName();
         List<Document> docs;
         if (name.endsWith(".zip")) {
-            docs = documentDao.addDocumentsFromZip(path != null ? path : documentRoot, file);
+            docs = documentDao.addDocumentsFromZip(path, file);
         } else {
             docs = Collections.singletonList(documentDao.addDocument(path + "/" + name, file));
         }

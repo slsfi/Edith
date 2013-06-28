@@ -105,8 +105,8 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     @Override
-    public Document getDocumentForPath(String svnPath) {
-        return getDocumentMetadata(svnPath);
+    public Document getDocumentForPath(String path) {
+        return getDocumentMetadata(path);
     }
 
     @Override
@@ -128,10 +128,13 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     }
 
     private Document createDocument(String path) {
-        Document doc = new Document();
-        doc.setPath(path);
-        doc.setTitle(path.contains("/") ? path.substring(1 + path.lastIndexOf('/')) : path);
-        persist(doc);
+        Document doc = from(document).where(document.path.eq(path)).uniqueResult(document);
+        if (doc == null) {
+            doc = new Document();
+            doc.setPath(path);
+            doc.setTitle(path.contains("/") ? path.substring(1 + path.lastIndexOf('/')) : path);
+            persist(doc);
+        }
         return doc;
     }
 
