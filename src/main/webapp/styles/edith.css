@@ -1,8 +1,17 @@
+a {
+  color: rgb(10, 126, 136);
+}
+
+#header .navbar .nav>li>a {
+  text-shadow: none;
+  font-size: 1.0em;
+}
+
 .navbar .active>a.edith-nav-link, .navbar .active>a.edith-nav-link:hover {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  background: #f4fae0;
+  background: #F0F2EB;
   font-weight: bold;
 }
 
@@ -29,8 +38,8 @@
 }
 
 .tab-operations {
-  border: 1px solid #CBE86B;
-  background-color: #f4fae0;
+  border: 1px solid #D0D2CB;
+  background-color: #F0F2EB;
   padding: 0.8em;
   height: 30px;
   line-height: 30px;
@@ -74,12 +83,16 @@ ul.notes {
   list-style-type: none;
 }
 
+  ul.notes a {
+    color: rgb(35, 84, 148);
+  }
+
   ul.notes li:first-of-type {
     padding-top: 5px;
   }
 
   ul.notes li.selected {
-    background: #dcdcdc;
+    background: #F4FAD2;
   }
 
   ul.notes li .metadata {
@@ -157,7 +170,7 @@ form.import {
 
 #note-edit h4 {
   padding: 10px;
-  background-color: #F2F2F2;
+  background-color: #F0F2EB;
 }
 
 #note-edit #comment {
