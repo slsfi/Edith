@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.io.Resources;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
@@ -21,6 +24,8 @@ import com.mysema.edith.domain.User;
 
 @Transactional
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private static final QUser user = QUser.user;
 
@@ -43,6 +48,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public User getByUsername(String username) {
+    	logger.debug("userDao.getUserName {}", username);
         return from(user).where(user.username.eq(username)).uniqueResult(user);
     }
 

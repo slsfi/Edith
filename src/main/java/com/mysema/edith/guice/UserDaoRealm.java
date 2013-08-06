@@ -13,6 +13,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mysema.edith.domain.User;
@@ -20,6 +22,8 @@ import com.mysema.edith.services.UserDao;
 
 public class UserDaoRealm extends AuthorizingRealm {
     
+	private static final Logger logger = LoggerFactory.getLogger(UserDaoRealm.class);
+	
     @Inject
     private UserDao dao;
 
@@ -31,6 +35,7 @@ public class UserDaoRealm extends AuthorizingRealm {
         if (user != null) {
             return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());    
         } else {
+        	logger.error("Found no user with given credentials");
             return null;
         }        
     }
