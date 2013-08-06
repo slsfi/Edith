@@ -5,7 +5,7 @@
   <groupId>com.mysema</groupId>
   <artifactId>com.mysema.edith</artifactId>
   <packaging>war</packaging>
-  <version>2.0.0.rc1</version>
+  <version>2.0.0.rc2</version>
   <name>Edith</name>
   <description></description>
 
