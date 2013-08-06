@@ -47,6 +47,7 @@ public class WebModule extends ServletModule {
         parameters.put("com.sun.jersey.spi.container.ContainerResponseFilters", CharsetResponseFilter.class.getName());
         serve("/api/*").with(GuiceContainer.class, parameters);
         filter("/workspace.html").through(NoCacheFilter.class);
+        filter("/login.html").through(NoCacheFilter.class);
         filter("/*").through(GuiceShiroFilter.class);
     }
 
