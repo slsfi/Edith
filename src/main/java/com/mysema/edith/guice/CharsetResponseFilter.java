@@ -1,6 +1,5 @@
 package com.mysema.edith.guice;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -15,7 +14,7 @@ public class CharsetResponseFilter implements ContainerResponseFilter {
 	private static final Logger logger = LoggerFactory.getLogger(CharsetResponseFilter.class);
 
     public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
-    	logger.debug("charsetResponseFilter.doFilter {}", ((HttpServletRequest)request).getRequestURI());
+    	logger.debug("charsetResponseFilter.doFilter {}", request.getAbsolutePath().toString());
         MediaType contentType = response.getMediaType();
         if (contentType != null) {
             response.getHttpHeaders().putSingle("Content-Type", contentType.toString() + ";charset=UTF-8");    
