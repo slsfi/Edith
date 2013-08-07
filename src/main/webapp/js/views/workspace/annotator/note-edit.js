@@ -124,7 +124,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     },
 
     extract: function() {
-      var arr = this.$el.serializeArray();
+      var arr = this.$('form').serializeArray();
       var data = _(arr).reduce(function(acc, field) {
                                  acc[field.name] = field.value;
                                  return acc;
