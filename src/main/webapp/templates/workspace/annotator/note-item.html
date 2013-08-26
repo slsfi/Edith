@@ -2,13 +2,17 @@
   <a href="#" id="select-note" data-id="{{ id }}">{{ shortenedSelection }}</a></span>
 </span>
 
+<span class="description">{{{ note.term.meaning }}}</span>
+
+<div class="clearfix"></div>
+
 <div class="metadata">
   <span class="fullSelection">{{ fullSelection }}</span>
   <span class="types">{{#each note.types }} {{ localize this }} {{/each}}</span>
   <span class="editedOn">{{ dateFormat note.editedOn }} ({{ note.lastEditedBy.username }})</span>
   <span class="status">{{ note.status }}</span>
   <span class="document">{{ document.title }}</span>
-  <span class="highlight description">{{{ note.term.meaning }}}</span>
+
   <span class="highlight comment">{{{ note.comment.message }}}</span>
 
   <div class="note-buttons">

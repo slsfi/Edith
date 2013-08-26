@@ -239,7 +239,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
 
       this.$el.html(searchTemplate());
       this.gridView = new GridView({el: this.$('.documentNoteGrid'), $pagers: this.$('.documentNotePager')});     
-      this.metadataSelect = new MetadataFieldSelect({el: this.$('.metadata-field-select'), defaultSelection: ['description', 'document']});     
+      this.metadataSelect = new MetadataFieldSelect({el: this.$('#search-results-metadata'), defaultSelection: ['description', 'document']});     
       this.filterColumnsAccordingToSelection(this.metadataSelect.getColumns());
 
       var userOpts = _.map(users.toJSON(), userOption).join('');
