@@ -93,14 +93,17 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     },
 
     render: function(id) {
-      var noteListMetadata = new MetadataFieldSelect({el: this.$('#note-list-metadata'),
-                                                      defaultSelection: ['description']});
+      if (!this.noteListMetadata) {
+        this.noteListMetadata = new MetadataFieldSelect({el: this.$('#note-list-metadata'),
+                                                         defaultSelection: ['description']});
+      }
+
       this.$('ul.notes').empty();
       spinner('document-notes:loaded');
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
         _(data).each(function(documentNote) {
-          self.$('ul.notes').append(new NoteListItem({metadataSelect: noteListMetadata,
+          self.$('ul.notes').append(new NoteListItem({metadataSelect: self.noteListMetadata,
                                                       data: documentNote}).el);
         });
         self.$('.note-buttons').hide();
