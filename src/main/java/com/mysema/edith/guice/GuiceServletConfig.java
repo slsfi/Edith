@@ -11,6 +11,8 @@ import javax.servlet.ServletContextEvent;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
+import com.mycila.guice.ext.closeable.CloseableModule;
+import com.mycila.guice.ext.jsr250.Jsr250Module;
 
 public class GuiceServletConfig extends GuiceServletContextListener {
 
@@ -26,6 +28,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
     protected Injector getInjector() {
         return Guice.createInjector(
                 new WebModule(), new ServiceModule(), new SecurityModule(),
+                new CloseableModule(), new Jsr250Module(),
                 new WebSecurityModule(this.servletContext));
     }
 }

@@ -18,6 +18,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
@@ -59,6 +61,11 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
         this.documentRoot = documentRoot;
         this.versioningDao = versioningDao;
         this.documentNoteDao = documentNoteDao;
+    }
+    
+    @PostConstruct
+    public void init() {
+    	fromPath(null, null);
     }
 
     @Override

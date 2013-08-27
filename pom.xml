@@ -41,6 +41,11 @@
       <artifactId>guice-servlet</artifactId>
       <version>${guice.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.mycila.guice.extensions</groupId>
+      <artifactId>mycila-guice-jsr250</artifactId>
+      <version>3.2.ga</version>
+    </dependency>    
 
     <!-- web -->
     <dependency>
