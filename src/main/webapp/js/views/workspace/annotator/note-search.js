@@ -70,14 +70,23 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     return _.map(types, localize).join(', ');
   };
   
+  var DescriptionFormatter = function(row, cell, value, columnDef, data) {
+    return $(data.get('note').description).text();
+  };
+
+  var StatusFormatter = function(row, cell, value, columnDef, data) {
+    return localize(data.get('note').status);
+  };
+
   var allColumns = [
       {sortable: true, id: 'shortenedSelection', width: 120, name: localize('shortenedSelection-label'), 
         field: 'shortenedSelection'},
       {sortable: true, id: 'fullSelection', name: localize('fullSelection-label'), field: 'fullSelection'},
       {sortable: false, id: 'types', name: localize('type-label'), field: 'note.types', formatter: TypesFormatter},
-      {sortable: true, id: 'description', name: localize('description-label'), field: 'note.term.meaning'},
+      {sortable: true, id: 'description', name: localize('description-label'), field: 'note.description', formatter: DescriptionFormatter},
       {sortable: true, id: 'editedOn', name: localize('editedOn-label'), field: 'note.editedOn', formatter: EditedByFormatter},
-      {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status'},
+      {sortable: true, id: 'status', name: localize('status-label'), field: 'note.status', formatter: StatusFormatter},
+      {sortable: true, id: 'basicForm', name: localize('basicForm-label'), field: 'note.term.basicForm'},
       {sortable: true, id: 'document', name: localize('document-label'), field: 'document.title'},
       {sortable: false, id: 'comment', name: localize('comment-label'), field: 'note.comment.message'}];
   
@@ -146,9 +155,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
   var dateFields = ['createdAfter', 'createdBefore', 'editedAfter', 'editedBefore'];
     
   var NoteSearch = Backbone.View.extend({
-    events: {'keyup .search': 'search',
-             'change form input': 'search',
-             'change form select[name="creators"]': 'search',
+    events: {'keyup form input[type="text"]': 'handleTextInputKeyUp',
+             'change form input[type!="text"]': 'handleNonTextInputChange',
+             'change form select[name="creators"]': 'handleNonTextInputChange',
+             'click form .search': 'handleSearchButton',
              'click .annotate': 'annotate',
              'click .select': 'select',
              'click .comment': 'comment',
@@ -156,7 +166,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
     
     initialize: function() {
       var self = this;
-      _.bindAll(this, 'filterColumnsAccordingToSelection', 'render', 'search', 'annotate', 'select', 'comment', 'editNote');
+      _.bindAll(this, 'filterColumnsAccordingToSelection', 'handleSearchButton', 'handleNonTextInputChange', 'handleTextInputKeyUp', 'render', 'search', 'annotate', 'select', 'comment', 'editNote');
       
       vent.on('tab:open', function(view) {
         if (view === self && !self.initialized) {
@@ -182,6 +192,21 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
 
       users.on('reset', this.render);
       users.fetch({reset: true});
+    },
+
+    handleTextInputKeyUp: function(event) {
+      if (event.keyCode == 13) {
+        this.$('.search').click();
+      }
+    },
+
+    handleNonTextInputChange: function(event) {
+      this.$('.search').click();
+    },
+
+    handleSearchButton: function(event) {
+      event.preventDefault();
+      this.search();
     },
 
     filterColumnsAccordingToSelection: function(columns) {

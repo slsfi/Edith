@@ -1,5 +1,11 @@
 <form>
-  <input name="query" type="text" placeholder="{{localize 'search'}}" class="query"></input>
+  <div class="search-header-row">
+    <input name="query" type="text" placeholder="{{localize 'fullText-label'}}" class="query"></input>
+    <span class="muted" style="font-size: 80%">
+      {{localize 'fullText-explanation'}}
+    </span>
+    <button class="btn search" type="submit" name="search">{{localize 'search'}}</button>
+  </div>
 
   <div class="accordion" id="searchAccordion">
     <div class="accordion-group">
@@ -63,7 +69,17 @@
                 </select>
               </div>
             </div>
-        
+            
+            <div class="control-group"><label for="status" class="control-label">{{localize 'status-label'}}</label>
+              <div class="controls">
+                <select name="status" id="status-select" multiple="multiple" class="multiselect">
+                  <option value="INITIAL">{{localize 'INITIAL'}}</option>
+                  <option value="DRAFT">{{localize 'DRAFT'}}</option>
+                  <option value="FINISHED">{{localize 'FINISHED'}}</option>
+                </select>
+              </div>
+            </div>        
+
             <div class="control-group">
               <label for="createdOn" class="control-label">{{localize 'createdOn-label'}}</label>
               <div class="controls">
@@ -85,35 +101,8 @@
               </div>
             </div>
             
-            <div class="control-group"><label for="status" class="control-label">{{localize 'status-label'}}</label>
-              <div class="controls">
-                <select name="status" id="status-select" multiple="multiple" class="multiselect">
-                  <option value="INITIAL">{{localize 'INITIAL'}}</option>
-                  <option value="DRAFT">{{localize 'DRAFT'}}</option>
-                  <option value="FINISHED">{{localize 'FINISHED'}}</option>
-                </select>
-              </div>
-            </div>
-
-
-            <div class="control-group">
-              <label for="shortenedSelection" class="control-label">{{localize 'shortenedSelection-label'}}</label>
-              <div class="controls">
-                <input type="text" name="shortenedSelection"/>
-              </div>
-            </div>
-            <div class="control-group">
-              <label for="description" class="control-label">{{localize 'description-label'}}</label>
-              <div class="controls">
-               <input type="text" name="description"/>       
-             </div> 
-            </div>
-            <div class="control-group">
-              <label for="lemmaMeaning" class="control-label">{{localize 'lemmaMeaning-label'}}</label>
-              <div class="controls">
-                <input type="text" name="lemmaMeaning"/>
-              </div>
-            </div>
+          <button class="btn search" type="submit" name="search">{{localize 'search'}}</button>
+          
           </form>
         </div>
       </div>
