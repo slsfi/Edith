@@ -9,8 +9,9 @@
 <div class="metadata">
   <span class="fullSelection">{{ fullSelection }}</span>
   <span class="types">{{#each note.types }} {{ localize this }} {{/each}}</span>
+  <span class="basicForm">{{ note.term.basicForm }}</span>
   <span class="editedOn">{{ dateFormat note.editedOn }} ({{ note.lastEditedBy.username }})</span>
-  <span class="status">{{ note.status }}</span>
+  <span class="status">{{ localize note.status }}</span>
   <span class="document">{{ document.title }}</span>
 
   <span class="highlight comment">{{{ note.comment.message }}}</span>
