@@ -115,8 +115,7 @@ ul.notes {
   ul.notes li .description {
     display: inline-block;
     padding: 0 5px;
-    background: #f0f0f0;
-    color: #D85038;
+    color: #666;
   }
 
     ul.notes li .description>p {
