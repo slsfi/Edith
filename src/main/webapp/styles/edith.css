@@ -116,6 +116,7 @@ ul.notes {
     display: inline-block;
     padding: 0 5px;
     color: #666;
+    font-size: 90%;
   }
 
     ul.notes li .description>p {
@@ -244,9 +245,17 @@ form input, form .btn-group, form textarea, form select {
   margin-bottom: 5px;
 }
 
-#note-search input.query {
-  margin-top: 5px;
+#note-search .search-header-row {
+  margin: 5px 0 10px 0;
 }
+
+  #note-search .search-header-row input {
+    margin: 0 10px 0 0;
+  }
+
+  #note-search .search-header-row button {
+    float: right;
+  }
 
 #note-search .actions {
   margin: 10px 0px 5px 0px;
@@ -294,3 +303,4 @@ form input, form .btn-group, form textarea, form select {
   display: none;
 }
 
+.accordion-body.in { overflow:visible; }
