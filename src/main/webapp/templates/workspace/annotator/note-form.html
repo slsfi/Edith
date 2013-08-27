@@ -1,5 +1,15 @@
 <h4>{{ localize 'noteEdit' }}</h4>
 <form>
+
+  <div class="control-group">
+    <label for="description" class="control-label">{{ localize 'description-label' }}</label>
+    <div class="controls">
+      <textarea class="wysiwyg" name="description" rows="8" cols="50">{{ description }}</textarea>
+    </div>
+  </div>
+
+  <hr></hr>
+
   <div class="control-group">
     <label class="control-label">{{localize 'number-of-document-notes'}}</label>
     <div class="controls">{{ documentNoteCount }}</div>
@@ -67,17 +77,6 @@
       </select>
     </div>
   </div>
-
-  <hr></hr>
-
-  <div class="control-group">
-    <label for="description" class="control-label">{{ localize 'description-label' }}</label>
-    <div class="controls">
-      <textarea class="wysiwyg" name="description" rows="8" cols="50">{{ description }}</textarea>
-    </div>
-  </div>
-
-  <hr></hr>
 
   <div class="control-group">
     <label for="sources" class="control-label">{{ localize 'sources-label' }}</label>
