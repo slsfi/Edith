@@ -96,12 +96,22 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
           elem[0].scrollIntoView(true);
         }
       });
+      vent.on('document:reset-raw-selection', function() {
+        if (self.savedRawSelection) {
+          var sel = window.getSelection();
+          sel.removeAllRanges();
+          for (var i = 0, len = self.savedRawSelection.length; i < len; ++i) {
+              sel.addRange(self.savedRawSelection[i]);
+          } 
+        }
+      });
       vent.on('note:new', function() {
         var selection = self.getSelection();
         if (selection && selection.selection.length > 0) {
           vent.trigger('document-note:create', self.documentId, selection);
         }
       });
+
     },
 
     render: function(id) {
@@ -155,8 +165,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
     },
 
     selectionChange: function() {
-      var selection = this.getSelection();
-      vent.trigger('document:selection-change', this.documentId, selection);
+      this.savedRawSelection = [];
+      var sel = rawSelection();
+      if (sel.rangeCount) {
+          for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+              this.savedRawSelection.push(sel.getRangeAt(i));
+          }
+      }
+
+      vent.trigger('document:selection-change', this.documentId, this.getSelection());
     }
   });
 

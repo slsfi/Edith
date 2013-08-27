@@ -133,8 +133,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         documentNotes.fetchWithScope();
       });
 
-      grid.onClick.subscribe(function() {
-        self.$('button.grid-action').removeAttr('disabled');
+      grid.onClick.subscribe(function(e, args) {
+        $('button.grid-action').removeAttr('disabled');
+        vent.trigger('document:reset-raw-selection');
       });
       
       documentNotes.onRowCountChanged.subscribe(function() {
