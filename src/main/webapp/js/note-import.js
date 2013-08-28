@@ -26,7 +26,6 @@ require([], function() {
              contentType: false,
              data: formData,
              success: function(data) {
-               console.log(data);
                self.$(".alert").html("Imported " + data + " notes").show();
              }});
         return false;
