@@ -1,4 +1,12 @@
-<h4>{{ localize 'noteEdit' }}</h4>
+<div class="form-subtitle">
+  <h4>{{ localize 'noteEdit' }}</h4>
+  <div class="buttons pull-right">
+    <button class="btn btn-small" id="save-note" disabled>{{ localize 'saveNote'}}</button>
+    <button class="btn btn-small" id="delete-note" {{#if id}} {{#if documentNoteCount}} disabled {{/if}} {{/if}}>{{ localize 'deleteNote' }}</button>
+  </div>
+</div>
+
+<div class="clearfix"></div>
 <form>
 
   <div class="control-group">
@@ -85,12 +93,4 @@
     </div>
   </div>
 
-  <hr></hr>
-
-  <div class="control-group">
-    <div>
-      <button id="save-note" disabled>{{ localize 'save' }}</button>
-      <button id="delete-note" {{#if id}} {{#if documentNoteCount}} disabled {{/if}} {{/if}}>{{ localize 'delete' }}</button>
-    </div>
-  </div>
 </form>

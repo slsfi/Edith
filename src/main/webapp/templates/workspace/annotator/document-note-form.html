@@ -1,8 +1,17 @@
-<h4>{{localize 'document-note'}}</h4>
+<div class="form-subtitle">
+  <h4>{{ localize 'document-note' }}</h4>
+  <div class="buttons pull-right">
+    <button class="btn btn-small" id="save-document-note" disabled>{{localize 'saveDocumentNote' }}</button>
+    <button class="btn btn-small" id="delete-document-note" disabled>{{ localize 'deleteDocumentNote' }}</button>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
 <form>
   <div class="control-group">
     <label class="control-label">{{ localize 'fullSelection-label' }}</label>
-    <div class="controls">{{ fullSelection }} &nbsp;<button id="update-full-selection" disabled="disabled">{{localize 'update-full-selection'}}</button></div>
+    <div class="controls">{{ fullSelection }} &nbsp;<button class="btn btn-small" id="update-full-selection" disabled="disabled">{{localize 'update-full-selection'}}</button></div>
 
   </div>
   <div class="control-group">
@@ -24,11 +33,4 @@
     </div>
   </div>
 
-  <hr></hr>
-
-  <div class="control-group">
-    <div>
-      <button id="save-document-note" disabled>{{ localize 'save' }}</button> <button id="delete-document-note" disabled>{{ localize 'delete' }}</button>
-    </div>
-  </div>
 </form>
