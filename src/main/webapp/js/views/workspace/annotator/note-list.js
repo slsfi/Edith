@@ -14,8 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     template: Handlebars.compile(noteItemTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'showFieldsAccordingToSelection', 'render', 'edit', 'comment');
-      this.metadataSelect = this.options.metadataSelect;
+      _.bindAll(this, 'render', 'edit', 'comment');
       this.documentNote = this.options.data;
       this.render();
       var self = this;
@@ -37,33 +36,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
           self.render();
         }
       });
-      vent.on('metadata-field-select:change', function(columns) {
-        if (self.$el.is(':visible')) {
-          self.showFieldsAccordingToSelection(columns);
-        }
-      });
-
-    },
-
-    showFieldsAccordingToSelection: function(columns) {
-      this.$('span').removeClass('selected-metadata');
-      this.$('span').addClass('unselected-metadata');
-      var self = this;
-      _.each(columns, function(column) {
-        var el = self.$('.' + column);
-        if (el.text().length > 0) {
-          self.$('.' + column).removeClass('unselected-metadata');
-          self.$('.' + column).addClass('selected-metadata');
-        }
-      });
     },
 
     render: function() {
       this.attributes = {'data-id': this.documentNote.id};
-      this.$el.html(this.template(this.documentNote));
-      this.$el.attr('data-id', this.documentNote.id);
-
-      this.showFieldsAccordingToSelection(this.metadataSelect.getColumns());
+      this.$el.html(this.template(this.documentNote)).attr('data-id', this.documentNote.id);
     },
 
     edit: function() {
@@ -86,10 +63,27 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     initialize: function() {
       _.bindAll(this, 'render', 'createNote', 'toggleCreateButton',
-                'selectNote', 'clickNote');
+                'selectNote', 'clickNote', 'showFieldsAccordingToSelection');
       vent.on('document:open annotation:change document-note:deleted', this.render);
       vent.on('document:selection-change', this.toggleCreateButton);
       vent.on('document-note:select', this.selectNote);
+      var self = this;
+      vent.on('metadata-field-select:change', function(columns) {
+        if (self.$el.is(':visible')) {
+          self.showFieldsAccordingToSelection(columns);
+        }
+      });
+    },
+
+    showFieldsAccordingToSelection: function(columns) {
+      this.$('li span').removeClass('selected-metadata').addClass('unselected-metadata');
+      var self = this;
+      _.each(columns, function(column) {
+        var el = self.$('li .' + column);
+        if (el.text().length > 0) {
+          self.$('li .' + column).removeClass('unselected-metadata').addClass('selected-metadata');
+        }
+      });
     },
 
     render: function(id) {
@@ -102,11 +96,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       spinner('document-notes:loaded');
       var self = this;
       $.get('/api/documents/' + id + '/document-notes', function(data) {
+        var start = new Date().getTime();
+        var fragment = document.createDocumentFragment();
         _(data).each(function(documentNote) {
-          self.$('ul.notes').append(new NoteListItem({metadataSelect: self.noteListMetadata,
-                                                      data: documentNote}).el);
+          fragment.appendChild(new NoteListItem({metadataSelect: self.noteListMetadata,
+                                                 data: documentNote}).el);
         });
+        self.$('ul.notes').append(fragment);
         self.$('.note-buttons').hide();
+        self.showFieldsAccordingToSelection(self.noteListMetadata.getColumns());
         vent.trigger('document-notes:loaded');
       });
     },
