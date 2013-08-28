@@ -1,5 +1,6 @@
 package com.mysema.edith.web;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import com.mysema.util.ReflectionUtils;
 
 @SuppressWarnings("unchecked")
 public class Converter {
-
+	
     private static final Map<Class<?>, Class<?>> containerTypes = Maps.newHashMap();
 
     static {
