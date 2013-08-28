@@ -89,6 +89,10 @@ a {
   top: 126px;
 }
 
+#note-list #create-note {
+  margin-top: -2px;
+}
+
 ul.notes {
   margin-left: 0;
   list-style-type: none;
@@ -156,7 +160,7 @@ ul.notes {
       }
 
     ul.notes li .metadata .note-buttons {
-      margin: 5px 0 5px;
+      margin: 5px 0 5px 0;
     }
 
 #document {
