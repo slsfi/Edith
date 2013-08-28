@@ -1,6 +1,6 @@
 define([], function() {
   var ckEditorSetup = {removePlugins: 'elementspath',
-                       height: '40px',
+                       height: '60px',
                        skin: 'kama',
                        entities: false,
                        extraPlugins: 'autogrow,onchange',
