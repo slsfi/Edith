@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.domain;
 
 import java.util.HashSet;
@@ -48,10 +43,10 @@ public class Note implements Identifiable {
 
     private Long editedOn;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> allEditors = new HashSet<User>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "note")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "note")
     private Set<NoteComment> comments = new HashSet<NoteComment>();
 
     @ManyToOne//(cascade = CascadeType.PERSIST)
@@ -69,7 +64,7 @@ public class Note implements Identifiable {
     @Enumerated(EnumType.STRING)
     private NoteStatus status = NoteStatus.INITIAL;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @JoinTable(name = "note_types")
     private Set<NoteType> types = new HashSet<NoteType>();
