@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Inject
     public UserDaoImpl(AuthService authService) {
-        this.authService = authService;
+        this.authService = authService;        
     }
 
     @Override
@@ -63,6 +64,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         for (User user : getAll()) {
             usersByUsername.put(user.getUsername(), user);
         }
+        String commonPassword = new SimpleHash("SHA-1", "EdithTwoPointZero20").toHex();        
         // "/users.csv"), "ISO-8859-1"
         List<String> lines = Resources.readLines(UserDaoImpl.class.getResource(filePath), Charset.forName(encoding));
         List<User> users = new ArrayList<User>();
@@ -76,7 +78,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             user.setFirstName(values[0]);
             user.setLastName(values[1]);
             user.setUsername(values[2]);
-            user.setPassword("EdithTwoPointZero20"); // TODO use hash instead
+            user.setPassword(commonPassword); 
             user.setEmail(values[3]);
             if (values[3].endsWith("mysema.com")) {
                 user.setProfile(Profile.Admin);
