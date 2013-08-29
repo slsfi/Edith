@@ -12,20 +12,12 @@ import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
-import com.mysema.edith.Identifiable;
-
 @Entity
 @Table(name = "place")
-public class Place implements Identifiable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Place extends BaseEntity {
 
     @Embedded
     private NameForm normalized;
@@ -40,14 +32,6 @@ public class Place implements Identifiable {
     public Place(NameForm normalized, Set<NameForm> otherForms) {
         this.normalized = normalized;
         this.otherForms = otherForms;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public NameForm getNormalized() {

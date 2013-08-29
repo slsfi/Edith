@@ -9,24 +9,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import com.mysema.edith.Identifiable;
-
 @Entity
 @Table(name = "user")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class User implements Identifiable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class User extends BaseEntity {
 
     private String firstName, lastName, email;
 
@@ -40,9 +31,7 @@ public class User implements Identifiable {
 
     private boolean active;
 
-    public User() {
-
-    }
+    public User() {}
 
     public User(String username) {
         this.username = username;
@@ -102,10 +91,6 @@ public class User implements Identifiable {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public Long getId() {
-        return id;
     }
 
 }

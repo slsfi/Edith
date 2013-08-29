@@ -6,25 +6,18 @@
 package com.mysema.edith.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import com.mysema.edith.Identifiable;
 import com.mysema.query.annotations.QueryInit;
 
 @Entity
 @Table(name = "documentnote")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class DocumentNote implements Identifiable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class DocumentNote extends BaseEntity {
 
     @ManyToOne
     private Document document;
@@ -48,15 +41,6 @@ public class DocumentNote implements Identifiable {
     @ManyToOne
     @QueryInit("*")
     private Note note;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Document getDocument() {
         return document;

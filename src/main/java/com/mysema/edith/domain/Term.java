@@ -8,23 +8,15 @@ package com.mysema.edith.domain;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import com.mysema.edith.Identifiable;
-
 @Entity
 @Table(name = "term")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Term implements Identifiable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Term extends BaseEntity {
 
     private String basicForm;
 
@@ -34,14 +26,6 @@ public class Term implements Identifiable {
     private TermLanguage language;
 
     private String otherLanguage;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public void setMeaning(String meaning) {
         this.meaning = meaning;

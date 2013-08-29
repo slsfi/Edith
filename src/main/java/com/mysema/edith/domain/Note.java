@@ -11,9 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -24,17 +21,13 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 
-import com.mysema.edith.Identifiable;
 import com.mysema.edith.dto.NoteCommentComparator;
 import com.mysema.edith.util.StringUtils;
 
 @Entity
 @Table(name = "note")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Note implements Identifiable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Note extends BaseEntity {
 
     private String lemma;
 
@@ -81,15 +74,6 @@ public class Note implements Identifiable {
     private Place place;
 
     private int documentNoteCount = 0;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getLemma() {
         return lemma;

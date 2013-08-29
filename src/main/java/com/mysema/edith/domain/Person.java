@@ -15,21 +15,13 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
-import com.mysema.edith.Identifiable;
-
 @Entity
 @Table(name = "person")
-public class Person implements Identifiable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+public class Person extends BaseEntity {
+    
     @Embedded
     private NameForm normalized;
 
@@ -59,14 +51,6 @@ public class Person implements Identifiable {
     public Person(NameForm normalized, Set<NameForm> otherForms) {
         this(normalized);
         this.otherForms = otherForms;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public NameForm getNormalized() {
