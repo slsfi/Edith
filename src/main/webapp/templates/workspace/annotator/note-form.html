@@ -1,8 +1,12 @@
 <div class="form-subtitle">
   <h4>{{ localize 'noteEdit' }}</h4>
   <div class="buttons pull-right">
-    <button class="btn btn-small" id="save-note" disabled>{{ localize 'saveNote'}}</button>
-    <button class="btn btn-small" id="delete-note" {{#if id}} {{#if documentNoteCount}} disabled {{/if}} {{/if}}>{{ localize 'deleteNote' }}</button>
+    {{#if id}}
+      <button class="btn btn-small" id="save-note" disabled>{{ localize 'saveNote'}}</button>
+      <button class="btn btn-small" id="delete-note" {{#if id}} {{#if documentNoteCount}} disabled {{/if}} {{/if}}>{{ localize 'deleteNote' }}</button>
+    {{else}}
+      <button class="btn btn-small" id="save-document-note">{{ localize 'saveDocumentNoteAndNote'}}</button>
+    {{/if}}
   </div>
 </div>
 

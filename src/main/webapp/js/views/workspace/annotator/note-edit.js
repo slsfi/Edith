@@ -480,10 +480,8 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
         documentNote.note = this.noteForm.note.id;
         this.documentNoteForm.save(documentNote);
       } else {
-        // Need to save DocumentNote and Note
-        if (!confirm(localize('save-note-confirm'))) {
-          return;
-        }
+        // #59 - save both document note and note without confirm
+
         var data = documentNote;
         data.note = this.noteForm.extract();
         spinner('document-note:change', 'note:change', 'annotation:change');
