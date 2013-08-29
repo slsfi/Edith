@@ -22,12 +22,12 @@ import com.mysema.edith.domain.User;
 import com.mysema.edith.services.UserDao;
 
 public class UserDaoRealm extends AuthorizingRealm {
-    
+
 	private static final Logger logger = LoggerFactory.getLogger(UserDaoRealm.class);
-	
+
     @Inject
     private UserDao dao;
-    
+
     public UserDaoRealm() {
 		setCredentialsMatcher(new HashedCredentialsMatcher("SHA-1"));
 	}
@@ -38,13 +38,13 @@ public class UserDaoRealm extends AuthorizingRealm {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         User user = dao.getByUsername(upToken.getUsername());
         if (user != null) {
-            return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());    
+            return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
         } else {
         	logger.error("Found no user with given credentials");
             return null;
-        }        
+        }
     }
-    
+
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         // TODO Auto-generated method stub
