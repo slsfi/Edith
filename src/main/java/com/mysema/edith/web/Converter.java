@@ -1,6 +1,5 @@
 package com.mysema.edith.web;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
