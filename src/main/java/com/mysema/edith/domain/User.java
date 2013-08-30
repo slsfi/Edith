@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
- */
 package com.mysema.edith.domain;
 
 import javax.persistence.Column;
@@ -93,4 +88,8 @@ public class User extends BaseEntity {
         this.active = active;
     }
 
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

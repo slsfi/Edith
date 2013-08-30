@@ -20,6 +20,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     }
   });
 
+  Handlebars.registerHelper('when-not-eq', function(x, y, options) {
+    if (x !== y) {
+      return options.fn(this);
+    }
+  });
+
+
   var DocumentNoteForm = Backbone.View.extend({
     // used when updating the annotation
     currentSelection: {},
@@ -194,12 +201,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
   var NoteForm = Backbone.View.extend({
     events: {'keyup input': 'setDirty',
              'change input': 'setDirty',
-             'change select': 'setDirty'},
+             'change select': 'setDirty',
+             'change select[name="status"]': 'statusChange'},
   
     template: Handlebars.compile(noteFormTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'render', 'save', 'setDirty', 'open', 'extract', 'remove', 'close');
+      _.bindAll(this, 'render', 'save', 'setDirty', 'open', 'extract', 'remove', 'close',
+                'statusChange');
       var self = this;
       vent.on('note:change', function(note) {
                                self.isDirty = false;
@@ -244,6 +253,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
              function(editor) {
                editor.on('change', function() { self.setDirty(); });
              });
+      if (this.note.locked) {
+        window.CKEditor = CKEditor;
+        setTimeout(function() {
+          CKEditor.instances['description'].setReadOnly(true);
+          CKEditor.instances['sources'].setReadOnly(true);
+        }, 100);
+      }
+
       this.$('#type-select').multiselect({
         buttonText: function(options, select) {
           if (options.length == 0) {
@@ -259,6 +276,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
           }
         }
       });
+    },
+
+    statusChange: function() {
+      var status = this.$('select[name="status"] option:selected').val();
+      if (status === 'FINISHED') {
+        this.$('input[name="locked"]').attr('disabled', false);
+      } else {
+        this.$('input[name="locked"]').attr('disabled', true).attr('checked', false);
+      }
     },
     
     open: function(note) {
@@ -296,8 +322,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                  return acc;
                                }, {});
 
-      if (data.term.language === '') {
+      if (data.term && data.term.language === '') {
         data.term.language = null;
+      }
+
+      if (data.locked === 'on') {
+        data.locked = true;
+      } else {
+        data.locked = false;
       }
 
       var types = _(this.$('select[name="types"]').serializeArray())
