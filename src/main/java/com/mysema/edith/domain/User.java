@@ -87,9 +87,4 @@ public class User extends BaseEntity {
     public void setActive(boolean active) {
         this.active = active;
     }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
 }

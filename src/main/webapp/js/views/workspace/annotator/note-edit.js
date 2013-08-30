@@ -247,19 +247,21 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                .join(', ');
       this.$el.html(this.template(this.note))
               .effect('highlight', {color: 'lightblue'}, 500);
-      this.$('.wysiwyg').ckeditor(ckEditorSetup);
+      if (this.note.locked) {
+        var setup = _.extend(ckEditorSetup);
+        setup.readOnly = true;
+        this.$('.wysiwyg').ckeditor(setup);
+      } else {
+        this.$('.wysiwyg').ckeditor(ckEditorSetup);
+      }
+      CKEditor.instances['description'].setReadOnly(this.note.locked);
+      CKEditor.instances['sources'].setReadOnly(this.note.locked);
+
       var self = this;
       _.each(CKEditor.instances,
              function(editor) {
                editor.on('change', function() { self.setDirty(); });
              });
-      if (this.note.locked) {
-        window.CKEditor = CKEditor;
-        setTimeout(function() {
-          CKEditor.instances['description'].setReadOnly(true);
-          CKEditor.instances['sources'].setReadOnly(true);
-        }, 100);
-      }
 
       this.$('#type-select').multiselect({
         buttonText: function(options, select) {
