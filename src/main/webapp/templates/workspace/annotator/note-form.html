@@ -91,8 +91,8 @@
   </div>
 
   <div class="control-group">
-    <label class="locked-label" for="locked">{{ localize 'locked-label' }}</label>
-    <div class="controls">
+    <label class="control-label" for="locked">{{ localize 'locked-label' }}</label>
+    <div class="control-group">
       <input type="checkbox" name="locked" {{#if locked }} checked {{/if}}
              {{#when-not-eq status 'FINISHED' }} disabled {{/when-not-eq}}></input>
     </div>
