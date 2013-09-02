@@ -201,14 +201,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
   var NoteForm = Backbone.View.extend({
     events: {'keyup input': 'setDirty',
              'change input': 'setDirty',
-             'change select': 'setDirty',
-             'change select[name="status"]': 'statusChange'},
+             'change select': 'setDirty'},
   
     template: Handlebars.compile(noteFormTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'render', 'save', 'setDirty', 'open', 'extract', 'remove', 'close',
-                'statusChange');
+      _.bindAll(this, 'render', 'save', 'setDirty', 'open', 'extract', 'remove', 'close');
       var self = this;
       vent.on('note:change', function(note) {
                                self.isDirty = false;
@@ -247,15 +245,18 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                .join(', ');
       this.$el.html(this.template(this.note))
               .effect('highlight', {color: 'lightblue'}, 500);
-      if (this.note.locked) {
+      
+      var locked = this.note.status == 'FINISHED'; 
+      if (locked) {
         var setup = _.extend(ckEditorSetup);
         setup.readOnly = true;
-        this.$('.wysiwyg').ckeditor(setup);
+        this.$('.wysiwyg').ckeditor(setup);        
+        CKEditor.instances['description'].setReadOnly(true);
+        CKEditor.instances['sources'].setReadOnly(true);
+        this.$(':input[name!="status"]').prop('disabled', true);
       } else {
         this.$('.wysiwyg').ckeditor(ckEditorSetup);
-      }
-      CKEditor.instances['description'].setReadOnly(this.note.locked);
-      CKEditor.instances['sources'].setReadOnly(this.note.locked);
+      }      
 
       var self = this;
       _.each(CKEditor.instances,
@@ -278,15 +279,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
           }
         }
       });
-    },
-
-    statusChange: function() {
-      var status = this.$('select[name="status"] option:selected').val();
-      if (status === 'FINISHED') {
-        this.$('input[name="locked"]').attr('disabled', false);
-      } else {
-        this.$('input[name="locked"]').attr('disabled', true).attr('checked', false);
-      }
     },
     
     open: function(note) {
@@ -326,12 +318,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
       if (data.term && data.term.language === '') {
         data.term.language = null;
-      }
-
-      if (data.locked === 'on') {
-        data.locked = true;
-      } else {
-        data.locked = false;
       }
 
       var types = _(this.$('select[name="types"]').serializeArray())

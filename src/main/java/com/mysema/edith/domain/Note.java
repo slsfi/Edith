@@ -75,8 +75,6 @@ public class Note extends BaseEntity {
 
     private int documentNoteCount = 0;
 
-    private boolean locked;
-
     public String getLemma() {
         return lemma;
     }
@@ -237,14 +235,6 @@ public class Note extends BaseEntity {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-    }
-
-    public boolean isLocked() {
-        return locked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
     }
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");

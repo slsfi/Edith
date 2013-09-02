@@ -44,8 +44,6 @@ public class NoteTO {
 
     private int documentNoteCount;
 
-    private boolean locked;
-
     public Long getId() {
         return id;
     }
@@ -188,13 +186,5 @@ public class NoteTO {
 
     public void setDocumentNoteCount(int documentNoteCount) {
         this.documentNoteCount = documentNoteCount;
-    }
-
-    public boolean isLocked() {
-        return locked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
     }
 }

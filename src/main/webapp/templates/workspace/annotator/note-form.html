@@ -91,14 +91,6 @@
   </div>
 
   <div class="control-group">
-    <label class="control-label" for="locked">{{ localize 'locked-label' }}</label>
-    <div class="control-group">
-      <input type="checkbox" name="locked" {{#if locked }} checked {{/if}}
-             {{#when-not-eq status 'FINISHED' }} disabled {{/when-not-eq}}></input>
-    </div>
-  </div>
-
-  <div class="control-group">
     <label for="sources" class="control-label">{{ localize 'sources-label' }}</label>
     <div class="controls">
       <textarea class="wysiwyg" name="sources" rows="8" cols="50" {{#if locked }} disabled {{/if}}>{{ sources }}</textarea>
