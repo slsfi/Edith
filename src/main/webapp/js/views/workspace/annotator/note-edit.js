@@ -250,13 +250,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       if (locked) {
         var setup = _.extend(ckEditorSetup);
         setup.readOnly = true;
-        this.$('.wysiwyg').ckeditor(setup);        
-        CKEditor.instances['description'].setReadOnly(true);
-        CKEditor.instances['sources'].setReadOnly(true);
+        this.$('.wysiwyg').ckeditor(setup);               
         this.$(':input[name!="status"]').prop('disabled', true);
       } else {
         this.$('.wysiwyg').ckeditor(ckEditorSetup);
-      }      
+      }
+      CKEditor.instances['description'].setReadOnly(locked);
+      CKEditor.instances['sources'].setReadOnly(locked);
 
       var self = this;
       _.each(CKEditor.instances,
