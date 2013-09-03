@@ -261,7 +261,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       var self = this;
       _.each(CKEditor.instances,
              function(editor) {
-    	       // XXX chrome / contentEditable fix
+               // XXX chrome / contentEditable fix
                if (!locked && editor.document) {
                  editor.document.$.body.setAttribute("contenteditable", true);  
                }
