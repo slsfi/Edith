@@ -65,7 +65,7 @@ public class DocumentDaoImpl extends AbstractDao<Document> implements DocumentDa
     
     @PostConstruct
     public void init() {
-    	fromPath(null, null);
+        fromPath(null, null);
     }
 
     @Override

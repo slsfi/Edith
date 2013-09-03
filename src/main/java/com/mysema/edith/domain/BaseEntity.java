@@ -9,8 +9,8 @@ import com.mysema.edith.Identifiable;
 
 @MappedSuperclass
 public abstract class BaseEntity implements Identifiable {
-	
-	@Id
+    
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)    
     private Long id;
         

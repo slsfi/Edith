@@ -10,11 +10,11 @@ import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 
 public class CharsetResponseFilter implements ContainerResponseFilter {
-	
-	private static final Logger logger = LoggerFactory.getLogger(CharsetResponseFilter.class);
+    
+    private static final Logger logger = LoggerFactory.getLogger(CharsetResponseFilter.class);
 
     public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
-    	logger.debug("charsetResponseFilter.doFilter {}", request.getAbsolutePath().toString());
+        logger.debug("charsetResponseFilter.doFilter {}", request.getAbsolutePath().toString());
         MediaType contentType = response.getMediaType();
         if (contentType != null) {
             response.getHttpHeaders().putSingle("Content-Type", contentType.toString() + ";charset=UTF-8");    

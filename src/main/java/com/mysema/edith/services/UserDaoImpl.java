@@ -25,8 +25,8 @@ import com.mysema.edith.domain.User;
 
 @Transactional
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
-	
-	private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+    
+    private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private static final QUser user = QUser.user;
 
@@ -49,7 +49,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public User getByUsername(String username) {
-    	logger.debug("userDao.getUserName {}", username);
+        logger.debug("userDao.getUserName {}", username);
         return from(user).where(user.username.eq(username)).uniqueResult(user);
     }
 
