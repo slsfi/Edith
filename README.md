@@ -4,12 +4,14 @@
 
 You need MySQL, Java and Git to get started.
 
+Insert this sweetness into your MySQL:
     CREATE DATABASE edith CHARACTER SET utf8 COLLATE utf8_swedish_ci;
     CREATE DATABASE edith_test CHARACTER SET utf8 COLLATE utf8_swedish_ci;
     CREATE USER 'edith'@'localhost' IDENTIFIED BY 'edith';
     GRANT ALL PRIVILEGES ON edith.* TO 'edith'@'localhost';
     GRANT ALL PRIVILEGES ON edith_test.* TO 'edith'@'localhost';
 
+Clone the repository and do the basic Maven stuff:
     git@github.com:mysema/edith.git
     cd edith/
     mvn dbmaintain:updateDatabase
