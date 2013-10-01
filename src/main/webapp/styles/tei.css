@@ -241,7 +241,7 @@
 
 .tei .noteanchor:after {
     color: #020299;
-    content: "[*]";
+    content: " [*]";
 }
 
 .tei .hi, .tei .emph {
