@@ -28,9 +28,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
       startOffset = selection.focusOffset;
       endOffset = selection.anchorOffset;
     }
+    if (startNode.textContent.substr(startOffset).trim().length <= 0) {
+      // FIXME: This is not exhaustive (might be parent or sibling even more on the right)
+      startNode = _.first(startNode.nextSibling.childNodes);
+      startOffset = startNode.textContent.substr(startOffset).length;
+    }
     if (endOffset === 0) {
       // FIXME: This is not exhaustive (might be parent or sibling even more on the left)
-      endNode = endNode.previousSibling;
+      endNode = _.last(endNode.previousSibling.childNodes);
       endOffset = endNode.textContent.length - 1;
     }
     var i = 0;
@@ -64,7 +69,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
 
   var previousSiblingsToString = function(node) {
     var sibling = null;
-    if (node.previousSibling == null && node.nodeType === 3) {
+    if (node.className && node.className.indexOf('notecontent') !== -1 && node.previousSibling == null && node.nodeType === 3) {
       sibling = node.parentNode.previousSibling;
     } else {
       sibling = node.previousSibling;
@@ -123,10 +128,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
       spinner('document:loaded');
       var self = this;
       $.get('/api/documents/' + id, function(data) {
-        //TODO Fix this to own view or something
-        var title = _.last(data.path.split("/documents/trunk/"))
-        window.document.title = title
-        $('#document-title').html(title)
+        // FIXME: Create dedicated view
+        var title = _.last(data.path.split("/documents/trunk/"));
+        window.document.title = title;
+        $('#document-title').html(title);
       }); 
 
       $.get('/api/documents/' + id + '/raw', function(data) {
@@ -166,14 +171,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
           baseSelection.startOffset + additionalStartOffset);
       var endCharIndex = getCharIndex(previousFromEnd + baseSelection.endNode.textContent, endChar,
           (baseSelection.endOffset - 1) + additionalEndOffset);
-      var startParent = baseSelection.startNode.parentNode;
-      var endParent = baseSelection.endNode.parentNode;
+      var startNode = baseSelection.startNode;
+      startNode = startNode.nodeType === 3 ? startNode.parentNode : startNode;
+      var endNode = baseSelection.endNode;
+      endNode = endNode.nodeType === 3 ? endNode.parentNode : endNode;
       var selection = {selection: str,
-//                       startChar: startChar,
                        startCharIndex: startCharIndex,
-                       startNode: startParent.id || startParent.getAttribute('data-node'),
-                       endNode: endParent.id || endParent.getAttribute('data-node'),
-//                       endChar: endChar,
+                       startNode: startNode.id || startNode.getAttribute('data-node'),
+                       endNode: endNode.id || endNode.getAttribute('data-node'),
                        endCharIndex: endCharIndex};
       return selection;
     },
