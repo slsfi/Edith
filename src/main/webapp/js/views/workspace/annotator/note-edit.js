@@ -100,7 +100,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       if (selection && selection.selection.length > 0) {
         this.$('#update-full-selection').removeAttr('disabled');
         this.$('#create-document-note').removeAttr('disabled');
-        this.currentSelection = {'documentId': documentId, 'noteId': noteId, 'selection': selection};
+        this.currentSelection = {documentId: documentId, noteId: noteId, selection: selection};
       } else {
         this.$('#create-document-note').attr('disabled', 'disabled');
         this.$('#update-full-selection').attr('disabled', 'disabled');
@@ -121,6 +121,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       this.setDirty();
       this.$('#update-full-selection').attr('disabled', 'disabled');
       this.currentSelection = {};
+      vent.trigger('selection:updated', this.documentNote.shortenedSelection);
     },
     
     close: function() {
@@ -227,6 +228,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                          $.ajax(request);
                                        });
       vent.on('note:deleted', this.close);
+      vent.on('selection:updated', function(selection) {
+        self.$('input[name="term.basicForm"]')
+            .val(selection)
+            .closest('.control-group').effect('highlight', {color: 'lightblue'}, 500);
+      });
       this.render();
     },
 
@@ -559,7 +565,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
           return;
         }
       }
-      
       this.documentNoteForm.close();
       this.documentNoteForm.attach(note);
       this.comment.close();
