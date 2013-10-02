@@ -63,7 +63,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
   }
 
   var previousSiblingsToString = function(node) {
-    var sibling = node.previousSibling;
+    var sibling = null;
+    if (node.previousSibling == null && node.nodeType === 3) {
+      sibling = node.parentNode.previousSibling;
+    } else {
+      sibling = node.previousSibling;
+    }
     if (sibling) {
       var str = '';
       if (sibling.nodeType === 3 || sibling.className.indexOf('notecontent') !== -1) {
