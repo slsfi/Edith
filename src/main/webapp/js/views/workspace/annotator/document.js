@@ -110,13 +110,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
           } 
         }
       });
+
       vent.on('note:new', function() {
         var selection = self.getSelection();
         if (selection && selection.selection.length > 0) {
           vent.trigger('document-note:create', self.documentId, selection);
         }
       });
-
     },
 
     render: function(id) {
@@ -133,6 +133,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
         self.$el.html(data)
                 .effect('highlight', {color: 'lightblue'}, 500);
         vent.trigger('document:loaded', id);
+
+        // Hover on anchors highlights the annotation text (#64)
+        self.$el.find('span[id^="end"]').each(function() {
+          $(this).mouseenter(function() {
+            self.$el.find('span.n' + $(this).attr('id').substring(3)).addClass('highlight');
+          }).mouseleave(function() {
+            self.$el.find('span.n' + $(this).attr('id').substring(3)).removeClass('highlight');
+          });
+        });
       });
     },
     

@@ -48,6 +48,10 @@ a {
   text-align: center;
 }
 
+.highlight {
+  background: #F5EC06;
+}
+
 .tab-operations {
   border: 1px solid #D0D2CB;
   background-color: #F0F2EB;
