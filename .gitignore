@@ -7,6 +7,7 @@ devops/*.lock
 !devops/modules/edithdb
 .idea
 *.iml
+*.swp
 .DS_Store
 .classpath
 .project
