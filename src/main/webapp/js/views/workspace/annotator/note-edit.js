@@ -228,11 +228,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                          $.ajax(request);
                                        });
       vent.on('note:deleted', this.close);
-      vent.on('selection:updated', function(selection) {
-        self.$('input[name="term.basicForm"]')
-            .val(selection)
-            .closest('.control-group').effect('highlight', {color: 'lightblue'}, 500);
-      });
       this.render();
     },
 
@@ -326,8 +321,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                  return acc;
                                }, {});
 
-      if (data.term && data.term.language === '') {
-        data.term.language = null;
+      if (data.term) {
+        if (data.term.language === '') {
+          data.term.language = null;
+        }
+        if (data.term.basicForm === '') {
+          data.term.basicForm = null;
+        }
       }
 
       var types = _(this.$('select[name="types"]').serializeArray())
