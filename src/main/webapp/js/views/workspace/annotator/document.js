@@ -10,6 +10,15 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
 
   var whitespaceRe = new RegExp(/\s+/g);
 
+  var contains = function(s, sub) {
+    return s.indexOf(sub) !== -1;
+  }
+
+  var isMetadataElement = function(x) {
+    return x.className && (contains(x.className, 'notestart') ||
+                           contains(x.className, 'noteanchor'));
+  }
+
   var getBaseSelection = function() {
     var selection = rawSelection();
 
@@ -30,12 +39,18 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
     }
     if (startNode.textContent.substr(startOffset).trim().length <= 0) {
       // FIXME: This is not exhaustive (might be parent or sibling even more on the right)
-      startNode = _.first(startNode.nextSibling.childNodes);
+      startNode = _.first(_.reject(startNode.nextSibling.childNodes, isMetadataElement));
+      if (startNode.className && contains(startNode.className, 'notecontent')) {
+        startNode = _.first(startNode.childNodes);
+      }
       startOffset = startNode.textContent.substr(startOffset).length;
     }
-    if (endOffset === 0) {
+    if (endOffset === 0 || endNode.textContent.substr(0, endOffset).trim().length <= 0) {
       // FIXME: This is not exhaustive (might be parent or sibling even more on the left)
-      endNode = _.last(endNode.previousSibling.childNodes);
+      endNode = _.last(_.reject(endNode.previousSibling.childNodes, isMetadataElement));
+      if (endNode.className && contains(endNode.className, 'notecontent')) {
+        endNode = _.last(endNode.childNodes);
+      }
       endOffset = endNode.textContent.length - 1;
     }
     var i = 0;
@@ -67,21 +82,38 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
     return ++idx;
   }
 
-  var previousSiblingsToString = function(node) {
-    var sibling = null;
-    if (node.className && node.className.indexOf('notecontent') !== -1 && node.previousSibling == null && node.nodeType === 3) {
-      sibling = node.parentNode.previousSibling;
-    } else {
-      sibling = node.previousSibling;
-    }
-    if (sibling) {
-      var str = '';
-      if (sibling.nodeType === 3 || sibling.className.indexOf('notecontent') !== -1) {
-        str = sibling.textContent;
+  var takeWhile = function(coll, pred) {
+    var rv = [];
+    for (var i = 0; i < coll.length; ++i) {
+      if (pred(coll[i])) {
+        rv.push(coll[i]);
+      } else {
+        break;
       }
-      return previousSiblingsToString(sibling) + str;
     }
-    return '';
+    return rv;
+  }
+  _.mixin({takeWhile: takeWhile});
+
+  var previousSiblingsToString = function(node) {
+    if (node.parentNode.className && contains(node.parentNode.className, ('notecontent'))) {
+      node = node.parentNode;
+    }
+    var rv = _($(node).parent().contents().toArray())
+      .chain()
+      .takeWhile(function(x) {
+        return x !== node;
+      })
+      .filter(function(x) {
+        return (x.className && contains(x.className, 'notecontent')) || x.nodeType === 3;
+      })
+      .map(function(x) {
+        return x.textContent;
+      })
+      .value()
+      .reverse()
+      .join('');
+    return rv;
   }
 
   var documentNoteTemplate = Handlebars.compile(documentNoteTemplate);
