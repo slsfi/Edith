@@ -5,7 +5,7 @@
   <groupId>com.mysema</groupId>
   <artifactId>com.mysema.edith</artifactId>
   <packaging>war</packaging>
-  <version>2.0.0.rc6</version>
+  <version>2.0.0.rc7</version>
   <name>Edith</name>
   <description></description>
 
@@ -370,7 +370,7 @@
           <plugin>
             <groupId>com.jelastic</groupId>
             <artifactId>jelastic-maven-plugin</artifactId>
-            <version>1.7-SNAPSHOT</version>
+            <version>1.7</version>
             <configuration>
               <email>jelastic@mysema.com</email>
               <password>${jelastic.password}</password>
@@ -505,7 +505,7 @@
       </plugin>
     </plugins>
   </build>
-  
+
   <pluginRepositories>
     <pluginRepository>
       <id>sonatype-oss-public</id>
