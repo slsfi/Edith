@@ -5,7 +5,7 @@
   <groupId>com.mysema</groupId>
   <artifactId>com.mysema.edith</artifactId>
   <packaging>war</packaging>
-  <version>2.0.0.rc7</version>
+  <version>2.0.0</version>
   <name>Edith</name>
   <description></description>
 
@@ -430,6 +430,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
