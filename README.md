@@ -38,7 +38,31 @@ You need to have set Mysema's Jelastic password in your `settings.xml`.
 
 ### Production
 
-TODO
+Start by bumping version in pom.xml.
+Server is only accesible from Mysema VPN. Note that war is deployed as a root webapp.
+Password is "annotaatio"
+
+    git tag -a v0.7.9 -m 'Deployed for SLS on 3.9.2013'
+    mvn -Psls clean package
+    scp target/edith.war timo@194.100.126.140:.
+    ssh timo@194.100.126.140
+    sudo service jetty stop
+    sudo mv edith.war webapps/ROOT.war
+
+If necessary update the database.
+
+    mvn -Psls dbmaintain:createScriptArchive
+    scp target/edith.jar timo@194.100.126.140:.
+
+Create backup before update, just in case.
+Password is "Kuddnas10"
+
+    mysqldump -u topeliusapp -p -h 192.168.0.7 --single-transaction topelius_notes > topelius_notes_dump_2014-1-9.sql
+    gzip topelius_notes_dump_2014-1-9.sql    
+    cd dbmaintain-2.4
+    ./dbmaintain.sh updateDatabase ../edith.jar
+
+TODO Svn backup, is that necessary sometimes?
 
 ## SKS deployment
 
