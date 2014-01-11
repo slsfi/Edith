@@ -1,6 +1,6 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
         'localize', 'spinner', 'raw-selection',
-        'text!/templates/workspace/annotator/note-item.html',
+        'text!templates/workspace/annotator/note-item.html',
         'views/workspace/annotator/metadata-field-select'],
        function($, _, Backbone, vent, Handlebars, localize, spinner, rawSelection, noteItemTemplate,
                 MetadataFieldSelect) {
@@ -50,7 +50,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     comment: function() {
       var noteId = this.documentNote.note.id;
       spinner('comment:edit');
-      $.getJSON('/api/notes/' + noteId + '/comment',
+      $.getJSON('api/notes/' + noteId + '/comment',
                 function(comment) {
                   vent.trigger('comment:edit', noteId, comment);
                 });
@@ -95,7 +95,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       this.$('ul.notes').empty();
       spinner('document-notes:loaded');
       var self = this;
-      $.get('/api/documents/' + id + '/document-notes', function(data) {
+      $.get('api/documents/' + id + '/document-notes', function(data) {
         var start = new Date().getTime();
         var fragment = document.createDocumentFragment();
         _(data).each(function(documentNote) {

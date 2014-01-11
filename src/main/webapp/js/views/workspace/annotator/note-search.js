@@ -1,6 +1,6 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         'slickgrid', 'moment', 'localize', 'spinner', 'raw-selection',
-        'text!/templates/workspace/annotator/note-search.html',
+        'text!templates/workspace/annotator/note-search.html',
         'views/workspace/annotator/metadata-field-select'],
        function($, _, Backbone, vent, Handlebars, Slickback, Slick, moment,
                 localize, spinner, rawSelection, searchTemplate, MetadataFieldSelect) {
@@ -20,7 +20,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
   
   var DocumentNotesCollection = Slickback.PaginatedCollection.extend({
     model: DocumentNote,
-    url: '/api/document-notes/query',
+    url: 'api/document-notes/query',
     
     setRefreshHints: function() {
       // TODO
@@ -53,7 +53,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
   
   var UsersCollection = Backbone.Collection.extend({
     model: Backbone.Model,
-    url: '/api/users'
+    url: 'api/users'
   });
   
   var users = new UsersCollection();
@@ -277,12 +277,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         checkbox: true,
         selectMode: 3,
         initAjax: {
-          url: '/api/files'
+          url: 'api/files'
         },
 
         onLazyRead: function(node) {
           node.appendAjax({
-            url: '/api/files/',
+            url: 'api/files/',
             data: 'path=' + node.data.path,
             success: function(node) {
               if (node.isSelected()) {

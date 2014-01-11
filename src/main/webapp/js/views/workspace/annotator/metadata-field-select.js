@@ -1,5 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize',
-        'text!/templates/workspace/annotator/metadata-field-select.html'],
+        'text!templates/workspace/annotator/metadata-field-select.html'],
        function($, _, Backbone, vent, Handlebars, localize, template) {
   var MetadataFieldSelect = Backbone.View.extend({
     template: Handlebars.compile(template),

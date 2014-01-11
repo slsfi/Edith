@@ -2,7 +2,7 @@ require.config(window.rconfig);
 
 require([], function() {
   require(['jquery', 'underscore', 'backbone', 'handlebars', 'slickback', 'slickgrid', 'localize', 'moment', 
-           'header', 'text!/templates/note-search.html'],
+           'header', 'text!templates/note-search.html'],
           function($, _, Backbone, Handlebars, Slickback, Slick, localize, moment, Header, searchTemplate) {
     new Header({el: $('#header')});
     
@@ -21,7 +21,7 @@ require([], function() {
 
     var NotesCollection = Slickback.PaginatedCollection.extend({
       model: Note,
-      url: '/api/notes',
+      url: 'api/notes',
 
       setRefreshHints: function() {
         // Called when changing page size. TODO: Implement functionality?

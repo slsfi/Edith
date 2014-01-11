@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.common.collect.Maps;
 
-@Path("/localizations")
+@Path("/localizations.js")
 @Produces(MediaType.APPLICATION_JSON)
 public class LocalizationsResource {
     

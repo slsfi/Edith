@@ -1,9 +1,9 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 'spinner',
-        'text!/templates/workspace/annotator/note-edit.html',
-        'text!/templates/workspace/annotator/document-note-form.html',
-        'text!/templates/workspace/annotator/document-note-form-stub.html',
-        'text!/templates/workspace/annotator/note-form.html',
-        'text!/templates/workspace/annotator/comment.html',
+        'text!templates/workspace/annotator/note-edit.html',
+        'text!templates/workspace/annotator/document-note-form.html',
+        'text!templates/workspace/annotator/document-note-form-stub.html',
+        'text!templates/workspace/annotator/note-form.html',
+        'text!templates/workspace/annotator/comment.html',
         'ckeditor', 'ckeditor-jquery', 'ckeditor-setup'],
        function($, _, Backbone, vent, Handlebars, localize, spinner, noteEditTemplate,
                 documentNoteFormTemplate, documentNoteFormStubTemplate, noteFormTemplate,
@@ -161,7 +161,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     save: function(data) {
       var self = this;
       spinner('document-note:change');
-      var request = {url: '/api/document-notes/' + data.id,
+      var request = {url: 'api/document-notes/' + data.id,
                      type: 'PUT',
                      dataType: 'json',
                      contentType: "application/json; charset=utf-8",
@@ -174,7 +174,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                        }
                      }};
       if (!data.id) {
-        request.url = '/api/document-notes/';
+        request.url = 'api/document-notes/';
         request.type = 'POST';
       }
       $.ajax(request);
@@ -187,7 +187,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     remove: function() {
       spinner('document-note:deleted');
       var self = this;
-      var request = {url: '/api/document-notes/' + this.documentNote.id,
+      var request = {url: 'api/document-notes/' + this.documentNote.id,
                      type: 'DELETE',
                      dataType: 'json',
                      contentType: "application/json; charset=utf-8",
@@ -215,7 +215,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                                self.render();
                              });
       vent.on('document-note:deleted', function() {
-                                         var request = {url: '/api/notes/' + self.note.id,
+                                         var request = {url: 'api/notes/' + self.note.id,
                                                         type: 'GET',
                                                         dataType: 'json',
                                                         contentType: "application/json; charset=utf-8",
@@ -342,7 +342,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     save: function(data) {
       spinner('note:change');
       var self = this;
-      var request = {url: '/api/notes/' + data.id,
+      var request = {url: 'api/notes/' + data.id,
                      type: 'PUT',
                      dataType: 'json',
                      contentType: "application/json; charset=utf-8",
@@ -352,7 +352,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
                        vent.trigger('note:change', data);
                      }};
       if (!data.id) {
-        request.url = '/api/notes/';
+        request.url = 'api/notes/';
         request.type = 'POST';
       }
       _(CKEditor.instances).each(function(editor) {
@@ -364,7 +364,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     remove: function() {
       spinner('note:deleted');
       var self = this;
-      var request = {url: '/api/notes/' + this.note.id,
+      var request = {url: 'api/notes/' + this.note.id,
                      type: 'DELETE',
                      dataType: 'json',
                      contentType: "application/json; charset=utf-8",
@@ -515,7 +515,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
         var data = documentNote;
         data.note = this.noteForm.extract();
         spinner('document-note:change', 'note:change', 'annotation:change');
-        var request = {url: '/api/document-notes/',
+        var request = {url: 'api/document-notes/',
                        type: 'POST',
                        dataType: 'json',
                        contentType: "application/json; charset=utf-8",

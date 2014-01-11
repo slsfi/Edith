@@ -1,5 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
-        'handlebars', 'text!/templates/workspace/document-management/document-actions.html'],
+        'handlebars', 'text!templates/workspace/document-management/document-actions.html'],
   function($, _, Backbone, vent, localize, Handlebars, template) {
   var template = Handlebars.compile(template);
 

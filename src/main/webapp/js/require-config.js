@@ -1,5 +1,8 @@
 window.rconfig = {
+  baseUrl: 'js',
   paths: {
+    templates: '../templates',
+    api: '../api',
     jquery: 'libs/jquery/jquery.min',
     jqueryui: 'libs/jquery/jquery-ui',
     dynatree: 'libs/dynatree/jquery.dynatree-1.2.4',

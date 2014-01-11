@@ -1,4 +1,4 @@
-define(['jquery', 'handlebars', 'json!/api/localizations', 'sprintf'],
+define(['jquery', 'handlebars', 'json!api/localizations', 'sprintf'],
   function($, Handlebars, localizations) {
     
     var localize = function(key) {

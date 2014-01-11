@@ -159,14 +159,14 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
     render: function(id) {
       spinner('document:loaded');
       var self = this;
-      $.get('/api/documents/' + id, function(data) {
+      $.get('api/documents/' + id, function(data) {
         // FIXME: Create dedicated view
         var title = _.last(data.path.split("/documents/trunk/"));
         window.document.title = title;
         $('#document-title').html(title);
       }); 
 
-      $.get('/api/documents/' + id + '/raw', function(data) {
+      $.get('api/documents/' + id + '/raw', function(data) {
         self.$el.html(data)
                 .effect('highlight', {color: 'lightblue'}, 500);
         vent.trigger('document:loaded', id);

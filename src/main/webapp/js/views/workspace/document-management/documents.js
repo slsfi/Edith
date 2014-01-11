@@ -1,6 +1,6 @@
 define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
-        'handlebars', 'text!/templates/workspace/document-management/documents.html', 
-        'text!/templates/workspace/document-management/document-info.html',
+        'handlebars', 'text!templates/workspace/document-management/documents.html', 
+        'text!templates/workspace/document-management/document-info.html',
         'dynatree'],
   function($, _, Backbone, vent, localize, Handlebars, template, docInfoTemplate, dynatree) {
 
@@ -36,7 +36,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
       var self = this;
       this.$('#directory-tree').dynatree({
         initAjax: {
-          url: '/api/files'
+          url: 'api/files'
         },
 
         onActivate: function(node) {
@@ -62,7 +62,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
 
         onLazyRead: function(node) {
           node.appendAjax({
-            url: '/api/files/',
+            url: 'api/files/',
             data: 'path=' + node.data.path
           });
         }

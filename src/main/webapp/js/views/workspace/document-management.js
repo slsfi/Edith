@@ -1,5 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'vent',
-        'text!/templates/workspace/document-management.html',
+        'text!templates/workspace/document-management.html',
         'views/workspace/document-management/document-actions',
         'views/workspace/document-management/documents',
         'views/workspace/document-management/comments'],

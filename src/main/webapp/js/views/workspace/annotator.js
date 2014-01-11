@@ -1,5 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'handlebars', 'vent', 'bootstrap', 'localize',
-        'text!/templates/workspace/annotator.html',
+        'text!templates/workspace/annotator.html',
         'views/workspace/annotator/document',
         'views/workspace/annotator/note-list',
         'views/workspace/annotator/note-edit',

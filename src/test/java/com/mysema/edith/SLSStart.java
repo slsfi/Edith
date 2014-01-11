@@ -28,7 +28,7 @@ public final class SLSStart {
         System.setProperty(EDITH.REPO_URL_PROPERTY, SVNURL.fromFile(svnRepo).toString());
         System.setProperty(EDITH.EXTENDED_TERM, "true");
         
-        JettyHelper.startJetty("src/main/webapp", "/", 8080, 8443);
+        JettyHelper.startJetty("src/main/webapp", "/edith", 8080, 8443);
     }
 
 
