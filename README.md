@@ -39,7 +39,7 @@ You need to have set Mysema's Jelastic password in your `settings.xml`.
 ### Production
 
 Start by bumping version in pom.xml.
-Server is only accesible from Mysema VPN. Note that war is deployed as a root webapp.
+Server is only accesible from Mysema VPN.
 Password is "annotaatio"
 
     git tag -a v0.7.9 -m 'Deployed for SLS on 3.9.2013'
@@ -47,7 +47,7 @@ Password is "annotaatio"
     scp target/edith.war timo@194.100.126.140:.
     ssh timo@194.100.126.140
     sudo service jetty stop
-    sudo mv edith.war webapps/ROOT.war
+    sudo mv edith.war webapps
 
 If necessary update the database.
 
