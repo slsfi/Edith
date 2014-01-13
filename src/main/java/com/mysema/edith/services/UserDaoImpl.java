@@ -79,7 +79,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             user.setLastName(values[1]);
             user.setUsername(values[2]);
             //user.setPassword(commonPassword); 
-            user.setPassword(values[2]); 
+            user.setPassword(new SimpleHash("SHA-1", values[2]).toHex()); 
             user.setEmail(values[3]);
             if (values[3].endsWith("mysema.com")) {
                 user.setProfile(Profile.Admin);
