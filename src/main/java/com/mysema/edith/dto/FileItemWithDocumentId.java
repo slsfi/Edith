@@ -16,6 +16,8 @@ public class FileItemWithDocumentId extends FileItem {
 
     private final Long lastNote;
 
+    private final String href;
+
     public FileItemWithDocumentId(String title, String path, boolean isFolder,
             List<FileItem> children, boolean hasChildren, Long documentId, boolean isSelected,
             long noteCount, Long lastNote) {
@@ -24,6 +26,7 @@ public class FileItemWithDocumentId extends FileItem {
         this.isSelected = isSelected;
         this.noteCount = noteCount;
         this.lastNote = lastNote;
+        href = "#documents/" + documentId;
     }
 
     public Long getDocumentId() {
@@ -40,5 +43,9 @@ public class FileItemWithDocumentId extends FileItem {
 
     public Long getLastNote() {
         return lastNote;
+    }
+
+    public String getHref() {
+        return href;
     }
 }
