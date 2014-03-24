@@ -161,9 +161,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
       var self = this;
       $.get('api/documents/' + id, function(data) {
         // FIXME: Create dedicated view
-        var title = _.last(data.path.split("/documents/trunk/"));
-        window.document.title = title;
-        $('#document-title').html(title);
+        window.document.title = data.title;
+
+        var path = data.path.replace('/documents/trunk/', '');
+        $('#document-title').html(path);
       }); 
 
       $.get('api/documents/' + id + '/raw', function(data) {
