@@ -18,4 +18,4 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
   });
   
   return Header;
-});k
+});
