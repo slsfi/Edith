@@ -164,7 +164,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'spinner', 'ra
         window.document.title = data.title;
 
         var path = data.path.replace('/documents/trunk/', '');
-        $('#document-title').html(path);
+        var $documentTitle = $('#document-title a');
+        $documentTitle.text(path);
+        $documentTitle.attr('href', 'api/documents/' + data.id + '/xml');
       }); 
 
       $.get('api/documents/' + id + '/raw', function(data) {
