@@ -293,7 +293,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
             }
           });
         },
-        
+
+        onDblClick: function(node) {
+          if (!node.data.isFolder) {
+            vent.trigger('route:change', 'documents/' + node.data.documentId);
+          }
+        },
+
         onSelect: function() {
           self.search();
         }
