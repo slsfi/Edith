@@ -254,7 +254,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       // tree nodes
       var nodes = this.$('.directory-tree').dynatree('getSelectedNodes');
       data.documents = _.map(nodes, function(n) { return n.data.documentId; });
-      data.paths = _.map(nodes, function(n) { return n.data.path });
+      data.paths = _.map(nodes, function(n) { return encodeURIComponent(n.data.path); });
       
       documentNotes.extendScope(data);
       documentNotes.fetchWithScope();
@@ -283,7 +283,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         onLazyRead: function(node) {
           node.appendAjax({
             url: 'api/files/',
-            data: 'path=' + node.data.path,
+            data: 'path=' + encodeURIComponent(node.data.path),
             success: function(node) {
               if (node.isSelected()) {
                 $.each(node.childList, function(){

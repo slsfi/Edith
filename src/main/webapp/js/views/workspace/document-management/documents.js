@@ -43,7 +43,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
           if (!node.data.isFolder) {
             vent.trigger('document:select', node.data);
           } else {
-            self.$('input[name=path]').val(node.data.path);
+            self.$('input[name=path]').val(encodeURIComponent(node.data.path));
             vent.trigger('folder:select', node.data);
           }
         },
@@ -63,7 +63,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'localize',
         onLazyRead: function(node) {
           node.appendAjax({
             url: 'api/files/',
-            data: 'path=' + node.data.path
+            data: 'path=' + encodeURIComponent(node.data.path)
           });
         }
       });
