@@ -5,7 +5,7 @@
   <groupId>com.mysema</groupId>
   <artifactId>com.mysema.edith</artifactId>
   <packaging>war</packaging>
-  <version>2.0.3</version>
+  <version>2.0.5</version>
   <name>Edith</name>
   <description></description>
 
@@ -14,18 +14,18 @@
     <extraResources>src/main/resources</extraResources>
 
     <failIfNoTests>false</failIfNoTests>
-    
+
     <hibernate.version>4.1.7.Final</hibernate.version>
-    <hibernate.validator.version>4.3.0.Final</hibernate.validator.version>    
+    <hibernate.validator.version>4.3.0.Final</hibernate.validator.version>
     <jetty.version>6.1.15</jetty.version>
     <querydsl.version>3.2.0</querydsl.version>
-    <guice.version>3.0</guice.version>    
+    <guice.version>3.0</guice.version>
     <jersey.version>1.14</jersey.version>
   </properties>
 
   <dependencies>
 
-    <!-- guice -->    
+    <!-- guice -->
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
@@ -50,7 +50,7 @@
       <groupId>com.mycila.guice.extensions</groupId>
       <artifactId>mycila-guice-jsr250</artifactId>
       <version>3.2.ga</version>
-    </dependency>    
+    </dependency>
 
     <!-- web -->
     <dependency>
@@ -62,7 +62,7 @@
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-json</artifactId>
       <version>${jersey.version}</version>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>com.sun.jersey.contribs</groupId>
       <artifactId>jersey-guice</artifactId>
@@ -73,14 +73,14 @@
       <artifactId>jersey-multipart</artifactId>
       <version>${jersey.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
       <scope>provided</scope>
-    </dependency>    
-    
+    </dependency>
+
     <!-- security -->
     <dependency>
       <groupId>org.apache.shiro</groupId>
@@ -91,7 +91,7 @@
       <groupId>org.apache.shiro</groupId>
       <artifactId>shiro-guice</artifactId>
       <version>1.2.2</version>
-    </dependency>    
+    </dependency>
 
     <!-- logging -->
     <dependency>
@@ -114,7 +114,7 @@
       <artifactId>log4j</artifactId>
       <version>1.2.17</version>
     </dependency>
-    
+
     <!-- services -->
     <dependency>
       <groupId>org.codehaus.woodstox</groupId>
@@ -126,7 +126,7 @@
       <artifactId>commons-compress</artifactId>
       <version>1.1</version>
     </dependency>
-    <!-- 
+    <!--
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
@@ -181,11 +181,11 @@
       <artifactId>hibernate-c3p0</artifactId>
       <version>${hibernate.version}</version>
     </dependency>
- 
+
     <dependency>
       <groupId>org.hibernate.javax.persistence</groupId>
       <artifactId>hibernate-jpa-2.0-api</artifactId>
-      <version>1.0.0.Final</version>      
+      <version>1.0.0.Final</version>
     </dependency>
     <dependency>
       <groupId>com.mysema.querydsl</groupId>
@@ -304,7 +304,7 @@
         <dbmaintain.fromScratchEnabled>true</dbmaintain.fromScratchEnabled>
       </properties>
     </profile>
-        
+
     <profile>
       <id>jenkins</id>
       <properties>
@@ -318,7 +318,7 @@
         <plugins>
           <plugin>
             <groupId>org.dbmaintain</groupId>
-            <artifactId>dbmaintain-maven-plugin</artifactId>                    
+            <artifactId>dbmaintain-maven-plugin</artifactId>
             <executions>
               <execution>
                 <id>updateDatabase</id>
@@ -328,11 +328,11 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>          
+          </plugin>
         </plugins>
       </build>
     </profile>
-    
+
     <profile>
       <id>prod</id>
       <properties>
@@ -343,28 +343,28 @@
         <dbmaintain.fromScratchEnabled>false</dbmaintain.fromScratchEnabled>
       </properties>
     </profile>
-    
+
     <profile>
       <id>sks</id>
       <properties>
         <extraResources>profiles/sks</extraResources>
       </properties>
     </profile>
-    
+
     <profile>
       <id>sls</id>
       <properties>
         <extraResources>profiles/sls</extraResources>
       </properties>
     </profile>
-    
+
     <profile>
       <id>standalone</id>
       <properties>
         <extraResources>profiles/standalone</extraResources>
       </properties>
     </profile>
-    
+
     <profile>
       <id>jelastic</id>
       <properties>
@@ -379,13 +379,13 @@
             <configuration>
               <email>jelastic@mysema.com</email>
               <password>${jelastic.password}</password>
-              <environment>edith2</environment>           
+              <environment>edith2</environment>
               <api_hoster>app.jelastic.planeetta.net</api_hoster>
             </configuration>
           </plugin>
         </plugins>
-      </build>      
-    </profile>    
+      </build>
+    </profile>
   </profiles>
 
   <build>
@@ -524,6 +524,6 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-  
+
 </project>
 
