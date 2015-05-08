@@ -359,6 +359,13 @@
     </profile>
 
     <profile>
+      <id>sls-parland</id>
+      <properties>
+        <extraResources>profiles/sls-parland</extraResources>
+      </properties>
+    </profile>
+    
+    <profile>
       <id>standalone</id>
       <properties>
         <extraResources>profiles/standalone</extraResources>
