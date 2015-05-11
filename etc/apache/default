@@ -1,0 +1,27 @@
+<VirtualHost *:80>
+RedirectMatch ^/$ /edith
+
+ProxyRequests Off
+
+<Proxy *>
+  Order deny,allow
+  Allow from all
+</Proxy>
+
+ProxyPreserveHost On
+ProxyPass /edith http://localhost:8080/edith
+ProxyPass /glossary http://localhost:8080/glossary
+
+<Location /svn>
+  DAV svn
+  Options Indexes
+  SVNPath /opt/svn/edith
+  ModMimeUsePathInfo on
+
+  AuthType Basic
+  AuthName "Edith Subversion repository"
+  AuthUserFile /etc/apache2/edithusers
+  Require valid-user   
+</Location>
+
+</VirtualHost>
