@@ -17,8 +17,12 @@ Clone the repository and do the basic Maven stuff:
     git@github.com:mysema/edith.git
     cd edith/
     mvn dbmaintain:updateDatabase
+    TODO: Check if the above command needs to include -Pprod to work properly,
+    TODO: did not create tables for edith db, though edith_test was created ok.
+
     mvn clean install
     mvn exec:java -Dexec.mainClass=com.mysema.edith.SLSStart -Dexec.classpathScope=test
+
 
 Check `/doc/use-sls-data.txt` on how to install SLS data.
 

@@ -5,43 +5,12 @@
  */
 package com.mysema.edith.services;
 
-import static com.mysema.query.support.Expressions.stringPath;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
-import org.joda.time.DateTime;
-
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EDITH;
-import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.LinkElement;
-import com.mysema.edith.domain.Note;
-import com.mysema.edith.domain.NoteComment;
-import com.mysema.edith.domain.NoteType;
-import com.mysema.edith.domain.Paragraph;
-import com.mysema.edith.domain.QDocumentNote;
-import com.mysema.edith.domain.QNote;
-import com.mysema.edith.domain.QTerm;
-import com.mysema.edith.domain.StringElement;
-import com.mysema.edith.domain.Term;
-import com.mysema.edith.domain.UrlElement;
-import com.mysema.edith.domain.User;
+import com.mysema.edith.domain.*;
 import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.QueryModifiers;
@@ -51,6 +20,22 @@ import com.mysema.query.types.EntityPath;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.ComparableExpressionBase;
 import com.mysema.query.types.path.StringPath;
+import org.joda.time.DateTime;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
+import static com.mysema.query.support.Expressions.stringPath;
 
 @Transactional
 public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
@@ -163,7 +148,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                 && (!search.getPaths().isEmpty() || !search.getDocuments().isEmpty())) {
             BooleanBuilder filter = new BooleanBuilder();
             for (String path : search.getPaths()) {
-                filter.or(documentNote.document.path.startsWith(path));
+            //    System.out.println(path);
+                filter.or(documentNote.document.path.startsWith(path.replaceAll("%2F", "/")));
             }
             if (!search.getDocuments().isEmpty()) {
                 filter.or(documentNote.document.id.in(search.getDocuments()));
