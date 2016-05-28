@@ -131,6 +131,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
         builder.and(note.deleted.isFalse());
 
+     //   System.out.print(search.getFilters());
+
         // only orphans
         if (search.isOrphans() && !search.isIncludeAllDocs()) {
             builder.and(note.documentNoteCount.eq(0));
@@ -162,14 +164,37 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             builder.and(note.term.language.eq(search.getLanguage()));
         }
 
+        // How to restrict the query to match only to Filters got by getFilters,
+        // i.e. not to include search results from the not selected filters.
+        //  AND is from (FIlter A or FIlter B)
+
         // fulltext
         if (!Strings.isNullOrEmpty(search.getQuery())) {
             QTerm term = QTerm.term;
             BooleanBuilder filter = new BooleanBuilder();
-            for (StringPath path : Arrays.asList(note.lemma, note.description, note.sources,
-                    note.comments.any().message, term.basicForm, term.meaning)) {
-                filter.or(path.containsIgnoreCase(search.getQuery()));
-            }
+
+            if (search.getFilters().isEmpty())
+                for (StringPath path : Arrays.asList(note.lemma, note.description, note.sources,
+                        note.comments.any().message, term.basicForm, term.meaning)) {
+                    filter.or(path.containsIgnoreCase(search.getQuery()));
+                } else {
+                for (Filters f : search.getFilters()) {
+                    switch (f) {
+                        case SOURCES:
+                            filter.or(note.sources.containsIgnoreCase(search.getQuery()));
+                            break;
+                        case LEMMA:
+                            filter.or(note.lemma.containsIgnoreCase(search.getQuery()));
+                            break;
+                        case DESCRIPTION:
+                            filter.or(note.description.containsIgnoreCase(search.getQuery()));
+                            break;
+                        case KEYWORDS:
+                            filter.or(term.basicForm.containsIgnoreCase(search.getQuery()));
+                            break;
+                }}}
+
+
             if (!searchNotes) {
                 filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
             }

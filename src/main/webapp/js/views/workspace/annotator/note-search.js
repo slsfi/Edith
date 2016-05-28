@@ -221,7 +221,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
       var arr = this.$('form').serializeArray();
       var data = _(arr).reduce(function(acc, field) {
              if (field.value) {
-               if (field.name == 'creators' || field.name == 'types') {
+               if (field.name == 'creators' || field.name == 'types' || field.name == 'filters') {
                  if (!acc[field.name]) {
                    acc[field.name] = [];
                  }
@@ -238,6 +238,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
            }, {});
 
       // clean data to make sure documentNotes.extendScope works properly
+
+      if (!data.filters) {
+        data.filters = [];
+      }
 
       if (!data.types) {
         data.types = [];
@@ -270,7 +274,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
 
       var userOpts = _.map(users.toJSON(), userOption).join('');
       this.$('.creators').html(userOption({}) + userOpts); 
-      
+
+
+
       this.$('.date').datepicker({ dateFormat: localize('dateformat') });
       
       this.$('.directory-tree').dynatree({
@@ -285,7 +291,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
             url: 'api/files/',
             data: 'path=' + encodeURIComponent(node.data.path),
             success: function(node) {
-              if (node.isSelected()) {
+           if (node.isSelected()) {
                 $.each(node.childList, function(){
                   this._select(true, false, true);
                 });
@@ -305,6 +311,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'slickback',
         }
 
       });
+
       this.$('#advancedSearch .multiselect').multiselect({
         buttonText: function(options, select) {
           if (options.length == 0) {
