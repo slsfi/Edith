@@ -261,6 +261,10 @@ form input, form .btn-group, form textarea, form select {
   margin-bottom: 5px;
 }
 
+#shortenedSelection {
+  resize: vertical;
+}
+
 #note-search .search-header-row {
   margin: 5px 0 10px 0;
 }
