@@ -27,17 +27,6 @@
     <div class="controls">{{ documentNoteCount }}</div>
   </div>
 
-  {{#if editedOn}}
-    <div class="control-group">
-      <label class="control-label">{{localize 'last-edited'}}</label>
-      <div class="controls">{{ dateFormat editedOn }} ({{ lastEditedBy.username }})</div>
-    </div>
-    <div class="control-group">
-      <label class="control-label">{{localize 'all-editors'}}</label>
-      <div class="controls">{{ allEditors }}</div>
-    </div>
-  {{/if}}
-
   <div class="control-group">
     <label for="type" class="control-label">
       {{localize 'type-label'}}
@@ -97,4 +86,14 @@
     </div>
   </div>
 
+  {{#if editedOn}}
+  <div class="control-group">
+    <label class="control-label">{{localize 'last-edited'}}</label>
+    <div class="controls">{{ dateFormat editedOn }} ({{ lastEditedBy.username }})</div>
+  </div>
+  <div class="control-group">
+    <label class="control-label">{{localize 'all-editors'}}</label>
+    <div class="controls">{{ allEditors }}</div>
+  </div>
+  {{/if}}
 </form>
