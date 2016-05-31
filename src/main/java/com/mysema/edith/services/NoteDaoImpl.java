@@ -174,7 +174,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             BooleanBuilder filter = new BooleanBuilder();
 
             if (search.getFilters().isEmpty())
-                for (StringPath path : Arrays.asList(note.lemma, note.description, note.sources,
+                for (StringPath path : Arrays.asList(note.lemma, note.description, // note.sources,   // Leave Sources out from the default search
                         note.comments.any().message, term.basicForm, term.meaning)) {
                     filter.or(path.containsIgnoreCase(search.getQuery()));
                 } else {
