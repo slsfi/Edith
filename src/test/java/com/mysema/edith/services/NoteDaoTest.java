@@ -6,36 +6,23 @@
  */
 package com.mysema.edith.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.Collections;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
 import com.mysema.edith.EDITH;
 import com.mysema.edith.EdithTestConstants;
-import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.Note;
-import com.mysema.edith.domain.NoteComment;
-import com.mysema.edith.domain.NoteFormat;
-import com.mysema.edith.domain.NoteType;
-import com.mysema.edith.domain.QNote;
-import com.mysema.edith.domain.Term;
-import com.mysema.edith.domain.TermLanguage;
-import com.mysema.edith.domain.User;
+import com.mysema.edith.domain.*;
 import com.mysema.edith.dto.DocumentTO;
 import com.mysema.edith.dto.NoteSearchTO;
 import com.mysema.query.SearchResults;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
+
+import static org.junit.Assert.*;
 
 @Transactional
 public class NoteDaoTest extends AbstractHibernateTest {
@@ -510,10 +497,11 @@ public class NoteDaoTest extends AbstractHibernateTest {
         assertFullText("d", 1);
         assertFullText("e", 0);
 
-        note1.setSources("e");
-        noteDao.save(note1);
-        assertFullText("e", 1);
-        assertFullText("f", 0);
+  //  31.5.2016:  SLS wanted to drop the Sources from the 'default' full-text search
+  //      note1.setSources("e");
+  //      noteDao.save(note1);
+  //      assertFullText("e", 1);
+  //      assertFullText("f", 0);
 
         noteDao.createComment(note1, "f");
         assertFullText("f", 1);
