@@ -349,7 +349,8 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
         // And to the short version
         if (extendedTerm && documentNote.getShortenedSelection() == null) {
-            documentNote.setShortenedSelection(abbreviation);
+            documentNote.setShortenedSelection(abbreviation.replaceAll("\n", " "));
+//            documentNote.setShortenedSelection(abbreviation);
         }
 
         documentNote.setDocument(document);
