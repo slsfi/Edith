@@ -202,11 +202,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
 
   var NoteForm = Backbone.View.extend({
-    events: {'keyup input': 'setDirty',
+    events: {
+    'keyup input': 'setDirty',
     'keyup textarea': 'setDirty',
-             'change input': 'setDirty',
-                 'change textarea': 'setDirty',
-             'change select': 'setDirty'},
+    'change input': 'setDirty',
+    'change textarea': 'setDirty',
+    'change select': 'setDirty'},
   
     template: Handlebars.compile(noteFormTemplate),
 
@@ -446,6 +447,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
           self.documentNoteForm.toggleAnnotationEnabled(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
         }
       });
+      vent.on('note-edit:vaihda', this.openDocumentNote);
       vent.on('note:create', this.create);
       vent.on('document-note:open', this.openDocumentNote);
       vent.on('note:open', this.openNote);
