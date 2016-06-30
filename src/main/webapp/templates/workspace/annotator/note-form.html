@@ -72,7 +72,7 @@
     <label for="status" class="control-label">{{ localize 'status-label' }}</label>
     <div class="control-group">
       <select name="status">
-        <option value="INITIAL" {{#when-eq status 'INITIAL'}} selected {{/when-eq}}>{{ localize 'INITIAL' }}</option>
+<!--        <option value="INITIAL" {{#when-eq status 'INITIAL'}} selected {{/when-eq}}>{{ localize 'INITIAL' }}</option> -->
         <option value="DRAFT" {{#when-eq status 'DRAFT'}} selected {{/when-eq}}>{{ localize 'DRAFT' }}</option>
         <option value="FINISHED" {{#when-eq status 'FINISHED'}} selected {{/when-eq}}>{{ localize 'FINISHED' }}</option>
       </select>

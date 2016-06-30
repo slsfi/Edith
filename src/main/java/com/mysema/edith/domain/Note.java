@@ -1,28 +1,15 @@
 package com.mysema.edith.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import com.mysema.edith.dto.NoteCommentComparator;
+import com.mysema.edith.util.StringUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 
-import com.mysema.edith.dto.NoteCommentComparator;
-import com.mysema.edith.util.StringUtils;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "note")
@@ -55,7 +42,7 @@ public class Note extends BaseEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private NoteStatus status = NoteStatus.INITIAL;
+    private NoteStatus status = NoteStatus.DRAFT;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
