@@ -93,7 +93,7 @@ enum Format {
 
 // Viitteen tila
 enum Status {
-  INITIAL, // alustava
+//  INITIAL, // alustava  Deprecated from SLS 6/2016
   DRAFT, // luonnos
   FINISHED // valmis
 }
