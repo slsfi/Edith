@@ -35,17 +35,27 @@
     font-style: italic;
 }
 
-.tei .sic {
+.tei .sic,
+.tei .expan,
+.tei .var,
+.tei .del,
+/* .tei .milestone, */
+.tei .orig
+/* .tei .reg [type=empty],
+.tei .corr [type=empty],
+.tei .note [type=instruction] */
+{
     display: none; /* sls */	
 }
 
-.tei .corr, .tei .reg {
+.tei .corr,
+.tei .reg,
+.tei .supplied,
+.tei .unclear,
+.tei .gap,
+.tei .figure
+{
     color: #808080;	
-}
-
-.tei .orig {
-    font-style: italic;
-    color: #D0D0D0;
 }
 
 .tei .sp {
@@ -56,12 +66,31 @@
     padding-right: 0.25em;    
 }    
 
-.tei .p {
+ .tei .l,
+ .tei .p,
+ .tei .lg,
+ .tei .opener,
+ .tei .closer,
+ .tei .head,
+ .tei .dateline,
+ .tei .item,
+ .tei .speaker,
+ .tei .stage,
+ .tei .trailer,
+ .tei .address,
+ .tei .salute,
+ .tei .signed,
+ .tei .postscript
+ {
+    display: block;
+}
+
+/* .tei .p {
     display: block;
     text-indent: 1em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
-}
+} */
 
 .tei .p.parIndent {
     text-indent: 0em;
@@ -181,48 +210,57 @@
     padding-left: 2.5em;    
 }    
 
+.tei .abbr,
 .tei .actor, 
 .tei .camera, 
-.tei .caption, 
+.tei .caption,
+.tei .castItem,
 .tei .date, 
 .tei .desc, 
 .tei .docAuthor, 
 .tei .gap, 
-.tei .orig,
+/* .tei .orig, */
+.tei .edVar,
 .tei .corr,
 .tei .ref, 
 .tei .role, 
-.tei .roleDesc, 
+.tei .roleDesc,
+.tei .row,
 .tei .set, 
 .tei .sound, 
 .tei .speaker, 
 .tei .tech, 
 .tei .view, 
-.tei .persName, 
-.tei .note, 
+.tei .persName,
+.tei .note,
 .tei .hi, 
 .tei .xref, 
 .tei .placeName,
+.tei .print,
 .tei .orgName,
 .tei .p .title,
 .tei .unclear,
-.tei .del,
+/* .tei .del, SLS  moved to display "none" */
 .tei .add,
+.tei .seg,
+.tei .stamp,
 .tei .supplied,
 .tei .subst,
 .tei .reg,
 .tei .choice,
-.tei .figure,
+/* .tei .figure, */
 .tei .sp,
 .tei .emph,
 .tei .foreign,
 .tei .rs,
+.tei .restore,
 .tei .cell
 {
     display: inline;    
 }    
 
 .tei .notecontent{
+    font-size: smaller;
     color: #990202;
 }
 
@@ -241,32 +279,43 @@
 
 .tei .noteanchor:after {
     color: #020299;
-    content: " [*]";
+    content: "[*]";
 }
 
 .tei .hi, .tei .emph {
     font-style: italic;
 }
 
-.tei .unclear {
+/*
+.tei .p[rend = "noIndent"] {
+   color: #FF0000;
+   font-style:
+}
+*/
+
+/* .tei .unclear {
     color: #494949;
     font-style: italic;
-}
+} */
 
-.tei .del {
+/* .tei .del {
     text-decoration: line-through;
-}
+} */
 
 .tei .gap:before {
     color: #494949;
     content: "[oläsligt]";
 }
 
-.tei .cell {
-    margin-right: 15px;
+.tei .space:before {
+     color: #808080;
 }
 
-.tei .list .item {
+/* .tei .cell {
+    margin-right: 15px;
+} */
+
+.tei .list {
     display: block;
 }
 

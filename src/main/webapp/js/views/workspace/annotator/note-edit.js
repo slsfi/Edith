@@ -35,6 +35,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     stubTemplate: Handlebars.compile(documentNoteFormStubTemplate),
 
     events: {'keyup input': 'setDirty',
+    'keyup textarea': 'setDirty',
              'click #update-full-selection': 'annotate',
              'click #create-document-note': 'annotate'},
 
@@ -78,11 +79,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     },
 
     setDirty: function() {
-      if (this.$('input[name=shortenedSelection]').val() === '') {
-        this.$('input[name=shortenedSelection]').parent().parent().addClass('error');
+//      if (this.$('input[name=shortenedSelection]').val() === '') {
+        if (this.$('#shortenedSelection').val() === '') {
+        this.$('#shortenedSelection').parent().parent().addClass('error');
         this.$('#save-document-note').attr('disabled', 'disabled');
       } else {
-        this.$('input[name=shortenedSelection]').parent().parent().removeClass('error');
+        this.$('#shortenedSelection').parent().parent().removeClass('error');
         this.$('#save-document-note').removeAttr('disabled');
       }
       this.isDirty = true;
@@ -200,9 +202,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
 
 
   var NoteForm = Backbone.View.extend({
-    events: {'keyup input': 'setDirty',
-             'change input': 'setDirty',
-             'change select': 'setDirty'},
+    events: {
+    'keyup input': 'setDirty',
+    'keyup textarea': 'setDirty',
+    'change input': 'setDirty',
+    'change textarea': 'setDirty',
+    'change select': 'setDirty'},
   
     template: Handlebars.compile(noteFormTemplate),
 
@@ -442,6 +447,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
           self.documentNoteForm.toggleAnnotationEnabled(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
         }
       });
+      vent.on('note-edit:vaihda', this.openDocumentNote);
       vent.on('note:create', this.create);
       vent.on('document-note:open', this.openDocumentNote);
       vent.on('note:open', this.openNote);

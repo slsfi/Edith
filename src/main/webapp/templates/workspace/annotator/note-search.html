@@ -38,6 +38,18 @@
             </div>
 
             <div class="control-group">
+              <label for="filters" class="control-label">{{localize 'filter-label'}}</label>
+              <div class="controls">
+                <select multiple="multiple" name="filters" id="filter-select" class="multiselect">
+                  <option value="LEMMA">{{localize 'LEMMA'}}</option>
+                  <option value="DESCRIPTION">{{localize 'DESCRIPTION'}}</option>
+                  <option value="KEYWORDS">{{localize 'KEYWORDS'}}</option>
+                  <option value="SOURCES">{{localize 'SOURCES'}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
               <label for="type" class="control-label">{{localize 'type-label'}}</label>
               <div class="controls">
                 <select multiple="multiple" name="types" id="type-select" class="multiselect">
@@ -73,7 +85,7 @@
             <div class="control-group"><label for="status" class="control-label">{{localize 'status-label'}}</label>
               <div class="controls">
                 <select name="status" id="status-select" multiple="multiple" class="multiselect">
-                  <option value="INITIAL">{{localize 'INITIAL'}}</option>
+       <!--       <option value="INITIAL">{{localize 'INITIAL'}}</option>  -->
                   <option value="DRAFT">{{localize 'DRAFT'}}</option>
                   <option value="FINISHED">{{localize 'FINISHED'}}</option>
                 </select>

@@ -19,13 +19,13 @@
 <form>
   <div class="control-group">
     <label class="control-label">{{ localize 'fullSelection-label' }}</label>
-    <div class="controls">{{ fullSelection }} &nbsp;<button class="btn btn-small" id="update-full-selection" disabled="disabled">{{localize 'update-full-selection'}}</button></div>
+    <div class="controls" style="overflow:auto;max-height:50px;">{{ fullSelection }} &nbsp;<button class="btn btn-small" id="update-full-selection" disabled="disabled">{{localize 'update-full-selection'}}</button></div>
 
   </div>
   <div class="control-group">
     <label class="control-label" for="shortenedSelection">{{ localize 'shortenedSelection-label' }}</label>
     <div class="controls">
-      <input type="text" class="input-block-level" id="shortenedSelection" name="shortenedSelection" value="{{ shortenedSelection }}"></input>
+      <textarea type="text" id="shortenedSelection" name="shortenedSelection"  class="input-block-level" style="margin-top:15px;">{{ shortenedSelection }}</textarea>
     </div>
   </div>
   <div class="control-group">

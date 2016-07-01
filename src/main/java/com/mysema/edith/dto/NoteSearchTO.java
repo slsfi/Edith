@@ -5,14 +5,15 @@
  */
 package com.mysema.edith.dto;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.mysema.edith.domain.NoteFormat;
 import com.mysema.edith.domain.NoteStatus;
 import com.mysema.edith.domain.NoteType;
+import com.mysema.edith.domain.Filters;
 import com.mysema.edith.domain.TermLanguage;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class NoteSearchTO {
 
@@ -23,6 +24,8 @@ public class NoteSearchTO {
     private NoteStatus status;
 
     private Set<NoteType> types = new HashSet<NoteType>();
+
+    private Set<Filters> filters = new HashSet<Filters>();
 
     private Set<NoteFormat> formats = new HashSet<NoteFormat>();
 
@@ -80,6 +83,11 @@ public class NoteSearchTO {
     public void setTypes(Set<NoteType> types) {
         this.types = types;
     }
+
+    public Set<Filters> getFilters() { return filters; }
+
+    public void setFilters(Set<Filters> filters) {this.filters = filters;}
+
 
     public Set<NoteFormat> getFormats() {
         return formats;

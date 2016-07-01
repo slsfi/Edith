@@ -27,17 +27,6 @@
     <div class="controls">{{ documentNoteCount }}</div>
   </div>
 
-  {{#if editedOn}}
-    <div class="control-group">
-      <label class="control-label">{{localize 'last-edited'}}</label>
-      <div class="controls">{{ dateFormat editedOn }} ({{ lastEditedBy.username }})</div>
-    </div>
-    <div class="control-group">
-      <label class="control-label">{{localize 'all-editors'}}</label>
-      <div class="controls">{{ allEditors }}</div>
-    </div>
-  {{/if}}
-
   <div class="control-group">
     <label for="type" class="control-label">
       {{localize 'type-label'}}
@@ -83,7 +72,7 @@
     <label for="status" class="control-label">{{ localize 'status-label' }}</label>
     <div class="control-group">
       <select name="status">
-        <option value="INITIAL" {{#when-eq status 'INITIAL'}} selected {{/when-eq}}>{{ localize 'INITIAL' }}</option>
+<!--        <option value="INITIAL" {{#when-eq status 'INITIAL'}} selected {{/when-eq}}>{{ localize 'INITIAL' }}</option> -->
         <option value="DRAFT" {{#when-eq status 'DRAFT'}} selected {{/when-eq}}>{{ localize 'DRAFT' }}</option>
         <option value="FINISHED" {{#when-eq status 'FINISHED'}} selected {{/when-eq}}>{{ localize 'FINISHED' }}</option>
       </select>
@@ -97,4 +86,14 @@
     </div>
   </div>
 
+  {{#if editedOn}}
+  <div class="control-group">
+    <label class="control-label">{{localize 'last-edited'}}</label>
+    <div class="controls">{{ dateFormat editedOn }} ({{ lastEditedBy.username }})</div>
+  </div>
+  <div class="control-group">
+    <label class="control-label">{{localize 'all-editors'}}</label>
+    <div class="controls">{{ allEditors }}</div>
+  </div>
+  {{/if}}
 </form>

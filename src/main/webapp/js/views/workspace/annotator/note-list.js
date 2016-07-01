@@ -9,12 +9,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
     tagName: 'li',
 
     events: {'click #edit-note': 'edit',
-             'click #comment-note': 'comment'},
+             'click #comment-note': 'comment',
+             'click #select-note': 'vaihda'},
 
     template: Handlebars.compile(noteItemTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'render', 'edit', 'comment');
+      _.bindAll(this, 'render', 'edit', 'comment', 'vaihda');
       this.documentNote = this.options.data;
       this.render();
       var self = this;
@@ -47,6 +48,11 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       vent.trigger('document-note:open', this.documentNote);
     },
 
+    vaihda: function() {
+      //UI works nicer with note-edit:vaihda trigger when there's unsaved modifications
+      vent.trigger('note-edit:vaihda', this.documentNote);
+    },
+
     comment: function() {
       var noteId = this.documentNote.note.id;
       spinner('comment:edit');
@@ -54,7 +60,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
                 function(comment) {
                   vent.trigger('comment:edit', noteId, comment);
                 });
-    },
+    }
   });
 
   var NoteList = Backbone.View.extend({
