@@ -5,4 +5,4 @@ package com.mysema.edith.domain;
  */
 
 public enum Filters {
-    SOURCES, KEYWORDS, DESCRIPTION, LEMMA }
+    SOURCES, KEYWORDS, DESCRIPTION, LEMMA, SHORTENED_SELECTION }

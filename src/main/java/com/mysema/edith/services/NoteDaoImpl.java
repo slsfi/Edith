@@ -131,8 +131,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
 
         builder.and(note.deleted.isFalse());
 
-     //   System.out.print(search.getFilters());
-
         // only orphans
         if (search.isOrphans() && !search.isIncludeAllDocs()) {
             builder.and(note.documentNoteCount.eq(0));
@@ -169,13 +167,19 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
             QTerm term = QTerm.term;
             BooleanBuilder filter = new BooleanBuilder();
 
+        //    System.out.println(search.getFilters() + " = Filters" );
 
-            if (search.getFilters().isEmpty())
+            if (search.getFilters().isEmpty()) {  // standard text search without filters
                 for (StringPath path : Arrays.asList(note.lemma, note.description, // note.sources,   // Leave Sources out from the default search
                         note.comments.any().message, term.basicForm, term.meaning)) {
                     filter.or(path.containsIgnoreCase(search.getQuery()));
-                } else {
-                // Restrict the query to match only to Filters got by getFilters
+                }
+                if (!searchNotes) {
+                    filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
+                }
+            }
+            else {
+                // Restrict the query to match only to Filters got from extended search UI
                 for (Filters f : search.getFilters()) {
                     switch (f) {
                         case SOURCES:
@@ -190,33 +194,36 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                         case KEYWORDS:
                             filter.or(term.basicForm.containsIgnoreCase(search.getQuery()));
                             break;
-                }}}
-
-            if (!searchNotes) {
-                filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
+                        case SHORTENED_SELECTION:
+                                filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
+                            break;
+                    }
+                }
             }
             builder.and(filter);
         }
 
-        // shortened selection
-        if (!Strings.isNullOrEmpty(search.getShortenedSelection())) {
-            docNoteFilter.and(documentNote.shortenedSelection.containsIgnoreCase(search.getShortenedSelection()));
-        }
 
-        // lemma
-        if (!Strings.isNullOrEmpty(search.getLemma())) {
-            builder.and(note.lemma.containsIgnoreCase(search.getLemma()));
-        }
-
-        // lemma meaning
-        if (!Strings.isNullOrEmpty(search.getLemmaMeaning())) {
-            builder.and(note.lemmaMeaning.containsIgnoreCase(search.getLemmaMeaning()));
-        }
-
-        // description
-        if (!Strings.isNullOrEmpty(search.getDescription())) {
-            builder.and(note.description.containsIgnoreCase(search.getDescription()));
-        }
+        // ?? I do not understand what these are for. How these empty inputs would be used to create query?
+//        // shortened selection
+//        if (!Strings.isNullOrEmpty(search.getShortenedSelection())) {
+//            docNoteFilter.and(documentNote.shortenedSelection.containsIgnoreCase(search.getShortenedSelection()));
+//        }
+//
+//        // lemma
+//        if (!Strings.isNullOrEmpty(search.getLemma())) {
+//            builder.and(note.lemma.containsIgnoreCase(search.getLemma()));
+//        }
+//
+//        // lemma meaning
+//        if (!Strings.isNullOrEmpty(search.getLemmaMeaning())) {
+//            builder.and(note.lemmaMeaning.containsIgnoreCase(search.getLemmaMeaning()));
+//        }
+//
+//        // description
+//        if (!Strings.isNullOrEmpty(search.getDescription())) {
+//            builder.and(note.description.containsIgnoreCase(search.getDescription()));
+//        }
 
         // creators
         if (!isNullOrEmpty(search.getCreators())) {
