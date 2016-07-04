@@ -192,7 +192,6 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                             break;
                 }}}
 
-
             if (!searchNotes) {
                 filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
             }
