@@ -195,7 +195,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                             filter.or(term.basicForm.containsIgnoreCase(search.getQuery()));
                             break;
                         case SHORTENED_SELECTION:
-                                filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
+                            filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
                             break;
                     }
                 }
@@ -353,8 +353,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         }
         // And to the short version
         if (extendedTerm && documentNote.getShortenedSelection() == null) {
-            documentNote.setShortenedSelection(abbreviation.replaceAll("\n", " "));
-//            documentNote.setShortenedSelection(abbreviation);
+            documentNote.setShortenedSelection(abbreviation);
         }
 
         documentNote.setDocument(document);
