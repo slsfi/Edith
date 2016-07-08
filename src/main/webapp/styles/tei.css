@@ -25,12 +25,6 @@
     padding-left: 1.5em;        
 }
 
-.tei .speaker {
-    /*font-weight: bold;*/
-    color: #4040D0;
-    font-style: italic;
-}
-
 .tei .stage {
     font-style: italic;
 }
@@ -45,7 +39,7 @@
 .tei .corr [type=empty],
 .tei .note [type=instruction] */
 {
-    display: none; /* sls */	
+    display: none; /* sls */
 }
 
 .tei .corr,
@@ -55,7 +49,7 @@
 .tei .gap,
 .tei .figure
 {
-    color: #808080;	
+    color: #808080;
 }
 
 .tei .sp {
@@ -233,7 +227,7 @@
 .tei .view, 
 .tei .persName,
 .tei .note,
-.tei .hi, 
+.tei .hi,
 .tei .xref, 
 .tei .placeName,
 .tei .print,
@@ -286,6 +280,12 @@
     font-style: italic;
 }
 
+.tei .raised{
+   font-style: normal;
+   font-size: smaller;
+   vertical-align: super;
+}
+
 /*
 .tei .p[rend = "noIndent"] {
    color: #FF0000;
@@ -302,13 +302,9 @@
     text-decoration: line-through;
 } */
 
-.tei .gap:before {
-    color: #494949;
+.tei .gap:before, .space:before {
+    color: #808080;         /* Previous grey value:  #494949; */
     content: "[oläsligt]";
-}
-
-.tei .space:before {
-     color: #808080;
 }
 
 /* .tei .cell {
