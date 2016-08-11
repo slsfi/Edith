@@ -146,15 +146,15 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
         // or documents and paths from selection
         else if (!search.isIncludeAllDocs()
                 && (!search.getPaths().isEmpty() || !search.getDocuments().isEmpty())) {
-            BooleanBuilder filter = new BooleanBuilder();
+            BooleanBuilder docsFilter = new BooleanBuilder();
             for (String path : search.getPaths()) {
             //    System.out.println(path);
-                filter.or(documentNote.document.path.startsWith(path.replaceAll("%2F", "/")));
+                docsFilter.or(documentNote.document.path.startsWith(path.replaceAll("%2F", "/")));
             }
             if (!search.getDocuments().isEmpty()) {
-                filter.or(documentNote.document.id.in(search.getDocuments()));
+                docsFilter.or(documentNote.document.id.in(search.getDocuments()));
             }
-            docNoteFilter.and(filter);
+            docNoteFilter.and(docsFilter);
         }
 
         // language
@@ -179,7 +179,7 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                 }
             }
             else {
-                // Restrict the query to match only to Filters got from extended search UI
+                // Restrict the query to match only to Filters got from 'extended search' UI element
                 for (Filters f : search.getFilters()) {
                     switch (f) {
                         case SOURCES:
@@ -195,14 +195,13 @@ public class NoteDaoImpl extends AbstractDao<Note> implements NoteDao {
                             filter.or(term.basicForm.containsIgnoreCase(search.getQuery()));
                             break;
                         case SHORTENED_SELECTION:
-                                filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
+                            filter.or(documentNote.shortenedSelection.containsIgnoreCase(search.getQuery()));
                             break;
                     }
                 }
             }
             builder.and(filter);
         }
-
 
         // ?? I do not understand what these are for. How these empty inputs would be used to create query?
 //        // shortened selection

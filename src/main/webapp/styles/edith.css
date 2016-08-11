@@ -283,7 +283,8 @@ form input, form .btn-group, form textarea, form select {
 
 #note-search .metadata-field-select {
   margin-left: 1px;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 5px;
 }
 
 #note-search .dynatree-container {
@@ -305,9 +306,9 @@ form input, form .btn-group, form textarea, form select {
   margin-left: 2px;
 }
 
-  div.documentNoteGrid div.selected {
-     background: #dcdcdc;
-  }
+div.documentNoteGrid div.selected {
+  background: #dcdcdc;
+}
 
 
 #spinner {
