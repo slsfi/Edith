@@ -79,11 +79,10 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
     },
 
     setDirty: function() {
-//      if (this.$('input[name=shortenedSelection]').val() === '') {
-        if (this.$('#shortenedSelection').val() === '') {
+      if (this.$('#shortenedSelection').val() === '') {
         this.$('#shortenedSelection').parent().parent().addClass('error');
         this.$('#save-document-note').attr('disabled', 'disabled');
-      } else {
+        } else {
         this.$('#shortenedSelection').parent().parent().removeClass('error');
         this.$('#save-document-note').removeAttr('disabled');
       }
@@ -123,7 +122,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
       this.setDirty();
       this.$('#update-full-selection').attr('disabled', 'disabled');
       this.currentSelection = {};
-      vent.trigger('selection:updated', this.documentNote.shortenedSelection);
+//      vent.trigger('selection:updated', this.documentNote.shortenedSelection);  // This trigger is not handled anywhere??
     },
     
     close: function() {
@@ -150,7 +149,13 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
         if (!data.shortenedSelection) {
           delete data.shortenedSelection;
         }
+      } else {
+        if (data.shortenedSelection) {
+          data.shortenedSelection = data.shortenedSelection.trim().replace(/\s/g, " ");  // for removing newlines & tabs
+          data.shortenedSelection = data.shortenedSelection.replace(/ +/g, ' ');  // complete removing by removing extra WHITESPACEs
+        }
       }
+
       data.selection = this.selection;
       data.document = this.document;
       return data;
