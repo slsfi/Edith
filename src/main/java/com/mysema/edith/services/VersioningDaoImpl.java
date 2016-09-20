@@ -316,6 +316,7 @@ public class VersioningDaoImpl implements VersioningDao {
 
     @Override
     public List<FileItem> getFileItems(String path, int revision) {
+        logger.info("Loading (" + revision + ") " + path);
         try {
             List<SVNDirEntry> entries = new ArrayList<SVNDirEntry>();
             svnRepository.getDir(path, revision, false, entries);
