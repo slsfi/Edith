@@ -17,7 +17,7 @@
 
     <hibernate.version>4.1.7.Final</hibernate.version>
     <hibernate.validator.version>4.3.0.Final</hibernate.validator.version>
-    <jetty.version>6.1.26</jetty.version>
+    <jetty.version>6.1.15</jetty.version>
     <querydsl.version>3.2.0</querydsl.version>
     <guice.version>3.0</guice.version>
     <jersey.version>1.14</jersey.version>
@@ -97,12 +97,12 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.6.1</version>
+      <version>1.7.5</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.6.1</version>
+      <version>1.7.5</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -355,6 +355,13 @@
       <id>sls</id>
       <properties>
         <extraResources>profiles/sls</extraResources>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>sls-test</id>
+      <properties>
+        <extraResources>profiles/sls-test</extraResources>
       </properties>
     </profile>
 
