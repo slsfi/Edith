@@ -1,10 +1,10 @@
 define([], function() {
   var ckEditorSetup = {removePlugins: 'elementspath',
-                       height: '60px',
+                       height: '200px',
                        skin: 'kama',
                        entities: false,
                        extraPlugins: 'autogrow,onchange',
-                       autoGrow_minHeight: '40',
+                       autoGrow_minHeight: '200',
                        resize_enabled: false,
                        startupFocus: false,
                        toolbarCanCollapse: false,

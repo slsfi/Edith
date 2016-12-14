@@ -42,8 +42,8 @@
 /* .tei .milestone, */
 .tei .orig
 /* .tei .reg [type=empty],
-.tei .corr [type=empty],
-.tei .note [type=instruction] */
+.tei .corr [type=empty], */
+.tei .note [type=instruction]
 {
     display: none; /* sls */	
 }
@@ -232,7 +232,7 @@
 .tei .tech, 
 .tei .view, 
 .tei .persName,
-.tei .note,
+.tei .note,   /* Katso kuten noteContent */
 .tei .hi, 
 .tei .xref, 
 .tei .placeName,
