@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+  version="1.0">
+  <persistence-unit name="edith">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <properties>
+      <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+      <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/topelius_notes" />
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" />
+      <property name="hibernate.connection.username" value="edith" />
+      <property name="hibernate.connection.password" value="edith" />
+
+      <property name="hbm2ddl.auto" value="none" />
+      <property name="hibernate.show_sql" value="false" />
+      <property name="hibernate.format_sql" value="false" />
+
+      <property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
+      <property name="hibernate.c3p0.acquire_increment" value="1" />
+      <property name="hibernate.c3p0.idle_test_period" value="100" /> <!-- seconds -->
+      <property name="hibernate.c3p0.max_size" value="10" />
+      <property name="hibernate.c3p0.max_statements" value="0" />
+      <property name="hibernate.c3p0.min_size" value="1" />
+      <property name="hibernate.c3p0.timeout" value="100" /> <!-- seconds -->
+
+      <property name="hibernate.cache.use_second_level_cache" value="true" />
+      <property name="hibernate.cache.use_query_cache" value="false" />
+      <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
+    </properties>
+  </persistence-unit>
+</persistence>
