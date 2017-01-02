@@ -5,35 +5,28 @@
  */
 package com.mysema.edith.services;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.events.XMLEvent;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EdithTestConstants;
 import com.mysema.edith.dto.SelectedText;
 import com.mysema.edith.util.ElementContext;
 import com.mysema.edith.util.StringUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.events.XMLEvent;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class NoteAdditionTest extends AbstractHibernateTest {
 
@@ -461,7 +454,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         addNote(new SelectedText(start, end, 0, 1, "\"sedan wi denna gången förbigå det vexande slägtet\""), new StringReader(xml));  
             
         String content = target.toString();
-        System.out.println(content);
+        // System.out.println(content);
         assertTrue(content.contains(
                 "/>\"sedan wi denna gången förbigå det vexande slägtet\"<"));
     } 
@@ -488,7 +481,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         addNote(new SelectedText(PREFIX + start, PREFIX + end, 0, 8, text));
 
         String content = getContent();
-        System.err.println(content);
+       // System.err.println(content);
         assertTrue(content.contains("<subst><del>m</del><add>" +
                                     start(localId) +
                                     "M</add></subst>azara</place> win" +
@@ -520,13 +513,14 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         assertTrue(pos6 > pos7);
         assertTrue(pos5 > pos6);
         
-        System.out.println(pos1);
+/*        System.out.println(pos1);
         System.out.println(pos2);
         System.out.println(pos3);
         System.out.println(pos4);
         System.out.println(pos5);
         System.out.println(pos6);
         System.out.println(pos7);
+*/
     } 
 
     private SelectedText createMultipleElementSelectedText(String prevCharacters, String elementCharacters, String characters, String prevContext, String context) {
