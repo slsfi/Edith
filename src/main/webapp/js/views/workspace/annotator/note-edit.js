@@ -149,11 +149,6 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
         if (!data.shortenedSelection) {
           delete data.shortenedSelection;
         }
-      } else {
-        if (data.shortenedSelection) {
-          data.shortenedSelection = data.shortenedSelection.trim().replace(/\s/g, " ");  // for removing newlines & tabs
-          data.shortenedSelection = data.shortenedSelection.replace(/ +/g, ' ');  // complete removing by removing extra WHITESPACEs
-        }
       }
 
       data.selection = this.selection;
