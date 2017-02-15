@@ -1,12 +1,5 @@
 package com.mysema.edith.web;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -15,14 +8,14 @@ import com.mysema.edith.domain.Document;
 import com.mysema.edith.domain.Note;
 import com.mysema.edith.domain.Term;
 import com.mysema.edith.domain.User;
-import com.mysema.edith.dto.DocumentNoteTO;
 import com.mysema.edith.dto.DocumentTO;
-import com.mysema.edith.dto.SelectedText;
-import com.mysema.edith.dto.SelectionTO;
 import com.mysema.edith.services.DocumentDao;
-import com.mysema.edith.services.NoteAdditionFailedException;
 import com.mysema.edith.services.NoteDao;
 import com.mysema.edith.services.UserDao;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 public class DocumentsResourceTest extends AbstractResourceTest {
     
@@ -77,7 +70,7 @@ public class DocumentsResourceTest extends AbstractResourceTest {
         assertNotNull(created.getClass());
     }
     
-    @Test
+/*    @Test
     public void Create_Selection() throws IOException, NoteAdditionFailedException {
         String PREFIX = "TEI-text0-body0-";
         Document document = documentDao.getDocumentForPath(testDocument);
@@ -92,7 +85,7 @@ public class DocumentsResourceTest extends AbstractResourceTest {
         
         assertNotNull(created.getId());
     }
-    
+*/
     @Test
     public void Update_Selection() {
         // TODO

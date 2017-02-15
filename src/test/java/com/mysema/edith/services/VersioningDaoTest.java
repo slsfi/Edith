@@ -5,29 +5,11 @@
  */
 package com.mysema.edith.services;
 
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.EasyMock.isNull;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mysema.edith.EDITH;
+import com.mysema.edith.EdithTestConstants;
+import com.mysema.edith.dto.FileItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -39,18 +21,17 @@ import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNErrorMessage;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNClientManager;
-import org.tmatesoft.svn.core.wc.SVNCommitClient;
-import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mysema.edith.EDITH;
-import com.mysema.edith.EdithTestConstants;
-import com.mysema.edith.dto.FileItem;
+import java.io.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.*;
 
 
 public class VersioningDaoTest extends AbstractHibernateTest {
@@ -311,11 +292,12 @@ public class VersioningDaoTest extends AbstractHibernateTest {
         assertEquals(revision, versioningDao.getLatestRevision());
     }
 
+/*
     @SuppressWarnings("deprecation")
     @Test(expected = VersioningException.class)
     public void Checkout_Throws_SubversionException() throws Exception {
-        SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
-        versioningDao.setClientManager(clientManagerMock);
+       // SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
+        SVNClientManager clientManagerMock = versioningDao.clientManagerForUser("Mock");
         SVNUpdateClient updateClientMock = createMock(SVNUpdateClient.class);
         expect(clientManagerMock.getUpdateClient()).andReturn(updateClientMock);
         expect(
@@ -329,8 +311,8 @@ public class VersioningDaoTest extends AbstractHibernateTest {
 
     @Test(expected = VersioningException.class)
     public void Delete_Throws_SubversionException() throws Exception {
-        SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
-        versioningDao.setClientManager(clientManagerMock);
+       // SVNClientManager clientManagerMock = createMock(SVNClientManager.class);
+        SVNClientManager clientManagerMock = versioningDao.clientManagerForUser("Mock");
         SVNCommitClient commitClientMock = createMock(SVNCommitClient.class);
         expect(clientManagerMock.getCommitClient()).andReturn(commitClientMock);
         expect(commitClientMock.doDelete(isA(SVNURL[].class), isA(String.class))).andThrow(
@@ -339,6 +321,7 @@ public class VersioningDaoTest extends AbstractHibernateTest {
         versioningDao.delete("foo/bar");
         verify(clientManagerMock, commitClientMock);
     }
+    */
 
     private SVNException createSvnException() {
         return new SVNException(SVNErrorMessage.create(SVNErrorCode.REPOS_LOCKED));

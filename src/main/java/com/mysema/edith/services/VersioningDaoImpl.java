@@ -5,19 +5,12 @@
  */
 package com.mysema.edith.services;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import com.google.common.io.Files;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mysema.edith.EDITH;
+import com.mysema.edith.dto.FileItem;
+import com.mysema.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
@@ -25,17 +18,15 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
+import org.tmatesoft.svn.core.internal.wc.DefaultSVNOptions;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import com.google.common.io.Files;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mysema.edith.EDITH;
-import com.mysema.edith.dto.FileItem;
-import com.mysema.util.FileUtils;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * VersioningDaoImpl is the default implementation of the VersioningDao
@@ -51,7 +42,9 @@ public class VersioningDaoImpl implements VersioningDao {
         FSRepositoryFactory.setup();
     }
 
-    private SVNClientManager clientManager;
+//    private SVNClientManager clientManager; Changed from one classInstance to user-specific clientManagers
+
+    private DefaultSVNOptions myOptions;
 
     private final String documentRoot;
 
@@ -70,12 +63,14 @@ public class VersioningDaoImpl implements VersioningDao {
     private final File workingCopies;
 
     @Inject
+    private AuthService authService;
+
+    @Inject
     public VersioningDaoImpl(@Named(EDITH.SVN_CACHE_DIR) String svnCache,
             @Named(EDITH.REPO_FILE_PROPERTY) String svnRepo,
             @Named(EDITH.REPO_URL_PROPERTY) String repoURL,
             @Named(EDITH.SVN_DOCUMENT_ROOT) String documentRoot,
             @Named(EDITH.TEI_MATERIAL_ROOT) String materialTeiRoot) {
-        clientManager = SVNClientManager.newInstance();
         this.svnCache = new File(svnCache);
         readCache = new File(svnCache + "/readCache");
         workingCopies = new File(svnCache + "/workingCopies");
@@ -90,18 +85,24 @@ public class VersioningDaoImpl implements VersioningDao {
         svnRepository = null;
     }
 
-    public void setClientManager(SVNClientManager clientManager) {
-        this.clientManager = clientManager;
-    }
+//    public void setClientManager(SVNClientManager clientManager) {
+//        this.clientManager = clientManager;
+//    }
 
     public void setSvnRepository(SVNRepository svnRepository) {
         this.svnRepository = svnRepository;
     }
 
+    public SVNClientManager clientManagerForUser(String user) {
+            return SVNClientManager.newInstance(myOptions, user, "passw");
+    }
+
+
     @SuppressWarnings("deprecation")
     public void checkout(File destination, long revision) {
         try {
-            clientManager.getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, true),
+          // System.out.println("authService.getUsername: " + authService.getUsername());
+            clientManagerForUser(authService.getUsername()).getUpdateClient().doCheckout(repoSvnURL.appendPath(documentRoot, true),
                     destination, SVNRevision.create(revision), SVNRevision.create(revision), true);
         } catch (SVNException s) {
             throw new VersioningException(s.getMessage(), s);
@@ -111,7 +112,7 @@ public class VersioningDaoImpl implements VersioningDao {
     @SuppressWarnings("deprecation")
     public long commit(File file) {
         try {
-            return clientManager
+            return clientManagerForUser(authService.getUsername())
                     .getCommitClient()
                     .doCommit(new File[] { file }, true, file.getName() + " committed", false, true)
                     .getNewRevision();
@@ -181,7 +182,7 @@ public class VersioningDaoImpl implements VersioningDao {
     public void delete(String svnPath) {
         try {
             SVNURL targetURL = repoSvnURL.appendPath(svnPath, false);
-            logger.info(clientManager.getCommitClient()
+            logger.info(clientManagerForUser(authService.getUsername()).getCommitClient()
                     .doDelete(new SVNURL[] { targetURL }, "removed " + svnPath).toString());
         } catch (SVNException e) {
             throw new VersioningException(e.getMessage(), e);
@@ -264,7 +265,7 @@ public class VersioningDaoImpl implements VersioningDao {
     @Override
     public long importFile(String svnPath, File file) {
         try {
-            return clientManager
+            return clientManagerForUser(authService.getUsername())
                     .getCommitClient()
                     .doImport(file, repoSvnURL.appendPath(svnPath, false), svnPath + " added", true)
                     .getNewRevision();
@@ -284,7 +285,7 @@ public class VersioningDaoImpl implements VersioningDao {
             }
             SVNRepositoryFactory.createLocalRepository(svnRepo, true, false);
 
-            clientManager.getCommitClient()
+            clientManagerForUser(authService.getUsername()).getCommitClient()
                     .doMkDir(
                             new SVNURL[] {
                                     repoSvnURL.appendPath(documentRoot.split("/")[1], false),
@@ -307,7 +308,7 @@ public class VersioningDaoImpl implements VersioningDao {
     @SuppressWarnings("deprecation")
     public void update(File file) {
         try {
-            clientManager.getUpdateClient().doUpdate(file, SVNRevision.create(getLatestRevision()),
+            clientManagerForUser(authService.getUsername()).getUpdateClient().doUpdate(file, SVNRevision.create(getLatestRevision()),
                     true);
         } catch (SVNException s) {
             throw new VersioningException(s.getMessage(), s);
@@ -352,7 +353,7 @@ public class VersioningDaoImpl implements VersioningDao {
             }
             File oldFile = new File(userCheckout + "/" + path);
             File newFile = new File(userCheckout + "/" + newPath.replace(documentRoot, ""));
-            clientManager.getMoveClient().doMove(oldFile, newFile);
+            clientManagerForUser(authService.getUsername()).getMoveClient().doMove(oldFile, newFile);
             commit(userCheckout);
         } catch (SVNException e) {
             throw new VersioningException(e.getMessage(), e);
