@@ -29,12 +29,19 @@
     font-style: italic;
 }
 
+.tei .sp .stage {
+     display: inline;
+}
+
+.tei .p .stage {
+     display: inline;
+}
 .tei .sic,
 .tei .expan,
 .tei .var,
 .tei .del,
 /* .tei .milestone, */
-.tei .orig
+.tei .orig,
 /* .tei .reg [type=empty],
 .tei .corr [type=empty], */
 .tei .note [type=instruction]
@@ -42,12 +49,19 @@
     display: none; /* sls */
 }
 
+/* .tei .note [place="foot"]
+{
+     font-size: smaller;
+} */
+
 .tei .corr,
+.tei .edVar,
 .tei .reg,
 .tei .supplied,
 .tei .unclear,
-.tei .gap,
-.tei .figure
+/* .tei .gap, */
+.tei .abbr
+/* .tei .figure */
 {
     color: #808080;
 }
@@ -79,12 +93,12 @@
     display: block;
 }
 
-/* .tei .p {
+.tei .p {
     display: block;
     text-indent: 1em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
-} */
+}
 
 .tei .p.parIndent {
     text-indent: 0em;
@@ -105,13 +119,13 @@
     text-align: right;	
 }
 
-.tei .expanded, .tei .romanType, .tei .italics {
-    font-style: italic;	
-}
 
+
+/*
 .tei .bold {
     font-weight: bold;    	
 }
+*/
 
 .tei .titleStmt .title {
     /*font-weight: bold;*/
@@ -154,18 +168,19 @@
 .tei .page {
     text-align: center;
     font-weight: bold;
-    /*display: inline;*/    
+    /*display: inline;*/
     padding: 0.5em;
     border-top: dotted 1px gray;
 }
 
-.tei .milestone.bar {
+.tei .milestone.bar, .milestone.smallBar {
     margin: 1em;
     border-top: dotted 1px gray;
 }
 
 .tei .milestone.unit {    
-    border-top: dotted 1px gray;
+    display: none;
+    /* border-top: dotted 1px gray; */
 }
 
 .tei .p .page {
@@ -204,7 +219,7 @@
     padding-left: 2.5em;    
 }    
 
-.tei .abbr,
+/* .tei .abbr, */
 .tei .actor, 
 .tei .camera, 
 .tei .caption,
@@ -214,12 +229,12 @@
 .tei .docAuthor, 
 .tei .gap, 
 /* .tei .orig, */
-.tei .edVar,
-.tei .corr,
+/* .tei .edVar, */
+/* .tei .corr, */
 .tei .ref, 
 .tei .role, 
 .tei .roleDesc,
-.tei .row,
+/* .tei .row, */
 .tei .set, 
 .tei .sound, 
 .tei .speaker, 
@@ -244,17 +259,16 @@
 .tei .choice,
 /* .tei .figure, */
 .tei .sp,
-.tei .emph,
+/* .tei .emph, */
 .tei .foreign,
 .tei .rs,
-.tei .restore,
-.tei .cell
+.tei .restore
+/* .tei .cell */
 {
     display: inline;    
 }    
 
 .tei .notecontent{
-    font-size: smaller;
     color: #990202;
 }
 
@@ -262,9 +276,9 @@
     border-bottom: solid 2px;
 }*/
 
-.underline {
+/* .underline {
     border-bottom: solid 2px;
-}
+} */
 
 .tei .noteanchor {
     color: #020299;    
@@ -276,16 +290,27 @@
     content: "[*]";
 }
 
-.tei .hi, .tei .emph {
+/* handling styles with; rend = */
+.tei .bold,
+.tei .emph,
+.tei .expanded,
+.tei .hi,
+.tei .raised,
+.tei .romanType,
+.tei .underline2,
+.tei .underline,
+.tei .uppercase
+{
     font-style: italic;
 }
 
-.tei .raised{
+/*
+.tei .raised {
    font-style: normal;
    font-size: smaller;
    vertical-align: super;
 }
-
+*/
 /*
 .tei .p[rend = "noIndent"] {
    color: #FF0000;
@@ -302,9 +327,19 @@
     text-decoration: line-through;
 } */
 
-.tei .gap:before, .space:before {
-    color: #808080;         /* Previous grey value:  #494949; */
+.tei .space:before {
+    color: #494949;
+    content: "[tomrum]";
+                   }
+
+.tei .gap:before {
+    color: #808080;
     content: "[oläsligt]";
+}
+
+.tei .figure:before {
+    color: #494949;
+    content: "[bild]";
 }
 
 /* .tei .cell {
@@ -332,6 +367,34 @@
 .body .title {
     background-color: #F6E65B;
 }*/
+
+/* DISPLAY: TABLE */
+.tei .table {
+        display: table;
+/*	border-left: 1px dotted black; */
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+	margin-left: 0;  /* 1em; */
+	margin-right: 0;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+/*        background-color: yellow; */
+}
+
+/* DISPLAY: TABLE-ROW */
+.tei .row {
+        display: table-row;
+}
+
+
+/* DISPLAY: TABLE-CELL */
+.tei .cell {
+        display: table-cell;
+/*	background-color: orange; */
+/*        border: 2px groove yellow; */
+        padding: 0.0em 0.6em 0.1em 0.1em;
+}
 
 
 

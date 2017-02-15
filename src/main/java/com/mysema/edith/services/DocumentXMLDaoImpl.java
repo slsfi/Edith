@@ -1,5 +1,16 @@
 package com.mysema.edith.services;
 
+import com.mysema.edith.domain.DocumentNote;
+import com.mysema.edith.dto.SelectedText;
+import com.mysema.edith.util.ElementContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -7,25 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.xml.namespace.QName;
-import javax.xml.stream.EventFilter;
-import javax.xml.stream.XMLEventFactory;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.dto.SelectedText;
-import com.mysema.edith.util.ElementContext;
 
 /**
  * @author tiwe
@@ -120,7 +112,6 @@ public class DocumentXMLDaoImpl implements DocumentXMLDao {
     
     int addNote(XMLEventReader reader, XMLEventWriter writer, SelectedText sel, Long localId)
             throws NoteAdditionFailedException {
-        logger.info(sel.toString());
         ElementContext context = new ElementContext();
         /* Used to concat all the strings while buffering. */
         StringBuilder allStrings = new StringBuilder();
