@@ -293,7 +293,8 @@ form input, form .btn-group, form textarea, form select {
 
 #directory-tree .dynatree-container {
   margin: 10px 0 0 0;
-  height: 400px;
+ /* font-size: 14pt; */
+  height: 700px;
   overflow: scroll;
 }
 
