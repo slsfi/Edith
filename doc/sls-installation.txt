@@ -5,8 +5,8 @@ tunnus timo / annotaatio.
 
 Alla ovat palvelimen tiedot. Mavenissa SLS build tehdään
 sls profiililla, sitten ylikirjoitat kohdepalvelimen
-/opt/jetty/webapps/edith.war tiedoston ja
-uudelleenkäynnistät jettyn (sudo service jetty restart).
+/var/lib/jetty8/webapps/  (oli: /opt/jetty/webapps/edith.war) tiedoston ja
+uudelleenkäynnistät jettyn (sudo service jetty8 restart).
 
 WEB:
 
@@ -19,6 +19,7 @@ SVN cache dir      : /opt/svn/cache
 RDF metadata dir   : /opt/rdfbean/edith
 Published docs     : /opt/published
 Jetty              : /opt/jetty
+log                : /var/log/jetty8/
 
 USERS:
 
