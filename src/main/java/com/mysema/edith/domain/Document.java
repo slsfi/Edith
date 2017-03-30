@@ -5,12 +5,13 @@
  */
 package com.mysema.edith.domain;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import java.io.File;
 
 @Entity
 @Table(name = "document")
@@ -31,7 +32,9 @@ public class Document extends BaseEntity {
     }
 
     public String getTitle() {
-        return title;
+        File f = new File(this.getPath());
+        return f.getName().toString();
+      //  return title;
     }
 
     public void setTitle(String title) {
