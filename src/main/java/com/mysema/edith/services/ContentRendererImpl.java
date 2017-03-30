@@ -5,53 +5,26 @@
  */
 package com.mysema.edith.services;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Pattern;
-
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventFactory;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.EndElement;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
-
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mysema.edith.EDITH;
-import com.mysema.edith.domain.Document;
-import com.mysema.edith.domain.DocumentNote;
-import com.mysema.edith.domain.Interval;
-import com.mysema.edith.domain.LinkElement;
-import com.mysema.edith.domain.NameForm;
-import com.mysema.edith.domain.Note;
-import com.mysema.edith.domain.NoteFormat;
-import com.mysema.edith.domain.NoteType;
-import com.mysema.edith.domain.Paragraph;
-import com.mysema.edith.domain.ParagraphElement;
-import com.mysema.edith.domain.Person;
-import com.mysema.edith.domain.Place;
-import com.mysema.edith.domain.UrlElement;
+import com.mysema.edith.domain.*;
 import com.mysema.edith.util.ElementContext;
 import com.mysema.edith.util.ParagraphParser;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 /**
  * @author tiwe
@@ -80,6 +53,8 @@ public class ContentRendererImpl implements ContentRenderer {
     private static final String CLASS = "class";
 
     private static final String DIV = "div";
+
+    private static final String TEI_NOTE = "note";
 
     private final DocumentDao documentDao;
 
@@ -573,7 +548,13 @@ public class ContentRendererImpl implements ContentRenderer {
             }
             writer.writeStartElement(DIV);
             writer.writeAttribute(CLASS, cssClass.toString());
-
+        } else if (localName.equals(TEI_NOTE) && reader.getAttributeValue(null, "place") != null) {
+            String place = reader.getAttributeValue(null, "place");
+            writer.writeStartElement(DIV);
+            writer.writeAttribute(CLASS, TEI_NOTE);
+            writer.writeAttribute("place", place);
+            if (path != null)
+                writer.writeAttribute("id", path);
         } else {
             String cssClass = rend != null ? (name + " " + rend) : name;
             writer.writeStartElement(DIV);
@@ -581,7 +562,6 @@ public class ContentRendererImpl implements ContentRenderer {
             if (path != null) {
                 writer.writeAttribute("id", path);
             }
-
         }
     }
 

@@ -49,12 +49,16 @@
     display: none; /* sls */
 }
 
-/* .tei .note [place="foot"]
+.tei .note[place="foot"]
 {
      font-size: smaller;
-} */
+}
 
-.tei .corr,
+.tei .note:before {
+    content: " ";
+}
+
+/* .tei .corr, */
 .tei .edVar,
 .tei .reg,
 .tei .supplied,
@@ -165,13 +169,14 @@
     padding-bottom: 0.5em;        
 }
 
-.tei .page {
+/*
+.tei .page. {
     text-align: center;
     font-weight: bold;
-    /*display: inline;*/
-    padding: 0.5em;
-    border-top: dotted 1px gray;
-}
+    display: inline;
+  /* padding: 0.5em; */
+  /*  border-top: dotted 1px gray; */
+} */
 
 .tei .milestone.bar, .milestone.smallBar {
     margin: 1em;
@@ -183,7 +188,8 @@
     /* border-top: dotted 1px gray; */
 }
 
-.tei .p .page {
+.tei /* .p */ .page {
+    text-align: center;
     display: inline;
     padding: 0px !important;
     border-top: none !important;
@@ -198,7 +204,7 @@
 }
 
 .tei .p .page:before {
-    content: "|";
+    content: " |";
 }
 
 .tei .p .page:after {
@@ -219,7 +225,7 @@
     padding-left: 2.5em;    
 }    
 
-/* .tei .abbr, */
+.tei .abbr,
 .tei .actor, 
 .tei .camera, 
 .tei .caption,
@@ -229,19 +235,20 @@
 .tei .docAuthor, 
 .tei .gap, 
 /* .tei .orig, */
-/* .tei .edVar, */
-/* .tei .corr, */
+.tei .edVar,
+.tei .corr,
 .tei .ref, 
 .tei .role, 
 .tei .roleDesc,
 /* .tei .row, */
 .tei .set, 
-.tei .sound, 
+.tei .sound,
+.tei .space,
 .tei .speaker, 
 .tei .tech, 
 .tei .view, 
 .tei .persName,
-.tei .note,   /* Katso kuten noteContent */
+.tei .note,
 .tei .hi, 
 .tei .xref, 
 .tei .placeName,
@@ -257,7 +264,7 @@
 .tei .subst,
 .tei .reg,
 .tei .choice,
-/* .tei .figure, */
+.tei .figure,
 .tei .sp,
 /* .tei .emph, */
 .tei .foreign,
@@ -288,6 +295,11 @@
 .tei .noteanchor:after {
     color: #020299;
     content: "[*]";
+}
+
+.tei .hi.raised {
+    vertical-align: super;
+    font-style: normal;
 }
 
 /* handling styles with; rend = */
@@ -327,8 +339,10 @@
     text-decoration: line-through;
 } */
 
+
 .tei .space:before {
     color: #494949;
+    display: inline;
     content: "[tomrum]";
                    }
 
