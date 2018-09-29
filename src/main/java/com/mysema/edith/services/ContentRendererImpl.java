@@ -54,7 +54,7 @@ public class ContentRendererImpl implements ContentRenderer {
 
     private static final String DIV = "div";
 
-    private static final String TEI_NOTE = "note";
+    private static final String TEI_NOTE = "note-place";
 
     private final DocumentDao documentDao;
 
@@ -548,11 +548,11 @@ public class ContentRendererImpl implements ContentRenderer {
             }
             writer.writeStartElement(DIV);
             writer.writeAttribute(CLASS, cssClass.toString());
-        } else if (localName.equals(TEI_NOTE) && reader.getAttributeValue(null, "place") != null) {
-            String place = reader.getAttributeValue(null, "place");
+        } else if (localName.equals(TEI_NOTE) && reader.getAttributeValue(null, "note-place") != null) {
+            String place = reader.getAttributeValue(null, "note-place");
             writer.writeStartElement(DIV);
             writer.writeAttribute(CLASS, TEI_NOTE);
-            writer.writeAttribute("place", place);
+            writer.writeAttribute("note-place", place);
             if (path != null)
                 writer.writeAttribute("id", path);
         } else {
