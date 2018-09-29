@@ -103,7 +103,6 @@ public class NoteAdditionTest extends AbstractHibernateTest {
         assertTrue(content.contains("<castItem><role>Antres</role>" + start(localId) + ", <roleDesc><ref xml:id=\"ref.1\" target=\"note.1\">kraatari" + end(localId) + "</ref> ja"));
     }
 
-    /*  TODO:  FIX this - broken after addition of <place> TEI-element handling
     @Test
     public void AddNote_end_element_inside_start_element() throws Exception {
         String startElement = "div0-div1-stage0";
@@ -117,7 +116,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
                 + "piaksen <ref xml:id=\"ref.3\" target=\"note.3\">huo" + end(localId) + "ne"));
         assertTrue(content.contains(
                 "Jaana istuu pöyd\u00E4n \u00E4\u00E4ress\u00E4, kutoen sukkaa,"));
-    } */
+    }
 
     @Test
     public void AddNote_end_element_inside_start_element_and_start_element_inside_end_element_()
@@ -489,7 +488,6 @@ public class NoteAdditionTest extends AbstractHibernateTest {
                                     end(localId) + "</p>"));
     } 
     
-/*   TODO:  FIX this - broken after addition of <place> TEI-element handling
     @Test
     public void Position_In_Order() throws Exception {
         // play-act-sp-p[1] , play-act-sp-p[1] : Jaana
@@ -523,7 +521,7 @@ public class NoteAdditionTest extends AbstractHibernateTest {
 //        System.out.println(pos6);
 //        System.out.println(pos7);
 
-    } */
+    }
 
     private SelectedText createMultipleElementSelectedText(String prevCharacters, String elementCharacters, String characters, String prevContext, String context) {
         int min = generateRandomNumber(0, prevCharacters.length());
