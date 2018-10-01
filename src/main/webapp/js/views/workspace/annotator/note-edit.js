@@ -447,7 +447,7 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars', 'localize', 's
           self.documentNoteForm.toggleAnnotationEnabled(documentId, self.noteForm.note ? self.noteForm.note.id : null, selection);
         }
       });
-      vent.on('note-edit:vaihda', this.openDocumentNote);
+      vent.on('note-edit:switchNote', this.openDocumentNote);
       vent.on('note:create', this.create);
       vent.on('document-note:open', this.openDocumentNote);
       vent.on('note:open', this.openNote);

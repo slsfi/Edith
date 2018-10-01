@@ -10,12 +10,12 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
 
     events: {'click #edit-note': 'edit',
              'click #comment-note': 'comment',
-             'click #select-note': 'vaihda'},
+             'click #select-note': 'switchNote'},
 
     template: Handlebars.compile(noteItemTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'render', 'edit', 'comment', 'vaihda');
+      _.bindAll(this, 'render', 'edit', 'comment', 'switchNote');
       this.documentNote = this.options.data;
       this.render();
       var self = this;
@@ -48,9 +48,9 @@ define(['jquery', 'underscore', 'backbone', 'vent', 'handlebars',
       vent.trigger('document-note:open', this.documentNote);
     },
 
-    vaihda: function() {
-      //UI works nicer with note-edit:vaihda trigger when there's unsaved modifications
-      vent.trigger('note-edit:vaihda', this.documentNote);
+    switchNote: function() {
+      //UI works nicer with note-edit:switchNote trigger when there's unsaved modifications
+      vent.trigger('note-edit:switchNote', this.documentNote);
     },
 
     comment: function() {
