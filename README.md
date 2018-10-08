@@ -1,7 +1,6 @@
 # edith
-
-    Tool for creating digital critical editions
-    Copyright (C) 2018  Mysema Oy
+Tool for creating digital critical editions
+Copyright (C) 2018  Mysema Oy
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
