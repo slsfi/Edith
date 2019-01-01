@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018 Mysema
+ */
+
 package com.mysema.edith.dto;
 
 public class DocumentNoteTO extends AbstractDocumentNoteTO {

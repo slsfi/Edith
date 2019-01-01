@@ -1,7 +1,5 @@
 /*
- * Copyright (c) 2012 Mysema Ltd.
- * All rights reserved.
- *
+ * Copyright (c) 2018 Mysema
  */
 package com.mysema.edith.guice;
 

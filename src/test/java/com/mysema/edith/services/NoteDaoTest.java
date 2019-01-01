@@ -1,8 +1,5 @@
 /*
- * Copyright (c) 2009 Mysema Ltd.
- * Copyright (c) 2009 Mysema Ltd.
- * All rights reserved.
- *
+ * Copyright (c) 2018 Mysema
  */
 package com.mysema.edith.services;
 

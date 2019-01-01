@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018 Mysema
+ */
+
 package com.mysema.edith.guice;
 
 import org.junit.runners.BlockJUnit4ClassRunner;

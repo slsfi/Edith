@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018 Mysema
+ */
+
 package com.mysema.edith.web;
 
 import com.google.common.collect.Lists;

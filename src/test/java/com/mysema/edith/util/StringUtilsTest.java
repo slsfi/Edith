@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018 Mysema
+ */
+
 package com.mysema.edith.util;
 
 import static org.junit.Assert.assertArrayEquals;

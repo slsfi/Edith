@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018 Mysema
+ */
+
 package com.mysema.edith.services;
 
 import com.mysema.edith.domain.DocumentNote;

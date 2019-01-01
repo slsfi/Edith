@@ -1,3 +1,7 @@
+;
+; Copyright (c) 2018 Mysema
+;
+
 (ns edith.core
   (:require [clojure.java.io :as io])
   (:import com.google.inject.Guice
