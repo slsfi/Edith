@@ -7,7 +7,7 @@
   <packaging>war</packaging>
   <version>2.1.2</version>
   <name>Edith</name>
-  <description></description>
+  <description/>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -200,7 +200,7 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.16</version>
+      <version>5.1.49</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
@@ -509,7 +509,7 @@
           <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.16</version>
+            <version>5.1.49</version>
           </dependency>
         </dependencies>
       </plugin>
