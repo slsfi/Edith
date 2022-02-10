@@ -15,7 +15,7 @@
 
     <failIfNoTests>false</failIfNoTests>
 
-    <hibernate.version>4.1.7.Final</hibernate.version>
+    <hibernate.version>5.4.24.Final</hibernate.version>
     <hibernate.validator.version>4.3.0.Final</hibernate.validator.version>
     <jetty.version>6.1.15</jetty.version>
     <querydsl.version>3.2.0</querydsl.version>
